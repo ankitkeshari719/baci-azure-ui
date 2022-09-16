@@ -19,10 +19,10 @@ jobs:
     
     steps:
     - name: Download artifact
-      uses: actions/download-artifact@v3
+      uses: dawidd6/action-download-artifact@v2
       with:
-        name: production-files
-        path: ./build
+        workflow: main.yml
+        workflow_conclusion: success
 
     
     - name: Azure login
