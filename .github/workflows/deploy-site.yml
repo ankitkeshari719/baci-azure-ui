@@ -21,8 +21,6 @@ jobs:
     - name: Download artifact
       uses: actions/download-artifact@v3
       with:
-        workflow: main.yml
-        workflow_conclusion: success
         name: production-files
         path: ./build
     
