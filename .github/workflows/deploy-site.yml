@@ -23,11 +23,14 @@ jobs:
       with:
         workflow: main.yml
         workflow_conclusion: success
+        name: production-files
     
-    - name: Azure login
+    - name: 'Az CLI login'
       uses: azure/login@v1
       with:
-          creds: ${{ secrets.AZURE_CREDENTIALS }}
+        client-id: "d091515d-bf2b-4207-b1ee-2932dd43b6ed"
+        tenant-id: "da419ccd-8206-427d-8e7e-78cb6fb5ca6d"
+        subscription-id: "dbe9f787-2fe7-4406-b528-4dcff64b8bcd"
     
     - name: Upload to Azure blob storage
       uses: azure/CLI@v1
