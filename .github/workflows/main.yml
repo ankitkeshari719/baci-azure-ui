@@ -23,7 +23,7 @@ jobs:
     # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v2
 
       - name: Install Node.js
         uses: actions/setup-node@v1
@@ -37,7 +37,7 @@ jobs:
         run: npm run build
         
       - name: Upload production-ready build files
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v2
         with:
           name: production-files
           path: ./build
