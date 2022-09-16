@@ -19,12 +19,12 @@ jobs:
     
     steps:
     - name: Download artifact
-      uses: rajeshgulrajani-evoltech/action-download-artifact@v3
+      uses: dawidd6/action-download-artifact@v2
       with:
         workflow: build-site.yml
         workflow_conclusion: success
     
-    - name: 'Az CLI login'
+    - name: Azure login
       uses: azure/login@v1
       with:
           creds: ${{ secrets.AZURE_CREDENTIALS }}
