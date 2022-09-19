@@ -1,8 +1,9 @@
 import { useEffect,useState,createContext,ReactChild } from "react";
 import socketIOClient from "socket.io-client";
+import { API_URL } from '../constants/FeatureFlags';
 
 
-const ws =  socketIOClient("http://localhost:5010");
+const ws =  socketIOClient(API_URL);
 //const ws = socketIOClient("https://baciapi.azurewebsites.net");
 
 

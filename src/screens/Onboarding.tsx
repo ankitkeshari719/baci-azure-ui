@@ -19,7 +19,7 @@ import { AuthenticatedTemplate, UnauthenticatedTemplate, useMsal } from "@azure/
 
 import EmailIcon from '@mui/icons-material/Email';
 import PhoneAndroidIcon from '@mui/icons-material/PhoneAndroid';
-import WhatsappOutlinedIcon from '@mui/icons-material/WhatsappOutlined';
+import WhatsAppIcon from '@mui/icons-material/WhatsApp';
 import Box from '@mui/material/Box';
 import CssBaseline from '@mui/material/CssBaseline';
 import QRCode from 'qrcode.react';
@@ -554,7 +554,7 @@ export function Onboarding() {
                   url={global.currentRetro.joinUrl}
                   style={{ padding: '5px' }}
                 >
-                  <WhatsappOutlinedIcon sx={{ color: '#4D555A' }} />
+                  <WhatsAppIcon sx={{ color: '#4D555A' }} />
                 </WhatsappShareButton>
                 {canShare ? (
                   <Link

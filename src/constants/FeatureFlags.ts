@@ -29,7 +29,7 @@ if (env === 'production') {
         report: true,
         stressTest: false,
     };
-    api_url = "http://localhost:5010"
+    api_url = "http://localhost:8080"
     log.setLevel(log.levels.TRACE);
 } else if (env === 'development') {
     featureFlags = {
@@ -39,7 +39,7 @@ if (env === 'production') {
         report: true,
         stressTest: true,
     };
-    api_url = "http://localhost:5010"
+    api_url = "http://localhost:8080"
     log.setLevel(log.levels.TRACE);
 }
 
