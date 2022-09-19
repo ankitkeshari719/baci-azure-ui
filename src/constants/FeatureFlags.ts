@@ -10,7 +10,7 @@ let featureFlags = {
     stressTest: true,
 };
 
-let api_url = "";
+let api_url = "http://localhost:8080";
 if (env === 'production') {
     featureFlags = {
         feedback: false,
@@ -29,7 +29,7 @@ if (env === 'production') {
         report: true,
         stressTest: false,
     };
-    api_url = "http://localhost:8080"
+    api_url = "https://baciapi.azurewebsites.net"
     log.setLevel(log.levels.TRACE);
 } else if (env === 'development') {
     featureFlags = {
@@ -39,7 +39,7 @@ if (env === 'production') {
         report: true,
         stressTest: true,
     };
-    api_url = "http://localhost:8080"
+    api_url = "https://baciapi.azurewebsites.net"
     log.setLevel(log.levels.TRACE);
 }
 
