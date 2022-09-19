@@ -38,7 +38,7 @@
   },
   "scripts": {
     "start": "set REACT_APP_NODE_ENV=development&&react-scripts start",
-    "build": "GENERATE_SOURCEMAP=false react-scripts build",
+    "build": "set REACT_APP_NODE_ENV=development && GENERATE_SOURCEMAP=false react-scripts build",
     "winBuild": "set \"GENERATE_SOURCEMAP=false\" && react-scripts build",
     "azBuild": "set REACT_APP_NODE_ENV=development && react-scripts build",
     "test": "react-scripts test",
