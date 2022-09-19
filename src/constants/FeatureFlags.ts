@@ -10,7 +10,7 @@ let featureFlags = {
     stressTest: true,
 };
 
-let api_url = "http://localhost:8080";
+let api_url = "https://baciapi.azurewebsites.net";
 if (env === 'production') {
     featureFlags = {
         feedback: false,
