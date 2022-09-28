@@ -41,7 +41,7 @@ export const Report = React.forwardRef((props, ref) => {
   const [actions, setActions] = React.useState<string[]>([]);
   const [questions, setQuestions] = React.useState<Question[]>([]);
   const [feedback, setFeedback] = React.useState<any | undefined>();
-
+  const [islanded, setIsLanded] =React.useState(true);
   React.useEffect(() => {
     const cardValues = [] as string[];
     console.log("startedDate",startedDate);
@@ -132,15 +132,21 @@ export const Report = React.forwardRef((props, ref) => {
       }}
     >
       <Typography sx={{ margin: '20px 0  0 10px', fontSize: '16px' }}>
-        Retro name : {retroName}
+        Retro name :<span style={{ fontWeight: 'bold' }}>{retroName}</span>
       </Typography>
       <Typography sx={{ margin: '0 0 0 10px', fontSize: '16px' }}>
-        Date : {startedDate?.toString()}
+        Date :{' '}
+        <span style={{ fontWeight: 'bold' }}>
+          {startedDate?.toLocaleDateString()}
+        </span>
       </Typography>
 
       {words.length !== 0 ? (
         <>
-          <Typography variant="h5" sx={{ margin: '10px', fontSize: '18px' }}>
+          <Typography
+            variant="h5"
+            sx={{ margin: '10px', fontSize: '18px', marginTop: '30px' }}
+          >
             Celebrate what went well
           </Typography>
           <Box
@@ -159,7 +165,10 @@ export const Report = React.forwardRef((props, ref) => {
 
       {actions.length !== 0 ? (
         <>
-          <Typography variant="h5" sx={{ margin: '10px', fontSize: '18px' }}>
+          <Typography
+            variant="h5"
+            sx={{ margin: '10px', fontSize: '18px', marginTop: '30px' }}
+          >
             Actions
           </Typography>
           <RetroColumn
@@ -170,6 +179,7 @@ export const Report = React.forwardRef((props, ref) => {
             expandAllGroups
             column={columns[ACTIONS_COLUMN]}
             showEditBox={false}
+            setIslanded={setIsLanded}
             setShowEditBox={() => {}}
             cardGroups={columns[ACTIONS_COLUMN].groups}
           />
@@ -177,7 +187,10 @@ export const Report = React.forwardRef((props, ref) => {
       ) : null}
 
       <>
-        <Typography variant="h5" sx={{ margin: '10px', fontSize: '18px' }}>
+        <Typography
+          variant="h5"
+          sx={{ margin: '10px', fontSize: '18px', marginTop: '30px' }}
+        >
           Pulse Check
         </Typography>
         <Box
@@ -201,7 +214,10 @@ export const Report = React.forwardRef((props, ref) => {
 
       {/* {feedback ? ( */}
       <>
-        <Typography variant="h5" sx={{ margin: '10px', fontSize: '18px' }}>
+        <Typography
+          variant="h5"
+          sx={{ margin: '10px', fontSize: '18px', marginTop: '30px' }}
+        >
           Feedback for facilitator
         </Typography>
         <Box
@@ -211,6 +227,7 @@ export const Report = React.forwardRef((props, ref) => {
             display: 'flex',
             justifyContent: 'center',
             alignItems: 'center',
+            marginBottom:"50px"
           }}
         >
           {feedback ? (

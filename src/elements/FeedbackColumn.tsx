@@ -2,7 +2,10 @@ import {
   Box,
   Button,
   Grid,
-  Link, styled, Typography, useMediaQuery
+  Link,
+  styled,
+  Typography,
+  useMediaQuery,
 } from '@mui/material';
 import React, { ReactElement } from 'react';
 import {
@@ -91,8 +94,10 @@ export function FeedbackColumn({
       dispatch({
         type: ActionType.SET_SNACK_MESSAGE,
         payload: {
-          snackMessage:
-            'Your feedback has been successfully submitted. Thank you!',
+          snackMessage: {
+            message:'Your feedback has been successfully submitted. Thank you!',
+            snackMessageType: 'success',
+          },
         },
       });
       setConfirmAction(undefined);

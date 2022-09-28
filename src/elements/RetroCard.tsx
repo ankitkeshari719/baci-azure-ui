@@ -3,12 +3,15 @@ import {
   Button,
   Card,
   CardActions,
-  CardContent, keyframes, ListItemIcon,
+  CardContent,
+  keyframes,
+  ListItemIcon,
   ListItemText,
   Menu,
   MenuItem,
   TextField,
-  Typography, useMediaQuery
+  Typography,
+  useMediaQuery,
 } from '@mui/material';
 import { MAX_CARD_TEXT_LENGTH, UNGROUPED } from '../constants';
 import { BoardContext } from '../contexts/BoardContext';
@@ -99,10 +102,6 @@ export function RetroCard({
     setAnchorEl(null);
   };
 
-  React.useEffect(() => {
-    setValue(card.value);
-  }, [card.value]);
-
   const cardColour =
     columns.find(column => column.id === columnId)?.cardColour || '#A4C5E3';
   const cardColourHover =
@@ -136,9 +135,11 @@ export function RetroCard({
       title: 'Delete a card',
       text: 'Are you sure you want to delete a card?',
       onConfirm: () => {
-        saveAndProcessAction(BoardActionType.DELETE_CARD, { cardId }).then(() => {
-          setConfirmAction(undefined);
-        });
+        saveAndProcessAction(BoardActionType.DELETE_CARD, { cardId }).then(
+          () => {
+            setConfirmAction(undefined);
+          }
+        );
       },
     });
   };
@@ -230,15 +231,16 @@ export function RetroCard({
           anchorEl={anchorEl}
           open={open}
           onClose={() => setAnchorEl(null)}
-          sx={{ border: '1px solid #9EA6AC', ul: { color: '#4D555A' } }}
+          sx={{ border: '1px solid #9EA6AC', ul: { color: '#4D555A' },zIndex:100,position:"absolute" }}
           MenuListProps={{
             'aria-labelledby': 'basic-button',
           }}
+        
         >
           {' '}
           {!editing && card.createdBy === global.user.id ? (
             <MenuItem
-              onClick={() => {
+              onClick={e => {
                 setEditing(true);
                 setAnchorEl(null);
               }}
@@ -315,20 +317,25 @@ export function RetroCard({
           ) : (
             <Typography
               color="black"
-              style={{ fontSize: '0.85rem' }}
+              style={{ fontSize: '0.85rem',cursor:"pointer" }}
               onClick={e => {
-                !ended &&
-                  !editing &&
-                  card.createdBy === global.user.id &&
-                  setEditing(true);
-                !hideButtons ? e.stopPropagation() : null;
+                // !ended &&
+                //   !editing &&
+                //   card.createdBy === global.user.id &&
+                  // setEditing(true);
+                  // console.log('e.detail', e.detail);
+                // if (e.detail === 2) {
+                //   setEditing(true);
+                // }
+
+                // !hideButtons ? e.stopPropagation() : null;
               }}
               onTouchStart={e => {
-                !ended &&
-                  !editing &&
-                  card.createdBy === global.user.id &&
-                  setEditing(true);
-                !hideButtons ? e.stopPropagation() : null;
+                // !ended &&
+                //   !editing &&
+                //   card.createdBy === global.user.id &&
+                //   setEditing(true);
+                // !hideButtons ? e.stopPropagation() : null;
               }}
               sx={{
                 cursor:
@@ -367,7 +374,7 @@ export function RetroCard({
           ) : null}
           {editing ? (
             <Box
-              sx={{ display: 'flex', justifyContent: 'flex-end', padding: 0 }}
+              sx={{ display: 'flex', justifyContent: 'flex-end', padding: 0,marginTop:"10px" }}
             >
               <Button
                 sx={{ minWidth: '0px', padding: 0, position: 'initial' }}

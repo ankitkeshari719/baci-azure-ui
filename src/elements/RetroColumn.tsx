@@ -1,7 +1,10 @@
 import {
   Box,
-  Button, styled, TextField,
-  Typography, useMediaQuery
+  Button,
+  styled,
+  TextField,
+  Typography,
+  useMediaQuery,
 } from '@mui/material';
 import React, { ReactElement, useMemo } from 'react';
 import Draggable, { DraggableData, DraggableEvent } from 'react-draggable';
@@ -50,6 +53,7 @@ export function RetroColumn({
   noHeader,
   showEditBox,
   setShowEditBox,
+  setIslanded,
   leftHeaderComponent,
   rightHeaderComponent,
 }: {
@@ -61,6 +65,7 @@ export function RetroColumn({
   showEditBox: boolean;
   leftHeaderComponent: any;
   rightHeaderComponent: any;
+  setIslanded: (islanded: boolean) => void;
   setShowEditBox: (showEditBox: boolean) => void;
 }): ReactElement {
   const selectedCard = React.useRef<number[] | null>(null);
@@ -106,9 +111,12 @@ export function RetroColumn({
 
   const [columnName, setColumnName] = React.useState(column.name);
 
-  React.useEffect(() => {
-    setColumnName(column.name);
-  }, [column.name]);
+  // React.useEffect(() => {
+  //   setColumnName(column.name);
+  // }, [column.name]);
+  // React.useEffect(() => {
+  //   console.log(groupCollapsed);
+  // }, [groupCollapsed]);
 
   const findCardInGroup = (group: CardGroup, id: string) =>
     group.cards.find(card => card.id === id);
@@ -170,6 +178,7 @@ export function RetroColumn({
   };
 
   const submit = async (text: string) => {
+    setIslanded(false);
     await addNewCard(
       (cardGroups.find(cardGroup => cardGroup.name === UNGROUPED) as CardGroup)
         .id,
@@ -354,6 +363,7 @@ export function RetroColumn({
     event: DraggableEvent,
     data: DraggableData
   ): void | false => {
+    selectedCard.current= [i, j];
     if (cardRefs !== undefined) {
       if (selectedCard.current !== null) {
         // for (const group of cardRefs) {
@@ -452,6 +462,7 @@ export function RetroColumn({
               selectedCard.current !== null &&
               targetMergeCard.current !== null
             ) {
+              
               mergeCards(
                 cardGroups[selectedCard.current[0]].cards[
                   selectedCard.current[1]
@@ -466,6 +477,7 @@ export function RetroColumn({
           selectedCard.current = null;
           targetLanding.current = null;
           targetMergeCard.current = null;
+        
         }
       }
     }
@@ -568,7 +580,7 @@ export function RetroColumn({
                         group.cards.length > 1 &&
                         !groupCollapsed[i]
                       }
-                      onCollapse={() => {
+                      onCollapse={value => {
                         groupCollapsed[i] = !groupCollapsed[i];
                         setGroupCollapsed([...groupCollapsed]);
                       }}
@@ -613,7 +625,10 @@ export function RetroColumn({
                                     style={{ padding: '10px' }}
                                   >
                                     <Draggable
-                                      ref={ref => (draggableRefs[i][j] = ref)}
+                                      ref={ref => {
+                                        draggableRefs[i][j] = ref;
+                                      
+                                      }}
                                       disabled={
                                         ended ||
                                         (card.locked &&
@@ -622,9 +637,9 @@ export function RetroColumn({
                                       onStart={(event, data) =>
                                         handleStart(i, j, event, data)
                                       }
-                                      onStop={(event, data) =>
-                                        handleStop(i, j, event, data)
-                                      }
+                                      onStop={(event, data) => {
+                                        handleStop(i, j, event, data);
+                                      }}
                                       onDrag={(event, data) =>
                                         handleDrag(i, j, event, data)
                                       }
@@ -632,7 +647,7 @@ export function RetroColumn({
                                       cancel={'just-name'}
                                       handle=".handle"
                                     >
-                                      <span>
+                                      <span className="handle">
                                         <RetroCard
                                           moveCard={moveCard}
                                           card={card}
@@ -704,6 +719,7 @@ export function RetroColumn({
                                 ) : null
                               )}
                               <span
+                                className="handel"
                                 ref={e =>
                                   cardRefCollector(
                                     e as HTMLDivElement,
@@ -734,7 +750,7 @@ export function RetroColumn({
               </div>
             </>
           ),
-          [column.groups]
+          [column.groups, groupCollapsed]
         )}
         {!ended && ((!isXsUp && mouseOver) || (isXsUp && showEditBox)) ? (
           <Box

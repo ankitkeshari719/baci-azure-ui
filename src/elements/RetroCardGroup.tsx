@@ -2,8 +2,10 @@ import {
   Button,
   Card,
   CardActions,
-  Grid, styled, TextField,
-  Typography
+  Grid,
+  styled,
+  TextField,
+  Typography,
 } from '@mui/material';
 import { BoardContext } from '../contexts/BoardContext';
 import { BoardActionType } from '../statemachine/BoardStateMachine';
@@ -11,6 +13,7 @@ import { CardGroup, Column } from '../types';
 
 import { ThumbUpOffAlt } from '@mui/icons-material';
 import CloseFullscreenIcon from '@mui/icons-material/CloseFullscreen';
+import OpenInFullIcon from '@mui/icons-material/OpenInFull';
 import DeleteIcon from '@mui/icons-material/Delete';
 import React from 'react';
 import { UNGROUPED } from '../constants';
@@ -45,7 +48,7 @@ export function RetroCardGroup({
   column: Column;
   children: React.ReactNode;
   showCollapse: boolean;
-  onCollapse: () => void;
+  onCollapse: (value: any) => void;
 }) {
   const [global] = React.useContext(GlobalContext);
   const {
@@ -72,9 +75,11 @@ export function RetroCardGroup({
       title: 'Delete a grouping',
       text: 'Are you sure you want to delete this grouping?',
       onConfirm: () => {
-        saveAndProcessAction(BoardActionType.DELETE_GROUP, { groupId }).then(() => {
-          setConfirmAction(undefined);
-        });
+        saveAndProcessAction(BoardActionType.DELETE_GROUP, { groupId }).then(
+          () => {
+            setConfirmAction(undefined);
+          }
+        );
       },
     });
   };
@@ -180,15 +185,36 @@ export function RetroCardGroup({
                 }}
               />
             </Grid>
-            {showCollapse ? (
+            {group.cards.length > 1 && showCollapse ? (
               <Grid item xs={2}>
-                <Button onClick={onCollapse} sx={{ position: 'initial' }}>
+                <Button
+                  onClick={event => {
+                    onCollapse(event);
+                  }}
+                  sx={{ position: 'initial' }}
+                >
                   <CloseFullscreenIcon
                     style={{ color: '#727D84', width: '20px' }}
                   />
                 </Button>
               </Grid>
-            ) : null}
+            ) : (
+              <Grid item xs={2}>
+                {' '}
+                {group.cards.length > 1 && (
+                  <Button
+                    onClick={event => {
+                      onCollapse(event);
+                    }}
+                    sx={{ position: 'initial' }}
+                  >
+                    <OpenInFullIcon
+                      style={{ color: '#727D84', width: '20px' }}
+                    />
+                  </Button>
+                )}
+              </Grid>
+            )}
           </Grid>
         ) : null}
         {group.cards.length === 0 && group.name !== UNGROUPED ? (

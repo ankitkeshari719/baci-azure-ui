@@ -79,7 +79,7 @@ export default function RetroBoard() {
   const [currentColumn, setCurrentColumn] = React.useState(0);
   const [showEditBox, setShowEditBox] = React.useState(false);
   const [justMyCards, setJustMyCards] = React.useState(false);
-
+  const [islanded, setIsLanded] =React.useState(true);
   const [showRetroPanel, setShowRetroPanel] = React.useState(false);
   const [showParticipantsPanel, setShowParticipantsPanel] =
     React.useState(false);
@@ -95,7 +95,21 @@ export default function RetroBoard() {
               (!b.reactions ? 0 : b.reactions.length) -
               (!a.reactions ? 0 : a.reactions.length)
           );
-
+          if(islanded){
+            for (const column of columns) {
+              for (const group of column.groups) {
+                if(group.cards.length !==0){
+                  group.cards =[];
+                }
+              }
+             }
+             setIsLanded(true);
+             return{
+              ...column,
+              groups: []
+            
+             }
+          } else{
           return {
             ...column,
             groups: groups
@@ -115,9 +129,10 @@ export default function RetroBoard() {
                   group.cards.length !== 0
               ),
           };
+        }
         })
       : [];
-
+   
   const closeAllPanels = () => {
     setShowRetroPanel(false);
     setShowParticipantsPanel(false);
@@ -168,14 +183,26 @@ export default function RetroBoard() {
 
   const finishRetro = () => {
     if (creatorId === global.user.id) {
+      sessionStorage.removeItem('retoname');
       setConfirmAction({
         action: 'Finish Retro',
         title: 'Finish Retro',
         text: 'This action will take All Participants to the Feedback screen.',
         onConfirm: () => {
-          saveAndProcessAction(BoardActionType.END_RETRO, {}).then(() => {
+          sessionStorage.removeItem('pulseCheckState');
+           saveAndProcessAction(BoardActionType.END_RETRO, {}).then(() => {
             setConfirmAction(undefined);
           });
+          //delete group before finishing retro
+          for (const column of columns) {
+            for (const group of column.groups) {
+              if(!group.name.includes('Ungrouped')){
+                let groupId: String = group.id;
+                saveAndProcessAction(BoardActionType.DELETE_GROUP, { groupId }).then(() => {
+                });
+              }
+            }}
+          
         },
       });
     } else {
@@ -184,6 +211,7 @@ export default function RetroBoard() {
   };
 
   const create10Cards = async () => {
+    setIsLanded(false);
     for (let i = 0; i < 10; i++) {
       const column = Math.floor(Math.random() * columns.length);
       const group = Math.floor(Math.random() * columns[column].groups.length);
@@ -512,6 +540,7 @@ export default function RetroBoard() {
                           noHeader={isXsUp}
                           showEditBox={showEditBox}
                           setShowEditBox={setShowEditBox}
+                          setIslanded={setIsLanded}
                           cardGroups={column.groups}
                         />
                         {isXsUp && !showEditBox ? (

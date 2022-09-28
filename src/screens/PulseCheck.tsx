@@ -5,16 +5,21 @@ import {
   FormControlLabel,
   Grid,
   Link,
-  Slide, styled, Switch,
+  Slide,
+  styled,
+  Switch,
   Toolbar,
-  Tooltip, tooltipClasses, TooltipProps,
-  Typography, useMediaQuery
+  Tooltip,
+  tooltipClasses,
+  TooltipProps,
+  Typography,
+  useMediaQuery,
 } from '@mui/material';
 import {
   PULSE_CHECK_QUESTIONS,
   PULSE_CHECK_QUESTIONS_INFO,
   QUICK_PULSE_CHECK_QUESTIONS,
-  QUICK_PULSE_CHECK_QUESTIONS_INFO
+  QUICK_PULSE_CHECK_QUESTIONS_INFO,
 } from '../constants';
 import { BoardContext } from '../contexts/BoardContext';
 import { ActionType, GlobalContext } from '../contexts/GlobalContext';
@@ -29,6 +34,7 @@ import SharePanel from '../elements/SharePanel';
 import useLoadRetro from '../hooks/useLoadRetro';
 import theme from '../theme/theme';
 import { ConfirmContext } from '../contexts/ConfirmContext';
+import { PulseCheckSubmitStatus } from '../types';
 
 const BootstrapTooltip = styled(({ className, ...props }: TooltipProps) => (
   <Tooltip {...props} classes={{ popper: className }}>
@@ -69,6 +75,36 @@ export default function PulseCheck() {
 
   useLoadRetro();
 
+  React.useEffect(() => {
+    // console.log(
+    //   'gPulseCheckState',
+
+    //   sessionStorage.getItem('pulseCheckState')
+    // );
+    const gPulseCheckState = sessionStorage.getItem('pulseCheckState');
+    if (gPulseCheckState) {
+      const parseGPulseCheckState = JSON.parse(gPulseCheckState);
+      if (
+        parseGPulseCheckState &&
+        parseGPulseCheckState.pulseSubmitState &&
+        parseGPulseCheckState?.retroId === currentRetro?.id
+      ) {
+        console.log('already pulse checked');
+
+        navigate('/board/' + currentRetro?.id);
+        dispatch({
+          type: ActionType.SET_SNACK_MESSAGE,
+          payload: {
+            snackMessage: {
+              snackMessageType: 'warning',
+              message: 'You have already submitted the pulse check feedback.',
+            },
+          },
+        });
+      }
+    }
+  }, []);
+
   const submit = () => {
     const someBlank =
       qs.findIndex(q => q[0] === -1) !== -1 &&
@@ -87,8 +123,11 @@ export default function PulseCheck() {
       dispatch({
         type: ActionType.SET_SNACK_MESSAGE,
         payload: {
-          snackMessage:
-            'Your responses have been successfully submitted. Thank you!',
+          snackMessage: {
+            message:
+              'Your responses have been successfully submitted. Thank you!',
+            snackMessageType: 'success',
+          },
         },
       });
     };
