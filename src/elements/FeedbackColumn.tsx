@@ -95,7 +95,8 @@ export function FeedbackColumn({
         type: ActionType.SET_SNACK_MESSAGE,
         payload: {
           snackMessage: {
-            message:'Your feedback has been successfully submitted. Thank you!',
+            message:
+              'Your feedback has been successfully submitted. Thank you!',
             snackMessageType: 'success',
           },
         },

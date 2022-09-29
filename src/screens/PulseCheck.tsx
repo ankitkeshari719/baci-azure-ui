@@ -130,6 +130,12 @@ export default function PulseCheck() {
           },
         },
       });
+      const pulseCheckState = {
+        retroId: currentRetro?.id + '',
+        pulseSubmitState: true,
+      };
+      sessionStorage.setItem('pulseCheckState', JSON.stringify(pulseCheckState));
+      navigate('/board/' + currentRetro?.id);
     };
 
     if (someBlank) {

@@ -22,7 +22,7 @@ export const getRetro = async (id: string): Promise<Retro> => {
     const requestOptions = {
         method: 'GET'
     };
-    await fetch(API_URL+`/getRetro?id=${id}`, requestOptions)
+    await fetch(API_URL+`/getRetro?_id=${id}`, requestOptions)
         .then(response => response.json())
         .then(data => {retro = data.retro[0]} );
     if (retro) {

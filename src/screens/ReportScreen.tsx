@@ -17,7 +17,7 @@ import {
 
 import { BoardContext } from '../contexts/BoardContext';
 import { GlobalContext } from '../contexts/GlobalContext';
-import React from 'react';
+import React, { useEffect } from 'react';
 import ReactToPrint from 'react-to-print';
 import { Report } from '../elements/Report';
 import { UserAvatar } from '../atoms/UserAvatar';
@@ -46,7 +46,7 @@ export default function ReportScreen() {
   const componentRef = React.createRef<HTMLDivElement>();
   const navigate = useNavigate();
 
-  useLoadRetro();
+  // useLoadRetro();
 
   const handleClickOpen = () => {
     setOpen(true);
@@ -166,33 +166,6 @@ export default function ReportScreen() {
             color: 'black',
           }}
         >
-          <span
-            style={{
-              flexDirection: 'row',
-              width: '100%',
-              justifyContent: 'center',
-              display: 'flex',
-              fontSize: '18px',
-              color: 'black',
-            }}
-          >
-            {' '}
-            Thank you! Below is the session summary{' '}
-          </span>
-
-          <span
-            style={{
-              flexDirection: 'row',
-              width: '100%',
-              justifyContent: 'center',
-              display: 'flex',
-              fontSize: '14px',
-              color: '#727D84',
-              marginTop: '5px',
-            }}
-          >
-            Don't forget to print it
-          </span>
           <div
             style={{
               display: 'flex',
@@ -275,6 +248,36 @@ export default function ReportScreen() {
               </DialogActions>
             </Dialog>
           </div>
+
+          <span
+            style={{
+              flexDirection: 'row',
+              width: '100%',
+              justifyContent: 'center',
+              display: 'flex',
+              fontSize: '22px',
+              color: 'black',
+              marginTop: '15px',
+              marginBottom: '5px',
+            }}
+          >
+            {' '}
+            Thank you! Below is the session summary{' '}
+          </span>
+
+          <span
+            style={{
+              flexDirection: 'row',
+              width: '100%',
+              justifyContent: 'center',
+              display: 'flex',
+              fontSize: '16px',
+              color: '#727D84',
+              marginTop: '5px',
+            }}
+          >
+            Don't forget to print it
+          </span>
         </div>
       </AppBar>
 
