@@ -15,10 +15,11 @@ import { BoardContext } from '../contexts/BoardContext';
 import { BoardActionType } from '../statemachine/BoardStateMachine';
 
 import CloseIcon from '@mui/icons-material/Close';
-import React from 'react';
+import React, { useState } from 'react';
 import { GlobalContext } from '../contexts/GlobalContext';
 import theme from '../theme/theme';
-
+import EditIcon from '@mui/icons-material/Edit';
+import DoneIcon from '@mui/icons-material/Done';
 export default function RetroPropsPanel({
   onClose,
   setShowSharePanel,
@@ -28,7 +29,7 @@ export default function RetroPropsPanel({
 }) {
   const isXsUp = useMediaQuery(theme.breakpoints.only('xs'));
   const isSmUp = useMediaQuery(theme.breakpoints.only('sm'));
-
+  const [isEditClicked, setIsEditClick] = useState(false);
   const [global, dispatch] = React.useContext(GlobalContext);
   const {
     state: { retroName, retroGoal, retroTimeframe },
@@ -52,7 +53,12 @@ export default function RetroPropsPanel({
   React.useEffect(() => {
     setLocalRetroTimeframe(retroTimeframe);
   }, [retroTimeframe]);
-
+  const editRetroNameClickHandler = () => {
+    setIsEditClick(true);
+  };
+  const doneEditRetroNameClickHandler = () => {
+    setIsEditClick(false);
+  }
   const saveAndProcessAction = async (
     actionName: BoardActionType,
     parameters: any
@@ -150,37 +156,85 @@ export default function RetroPropsPanel({
                 Info
               </Typography>
             ) : null}
-            <FormControl>
-              <TextField
-                multiline
-                variant="standard"
-                label="Retro Name"
-                sx={{ color: '#727D84', minWidth: '200px', margin: '10px' }}
-                value={localRetroName}
-                onChange={e => {
-                  setLocalRetroName(e.currentTarget.value);
-                }}
-                onBlur={async () => {
-                  await saveAndProcessAction(
-                    BoardActionType.UPDATE_RETRO_DETAILS,
-                    {
-                      retroName: localRetroName,
-                    }
-                  );
-                }}
-                onKeyDown={async e => {
-                  if (e.keyCode === 13) {
+
+            <div style={{ width: '100%' }}>
+              {isEditClicked ? (
+                <div style={{
+                  display: 'inline-flex',
+                  verticalAlign: 'text-bottom',
+                  boxSizing: 'inherit',
+                  textAlign: 'center',
+                  alignItems: 'center',
+                  width: '100%',
+                }}>
+                  <div style={{ width: '70%' }}>
+                  <TextField
+                  multiline
+                  variant="standard"
+                  label="Retro Name"
+                  sx={{ color: '#727D84', minWidth: '200px', margin: '10px' }}
+                  value={localRetroName}
+                  onChange={e => {
+                    setLocalRetroName(e.currentTarget.value);
+                  }}
+                  onBlur={async () => {
                     await saveAndProcessAction(
                       BoardActionType.UPDATE_RETRO_DETAILS,
                       {
                         retroName: localRetroName,
                       }
                     );
-                    (e.target as HTMLInputElement).blur();
-                  }
-                }}
-              />
-              <Select
+                  }}
+                  onKeyDown={async e => {
+                    if (e.keyCode === 13) {
+                      await saveAndProcessAction(
+                        BoardActionType.UPDATE_RETRO_DETAILS,
+                        {
+                          retroName: localRetroName,
+                        }
+                      );
+                      (e.target as HTMLInputElement).blur();
+                    }
+                  }}
+                />
+                </div>
+                <div style={{ width: '30%' }}>
+                      <Button onClick={doneEditRetroNameClickHandler}>
+                        <DoneIcon color="disabled" fontSize='large' />
+                      </Button>
+                    </div>
+                </div>
+                
+              ) : (
+                <>
+                  <div>
+                    <Typography style={{ marginLeft: '5px', color: '#00000099' }}>Retro Name</Typography>
+                  </div>
+                  <div
+                    style={{
+                      display: 'inline-flex',
+                      verticalAlign: 'text-bottom',
+                      boxSizing: 'inherit',
+                      textAlign: 'center',
+                      alignItems: 'center',
+                      width: '100%',
+                    }}
+                  >
+                    <div style={{width: '70%'}}>
+                      <Typography style={{ marginLeft: '10px', float: 'left' }}>
+                        {localRetroName}
+                      </Typography>
+                    </div>
+                    <div style={{ width: '30%' }}>
+                      <Button onClick={editRetroNameClickHandler}>
+                        <EditIcon color="disabled" />
+                      </Button>
+                    </div>
+                  </div>
+                </>
+              )}
+            </div>
+            {/* <Select
                 variant="outlined"
                 label="Time Frame"
                 displayEmpty
@@ -207,8 +261,17 @@ export default function RetroPropsPanel({
                 <MenuItem value={'3 weeks'}>3 weeks</MenuItem>
                 <MenuItem value={'4 weeks'}>4 weeks</MenuItem>
                 <MenuItem value={'N/A'}>N/A</MenuItem>
-              </Select>
-            </FormControl>
+              </Select> */}
+            <div style={{ width: '100%' }}>
+              <div style={{ padding: '5px', margin: '5px' }}>
+                <Typography style={{ color: '#00000099' }}>
+                  Time Frame
+                </Typography>
+              </div>
+              <div style={{ padding: '5px', margin: '5px' }}>
+                <Typography style={{}}>{localRetroTimeframe}</Typography>
+              </div>
+            </div>
 
             {isXsUp || isSmUp ? (
               <Box

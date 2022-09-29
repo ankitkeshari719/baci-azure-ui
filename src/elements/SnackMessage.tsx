@@ -2,7 +2,7 @@ import { ActionType, GlobalContext } from '../contexts/GlobalContext';
 import { Alert, Button, Snackbar } from '@mui/material';
 
 import CloseIcon from '@mui/icons-material/Close';
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 
 export const SnackMessage = () => {
   const [global, dispatch] = React.useContext(GlobalContext);
@@ -10,18 +10,26 @@ export const SnackMessage = () => {
   const clearMessage = () => {
     dispatch({
       type: ActionType.SET_SNACK_MESSAGE,
-      payload: { snackMessage: undefined },
+      payload: {
+        snackMessage: {
+          message: '',
+          snackMessageType: global.snackMessage?.snackMessageType,
+        },
+      },
     });
   };
+
+
+
   return (
     <Snackbar
-      open={global.snackMessage !== undefined}
+      open={global.snackMessage.message !== ""}
       autoHideDuration={4000}
       onClose={clearMessage}
       anchorOrigin={{ vertical: 'top', horizontal: 'right' }}
     >
-      <Alert severity="success">
-        {global.snackMessage}
+      <Alert severity= {global.snackMessage?.snackMessageType}>
+        {global.snackMessage?.message}
         <Button color="primary" size="small" onClick={clearMessage}>
           <CloseIcon />
         </Button>
