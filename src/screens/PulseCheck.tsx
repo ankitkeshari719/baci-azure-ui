@@ -119,7 +119,6 @@ export default function PulseCheck() {
         questions: qs.map((q, i) => ({ id: String(i), entry: q[0] })),
       });
       setConfirmAction(undefined);
-      navigate('/board/' + currentRetro?.id);
       dispatch({
         type: ActionType.SET_SNACK_MESSAGE,
         payload: {

@@ -92,6 +92,7 @@ export function Onboarding() {
     }
     sessionStorage.setItem('retroname', '"' + retroName + '"');
     setCaptureName(false);
+    console.log(started, joining, global.currentRetro);
   };
   function handleRetronameChange(e: React.SetStateAction<string>) {
     if(e == "") {
@@ -136,9 +137,9 @@ export function Onboarding() {
       setCodeError('Please enter access code');
     } else {
       let foundRetro = await retro.getByHumanId(humanId);
-      if (!foundRetro) {
-        foundRetro = await retro.getById(humanId);
-      }
+      // if (!foundRetro) {
+      //   foundRetro = await retro.getById(humanId);
+      // }
       if (foundRetro) {
         setJoining(true);
         setCaptureName(true);

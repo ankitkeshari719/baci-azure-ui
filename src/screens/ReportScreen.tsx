@@ -171,6 +171,7 @@ export default function ReportScreen() {
               display: 'flex',
               flexDirection: 'row',
               justifyContent: 'flex-end',
+              marginTop:"15px"
             }}
           >
             <ReactToPrint
@@ -285,10 +286,11 @@ export default function ReportScreen() {
 
       <Box
         sx={{
+          marginTop:"5px",
           overflowY: 'scroll',
           height: isXsUp
-            ? 'calc(var(--app-height) - 145px)'
-            : 'calc(var(--app-height) - 140px)',
+            ? 'calc(var(--app-height) - 195px)'
+            : 'calc(var(--app-height) - 190px)',
           display: 'flex',
           justifyContent: 'center',
         }}
