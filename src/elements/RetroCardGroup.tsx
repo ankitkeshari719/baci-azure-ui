@@ -217,6 +217,7 @@ export function RetroCardGroup({
             )}
           </Grid>
         ) : null}
+
         {group.cards.length === 0 && group.name !== UNGROUPED ? (
           <div>
             <div
@@ -237,6 +238,8 @@ export function RetroCardGroup({
         ) : (
           children
         )}
+
+        {/* bottom side of grouping */}
         {group.name !== UNGROUPED ? (
           <>
             <CardActions style={{ justifyContent: 'space-around', padding: 0 }}>

@@ -12,7 +12,7 @@ class ErrorBoundary extends React.Component {
   }
 
   componentDidCatch(error: any, errorInfo: any) {
-    this.context.setError('Error:' + error.message);
+    this.context.setError('Error:' + error?.message);
   }
 
   render() {

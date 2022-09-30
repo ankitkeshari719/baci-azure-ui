@@ -143,6 +143,7 @@ export function RetroColumn({
 
   const addNewCard = async (cardGroupId: string, value: string) => {
     const id = shortid.generate();
+    console.log(id, 'id');
     await saveAndProcessAction(BoardActionType.ADD_NEW_CARD, {
       groupId: cardGroupId,
       id,
@@ -179,10 +180,17 @@ export function RetroColumn({
 
   const submit = async (text: string) => {
     setIslanded(false);
-    await addNewCard(
-      (cardGroups.find(cardGroup => cardGroup.name === UNGROUPED) as CardGroup)
-        .id,
-      text
+
+    console.log(cardGroups);
+
+      await addNewCard(
+        (
+          cardGroups.find(
+            cardGroup => cardGroup.name === UNGROUPED
+          ) as CardGroup
+        ).id,
+        text
+      
     );
     setValue('');
     setValueSet(false);
@@ -363,7 +371,7 @@ export function RetroColumn({
     event: DraggableEvent,
     data: DraggableData
   ): void | false => {
-    selectedCard.current= [i, j];
+    selectedCard.current = [i, j];
     if (cardRefs !== undefined) {
       if (selectedCard.current !== null) {
         // for (const group of cardRefs) {
@@ -462,7 +470,6 @@ export function RetroColumn({
               selectedCard.current !== null &&
               targetMergeCard.current !== null
             ) {
-              
               mergeCards(
                 cardGroups[selectedCard.current[0]].cards[
                   selectedCard.current[1]
@@ -477,7 +484,6 @@ export function RetroColumn({
           selectedCard.current = null;
           targetLanding.current = null;
           targetMergeCard.current = null;
-        
         }
       }
     }
@@ -627,7 +633,6 @@ export function RetroColumn({
                                     <Draggable
                                       ref={ref => {
                                         draggableRefs[i][j] = ref;
-                                      
                                       }}
                                       disabled={
                                         ended ||

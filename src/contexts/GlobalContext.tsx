@@ -22,7 +22,7 @@ export class ReducerPayload {
   user?: User;
   preferredNickname?: string;
   snackMessage?: SnackMessageClass;
-  retroCreateState?: boolean;
+  retroCreateState?:boolean;
   pulseCheckState?: PulseCheckSubmitStatus;
 }
 
@@ -81,18 +81,18 @@ function GlobalProvider(props: ComponentProps<any>) {
       case ActionType.SET_SNACK_MESSAGE:
         return saveState({
           ...state,
-          snackMessage:action.payload?.snackMessage as SnackMessageClass,
+          snackMessage: action.payload?.snackMessage as SnackMessageClass,
         });
       case ActionType.SET_RETRO_CREATE:
         return saveState({
           ...state,
           retroCreateState: action.payload?.retroCreateState,
         });
-      case ActionType.SET_PULSE_CHECK:
-        return saveState({
-          ...state,
-          pulseCheckState: action.payload?.pulseCheckState,
-        });
+        case ActionType.SET_PULSE_CHECK:
+          return saveState({
+            ...state,
+            pulseCheckState: action.payload?.pulseCheckState,
+          });
     }
     return saveState({ ...state });
   }
