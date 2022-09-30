@@ -5,16 +5,21 @@ import {
   FormControlLabel,
   Grid,
   Link,
-  Slide, styled, Switch,
+  Slide,
+  styled,
+  Switch,
   Toolbar,
-  Tooltip, tooltipClasses, TooltipProps,
-  Typography, useMediaQuery
+  Tooltip,
+  tooltipClasses,
+  TooltipProps,
+  Typography,
+  useMediaQuery,
 } from '@mui/material';
 import {
   PULSE_CHECK_QUESTIONS,
   PULSE_CHECK_QUESTIONS_INFO,
   QUICK_PULSE_CHECK_QUESTIONS,
-  QUICK_PULSE_CHECK_QUESTIONS_INFO
+  QUICK_PULSE_CHECK_QUESTIONS_INFO,
 } from '../constants';
 import { BoardContext } from '../contexts/BoardContext';
 import { ActionType, GlobalContext } from '../contexts/GlobalContext';
@@ -29,6 +34,7 @@ import SharePanel from '../elements/SharePanel';
 import useLoadRetro from '../hooks/useLoadRetro';
 import theme from '../theme/theme';
 import { ConfirmContext } from '../contexts/ConfirmContext';
+import { PulseCheckSubmitStatus } from '../types';
 
 const BootstrapTooltip = styled(({ className, ...props }: TooltipProps) => (
   <Tooltip {...props} classes={{ popper: className }}>
@@ -63,11 +69,42 @@ export default function PulseCheck() {
   const [introScreen, setIntroScreen] = React.useState<boolean>(true);
   const [scrollDownButton, setScrollDownButton] = React.useState(true);
   const [showSharePanel, setShowSharePanel] = React.useState(false);
-
+  // const [gPulseCheckState, setPulseCheckState] =
+  //   React.useState(pulseCheckState);
   const scrollableRef = React.useRef<HTMLDivElement>(null);
   const questionRef = React.useRef<HTMLDivElement>(null);
 
   useLoadRetro();
+
+  React.useEffect(() => {
+    // console.log(
+    //   'gPulseCheckState',
+
+    //   sessionStorage.getItem('pulseCheckState')
+    // );
+    const gPulseCheckState = sessionStorage.getItem('pulseCheckState');
+    if (gPulseCheckState) {
+      const parseGPulseCheckState = JSON.parse(gPulseCheckState);
+      if (
+        parseGPulseCheckState &&
+        parseGPulseCheckState.pulseSubmitState &&
+        parseGPulseCheckState?.retroId === currentRetro?.id
+      ) {
+        console.log('already pulse checked');
+
+        navigate('/board/' + currentRetro?.id);
+        dispatch({
+          type: ActionType.SET_SNACK_MESSAGE,
+          payload: {
+            snackMessage: {
+              snackMessageType: 'warning',
+              message: 'You have already submitted the pulse check feedback.',
+            },
+          },
+        });
+      }
+    }
+  }, []);
 
   const submit = () => {
     const someBlank =
@@ -83,14 +120,31 @@ export default function PulseCheck() {
         questions: qs.map((q, i) => ({ id: String(i), entry: q[0] })),
       });
       setConfirmAction(undefined);
-      navigate('/board/' + currentRetro?.id);
       dispatch({
         type: ActionType.SET_SNACK_MESSAGE,
         payload: {
-          snackMessage:
-            'Your responses have been successfully submitted. Thank you!',
+          snackMessage: {
+            message:
+              'Your responses have been successfully submitted. Thank you!',
+            snackMessageType: 'success',
+          },
         },
       });
+      // dispatch({
+      //   type: ActionType.SET_PULSE_CHECK,
+      //   payload: {
+      //     pulseCheckState: {
+      //       retroId: currentRetro?.id + '',
+      //       pulseSubmitState: true,
+      //     },
+      //   },
+      // });
+      const pulseCheckState = {
+        retroId: currentRetro?.id + '',
+        pulseSubmitState: true,
+      };
+      sessionStorage.setItem('pulseCheckState', JSON.stringify(pulseCheckState));
+      navigate('/board/' + currentRetro?.id);
     };
 
     if (someBlank) {

@@ -2,7 +2,10 @@ import {
   Box,
   Button,
   Grid,
-  Link, styled, Typography, useMediaQuery
+  Link,
+  styled,
+  Typography,
+  useMediaQuery,
 } from '@mui/material';
 import React, { ReactElement } from 'react';
 import {
@@ -10,7 +13,7 @@ import {
   FEEDBACK_QUESTIONS,
   FEEDBACK_QUESTIONS_COLORS,
   FEEDBACK_QUESTIONS_FILLED,
-  FEEDBACK_QUESTIONS_OUTLINE
+  FEEDBACK_QUESTIONS_OUTLINE,
 } from '../constants';
 import { BoardContext } from '../contexts/BoardContext';
 import { BoardActionType } from '../statemachine/BoardStateMachine';
@@ -91,8 +94,11 @@ export function FeedbackColumn({
       dispatch({
         type: ActionType.SET_SNACK_MESSAGE,
         payload: {
-          snackMessage:
-            'Your feedback has been successfully submitted. Thank you!',
+          snackMessage: {
+            message:
+              'Your feedback has been successfully submitted. Thank you!',
+            snackMessageType: 'success',
+          },
         },
       });
       setConfirmAction(undefined);
@@ -132,10 +138,27 @@ export function FeedbackColumn({
           FEATURE_FLAGS.report &&
           global.currentRetro?.creatorId === global.user.id
         ) {
+          console.log(
+            FEATURE_FLAGS.report,
+            global.currentRetro?.creatorId === global.user.id,
+            'data'
+          );
           navigate('/report/' + global.currentRetro.id);
         } else {
           navigate(`/offboarding`);
         }
+
+        // setConfirmAction(undefined);
+        // console.log( FEATURE_FLAGS.report ,
+        //   global.currentRetro?.creatorId === global.user.id,  "data")
+        // if (
+        //   FEATURE_FLAGS.report &&
+        //   global.currentRetro?.creatorId === global.user.id
+        // ) {
+        //   navigate('/report/' + global.currentRetro.id);
+        // } else {
+        //   navigate(`/offboarding`);
+        // }
       },
     });
   };

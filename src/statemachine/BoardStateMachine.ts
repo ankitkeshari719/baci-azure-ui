@@ -744,7 +744,7 @@ import {
             createdBy: userId,
             locked: false,
           };
-          group1.cards.splice(group1.cards.indexOf(card1), 1);
+          group1.cards.splice(group1.cards.indexOf(card1), 1); 
           group2.cards.splice(group2.cards.indexOf(card2), 1);
   
           column.groups = [
