@@ -50,7 +50,7 @@ export function Onboarding() {
   const [humanId, setHumanId] = useState(id || '');
   const [retroName, setRetroName] = useState('');
   const [localRetroName, setlocalRetroName] = useState(
-    sessionStorage.getItem('retroname') || ''
+    localStorage.getItem('retroname') || ''
   );
   const [retroTimeframe, setRetroTimeframe] = useState('');
   const [userName, setUserName] = useState(
@@ -76,7 +76,7 @@ export function Onboarding() {
     }
   }, []);
   const create = async () => {
-    sessionStorage.setItem('retroname', retroName);
+    localStorage.setItem('retroname', retroName);
     setlocalRetroName('"' + retroName + '"');
     if (retroName !== '' && retroTimeframe !== '') {
       setCodeError('');
@@ -90,7 +90,7 @@ export function Onboarding() {
     } else if (retroTimeframe === '') {
       setisTimeFrameSet(true);
     }
-    sessionStorage.setItem('retroname', '"' + retroName + '"');
+    localStorage.setItem('retroname', '"' + retroName + '"');
     setCaptureName(false);
     console.log(started, joining, global.currentRetro);
   };
@@ -489,12 +489,11 @@ export function Onboarding() {
                 {codeWarning}
               </FormHelperText>
             )}
-            <Select
+            <TextField
               inputRef={timeframeRef}
               variant="outlined"
-              label="Retro Time Frame"
-              displayEmpty
-              renderValue={value => (value !== '' ? value : 'Time frame')}
+              label="Time Frame"
+            //renderValue={(value: any) => (value !== '' ? value : 'Time frame')}
               sx={{
                 color: '#727D84',
                 minWidth: '320px',
@@ -502,6 +501,7 @@ export function Onboarding() {
                 span: { visibility: 'visible', background: 'white' },
               }}
               value={retroTimeframe}
+              select
               onChange={e => handleTimeFrame(e?.target?.value)}
             >
               <MenuItem value={'1 day'}>1 day</MenuItem>
@@ -510,7 +510,7 @@ export function Onboarding() {
               <MenuItem value={'3 weeks'}>3 weeks</MenuItem>
               <MenuItem value={'4 weeks'}>4 weeks</MenuItem>
               <MenuItem value={'N/A'}>N/A</MenuItem>
-            </Select>
+            </TextField>
             {isTimeFrameSet && (
               <FormHelperText style={{ color: '#d32f2f', marginLeft: '5px' }}>
                 Please enter time frame
@@ -571,7 +571,7 @@ export function Onboarding() {
                 color="text.primary"
                 align="center"
               >
-               �Your retro has been created!� 
+               Your retro has been created!
               </Typography>
               <Typography
                 sx={{ my: 0, mx: 2, color:'#4d555a',fontSize: '15px', marginBottom: '28px'}}

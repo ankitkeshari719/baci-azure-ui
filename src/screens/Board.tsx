@@ -108,7 +108,7 @@ export default function RetroBoard() {
               ...column,
               groups: []
             
-             }
+            }
           } else{
           return {
             ...column,
@@ -193,16 +193,6 @@ export default function RetroBoard() {
            saveAndProcessAction(BoardActionType.END_RETRO, {}).then(() => {
             setConfirmAction(undefined);
           });
-          //delete group before finishing retro
-          for (const column of columns) {
-            for (const group of column.groups) {
-              if(!group.name.includes('Ungrouped')){
-                let groupId: String = group.id;
-                saveAndProcessAction(BoardActionType.DELETE_GROUP, { groupId }).then(() => {
-                });
-              }
-            }}
-          
         },
       });
     } else {
@@ -586,3 +576,4 @@ export default function RetroBoard() {
     </Box>
   );
 }
+

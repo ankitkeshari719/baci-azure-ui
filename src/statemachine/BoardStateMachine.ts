@@ -544,7 +544,7 @@ export const processAction = (state: BoardState, actionName: BoardActionType, pa
         const user = findUser(userId);
         if (!user) {
             if (date && !state.startedDate) {
-                state.startedDate = date;
+                state.startedDate =new Date(date) ;
             }
             state.users.push({ userId, userNickname, feedback: [], pulseCheckQuestions: [] });
         } else if (user?.userNickname !== userNickname) {
