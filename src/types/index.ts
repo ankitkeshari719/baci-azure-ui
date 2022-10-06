@@ -1,24 +1,30 @@
 import { AlertColor } from "@mui/material";
+
 export class Retro {
-    id: string = '';
-    humanId: string = '';
-    name: string = '';
-    joinUrl: string = '';
-    creatorId?: string = '';
+  id: string = '';
+  humanId: string = '';
+  name: string = '';
+  joinUrl: string = '';
+  creatorId?: string = '';
 }
 export interface PulseCheckSubmitStatus {
     retroId: string;
     pulseSubmitState: boolean;
   }
 export class User {
-    id: string = '';
-    name: string = '';
-    nickname?: string = '';
+  id: string = '';
+  name: string = '';
+  nickname?: string = '';
 }
+
 export class SnackMessageClass {
-    snackMessageType: AlertColor = 'success';
-    message: string = '';
-  }
+  snackMessageType: AlertColor = 'success';
+  message: string = '';
+}
+
+
+
+
 export class Global {
   user: User = new User();
   currentRetro?: Retro = undefined;
@@ -100,25 +106,28 @@ export class BoardState {
   fullPulseCheck: boolean = false;
   lastUpdatedBy?: string;
   ended: boolean = false;
+
+  needsToShow:boolean=false;
+
   startedDate: Date | undefined;
   endedDate: Date | undefined;
   lastStateUpdate: Date | undefined;
 
-    constructor(retroId: string, columns: Column[]) {
-        this.retroId = retroId;
-        this.columns = columns;
-    }
+  constructor(retroId: string, columns: Column[]) {
+    this.retroId = retroId;
+    this.columns = columns;
+  }
 }
 
 export interface Action {
-    id: string;
-    actionName: string;
-    parameters: any;
-    userId: string;
-    timestamp: number;
-    date?: Date;
-    sourceActionTimestamp: number;
-    sourceActionId: string;
-    onlyVisibleBy?: string[];
-    version: number;
+  id: string;
+  actionName: string;
+  parameters: any;
+  userId: string;
+  timestamp: number;
+  date?: Date;
+  sourceActionTimestamp: number;
+  sourceActionId: string;
+  onlyVisibleBy?: string[];
+  version: number;
 }

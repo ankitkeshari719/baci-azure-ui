@@ -71,7 +71,15 @@ export default function RetroBoard() {
 
   const [global, dispatch] = React.useContext(GlobalContext);
   const {
-    state: { lastStateUpdate, columns, retroName, users, creatorId, ended },
+    state: {
+      lastStateUpdate,
+      columns,
+      retroName,
+      users,
+      creatorId,
+      ended,
+      needsToShow,
+    },
     commitAction,
   } = React.useContext(BoardContext);
   const { setConfirmAction } = React.useContext(ConfirmContext);
@@ -79,13 +87,63 @@ export default function RetroBoard() {
   const [currentColumn, setCurrentColumn] = React.useState(0);
   const [showEditBox, setShowEditBox] = React.useState(false);
   const [justMyCards, setJustMyCards] = React.useState(false);
-  const [islanded, setIsLanded] =React.useState(true);
+
+  const [islanded, setIsLanded] = React.useState(true);
+
   const [showRetroPanel, setShowRetroPanel] = React.useState(false);
   const [showParticipantsPanel, setShowParticipantsPanel] =
     React.useState(false);
   const [showSharePanel, setShowSharePanel] = React.useState(false);
 
   useLoadRetro();
+  React.useEffect(() => {
+    console.log(columns, '');
+  });
+  // const getProcessedColumns = () =>
+  //    columns
+  //     ? columns.map(column => {
+  //         const groups = [...column.groups].sort(
+  //           (a, b) =>
+  //             (!b.reactions ? 0 : b.reactions.length) -
+  //             (!a.reactions ? 0 : a.reactions.length)
+  //         );
+  //         if(islanded){
+  //           for (const column of columns) {
+  //             for (const group of column.groups) {
+  //               if(group.cards.length !==0){
+  //                 group.cards =[];
+  //               }
+  //             }
+  //            }
+  //            setIsLanded(true);
+  //            return{
+  //             ...column,
+  //             groups: []
+
+  //            }
+  //         } else{
+  //         return {
+  //           ...column,
+  //           groups: groups
+  //             .map(group => {
+  //               const cards = group.cards.filter(
+  //                 card => !justMyCards || card.createdBy === global.user.id
+  //               );
+  //               return {
+  //                 ...group,
+  //                 cards,
+  //               };
+  //             })
+  //             .filter(
+  //               group =>
+  //                 !justMyCards ||
+  //                 group.name === UNGROUPED ||
+  //                 group.cards.length !== 0
+  //             ),
+  //         };
+  //       }
+  //       })
+  //     : [];
 
   const getProcessedColumns = () =>
     columns
@@ -211,7 +269,6 @@ export default function RetroBoard() {
       navigate(`/board/${global?.currentRetro?.id}/feedback`);
     }
   };
-
   const create10Cards = async () => {
     setIsLanded(false);
     for (let i = 0; i < 10; i++) {
@@ -226,10 +283,11 @@ export default function RetroBoard() {
   };
 
   React.useEffect(() => {
-    if (ended) {
+    console.log(needsToShow)
+    if (ended && !needsToShow) {
       navigate(`/board/${global?.currentRetro?.id}/feedback`);
     }
-  }, [ended]);
+  }, [ended, needsToShow]);
 
   return (
     <Box

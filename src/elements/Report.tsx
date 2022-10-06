@@ -14,7 +14,6 @@ import {
   Grid,
   Typography,
   styled,
-
 } from '@mui/material';
 import StackedBarChart, { Question } from './PulseCheckChart';
 import WordCloud, { Word } from './WordCloud';
@@ -44,7 +43,7 @@ export const Report = React.forwardRef((props, ref) => {
   const [islanded, setIsLanded] =React.useState(true);
   React.useEffect(() => {
     const cardValues = [] as string[];
-    console.log("startedDate",startedDate);
+
     columns[ACTIONS_COLUMN].groups.forEach(group =>
       group.cards.forEach(card => {
         actions.push(card.value);

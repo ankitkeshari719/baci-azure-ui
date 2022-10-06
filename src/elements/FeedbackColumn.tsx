@@ -13,7 +13,7 @@ import {
   FEEDBACK_QUESTIONS,
   FEEDBACK_QUESTIONS_COLORS,
   FEEDBACK_QUESTIONS_FILLED,
-  FEEDBACK_QUESTIONS_OUTLINE
+  FEEDBACK_QUESTIONS_OUTLINE,
 } from '../constants';
 import { BoardContext } from '../contexts/BoardContext';
 import { BoardActionType } from '../statemachine/BoardStateMachine';
@@ -138,10 +138,27 @@ export function FeedbackColumn({
           FEATURE_FLAGS.report &&
           global.currentRetro?.creatorId === global.user.id
         ) {
+          console.log(
+            FEATURE_FLAGS.report,
+            global.currentRetro?.creatorId === global.user.id,
+            'data'
+          );
           navigate('/report/' + global.currentRetro.id);
         } else {
           navigate(`/offboarding`);
         }
+
+        // setConfirmAction(undefined);
+        // console.log( FEATURE_FLAGS.report ,
+        //   global.currentRetro?.creatorId === global.user.id,  "data")
+        // if (
+        //   FEATURE_FLAGS.report &&
+        //   global.currentRetro?.creatorId === global.user.id
+        // ) {
+        //   navigate('/report/' + global.currentRetro.id);
+        // } else {
+        //   navigate(`/offboarding`);
+        // }
       },
     });
   };

@@ -69,7 +69,8 @@ export default function PulseCheck() {
   const [introScreen, setIntroScreen] = React.useState<boolean>(true);
   const [scrollDownButton, setScrollDownButton] = React.useState(true);
   const [showSharePanel, setShowSharePanel] = React.useState(false);
-
+  // const [gPulseCheckState, setPulseCheckState] =
+  //   React.useState(pulseCheckState);
   const scrollableRef = React.useRef<HTMLDivElement>(null);
   const questionRef = React.useRef<HTMLDivElement>(null);
 
