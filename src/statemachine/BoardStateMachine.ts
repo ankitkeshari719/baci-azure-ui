@@ -870,16 +870,18 @@ import {
         }
       }
     };
-  
-    const joinRetro = (
-      userNickname: string,
-      date: Date | undefined,
-      userId: string
-    ) => {
-      const user = findUser(userId);
-      if (!user) {
-        if (date && !state.startedDate) {
-          state.startedDate = date;
+
+
+    const joinRetro = (userNickname: string, date: Date | undefined, userId: string) => {
+        const user = findUser(userId);
+        if (!user) {
+            if (date && !state.startedDate) {
+                state.startedDate =new Date(date) ;
+            }
+            state.users.push({ userId, userNickname, feedback: [], pulseCheckQuestions: [] });
+        } else if (user?.userNickname !== userNickname) {
+            user.userNickname = userNickname;
+
         }
         state.users.push({
           userId,

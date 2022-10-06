@@ -53,7 +53,7 @@ export function FeedbackColumn({
 
   const scrollableContainer = React.createRef<HTMLDivElement>();
 
-  const qs = FEEDBACK_QUESTIONS.map(q => React.useState(-1));
+  const qs = FEEDBACK_QUESTIONS.map(q => React.useState(0));
 
   const [uncompletedError, setUnCompletedError] = React.useState(false);
 

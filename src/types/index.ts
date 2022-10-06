@@ -7,7 +7,10 @@ export class Retro {
   joinUrl: string = '';
   creatorId?: string = '';
 }
-
+export interface PulseCheckSubmitStatus {
+    retroId: string;
+    pulseSubmitState: boolean;
+  }
 export class User {
   id: string = '';
   name: string = '';
@@ -18,6 +21,8 @@ export class SnackMessageClass {
   snackMessageType: AlertColor = 'success';
   message: string = '';
 }
+
+
 
 
 export class Global {
@@ -101,7 +106,9 @@ export class BoardState {
   fullPulseCheck: boolean = false;
   lastUpdatedBy?: string;
   ended: boolean = false;
+
   needsToShow:boolean=false;
+
   startedDate: Date | undefined;
   endedDate: Date | undefined;
   lastStateUpdate: Date | undefined;

@@ -2,8 +2,10 @@ import * as React from 'react';
 
 import {
   Button,
+  createMuiTheme,
   Divider,
   FormControl,
+  FormHelperText,
   Grid,
   Link,
   MenuItem,
@@ -15,8 +17,7 @@ import {
 import { useNavigate, useParams } from 'react-router-dom';
 import { EmailShareButton, WhatsappShareButton } from 'react-share';
 import { ActionType, GlobalContext } from '../contexts/GlobalContext';
-import { AuthenticatedTemplate, UnauthenticatedTemplate, useMsal } from "@azure/msal-react";
-
+import { createTheme as any } from '@mui/material/styles';
 import EmailIcon from '@mui/icons-material/Email';
 import PhoneAndroidIcon from '@mui/icons-material/PhoneAndroid';
 import WhatsAppIcon from '@mui/icons-material/WhatsApp';
@@ -32,7 +33,8 @@ import { useAzureAuth } from '../msal/azureauth';
 import { loginRequest, b2cPolicies } from "../authConfig";
 import ButtonGroup from "@material-ui/core/ButtonGroup";
 import { Link as RouterLink } from "react-router-dom";
-
+import { BoardActionType } from '../statemachine/BoardStateMachine';
+import { BoardContext } from '../contexts/BoardContext';
 
 export function Onboarding() {
   const { id } = useParams();
@@ -40,67 +42,158 @@ export function Onboarding() {
   const navigate = useNavigate();
   const [global, dispatch] = React.useContext(GlobalContext);
   const retro = useRetro();
-
+  const { state: commitAction } = React.useContext(BoardContext);
   const [started, setStarted] = useState(global.retroCreateState || false);
   const [joining, setJoining] = useState(id ? true : false);
   const [captureName, setCaptureName] = useState(id ? true : false);
-
+  const [isTimeFrameSet, setisTimeFrameSet] = useState(id ? true : false);
   const [humanId, setHumanId] = useState(id || '');
   const [retroName, setRetroName] = useState('');
+  const [localRetroName, setlocalRetroName] = useState(
+    localStorage.getItem('retroname') || ''
+  );
   const [retroTimeframe, setRetroTimeframe] = useState('');
   const [userName, setUserName] = useState(
     global.preferredNickname || global.user?.name
   );
   const [codeError, setCodeError] = useState('');
-
+  const [codeWarning, setCodeWarning] = useState('');
   const timeframeRef = React.useRef<HTMLSelectElement | null>(null);
-  const { instance } = useMsal();
+
+  const AVATAR_CHARACTER_LIMIT = 30;
+  const RETRONAME_CHARACTER_LIMIT = 80;
+  React.useEffect(() => {
+   
+    if (window.location.pathname.includes('join')) {
+      setStarted(false);
+      if (sessionStorage.getItem('BoardContext') !== null) {
+        let data: any = sessionStorage.getItem('BoardContext');
+        data = JSON.parse(data);
+        for (const item of [...data.history]) {
+          setRetroName(item.action.parameters.retroName);
+        }
+      }
+    }
+  }, []);
   const create = async () => {
-    await retro.create(
-      {
-        name: retroName === '' ? 'Retro' : retroName,
-      },
-      retroTimeframe,
-      ''
-    );
+    localStorage.setItem('retroname', retroName);
+    setlocalRetroName('"' + retroName + '"');
+    if (retroName !== '' && retroTimeframe !== '') {
+      setCodeError('');
+      setisTimeFrameSet(false);
+      await retro.create({ name: retroName }, retroTimeframe, '');
+    } else if (retroTimeframe === '' && retroName === '') {
+      setisTimeFrameSet(true);
+      setCodeError('Please enter retro name');
+    } else if (retroName === '') {
+      setCodeError('Please enter retro name');
+    } else if (retroTimeframe === '') {
+      setisTimeFrameSet(true);
+    }
+    localStorage.setItem('retroname', '"' + retroName + '"');
     setCaptureName(false);
+    console.log(started, joining, global.currentRetro);
   };
-  const handleLogin = () => {
-    instance.loginRedirect(loginRequest)
-        .catch((error) => console.log(error))
+  function handleRetronameChange(e: React.SetStateAction<string>) {
+    if(e == "") {
+      setCodeWarning('');
+    } else {
+      setCodeError('');
+    }
+    if (e.length >= 60) {
+      let count = 80 - e.length;
+      
+     if (count === 0) {
+        setCodeWarning('No more charachter remaining');
+      } else {
+        setCodeWarning('Character remaining -' + `${count}`);
+      }
+    } else {
+      setCodeWarning('');
+    }
+    setRetroName(e);
+    
+  }
+  function handleTimeFrame(e: React.SetStateAction<string>) {
+    setRetroTimeframe(e);
+    setisTimeFrameSet(false);
+  }
+  function handleUsername(e: string) {
+    setCodeWarning('');
+    setCodeError('');
+    if (e.length >= 25) {
+      let count = 30 - e.length;
+      if (count === 0) {
+        setCodeWarning('No more charachter remaining');
+      } else {
+        setCodeWarning('Character remaining -' + `${count}`);
+      }
+    }
+
+    setUserName(e);
   }
   const joinRetro = async (): Promise<RetroType | undefined> => {
-    let foundRetro = await retro.getByHumanId(humanId);
-    if (!foundRetro) {
-      foundRetro = await retro.getById(humanId);
-    }
-    dispatch({
-      type: ActionType.SET_CURRENT_RETRO,
-      payload: { retro: foundRetro },
-    });
-    if (foundRetro) {
-      setJoining(true);
-      setCaptureName(true);
-      return foundRetro;
+    if(humanId === ''){
+      setCodeError('Please enter access code');
     } else {
-      setCodeError('Sorry, wrong code. Please try again.');
+      let foundRetro = await retro.getByHumanId(humanId);
+      // if (!foundRetro) {
+      //   foundRetro = await retro.getById(humanId);
+      // }
+      if (foundRetro) {
+        setJoining(true);
+        setCaptureName(true);
+        setCodeError('');
+        dispatch({
+          type: ActionType.SET_CURRENT_RETRO,
+          payload: { retro: foundRetro },
+        });
+        return foundRetro;
+      } else {
+        setCodeError('Sorry, wrong code. Please try again');
+      }
     }
+
+    // let foundRetro = await retro.getByHumanId(humanId);
+    // if (humanId === '') {
+    //   setCodeError('Please enter access code');
+    // } 
+    // if (!foundRetro) {
+    //   foundRetro = await retro.getById(humanId);
+    // }
+    // dispatch({
+    //   type: ActionType.SET_CURRENT_RETRO,
+    //   payload: { retro: foundRetro },
+    // });
+    // if (foundRetro) {
+    //   setJoining(true);
+    //   setCaptureName(true);
+    //   return foundRetro;
+    // } else {
+    //   setCodeError('Sorry, wrong code. Please try again');
+    // }
   };
 
   const setName = () => {
-    dispatch({
-      type: ActionType.SET_PREFERRED_NICKNAME,
-      payload: { preferredNickname: userName },
-    });
-    setCaptureName(false);
-    if (!global.currentRetro || joining) {
-      joinRetro().then(retro => {
-        if (retro) {
-          navigate('/board/' + retro.id);
-        }
+    sessionStorage.removeItem('pulseCheckState');
+    if (userName !== '') {
+      dispatch({
+        type: ActionType.SET_PREFERRED_NICKNAME,
+        payload: { preferredNickname: userName },
       });
+      if (!global.currentRetro || joining) {
+        joinRetro().then(retro => {
+          if (retro) {
+            navigate('/board/' + retro.id + '/pulsecheck');
+            setCaptureName(false);
+          }
+        });
+      } else {
+        navigate('/board/' + global.currentRetro?.id);
+        setCaptureName(false);
+      }
     } else {
-      navigate('/board/' + global.currentRetro?.id);
+      setCodeError('Please enter avatar name');
     }
   };
 
@@ -138,11 +231,14 @@ export function Onboarding() {
   return (
     <>
       <CssBaseline />
-          <AuthenticatedTemplate>
-          <Typography variant="h4" sx={{ textAlign: 'center' }}>
-                Logged In 
-            </Typography>
-          </AuthenticatedTemplate>
+        <Box>
+        <img
+          src="/images/BACI.png"
+          alt="Logo"
+          style={{ width: '145px', height: '90px' }}
+        />
+      </Box>
+      
       <Slide
         direction="up"
         in={!global.currentRetro && !started && !joining && !id}
@@ -161,40 +257,57 @@ export function Onboarding() {
             fontSize:'24px'
           }}
         >
-          <div style={{marginBottom: '45px'}}>
+          <div style={{ marginBottom: '45px', marginTop: '-70px' }}>
             <Typography variant="h4" sx={{ textAlign: 'center' }}>
                  What BACI retro are you joining today?
             </Typography>
           </div>
           <Divider sx={{ margin: '20px' }}></Divider>
-          <FormControl>
-          <Typography  sx={{ textAlign: 'center' , fontSize: '18px'}}>
-          Please enter your access code
-          </Typography>
-            <TextField
-              autoFocus
-              variant="standard"
-              placeholder="12345"
-              error={!!codeError}
-              helperText={codeError}
-              sx={{
-                input: {
-                  borderRadius: '7px',
-                  fontSize: '18px',
-                  textAlign: 'center',
-                },
-                color: '#4D555A',
-                minWidth: '300px',
-              }}
-              onKeyDown={e => {
-                if (e.keyCode === 13) {
-                  joinRetro();
-                }
-              }}
-              value={humanId}
-              onChange={e => setHumanId(e.currentTarget.value)}
-            />
-          </FormControl>
+          <Box
+            sx={{
+              '& .MuiInputBase-root-MuiInput-root.Mui-error:after': {
+                borderBottom: '1px Solid',
+              },
+            }}
+          >
+            <FormControl>
+              <Typography sx={{ textAlign: 'center', fontSize: '20px' }}>
+                Please enter your access code
+              </Typography>
+              <TextField
+                autoFocus
+                variant="standard"
+                placeholder="123 456"
+                error={!!codeError}
+                sx={{
+                  input: {
+                    borderRadius: '7px',
+                    fontSize: '22px',
+                    textAlign: 'center',
+                    margin: '5px',
+                  },
+                  '& .css-16xpbqp-MuiInputBase-root-MuiInput-root.Mui-error:after':
+                    {
+                      borderBottom: '1px solid #d32f2f !important',
+                    },
+                  color: '#4D555A',
+                  minWidth: '300px',
+                }}
+                onKeyDown={e => {
+                  if (e.keyCode === 13) {
+                    joinRetro();
+                  }
+                }}
+                value={humanId}
+                onChange={e => setHumanId(e.currentTarget.value)}
+              />
+              {codeError !== '' && (
+                <FormHelperText style={{ color: '#d32f2f', marginLeft: '5px' }}>
+                  {codeError}
+                </FormHelperText>
+              )}
+            </FormControl>
+          </Box>
           <Divider sx={{ margin: '20px' }}></Divider>
           <Box sx={{ display: 'flex', justifyContent: 'center' }}>
             <Button
@@ -236,6 +349,7 @@ export function Onboarding() {
                   payload: { retroCreateState: true },
                 });
                 setStarted(true);
+                setCodeError('');
               }}
             >
               or Create new retro
@@ -256,31 +370,42 @@ export function Onboarding() {
           }}
         >
           <Typography
-            variant="h4"
-            sx={{ position: 'absolute', top: 0, left: 0, padding: '20px' }}
+            sx={{ fontSize: '24px', marginBottom: '60px', marginTop: '-100px' }}
           >
-            Welcome!
+            Welcome to the {localRetroName}!
           </Typography>
-          <Typography variant="h5">What's your Avatar Name?</Typography>
+          <Typography sx={{ fontSize: '18px' }}>
+            What's your Avatar Name?
+          </Typography>
           <Divider sx={{ margin: '20px' }}></Divider>
           <FormControl>
             <TextField
               autoFocus
-              variant="outlined"
-              placeholder="Your Name or Nickname"
+              variant="standard"
+              placeholder="Your name or nickname"
               sx={{
-                input: { background: '#CDCDD4', borderRadius: '7px' },
+                input: { borderRadius: '7px', textAlign: 'center' },
                 color: '#4D555A',
                 minWidth: '300px',
               }}
+              inputProps={{
+                maxLength: AVATAR_CHARACTER_LIMIT,
+              }}
+              error={!!codeError}
+              helperText={codeError}
               value={userName}
-              onChange={e => setUserName(e.currentTarget.value)}
+              onChange={e => handleUsername(e.currentTarget.value)}
               onKeyDown={e => {
                 if (e.keyCode === 13) {
                   setName();
                 }
               }}
             />
+            {codeWarning !== ' ' && (
+              <FormHelperText sx={{ color: 'orange' }}>
+                {codeWarning}
+              </FormHelperText>
+            )}
           </FormControl>
           <Divider sx={{ margin: '20px' }}></Divider>
           <Box sx={{ display: 'flex', justifyContent: 'center' }}>
@@ -288,13 +413,14 @@ export function Onboarding() {
               variant="outlined"
               sx={{
                 ':hover': { background: '#159ADD' },
-                background: '#159ADD',
+                background: '#397DE1',
                 color: '#fff',
                 minWidth: '300px',
+                height: '45px',
               }}
               onClick={setName}
             >
-              Let's start
+              Let's start!
             </Button>
           </Box>
           <Box
@@ -303,6 +429,7 @@ export function Onboarding() {
               justifyContent: 'flex-end',
               flexDirection: 'column',
               minHeight: '10vh',
+              marginTop: '82px',
             }}
           >
             <Link
@@ -324,18 +451,31 @@ export function Onboarding() {
             flexDirection: 'column',
             justifyContent: 'center',
             alignItems: 'center',
+            marginTop: '-55px',
           }}
         >
-          <Typography variant="h4">Create new Retro</Typography>
+          <Typography style={{fontSize: '24px'}}>Create new BACI retro</Typography>
           <Divider sx={{ margin: '20px' }}></Divider>
           <FormControl>
             <TextField
               autoFocus
               variant="standard"
-              placeholder="New RETRO NAME"
-              sx={{ minWidth: '300px' }}
+              placeholder="New retro name"
+              inputProps={{
+                maxLength: RETRONAME_CHARACTER_LIMIT,
+              }}
+              sx={{
+                minWidth: '300px',
+                textarea: { borderRadius: '7px', textAlign: 'center' },
+                '& .css-s1623g-MuiInputBase-root-MuiInput-root.Mui-error:after':
+                  {
+                    borderBottom: '1px solid #d32f2f !important',
+                  },
+              }}
               value={retroName}
-              onChange={e => setRetroName(e.currentTarget.value)}
+              error={!!codeError}
+              helperText={codeError}
+              onChange={e => handleRetronameChange(e.currentTarget.value)}
               multiline
               onKeyDown={e => {
                 if (e.keyCode === 13) {
@@ -344,12 +484,16 @@ export function Onboarding() {
                 }
               }}
             />
-            <Select
+            {codeWarning !== ' ' &&  (
+              <FormHelperText sx={{ color: 'orange' }}>
+                {codeWarning}
+              </FormHelperText>
+            )}
+            <TextField
               inputRef={timeframeRef}
               variant="outlined"
-              label="Retro Time Frame"
-              displayEmpty
-              renderValue={value => (value !== '' ? value : 'Time frame')}
+              label="Time Frame"
+            //renderValue={(value: any) => (value !== '' ? value : 'Time frame')}
               sx={{
                 color: '#727D84',
                 minWidth: '320px',
@@ -357,7 +501,8 @@ export function Onboarding() {
                 span: { visibility: 'visible', background: 'white' },
               }}
               value={retroTimeframe}
-              onChange={e => setRetroTimeframe(e?.target?.value)}
+              select
+              onChange={e => handleTimeFrame(e?.target?.value)}
             >
               <MenuItem value={'1 day'}>1 day</MenuItem>
               <MenuItem value={'1 week'}>1 week</MenuItem>
@@ -365,7 +510,12 @@ export function Onboarding() {
               <MenuItem value={'3 weeks'}>3 weeks</MenuItem>
               <MenuItem value={'4 weeks'}>4 weeks</MenuItem>
               <MenuItem value={'N/A'}>N/A</MenuItem>
-            </Select>
+            </TextField>
+            {isTimeFrameSet && (
+              <FormHelperText style={{ color: '#d32f2f', marginLeft: '5px' }}>
+                Please enter time frame
+              </FormHelperText>
+            )}
           </FormControl>
           <Divider sx={{ margin: '20px' }}></Divider>
           <Box sx={{ display: 'flex', justifyContent: 'center' }}>
@@ -373,9 +523,10 @@ export function Onboarding() {
               variant="outlined"
               sx={{
                 ':hover': { background: '#159ADD' },
-                background: '#159ADD',
+                background: '#397DE1',
                 color: '#fff',
-                minWidth: '300px',
+                minWidth: '320px',
+                height: '45px',
               }}
               onClick={create}
             >
@@ -388,6 +539,7 @@ export function Onboarding() {
               justifyContent: 'flex-end',
               flexDirection: 'column',
               minHeight: '10vh',
+              marginTop: '100px',
             }}
           >
             <Link
@@ -409,90 +561,43 @@ export function Onboarding() {
             flexDirection: 'column',
             justifyContent: 'center',
             alignItems: 'center',
+            marginTop: '-68px',
           }}
         >
           {global.currentRetro?.creatorId === global.user.id ? (
             <>
               <Typography
-                sx={{ my: 0, mx: 2, fontSize: '1.5rem' }}
+                sx={{ my: 1, mx: 2, color:'black' , fontSize: '24px'}}
                 color="text.primary"
                 align="center"
               >
-                Awesome!
+               Your retro has been created!
               </Typography>
               <Typography
-                sx={{ my: 1, mx: 2, fontWeight: '700' }}
+                sx={{ my: 0, mx: 2, color:'#4d555a',fontSize: '15px', marginBottom: '28px'}}
                 color="text.primary"
                 align="center"
               >
                 {global.currentRetro?.creatorId !== global.user.id
                   ? `You're all set!`
-                  : `${global.currentRetro.name} has been created`}
+                  : `Retro Name:${global.currentRetro.name}`}
               </Typography>
               <Typography
-                sx={{ my: 1, mx: 2 }}
+                sx={{ my: 1, mx: 2, color:'black' , fontSize: '18px'}}
                 color="text.primary"
                 align="center"
               >
-                Anyone with code{' '}
-                <span style={{ fontWeight: '700', background: '#CDCDD4' }}>
-                  {global.currentRetro?.humanId}
-                </span>
-                , QR or link can join Retro.
+               Retro participation information:
               </Typography>
-
-              <Box
-                sx={{
-                  display: 'flex',
-                  minWidth: '400px',
-                  justifyContent: 'space-evenly',
-                }}
-              >
-                <div
+              <div
                   style={{
-                    display: 'flex',
-                    alignItems: 'center',
-                  }}
-                >
-                  <CopyToClipboard text={global.currentRetro?.joinUrl}>
-                    <Button
-                      sx={{
-                        ':hover': { background: '#159ADD' },
-                        background: '#159ADD',
-                        color: '#fff',
-                      }}
-                      variant="outlined"
-                      onClick={() => {
-                        const canvas = document.querySelector('canvas');
-                        if (canvas) {
-                          const downloadLink = document.createElement('a');
-                          downloadLink.setAttribute('download', 'QR.png');
-                          const dataURL = canvas.toDataURL('image/png');
-                          const url = dataURL.replace(
-                            /^data:image\/png/,
-                            'data:application/octet-stream'
-                          );
-                          downloadLink.setAttribute('href', url);
-                          downloadLink.click();
-                        }
-                      }}
-                    >
-                      Download QR
-                    </Button>
-                  </CopyToClipboard>
-                </div>
-                <div
-                  style={{
-                    flexGrow: 2,
                     justifyContent: 'center',
                     display: 'flex',
                   }}
                 >
-                  <QRCode value={global.currentRetro?.joinUrl || ''} />
+                  <QRCode value={global.currentRetro?.joinUrl || ''} style={{width:'80px',height: '80px'}}/>
                 </div>
-              </Box>
-
-              <Box
+                <Box
                 sx={{
                   display: 'flex',
                   minWidth: '400px',
@@ -503,22 +608,24 @@ export function Onboarding() {
                   style={{
                     display: 'flex',
                     alignItems: 'center',
+                    margin: '20px'
                   }}
                 >
                   <CopyToClipboard text={global.currentRetro?.joinUrl}>
                     <Button
                       sx={{
-                        ':hover': { background: '#159ADD' },
-                        background: '#159ADD',
-                        color: '#fff',
+                        ':hover': { background: '#CDCDD4' },
+                        background: '#CDCDD4',
+                        color: 'black',
+                        fontWeight: 'bold'
                       }}
-                      variant="outlined"
+                      
                     >
                       Copy link
                     </Button>
                   </CopyToClipboard>
                 </div>
-
+{/* 
                 <div style={{ flexGrow: 2 }}>
                   <TextField
                     variant="outlined"
@@ -530,38 +637,33 @@ export function Onboarding() {
                     }}
                     value={global.currentRetro?.joinUrl}
                   />
-                </div>
+                </div> */}
               </Box>
-
+                
+            
               <Grid
                 container
                 alignItems="center"
                 direction="row"
                 justifyContent="center"
               >
-                <Typography
-                  sx={{ paddingBottom: '10px', paddingRight: '10px' }}
+                {/* <Typography
+                  sx={{ paddingBottom: '10px', paddingRight: '5px', color: '#4D555A', fontSize: '15px' }}
                 >
                   Send via
-                </Typography>
+                </Typography> */}
                 <EmailShareButton
                   url={global.currentRetro.joinUrl}
                   style={{ padding: '5px' }}
-                >
-                  <EmailIcon sx={{ color: '#4D555A' }} />
+                >Send via
+                  <EmailIcon sx={{ color: '#4D555A' , width: '18px', height: '18px', marginBottom: '-4px', marginLeft: '3px'}} />
                 </EmailShareButton>
-                <WhatsappShareButton
-                  url={global.currentRetro.joinUrl}
-                  style={{ padding: '5px' }}
-                >
-                  <WhatsAppIcon sx={{ color: '#4D555A' }} />
-                </WhatsappShareButton>
                 {canShare ? (
                   <Link
                     style={{ padding: '5px', cursor: 'pointer' }}
                     onClick={share}
                   >
-                    <PhoneAndroidIcon sx={{ color: '#4D555A' }} />
+                   
                   </Link>
                 ) : null}
               </Grid>
@@ -589,7 +691,7 @@ export function Onboarding() {
               variant="outlined"
               sx={{
                 ':hover': { background: '#159ADD' },
-                background: '#159ADD',
+                background: '#397DE1',
                 color: '#fff',
                 minWidth: '300px',
               }}
@@ -609,7 +711,6 @@ export function Onboarding() {
                 setRetroName('');
                 setRetroTimeframe('');
                 setCodeError('');
-
                 navigate(`/join/${humanId}`);
               }}
             >
@@ -622,6 +723,7 @@ export function Onboarding() {
               justifyContent: 'flex-end',
               flexDirection: 'column',
               minHeight: '10vh',
+              marginTop: '32px'
             }}
           >
             <Link
@@ -631,6 +733,7 @@ export function Onboarding() {
               To return to the main page click here
             </Link>
           </Box>
+
         </Box>
       </Slide>
     </>

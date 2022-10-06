@@ -13,7 +13,7 @@ export const createRetro = async (retro: Omit<Retro, 'id'>, creator: User): Prom
     };
     await fetch(API_URL+'/createRetro', requestOptions)
         .then(response => response.json())
-        .then(data => {id = data.id} );
+        .then(data => {id = data.id;} );
     return id;
 }
 

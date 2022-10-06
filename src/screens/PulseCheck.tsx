@@ -130,15 +130,6 @@ export default function PulseCheck() {
           },
         },
       });
-      // dispatch({
-      //   type: ActionType.SET_PULSE_CHECK,
-      //   payload: {
-      //     pulseCheckState: {
-      //       retroId: currentRetro?.id + '',
-      //       pulseSubmitState: true,
-      //     },
-      //   },
-      // });
       const pulseCheckState = {
         retroId: currentRetro?.id + '',
         pulseSubmitState: true,
