@@ -86,7 +86,9 @@ export default function RetroBoard() {
   const [showSharePanel, setShowSharePanel] = React.useState(false);
 
   useLoadRetro();
-
+  React.useEffect(()=>{
+    console.log(retroName);
+  })
   const getProcessedColumns = () =>
     columns
       ? columns.map(column => {
@@ -95,21 +97,21 @@ export default function RetroBoard() {
               (!b.reactions ? 0 : b.reactions.length) -
               (!a.reactions ? 0 : a.reactions.length)
           );
-          if(islanded){
-            for (const column of columns) {
-              for (const group of column.groups) {
-                if(group.cards.length !==0){
-                  group.cards =[];
-                }
-              }
-             }
-             setIsLanded(true);
-             return{
-              ...column,
-              groups: []
+          // if(islanded){
+          //   for (const column of columns) {
+          //     for (const group of column.groups) {
+          //       if(group.cards.length !==0){
+          //         group.cards =[];
+          //       }
+          //     }
+          //    }
+          //    setIsLanded(true);
+          //    return{
+          //     ...column,
+          //     groups: []
             
-            }
-          } else{
+          //   }
+          // } else{
           return {
             ...column,
             groups: groups
@@ -129,7 +131,7 @@ export default function RetroBoard() {
                   group.cards.length !== 0
               ),
           };
-        }
+       // }
         })
       : [];
    
