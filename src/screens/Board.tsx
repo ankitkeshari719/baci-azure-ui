@@ -86,9 +86,7 @@ export default function RetroBoard() {
   const [showSharePanel, setShowSharePanel] = React.useState(false);
 
   useLoadRetro();
-  React.useEffect(()=>{
-    console.log(retroName);
-  })
+
   const getProcessedColumns = () =>
     columns
       ? columns.map(column => {
@@ -110,8 +108,9 @@ export default function RetroBoard() {
           //     ...column,
           //     groups: []
             
-          //   }
+          //    }
           // } else{
+            console.log("column",column)
           return {
             ...column,
             groups: groups
@@ -131,8 +130,9 @@ export default function RetroBoard() {
                   group.cards.length !== 0
               ),
           };
-       // }
-        })
+        }
+        // }
+        )
       : [];
    
   const closeAllPanels = () => {
@@ -195,6 +195,16 @@ export default function RetroBoard() {
            saveAndProcessAction(BoardActionType.END_RETRO, {}).then(() => {
             setConfirmAction(undefined);
           });
+          //delete group before finishing retro
+          for (const column of columns) {
+            for (const group of column.groups) {
+              if(!group.name.includes('Ungrouped')){
+                let groupId: String = group.id;
+                saveAndProcessAction(BoardActionType.DELETE_GROUP, { groupId }).then(() => {
+                });
+              }
+            }}
+          
         },
       });
     } else {
@@ -578,4 +588,3 @@ export default function RetroBoard() {
     </Box>
   );
 }
-
