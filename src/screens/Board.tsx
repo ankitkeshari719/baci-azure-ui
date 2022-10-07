@@ -13,7 +13,7 @@ import {
   Typography,
   useMediaQuery,
 } from '@mui/material';
-import React, { useMemo } from 'react';
+import React, { useEffect, useMemo } from 'react';
 import { FEATURE_FLAGS, UNGROUPED } from '../constants';
 
 import AddIcon from '@mui/icons-material/Add';
@@ -96,9 +96,9 @@ export default function RetroBoard() {
   const [showSharePanel, setShowSharePanel] = React.useState(false);
 
   useLoadRetro();
-  React.useEffect(() => {
-    console.log(columns, '');
-  });
+  // React.useEffect(() => {
+  //   console.log(columns, '');
+  // });
   // const getProcessedColumns = () =>
   //    columns
   //     ? columns.map(column => {
@@ -147,52 +147,54 @@ export default function RetroBoard() {
 
   const getProcessedColumns = () =>
     columns
-      ? columns.map(column => {
-          const groups = [...column.groups].sort(
-            (a, b) =>
-              (!b.reactions ? 0 : b.reactions.length) -
-              (!a.reactions ? 0 : a.reactions.length)
-          );
-          // if(islanded){
-          //   for (const column of columns) {
-          //     for (const group of column.groups) {
-          //       if(group.cards.length !==0){
-          //         group.cards =[];
-          //       }
-          //     }
-          //    }
-          //    setIsLanded(true);
-          //    return{
-          //     ...column,
-          //     groups: []
-            
-          //    }
-          // } else{
-            console.log("column",column)
-          return {
-            ...column,
-            groups: groups
-              .map(group => {
-                const cards = group.cards.filter(
-                  card => !justMyCards || card.createdBy === global.user.id
-                );
-                return {
-                  ...group,
-                  cards,
-                };
-              })
-              .filter(
-                group =>
-                  !justMyCards ||
-                  group.name === UNGROUPED ||
-                  group.cards.length !== 0
-              ),
-          };
-        }
-        // }
+      ? columns.map(
+          column => {
+            const groups = [...column.groups].sort(
+              (a, b) =>
+                (!b.reactions ? 0 : b.reactions.length) -
+                (!a.reactions ? 0 : a.reactions.length)
+            );
+            // if(islanded){
+            //   for (const column of columns) {
+            //     for (const group of column.groups) {
+            //       if(group.cards.length !==0){
+            //         group.cards =[];
+            //       }
+            //     }
+            //    }
+            //    setIsLanded(true);
+            //    return{
+            //     ...column,
+            //     groups: []
+
+            //    }
+            // } else{
+            // console.log('column', column);
+            return {
+              ...column,
+              groups: groups
+                .map(group => {
+                  const cards = group.cards.filter(
+                    card => !justMyCards || card.createdBy === global.user.id
+                  );
+                  return {
+                    ...group,
+                    cards,
+                  };
+                })
+                .filter(
+                  group =>
+                    !justMyCards ||
+                    group.name === UNGROUPED ||
+                    group.cards.length !== 0
+                ),
+            };
+          }
+          // }
         )
       : [];
-   
+
+
   const closeAllPanels = () => {
     setShowRetroPanel(false);
     setShowParticipantsPanel(false);
@@ -250,19 +252,20 @@ export default function RetroBoard() {
         text: 'This action will take All Participants to the Feedback screen.',
         onConfirm: () => {
           sessionStorage.removeItem('pulseCheckState');
-           saveAndProcessAction(BoardActionType.END_RETRO, {}).then(() => {
+          saveAndProcessAction(BoardActionType.END_RETRO, {}).then(() => {
             setConfirmAction(undefined);
           });
           //delete group before finishing retro
           for (const column of columns) {
             for (const group of column.groups) {
-              if(!group.name.includes('Ungrouped')){
+              if (!group.name.includes('Ungrouped')) {
                 let groupId: String = group.id;
-                saveAndProcessAction(BoardActionType.DELETE_GROUP, { groupId }).then(() => {
-                });
+                saveAndProcessAction(BoardActionType.DELETE_GROUP, {
+                  groupId,
+                }).then(() => {});
               }
-            }}
-          
+            }
+          }
         },
       });
     } else {
@@ -283,7 +286,7 @@ export default function RetroBoard() {
   };
 
   React.useEffect(() => {
-    console.log(needsToShow)
+    // console.log(needsToShow);
     if (ended && !needsToShow) {
       navigate(`/board/${global?.currentRetro?.id}/feedback`);
     }

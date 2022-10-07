@@ -40,6 +40,7 @@ export const useRetro = () => {
                 sourceActionTimestamp: 0,
                 version: BOARD_STATE_MACHINE_VERSION
             };
+            // console.log("action",action)
 
             await addRetroAction(
                 id,

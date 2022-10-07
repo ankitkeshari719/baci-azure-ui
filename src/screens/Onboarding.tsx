@@ -50,7 +50,7 @@ export function Onboarding() {
   const [humanId, setHumanId] = useState(id || '');
   const [retroName, setRetroName] = useState('');
   const [localRetroName, setlocalRetroName] = useState(
-    localStorage.getItem('retroname') || ''
+    sessionStorage.getItem('retroname') || ''
   );
   const [retroTimeframe, setRetroTimeframe] = useState('');
   const [userName, setUserName] = useState(
@@ -76,7 +76,7 @@ export function Onboarding() {
     }
   }, []);
   const create = async () => {
-    localStorage.setItem('retroname', retroName);
+    sessionStorage.setItem('retroname', retroName);
     setlocalRetroName('"' + retroName + '"');
     if (retroName !== '' && retroTimeframe !== '') {
       setCodeError('');
@@ -90,9 +90,9 @@ export function Onboarding() {
     } else if (retroTimeframe === '') {
       setisTimeFrameSet(true);
     }
-    localStorage.setItem('retroname', '"' + retroName + '"');
+    sessionStorage.setItem('retroname', '"' + retroName + '"');
     setCaptureName(false);
-    console.log(started, joining, global.currentRetro);
+    // console.log(started, joining, global.currentRetro);
   };
   function handleRetronameChange(e: React.SetStateAction<string>) {
     if(e == "") {
@@ -132,47 +132,72 @@ export function Onboarding() {
 
     setUserName(e);
   }
+  // const joinRetro = async (): Promise<RetroType | undefined> => {
+  //   if(humanId === ''){
+  //     setCodeError('Please enter access code');
+  //   } else {
+  //     let foundRetro = await retro.getByHumanId(humanId);
+  //     // if (!foundRetro) {
+  //     //   foundRetro = await retro.getById(humanId);
+  //     // }
+  //     if (foundRetro) {
+  //       setJoining(true);
+  //       setCaptureName(true);
+  //       setCodeError('');
+  //       dispatch({
+  //         type: ActionType.SET_CURRENT_RETRO,
+  //         payload: { retro: foundRetro },
+  //       });
+  //       return foundRetro;
+  //     } else {
+  //       setCodeError('Sorry, wrong code. Please try again');
+  //     }
+  //   }
+
+  //   // let foundRetro = await retro.getByHumanId(humanId);
+  //   // if (humanId === '') {
+  //   //   setCodeError('Please enter access code');
+  //   // } 
+  //   // if (!foundRetro) {
+  //   //   foundRetro = await retro.getById(humanId);
+  //   // }
+  //   dispatch({
+  //     type: ActionType.SET_CURRENT_RETRO,
+  //     payload: { retro: foundRetro },
+  //   });
+  //   if (foundRetro) {
+  //     setJoining(true);
+  //     setCaptureName(true);
+  //     return foundRetro;
+  //   } else {
+  //     setCodeError('Sorry, wrong code. Please try again');
+  //   }
+  // };
+
+
   const joinRetro = async (): Promise<RetroType | undefined> => {
-    if(humanId === ''){
+    let foundRetro = await retro.getByHumanId(humanId);
+    if (humanId === '') {
       setCodeError('Please enter access code');
     } else {
-      let foundRetro = await retro.getByHumanId(humanId);
-      // if (!foundRetro) {
-      //   foundRetro = await retro.getById(humanId);
-      // }
-      if (foundRetro) {
-        setJoining(true);
-        setCaptureName(true);
-        setCodeError('');
-        dispatch({
-          type: ActionType.SET_CURRENT_RETRO,
-          payload: { retro: foundRetro },
-        });
-        return foundRetro;
-      } else {
-        setCodeError('Sorry, wrong code. Please try again');
-      }
+      setCodeError('');
     }
-
-    // let foundRetro = await retro.getByHumanId(humanId);
-    // if (humanId === '') {
-    //   setCodeError('Please enter access code');
-    // } 
-    // if (!foundRetro) {
-    //   foundRetro = await retro.getById(humanId);
-    // }
-    // dispatch({
-    //   type: ActionType.SET_CURRENT_RETRO,
-    //   payload: { retro: foundRetro },
-    // });
-    // if (foundRetro) {
-    //   setJoining(true);
-    //   setCaptureName(true);
-    //   return foundRetro;
-    // } else {
-    //   setCodeError('Sorry, wrong code. Please try again');
-    // }
+    if (!foundRetro) {
+      foundRetro = await retro.getById(humanId);
+    }
+    dispatch({
+      type: ActionType.SET_CURRENT_RETRO,
+      payload: { retro: foundRetro },
+    });
+    if (foundRetro) {
+      setJoining(true);
+      setCaptureName(true);
+      return foundRetro;
+    } else {
+      setCodeError('Sorry, wrong code. Please try again');
+    }
   };
+
 
   const setName = () => {
     sessionStorage.removeItem('pulseCheckState');

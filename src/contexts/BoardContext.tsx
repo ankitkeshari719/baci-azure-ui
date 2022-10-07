@@ -85,7 +85,7 @@ function BoardProvider(props: ComponentProps<any>) {
       version: BOARD_STATE_MACHINE_VERSION,
     });
     try {
-      localStorage.setItem('BoardContext', value);
+      sessionStorage.setItem('BoardContext', value);
     } catch (e) {
       log.error(e);
     }
@@ -93,7 +93,7 @@ function BoardProvider(props: ComponentProps<any>) {
   }
 
   function clearState() {
-    localStorage.removeItem('BoardContext');
+    sessionStorage.removeItem('BoardContext');
     history.current = [];
     lastActionTimestamp.current = -1;
     lastActionId.current = '';
@@ -101,7 +101,7 @@ function BoardProvider(props: ComponentProps<any>) {
   }
 
   function loadState() {
-    const loadedContext = localStorage.getItem('BoardContext');
+    const loadedContext = sessionStorage.getItem('BoardContext');
     if (loadedContext) {
       const loadedContextParsed = stringifyDate.parse(loadedContext);
       if (
@@ -268,7 +268,7 @@ function BoardProvider(props: ComponentProps<any>) {
         lastActionTimestamp.current
       ).then(actions => {
         if (actions.length === 0 && !loadedState) {
-          setState({ ...initialBoardState(currentRetro?.id), loading: false });
+          // setState({ ...initialBoardState(currentRetro?.id), loading: false });
         }
         if (actions.length !== 0) {
           const newState = processActions(actions);

@@ -138,11 +138,11 @@ export function FeedbackColumn({
           FEATURE_FLAGS.report &&
           global.currentRetro?.creatorId === global.user.id
         ) {
-          console.log(
-            FEATURE_FLAGS.report,
-            global.currentRetro?.creatorId === global.user.id,
-            'data'
-          );
+          // console.log(
+          //   FEATURE_FLAGS.report,
+          //   global.currentRetro?.creatorId === global.user.id,
+          //   'data'
+          // );
           navigate('/report/' + global.currentRetro.id);
         } else {
           navigate(`/offboarding`);
