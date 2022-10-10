@@ -41,6 +41,7 @@
   "@types/react-dom": "17.0.2"
 },
   "scripts": {
+    "preinstall": "npm install --package-lock-only --ignore-scripts && npx npm-force-resolutions",
     "start": "set REACT_APP_NODE_ENV=development&&react-scripts start",
     "build": "set REACT_APP_NODE_ENV=development && GENERATE_SOURCEMAP=false react-scripts build",
     "winBuild": "set \"GENERATE_SOURCEMAP=false\" && react-scripts build",
