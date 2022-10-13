@@ -9,12 +9,15 @@ import { ErrorProvider } from './contexts/ErrorContext';
 import Feedback from './screens/Feedback';
 import { GlobalProvider } from './contexts/GlobalContext';
 import { Offboarding } from './screens/Offboarding';
+import { LandingPage } from './screens/LandingPage';
 import { Onboarding } from './screens/Onboarding';
+import { CreateNewRetro } from './screens/CreateRetroPage';
 import PulseCheck from './screens/PulseCheck';
 import ReportScreen from './screens/ReportScreen';
 import { SnackMessage } from './elements/SnackMessage';
 import { ThemeProvider } from '@mui/material/styles';
 import theme from './theme/theme';
+import './index.scss'
 //import { useFirebase } from './firebase';
 //import { useAuth } from './firebase/auth';
 import { useAzureAuth } from './msal/azureauth';
@@ -60,7 +63,8 @@ export default function App({ instance } :AppProps) {
                 <ThemeProvider theme={theme}>
                 <MsalProvider instance={instance}>
                   <Routes>
-                    <Route path="/" element={<Onboarding></Onboarding>} />
+                    <Route path="/" element={<LandingPage></LandingPage>} />
+                    <Route path="/createretro" element={<CreateNewRetro></CreateNewRetro>} />
                     <Route path="/join/:id" element={<Onboarding></Onboarding>} />
                     <Route
                       path="/offboarding"

@@ -19,30 +19,31 @@ let theme = createTheme({
   },
   typography: {
     body1: {
-      fontFamily: `'Helvetica', 'Arial', sans-serif`,
+      fontFamily: `'Poppins'`,
     },
     body2: {
-      fontFamily: `'Helvetica', 'Arial', sans-serif`,
+      fontFamily: `'Poppins', 'Arial', sans-serif`,
     },
     h1: {
-      fontFamily: `'Helvetica', 'Arial', sans-serif`,
+      fontFamily: `'Poppins', 'Arial', sans-serif`,
     },
     h2: {
-      fontFamily: `'Helvetica', 'Arial', sans-serif`,
+      fontFamily: `'Poppins', 'Arial', sans-serif`,
     },
     h3: {
-      fontFamily: `'Helvetica', 'Arial', sans-serif`,
+      fontFamily: `'Poppins', 'Arial', sans-serif`,
     },
     h4: {
-      fontFamily: `'Helvetica', 'Arial', sans-serif`,
+      fontFamily: `'Poppins', 'Arial', sans-serif`,
     },
     h5: {
-      fontFamily: `'Helvetica', 'Arial', sans-serif`,
+      fontFamily: `'Poppins', 'Arial', sans-serif`,
       fontWeight: 500,
       fontSize: 26,
       letterSpacing: 0.5,
     },
   },
+  
   shape: {
     borderRadius: 8,
   },
@@ -69,6 +70,22 @@ theme = {
           backgroundColor: '#081627',
         },
       },
+    },
+    MuiInput:{
+      styleOverrides: {
+        root: {
+          borderBottom: '1px solid',
+          '&:before': {
+            borderBottom: '1px solid rgba(0, 0, 0, 0.42)'
+          },
+          '&:after': {
+            borderBottom: '1px solid rgba(0, 0, 0, 0.42)'
+          },
+          '&:hover:not': {
+            borderBottom: 'none'
+          },
+        },
+      }
     },
     MuiButton: {
       styleOverrides: {
