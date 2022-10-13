@@ -8,11 +8,11 @@ import StarBorderOutlinedIcon from '@mui/icons-material/StarBorderOutlined';
 import { FEATURE_FLAGS_SET } from './FeatureFlags';
 
 export const CARD_COLOURS = [
-  '#98c3e8',
-  '#958cb8',
-  '#fecd8c',
-  '#c9e19b',
-  '#f8a38d',
+  '#FFFFFF',
+  '#FFFFFF',
+  '#FFFFFF',
+  '#FFFFFF',
+  '#FFFFFF',
 ];
 
 export const CARD_HOVER_COLOURS = [
