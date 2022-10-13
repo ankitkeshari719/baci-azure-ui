@@ -17,7 +17,7 @@ import SendIcon from '@mui/icons-material/Send';
 import Color from 'color';
 import shortid from 'shortid';
 import { GlobalContext } from '../contexts/GlobalContext';
-import { RetroCard } from '../elements/RetroCard';
+import { RetroCard } from './retroCard/RetroCard';
 import theme from '../theme/theme';
 import { RetroCardGroup } from './RetroCardGroup';
 
@@ -143,7 +143,7 @@ export function RetroColumn({
 
   const addNewCard = async (cardGroupId: string, value: string) => {
     const id = shortid.generate();
-    console.log(id, 'id');
+    // console.log(id, 'id');
     await saveAndProcessAction(BoardActionType.ADD_NEW_CARD, {
       groupId: cardGroupId,
       id,
@@ -181,7 +181,7 @@ export function RetroColumn({
   const submit = async (text: string) => {
     setIslanded(false);
 
-    console.log(cardGroups);
+    // console.log(cardGroups);
 
       await addNewCard(
         (
