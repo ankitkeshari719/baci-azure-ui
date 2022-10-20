@@ -29,6 +29,7 @@ let theme = createTheme({
     },
     h2: {
       fontFamily: `'Poppins', 'Arial', sans-serif`,
+      fontSize: '28px'
     },
     h3: {
       fontFamily: `'Poppins', 'Arial', sans-serif`,
@@ -71,7 +72,17 @@ theme = {
         },
       },
     },
-    MuiInput:{
+    MuiMenuItem: { 
+      styleOverrides: {
+        root: {
+          "&& .Mui-selected": {       // this is to refer to the prop provided by M-UI
+            backgroundColor: "white", // updated backgroundColor
+          },
+        },
+      }
+       
+      },
+   MuiInput:{
       styleOverrides: {
         root: {
           borderBottom: '1px solid',
@@ -84,7 +95,23 @@ theme = {
           '&:hover:not': {
             borderBottom: 'none'
           },
+          '&:focus':{
+            backgroundColor: 'white'
+          }
         },
+      }
+    },
+    MuiSelect: {
+      defaultProps: {
+        displayEmpty: true,
+        variant: "outlined"
+      },
+      styleOverrides: {
+        'select':{
+          "&:MuiSelect-select-MuiInputBase-input-MuiInput-input:focus": {
+            background: "white"
+          }
+        }
       }
     },
     MuiButton: {

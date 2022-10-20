@@ -10,8 +10,10 @@ import Feedback from './screens/Feedback';
 import { GlobalProvider } from './contexts/GlobalContext';
 import { Offboarding } from './screens/Offboarding';
 import { LandingPage } from './screens/LandingPage';
+import { RetroDetails } from './screens/RetroDetails'
 import { Onboarding } from './screens/Onboarding';
 import { CreateNewRetro } from './screens/CreateRetroPage';
+import { AvatarNamePage } from './screens/AvatarNamePage';
 import PulseCheck from './screens/PulseCheck';
 import ReportScreen from './screens/ReportScreen';
 import { SnackMessage } from './elements/SnackMessage';
@@ -65,7 +67,8 @@ export default function App({ instance } :AppProps) {
                   <Routes>
                     <Route path="/" element={<LandingPage></LandingPage>} />
                     <Route path="/createretro" element={<CreateNewRetro></CreateNewRetro>} />
-                    <Route path="/join/:id" element={<Onboarding></Onboarding>} />
+                    <Route path="/join/:id" element={<AvatarNamePage></AvatarNamePage>} />
+                    <Route path="/retrodetails" element={<RetroDetails></RetroDetails>}/>
                     <Route
                       path="/offboarding"
                       element={<Offboarding></Offboarding>}

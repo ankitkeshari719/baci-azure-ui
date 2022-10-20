@@ -1,7 +1,13 @@
 import React from 'react';
 
 const Avatar = (props:any) => {
-    const avatar ="/avatars/"+props.avatar+".svg";
+    let avatar;
+    if(!window.location.pathname.includes('join')){
+         avatar ="/avatars/"+props.avatar+".svg";
+    } else if(window.location.pathname.includes('join')){
+         avatar ="/avatars/animals"+props.avatar+".svg";
+    }
+    
     return (
        
            <img style={{width:'40px',height:"40px"}} src={avatar}></img> 

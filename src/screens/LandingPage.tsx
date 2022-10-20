@@ -48,7 +48,11 @@ const styles = {
   accessCodeTextField: {
     minWidth: '322px',
     marginTop: '86px',
-    height: '48px'
+    height: '48px',
+    "& .MuiFormLabel-root": {
+      color: "rgba(0, 0, 0, 0.6)" ,
+      fontSize: '14px'
+    }
   }
 };
 
@@ -85,7 +89,14 @@ export function LandingPage() {
         }
       };
 
-
+    function CreateNewRetro(){
+        dispatch({
+            type: ActionType.SET_RETRO_CREATE,
+            payload: { retroCreateState: true },
+          });
+          setCodeError('');
+          navigate('/createretro/');
+    }
 
 
 
@@ -100,7 +111,7 @@ export function LandingPage() {
           marginRight={commonStyles.m_80}
           marginLeft={commonStyles.m_80}
         >
-          <Box
+          {/* <Box
             sx={{
               display: 'flex',
               flexDirection: 'row-reverse',
@@ -118,15 +129,15 @@ export function LandingPage() {
               <span className="primaryButtonText">Sign In</span>
             </Button>
             <Button style={styles.newUserText}>New user?Register</Button>
-          </Box>
+          </Box> */}
           <Box component="div" whiteSpace="normal" sx={styles.retroJoiningText}>
             What BACI retro are you joining today?
           </Box>
-          <FormControl>
+          
               <TextField
                 autoFocus
-                variant="standard"
-                placeholder="Retro access code"
+                variant='standard'
+                label="Retro access code"
                 error={!!codeError}
                 sx= {styles.accessCodeTextField}
                 onKeyDown={e => {
@@ -142,14 +153,17 @@ export function LandingPage() {
                   {codeError}
                 </FormHelperText>
               )}
-            </FormControl>
+            
             <Button variant="outlined"
               className="secondaryButton"
               style={styles.signInMargin}
               onClick={() => joinRetro()}>
                 <span className="secondaryButtonText">Go on..</span>
             </Button>
-            <Button style={styles.newUserText}>Create New Retro</Button>
+            <Button style={styles.newUserText}
+            onClick={() => {
+                CreateNewRetro();
+              }}>Create New Retro</Button>
         </Grid>
       </Grid>
     </Grid>
