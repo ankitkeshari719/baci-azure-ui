@@ -323,7 +323,7 @@ function BoardProvider(props: ComponentProps<any>) {
 
   return (
     <BoardContext.Provider value={{ state, commitAction }}>
-      {currentRetro && state.loading ? (
+      {!currentRetro && state.loading ? (
         <Dialog open={true}>
           <DialogTitle>Loading board...</DialogTitle>
           <DialogContent>

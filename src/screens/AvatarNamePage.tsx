@@ -20,6 +20,7 @@ import { Retro as RetroType } from '../types';
 import { useRetro } from '../helpers';
 import { ActionType, GlobalContext } from '../contexts/GlobalContext';
 import Avatar from '../elements/Avatar';
+import { avatarName } from '../constants/AvatarName';
 
 const styles = {
   heading: {
@@ -36,13 +37,21 @@ const styles = {
   chooseAvatarText: {
     marginTop: '32px',
     marginBottom: '12px',
+    color: 'rgba(0, 0, 0, 0.6)'
   },
   avatarBox: {
     width: '527px',
     height: '220px',
+    overflow: 'auto'
   },
-  goOnBtn:{
-    marginTop: '48px'
+  goOnBtn: {
+    marginTop: '48px',
+  },
+  avatarSvg: {
+    width: "60px",
+  height: "60px",
+  marginBottom: "40px",
+  marginRight: "40px"
   }
 };
 
@@ -52,9 +61,9 @@ export function AvatarNamePage() {
   );
   const AVATAR_COUNT = 57;
 
-  const joinRetro= () =>{
+  const joinRetro = () => {
     //Navigate to dashboard
-  }
+  };
   return (
     <Grid container spacing={0} xs={12}>
       <Grid item xs={6}>
@@ -86,15 +95,20 @@ export function AvatarNamePage() {
               Choose your avatar
             </Typography>
             <Box sx={styles.avatarBox}>
-            {/* <Avatar avatar={`Animals-avatar_${i}avatar`}></Avatar>; */}
-              
+              {/* <Avatar avatar={`Animals-avatar_${i}avatar`}></Avatar>; */}
+              <div>
+                {avatarName.map((avatar: any) => (
+                  <Avatar avatar={avatar} css={styles.avatarSvg}></Avatar>
+                ))}
+              </div>
             </Box>
-            <Button variant="outlined"
+            <Button
+              variant="outlined"
               className="secondaryButton"
               style={styles.goOnBtn}
               onClick={joinRetro}
-              >
-                <span className="secondaryButtonText">Go on..</span>
+            >
+              <span className="secondaryButtonText">Go on..</span>
             </Button>
           </Box>
         </Grid>

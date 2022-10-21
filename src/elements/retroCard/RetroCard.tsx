@@ -258,7 +258,7 @@ export function RetroCard({
           }}
         >
           <Box sx={{ display: 'flex', flexDirection: 'row' }}>
-            <Avatar avatar="Ellipse 801" />
+            <Avatar avatar="Ellipse 801" css={{width:'40px', height:'40px'}}/>
 
             <Box
               component="span"

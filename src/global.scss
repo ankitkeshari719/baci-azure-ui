@@ -35,3 +35,22 @@
     width: 180px;
     height: 180px;
 }
+*::-webkit-scrollbar {
+    width: 9.19px;
+    height: 94.9px
+  }
+  
+  /* Track */
+  *::-webkit-scrollbar-track {
+    background: #f0f0f0; 
+  }
+   
+  /* Handle */
+  *::-webkit-scrollbar-thumb {
+    background: #E3E3E3; 
+  }
+  
+//   /* Handle on hover */
+//   *::-webkit-scrollbar-thumb:hover {
+//     background: #555; 
+//   }

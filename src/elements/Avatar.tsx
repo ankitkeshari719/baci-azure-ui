@@ -5,12 +5,12 @@ const Avatar = (props:any) => {
     if(!window.location.pathname.includes('join')){
          avatar ="/avatars/"+props.avatar+".svg";
     } else if(window.location.pathname.includes('join')){
-         avatar ="/avatars/animals"+props.avatar+".svg";
+         avatar ="/avatars/animals/"+props.avatar+".svg";
     }
     
     return (
        
-           <img style={{width:'40px',height:"40px"}} src={avatar}></img> 
+           <img style={props.css} src={avatar}></img> 
          
        
     );
