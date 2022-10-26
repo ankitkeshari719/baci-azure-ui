@@ -1,7 +1,7 @@
 export const productName = 'Team Coach';
 export const productWebsite = 'http://www.retroland.com';
 export const UNGROUPED = 'Ungrouped';
-export const API_URL = "http://localhost:5010"
+export const API_URL = 'http://localhost:5010';
 
 import StarIcon from '@mui/icons-material/Star';
 import StarBorderOutlinedIcon from '@mui/icons-material/StarBorderOutlined';
@@ -16,9 +16,25 @@ export const CARD_COLOURS = [
 ];
 
 export const CARD_HOVER_COLOURS = [
-  '#5ba8dd',
+  '#a7e4fc',
   '#695f9b',
   '#fcb34c',
+  '#abd261',
+  '#f3715b',
+];
+
+export const GROUP_FONT_COLOURS = [
+  '#0B6623',
+  '#F79722',
+  '#8A38F5',
+  '#abd261',
+  '#f3715b',
+];
+
+export const GROUP_COLOURS = [
+  '#E2EBE5',
+  '#fcf2e6',
+  '#F5F1FB',
   '#abd261',
   '#f3715b',
 ];
@@ -88,6 +104,8 @@ export const INITIAL_COLUMNS = [
     order: 0,
     cardColour: CARD_COLOURS[0],
     cardColourHover: CARD_HOVER_COLOURS[0],
+    groupColour:GROUP_COLOURS[0],
+    groupFontColour:GROUP_FONT_COLOURS[0],
     groups: [
       {
         id: UNGROUPED + 1,
@@ -106,6 +124,8 @@ export const INITIAL_COLUMNS = [
     order: 1,
     cardColour: CARD_COLOURS[1],
     cardColourHover: CARD_HOVER_COLOURS[1],
+    groupColour:GROUP_COLOURS[1],
+    groupFontColour:GROUP_FONT_COLOURS[1],
     groups: [
       {
         id: UNGROUPED + 2,
@@ -124,6 +144,8 @@ export const INITIAL_COLUMNS = [
     order: 2,
     cardColour: CARD_COLOURS[2],
     cardColourHover: CARD_HOVER_COLOURS[2],
+    groupColour:GROUP_COLOURS[2],
+    groupFontColour:GROUP_FONT_COLOURS[2],
     groups: [
       {
         id: UNGROUPED + 3,

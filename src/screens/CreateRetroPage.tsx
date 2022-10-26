@@ -14,6 +14,7 @@ import commonStyles from './../style.module.scss';
 import './../global.scss';
 import { useNavigate, useParams } from 'react-router-dom';
 import { useRetro } from '../helpers';
+import { useAzureAuth } from '../msal/azureauth';
 
 const styles = {
   createRetroText: {
@@ -73,6 +74,7 @@ export function CreateNewRetro() {
   );
   const RETRONAME_CHARACTER_LIMIT = 80;
   const timeframeRef = React.useRef<HTMLSelectElement | null>(null);
+  useAzureAuth();
 
   function handleRetronameChange(e: React.SetStateAction<string>) {
     if (e == '') {

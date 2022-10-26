@@ -600,6 +600,7 @@ export default function RetroBoard() {
                             <RightContainer index={index} />
                           }
                           column={column}
+                          columnId={column.id}
                           noHeader={isXsUp}
                           showEditBox={showEditBox}
                           setShowEditBox={setShowEditBox}

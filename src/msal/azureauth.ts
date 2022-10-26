@@ -17,7 +17,7 @@ export const useAzureAuth = () => {
     }
 
     React.useEffect(() => {
-        // console.log("in Azure Auth",global.user)
+        console.log("in Azure Auth",global.user)
             if (!global.user.id) {
                 dispatch({
                     type: ActionType.SET_USER,

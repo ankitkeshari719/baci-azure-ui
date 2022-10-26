@@ -22,7 +22,7 @@ export class ReducerPayload {
   user?: User;
   preferredNickname?: string;
   snackMessage?: SnackMessageClass;
-  retroCreateState?:boolean;
+  retroCreateState?: boolean;
   pulseCheckState?: PulseCheckSubmitStatus;
 }
 
@@ -57,6 +57,7 @@ function GlobalProvider(props: ComponentProps<any>) {
     switch (action.type) {
       case ActionType.SET_USER:
         if (action.payload?.user && action.payload?.user.id) {
+          console.log('user', action.payload?.user);
           return saveState({ ...state, user: action.payload?.user as User });
         }
         break;
@@ -88,11 +89,11 @@ function GlobalProvider(props: ComponentProps<any>) {
           ...state,
           retroCreateState: action.payload?.retroCreateState,
         });
-        case ActionType.SET_PULSE_CHECK:
-          return saveState({
-            ...state,
-            pulseCheckState: action.payload?.pulseCheckState,
-          });
+      case ActionType.SET_PULSE_CHECK:
+        return saveState({
+          ...state,
+          pulseCheckState: action.payload?.pulseCheckState,
+        });
     }
     return saveState({ ...state });
   }

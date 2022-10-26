@@ -63,7 +63,7 @@ export function Onboarding() {
   const AVATAR_CHARACTER_LIMIT = 30;
   const RETRONAME_CHARACTER_LIMIT = 80;
   React.useEffect(() => {
-   
+   console.log("loging")
     if (window.location.pathname.includes('join')) {
       setStarted(false);
       if (sessionStorage.getItem('BoardContext') !== null) {
@@ -251,6 +251,7 @@ export function Onboarding() {
 
   const canShare = navigator.canShare && navigator.canShare(shareData);
 
+  useAzureAuth();
   useAzureAuth();
 
   return (

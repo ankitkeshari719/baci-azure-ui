@@ -1,4 +1,5 @@
 import {
+  Box,
   Button,
   Card,
   CardActions,
@@ -40,19 +41,22 @@ const TextFieldNoBorderWrapper = styled('div')({
 export function RetroCardGroup({
   group,
   column,
+  columnId,
   children,
   showCollapse,
   onCollapse,
 }: {
   group: CardGroup;
   column: Column;
+  columnId: string;
   children: React.ReactNode;
   showCollapse: boolean;
   onCollapse: (value: any) => void;
 }) {
   const [global] = React.useContext(GlobalContext);
+
   const {
-    state: { ended },
+    state: { columns, ended },
     commitAction,
   } = React.useContext(BoardContext);
   const { setConfirmAction } = React.useContext(ConfirmContext);
@@ -61,7 +65,12 @@ export function RetroCardGroup({
   const [nameSet, setNameSet] = React.useState(!!group.name);
   const [reactGroups, setReactGroups] = React.useState<any>({});
   const [myReact, setMyReact] = React.useState<boolean>(false);
-
+  const groupColour = columns.find(
+    column => column.id === columnId
+  )?.groupColour;
+  const groupFontColour = columns.find(
+    column => column.id === columnId
+  )?.groupFontColour;
   React.useEffect(() => {
     setName(group.name);
     if (group.name) {
@@ -134,7 +143,8 @@ export function RetroCardGroup({
         sx={{
           margin: '0',
           borderRadius: 0,
-          background: group.name !== UNGROUPED ? 'rgb(220 220 225)' : 'none',
+          background: group.name !== UNGROUPED ? groupColour : 'none',
+          optacity: 0.1,
           border: 'none',
           marginBottom: 0,
           paddingBottom: '5px',
@@ -142,23 +152,33 @@ export function RetroCardGroup({
       >
         {group.name !== UNGROUPED ? (
           <Grid container>
-            <Grid item xs={10}>
+            <Grid
+              item
+              xs={10}
+              sx={{
+                height: '30px',
+                display: 'flex',
+                flexDirection: 'row',
+                alignItems: 'center',
+              }}
+            >
               <TextField
                 type="text"
                 sx={{
-                  flexGrow: 22,
+                  // flexGrow: 22,
                   fontStyle: nameSet ? 'normal' : 'italic',
                   textarea: {
                     fontWeight: '600',
                     padding: 0,
-                    color: nameSet ? '#4D555A' : '#8D858A',
+                    color: nameSet ? groupFontColour : '#8D858A',
                   },
                   fieldset: { border: 'none' },
                   px: 2,
                   py: 2,
                   paddingBottom: 0,
                   paddingRight: 0,
-                  width: '100%',
+                  // width: '100%',
+                  width: (nameSet ? name.length : 14) + 3 + 'ch',
                   div: { padding: 0, position: 'initial', width: '100%' },
                   position: 'initial',
                 }}
@@ -166,7 +186,19 @@ export function RetroCardGroup({
                 value={nameSet ? name : 'Name grouping'}
                 multiline
                 onChange={event => {
-                  setName(event.target.value);
+                  console.log(
+                    event.target.value.replace(
+                      ' ( ' + group.cards.length + ' ) ',
+                      ''
+                    ),
+                    'value'
+                  );
+                  setName(
+                    event.target.value.replace(
+                      ' ( ' + group.cards.length + ' ) ',
+                      ''
+                    )
+                  );
                 }}
                 InputProps={{
                   readOnly: ended,
@@ -184,22 +216,117 @@ export function RetroCardGroup({
                   }
                 }}
               />
+              <span
+                style={{
+                  fontWeight: '600',
+                  padding: 0,
+                  color: nameSet ? groupFontColour : '#8D858A',
+                  paddingTop: '18px',
+                }}
+              >
+                {' '}
+                {'( ' + group.cards.length + ' )'}
+              </span>
+              {group.name !== UNGROUPED && (
+                <Button
+                  sx={{ marginTop: '18px', position: 'initial' }}
+                  disabled={ended}
+                  onClick={() =>
+                    !ended
+                      ? myReact
+                        ? addReactToGroup(group.id, '')
+                        : addReactToGroup(group.id, '👍')
+                      : null
+                  }
+                >
+                  {myReact ? (
+                    <svg
+                      width="20"
+                      height="20"
+                      viewBox="0 0 20 20"
+                      fill="none"
+                      xmlns="http://www.w3.org/2000/svg"
+                    >
+                      <path
+                        d="M9.48073 1.4987C9.67288 1.03673 10.3273 1.03673 10.5195 1.4987L12.6454 6.61016C12.7264 6.80492 12.9096 6.93799 13.1199 6.95484L18.6381 7.39724C19.1369 7.43722 19.3391 8.05964 18.9591 8.38514L14.7548 11.9866C14.5946 12.1238 14.5246 12.3391 14.5736 12.5443L15.858 17.9292C15.9741 18.4159 15.4447 18.8005 15.0177 18.5397L10.2933 15.6541C10.1133 15.5441 9.8869 15.5441 9.7069 15.6541L4.98251 18.5397C4.55551 18.8005 4.02606 18.4159 4.14215 17.9292L5.42664 12.5443C5.47558 12.3391 5.40562 12.1238 5.24543 11.9866L1.04111 8.38514C0.661119 8.05964 0.863352 7.43722 1.36209 7.39724L6.88034 6.95484C7.0906 6.93799 7.27375 6.80492 7.35476 6.61016L9.48073 1.4987Z"
+                        fill="#FBBC05"
+                        stroke="#FBBC05"
+                        stroke-width="1.5"
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                      />
+                    </svg>
+                  ) : (
+                    <span>
+                      {ended ? (
+                        // <img src="/svgs/Star.svg" />
+                        <svg
+                          width="20"
+                          height="20"
+                          viewBox="0 0 20 20"
+                          fill="none"
+                          xmlns="http://www.w3.org/2000/svg"
+                        >
+                          <path
+                            d="M9.48073 1.4987C9.67288 1.03673 10.3273 1.03673 10.5195 1.4987L12.6454 6.61016C12.7264 6.80492 12.9096 6.93799 13.1199 6.95484L18.6381 7.39724C19.1369 7.43722 19.3391 8.05964 18.9591 8.38514L14.7548 11.9866C14.5946 12.1238 14.5246 12.3391 14.5736 12.5443L15.858 17.9292C15.9741 18.4159 15.4447 18.8005 15.0177 18.5397L10.2933 15.6541C10.1133 15.5441 9.8869 15.5441 9.7069 15.6541L4.98251 18.5397C4.55551 18.8005 4.02606 18.4159 4.14215 17.9292L5.42664 12.5443C5.47558 12.3391 5.40562 12.1238 5.24543 11.9866L1.04111 8.38514C0.661119 8.05964 0.863352 7.43722 1.36209 7.39724L6.88034 6.95484C7.0906 6.93799 7.27375 6.80492 7.35476 6.61016L9.48073 1.4987Z"
+                            fill="#FBBC05"
+                            stroke="#FBBC05"
+                            stroke-width="1.5"
+                            stroke-linecap="round"
+                            stroke-linejoin="round"
+                          />
+                        </svg>
+                      ) : (
+                        // <img src="/svgs/GrayStar.svg" />
+                        <svg
+                          width="20"
+                          height="20"
+                          viewBox="0 0 20 20"
+                          fill="none"
+                          xmlns="http://www.w3.org/2000/svg"
+                        >
+                          <path
+                            d="M9.48073 1.4987C9.67288 1.03673 10.3273 1.03673 10.5195 1.4987L12.6454 6.61016C12.7264 6.80492 12.9096 6.93799 13.1199 6.95484L18.6381 7.39724C19.1369 7.43722 19.3391 8.05964 18.9591 8.38514L14.7548 11.9866C14.5946 12.1238 14.5246 12.3391 14.5736 12.5443L15.858 17.9292C15.9741 18.4159 15.4447 18.8005 15.0177 18.5397L10.2933 15.6541C10.1133 15.5441 9.8869 15.5441 9.7069 15.6541L4.98251 18.5397C4.55551 18.8005 4.02606 18.4159 4.14215 17.9292L5.42664 12.5443C5.47558 12.3391 5.40562 12.1238 5.24543 11.9866L1.04111 8.38514C0.661119 8.05964 0.863352 7.43722 1.36209 7.39724L6.88034 6.95484C7.0906 6.93799 7.27375 6.80492 7.35476 6.61016L9.48073 1.4987Z"
+                            fill="white"
+                            stroke="#FBBC05"
+                            stroke-width="1.5"
+                            stroke-linecap="round"
+                            stroke-linejoin="round"
+                          />
+                        </svg>
+                      )}
+                    </span>
+                  )}
+                  <Typography
+                    color="#FBBC05"
+                    style={{
+                      fontSize: '1rem',
+                      marginLeft: '5px',
+                      marginTop: '3px',
+                    }}
+                  >
+                    {group.reactions?.length ? group.reactions?.length : ''}
+                  </Typography>
+                </Button>
+              )}
             </Grid>
+            {/* <Box component="span">{' ( ' + group.cards.length + ' ) '}</Box> */}
             {group.cards.length > 1 && showCollapse ? (
-              <Grid item xs={2}>
+              <Grid item xs={2} sx={{display:"flex",flexDirection:"row",justifyContent:"flex-end"}}>
                 <Button
                   onClick={event => {
                     onCollapse(event);
                   }}
-                  sx={{ position: 'initial' }}
+                  // sx={{ position: 'initial' }}
                 >
-                  <CloseFullscreenIcon
+                  {/* <CloseFullscreenIcon
                     style={{ color: '#727D84', width: '20px' }}
-                  />
+                  /> */}
+                  <img src="/svgs/Down.svg" />
                 </Button>
               </Grid>
             ) : (
-              <Grid item xs={2}>
+              <Grid item xs={2} sx={{display:"flex",flexDirection:"row",justifyContent:"flex-end"}}>
                 {' '}
                 {group.cards.length > 1 && (
                   <Button
@@ -208,9 +335,10 @@ export function RetroCardGroup({
                     }}
                     sx={{ position: 'initial' }}
                   >
-                    <OpenInFullIcon
+                    {/* <OpenInFullIcon
                       style={{ color: '#727D84', width: '20px' }}
-                    />
+                    /> */}
+                    <img src="/svgs/Up.svg" />
                   </Button>
                 )}
               </Grid>
@@ -240,47 +368,6 @@ export function RetroCardGroup({
         )}
 
         {/* bottom side of grouping */}
-        {group.name !== UNGROUPED ? (
-          <>
-            <CardActions style={{ justifyContent: 'space-around', padding: 0 }}>
-              <span style={{ minWidth: '0px' }}>
-                <Typography
-                  style={{
-                    background: column.cardColour,
-                    padding: '3px 14px',
-                    marginLeft: '10px',
-                    fontSize: '0.85rem',
-                  }}
-                  color="black"
-                >
-                  {group.cards.length}
-                </Typography>
-              </span>
-              <div style={{ flexGrow: 2 }}>&nbsp;</div>
-              <Button
-                sx={{ minWidth: '0px', position: 'initial' }}
-                disabled={ended}
-                onClick={() =>
-                  !ended
-                    ? myReact
-                      ? addReactToGroup(group.id, '')
-                      : addReactToGroup(group.id, '👍')
-                    : null
-                }
-              >
-                <ThumbUpOffAlt
-                  sx={{
-                    height: '20px',
-                    color: myReact ? '#1D5C98' : '#9EA7AC',
-                  }}
-                />
-                <Typography color="black" style={{ fontSize: '0.85rem' }}>
-                  {group.reactions?.length ? group.reactions?.length : ''}
-                </Typography>
-              </Button>
-            </CardActions>
-          </>
-        ) : null}
       </Card>
     </>
   );

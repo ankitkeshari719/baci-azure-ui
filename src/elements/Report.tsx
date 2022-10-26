@@ -177,6 +177,7 @@ export const Report = React.forwardRef((props, ref) => {
             noHeader
             expandAllGroups
             column={columns[ACTIONS_COLUMN]}
+            columnId={columns[ACTIONS_COLUMN].id}
             showEditBox={false}
             setIslanded={setIsLanded}
             setShowEditBox={() => {}}

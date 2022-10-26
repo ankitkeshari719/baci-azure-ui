@@ -1,5 +1,6 @@
 import {
   Box,
+  Grid,
   Button,
   styled,
   TextField,
@@ -47,6 +48,7 @@ const TextFieldNoBorderWrapper = styled('div')({
 
 export function RetroColumn({
   column,
+  columnId,
   cardGroups,
   noHeightLimit,
   expandAllGroups,
@@ -58,7 +60,9 @@ export function RetroColumn({
   rightHeaderComponent,
 }: {
   column: Column;
+  columnId: string;
   noHeader: boolean;
+
   expandAllGroups?: boolean;
   cardGroups: CardGroup[];
   noHeightLimit?: boolean;
@@ -79,10 +83,15 @@ export function RetroColumn({
     cardGroups.map(() => true)
   );
   const {
-    state: { ended },
+    state: { columns, ended },
     commitAction,
   } = React.useContext(BoardContext);
-
+  const groupColour = columns.find(
+    column => column.id === columnId
+  )?.groupColour;
+  const groupFontColour = columns.find(
+    column => column.id === columnId
+  )?.groupFontColour;
   const [value, setValue] = React.useState('');
   const [valueSet, setValueSet] = React.useState(false);
   const [mouseOver, setMouseOver] = React.useState(true);
@@ -183,14 +192,10 @@ export function RetroColumn({
 
     // console.log(cardGroups);
 
-      await addNewCard(
-        (
-          cardGroups.find(
-            cardGroup => cardGroup.name === UNGROUPED
-          ) as CardGroup
-        ).id,
-        text
-      
+    await addNewCard(
+      (cardGroups.find(cardGroup => cardGroup.name === UNGROUPED) as CardGroup)
+        .id,
+      text
     );
     setValue('');
     setValueSet(false);
@@ -511,6 +516,8 @@ export function RetroColumn({
           : isXsUp
           ? 'calc(var(--app-height) - 145px)'
           : 'calc(var(--app-height) - 120px)',
+        borderRadius: '8px',
+        border: '1px solid #0B6623',
       }}
       onMouseOver={() => {
         setMouseOver(true);
@@ -519,68 +526,109 @@ export function RetroColumn({
         setMouseOver(true);
       }}
     >
-      <div style={{ display: 'flex', flexDirection: 'column', flexGrow: 1 }}>
-        {!noHeader ? (
-          <Typography
-            align="center"
-            sx={{ userSelect: 'none', display: 'flex', fontSize: '0.9rem' }}
-          >
-            {leftHeaderComponent}
-            <TextField
-              maxRows={2}
+      <Box  style={{ display: 'flex', flexDirection: 'column',justifyContent:"flex-start",width:'100%' }}>
+        <Box
+          sx={{
+            display: 'flex',
+            flexDirection: 'row',
+            width: '100%',
+            justifyContent: 'space-between',
+            background: groupColour,
+            alignItems: 'center',
+            padding: '14px',
+          }}
+        >
+          {!noHeader && (
+            <Typography
+              align="center"
               sx={{
-                fieldset: { border: 'none' },
-                flex: 10,
-                padding: '10px',
-                div: { padding: 0, position: 'initial' },
-                textarea: { textAlign: 'center' },
-                position: 'initial',
+                userSelect: 'none',
                 display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
+                fontSize: '0.9rem',
+                width: 'calc(100%-90px)',
               }}
-              multiline
-              fullWidth
-              value={columnName.toUpperCase()}
-              onKeyDown={e => {
-                if (e.keyCode === 13) {
-                  submitColumnName(columnName);
-                  (e.target as HTMLInputElement).blur();
-                }
-              }}
-              onChange={e => setColumnName(e.currentTarget.value)}
-              onBlur={() => submitColumnName(columnName)}
-              onSubmit={() => submitColumnName(columnName)}
-            ></TextField>
-            {rightHeaderComponent}
-          </Typography>
-        ) : null}
+            >
+              {leftHeaderComponent}
+              <TextField
+                maxRows={2}
+                sx={{
+                  fieldset: { border: 'none' },
+                  flex: 10,
+                  // padding: '10px',
+                  div: { padding: 0, position: 'initial' },
+                  textarea: {
+                    // textAlign: 'center',
+                    color: groupFontColour + '!important',
+                    fontSize: '16px',
+                    fontWeight: 600,
+                  },
+                  position: 'initial',
+                  display: 'flex',
+                  // alignItems: 'center',
+                  // justifyContent: 'left',
+                }}
+                multiline
+                fullWidth
+                value={columnName.toUpperCase()}
+                onKeyDown={e => {
+                  if (e.keyCode === 13) {
+                    submitColumnName(columnName);
+                    (e.target as HTMLInputElement).blur();
+                  }
+                }}
+                onChange={e => setColumnName(e.currentTarget.value)}
+                onBlur={() => submitColumnName(columnName)}
+                onSubmit={() => submitColumnName(columnName)}
+              ></TextField>
+              {rightHeaderComponent}
+            </Typography>
+          )}
+          <Box>
+            <img
+              src="/svgs/Message.svg"
+              style={{ width: '20px', marginLeft: '10px' }}
+            />
+            <img
+              src="/svgs/Unlock.svg"
+              style={{ width: '20px', marginLeft: '10px' }}
+            />
+            <img
+              src="/svgs/Expand.svg"
+              style={{ width: '20px', marginLeft: '10px' }}
+            />
+          </Box>
+        </Box>
         {useMemo(
           () => (
             <>
-              <div
+              <Grid
+                container
+                // spacing={2}
                 ref={containerRef}
                 style={{
-                  overflowY: noHeightLimit ? 'auto' : 'scroll',
+                  overflowY: noHeightLimit ? 'auto' : 'auto',
                   userSelect: 'none',
-                  flexGrow: 2,
+                  flexGrow: 1,
                 }}
               >
                 {cardGroups.map((group, i) => (
-                  <div
+                  <Grid
+                    md={12}
+                    spacing={2}
                     key={group.id}
                     ref={e => (groupRefs[i] = e)}
-                    style={{
+                    sx={{
                       marginBottom: '10px',
                       padding: '3px',
                       borderRadius: 0,
-                      background:
-                        group.name !== UNGROUPED ? 'rgb(220 220 225)' : 'none',
+                      // background:
+                      //   group.name !== UNGROUPED ? 'rgb(220 220 225)' : 'none',
                     }}
                   >
                     <RetroCardGroup
                       group={group}
                       column={column}
+                      columnId={column.id}
                       showCollapse={
                         group.name !== UNGROUPED &&
                         group.cards.length > 1 &&
@@ -595,7 +643,10 @@ export function RetroColumn({
                       !groupCollapsed[i] ||
                       group.cards.length < 2 ||
                       expandAllGroups ? (
-                        <div
+                        <Grid
+                          md={12}
+                          container
+                          spacing={2}
                           style={{
                             display: 'flex',
                             flexWrap: 'wrap',
@@ -614,83 +665,89 @@ export function RetroColumn({
                             }}
                           ></span>
                           {group.cards.map((card: RetroCardType, j: number) => (
-                            <React.Fragment key={card.id}>
-                              {group.name === UNGROUPED ||
-                              j <
-                                (groupCollapsed[i] ? 2 : group.cards.length) ? (
-                                <>
-                                  <span
-                                    ref={e =>
-                                      cardRefCollector(
-                                        e as HTMLDivElement,
-                                        i,
-                                        j,
-                                        card
-                                      )
-                                    }
-                                    style={{ padding: '10px' }}
-                                  >
-                                    <Draggable
-                                      ref={ref => {
-                                        draggableRefs[i][j] = ref;
-                                      }}
-                                      disabled={
-                                        ended ||
-                                        (card.locked &&
-                                          card.lockedBy !== global.user.id)
+                            <Grid md={2} item>
+                              <React.Fragment key={card.id}>
+                                {group.name === UNGROUPED ||
+                                j <
+                                  (groupCollapsed[i]
+                                    ? 2
+                                    : group.cards.length) ? (
+                                  <>
+                                    <span
+                                      ref={e =>
+                                        cardRefCollector(
+                                          e as HTMLDivElement,
+                                          i,
+                                          j,
+                                          card
+                                        )
                                       }
-                                      onStart={(event, data) =>
-                                        handleStart(i, j, event, data)
-                                      }
-                                      onStop={(event, data) => {
-                                        handleStop(i, j, event, data);
-                                      }}
-                                      onDrag={(event, data) =>
-                                        handleDrag(i, j, event, data)
-                                      }
-                                      enableUserSelectHack={true}
-                                      cancel={'just-name'}
-                                      handle=".handle"
+                                      style={{ padding: '10px' }}
                                     >
-                                      <span className="handle">
-                                        <RetroCard
-                                          moveCard={moveCard}
-                                          card={card}
-                                          groups={cardGroups}
-                                          currentGroupId={group.id}
-                                          columnId={column.id}
-                                          hideButtons={false}
-                                          animate={true}
-                                        />
-                                      </span>
-                                    </Draggable>
-                                    <div
-                                      ref={ref => (placeholderRefs[i][j] = ref)}
-                                    ></div>
-                                  </span>
-                                  <span
-                                    ref={e => {
-                                      landingZones[i][j + 1] =
-                                        e as HTMLDivElement;
-                                    }}
-                                    style={{
-                                      maxHeight: '0',
-                                      margin: '0',
-                                      padding: '0',
-                                    }}
-                                  ></span>
-                                </>
-                              ) : null}
-                            </React.Fragment>
+                                      <Draggable
+                                        ref={ref => {
+                                          draggableRefs[i][j] = ref;
+                                        }}
+                                        disabled={
+                                          ended ||
+                                          (card.locked &&
+                                            card.lockedBy !== global.user.id)
+                                        }
+                                        onStart={(event, data) =>
+                                          handleStart(i, j, event, data)
+                                        }
+                                        onStop={(event, data) => {
+                                          handleStop(i, j, event, data);
+                                        }}
+                                        onDrag={(event, data) =>
+                                          handleDrag(i, j, event, data)
+                                        }
+                                        enableUserSelectHack={true}
+                                        cancel=".can"
+                                        handle=".handle"
+                                      >
+                                        <Grid className="handle">
+                                          <RetroCard
+                                            moveCard={moveCard}
+                                            card={card}
+                                            groups={cardGroups}
+                                            currentGroupId={group.id}
+                                            columnId={column.id}
+                                            hideButtons={false}
+                                            animate={true}
+                                          />
+                                        </Grid>
+                                      </Draggable>
+                                      <div
+                                        ref={ref =>
+                                          (placeholderRefs[i][j] = ref)
+                                        }
+                                      ></div>
+                                    </span>
+                                    <span
+                                      ref={e => {
+                                        landingZones[i][j + 1] =
+                                          e as HTMLDivElement;
+                                      }}
+                                      style={{
+                                        maxHeight: '0',
+                                        margin: '0',
+                                        padding: '0',
+                                      }}
+                                    ></span>
+                                  </>
+                                ) : null}
+                              </React.Fragment>
+                            </Grid>
                           ))}
-                        </div>
+                        </Grid>
                       ) : (
-                        <div>
-                          <div
+                        <Grid md={12}>
+                          <Grid xs={3}
                             style={{
-                              padding: '10px',
+                              // padding: '10px',
                               display: 'flex',
-                              justifyContent: 'center',
+                              // justifyContent: 'space-between',
                             }}
                           >
                             <div
@@ -707,7 +764,7 @@ export function RetroColumn({
                                 setGroupCollapsed([...groupCollapsed]);
                               }}
                             >
-                              {group.cards.map((card, j) =>
+                              {/* {group.cards.map((card, j) =>
                                 j !== 0 ? (
                                   <div
                                     key={card.id}
@@ -722,42 +779,50 @@ export function RetroColumn({
                                     }}
                                   ></div>
                                 ) : null
-                              )}
-                              <span
-                                className="handel"
-                                ref={e =>
-                                  cardRefCollector(
-                                    e as HTMLDivElement,
-                                    i,
-                                    0,
-                                    group.cards[0]
+                              )} */}
+                              {group.cards.map(
+                                (card, j) =>
+                                  j < 2 && (
+                                    <span
+                                      className="handel"
+                                      style={{ padding: '10px' }}
+                                      ref={e =>
+                                        cardRefCollector(
+                                          e as HTMLDivElement,
+                                          i,
+                                          0,
+                                          group.cards[0]
+                                        )
+                                      }
+                                    >
+                                      <RetroCard
+                                        moveCard={moveCard}
+                                        card={group.cards[0]}
+                                        groups={cardGroups}
+                                        currentGroupId={group.id}
+                                        columnId={column.id}
+                                        hideButtons={true}
+                                        animate={false}
+                                      />
+                                    </span>
                                   )
-                                }
-                              >
-                                <RetroCard
-                                  moveCard={moveCard}
-                                  card={group.cards[0]}
-                                  groups={cardGroups}
-                                  currentGroupId={group.id}
-                                  columnId={column.id}
-                                  hideButtons={true}
-                                  animate={false}
-                                />
-                              </span>
+                              )}
                             </div>
-                          </div>
-                        </div>
+                          </Grid>
+                        </Grid>
                       )}
                     </RetroCardGroup>
-                  </div>
+                  </Grid>
                 ))}
                 <span ref={surroundDiv} style={{ display: 'none' }}></span>
-              </div>
+              </Grid>
             </>
           ),
           [column.groups, groupCollapsed]
         )}
-        {!ended && ((!isXsUp && mouseOver) || (isXsUp && showEditBox)) ? (
+
+        {/* To add new cards */}
+        {!ended && ((!isXsUp && mouseOver) || (isXsUp && showEditBox)) && (
           <Box
             style={{
               background: 'white',
@@ -837,7 +902,7 @@ export function RetroColumn({
                 </Typography>
               ) : null}
             </TextFieldNoBorderWrapper>
-            <div
+            <Box
               style={{
                 display: 'flex',
                 justifyContent: 'flex-end',
@@ -851,10 +916,10 @@ export function RetroColumn({
               >
                 <SendIcon></SendIcon>
               </Button>
-            </div>
+            </Box>
           </Box>
-        ) : null}
-      </div>
+        )}
+      </Box>
     </ColumnComponent>
   );
 }

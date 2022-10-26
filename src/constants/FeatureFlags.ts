@@ -39,7 +39,7 @@ if (env === 'production') {
         report: true,
         stressTest: true,
     };
-    api_url = "https://baciapi.azurewebsites.net"
+    api_url = "http://localhost:8080"
     log.setLevel(log.levels.TRACE);
 }
 

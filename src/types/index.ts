@@ -1,4 +1,4 @@
-import { AlertColor } from "@mui/material";
+import { AlertColor } from '@mui/material';
 
 export class Retro {
   id: string = '';
@@ -8,9 +8,9 @@ export class Retro {
   creatorId?: string = '';
 }
 export interface PulseCheckSubmitStatus {
-    retroId: string;
-    pulseSubmitState: boolean;
-  }
+  retroId: string;
+  pulseSubmitState: boolean;
+}
 export class User {
   id: string = '';
   name: string = '';
@@ -21,9 +21,6 @@ export class SnackMessageClass {
   snackMessageType: AlertColor = 'success';
   message: string = '';
 }
-
-
-
 
 export class Global {
   user: User = new User();
@@ -66,6 +63,8 @@ export interface Column {
   order: number;
   cardColour: string;
   cardColourHover: string;
+  groupFontColour: string;
+  groupColour: string;
   groups: CardGroup[];
   lastUpdatedBy?: string;
 }
@@ -107,7 +106,7 @@ export class BoardState {
   lastUpdatedBy?: string;
   ended: boolean = false;
 
-  needsToShow:boolean=false;
+  needsToShow: boolean = false;
 
   startedDate: Date | undefined;
   endedDate: Date | undefined;

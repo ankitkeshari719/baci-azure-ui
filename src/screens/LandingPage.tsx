@@ -1,4 +1,13 @@
-import { Box, Button, FormControl, FormHelperText, Grid, Paper, TextField, Typography } from '@mui/material';
+import {
+  Box,
+  Button,
+  FormControl,
+  FormHelperText,
+  Grid,
+  Paper,
+  TextField,
+  Typography,
+} from '@mui/material';
 import * as React from 'react';
 import ReactDOM from 'react-dom';
 import LandingImage from '../assets/img/landingimage.png';
@@ -10,6 +19,7 @@ import { useNavigate, useParams } from 'react-router-dom';
 import { Retro as RetroType } from '../types';
 import { useRetro } from '../helpers';
 import { ActionType, GlobalContext } from '../contexts/GlobalContext';
+import { useAzureAuth } from '../msal/azureauth';
 
 // import {primaryButton,primaryButtonText, secondaryButton,secondaryButtonText } from './../style.module.scss';
 const styles = {
@@ -49,56 +59,53 @@ const styles = {
     minWidth: '322px',
     marginTop: '86px',
     height: '48px',
-    "& .MuiFormLabel-root": {
-      color: "rgba(0, 0, 0, 0.6)" ,
-      fontSize: '14px'
-    }
-  }
+    '& .MuiFormLabel-root': {
+      color: 'rgba(0, 0, 0, 0.6)',
+      fontSize: '14px',
+    },
+  },
 };
 
 export function LandingPage() {
-    const { id } = useParams();
-    const retro = useRetro();
-    const navigate = useNavigate();
+  const { id } = useParams();
+  const retro = useRetro();
+  const navigate = useNavigate();
 
-    const [humanId, setHumanId] = React.useState(id || '');
-    const [codeError, setCodeError] = React.useState('');
-    const [global, dispatch] = React.useContext(GlobalContext);
+  const [humanId, setHumanId] = React.useState(id || '');
+  const [codeError, setCodeError] = React.useState('');
+  const [global, dispatch] = React.useContext(GlobalContext);
 
-
-
-    const joinRetro = async (): Promise<RetroType | undefined> => {
-        let foundRetro = await retro.getByHumanId(humanId);
-        if (humanId === '') {
-          setCodeError('Please enter access code');
-        } else {
-          setCodeError('');
-        }
-        if (!foundRetro) {
-          foundRetro = await retro.getById(humanId);
-        }
-        dispatch({
-          type: ActionType.SET_CURRENT_RETRO,
-          payload: { retro: foundRetro },
-        });
-        if (foundRetro) {
-            navigate('/join/' + humanId);
-          return foundRetro;
-        } else {
-          setCodeError('Sorry, wrong code. Please try again');
-        }
-      };
-
-    function CreateNewRetro(){
-        dispatch({
-            type: ActionType.SET_RETRO_CREATE,
-            payload: { retroCreateState: true },
-          });
-          setCodeError('');
-          navigate('/createretro/');
+  useAzureAuth();
+  const joinRetro = async (): Promise<RetroType | undefined> => {
+    let foundRetro = await retro.getByHumanId(humanId);
+    if (humanId === '') {
+      setCodeError('Please enter access code');
+    } else {
+      setCodeError('');
     }
+    if (!foundRetro) {
+      foundRetro = await retro.getById(humanId);
+    }
+    dispatch({
+      type: ActionType.SET_CURRENT_RETRO,
+      payload: { retro: foundRetro },
+    });
+    if (foundRetro) {
+      navigate('/join/' + humanId);
+      return foundRetro;
+    } else {
+      setCodeError('Sorry, wrong code. Please try again');
+    }
+  };
 
-
+  function CreateNewRetro() {
+    dispatch({
+      type: ActionType.SET_RETRO_CREATE,
+      payload: { retroCreateState: true },
+    });
+    setCodeError('');
+    navigate('/createretro/');
+  }
 
   return (
     <Grid container spacing={0} xs={12}>
@@ -133,37 +140,43 @@ export function LandingPage() {
           <Box component="div" whiteSpace="normal" sx={styles.retroJoiningText}>
             What BACI retro are you joining today?
           </Box>
-          
-              <TextField
-                autoFocus
-                variant='standard'
-                label="Retro access code"
-                error={!!codeError}
-                sx= {styles.accessCodeTextField}
-                onKeyDown={e => {
-                  if (e.keyCode === 13) {
-                    joinRetro();
-                  }
-                }}
-                value={humanId}
-                onChange={e => setHumanId(e.currentTarget.value)}
-              />
-              {codeError !== '' && (
-                <FormHelperText style={{ color: '#d32f2f', marginLeft: '5px' }}>
-                  {codeError}
-                </FormHelperText>
-              )}
-            
-            <Button variant="outlined"
-              className="secondaryButton"
-              style={styles.signInMargin}
-              onClick={() => joinRetro()}>
-                <span className="secondaryButtonText">Go on..</span>
-            </Button>
-            <Button style={styles.newUserText}
+
+          <TextField
+            autoFocus
+            variant="standard"
+            label="Retro access code"
+            error={!!codeError}
+            sx={styles.accessCodeTextField}
+            onKeyDown={e => {
+              if (e.keyCode === 13) {
+                joinRetro();
+              }
+            }}
+            value={humanId}
+            onChange={e => setHumanId(e.currentTarget.value)}
+          />
+          {codeError !== '' && (
+            <FormHelperText style={{ color: '#d32f2f', marginLeft: '5px' }}>
+              {codeError}
+            </FormHelperText>
+          )}
+
+          <Button
+            variant="outlined"
+            className="secondaryButton"
+            style={styles.signInMargin}
+            onClick={() => joinRetro()}
+          >
+            <span className="secondaryButtonText">Go on..</span>
+          </Button>
+          <Button
+            style={styles.newUserText}
             onClick={() => {
-                CreateNewRetro();
-              }}>Create New Retro</Button>
+              CreateNewRetro();
+            }}
+          >
+            Create New Retro
+          </Button>
         </Grid>
       </Grid>
     </Grid>
