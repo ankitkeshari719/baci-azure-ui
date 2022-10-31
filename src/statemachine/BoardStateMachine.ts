@@ -549,6 +549,7 @@ export const processAction = (state: BoardState, actionName: BoardActionType, pa
             state.users.push({ userId, userNickname, feedback: [], pulseCheckQuestions: [] });
         } else if (user?.userNickname !== userNickname) {
             user.userNickname = userNickname;
+            
         }
     };
 

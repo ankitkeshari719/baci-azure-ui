@@ -53,5 +53,5 @@
 'Animals-avatar_54avatar',
 'Animals-avatar_55avatar',
 'Animals-avatar_56avatar',
-'Animals-avatar_57avatar',
+// 'Animals-avatar_57avatar',
 ];

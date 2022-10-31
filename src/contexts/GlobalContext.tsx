@@ -21,6 +21,7 @@ export class ReducerPayload {
   retro?: Partial<Retro>;
   user?: User;
   preferredNickname?: string;
+  avatar?:string;
   snackMessage?: SnackMessageClass;
   retroCreateState?: boolean;
   pulseCheckState?: PulseCheckSubmitStatus;
@@ -78,6 +79,7 @@ function GlobalProvider(props: ComponentProps<any>) {
         return saveState({
           ...state,
           preferredNickname: action.payload?.preferredNickname,
+          avatar:action.payload?.avatar,
         });
       case ActionType.SET_SNACK_MESSAGE:
         return saveState({

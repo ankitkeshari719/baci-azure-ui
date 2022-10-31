@@ -26,6 +26,7 @@ export class Global {
   user: User = new User();
   currentRetro?: Retro = undefined;
   preferredNickname?: string = undefined;
+  avatar?: string = '';
   snackMessage: SnackMessageClass = new SnackMessageClass();
   retroCreateState?: boolean = false;
   pulseCheckState?: PulseCheckSubmitStatus = {
@@ -92,6 +93,7 @@ export class BoardState {
   users: {
     userId: string;
     userNickname: string;
+
     feedback: FeedbackEntry[];
     pulseCheckQuestions: PulseCheckEntry[];
   }[] = [];
