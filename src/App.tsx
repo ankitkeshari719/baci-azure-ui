@@ -12,6 +12,7 @@ import { Offboarding } from './screens/Offboarding';
 import { LandingPage } from './screens/LandingPage';
 import { RetroDetails } from './screens/RetroDetails'
 import { Onboarding } from './screens/Onboarding';
+import { ParticipantWaitingPage } from './screens/ParticipantWaitingPage'
 import { CreateNewRetro } from './screens/CreateRetroPage';
 import { AvatarNamePage } from './screens/AvatarNamePage';
 import PulseCheck from './screens/PulseCheck';
@@ -69,6 +70,7 @@ export default function App({ instance } :AppProps) {
                     <Route path="/createretro" element={<CreateNewRetro></CreateNewRetro>} />
                     <Route path="/join/:id" element={<AvatarNamePage></AvatarNamePage>} />
                     <Route path="/retrodetails" element={<RetroDetails></RetroDetails>}/>
+                    <Route path="/waiting" element={<ParticipantWaitingPage></ParticipantWaitingPage>}/>
                     <Route
                       path="/offboarding"
                       element={<Offboarding></Offboarding>}

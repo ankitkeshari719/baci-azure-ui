@@ -39,7 +39,7 @@ if (env === 'production') {
         report: true,
         stressTest: true,
     };
-    api_url = "http://localhost:8080"
+    api_url = "http://localhost:5010"
     log.setLevel(log.levels.TRACE);
 }
 

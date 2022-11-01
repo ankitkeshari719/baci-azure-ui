@@ -67,6 +67,7 @@ export function AvatarNamePage() {
   const [codeError, setCodeError] = React.useState('');
   const [codeWarning, setCodeWarning] = React.useState('');
   const [avatarSelectionError, setAvatarSelectionError] = React.useState('');
+  const navigate = useNavigate();
   const joinRetro = () => {
     //Navigate to dashboard
   };
@@ -96,6 +97,7 @@ export function AvatarNamePage() {
       //   navigate('/board/' + global.currentRetro?.id);
       //   setCaptureName(false);
       // }
+      navigate('/waiting');
     } else {
       if (userName === '') setCodeError('Please enter avatar name');
       else setAvatarSelectionError('Please select avatar name');
