@@ -19,45 +19,39 @@ export function ParticipantWaitingPage() {
 const [retroName, setRetroName] = React.useState(
     localStorage.getItem('retroname') || ''
     );
-const [animateFirst, setAnimateFirst]= React.useState(false);
-const [animatesecond, setAnimatesecond]= React.useState(false);
-const [animateThird, setAnimateThird]= React.useState(false);
+const [animateFirst, setAnimateFirst]= React.useState('first');
+const [animatesecond, setAnimatesecond]= React.useState('');
+const [animateThird, setAnimateThird]= React.useState('');
 React.useEffect(()=>{
-    // setTimeout(() => {
-    //     setAnimateFirst(false);
-    //     setAnimatesecond(true);
-    //     setAnimateThird(false);
-    //     setTimeout(() => {
-    //         setAnimateFirst(false);
-    //         setAnimatesecond(false);
-    //         setAnimateThird(true);
-    //         setTimeout(() => {
-    //             setAnimateFirst(true);
-    //             setAnimatesecond(false);
-    //             setAnimateThird(false);
-    //         }, 8000);
-    //     }, 8000);
-    //   }, 8000);
-
-      let interval1 = setInterval(() => {
-        setAnimateFirst(false);
-        setAnimatesecond(true);
-        setAnimateThird(false);
-      }, 10000);
+      let int2=setTimeout(() => {
+        setAnimateFirst('');
+        setAnimatesecond('second');
+        setAnimateThird('');
+      }, 8000);
+      let int3=setTimeout(() => {
+        setAnimateFirst('');
+        setAnimatesecond('');
+        setAnimateThird('third');
+      }, 8000);
+      // let interval1 = setInterval(() => {
+      //   setAnimateFirst(false);
+      //   setAnimatesecond(true);
+      //   setAnimateThird(false);
+      // }, 10000);
       
-      let interval2=  setInterval(() => {
+      // let interval2=  setInterval(() => {
         
-            setAnimateFirst(false);
-            setAnimatesecond(false);
-            setAnimateThird(true);
+      //       setAnimateFirst(false);
+      //       setAnimatesecond(false);
+      //       setAnimateThird(true);
               
-        }, 10000)
-      let interval3 =  setInterval(() => {
+      //   }, 10000)
+      // let interval3 =  setInterval(() => {
         
-                setAnimateFirst(true);
-                setAnimatesecond(false);
-                setAnimateThird(false);
-            }, 10000)
+      //           setAnimateFirst(true);
+      //           setAnimatesecond(false);
+      //           setAnimateThird(false);
+      //       }, 10000)
          
 })
 return(
@@ -82,25 +76,25 @@ return(
           <Box sx={{display: 'flex', justifyContent: 'center'}}>
             <img src= {gif}></img>
           </Box>
-        {animateFirst &&
+        {animateFirst === 'first' &&
         <Box mt= '16px' style={{display: 'flex', flexDirection:'row', justifyContent: 'center'}}>
-        <h4 style={{color: commomStyles.primaryDark , marginRight: '86px'}} >What went well</h4>
-        <h4 style={{color: commomStyles.primaryDark, opacity: '0.1',marginRight: '86px'}}>What didn't went well</h4>
-        <h4 style={{ color: commomStyles.primaryDark,  opacity: '0.5'}}>Actions</h4>
+        <Typography style={{color: commomStyles.primaryDark , marginRight: '86px'}} >What went well</Typography>
+        <Typography style={{color: commomStyles.primaryDark, opacity: '0.1',marginRight: '86px'}}>What didn't went well</Typography>
+        <Typography style={{ color: commomStyles.primaryDark,  opacity: '0.5'}}>Actions</Typography>
         </Box>
         }
-        {animatesecond &&
+        {animatesecond === 'second' &&
         <Box mt= '16px' style={{display: 'flex', flexDirection:'row', justifyContent: 'center'}}>
-        <h4 style={{color: commomStyles.primaryDark , marginRight: '86px' , opacity: '0.5'}} >What went well</h4>
-        <h4 style={{color: commomStyles.primaryDark, marginRight: '86px'}}>What didn't went well</h4>
-        <h4 style={{ color: commomStyles.primaryDark,  opacity: '0.1'}}>Actions</h4>
+        <Typography style={{color: commomStyles.primaryDark , marginRight: '86px' , opacity: '0.5'}} >What went well</Typography>
+        <Typography style={{color: commomStyles.primaryDark, marginRight: '86px'}}>What didn't went well</Typography>
+        <Typography style={{ color: commomStyles.primaryDark,  opacity: '0.1'}}>Actions</Typography>
         </Box>
         }
-        {animateThird &&
+        {animateThird === 'third' &&
         <Box mt= '16px' style={{display: 'flex', flexDirection:'row', justifyContent: 'center'}}>
-        <h4 style={{color: commomStyles.primaryDark , marginRight: '86px',opacity: '0.1'}} >What went well</h4>
-        <h4 style={{color: commomStyles.primaryDark, opacity: '0.5',marginRight: '86px'}}>What didn't went well</h4>
-        <h4 style={{ color: commomStyles.primaryDark}}>Actions</h4>
+        <Typography style={{color: commomStyles.primaryDark , marginRight: '86px',opacity: '0.1'}} >What went well</Typography>
+        <Typography style={{color: commomStyles.primaryDark, opacity: '0.5',marginRight: '86px'}}>What didn't went well</Typography>
+        <Typography style={{ color: commomStyles.primaryDark}}>Actions</Typography>
         </Box>
         }
          
