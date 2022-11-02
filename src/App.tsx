@@ -15,6 +15,7 @@ import { Onboarding } from './screens/Onboarding';
 import { ParticipantWaitingPage } from './screens/ParticipantWaitingPage'
 import { CreateNewRetro } from './screens/CreateRetroPage';
 import { AvatarNamePage } from './screens/AvatarNamePage';
+import { StartRetro } from './screens/StartRetro'
 import PulseCheck from './screens/PulseCheck';
 import ReportScreen from './screens/ReportScreen';
 import { SnackMessage } from './elements/SnackMessage';
@@ -44,7 +45,7 @@ function MainContent() {
       <Box sx={{ flex: 1, display: 'flex', flexDirection: 'column' }}>
         <Box
           component="main"
-          sx={{ display: 'flex', flex: 1, py: 0, px: 0, bgcolor: '#eaeff1' }}
+          sx={{ display: 'flex', flex: 1, py: 0, px: 0 }}
         >
           <Outlet />
         </Box>
@@ -78,6 +79,7 @@ export default function App({ instance } :AppProps) {
                     <Route path="/board" element={<MainContent />}>
                       <Route path=":id/pulsecheck" element={<PulseCheck />} />
                       <Route path=":id/feedback" element={<Feedback />} />
+                      <Route path=":id/startretro" element={<StartRetro />} />
                       <Route path=":id" element={<Board />} />
                     </Route>
                     <Route path="/report/:id" element={<ReportScreen />} />

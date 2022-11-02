@@ -17,6 +17,9 @@ import { Link, Navigate, useNavigate, useParams } from 'react-router-dom';
 import { useRetro } from '../helpers';
 
 import email from '../assets/img/emailbox.png';
+import copy from '../assets/img/Vectorcopy.png';
+import send from '../assets/img/Vectorsend.png';
+import download from '../assets/img/download.png';
 import { Email, EmailOutlined } from '@mui/icons-material';
 import { GlobalContext } from '../contexts/GlobalContext';
 import { CopyToClipboard } from 'react-copy-to-clipboard';
@@ -58,14 +61,15 @@ const styles = {
     marginBottom: '17.5px',
   },
   emailImg: {
-    width: '96px',
-    height: '96px',
-    margin: '35px 44px 0px 45px',
+    width: '138px',
+    height: '138px',
+    margin: '50px 44px 0px 45px',
+
   },
   group95: {
     marginTop: '27.5px',
     marginBottom: '104px',
-    background: '#FFFFFF',
+    background: '#CEEFFF',
     height: '177px',
     display: 'inline-block',
     width: '100%',
@@ -75,14 +79,12 @@ const styles = {
     justifyContent: 'center',
     alignItems: 'center',
     flexFlow: 'column',
-    width: '375px',
-    height: '375px',
-    marginLeft: '325px',
     top: '39.07%',
     bottom: '27.87%',
-    background: '#FFFFFF',
+    background: '#CEEFFF',
     boxShadow: '0px 0px 20px rgba(0, 0, 0, 0.15)',
     borderRadius: '10px',
+    height: '267px',
   },
   group97: {
     display: 'flex',
@@ -91,13 +93,10 @@ const styles = {
     flexFlow: 'column',
     top: '39.07%',
     bottom: '27.87%',
-    background: '#FFFFFF',
-    width: '375px',
-    height: '375px',
-    marginRight: '100px',
-    marginLeft: '100px',
+    background: '#CEEFFF',
     boxShadow: '0px 0px 20px rgba(0, 0, 0, 0.15)',
     borderRadius: '10px',
+    height: '267px',
   },
   group98: {
     display: 'flex',
@@ -106,11 +105,10 @@ const styles = {
     flexFlow: 'column',
     top: '39.07%',
     bottom: '27.87%',
-    width: '375px',
-    height: '375px',
-    background: '#FFFFFF',
+    background: '#CEEFFF',
     boxShadow: '0px 0px 20px rgba(0, 0, 0, 0.15)',
     borderRadius: '10px',
+    height: '267px',
   },
   div95: {
     marginTop: '48.75px',
@@ -132,22 +130,22 @@ const styles = {
   },
   joinurl: {
     color: commonStyles.primaryDark,
-    width: '153px',
+    width: '218px',
+    height: '61px',
     display: 'inline-block',
-    margin: '41px 16px 0px 16px',
+    
   },
   qrCode: {
-    margin: '43px 53px 0px 52px',
-    width: '80px',
-    height: '80px',
+    margin: '62px 53px 0px 52px',
+    width: '115px',
+    height: '115px',
   },
   goToRetroBtn: {
     height: '44px',
     marginTop: '44px',
   },
   copyURL: {
-    height: '36px',
-    marginTop: '81.29px',
+    height: '16.5px',
   },
 };
 export function RetroDetails() {
@@ -169,126 +167,129 @@ export function RetroDetails() {
   function goToRetro() {
     navigate('/join/' + global?.currentRetro?.humanId);
   }
+  const downloadQRCode = () => {
+    const canvas = document.querySelector('canvas');
+                        if (canvas) {
+                          const downloadLink = document.createElement('a');
+                          downloadLink.setAttribute('download', 'QR.png');
+                          const dataURL = canvas.toDataURL('image/png');
+                          const url = dataURL.replace(
+                            /^data:image\/png/,
+                            'data:application/octet-stream'
+                          );
+                          downloadLink.setAttribute('href', url);
+                          downloadLink.click();
+                        }
+  }
   return (
     <Grid container spacing={0} xs={12}>
-      <Grid
-        xs={12}
-        marginRight={commonStyles.m_80}
-        marginLeft={commonStyles.m_80}
-      >
-        <Box style={styles.frame101}>
-          <Typography
-            variant="h2"
-            color={commonStyles.primaryDark}
-            className="alignCenter"
-          >
-            ‘{retroName}’ retro is created successfully!
-          </Typography>
-          <Box style={styles.group100}>
-            <Box style={styles.displayCenter}>
-              <Button sx={styles.nowAvailableAt}>now available at</Button>
-            </Box>
-            <Box style={styles.displayCenter}>
-              {' '}
-              <a
-                href="https://baciapp.com"
-                rel="noreferrer"
-                target="_blank"
-                style={styles.link}
-              >
-                https://baciapp.com
-              </a>
-            </Box>
-          </Box>
-          <Box sx={styles.group99}>
-            <div style={styles.displayCenter}>
-              <Typography color={commonStyles.primaryDark}>
-                WITH CODE
-              </Typography>
-            </div>
-            <div style={styles.displayCenter}>
-              <Typography
-                variant="h2"
-                display="block"
-                color={commonStyles.primaryDark}
-                style={{
-                  margin: '12px 0px 0px 0px',
-                  width: '185px',
-                  textAlign: 'center',
-                }}
-              >
-                {global?.currentRetro?.humanId}
-              </Typography>
-            </div>
-            <Box sx={{ display: 'flex' , marginTop: '70px'}}>
-              <Box sx={styles.group96}>
-                <div style={styles.joinurl}>
-                  <a style={{ overflowWrap: 'break-word' }}>
-                    {global?.currentRetro?.joinUrl}
-                  </a>
-                </div>
-                <CopyToClipboard
-                  text={global?.currentRetro?.joinUrl}
-                  onCopy={() => setIsCopied(true)}
-                >
-                  <Button
-                    variant="outlined"
-                    className="primaryButton"
-                    startIcon={<Icons.Link size={20} />}
-                    style={styles.copyURL}
-                  >
-                    <span className="primaryButtonText">Copy URL</span>
-                  </Button>
-                </CopyToClipboard>
-              </Box>
-
-              <Box sx={styles.group97}>
-                <QRCode
-                  value={global.currentRetro?.joinUrl || ''}
-                  style={styles.qrCode}
-                />
-                <div style={styles.div97}>
-                  <Button
-                    variant="outlined"
-                    className="primaryButton"
-                    startIcon={<Icons.Qrcode size={20} />}
-                    style={styles.copyURL}
-                  >
-                    <span className="primaryButtonText">download qr code</span>
-                  </Button>
-                </div>
-              </Box>
-
-              <Box sx={styles.group98}>
-                <img src={email} alt="email" style={styles.emailImg} />
-                <div style={styles.div98}>
-                  <Button
-                    variant="outlined"
-                    className="primaryButton"
-                    startIcon={<EmailOutlined />}
-                    style={styles.copyURL}
-                    onClick={shareRetroDetails}
-                  >
-                    <span className="primaryButtonText">Invite via email</span>
-                  </Button>
-                </div>
-              </Box>
-            </Box>
-          </Box>
-          <Box
-            display="flex"
-            sx={{ justifyContent: 'center', alignItems: 'center' }}
-          >
-            <Button
-              variant="outlined"
-              className="secondaryButton"
-              style={styles.goToRetroBtn}
-              onClick={() => goToRetro()}
+      <Grid item xs={6}>
+        <LandingLayout></LandingLayout>
+      </Grid>
+      <Grid item xs={6}>
+        <Grid
+          xs={12}
+          marginRight={commonStyles.m_80}
+          marginLeft={commonStyles.m_80}
+        >
+          <Box style={styles.frame101}>
+            <Typography
+              variant="h2"
+              color={commonStyles.primaryDark}
+              className="alignCenter"
             >
-              <span className="secondaryButtonText">Start retro</span>
-            </Button>
+              ‘{retroName}’ retro is created successfully!
+            </Typography>
+            <Box style={styles.group100}>
+              <Box style={styles.displayCenter}>
+                <Button sx={styles.nowAvailableAt}>now available at</Button>
+              </Box>
+              <Box style={styles.displayCenter}>
+                {' '}
+                <a
+                  href="https://baciapp.com"
+                  rel="noreferrer"
+                  target="_blank"
+                  style={styles.link}
+                >
+                  https://baciapp.com
+                </a>
+              </Box>
+            </Box>
+            <Box sx={styles.group99}>
+              <div style={styles.displayCenter}>
+                <Typography color={commonStyles.primaryDark}>
+                  WITH CODE
+                </Typography>
+              </div>
+              <div style={styles.displayCenter}>
+                <Typography
+                  variant="h2"
+                  display="block"
+                  color={commonStyles.primaryDark}
+                  style={{
+                    margin: '12px 0px 0px 0px',
+                    width: '185px',
+                    textAlign: 'center',
+                  }}
+                >
+                  {global?.currentRetro?.humanId}
+                </Typography>
+              </div>
+
+              <Grid container spacing={2} mt="48px">
+                <Grid item xs={4}>
+                  <Box sx={styles.group96}>
+                    <div style={styles.joinurl}>
+                      <a style={{ overflowWrap: 'break-word' }}>
+                        {global?.currentRetro?.joinUrl}
+                      </a>
+                    </div>
+                    <CopyToClipboard
+                      text={global?.currentRetro?.joinUrl}
+                      onCopy={() => setIsCopied(true)}
+                    >
+                      <img src={copy} style={(styles.copyURL,{marginTop:'51px'})} ></img>
+                    </CopyToClipboard>
+                  </Box>
+                </Grid>
+                <Grid item xs={4}>
+                  <Box sx={styles.group97}>
+                    <QRCode
+                      value={global.currentRetro?.joinUrl || ''}
+                      style={styles.qrCode}
+                    />
+                    <div style={styles.div97}>
+                      <img src={download} style={styles.copyURL} onClick={downloadQRCode}></img>
+                    </div>
+                  </Box>
+                </Grid>
+                <Grid item xs={4}>
+                  <Box sx={styles.group98}>
+                    <img src={email} alt="email" style={styles.emailImg} />
+                    <div style={styles.div98}>
+                      <img src={send} style={styles.copyURL}></img>
+                    </div>
+                  </Box>
+                </Grid>
+              </Grid>
+            </Box>
+            <Box
+              display="flex"
+              sx={{ justifyContent: 'center', alignItems: 'center' }}
+              mt="48px"
+            >
+              <Button
+                variant="outlined"
+                className="secondaryButton"
+                style={styles.goToRetroBtn}
+                onClick={() => goToRetro()}
+              >
+                <span className="secondaryButtonText">Go to retro</span>
+              </Button>
+            </Box>
           </Box>
-        </Box>
+        </Grid>
       </Grid>
     </Grid>
   );

@@ -21,6 +21,7 @@ import { useRetro } from '../helpers';
 import { ActionType, GlobalContext } from '../contexts/GlobalContext';
 import Avatar from '../elements/Avatar';
 import { avatarName } from '../constants/AvatarName';
+import { BoardContext } from '../contexts/BoardContext';
 const AVATAR_CHARACTER_LIMIT = 30;
 const styles = {
   heading: {
@@ -67,6 +68,7 @@ export function AvatarNamePage() {
   const [codeError, setCodeError] = React.useState('');
   const [codeWarning, setCodeWarning] = React.useState('');
   const [avatarSelectionError, setAvatarSelectionError] = React.useState('');
+  const { state: { retroId, users, ended, loading } } = React.useContext(BoardContext);
   const navigate = useNavigate();
   const joinRetro = () => {
     //Navigate to dashboard
@@ -97,7 +99,7 @@ export function AvatarNamePage() {
       //   navigate('/board/' + global.currentRetro?.id);
       //   setCaptureName(false);
       // }
-      navigate('/waiting');
+      navigate(`/board/${retroId}/startretro`);
     } else {
       if (userName === '') setCodeError('Please enter avatar name');
       else setAvatarSelectionError('Please select avatar name');
