@@ -6,7 +6,7 @@ $grey : #F0F0F0;
 $PrimaryMain : #159ADD;
 $m-80 :80px;
 $height16: 16.5px;
-
+$grey30:#E3E3E3;
 
 :export {
     secondaryMain: $secondaryMain;
@@ -15,5 +15,6 @@ $height16: 16.5px;
     grey: $grey;
     m_80:$m-80;
     PrimaryMain:$PrimaryMain;
-    height_16: $height16
+    height_16: $height16;
+    grey30: $grey30
   }

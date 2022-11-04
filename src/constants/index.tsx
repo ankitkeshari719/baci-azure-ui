@@ -82,9 +82,9 @@ export const PULSE_CHECK_QUESTIONS_INFO = [
 ];
 
 export const QUICK_PULSE_CHECK_QUESTIONS = [
-  'People & Resources',
-  'Work Processes',
-  'Technical Tools',
+  '1.People & Resources',
+  '2.Work Processes',
+  '3.Technical Tools',
 ];
 
 export const QUICK_PULSE_CHECK_QUESTIONS_INFO = [

@@ -32,6 +32,7 @@ import ButtonGroup from "@material-ui/core/ButtonGroup";
 import { Link as RouterLink } from "react-router-dom";
 import Button from "@material-ui/core/Button";
 import { SocketProvider } from "./contexts/SocketProvider";
+import { Grid } from '@mui/material';
 
 type AppProps = {
   instance: IPublicClientApplication
@@ -40,17 +41,20 @@ type AppProps = {
 function MainContent() {
   const { instance } = useMsal();
   return (
-    <Box sx={{ display: 'flex', minHeight: '100%', maxHeight: '100%' }}>
-      <CssBaseline />
-      <Box sx={{ flex: 1, display: 'flex', flexDirection: 'column' }}>
-        <Box
-          component="main"
-          sx={{ display: 'flex', flex: 1, py: 0, px: 0 }}
-        >
-          <Outlet />
-        </Box>
-      </Box>
-    </Box>
+    // <Box sx={{ display: 'flex', minHeight: '100%', maxHeight: '100%' }}>
+    //   <CssBaseline />
+    //   <Box sx={{ flex: 1, display: 'flex', flexDirection: 'column' }}>
+    //     <Box
+    //       component="main"
+    //       sx={{ display: 'flex', flex: 1, py: 0, px: 0 }}
+    //     >
+    //       <Outlet />
+    //     </Box>
+    //   </Box>
+    // </Box>
+    <Grid container spacing={0}>
+       <Outlet />
+    </Grid>
   );
 }
 

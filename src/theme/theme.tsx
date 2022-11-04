@@ -40,8 +40,8 @@ let theme = createTheme({
     },
     h5: {
       fontFamily: `'Poppins', 'Arial', sans-serif`,
-      fontWeight: 500,
-      fontSize: 26,
+      fontWeight: 600,
+      fontSize: 18,
       letterSpacing: 0.5,
     },
   },

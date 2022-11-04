@@ -35,6 +35,35 @@
     width: 180px;
     height: 180px;
 }
+.infoLink {
+    font-family: 'Poppins';
+font-style: normal;
+font-weight: 400;
+font-size: 16px;
+line-height: 20px;
+/* identical to box height, or 125% */
+
+letter-spacing: 0.4px;
+text-decoration-line: underline;
+text-align: center;
+/* Info */
+
+color: #4285F4;
+}
+.pulseLineBlue {
+    width: 31px;
+    height: 0px;
+    margin-top: 18px;
+    border: 2px solid $PrimaryMain;
+    background-color: $PrimaryMain;
+}
+.pulseLineGrey {
+    width: 31px;
+    height: 0px;
+    margin-top: 18px;
+    border: 2px solid $grey30;
+    background-color: $grey30;
+}
 *::-webkit-scrollbar {
     width: 9.19px;
     height: 94.9px

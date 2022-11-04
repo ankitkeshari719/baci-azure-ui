@@ -22,6 +22,7 @@ import {
   import { CopyToClipboard } from 'react-copy-to-clipboard';
   import QRCode from 'qrcode.react';
   import * as Icons from 'heroicons-react';
+  import { BoardContext } from '../contexts/BoardContext';
   
   const styles = {
     frame101: {
@@ -156,7 +157,9 @@ import {
     );
     const [global, dispatch] = React.useContext(GlobalContext);
     const [iscopied, setIsCopied] = React.useState(false);
+    const { state: { retroId, users, ended, loading } } = React.useContext(BoardContext);
     const navigate = useNavigate();
+
     const shareData = {
       title: 'Retro',
       text: 'Join the retro',
@@ -167,7 +170,7 @@ import {
       navigator.share(shareData);
     };
     function goToRetro() {
-      navigate('/join/' + global?.currentRetro?.humanId);
+        navigate(`/board/${retroId}/pulsecheck`);
     }
     const downloadQRCode = () => {
         const canvas = document.querySelector('canvas');

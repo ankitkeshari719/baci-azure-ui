@@ -23,7 +23,7 @@ import {
 } from '../constants';
 import { BoardContext } from '../contexts/BoardContext';
 import { ActionType, GlobalContext } from '../contexts/GlobalContext';
-
+import * as Icons from 'heroicons-react';
 import HelpCenterIcon from '@mui/icons-material/HelpCenter';
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
 import MonitorHeartIcon from '@mui/icons-material/MonitorHeart';
@@ -35,6 +35,16 @@ import useLoadRetro from '../hooks/useLoadRetro';
 import theme from '../theme/theme';
 import { ConfirmContext } from '../contexts/ConfirmContext';
 import { PulseCheckSubmitStatus } from '../types';
+import commonStyles from './../style.module.scss';
+import './../global.scss';
+import Bluepulse from '../assets/img/bluepulse.png';
+import Greypulse from '../assets/img/greypulse.png';
+import happy from '../assets/img/happy.png';
+import sad from '../assets/img/sad.png';
+import neutral from '../assets/img/neutral.png';
+import happyMask from '../assets/img/Happy_Mask.png';
+import sadMask from '../assets/img/sad_mask.png';
+import neutralMask from '../assets/img/Neutral_Mask.png';
 
 const BootstrapTooltip = styled(({ className, ...props }: TooltipProps) => (
   <Tooltip {...props} classes={{ popper: className }}>
@@ -64,13 +74,12 @@ export default function PulseCheck() {
   const { setConfirmAction } = React.useContext(ConfirmContext);
 
   const [showBlankErrors, setShowBlankErrors] = React.useState(false);
-  const qs = PULSE_CHECK_QUESTIONS.map(q => React.useState(-1));
+  const qs = QUICK_PULSE_CHECK_QUESTIONS.map(q => React.useState(-1));
   const [qsTooltipOpen, setQsTooltipOpen] = React.useState(-1);
   const [introScreen, setIntroScreen] = React.useState<boolean>(true);
   const [scrollDownButton, setScrollDownButton] = React.useState(true);
   const [showSharePanel, setShowSharePanel] = React.useState(false);
-  // const [gPulseCheckState, setPulseCheckState] =
-  //   React.useState(pulseCheckState);
+
   const scrollableRef = React.useRef<HTMLDivElement>(null);
   const questionRef = React.useRef<HTMLDivElement>(null);
 
@@ -109,11 +118,8 @@ export default function PulseCheck() {
   const submit = () => {
     const someBlank =
       qs.findIndex(q => q[0] === -1) !== -1 &&
-      qs.findIndex(q => q[0] === -1) <
-        (fullPulseCheck
-          ? PULSE_CHECK_QUESTIONS.length
-          : QUICK_PULSE_CHECK_QUESTIONS.length);
-
+      qs.findIndex(q => q[0] === -1) < QUICK_PULSE_CHECK_QUESTIONS.length;
+console.log('pulse check array',qs);
     const submitter = async () => {
       // Submit
       await saveAndProcessAction(BoardActionType.SUBMIT_PULSE_CHECK, {
@@ -134,7 +140,10 @@ export default function PulseCheck() {
         retroId: currentRetro?.id + '',
         pulseSubmitState: true,
       };
-      sessionStorage.setItem('pulseCheckState', JSON.stringify(pulseCheckState));
+      sessionStorage.setItem(
+        'pulseCheckState',
+        JSON.stringify(pulseCheckState)
+      );
       navigate('/board/' + currentRetro?.id);
     };
 
@@ -225,78 +234,13 @@ export default function PulseCheck() {
   };
 
   return (
-    <Box
-      style={{
-        flexGrow: 1,
-        display: 'flex',
-        flexDirection: 'column',
-      }}
+    <Grid
+      xs={12}
+      marginRight={commonStyles.m_80}
+      marginLeft={commonStyles.m_80}
     >
-      <AppBar component="div" color="primary" position="static" elevation={0}>
-        <Toolbar>
-          <Grid container spacing={2}>
-            <Grid
-              item
-              xs={!isXsUp && !isSmUp ? 4 : 12}
-              sx={{
-                display: 'flex',
-                flexDirection: 'row',
-                alignItems: 'center',
-              }}
-            >
-              <MonitorHeartIcon />
-              <Typography
-                variant="h6"
-                sx={{ paddingLeft: '10px', fontWeight: 'bold' }}
-                color="text.white"
-                align="center"
-              >
-                Pulse Check
-              </Typography>
-            </Grid>
 
-            {!isXsUp && !isSmUp ? (
-              <Grid
-                item
-                xs={4}
-                style={{
-                  display: 'flex',
-                  flexDirection: 'row',
-                  justifyContent: 'center',
-                  alignItems: 'center',
-                }}
-              >
-                <Box
-                  sx={{
-                    color: 'black',
-                    border: '2px #FECE8B solid',
-                    padding: '3px',
-                    background: 'white',
-                  }}
-                >
-                  Retro Access Code: {currentRetro?.humanId}
-                </Box>
-                <Button
-                  variant="outlined"
-                  sx={{
-                    background: '#FECE8B',
-                    color: 'black',
-                    padding: '4px',
-                    marginLeft: '4px',
-                    borderRadius: 0,
-                    borderColor: '#FECE8B',
-                  }}
-                  onClick={() => setShowSharePanel(!showSharePanel)}
-                >
-                  Share
-                </Button>
-              </Grid>
-            ) : null}
-          </Grid>
-        </Toolbar>
-      </AppBar>
-
-      {showSharePanel ? (
+      {/* {showSharePanel ? (
         <Box
           sx={{
             position: 'absolute',
@@ -313,70 +257,427 @@ export default function PulseCheck() {
         >
           <SharePanel onClose={() => setShowSharePanel(false)} />
         </Box>
-      ) : null}
+      ) : null} */}
 
-      <Slide direction="up" in={!!introScreen}>
-        <Box
+      <Box
+        sx={{
+          userSelect: 'none',
+          background: 'white',
+          flexDirection: 'column',
+          alignItems: 'center',
+          justifyContent: 'flex-start',
+        }}
+      >
+        <Typography
+          variant="h4"
           sx={{
-            display: !!introScreen ? 'flex' : 'none',
-            height: 'var(--app-height)',
-            userSelect: 'none',
-            background: 'white',
-            flexDirection: 'column',
-            alignItems: 'center',
-            justifyContent: 'flex-start',
+            fontSize: '20px',
+            marginBottom: '40px',
+            padding: '20px',
+            marginTop: '100px',
           }}
+          className="alignCenter"
         >
-          <Typography
-            variant="h5"
-            sx={{
-              fontSize: '20px',
-              marginBottom: '40px',
-              padding: '20px',
-              marginTop: '100px',
-            }}
-          >
-            Let's start with a quick Pulse Check to see how you are feeling
-          </Typography>
+          Let's start with a quick Pulse Check to see how you are feeling
+        </Typography>
+      </Box>
+      <Box mt="48px" sx={{ display: 'flex', justifyContent: 'center' }}>
+        <span className="pulseLineBlue"></span>
+        <img src={Bluepulse}></img>
+        <span className="pulseLineBlue"></span>
+        <img src={Bluepulse}></img>
+        <span className="pulseLineGrey"></span>
+        <img src={Greypulse}></img>
+      </Box>
+      <Box
+        sx={{
+          display: 'flex',
+          flexDirection: 'row',
+        }}
+      >
+       { QUICK_PULSE_CHECK_QUESTIONS.map((question, index) => (
+        <Grid item xs={4} sx={{display: 'flex', justifyContent: 'center'}}>
           <Box
             sx={{
-              display: 'flex',
-              flexDirection: 'column',
-              justifyContent: 'center',
-              paddingTop: '20px',
+              marginTop: '48px',
             }}
           >
-            <Button
-              variant="outlined"
+            <Typography
+              variant="h5"
               sx={{
-                ':hover': { background: '#159ADD' },
-                background: '#159ADD',
-                color: '#fff',
-                minWidth: '300px',
-                fontSize: '18px',
+                marginBottom: '40px',
+                padding: '20px',
+                marginTop: '100px',
               }}
-              onClick={() => setIntroScreen(false)}
             >
-              Go on...
-            </Button>
-            <Link
-              sx={{
-                textAlign: 'center',
-                cursor: 'pointer',
-                marginTop: '20px',
-                color: '#727D84',
-                textDecorationColor: '#727D84',
-                fontSize: '0.9rem',
-              }}
-              onClick={skip}
-            >
-              Skip Pulse Check
-            </Link>
-          </Box>
-        </Box>
-      </Slide>
+              {question}
+              <Icons.QuestionMarkCircleOutline
+                size={20}
+                color={commonStyles.secondaryMain}
+              />
+            </Typography>
 
-      <Slide direction="up" in={!introScreen}>
+            <Box sx={{ display: 'flex', marginTop: '48px' }}>
+              <Box sx={{ marginRight: '32px', marginLeft: '21px' }}>
+                <Box
+                  style={{
+                    backgroundImage: 'url(' + happy + ')',
+                    width: '40px',
+                    height: '40px',
+                   
+                  }}
+                  onClick={() => qs[index][1](3)}
+                >
+                   </Box>
+                  <img
+                    src={happyMask}
+                    style={{
+                      marginLeft: '-10px',
+                      marginTop: '-50px',
+                      width: '64px',
+                      height: '64px',
+                      display: qs[index][0] === 3 ? 'block' : 'none'
+                    }}
+					         
+                  ></img>
+               
+              </Box>
+              <Box>
+                <Box
+                  style={{
+                    backgroundImage: 'url(' + neutral + ')',
+                    width: '40px',
+                    height: '40px',
+                    marginRight: '32px',
+                    
+                  }}
+                  onClick={() => qs[index][1](2)}
+                >
+                  </Box>
+                  <img
+                    src={neutralMask}
+                    style={{
+                      marginLeft: '-10px',
+                      marginTop: '-50px',
+                      width: '64px',
+                      height: '64px',
+                      display: qs[index][0] === 2 ? 'block' : 'none'
+                    }}
+                    
+                  ></img>
+                
+              </Box>
+              <Box>
+                <Box
+                  style={{
+                    backgroundImage: 'url(' + sad + ')',
+                    width: '40px',
+                    height: '40px',
+                    
+                   }}
+                   onClick={() => qs[index][1](1)}
+                >
+                  </Box>
+                  <img
+                    src={sadMask}
+                    style={{
+                      marginLeft: '-10px',
+                      marginTop: '-50px',
+                      width: '64px',
+                      height: '64px',
+                      display: qs[index][0] === 1 ? 'block' : 'none'
+                    }}
+                    
+                  ></img>
+                
+              </Box>
+            </Box>
+          </Box>
+        </Grid>))}
+        {/* <Grid item xs={4} sx={{display: 'flex', justifyContent: 'center'}}>
+          <Box
+            sx={{
+              marginTop: '48px',
+            }}
+          >
+            <Typography
+              variant="h5"
+              sx={{
+                marginBottom: '40px',
+                padding: '20px',
+                marginTop: '100px',
+              }}
+            >
+              1. People & Resources{' '}
+              <Icons.QuestionMarkCircleOutline
+                size={20}
+                color={commonStyles.secondaryMain}
+              />
+            </Typography>
+
+            <Box sx={{ display: 'flex', marginTop: '48px' }}>
+              <Box sx={{ marginRight: '32px', marginLeft: '21px' }}>
+                <div
+                  style={{
+                    backgroundImage: 'url(' + happy + ')',
+                    width: '40px',
+                    height: '40px',
+                  }}
+                >
+                  <img
+                    src={happyMask}
+                    style={{
+                      marginLeft: '-10px',
+                      marginTop: '-10px',
+                      width: '64px',
+                      height: '64px',
+                    }}
+                  ></img>
+                </div>
+              </Box>
+              <Box>
+                <div
+                  style={{
+                    backgroundImage: 'url(' + neutral + ')',
+                    width: '40px',
+                    height: '40px',
+                    marginRight: '32px',
+                  }}
+                >
+                  <img
+                    src={neutralMask}
+                    style={{
+                      marginLeft: '-10px',
+                      marginTop: '-10px',
+                      width: '64px',
+                      height: '64px',
+                    }}
+                    onClick={() => qs[0][1](0)}
+                  ></img>
+                </div>
+              </Box>
+              <Box>
+                <div
+                  style={{
+                    backgroundImage: 'url(' + sad + ')',
+                    width: '40px',
+                    height: '40px',
+                   }}
+                  
+                >
+                  <img
+                    src={sadMask}
+                    style={{
+                      marginLeft: '-10px',
+                      marginTop: '-10px',
+                      width: '64px',
+                      height: '64px',
+                    }}
+                    onClick={() => qs[0][1](1)}
+                  ></img>
+                </div>
+              </Box>
+            </Box>
+          </Box>
+        </Grid>
+        2nd pulse
+        <Grid item xs={4} sx={{display: 'flex', justifyContent: 'center'}}>
+          <Box
+            sx={{
+              marginTop: '48px',
+            }}
+          >
+            <Typography
+              variant="h5"
+              sx={{
+                marginBottom: '40px',
+                padding: '20px',
+                marginTop: '100px',
+              }}
+            >
+              2. Work Processes
+              <Icons.QuestionMarkCircleOutline
+                size={20}
+                color={commonStyles.secondaryMain}
+              />
+            </Typography>
+
+            <Box sx={{ display: 'flex', marginTop: '48px' }}>
+              <Box sx={{ marginRight: '32px', marginLeft: '21px' }}>
+                <div
+                  style={{
+                    backgroundImage: 'url(' + happy + ')',
+                    width: '40px',
+                    height: '40px',
+                  }}
+                  onClick={() => qs[1][1](2)}
+                >
+                  <img
+                    src={happyMask}
+                    style={{
+                      marginLeft: '-10px',
+                      marginTop: '-10px',
+                      width: '64px',
+                      height: '64px',
+                    }}
+                  ></img>
+                </div>
+              </Box>
+              <Box>
+                <div
+                  style={{
+                    backgroundImage: 'url(' + neutral + ')',
+                    width: '40px',
+                    height: '40px',
+                    marginRight: '32px',
+                  }}
+                >
+                  <img
+                    src={neutralMask}
+                    style={{
+                      marginLeft: '-10px',
+                      marginTop: '-10px',
+                      width: '64px',
+                      height: '64px',
+                    }}
+                  ></img>
+                </div>
+              </Box>
+              <Box>
+                <div
+                  style={{
+                    backgroundImage: 'url(' + sad + ')',
+                    width: '40px',
+                    height: '40px',
+                  }}
+                  onClick={() => qs[2][1](3)}
+                >
+                  <img
+                    src={sadMask}
+                    style={{
+                      marginLeft: '-10px',
+                      marginTop: '-10px',
+                      width: '64px',
+                      height: '64px',
+                    }}
+                  ></img>
+                </div>
+              </Box>
+            </Box>
+          </Box>
+        </Grid>
+       3rd pulse
+        <Grid item xs={4} sx={{display: 'flex', justifyContent: 'center'}}>
+          <Box
+            sx={{
+              marginTop: '48px',
+            }}
+          >
+            <Typography
+              variant="h5"
+              sx={{
+                marginBottom: '40px',
+                padding: '20px',
+                marginTop: '100px',
+              }}
+            >
+              3. Technical Tools
+              <Icons.QuestionMarkCircleOutline
+                size={20}
+                color={commonStyles.secondaryMain}
+              />
+            </Typography>
+
+            <Box sx={{ display: 'flex', marginTop: '48px' }}>
+              <Box sx={{ marginRight: '32px', marginLeft: '21px' }}>
+                <div
+                  style={{
+                    backgroundImage: 'url(' + happy + ')',
+                    width: '40px',
+                    height: '40px',
+                  }}
+                >
+                  <img
+                    src={happyMask}
+                    style={{
+                      marginLeft: '-10px',
+                      marginTop: '-10px',
+                      width: '64px',
+                      height: '64px',
+                    }}
+                  ></img>
+                </div>
+              </Box>
+              <Box>
+                <div
+                  style={{
+                    backgroundImage: 'url(' + neutral + ')',
+                    width: '40px',
+                    height: '40px',
+                    marginRight: '32px',
+                  }}
+                >
+                  <img
+                    src={neutralMask}
+                    style={{
+                      marginLeft: '-10px',
+                      marginTop: '-10px',
+                      width: '64px',
+                      height: '64px',
+                    }}
+                  ></img>
+                </div>
+              </Box>
+              <Box>
+                <div
+                  style={{
+                    backgroundImage: 'url(' + sad + ')',
+                    width: '40px',
+                    height: '40px',
+                  }}
+                >
+                  <img
+                    src={sadMask}
+                    style={{
+                      marginLeft: '-10px',
+                      marginTop: '-10px',
+                      width: '64px',
+                      height: '64px',
+                    }}
+                  ></img>
+                </div>
+              </Box>
+            </Box>
+          </Box>
+        </Grid> */}
+      </Box>
+
+      {/* button Section */}
+      <Box
+        sx={{
+          display: 'flex',
+          justifyContent: 'center',
+          paddingTop: '20px',
+          marginTop: '147px',
+        }}
+      >
+        <Button variant="outlined" className="secondaryButton" onClick={submit}>
+          <span className="secondaryButtonText">Submit and go to retro</span>
+        </Button>
+      </Box>
+      <Box
+        sx={{
+          display: 'flex',
+          justifyContent: 'center',
+          paddingTop: '20px',
+        }}
+      >
+        <Link sx={{ marginTop: '43px' }} className="infoLink" onClick={skip}>
+          Skip Pulse Check
+        </Link>
+      </Box>
+
+      {/* <Slide direction="up" in={!introScreen}>
         <Box
           sx={{
             display: !introScreen ? 'flex' : 'none',
@@ -705,7 +1006,7 @@ export default function PulseCheck() {
             ) : null}
           </Box>
         </Box>
-      </Slide>
-    </Box>
+      </Slide> */}
+    </Grid>
   );
 }
