@@ -21,7 +21,6 @@ import { useRetro } from '../helpers';
 import { ActionType, GlobalContext } from '../contexts/GlobalContext';
 import Avatar from '../elements/Avatar';
 import { avatarName } from '../constants/AvatarName';
-import { BoardContext } from '../contexts/BoardContext';
 const AVATAR_CHARACTER_LIMIT = 30;
 const styles = {
   heading: {
@@ -60,7 +59,7 @@ const styles = {
 export function AvatarNamePage() {
   const [global, dispatch] = React.useContext(GlobalContext);
   const [retroName, setRetroName] = React.useState(
-    localStorage.getItem('retroname') || ''
+    sessionStorage.getItem('retroname') || ''
   );
   const [selectedAvatar, setAvatar] = React.useState('');
   const [userName, setUserName] = React.useState('');
@@ -68,10 +67,37 @@ export function AvatarNamePage() {
   const [codeError, setCodeError] = React.useState('');
   const [codeWarning, setCodeWarning] = React.useState('');
   const [avatarSelectionError, setAvatarSelectionError] = React.useState('');
-  const { state: { retroId, users, ended, loading } } = React.useContext(BoardContext);
+  const { id } = useParams();
+  const [humanId, setHumanId] = React.useState(id || '');
+  const retro = useRetro();
   const navigate = useNavigate();
-  const joinRetro = () => {
-    //Navigate to dashboard
+  const [started, setStarted] = React.useState(
+    global.retroCreateState || false
+  );
+  const [joining, setJoining] = React.useState(id ? true : false);
+  const [captureName, setCaptureName] = React.useState(id ? true : false);
+
+  const joinRetro = async (): Promise<RetroType | undefined> => {
+    let foundRetro = await retro.getByHumanId(humanId);
+    if (humanId === '') {
+      setCodeError('Please enter access code');
+    } else {
+      setCodeError('');
+    }
+    if (!foundRetro) {
+      foundRetro = await retro.getById(humanId);
+    }
+    dispatch({
+      type: ActionType.SET_CURRENT_RETRO,
+      payload: { retro: foundRetro },
+    });
+    if (foundRetro) {
+      setJoining(true);
+      setCaptureName(true);
+      return foundRetro;
+    } else {
+      setCodeError('Sorry, wrong code. Please try again');
+    }
   };
   const onClickAvatar = (avatarName: any) => {
     setAvatar(avatarName);
@@ -80,7 +106,6 @@ export function AvatarNamePage() {
   };
 
   const setName = () => {
-
     sessionStorage.removeItem('pulseCheckState');
     if (userName !== '' && selectedAvatar !== '') {
       dispatch({
@@ -88,18 +113,23 @@ export function AvatarNamePage() {
         payload: { preferredNickname: userName, avatar: selectedAvatar },
       });
       console.log('disptach');
-      // if (!global.currentRetro || joining) {
-      //   joinRetro().then(retro => {
-      //     if (retro) {
-      //       navigate('/board/' + retro.id + '/pulsecheck');
-      //       setCaptureName(false);
-      //     }
-      //   });
-      // } else {
-      //   navigate('/board/' + global.currentRetro?.id);
-      //   setCaptureName(false);
-      // }
-      navigate(`/board/${retroId}/startretro`);
+      if (!global.currentRetro || joining) {
+        joinRetro().then(retro => {
+          console.log('retro', retro);
+          if (retro) {
+            if (global.currentRetro?.creatorId === global.user?.id) {
+              navigate('/board/' + retro.id + '/startRetro');
+            } else {
+              navigate('/board/' + retro.id + '/waiting');
+
+              setCaptureName(false);
+            }
+          }
+        });
+      } else {
+        navigate('/board/' + global.currentRetro?.id);
+        setCaptureName(false);
+      }
     } else {
       if (userName === '') setCodeError('Please enter avatar name');
       else setAvatarSelectionError('Please select avatar name');

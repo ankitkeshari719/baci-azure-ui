@@ -6,6 +6,9 @@ export class Retro {
   name: string = '';
   joinUrl: string = '';
   creatorId?: string = '';
+  timestamp?: Date | undefined;
+  waitingTimeStamp: Date | undefined;
+  retroStatus: string = '';
 }
 export interface PulseCheckSubmitStatus {
   retroId: string;
@@ -93,7 +96,7 @@ export class BoardState {
   users: {
     userId: string;
     userNickname: string;
-
+    avatar: string;
     feedback: FeedbackEntry[];
     pulseCheckQuestions: PulseCheckEntry[];
   }[] = [];
@@ -107,9 +110,9 @@ export class BoardState {
   fullPulseCheck: boolean = false;
   lastUpdatedBy?: string;
   ended: boolean = false;
-
+  retroStarted: boolean = false;
+  retroDuration: number = 90;
   needsToShow: boolean = false;
-
   startedDate: Date | undefined;
   endedDate: Date | undefined;
   lastStateUpdate: Date | undefined;

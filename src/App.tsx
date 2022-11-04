@@ -10,31 +10,40 @@ import Feedback from './screens/Feedback';
 import { GlobalProvider } from './contexts/GlobalContext';
 import { Offboarding } from './screens/Offboarding';
 import { LandingPage } from './screens/LandingPage';
-import { RetroDetails } from './screens/RetroDetails'
+import { RetroDetails } from './screens/RetroDetails';
 import { Onboarding } from './screens/Onboarding';
-import { ParticipantWaitingPage } from './screens/ParticipantWaitingPage'
+import { ParticipantWaitingPage } from './screens/ParticipantWaitingPage';
 import { CreateNewRetro } from './screens/CreateRetroPage';
 import { AvatarNamePage } from './screens/AvatarNamePage';
-import { StartRetro } from './screens/StartRetro'
 import PulseCheck from './screens/PulseCheck';
 import ReportScreen from './screens/ReportScreen';
 import { SnackMessage } from './elements/SnackMessage';
 import { ThemeProvider } from '@mui/material/styles';
 import theme from './theme/theme';
-import './index.scss'
+import './index.scss';
 //import { useFirebase } from './firebase';
 //import { useAuth } from './firebase/auth';
 import { useAzureAuth } from './msal/azureauth';
-import { MsalProvider, useMsal,AuthenticatedTemplate, UnauthenticatedTemplate } from "@azure/msal-react";
-import { EventType, InteractionType, IPublicClientApplication } from "@azure/msal-browser";
-import { loginRequest, b2cPolicies } from "./authConfig";
-import ButtonGroup from "@material-ui/core/ButtonGroup";
-import { Link as RouterLink } from "react-router-dom";
-import Button from "@material-ui/core/Button";
-import { SocketProvider } from "./contexts/SocketProvider";
+import {
+  MsalProvider,
+  useMsal,
+  AuthenticatedTemplate,
+  UnauthenticatedTemplate,
+} from '@azure/msal-react';
+import {
+  EventType,
+  InteractionType,
+  IPublicClientApplication,
+} from '@azure/msal-browser';
+import { loginRequest, b2cPolicies } from './authConfig';
+import ButtonGroup from '@material-ui/core/ButtonGroup';
+import { Link as RouterLink } from 'react-router-dom';
+import Button from '@material-ui/core/Button';
+import { SocketProvider } from './contexts/SocketProvider';
+import { StartRetro } from './screens/StartRetro';
 
 type AppProps = {
-  instance: IPublicClientApplication
+  instance: IPublicClientApplication;
 };
 
 function MainContent() {
@@ -45,7 +54,7 @@ function MainContent() {
       <Box sx={{ flex: 1, display: 'flex', flexDirection: 'column' }}>
         <Box
           component="main"
-          sx={{ display: 'flex', flex: 1, py: 0, px: 0 }}
+          sx={{ display: 'flex', flex: 1, py: 0, px: 0, bgcolor: '#eaeff1' }}
         >
           <Outlet />
         </Box>
@@ -54,43 +63,63 @@ function MainContent() {
   );
 }
 
-
-export default function App({ instance } :AppProps) {
+export default function App({ instance }: AppProps) {
   return (
     <ErrorProvider>
       <ErrorBoundary>
         <SocketProvider>
-        <GlobalProvider>
-          <BrowserRouter>
-            <BoardProvider>
-              <ConfirmProvider>
-                <ThemeProvider theme={theme}>
-                <MsalProvider instance={instance}>
-                  <Routes>
-                    <Route path="/" element={<LandingPage></LandingPage>} />
-                    <Route path="/createretro" element={<CreateNewRetro></CreateNewRetro>} />
-                    <Route path="/join/:id" element={<AvatarNamePage></AvatarNamePage>} />
-                    <Route path="/retrodetails" element={<RetroDetails></RetroDetails>}/>
-                    <Route path="/waiting" element={<ParticipantWaitingPage></ParticipantWaitingPage>}/>
-                    <Route
-                      path="/offboarding"
-                      element={<Offboarding></Offboarding>}
-                    />
-                    <Route path="/board" element={<MainContent />}>
-                      <Route path=":id/pulsecheck" element={<PulseCheck />} />
-                      <Route path=":id/feedback" element={<Feedback />} />
-                      <Route path=":id/startretro" element={<StartRetro />} />
-                      <Route path=":id" element={<Board />} />
-                    </Route>
-                    <Route path="/report/:id" element={<ReportScreen />} />
-                  </Routes>
-                  </MsalProvider>
-                  <SnackMessage />
-                </ThemeProvider>
-              </ConfirmProvider>
-            </BoardProvider>
-          </BrowserRouter>
-        </GlobalProvider>
+          <GlobalProvider>
+            <BrowserRouter>
+              <BoardProvider>
+                <ConfirmProvider>
+                  <ThemeProvider theme={theme}>
+                    <MsalProvider instance={instance}>
+                      <Routes>
+                        <Route path="/" element={<LandingPage></LandingPage>} />
+                        <Route
+                          path="/createretro"
+                          element={<CreateNewRetro></CreateNewRetro>}
+                        />
+                        <Route
+                          path="/join/:id"
+                          element={<AvatarNamePage></AvatarNamePage>}
+                        />
+                        <Route
+                          path="/retrodetails"
+                          element={<RetroDetails></RetroDetails>}
+                        />
+                        <Route
+                          path="/offboarding"
+                          element={<Offboarding></Offboarding>}
+                        />
+                        <Route path="/board" element={<MainContent />}>
+                          <Route
+                            path=":id/waiting"
+                            element={
+                              <ParticipantWaitingPage></ParticipantWaitingPage>
+                            }
+                          />
+                          <Route
+                            path=":id/startRetro"
+                            element={<StartRetro></StartRetro>}
+                          />
+
+                          <Route
+                            path=":id/pulsecheck"
+                            element={<PulseCheck />}
+                          />
+                          <Route path=":id/feedback" element={<Feedback />} />
+                          <Route path=":id" element={<Board />} />
+                        </Route>
+                        <Route path="/report/:id" element={<ReportScreen />} />
+                      </Routes>
+                    </MsalProvider>
+                    <SnackMessage />
+                  </ThemeProvider>
+                </ConfirmProvider>
+              </BoardProvider>
+            </BrowserRouter>
+          </GlobalProvider>
         </SocketProvider>
       </ErrorBoundary>
     </ErrorProvider>
