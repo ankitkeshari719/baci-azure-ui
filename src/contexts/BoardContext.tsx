@@ -18,7 +18,7 @@ import React, { ComponentProps } from 'react';
   addRetroAction,
   getRetroActions
 } from '../firebase/firestore'; */
-import{
+import {
   addRetroAction,
   getRetroActions,
   // onSnapshotRetroActions
@@ -30,7 +30,7 @@ import _ from 'lodash';
 import log from 'loglevel';
 import shortid from 'shortid';
 import stringifyDate from 'json-stringify-date';
-import { useSocket } from "../hooks/useSocket";
+import { useSocket } from '../hooks/useSocket';
 import { SocketContext } from './SocketProvider';
 
 export interface ReducerPayload {
@@ -41,7 +41,7 @@ export interface ReducerPayload {
 
 const SNAPSHOTS_ENABLED = true;
 const SNAPSHOT_GAP = 40;
-const MAX_SNAPSHOTS = 10
+const MAX_SNAPSHOTS = 10;
 
 type ContextType = {
   state: BoardState;
@@ -153,15 +153,14 @@ function BoardProvider(props: ComponentProps<any>) {
   };
 
   const processActions = (actions: Action[]): BoardState | undefined => {
+    console.log('start Retro Action');
     const actionSortFunction = (actionA: Action, actionB: Action) =>
       actionA.sourceActionTimestamp !== actionB.sourceActionTimestamp
         ? actionA.sourceActionTimestamp - actionB.sourceActionTimestamp
-        : (actionA.timestamp
-            ? actionA.timestamp
-            : Number.MAX_SAFE_INTEGER) -
+        : (actionA.timestamp ? actionA.timestamp : Number.MAX_SAFE_INTEGER) -
           (actionB.timestamp ? actionB.timestamp : Number.MAX_SAFE_INTEGER);
     actions.sort(actionSortFunction);
-    
+
     actions.forEach(action => {
       const existingActionIndex = history.current.findIndex(
         (a: { action: { id: string } }) => a.action.id === action.id
@@ -183,7 +182,9 @@ function BoardProvider(props: ComponentProps<any>) {
     if (SNAPSHOTS_ENABLED) {
       if (stateSnapshots.current && stateSnapshots.current.length !== 0) {
         // find where the first new action has landed
-        const indexOfFirstNewAction = history.current.findIndex(entry => entry.action.id === actions[0].id);
+        const indexOfFirstNewAction = history.current.findIndex(
+          entry => entry.action.id === actions[0].id
+        );
         const invalidSnapshotIndex = stateSnapshots.current.findIndex(
           ({ index }) => index >= indexOfFirstNewAction
         );
@@ -198,7 +199,9 @@ function BoardProvider(props: ComponentProps<any>) {
     const newState =
       !SNAPSHOTS_ENABLED || stateSnapshots.current.length === 0
         ? initialBoardState(state.retroId)
-        : _.cloneDeep(stateSnapshots.current[stateSnapshots.current.length - 1].state);
+        : _.cloneDeep(
+            stateSnapshots.current[stateSnapshots.current.length - 1].state
+          );
     const startIndex =
       !SNAPSHOTS_ENABLED || stateSnapshots.current.length === 0
         ? 0
@@ -276,34 +279,38 @@ function BoardProvider(props: ComponentProps<any>) {
             setState(newState);
           }
         }
-        socket.emit('retro',currentRetro?.id);
-        socket.on('newMessage',(snapshot: { retroId: string; action: any; }[]) => {
-          const results = [] as any[];
-          snapshot.forEach((change: { retroId: string; action: any; }) => {
-              
+        socket.emit('retro', currentRetro?.id);
+        socket.on(
+          'newMessage',
+          (snapshot: { retroId: string; action: any }[]) => {
+            const results = [] as any[];
+            snapshot.forEach((change: { retroId: string; action: any }) => {
               // if ((change.type === "modified" || change.type === "added") && !change.doc.metadata.hasPendingWrites) {
               if (
-                change.retroId === currentRetro?.id 
-                &&
-                (
-                  change.action.sourceActionTimestamp >= lastActionTimestamp.current === undefined ? 0 : lastActionTimestamp.current
-                )
-               ) {    
-              
-                  const data = change.action;
-                  if (!data.onlyVisibleBy || data.onlyVisibleBy.includes(user.id)) {
-                    results.push(data);
-                  }
+                change.retroId === currentRetro?.id &&
+                (change.action.sourceActionTimestamp >=
+                  lastActionTimestamp.current ===
+                undefined
+                  ? 0
+                  : lastActionTimestamp.current)
+              ) {
+                const data = change.action;
+                if (
+                  !data.onlyVisibleBy ||
+                  data.onlyVisibleBy.includes(user.id)
+                ) {
+                  results.push(data);
+                }
               }
               // }
-          });
-          actions=results;
+            });
+            actions = results;
             if (actions.length !== 0) {
-              
               processActions(actions);
             }
-        });
-        
+          }
+        );
+
         /* snapshotUnsubscriber.current = onSnapshotRetroActions(
           currentRetro?.id as string,
           user.id,
@@ -323,7 +330,7 @@ function BoardProvider(props: ComponentProps<any>) {
 
   return (
     <BoardContext.Provider value={{ state, commitAction }}>
-      {!currentRetro && state.loading ? (
+      {!currentRetro && !state.loading ? (
         <Dialog open={true}>
           <DialogTitle>Loading board...</DialogTitle>
           <DialogContent>

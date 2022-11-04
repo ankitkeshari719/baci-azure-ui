@@ -26,6 +26,7 @@ import { CopyToClipboard } from 'react-copy-to-clipboard';
 import QRCode from 'qrcode.react';
 import * as Icons from 'heroicons-react';
 
+
 const styles = {
   frame101: {
     marginTop: '112px',
@@ -64,7 +65,6 @@ const styles = {
     width: '138px',
     height: '138px',
     margin: '50px 44px 0px 45px',
-
   },
   group95: {
     marginTop: '27.5px',
@@ -133,7 +133,6 @@ const styles = {
     width: '218px',
     height: '61px',
     display: 'inline-block',
-    
   },
   qrCode: {
     margin: '62px 53px 0px 52px',
@@ -150,7 +149,7 @@ const styles = {
 };
 export function RetroDetails() {
   const [retroName, setRetroName] = React.useState(
-    localStorage.getItem('retroname') || ''
+    sessionStorage.getItem('retroname') || ''
   );
   const [global, dispatch] = React.useContext(GlobalContext);
   const [iscopied, setIsCopied] = React.useState(false);
@@ -169,18 +168,18 @@ export function RetroDetails() {
   }
   const downloadQRCode = () => {
     const canvas = document.querySelector('canvas');
-                        if (canvas) {
-                          const downloadLink = document.createElement('a');
-                          downloadLink.setAttribute('download', 'QR.png');
-                          const dataURL = canvas.toDataURL('image/png');
-                          const url = dataURL.replace(
-                            /^data:image\/png/,
-                            'data:application/octet-stream'
-                          );
-                          downloadLink.setAttribute('href', url);
-                          downloadLink.click();
-                        }
-  }
+    if (canvas) {
+      const downloadLink = document.createElement('a');
+      downloadLink.setAttribute('download', 'QR.png');
+      const dataURL = canvas.toDataURL('image/png');
+      const url = dataURL.replace(
+        /^data:image\/png/,
+        'data:application/octet-stream'
+      );
+      downloadLink.setAttribute('href', url);
+      downloadLink.click();
+    }
+  };
   return (
     <Grid container spacing={0} xs={12}>
       <Grid item xs={6}>
@@ -249,7 +248,10 @@ export function RetroDetails() {
                       text={global?.currentRetro?.joinUrl}
                       onCopy={() => setIsCopied(true)}
                     >
-                      <img src={copy} style={(styles.copyURL,{marginTop:'51px'})} ></img>
+                      <img
+                        src={copy}
+                        style={(styles.copyURL, { marginTop: '51px' })}
+                      ></img>
                     </CopyToClipboard>
                   </Box>
                 </Grid>
@@ -260,7 +262,11 @@ export function RetroDetails() {
                       style={styles.qrCode}
                     />
                     <div style={styles.div97}>
-                      <img src={download} style={styles.copyURL} onClick={downloadQRCode}></img>
+                      <img
+                        src={download}
+                        style={styles.copyURL}
+                        onClick={downloadQRCode}
+                      ></img>
                     </div>
                   </Box>
                 </Grid>
@@ -287,6 +293,7 @@ export function RetroDetails() {
               >
                 <span className="secondaryButtonText">Go to retro</span>
               </Button>
+          
             </Box>
           </Box>
         </Grid>

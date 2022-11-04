@@ -70,7 +70,7 @@ export function CreateNewRetro() {
   const [retroTimeframe, setRetroTimeframe] = React.useState('');
   const [isTimeFrameSet, setisTimeFrameSet] = React.useState(id ? true : false);
   const [localRetroName, setlocalRetroName] = React.useState(
-    localStorage.getItem('retroname') || ''
+    sessionStorage.getItem('retroname') || ''
   );
   const RETRONAME_CHARACTER_LIMIT = 80;
   const timeframeRef = React.useRef<HTMLSelectElement | null>(null);
@@ -100,7 +100,7 @@ export function CreateNewRetro() {
     setisTimeFrameSet(false);
   }
   const create = async () => {
-    localStorage.setItem('retroname', retroName);
+    sessionStorage.setItem('retroname', retroName);
     setlocalRetroName('"' + retroName + '"');
     if (retroName !== '' && retroTimeframe !== '') {
       setCodeError('');
