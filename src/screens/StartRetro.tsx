@@ -78,7 +78,7 @@ const styles = {
     flexFlow: 'column',
     width: '375px',
     height: '375px',
-    marginLeft: '325px',
+    marginLeft: '245px',
     top: '39.07%',
     bottom: '27.87%',
     background: '#FFFFFF',
@@ -153,7 +153,7 @@ const styles = {
 };
 export function StartRetro() {
   const [retroName, setRetroName] = React.useState(
-    localStorage.getItem('retroname') || ''
+    sessionStorage.getItem('retroname') || ''
   );
   const [global, dispatch] = React.useContext(GlobalContext);
   const [iscopied, setIsCopied] = React.useState(false);
@@ -197,7 +197,7 @@ export function StartRetro() {
             color={commonStyles.primaryDark}
             className="alignCenter"
           >
-            ‘{retroName}’ retro is created successfully!
+            ‘{global.currentRetro?.name}’ retro is created successfully!
           </Typography>
           <Box style={styles.group100}>
             <Box style={styles.displayCenter}>

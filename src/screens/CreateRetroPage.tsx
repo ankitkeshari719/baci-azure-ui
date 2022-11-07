@@ -4,6 +4,7 @@ import {
   FormControl,
   FormHelperText,
   Grid,
+  InputLabel,
   MenuItem,
   Select,
   TextField,
@@ -35,13 +36,24 @@ const styles = {
     "& .MuiFormLabel-root": {
       color: "rgba(0, 0, 0, 0.6) !important" ,
       fontSize: '14px'
+    },
+    '& .MuiFormLabel-root-MuiInputLabel-root.Mui-focused': {
+      color: "rgba(0, 0, 0, 0.6) !important" ,
     }
   },
   timeFramefield: {
     marginTop: '32px',
-    "&:MuiSelect-select-MuiInputBase-input-MuiInput-input:focus":{
-        backgroundColor:'white'
+    
+    "& label": {
+      color: "rgba(0, 0, 0, 0.6) !important" ,
+      fontSize: '14px',
+      "&.Mui-focused": {
+        color: "rgba(0, 0, 0, 0.6) !important" ,
+      }
     }
+    // "&:MuiSelect-select-MuiInputBase-input-MuiInput-input:focus":{
+    //     backgroundColor:'white'
+    // }
   },
   proceedButton: {
     marginTop: '53px',
@@ -101,7 +113,7 @@ export function CreateNewRetro() {
   }
   const create = async () => {
     sessionStorage.setItem('retroname', retroName);
-    setlocalRetroName('"' + retroName + '"');
+    setlocalRetroName(retroName);
     if (retroName !== '' && retroTimeframe !== '') {
       setCodeError('');
       setisTimeFrameSet(false);
@@ -115,7 +127,7 @@ export function CreateNewRetro() {
     } else if (retroTimeframe === '') {
       setisTimeFrameSet(true);
     }
-    sessionStorage.setItem('retroname', '"' + retroName + '"');
+    sessionStorage.setItem('retroname', retroName);
   };
 const joinExistingRetro= () => {
     navigate('/');
@@ -160,12 +172,15 @@ const joinExistingRetro= () => {
                 {codeWarning}
               </FormHelperText>
             )}
-            <Select
+            {/* <FormControl fullWidth>
+            <InputLabel id="select-label" sx={{color:'rgba(0, 0, 0, 0.6)'}}>I am Select</InputLabel> */}
+            <TextField
               inputRef={timeframeRef}
               variant="standard"
-              label="Time Frame"
+              label="Period to retrospect on"
               sx={styles.timeFramefield}
               value={retroTimeframe}
+              select
               onChange={e => handleTimeFrame(e?.target?.value)}
             >
               <MenuItem disableRipple value={'1 day'}>
@@ -176,13 +191,14 @@ const joinExistingRetro= () => {
               <MenuItem value={'3 weeks'}>3 weeks</MenuItem>
               <MenuItem value={'4 weeks'}>4 weeks</MenuItem>
               <MenuItem value={'N/A'}>N/A</MenuItem>
-            </Select>
+            </TextField>
+            </FormControl>
             {isTimeFrameSet && (
               <FormHelperText style={{ color: '#d32f2f', marginLeft: '5px' }}>
                 Please enter time frame
               </FormHelperText>
             )}
-          </FormControl>
+          {/* </FormControl> */}
           <Box sx={{ display: 'flex', justifyContent: 'start' }}>
             <Button
               variant="outlined"

@@ -300,6 +300,7 @@ console.log('pulse check array',qs);
           <Box
             sx={{
               marginTop: '48px',
+              
             }}
           >
             <Typography
@@ -318,7 +319,7 @@ console.log('pulse check array',qs);
             </Typography>
 
             <Box sx={{ display: 'flex', marginTop: '48px' }}>
-              <Box sx={{ marginRight: '32px', marginLeft: '21px' }}>
+              <Box sx={{ marginRight: '32px', marginLeft: '21px',width: '64px',height: '64px' }}>
                 <Box
                   style={{
                     backgroundImage: 'url(' + happy + ')',
@@ -342,7 +343,7 @@ console.log('pulse check array',qs);
                   ></img>
                
               </Box>
-              <Box>
+              <Box sx={{ marginRight: '32px', marginLeft: '21px',width: '64px',height: '64px' }}>
                 <Box
                   style={{
                     backgroundImage: 'url(' + neutral + ')',
@@ -367,7 +368,7 @@ console.log('pulse check array',qs);
                   ></img>
                 
               </Box>
-              <Box>
+              <Box sx={{ marginRight: '32px', marginLeft: '21px',width: '64px',height: '64px' }}>
                 <Box
                   style={{
                     backgroundImage: 'url(' + sad + ')',

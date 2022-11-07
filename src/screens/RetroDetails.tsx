@@ -197,7 +197,7 @@ export function RetroDetails() {
               color={commonStyles.primaryDark}
               className="alignCenter"
             >
-              ‘{retroName}’ retro is created successfully!
+              ‘{global.currentRetro?.name}’ retro is created successfully!
             </Typography>
             <Box style={styles.group100}>
               <Box style={styles.displayCenter}>

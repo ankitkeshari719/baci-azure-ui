@@ -18,7 +18,7 @@ const styles = {
 
 export function ParticipantWaitingPage() {
   const [retroName, setRetroName] = React.useState(
-    localStorage.getItem('retroname') || ''
+    sessionStorage.getItem('retroname') || ''
   );
   const [animateFirst, setAnimateFirst] = React.useState(false);
   const [animatesecond, setAnimatesecond] = React.useState(false);
