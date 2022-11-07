@@ -269,7 +269,7 @@ export default function RetroBoard() {
         },
       });
     } else {
-      navigate(`/board/${global?.currentRetro?.id}/feedback`);
+      //navigate(`/board/${global?.currentRetro?.id}/feedback`);
     }
   };
   const create10Cards = async () => {

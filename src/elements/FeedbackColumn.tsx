@@ -220,19 +220,7 @@ export function FeedbackColumn({
           ref={scrollableContainer}
           onScroll={onScroll}
         >
-          <Typography
-            sx={{
-              textAlign: 'center',
-              fontSize: '18px',
-              color: 'white',
-              background: '#695F9B',
-              width: '100%',
-              padding: '10px',
-            }}
-          >
-            Please rate the retro session, so your facilitator can improve (3
-            questions)
-          </Typography>
+        
           <Grid container sx={{ justifyContent: 'center' }}>
             {FEEDBACK_QUESTIONS.map((question, index) => (
               <Grid
