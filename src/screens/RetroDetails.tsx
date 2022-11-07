@@ -26,7 +26,6 @@ import { CopyToClipboard } from 'react-copy-to-clipboard';
 import QRCode from 'qrcode.react';
 import * as Icons from 'heroicons-react';
 
-
 const styles = {
   frame101: {
     marginTop: '112px',
@@ -148,9 +147,6 @@ const styles = {
   },
 };
 export function RetroDetails() {
-  const [retroName, setRetroName] = React.useState(
-    sessionStorage.getItem('retroname') || ''
-  );
   const [global, dispatch] = React.useContext(GlobalContext);
   const [iscopied, setIsCopied] = React.useState(false);
   const navigate = useNavigate();
@@ -293,7 +289,6 @@ export function RetroDetails() {
               >
                 <span className="secondaryButtonText">Go to retro</span>
               </Button>
-          
             </Box>
           </Box>
         </Grid>

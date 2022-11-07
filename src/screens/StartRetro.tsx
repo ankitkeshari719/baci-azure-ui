@@ -23,6 +23,7 @@ import { CopyToClipboard } from 'react-copy-to-clipboard';
 import QRCode from 'qrcode.react';
 import * as Icons from 'heroicons-react';
 import StartRetroButton from '../elements/StartRetroButton';
+import Toolbar from '../elements/Toolbar';
 
 const styles = {
   frame101: {
@@ -152,9 +153,6 @@ const styles = {
   },
 };
 export function StartRetro() {
-  const [retroName, setRetroName] = React.useState(
-    sessionStorage.getItem('retroname') || ''
-  );
   const [global, dispatch] = React.useContext(GlobalContext);
   const [iscopied, setIsCopied] = React.useState(false);
   const navigate = useNavigate();
@@ -186,6 +184,7 @@ export function StartRetro() {
   };
   return (
     <Grid container spacing={0} xs={12}>
+      <Toolbar></Toolbar>
       <Grid
         xs={12}
         marginRight={commonStyles.m_80}
