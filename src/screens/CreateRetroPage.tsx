@@ -150,7 +150,7 @@ const joinExistingRetro= () => {
             <TextField
               autoFocus
               variant="standard"
-              label="Retro access code"
+              label="Retro Name"
               inputProps={{
                 maxLength: RETRONAME_CHARACTER_LIMIT,
               }}

@@ -38,7 +38,13 @@ const StartRetroButton = () => {
 
   React.useEffect(() => {
     // console.log(needsToShow);
-    console.log(retroStarted, 'retroStarted');
+    console.log(
+      retroStarted,
+      'retroStarted',
+      creatorId,
+      global.user.id,
+      creatorId === global.user.id
+    );
 
     if (retroStarted) {
       navigate(`/board/${retroId}/pulsecheck`);
