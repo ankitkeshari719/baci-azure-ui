@@ -147,8 +147,6 @@ export function RetroColumn({
     await commitAction(actionName as BoardActionType, {
       parameters,
       userId: global.user.id,
-    
-     
     });
   };
 
@@ -159,7 +157,7 @@ export function RetroColumn({
       groupId: cardGroupId,
       id,
       value,
-      avatar:global.user.avatar
+      avatar: global.user.avatar,
     });
     autoFocusCardId.current = id;
   };
@@ -191,10 +189,23 @@ export function RetroColumn({
   };
 
   const publishColumn = async (value: boolean) => {
-    await saveAndProcessAction(BoardActionType.PUBLISH_COLUMN, {
-      columnId: column.id,
-      value,
-    });
+    if (column.publish !== true) {
+      dispatch({
+        type: ActionType.SET_LOADING,
+        payload: { loadingFlag: true },
+      });
+      await saveAndProcessAction(BoardActionType.PUBLISH_COLUMN, {
+        columnId: column.id,
+        value,
+      }).then(res => {
+        dispatch({
+          type: ActionType.SET_LOADING,
+          payload: { loadingFlag: false },
+        });
+      });
+    } else {
+      console.log('already published');
+    }
   };
 
   const submit = async (text: string) => {
@@ -603,15 +614,19 @@ export function RetroColumn({
             </Typography>
           )}
           <Box>
-            <img
-              onClick={() => publishColumn(true)}
-              src="/svgs/Message.svg"
-              style={{ width: '20px', marginLeft: '15px' }}
-            />
-            <img
-              src="/svgs/Unlock.svg"
-              style={{ width: '20px', marginLeft: '15px' }}
-            />
+            {global.currentRetro?.creatorId === global.user.id && (
+              <img
+                onClick={() => publishColumn(true)}
+                src="/svgs/Message.svg"
+                style={{ width: '20px', marginLeft: '15px' }}
+              />
+            )}
+            {global.currentRetro?.creatorId === global.user.id && (
+              <img
+                src="/svgs/Unlock.svg"
+                style={{ width: '20px', marginLeft: '15px' }}
+              />
+            )}
             {global.expandColumn === -1 ? (
               <img
                 onClick={() => {
@@ -707,7 +722,8 @@ export function RetroColumn({
                             (card: RetroCardType, j: number) =>
                               (card.createdBy === global.user.id ||
                                 global.currentRetro?.creatorId ===
-                                  global.user.id || column.publish) && (
+                                  global.user.id ||
+                                column.publish) && (
                                 <Grid md={6} lg={6} item>
                                   <React.Fragment key={card.id}>
                                     {group.name === UNGROUPED ||

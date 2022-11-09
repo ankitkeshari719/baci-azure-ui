@@ -21,6 +21,7 @@ import { useRetro } from '../helpers';
 import { ActionType, GlobalContext } from '../contexts/GlobalContext';
 import Avatar from '../elements/Avatar';
 import { avatarName } from '../constants/AvatarName';
+import { useAzureAuth } from '../msal/azureauth';
 const AVATAR_CHARACTER_LIMIT = 30;
 const styles = {
   heading: {
@@ -104,7 +105,7 @@ export function AvatarNamePage() {
     setAvatarSelectionError('');
     console.log(avatarName);
   };
-
+  useAzureAuth();
   const setName = () => {
     sessionStorage.removeItem('pulseCheckState');
     if (userName !== '' && selectedAvatar !== '') {
