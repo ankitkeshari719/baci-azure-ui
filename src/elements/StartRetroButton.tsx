@@ -1,6 +1,6 @@
 import React from 'react';
 import { BoardContext } from '../contexts/BoardContext';
-import { GlobalContext } from '../contexts/GlobalContext';
+import { ActionType, GlobalContext } from '../contexts/GlobalContext';
 import { BoardActionType } from '../statemachine/BoardStateMachine';
 import shortid from 'shortid';
 import { Button } from '@mui/material';
@@ -13,7 +13,7 @@ const styles = {
 };
 const StartRetroButton = () => {
   const {
-    state: { retroId, retroStarted, retroDuration, creatorId },
+    state: { retroId, retroStarted, retroDuration },
     commitAction,
   } = React.useContext(BoardContext);
   const navigate = useNavigate();
@@ -31,20 +31,22 @@ const StartRetroButton = () => {
   };
 
   const startRetro = () => {
+    dispatch({
+      type: ActionType.SET_LOADING,
+      payload: { loadingFlag: true },
+    });
     saveAndProcessAction(BoardActionType.START_RETRO, {}).then(() => {
       console.log('started retro');
+      dispatch({
+        type: ActionType.SET_LOADING,
+        payload: { loadingFlag: false },
+      });
+      navigate(`/board/${retroId}/pulsecheck`);
     });
   };
 
   React.useEffect(() => {
     // console.log(needsToShow);
-    console.log(
-      retroStarted,
-      'retroStarted',
-      creatorId,
-      global.user.id,
-      creatorId === global.user.id
-    );
 
     if (retroStarted) {
       navigate(`/board/${retroId}/pulsecheck`);
@@ -52,7 +54,7 @@ const StartRetroButton = () => {
   }, [retroStarted]);
   return (
     <>
-      {creatorId === global.user.id && (
+      {global?.currentRetro?.creatorId === global?.user?.id && (
         // <button onClick={startRetro}>Start</button>
         <Button
           variant="outlined"

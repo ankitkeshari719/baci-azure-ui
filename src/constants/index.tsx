@@ -84,9 +84,9 @@ export const PULSE_CHECK_QUESTIONS_INFO = [
 ];
 
 export const QUICK_PULSE_CHECK_QUESTIONS = [
-  '1.People & Resources',
-  '2.Work Processes',
-  '3.Technical Tools',
+  '1. People & Resources ',
+  '2. Work Processes ',
+  '3. Technical Tools ',
 ];
 
 export const QUICK_PULSE_CHECK_QUESTIONS_INFO = [
@@ -119,6 +119,7 @@ export const INITIAL_COLUMNS = [
         lockedBy: undefined,
       },
     ],
+    publish:false
   },
   {
     id: '1',
@@ -139,6 +140,7 @@ export const INITIAL_COLUMNS = [
         lockedBy: undefined,
       },
     ],
+    publish:false
   },
   {
     id: '2',
@@ -159,6 +161,7 @@ export const INITIAL_COLUMNS = [
         lockedBy: undefined,
       },
     ],
+    publish:false
   },
 ];
 

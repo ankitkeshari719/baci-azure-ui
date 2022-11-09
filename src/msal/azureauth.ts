@@ -12,7 +12,8 @@ export const useAzureAuth = () => {
     const azureToUser = (): User => {
         return {
             id: uuidv4(),     
-            name: ''
+            name: '',
+            avatar:''
         };
     }
 

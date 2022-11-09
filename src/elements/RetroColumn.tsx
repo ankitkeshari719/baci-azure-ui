@@ -7,7 +7,7 @@ import {
   Typography,
   useMediaQuery,
 } from '@mui/material';
-import React, { ReactElement, useMemo } from 'react';
+import React, { ReactElement, useEffect, useMemo } from 'react';
 import Draggable, { DraggableData, DraggableEvent } from 'react-draggable';
 import { MAX_CARD_TEXT_LENGTH, UNGROUPED } from '../constants';
 import { BoardContext } from '../contexts/BoardContext';
@@ -17,7 +17,7 @@ import { Card, Card as RetroCardType, CardGroup, Column } from '../types';
 import SendIcon from '@mui/icons-material/Send';
 import Color from 'color';
 import shortid from 'shortid';
-import { GlobalContext } from '../contexts/GlobalContext';
+import { ActionType, GlobalContext } from '../contexts/GlobalContext';
 import { RetroCard } from './retroCard/RetroCard';
 import theme from '../theme/theme';
 import { RetroCardGroup } from './RetroCardGroup';
@@ -157,6 +157,7 @@ export function RetroColumn({
       groupId: cardGroupId,
       id,
       value,
+      avatar: global.user.avatar,
     });
     autoFocusCardId.current = id;
   };
@@ -185,6 +186,26 @@ export function RetroColumn({
       columnId: column.id,
       value,
     });
+  };
+
+  const publishColumn = async (value: boolean) => {
+    if (column.publish !== true) {
+      dispatch({
+        type: ActionType.SET_LOADING,
+        payload: { loadingFlag: true },
+      });
+      await saveAndProcessAction(BoardActionType.PUBLISH_COLUMN, {
+        columnId: column.id,
+        value,
+      }).then(res => {
+        dispatch({
+          type: ActionType.SET_LOADING,
+          payload: { loadingFlag: false },
+        });
+      });
+    } else {
+      console.log('already published');
+    }
   };
 
   const submit = async (text: string) => {
@@ -507,7 +528,9 @@ export function RetroColumn({
       autoFocusCardId.current = undefined;
     }
   };
-
+  useEffect(() => {
+    console.log('publish status', column.publish, column.id);
+  }, [column.publish]);
   return (
     <ColumnComponent
       sx={{
@@ -526,12 +549,19 @@ export function RetroColumn({
         setMouseOver(true);
       }}
     >
-      <Box  style={{ display: 'flex', flexDirection: 'column',justifyContent:"flex-start",width:'100%' }}>
+      <Box
+        style={{
+          display: 'flex',
+          flexDirection: 'column',
+          justifyContent: 'flex-start',
+          width: '100%',
+        }}
+      >
         <Box
           sx={{
             display: 'flex',
             flexDirection: 'row',
-            width: '100%',
+            width: 'calc(100%-28px)',
             justifyContent: 'space-between',
             background: groupColour,
             alignItems: 'center',
@@ -584,18 +614,42 @@ export function RetroColumn({
             </Typography>
           )}
           <Box>
-            <img
-              src="/svgs/Message.svg"
-              style={{ width: '20px', marginLeft: '10px' }}
-            />
-            <img
-              src="/svgs/Unlock.svg"
-              style={{ width: '20px', marginLeft: '10px' }}
-            />
-            <img
-              src="/svgs/Expand.svg"
-              style={{ width: '20px', marginLeft: '10px' }}
-            />
+            {global.currentRetro?.creatorId === global.user.id && (
+              <img
+                onClick={() => publishColumn(true)}
+                src="/svgs/Message.svg"
+                style={{ width: '20px', marginLeft: '15px' }}
+              />
+            )}
+            {global.currentRetro?.creatorId === global.user.id && (
+              <img
+                src="/svgs/Unlock.svg"
+                style={{ width: '20px', marginLeft: '15px' }}
+              />
+            )}
+            {global.expandColumn === -1 ? (
+              <img
+                onClick={() => {
+                  dispatch({
+                    type: ActionType.EXPAND_COLUMN,
+                    payload: { expandColumn: +column.id },
+                  });
+                }}
+                src="/svgs/Expand.svg"
+                style={{ width: '20px', marginLeft: '15px' }}
+              />
+            ) : (
+              <img
+                onClick={() => {
+                  dispatch({
+                    type: ActionType.EXPAND_COLUMN,
+                    payload: { expandColumn: -1 },
+                  });
+                }}
+                src="/svgs/Shrink.svg"
+                style={{ width: '20px', marginLeft: '15px' }}
+              />
+            )}
           </Box>
         </Box>
         {useMemo(
@@ -664,86 +718,94 @@ export function RetroColumn({
                               padding: '0',
                             }}
                           ></span>
-                          {group.cards.map((card: RetroCardType, j: number) => (
-                            <Grid md={2} item>
-                              <React.Fragment key={card.id}>
-                                {group.name === UNGROUPED ||
-                                j <
-                                  (groupCollapsed[i]
-                                    ? 2
-                                    : group.cards.length) ? (
-                                  <>
-                                    <span
-                                      ref={e =>
-                                        cardRefCollector(
-                                          e as HTMLDivElement,
-                                          i,
-                                          j,
-                                          card
-                                        )
-                                      }
-                                      style={{ padding: '10px' }}
-                                    >
-                                      <Draggable
-                                        ref={ref => {
-                                          draggableRefs[i][j] = ref;
-                                        }}
-                                        disabled={
-                                          ended ||
-                                          (card.locked &&
-                                            card.lockedBy !== global.user.id)
-                                        }
-                                        onStart={(event, data) =>
-                                          handleStart(i, j, event, data)
-                                        }
-                                        onStop={(event, data) => {
-                                          handleStop(i, j, event, data);
-                                        }}
-                                        onDrag={(event, data) =>
-                                          handleDrag(i, j, event, data)
-                                        }
-                                        enableUserSelectHack={true}
-                                        cancel=".can"
-                                        handle=".handle"
-                                      >
-                                        <Grid className="handle">
-                                          <RetroCard
-                                            moveCard={moveCard}
-                                            card={card}
-                                            groups={cardGroups}
-                                            currentGroupId={group.id}
-                                            columnId={column.id}
-                                            hideButtons={false}
-                                            animate={true}
-                                          />
-                                        </Grid>
-                                      </Draggable>
-                                      <div
-                                        ref={ref =>
-                                          (placeholderRefs[i][j] = ref)
-                                        }
-                                      ></div>
-                                    </span>
-                                    <span
-                                      ref={e => {
-                                        landingZones[i][j + 1] =
-                                          e as HTMLDivElement;
-                                      }}
-                                      style={{
-                                        maxHeight: '0',
-                                        margin: '0',
-                                        padding: '0',
-                                      }}
-                                    ></span>
-                                  </>
-                                ) : null}
-                              </React.Fragment>
-                            </Grid>
-                          ))}
+                          {group.cards.map(
+                            (card: RetroCardType, j: number) =>
+                              (card.createdBy === global.user.id ||
+                                global.currentRetro?.creatorId ===
+                                  global.user.id ||
+                                column.publish) && (
+                                <Grid md={6} lg={6} item>
+                                  <React.Fragment key={card.id}>
+                                    {group.name === UNGROUPED ||
+                                    j <
+                                      (groupCollapsed[i]
+                                        ? 2
+                                        : group.cards.length) ? (
+                                      <>
+                                        <span
+                                          ref={e =>
+                                            cardRefCollector(
+                                              e as HTMLDivElement,
+                                              i,
+                                              j,
+                                              card
+                                            )
+                                          }
+                                          style={{ padding: '10px' }}
+                                        >
+                                          <Draggable
+                                            ref={ref => {
+                                              draggableRefs[i][j] = ref;
+                                            }}
+                                            disabled={
+                                              ended ||
+                                              (card.locked &&
+                                                card.lockedBy !==
+                                                  global.user.id)
+                                            }
+                                            onStart={(event, data) =>
+                                              handleStart(i, j, event, data)
+                                            }
+                                            onStop={(event, data) => {
+                                              handleStop(i, j, event, data);
+                                            }}
+                                            onDrag={(event, data) =>
+                                              handleDrag(i, j, event, data)
+                                            }
+                                            enableUserSelectHack={true}
+                                            cancel=".can"
+                                            handle=".handle"
+                                          >
+                                            <Grid className="handle">
+                                              <RetroCard
+                                                moveCard={moveCard}
+                                                card={card}
+                                                groups={cardGroups}
+                                                currentGroupId={group.id}
+                                                columnId={column.id}
+                                                hideButtons={false}
+                                                animate={true}
+                                              />
+                                            </Grid>
+                                          </Draggable>
+                                          <div
+                                            ref={ref =>
+                                              (placeholderRefs[i][j] = ref)
+                                            }
+                                          ></div>
+                                        </span>
+                                        <span
+                                          ref={e => {
+                                            landingZones[i][j + 1] =
+                                              e as HTMLDivElement;
+                                          }}
+                                          style={{
+                                            maxHeight: '0',
+                                            margin: '0',
+                                            padding: '0',
+                                          }}
+                                        ></span>
+                                      </>
+                                    ) : null}
+                                  </React.Fragment>
+                                </Grid>
+                              )
+                          )}
                         </Grid>
                       ) : (
                         <Grid md={12}>
-                          <Grid xs={3}
+                          <Grid
+                            xs={6}
                             style={{
                               // padding: '10px',
                               display: 'flex',
