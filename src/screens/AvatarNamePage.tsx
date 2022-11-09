@@ -109,6 +109,10 @@ export function AvatarNamePage() {
     sessionStorage.removeItem('pulseCheckState');
     if (userName !== '' && selectedAvatar !== '') {
       dispatch({
+        type: ActionType.SET_LOADING,
+        payload: { loadingFlag: true },
+      });
+      dispatch({
         type: ActionType.SET_PREFERRED_NICKNAME,
         payload: { preferredNickname: userName, avatar: selectedAvatar },
       });
@@ -116,6 +120,10 @@ export function AvatarNamePage() {
       if (!global.currentRetro || joining) {
         joinRetro().then(retro => {
           console.log('retro', retro);
+          dispatch({
+            type: ActionType.SET_LOADING,
+            payload: { loadingFlag: false },
+          });
           if (retro) {
             if (global.currentRetro?.creatorId === global.user?.id) {
               navigate('/board/' + retro.id + '/startRetro');
@@ -127,6 +135,10 @@ export function AvatarNamePage() {
           }
         });
       } else {
+        dispatch({
+          type: ActionType.SET_LOADING,
+          payload: { loadingFlag: false },
+        });
         navigate('/board/' + global.currentRetro?.id);
         setCaptureName(false);
       }

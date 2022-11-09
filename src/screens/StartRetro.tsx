@@ -184,7 +184,9 @@ export function StartRetro() {
   };
   return (
     <Grid container spacing={0} xs={12}>
-      <Toolbar></Toolbar>
+      <Grid xs={12} sx={{ paddingLeft: '56px', paddingRight: '56px' }}>
+        <Toolbar></Toolbar>
+      </Grid>
       <Grid
         xs={12}
         marginRight={commonStyles.m_80}

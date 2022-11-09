@@ -15,16 +15,20 @@ export enum ActionType {
   SET_SNACK_MESSAGE = 'setSnackMessage',
   SET_RETRO_CREATE = 'setRetroCreate',
   SET_PULSE_CHECK = 'setPulseCheck',
+  SET_LOADING = 'setLoading',
+  EXPAND_COLUMN = 'expandColumn',
 }
 
 export class ReducerPayload {
   retro?: Partial<Retro>;
   user?: User;
   preferredNickname?: string;
-  avatar?:string;
+  avatar?: string;
   snackMessage?: SnackMessageClass;
   retroCreateState?: boolean;
   pulseCheckState?: PulseCheckSubmitStatus;
+  loadingFlag?: boolean;
+  expandColumn?: number;
 }
 
 type ContextType = [
@@ -43,7 +47,13 @@ function saveState(state: Global) {
 
 function loadState() {
   const savedContext = sessionStorage.getItem('GlobalContext');
-  return savedContext ? JSON.parse(savedContext) : initialGlobalState();
+  var parsingSavedContext = savedContext
+    ? JSON.parse(savedContext)
+    : initialGlobalState();
+  parsingSavedContext.loadingFlag = false;
+  console.log('loadingFlag', parsingSavedContext);
+  // return savedContext ? JSON.parse(savedContext) : initialGlobalState();
+  return parsingSavedContext;
 }
 
 function initialGlobalState(): Global {
@@ -79,7 +89,13 @@ function GlobalProvider(props: ComponentProps<any>) {
         return saveState({
           ...state,
           preferredNickname: action.payload?.preferredNickname,
-          avatar:action.payload?.avatar,
+          avatar: action.payload?.avatar,
+          
+          user: {
+            ...state.user,
+            name: action.payload?.preferredNickname+"",
+            avatar:action.payload?.avatar+"",
+          },
         });
       case ActionType.SET_SNACK_MESSAGE:
         return saveState({
@@ -95,6 +111,16 @@ function GlobalProvider(props: ComponentProps<any>) {
         return saveState({
           ...state,
           pulseCheckState: action.payload?.pulseCheckState,
+        });
+      case ActionType.SET_LOADING:
+        return saveState({
+          ...state,
+          loadingFlag: action.payload?.loadingFlag,
+        });
+      case ActionType.EXPAND_COLUMN:
+        return saveState({
+          ...state,
+          expandColumn: action.payload?.expandColumn,
         });
     }
     return saveState({ ...state });

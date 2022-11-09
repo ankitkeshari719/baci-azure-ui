@@ -6,6 +6,7 @@ import {
   validateAction,
 } from '../statemachine/BoardStateMachine';
 import {
+  Box,
   CircularProgress,
   Dialog,
   DialogContent,
@@ -37,6 +38,7 @@ export interface ReducerPayload {
   parameters: any;
   userId: string;
   version?: number;
+
 }
 
 const SNAPSHOTS_ENABLED = true;
@@ -67,7 +69,7 @@ function BoardProvider(props: ComponentProps<any>) {
   const socket = React.useContext(SocketContext);
 
   const [state, setState] = React.useState<BoardState>(initialBoardState(''));
-
+  const [global, dispatch] = React.useContext(GlobalContext);
   const stateSnapshots = React.useRef<
     { index: number; actionId: string; state: BoardState }[]
   >([]);
@@ -224,7 +226,8 @@ function BoardProvider(props: ComponentProps<any>) {
           action.parameters,
           action.userId,
           action.date,
-          action.version
+          action.version,
+
         );
       }
 
@@ -243,7 +246,7 @@ function BoardProvider(props: ComponentProps<any>) {
         }
       }
 
-      newState.loading = false;
+      // newState.loading = false;
       if (action.timestamp) {
         lastActionTimestamp.current = action.timestamp;
       }
@@ -340,7 +343,28 @@ function BoardProvider(props: ComponentProps<any>) {
           </DialogContent>
         </Dialog>
       ) : null}
-
+      {/* <Dialog open={true}>
+        <DialogContent>
+          <Grid container justifyContent="center"> */}
+      {global.loadingFlag && (
+        <Box
+          sx={{
+            zIndex: '1000',
+            position: 'absolute',
+            width: '100%',
+            height: '100vh',
+            display: 'flex',
+            flexDirection: 'row',
+            alignItems: 'center',
+            justifyContent: 'center',
+          }}
+        >
+          <CircularProgress />
+        </Box>
+      )}
+      {/* </Grid>
+        </DialogContent>
+      </Dialog> */}
       {props.children}
     </BoardContext.Provider>
   );

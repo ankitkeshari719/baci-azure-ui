@@ -18,6 +18,7 @@ export class User {
   id: string = '';
   name: string = '';
   nickname?: string = '';
+  avatar: string = '';
 }
 
 export class SnackMessageClass {
@@ -36,6 +37,8 @@ export class Global {
     retroId: '',
     pulseSubmitState: false,
   };
+  loadingFlag?: boolean = false;
+  expandColumn?: number = -1;
 }
 
 export interface Card {
@@ -47,6 +50,7 @@ export interface Card {
   createdBy?: string;
   lastUpdatedBy?: string;
   editCount: number;
+  avatar: string;
 }
 
 export interface CardGroup {
@@ -71,6 +75,7 @@ export interface Column {
   groupColour: string;
   groups: CardGroup[];
   lastUpdatedBy?: string;
+  publish: boolean;
 }
 
 export interface PulseCheckEntry {
@@ -90,6 +95,7 @@ export interface FeedbackEntry {
 
 export class BoardState {
   retroId: string = '';
+  publishColumn: any[] = [];
   loading: boolean = true;
   columns: Column[] = [];
   creatorId: string = '';
@@ -111,11 +117,13 @@ export class BoardState {
   lastUpdatedBy?: string;
   ended: boolean = false;
   retroStarted: boolean = false;
+  loadingFlag: boolean = false;
   retroDuration: number = 90;
   needsToShow: boolean = false;
   startedDate: Date | undefined;
   endedDate: Date | undefined;
   lastStateUpdate: Date | undefined;
+  avatar: string | undefined;
 
   constructor(retroId: string, columns: Column[]) {
     this.retroId = retroId;
