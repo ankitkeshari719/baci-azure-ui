@@ -19,6 +19,7 @@ import { FeedbackColumn } from '../elements/FeedbackColumn';
 import useLoadRetro from '../hooks/useLoadRetro';
 import { BoardActionType } from '../statemachine/BoardStateMachine';
 import theme from '../theme/theme';
+import FeedbackPopup from '../atoms/feedbackPopup';
 
 export default function Feedback() {
   const navigate = useNavigate();
@@ -186,20 +187,9 @@ export default function Feedback() {
       ) : null}
 
       <Box
-        sx={{
-          height: isXsUp
-            ? 'calc(var(--app-height) - 145px)'
-            : 'calc(var(--app-height) - 95px)',
-          display: 'flex',
-          justifyContent: 'center',
-          background: 'white',
-        }}
+       
       >
-        <FeedbackColumn
-          noHeader={true}
-          leftHeaderComponent={<></>}
-          rightHeaderComponent={<></>}
-        />
+        <FeedbackPopup show={true}></FeedbackPopup>
       </Box>
     </Box>
   );

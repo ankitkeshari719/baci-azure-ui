@@ -36,6 +36,7 @@ import RetroPropsPanel from '../elements/RetroPropsPanel';
 import SharePanel from '../elements/SharePanel';
 import useLoadRetro from '../hooks/useLoadRetro';
 import theme from '../theme/theme';
+import  FeedbackPopup  from  '../atoms/feedbackPopup'
 
 const ColumnContainer = ({
   children,
@@ -87,7 +88,7 @@ export default function RetroBoard() {
   const [currentColumn, setCurrentColumn] = React.useState(0);
   const [showEditBox, setShowEditBox] = React.useState(false);
   const [justMyCards, setJustMyCards] = React.useState(false);
-
+  const [showFeedback, setshowFeedback] = React.useState(false);
   const [islanded, setIsLanded] = React.useState(true);
 
   const [showRetroPanel, setShowRetroPanel] = React.useState(false);
@@ -254,22 +255,13 @@ export default function RetroBoard() {
           sessionStorage.removeItem('pulseCheckState');
           saveAndProcessAction(BoardActionType.END_RETRO, {}).then(() => {
             setConfirmAction(undefined);
+            navigate('/report/' + global.currentRetro?.id);
           });
-          //delete group before finishing retro
-          for (const column of columns) {
-            for (const group of column.groups) {
-              if (!group.name.includes('Ungrouped')) {
-                let groupId: String = group.id;
-                saveAndProcessAction(BoardActionType.DELETE_GROUP, {
-                  groupId,
-                }).then(() => {});
-              }
-            }
-          }
-        },
+         },
       });
     } else {
       //navigate(`/board/${global?.currentRetro?.id}/feedback`);
+      setshowFeedback(true);
     }
   };
   const create10Cards = async () => {
@@ -579,7 +571,7 @@ export default function RetroBoard() {
             {showSharePanel ? <SharePanel onClose={closeAllPanels} /> : null}
           </Box>
         ) : null}
-
+        {showFeedback?  <FeedbackPopup show={true}></FeedbackPopup> : null}
         {useMemo(
           () =>
             (isXsUp
