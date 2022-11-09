@@ -282,12 +282,12 @@ export default function RetroBoard() {
     }
   };
 
-  React.useEffect(() => {
-    // console.log(needsToShow);
-    if (ended && !needsToShow) {
-      navigate(`/board/${global?.currentRetro?.id}/feedback`);
-    }
-  }, [ended, needsToShow]);
+  // React.useEffect(() => {
+  //   // console.log(needsToShow);
+  //   if (ended && !needsToShow) {
+  //     navigate(`/board/${global?.currentRetro?.id}/feedback`);
+  //   }
+  // }, [ended, needsToShow]);
 
   return (
     <Box

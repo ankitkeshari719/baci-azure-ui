@@ -67,7 +67,7 @@ export default function ReportScreen() {
         flexDirection: 'column',
       }}
     >
-      {loading ? (
+      {/* {loading ? (
         <Dialog open={true}>
           <DialogTitle>Loading board...</DialogTitle>
           <DialogContent>
@@ -76,7 +76,7 @@ export default function ReportScreen() {
             </Grid>
           </DialogContent>
         </Dialog>
-      ) : null}
+      ) : null} */}
 
       <AppBar component="div" color="primary" position="static" elevation={0}>
         <Toolbar>
