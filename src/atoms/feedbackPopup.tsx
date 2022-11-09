@@ -29,6 +29,7 @@ import { ActionType, GlobalContext } from '../contexts/GlobalContext';
 import { FeedbackEntry } from '../types';
 import { ConfirmContext } from '../contexts/ConfirmContext';
 import { useNavigate } from 'react-router-dom';
+import closeImage from '../assets/img/Vectorclose.png'
 const BorderLinearProgress = styled(LinearProgress)(({ theme }) => ({
   height: '6px',
   borderRadius: '4px',
@@ -45,12 +46,13 @@ const BorderLinearProgress = styled(LinearProgress)(({ theme }) => ({
   },
 }));
 
-export default function FeedbackPopup(props: { show: boolean; }) {
+export default function FeedbackPopup(props: { show: boolean;  }) {
   const [index, setIndex] = React.useState(0);
   const qs = FEEDBACK_QUESTIONS.map(q => React.useState(0));
   const { commitAction } = React.useContext(BoardContext);
   const [global, dispatch] = React.useContext(GlobalContext);
   const { setConfirmAction } = React.useContext(ConfirmContext);
+  const [barvalue, setbarvalue] = React.useState(0);
   const navigate = useNavigate();
   
   const handleNext = () => {
@@ -101,7 +103,9 @@ export default function FeedbackPopup(props: { show: boolean; }) {
         navigate(`/offboarding`);
       }
     };
-
+    const closeFeedback = () =>{
+        navigate(`/offboarding`);
+    }
   return (
     <Dialog
       open={props.show}
@@ -121,8 +125,11 @@ export default function FeedbackPopup(props: { show: boolean; }) {
       }}
       aria-describedby="alert-dialog-slide-description"
     >
+        <Box sx={{display: 'flex', justifyContent:'flex-end'}} mr='23px' mt='23px'>
+            <img src={closeImage} onClick={closeFeedback}></img>
+        </Box>
       <DialogTitle
-        mt="64px"
+        mt="20px"
         variant="h3"
         color={commonStyles.secondaryMain}
         textAlign="center"
@@ -133,7 +140,7 @@ export default function FeedbackPopup(props: { show: boolean; }) {
       <Typography className="identityWillbeConfidentialText">
         Your identity will be confidential
       </Typography>
-      <BorderLinearProgress variant="determinate" value={50} />
+      <BorderLinearProgress variant="determinate" value={barvalue} />
       <DialogContent
         sx={{ display: 'flex', justifyContent: 'center', textAlign: 'center' , overflowY: 'hidden'}}
       >
@@ -141,7 +148,7 @@ export default function FeedbackPopup(props: { show: boolean; }) {
           <Box>
             <Typography
               variant="h4"
-              mt="57px"
+              mt="32px"
               width="488px"
               height="56px"
               id="alert-dialog-slide-description"
@@ -165,7 +172,7 @@ export default function FeedbackPopup(props: { show: boolean; }) {
                   color: FEEDBACK_QUESTIONS_COLORS[index],
                   minWidth: 0,
                 }}
-                onClick={() => qs[index][1](i)}
+                onClick={() =>{qs[index][1](i); setbarvalue(barvalue + 100/qs.length)} }
                 onTouchStart={() => qs[index][1](i)}
               >
                 {i > qs[index][0]
