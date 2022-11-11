@@ -41,6 +41,9 @@ export const Report = React.forwardRef((props, ref) => {
   const [questions, setQuestions] = React.useState<Question[]>([]);
   const [feedback, setFeedback] = React.useState<any | undefined>();
   const [islanded, setIsLanded] =React.useState(true);
+  React.useEffect(()=>{
+    console.log(columns,"COLUMNS")
+  },[])
   React.useEffect(() => {
     const cardValues = [] as string[];
 

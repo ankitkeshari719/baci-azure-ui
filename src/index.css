@@ -92,3 +92,8 @@ body {
 .selectedAvatar {
   background-color: brown;
 }
+
+
+#multiple-checkbox .css-duy8o2-MuiSelect-select-MuiInputBase-input-MuiOutlinedInput-input {
+  padding: 0px
+}

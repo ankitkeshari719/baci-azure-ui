@@ -36,6 +36,7 @@ export enum BoardActionType {
   RESUME_TIMER = 'resumeTimer',
   INCREMENT_TIMER = 'incrementTimer',
   DECREMENT_TIMER = 'decrementTimer',
+  SET_TIMER = 'setTimer',
   EXPIRE_TIMER = 'expireTimer',
   SET_COLUMN_NAME = 'setColumnName',
   SUBMIT_PULSE_CHECK = 'submitPulseCheck',
@@ -522,6 +523,8 @@ export const validateAction = (
         parameters.amount,
         userId
       );
+    case BoardActionType.SET_TIMER:
+      return true;
     case BoardActionType.EXPIRE_TIMER:
       return canExpireTimer(userId);
     case BoardActionType.SET_COLUMN_NAME:
@@ -679,7 +682,7 @@ export const processAction = (
     id: string,
     value: string,
     userId: string,
-    avatar:string,
+    avatar: string
   ) => {
     if (!findCard(id).card) {
       const { group } = findGroup(groupId);
@@ -904,7 +907,7 @@ export const processAction = (
     userId: string
   ) => {
     const user = findUser(userId);
-    console.log(users);
+    console.log(users, 'flag');
     if (!user) {
       if (date && !state.startedDate) {
         state.startedDate = new Date(date);
@@ -976,6 +979,10 @@ export const processAction = (
     if (countdownDuration === fromDuration && countdownDuration > amount) {
       state.countdownDuration = countdownDuration - amount;
     }
+  };
+
+  const setTimer = (fromDuration: number, amount: number, userId: string) => {
+    state.countdownDuration = amount;
   };
 
   const expireTimer = (userId: string) => {
@@ -1052,7 +1059,13 @@ export const processAction = (
       );
       break;
     case BoardActionType.ADD_NEW_CARD:
-      addNewCard(parameters.groupId, parameters.id, parameters.value, userId,parameters.avatar);
+      addNewCard(
+        parameters.groupId,
+        parameters.id,
+        parameters.value,
+        userId,
+        parameters.avatar
+      );
       break;
     case BoardActionType.DELETE_CARD:
       deleteCard(parameters.cardId, userId);
@@ -1113,6 +1126,9 @@ export const processAction = (
       break;
     case BoardActionType.DECREMENT_TIMER:
       decrementTimer(parameters.fromDuration, parameters.amount, userId);
+      break;
+    case BoardActionType.SET_TIMER:
+      setTimer(parameters.fromDuration, parameters.amount, userId);
       break;
     case BoardActionType.EXPIRE_TIMER:
       expireTimer(userId);

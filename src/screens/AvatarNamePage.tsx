@@ -184,7 +184,7 @@ export function AvatarNamePage() {
               color={commonStyles.primaryDark}
               sx={styles.heading}
             >
-              Who you are in ‘{retroName}’?
+              Who you are in ‘{global.currentRetro?.name}’?
             </Typography>
             <FormControl>
               <TextField

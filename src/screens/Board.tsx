@@ -38,6 +38,7 @@ import useLoadRetro from '../hooks/useLoadRetro';
 import theme from '../theme/theme';
 import  FeedbackPopup  from  '../atoms/feedbackPopup'
 import Toolbar from '../elements/Toolbar';
+import SubToolbar from '../elements/SubToolbar';
 
 const ColumnContainer = ({
   children,
@@ -50,6 +51,7 @@ const ColumnContainer = ({
   return (
     <Grid
       item
+
       xs={isXsUp ? 12 : 6}
       md={12 / totalPanels}
       sx={{
@@ -245,7 +247,7 @@ export default function RetroBoard() {
   ) => {
     await commitAction(actionName as BoardActionType, {
       parameters,
-      userId: global.user.id
+      userId: global.user.id,
     });
   };
 
@@ -394,11 +396,12 @@ export default function RetroBoard() {
           </Grid>
         </Toolbar>
       </AppBar> */}
-      <Grid xs={12} style={{ marginLeft: '56px', marginRight: '56px' }}>
+      <Grid xs={12} item style={{ marginLeft: '56px', marginRight: '56px' }}>
         <Toolbar></Toolbar>
+        <SubToolbar></SubToolbar>
       </Grid>
 
-      {isXsUp ? (
+      {/* {isXsUp ? (
         <>
           <Tabs
             value={currentColumn}
@@ -543,12 +546,12 @@ export default function RetroBoard() {
             ) : null}
           </Grid>
         </AppBar>
-      ) : null}
+      ) : null} */}
 
       <Grid
         container
         spacing={0}
-        style={{ flexWrap: 'nowrap', flexGrow: 1, background: '#9EA6AC' }}
+        style={{ flexWrap: 'nowrap', flexGrow: 1, background: 'white' }}
       >
         {showRetroPanel || showParticipantsPanel || showSharePanel ? (
           <Box
@@ -586,7 +589,7 @@ export default function RetroBoard() {
               ? [...getProcessedColumns(), undefined]
               : getProcessedColumns()
             ).map((column, index) => (
-              <React.Fragment key={column?.id}>
+              <React.Fragment key={column?.id.toString()}>
                 {(isXsUp && index === currentColumn) ||
                   (isSmUp &&
                     (index === currentColumn || index === currentColumn + 1)) ||
@@ -597,7 +600,7 @@ export default function RetroBoard() {
                       <ColumnContainer totalPanels={totalPanels}>
                         {!!column ? (
                           <>
-                            <RetroColumn
+                            <RetroColumn  
                               leftHeaderComponent={
                                 <LeftContainer index={index} />
                               }
