@@ -80,7 +80,7 @@ const styles = {
     flexFlow: 'column',
     width: '375px',
     height: '375px',
-    marginLeft: '245px',
+    marginLeft: '280px',
     top: '39.07%',
     bottom: '27.87%',
     background: '#FFFFFF',
