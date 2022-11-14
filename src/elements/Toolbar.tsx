@@ -2,6 +2,7 @@ import {
   Box,
   Button,
   InputAdornment,
+  Popover,
   TextField,
   Typography,
 } from '@mui/material';
@@ -12,9 +13,16 @@ import BACILogo from '../assets/img/bacilogo.png';
 import { useLocation } from 'react-router-dom';
 import { BoardContext } from '../contexts/BoardContext';
 import { BoardActionType } from '../statemachine/BoardStateMachine';
-const Toolbar = () => {
+import { StartRetro } from '../screens/StartRetro';
+import PulseCheck from '../screens/PulseCheck';
+import { RetroDetails } from '../screens/RetroDetails';
+// import { ReactComponent as InfoSvg } from '../../public/svgs/Info.svg';
+const Toolbar = (props: any) => {
   const [{ avatar, currentRetro, user }] = React.useContext(GlobalContext);
   const location = useLocation();
+  const showFinishRetroButton =
+    !location.pathname.includes('pulsecheck') &&
+    !location.pathname.includes('report')&&!location.pathname.includes('startRetro');
   const [editing, setEditing] = React.useState(false);
   const RETRONAME_CHARACTER_LIMIT = 80;
   const {
@@ -24,6 +32,22 @@ const Toolbar = () => {
   const [localRetroName, setLocalRetroName] = React.useState(
     retroName || currentRetro?.name
   );
+  const [anchorEl, setAnchorEl] = React.useState<HTMLButtonElement | null>(
+    null
+  );
+
+  const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
+    console.log('handleClick');
+    setAnchorEl(event.currentTarget);
+  };
+
+  const handleClose = () => {
+    setAnchorEl(null);
+  };
+
+  const open = Boolean(anchorEl);
+  const id = open ? 'simple-popover' : undefined;
+
   React.useEffect(() => {
     setLocalRetroName(retroName);
   }, [retroName]);
@@ -43,11 +67,14 @@ const Toolbar = () => {
       sx={{
         display: 'flex',
         alignItems: 'center',
-        padding: '4px',
+        // padding: '4px',
         // paddingLeft: '56px',
         // paddingRight: '56px',
         flexDirection: 'row',
-        width: 'calc(100% - 0px)',
+        width: 'calc(100% - 112px)',
+        paddingLeft: '56px',
+        paddingRight: '56px',
+        boxShadow: '0px 0px 2px rgba(0, 0, 0, 0.25)!important',
       }}
     >
       <img
@@ -58,20 +85,20 @@ const Toolbar = () => {
           height: '28px',
         }}
       />
-      {currentRetro?.name &&
+
+      {currentRetro?.name &&!location.pathname.includes('startRetro')&&
         (location.pathname.includes('pulsecheck') ||
           window.location.pathname.includes('board')) && (
           <Box
             sx={{ display: 'flex', flexDirection: 'row', alignItems: 'center' }}
           >
-            {currentRetro?.creatorId===user.id ? (
+            {currentRetro?.creatorId === user.id ? (
               <TextField
                 multiline
                 fullWidth
                 InputLabelProps={{
                   style: { fontSize: 0 },
                 }}
-                
                 sx={{
                   fieldset: { border: 'none' },
                   color: '#2C69A1',
@@ -86,7 +113,7 @@ const Toolbar = () => {
                     // borderBottom: 'none!important',
                     borderBottom: '0px solid!important',
                   },
-               
+
                   // endAdornment: (
                   //   <InputAdornment position="start">
                   //     <Button
@@ -141,15 +168,64 @@ const Toolbar = () => {
             )}
 
             <Typography
-              sx={{ fontSize: '20px', color: '#2C69A1', marginLeft: '66px',display:'flex', width:'300px' }}
+              sx={{
+                fontSize: '20px',
+                color: '#2C69A1',
+                marginLeft: '66px',
+                display: 'flex',
+                width: '280px',
+              }}
             >
-              Code: {currentRetro?.humanId}
+              Code : {currentRetro?.humanId}
             </Typography>
+            <Button
+        aria-describedby={id}
+        sx={{ borderRadius: '25%', marginLeft: '15px' }}
+        onClick={handleClick}
+      >
+        <img src="/svgs/Info.svg" />
+      </Button>
+      <Popover
+        id={id}
+        open={open}
+        anchorEl={anchorEl}
+        onClose={handleClose}
+        anchorOrigin={{
+          vertical: 'bottom',
+          horizontal: 'center',
+        }}
+        transformOrigin={{
+          vertical: 'top',
+          horizontal: 'center',
+        }}
+      >
+        <RetroDetails popover={true} close={handleClose}></RetroDetails>
+      </Popover>
           </Box>
         )}
+   
       <Box component="span" sx={{ flex: '1 1 auto' }}></Box>
+      {showFinishRetroButton && (
+        <Button
+          variant="contained"
+          sx={{
+            // background: '#159ADD',
+            // color: 'white',
+            borderRadius: '24px',
+            width: '148px',
+            height: '44px',
+            padding: '10px 20px',
+            marginRight: '40px',
+            fontWeight: 500,
+          }}
+          onClick={props.onFinishRetro}
+        >
+          FINISH RETRO
+        </Button>
+      )}
       <Avatar
         avatar={avatar}
+        onClickAvatar={() => {}}
         css={{
           width: '56px',
           height: '56px',

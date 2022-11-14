@@ -7,6 +7,7 @@ import {
   MenuItem,
   Select,
   TextField,
+  Tooltip,
   Typography,
 } from '@mui/material';
 import * as React from 'react';
@@ -145,8 +146,9 @@ const styles = {
   copyURL: {
     height: '16.5px',
   },
+
 };
-export function RetroDetails() {
+export function RetroDetails(props: any) {
   const [global, dispatch] = React.useContext(GlobalContext);
   const [iscopied, setIsCopied] = React.useState(false);
   const navigate = useNavigate();
@@ -176,25 +178,46 @@ export function RetroDetails() {
       downloadLink.click();
     }
   };
+  const handleTooltipClose=() => {
+    setIsCopied(false);
+  }
   return (
-    <Grid container spacing={0} xs={12}>
-      <Grid item xs={6}>
-        <LandingLayout></LandingLayout>
-      </Grid>
-      <Grid item xs={6}>
+    <Grid container spacing={0} lg={12}>
+      {!props?.popover && (
+        <Grid item lg={6}>
+          <LandingLayout></LandingLayout>
+        </Grid>
+      )}
+      <Grid item lg={!props?.popover ? 6 : 12}>
         <Grid
           xs={12}
           marginRight={commonStyles.m_80}
           marginLeft={commonStyles.m_80}
         >
-          <Box style={styles.frame101}>
-            <Typography
-              variant="h2"
-              color={commonStyles.primaryDark}
-              className="alignCenter"
-            >
-              ‘{global.currentRetro?.name}’ retro is created successfully!
-            </Typography>
+          <Box
+            style={
+              !props?.popover
+                ? styles.frame101
+                : { marginTop: '50px', marginBottom: '50px' }
+            }
+          >
+            {!props?.popover ? (
+              <Typography
+                variant="h2"
+                color={commonStyles.primaryDark}
+                className="alignCenter"
+              >
+                ‘{global.currentRetro?.name}’ retro is created successfully!
+              </Typography>
+            ) : (
+              <Typography
+                variant="h2"
+                color={commonStyles.primaryDark}
+                className="alignCenter"
+              >
+                Name : ‘{global.currentRetro?.name}’
+              </Typography>
+            )}
             <Box style={styles.group100}>
               <Box style={styles.displayCenter}>
                 <Button sx={styles.nowAvailableAt}>now available at</Button>
@@ -202,12 +225,12 @@ export function RetroDetails() {
               <Box style={styles.displayCenter}>
                 {' '}
                 <a
-                  href="https://baciapp.com"
+                  href="https://baci.app/"
                   rel="noreferrer"
                   target="_blank"
                   style={styles.link}
                 >
-                  https://baciapp.com
+                  https://baci.app
                 </a>
               </Box>
             </Box>
@@ -235,20 +258,39 @@ export function RetroDetails() {
               <Grid container spacing={2} mt="48px">
                 <Grid item xs={4}>
                   <Box sx={styles.group96}>
-                    <div style={styles.joinurl}>
-                      <a style={{ overflowWrap: 'break-word' }}>
+                    <Box mt="80px">
+                      <a
+                        style={{
+                          overflowWrap: 'break-word',
+                          color: commonStyles.primaryDark,
+                        }}
+                      >
                         {global?.currentRetro?.joinUrl}
                       </a>
-                    </div>
-                    <CopyToClipboard
-                      text={global?.currentRetro?.joinUrl}
-                      onCopy={() => setIsCopied(true)}
-                    >
-                      <img
-                        src={copy}
-                        style={(styles.copyURL, { marginTop: '51px' })}
-                      ></img>
-                    </CopyToClipboard>
+                    </Box>
+
+                    <Box mt="75px">
+                      <CopyToClipboard
+                        text={global?.currentRetro?.joinUrl}
+                        
+                      >
+                        <Tooltip
+                        onClose={handleTooltipClose}
+                          open={iscopied}
+                         style={{width: '20px', fontSize: '10px'}}
+                          disableTouchListener
+                          leaveDelay={1500}
+                          placement="top"
+                           title="Link Copied!"
+                        >
+                          <img
+                            src={copy}
+                            onClick={() =>setIsCopied(true)}
+                            style={(styles.copyURL, { marginTop: '15px' })}
+                          ></img>
+                        </Tooltip>
+                      </CopyToClipboard>
+                    </Box>
                   </Box>
                 </Grid>
                 <Grid item xs={4}>
@@ -270,7 +312,11 @@ export function RetroDetails() {
                   <Box sx={styles.group98}>
                     <img src={email} alt="email" style={styles.emailImg} />
                     <div style={styles.div98}>
-                      <img src={send} style={styles.copyURL}></img>
+                      <img
+                        src={send}
+                        style={styles.copyURL}
+                        onClick={shareRetroDetails}
+                      ></img>
                     </div>
                   </Box>
                 </Grid>
@@ -281,14 +327,25 @@ export function RetroDetails() {
               sx={{ justifyContent: 'center', alignItems: 'center' }}
               mt="48px"
             >
-              <Button
-                variant="outlined"
-                className="secondaryButton"
-                style={styles.goToRetroBtn}
-                onClick={() => goToRetro()}
-              >
-                <span className="secondaryButtonText">Go to retro</span>
-              </Button>
+              {!props?.popover ? (
+                <Button
+                  variant="outlined"
+                  className="secondaryButton"
+                  style={styles.goToRetroBtn}
+                  onClick={() => goToRetro()}
+                >
+                  <span className="secondaryButtonText">Go to retro</span>
+                </Button>
+              ) : (
+                <Button
+                  variant="outlined"
+                  className="secondaryButton"
+                  style={styles.goToRetroBtn}
+                  onClick={() => props?.popover && props.close()}
+                >
+                  <span className="secondaryButtonText">Close</span>
+                </Button>
+              )}
             </Box>
           </Box>
         </Grid>

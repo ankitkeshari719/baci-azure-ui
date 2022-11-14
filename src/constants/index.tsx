@@ -166,4 +166,5 @@ export const INITIAL_COLUMNS = [
 ];
 
 export const WHAT_WENT_WELL_COLUMN = 0;
+export const WHAT_DIDNT_GO_WELL =1;
 export const ACTIONS_COLUMN = 2;

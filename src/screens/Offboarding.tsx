@@ -20,9 +20,11 @@ import { FEATURE_FLAGS } from '../constants';
 import React from 'react';
 //import { addFeedback } from '../firebase/firestore';
 import { addFeedback } from '../msal/services';
-
+import commonStyles from './../style.module.scss';
+import './../global.scss';
 
 import { useNavigate } from 'react-router-dom';
+import Toolbar from '../elements/Toolbar';
 
 export function Offboarding() {
   const [global, dispatch] = useContext(GlobalContext);
@@ -197,7 +199,31 @@ export function Offboarding() {
         </Box>
       </Slide>
       <Slide direction="up" in={done} key="thank-you">
-        <Box
+        <Box>
+          <Toolbar/>
+          <Box sx={{display:'flex', justifyContent: 'center', flexDirection: 'column', alignItems: 'center'}}>
+            <Box mt='40px'>
+{/* need add gif */}
+            </Box>
+            <Box mt='40px'>
+              <Typography variant='h4' color={commonStyles.PrimaryMain}>Your feedback is submitted successfully!</Typography>
+            </Box>
+            <Box mt='52px'>
+              <Button
+              variant="outlined"
+              className="secondaryButton"
+            >
+              <span className="secondaryButtonText">Show board</span>
+            </Button>
+            </Box>
+            <Box mt='40px' sx={{display: 'inline-flex'}}>
+              <Typography variant='h1' color={commonStyles.secondaryMain}>Thank You for using </Typography><Typography mr='10px' ml='10px' variant='h1' color={commonStyles.PrimaryMain}>BACI</Typography>
+              <Typography variant='h1' color={commonStyles.secondaryMain}>Retros</Typography>
+            </Box>
+            
+          </Box>
+        </Box>
+        {/* <Box
           sx={{
             display: done ? 'flex' : 'none',
             height: 'var(--app-height)',
@@ -208,6 +234,7 @@ export function Offboarding() {
             alignItems: 'center',
           }}
         >
+          <Toolbar/>
           <Typography variant="h4">Thank you!</Typography>
           <Typography
             sx={{
@@ -248,7 +275,7 @@ export function Offboarding() {
               To return to the main page click here
             </Link>
           </Box>
-        </Box>
+        </Box> */}
       </Slide>
     </>
   );

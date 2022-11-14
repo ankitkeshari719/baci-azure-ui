@@ -26,18 +26,22 @@ let theme = createTheme({
     },
     h1: {
       fontFamily: `'Poppins', 'Arial', sans-serif`,
+      fontSize: '36px',
+      fontWeight: 500,
+      fontStyle: 'normal',
+      lineHeight: '48px',
     },
     h2: {
       fontFamily: `'Poppins', 'Arial', sans-serif`,
-      fontSize: '28px'
+      fontSize: '28px',
     },
     h3: {
       fontFamily: `'Poppins', 'Arial', sans-serif`,
-      fontSize: '24px'
+      fontSize: '24px',
     },
     h4: {
       fontFamily: `'Poppins', 'Arial', sans-serif`,
-      fontSize: '20px'
+      fontSize: '20px',
     },
     h5: {
       fontFamily: `'Poppins', 'Arial', sans-serif`,
@@ -46,7 +50,7 @@ let theme = createTheme({
       letterSpacing: 0.5,
     },
   },
-  
+
   shape: {
     borderRadius: 8,
   },
@@ -74,47 +78,63 @@ theme = {
         },
       },
     },
-    MuiMenuItem: { 
+    MuiMenuItem: {
       styleOverrides: {
         root: {
-          "&& .Mui-selected": {       // this is to refer to the prop provided by M-UI
-            backgroundColor: "white", // updated backgroundColor
+          '&& .Mui-selected': {
+            // this is to refer to the prop provided by M-UI
+            backgroundColor: 'white', // updated backgroundColor
           },
         },
-      }
-       
       },
-   MuiInput:{
+    },
+    MuiInput: {
       styleOverrides: {
         root: {
           borderBottom: '1px solid',
           '&:before': {
-            borderBottom: '1px solid rgba(0, 0, 0, 0.42)'
+            borderBottom: '1px solid rgba(0, 0, 0, 0.42)',
           },
           '&:after': {
-            borderBottom: '1px solid rgba(0, 0, 0, 0.42)'
+            borderBottom: '1px solid rgba(0, 0, 0, 0.42)',
           },
           '&:hover:not': {
-            borderBottom: 'none'
+            borderBottom: 'none',
           },
-          '&:focus':{
-            backgroundColor: 'white'
-          }
+          '&:focus': {
+            backgroundColor: 'white',
+          },
         },
-      }
+      },
+    },
+    MuiTooltip: {
+      styleOverrides: {
+        tooltip: {
+          backgroundColor: 'rgba(97, 97, 97, 0.92)',
+          borderRadius: ['8px', '4px'],
+          color: '#fff',
+          fontFamily: '"Roboto","Helvetica","Arial",sans-serif',
+          padding: '4px 8px',
+          fontSize: '14px',
+          maxWidth: '300px',
+          margin: '2px',
+          wordWrap: 'break-word',
+          fontWeight: 500,
+        },
+      },
     },
     MuiSelect: {
       defaultProps: {
         displayEmpty: true,
-        variant: "outlined"
+        variant: 'outlined',
       },
       styleOverrides: {
-        'select':{
-          "&:MuiSelect-select-MuiInputBase-input-MuiInput-input:focus": {
-            background: "white"
-          }
-        }
-      }
+        select: {
+          '&:MuiSelect-select-MuiInputBase-input-MuiInput-input:focus': {
+            background: 'white',
+          },
+        },
+      },
     },
     MuiButton: {
       styleOverrides: {
@@ -163,13 +183,13 @@ theme = {
         },
       },
     },
-    MuiTooltip: {
-      styleOverrides: {
-        tooltip: {
-          borderRadius: 4,
-        },
-      },
-    },
+    // MuiTooltip: {
+    //   styleOverrides: {
+    //     tooltip: {
+    //       borderRadius: 4,
+    //     },
+    //   },
+    // },
     MuiDivider: {
       styleOverrides: {
         root: {

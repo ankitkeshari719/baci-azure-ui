@@ -36,7 +36,7 @@ import RetroPropsPanel from '../elements/RetroPropsPanel';
 import SharePanel from '../elements/SharePanel';
 import useLoadRetro from '../hooks/useLoadRetro';
 import theme from '../theme/theme';
-import  FeedbackPopup  from  '../atoms/feedbackPopup'
+import FeedbackPopup from '../atoms/feedbackPopup';
 import Toolbar from '../elements/Toolbar';
 import SubToolbar from '../elements/SubToolbar';
 
@@ -51,7 +51,6 @@ const ColumnContainer = ({
   return (
     <Grid
       item
-
       xs={isXsUp ? 12 : 6}
       md={12 / totalPanels}
       sx={{
@@ -264,7 +263,7 @@ export default function RetroBoard() {
             setConfirmAction(undefined);
             navigate('/report/' + global.currentRetro?.id);
           });
-         },
+        },
       });
     } else {
       //navigate(`/board/${global?.currentRetro?.id}/feedback`);
@@ -396,8 +395,8 @@ export default function RetroBoard() {
           </Grid>
         </Toolbar>
       </AppBar> */}
-      <Grid xs={12} item style={{ marginLeft: '56px', marginRight: '56px' }}>
-        <Toolbar></Toolbar>
+      <Grid xs={12} item>
+        <Toolbar onFinishRetro={finishRetro} ></Toolbar>
         <SubToolbar></SubToolbar>
       </Grid>
 
@@ -582,7 +581,7 @@ export default function RetroBoard() {
             {showSharePanel ? <SharePanel onClose={closeAllPanels} /> : null}
           </Box>
         ) : null}
-        {showFeedback?  <FeedbackPopup show={true}></FeedbackPopup> : null}
+        {showFeedback ? <FeedbackPopup show={true}></FeedbackPopup> : null}
         {useMemo(
           () =>
             (isXsUp
@@ -600,7 +599,7 @@ export default function RetroBoard() {
                       <ColumnContainer totalPanels={totalPanels}>
                         {!!column ? (
                           <>
-                            <RetroColumn  
+                            <RetroColumn
                               leftHeaderComponent={
                                 <LeftContainer index={index} />
                               }
