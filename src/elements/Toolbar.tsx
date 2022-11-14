@@ -59,7 +59,7 @@ const Toolbar = () => {
         }}
       />
       {currentRetro?.name &&
-        (location.pathname.includes('pulsecheck') ||
+        (location.pathname.includes('pulsecheck') || 
           window.location.pathname.includes('board')) && (
           <Box
             sx={{ display: 'flex', flexDirection: 'row', alignItems: 'center' }}

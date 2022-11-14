@@ -8,7 +8,6 @@ import {
   DialogContent,
   DialogTitle,
   Grid,
-  Toolbar,
   Typography,
   useMediaQuery,
   DialogActions,
@@ -25,6 +24,13 @@ import theme from '../theme/theme';
 import useLoadRetro from '../hooks/useLoadRetro';
 import { Navigate, useNavigate } from 'react-router-dom';
 import { ActionType } from '../contexts/GlobalContext';
+
+
+
+
+
+
+
 export default function ReportScreen() {
   const [global, dispatch] = React.useContext(GlobalContext);
   const reset = () => {
@@ -43,10 +49,19 @@ export default function ReportScreen() {
     state: { loading, creatorId, retroName, users, retroId, ended },
     commitAction,
   } = React.useContext(BoardContext);
+  const [retroDate, setRetroDate]=React.useState("");
   const componentRef = React.createRef<HTMLDivElement>();
   const navigate = useNavigate();
 
-  // useLoadRetro();
+React.useEffect(()=>{
+const longEnUSFormatter = new Intl.DateTimeFormat('en-US', {
+    year: 'numeric',
+    month: 'long',
+    day: 'numeric',
+  }).format(new Date());
+  setRetroDate(longEnUSFormatter);
+  console.log(longEnUSFormatter, typeof(longEnUSFormatter));
+});
 
   const handleClickOpen = () => {
     setOpen(true);
@@ -60,6 +75,7 @@ export default function ReportScreen() {
   };
 
   return (
+    
     <Box
       style={{
         flexGrow: 1,
@@ -78,7 +94,7 @@ export default function ReportScreen() {
         </Dialog>
       ) : null} */}
 
-      <AppBar component="div" color="primary" position="static" elevation={0}>
+      {/* <AppBar component="div" color="primary" position="static" elevation={0}>
         <Toolbar>
           <Grid container alignItems="center" spacing={1}>
             <Grid
@@ -139,9 +155,9 @@ export default function ReportScreen() {
             </Grid>
           </Grid>
         </Toolbar>
-      </AppBar>
+      </AppBar> */}
 
-      <AppBar
+      {/* <AppBar
         component="div"
         position="static"
         elevation={0}
@@ -280,23 +296,10 @@ export default function ReportScreen() {
             Don't forget to print it
           </span>
         </div>
-      </AppBar>
-
-      <Typography></Typography>
-
-      <Box
-        sx={{
-          marginTop:"5px",
-          overflowY: 'scroll',
-          height: isXsUp
-            ? 'calc(var(--app-height) - 195px)'
-            : 'calc(var(--app-height) - 190px)',
-          display: 'flex',
-          justifyContent: 'center',
-        }}
-      >
+      </AppBar> */}
+    
         <Report ref={componentRef} />
-      </Box>
+      
     </Box>
   );
 }

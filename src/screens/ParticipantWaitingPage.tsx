@@ -8,7 +8,7 @@ import commonStyles from './../style.module.scss';
 import gif from '../assets/img/participant_waiting.gif';
 import useLoadRetro from '../hooks/useLoadRetro';
 import StartRetroButton from '../elements/StartRetroButton';
-
+import Toolbar from '../elements/Toolbar';
 const styles = {
   group90: {
     width: '100%',
@@ -60,6 +60,7 @@ export function ParticipantWaitingPage() {
   });
   return (
     <Grid container xs={12}>
+      <Toolbar/>
       <Box style={styles.group90}>
         <Typography
           variant="h2"

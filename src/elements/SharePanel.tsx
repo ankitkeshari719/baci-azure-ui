@@ -202,7 +202,7 @@ export default function SharePanel({ onClose }: { onClose: () => void }) {
                     alignItems: 'center',
                   }}
                 >
-                  <CopyToClipboard text={global.currentRetro?.joinUrl}>
+                  <CopyToClipboard text={global.currentRetro?.joinUrl} onCopy={() => alert("Copied")}>
                     <Button
                       sx={{
                         ':hover': { background: '#159ADD' },

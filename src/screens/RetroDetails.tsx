@@ -202,7 +202,7 @@ export function RetroDetails() {
               <Box style={styles.displayCenter}>
                 {' '}
                 <a
-                  href="https://baciapp.com"
+                  href="https://baci.app.com"
                   rel="noreferrer"
                   target="_blank"
                   style={styles.link}
@@ -242,7 +242,8 @@ export function RetroDetails() {
                     </div>
                     <CopyToClipboard
                       text={global?.currentRetro?.joinUrl}
-                      onCopy={() => setIsCopied(true)}
+                      onCopy={() => alert("Copied")}
+
                     >
                       <img
                         src={copy}
