@@ -395,8 +395,8 @@ export default function RetroBoard() {
           </Grid>
         </Toolbar>
       </AppBar> */}
-      <Grid xs={12} item style={{ marginLeft: '56px', marginRight: '56px' }}>
-        <Toolbar onFinishRetro={finishRetro}></Toolbar>
+      <Grid xs={12} item>
+        <Toolbar onFinishRetro={finishRetro} ></Toolbar>
         <SubToolbar></SubToolbar>
       </Grid>
 

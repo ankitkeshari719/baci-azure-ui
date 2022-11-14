@@ -31,7 +31,7 @@ import Color from 'color';
 import React, { useEffect } from 'react';
 import shortid from 'shortid';
 import { ConfirmContext } from '../../contexts/ConfirmContext';
-import { GlobalContext } from '../../contexts/GlobalContext';
+import { ActionType, GlobalContext } from '../../contexts/GlobalContext';
 import theme from '../../theme/theme';
 import Avatar from '../Avatar';
 
@@ -161,9 +161,18 @@ export function RetroCard({
     });
   };
   const addReactToCard = async (cardId: string) => {
+    dispatch({
+      type: ActionType.SET_LOADING,
+      payload: { loadingFlag: true },
+    });
     await saveAndProcessAction(BoardActionType.ADD_REACT_TO_CARD, {
       cardId,
       react: '👍',
+    }).then(res => {
+      dispatch({
+        type: ActionType.SET_LOADING,
+        payload: { loadingFlag: false },
+      });
     });
   };
   const removeReactFromCard = async (cardId: string) => {
@@ -174,9 +183,18 @@ export function RetroCard({
   };
   const submit = async (value: string) => {
     if (card.value !== value) {
+      dispatch({
+        type: ActionType.SET_LOADING,
+        payload: { loadingFlag: true },
+      });
       await saveAndProcessAction(BoardActionType.SET_CARD_VALUE, {
         cardId: card.id,
         value,
+      }).then(() => {
+        dispatch({
+          type: ActionType.SET_LOADING,
+          payload: { loadingFlag: false },
+        });
       });
       setEditing(false);
     } else {
@@ -241,7 +259,7 @@ export function RetroCard({
             }}
           />
         ),
-        callback: () => console.log('New clicked'),
+        callback: () => deleteCard(card?.id),
       },
       {
         label: '    Move Card    ',

@@ -40,7 +40,8 @@ const SubToolbar = () => {
   const [selected, setSelected] = React.useState([]);
   const [userSelected, setUserSelected] = React.useState<string[]>([]);
   const [userNameIdArray, setUserNameIdArray] = React.useState<any[]>([]);
-  const isAllSelected = users.length > 0 && userSelected.length === users.length;
+  const isAllSelected =
+    users.length > 0 && userSelected.length === users.length;
   const [anchorEl, setAnchorEl] = React.useState<HTMLButtonElement | null>(
     null
   );
@@ -59,9 +60,11 @@ const SubToolbar = () => {
     const {
       target: { value },
     } = event;
-   
-    if (value[value.length - 1] === "all") {
-      setUserSelected(userSelected.length === users.length ? [] : getValueForAll().split(','));
+
+    if (value[value.length - 1] === 'all') {
+      setUserSelected(
+        userSelected.length === users.length ? [] : getValueForAll().split(',')
+      );
       return;
     }
     setUserSelected(
@@ -70,7 +73,6 @@ const SubToolbar = () => {
     );
   };
   useEffect(() => {
-   
     if (userSelected.length === 0) {
       setUserNameIdArray([]);
     } else {
@@ -98,6 +100,9 @@ const SubToolbar = () => {
         flexDirection: 'row',
         alignItems: 'center',
         height: '60px',
+        paddingLeft: '56px',
+        paddingRight: '56px',
+        marginTop:'10px'
       }}
     >
       <Typography
@@ -108,9 +113,12 @@ const SubToolbar = () => {
           flexDirection: 'row',
           display: 'flex',
           marginRight: '10px',
+          alignItems: 'center',
         }}
       >
-        <Typography>{users?.length}</Typography>
+        <Typography>
+          {users?.length < 9 ? '0' + users?.length : users?.length}
+        </Typography>
         <Typography
           sx={{ fontSize: '14px', fontWeight: '500', marginLeft: '4px' }}
         >
@@ -175,9 +183,15 @@ const SubToolbar = () => {
             primary="Select All"
           />
         </MenuItem>
-        <hr style={{width:"100%",color:'#E3E3E3',border: "1px solid #E3E3E3"}}></hr>
+        <hr
+          style={{
+            width: '100%',
+            color: '#E3E3E3',
+            border: '1px solid #E3E3E3',
+          }}
+        ></hr>
         {users.map((user, index) => (
-          <MenuItem key={user.userId+index} value={user.userId + '@' + index}>
+          <MenuItem key={user.userId + index} value={user.userId + '@' + index}>
             <Checkbox
               checked={userSelected.indexOf(user.userId + '@' + index) > -1}
             />

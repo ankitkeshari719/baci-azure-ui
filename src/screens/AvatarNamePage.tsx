@@ -63,6 +63,8 @@ export function AvatarNamePage() {
     sessionStorage.getItem('retroname') || ''
   );
   const [selectedAvatar, setAvatar] = React.useState('');
+  const [avatarList, setAvatarList] = React.useState<string[]>([]);
+
   const [userName, setUserName] = React.useState('');
   const AVATAR_COUNT = 57;
   const [codeError, setCodeError] = React.useState('');
@@ -78,7 +80,13 @@ export function AvatarNamePage() {
   const [joining, setJoining] = React.useState(id ? true : false);
   const [captureName, setCaptureName] = React.useState(id ? true : false);
 
-  const joinRetro = async (): Promise<RetroType | undefined> => {
+
+  React.useEffect(()=>{
+    setAvatarList(avatarName.sort(() => Math.random() - 0.5))
+  },[])
+  const joinRetro = async (
+    retrunBool: boolean
+  ): Promise<RetroType | undefined> => {
     let foundRetro = await retro.getByHumanId(humanId);
     if (humanId === '') {
       setCodeError('Please enter access code');
@@ -92,6 +100,9 @@ export function AvatarNamePage() {
       type: ActionType.SET_CURRENT_RETRO,
       payload: { retro: foundRetro },
     });
+    if (retrunBool) {
+      return;
+    }
     if (foundRetro) {
       setJoining(true);
       setCaptureName(true);
@@ -119,7 +130,7 @@ export function AvatarNamePage() {
       });
       console.log('disptach');
       if (!global.currentRetro || joining) {
-        joinRetro().then(retro => {
+        joinRetro(false).then(retro => {
           console.log('retro', retro);
           dispatch({
             type: ActionType.SET_LOADING,
@@ -166,6 +177,28 @@ export function AvatarNamePage() {
 
     setUserName(e);
   };
+  React.useEffect(() => {
+    if (!global.currentRetro?.name) {
+      dispatch({
+        type: ActionType.SET_LOADING,
+        payload: { loadingFlag: true },
+      });
+      joinRetro(true).then(
+        res => {
+          dispatch({
+            type: ActionType.SET_LOADING,
+            payload: { loadingFlag: false },
+          });
+        },
+        err => {
+          dispatch({
+            type: ActionType.SET_LOADING,
+            payload: { loadingFlag: false },
+          });
+        }
+      );
+    }
+  }, []);
   return (
     <Grid container spacing={0}>
       <Grid item xs={6}>
@@ -222,15 +255,17 @@ export function AvatarNamePage() {
             <Box sx={styles.avatarBox}>
               {/* <Avatar avatar={`Animals-avatar_${i}avatar`}></Avatar>; */}
               {/* <Box> */}
-              {avatarName.map((avatar: any, index) => (
-                <Avatar
-                  key={index}
-                  avatar={avatar}
-                  css={styles.avatarSvg}
-                  onClickAvatar={onClickAvatar}
-                  selectedAvatar={selectedAvatar}
-                ></Avatar>
-              ))}
+              {avatarList
+                // .sort(() => Math.random() - 0.5)
+                .map((avatar: any, index) => (
+                  <Avatar
+                    key={index}
+                    avatar={avatar}
+                    css={styles.avatarSvg}
+                    onClickAvatar={onClickAvatar}
+                    selectedAvatar={selectedAvatar}
+                  ></Avatar>
+                ))}
               {/* </Box> */}
             </Box>
             {avatarSelectionError !== '' && (

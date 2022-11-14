@@ -211,12 +211,20 @@ export function RetroColumn({
     setIslanded(false);
 
     console.log(cardGroups);
-
+    dispatch({
+      type: ActionType.SET_LOADING,
+      payload: { loadingFlag: true },
+    });
     await addNewCard(
       (cardGroups.find(cardGroup => cardGroup.name === UNGROUPED) as CardGroup)
         .id,
       text
-    );
+    ).then((res: any) => {
+      dispatch({
+        type: ActionType.SET_LOADING,
+        payload: { loadingFlag: false },
+      });
+    });
     setValue('');
     setValueSet(false);
     setShowEditBox(false);

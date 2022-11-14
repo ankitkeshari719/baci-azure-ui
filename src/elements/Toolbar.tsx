@@ -20,6 +20,9 @@ import { RetroDetails } from '../screens/RetroDetails';
 const Toolbar = (props: any) => {
   const [{ avatar, currentRetro, user }] = React.useContext(GlobalContext);
   const location = useLocation();
+  const showFinishRetroButton =
+    !location.pathname.includes('pulsecheck') &&
+    !location.pathname.includes('report')&&!location.pathname.includes('startRetro');
   const [editing, setEditing] = React.useState(false);
   const RETRONAME_CHARACTER_LIMIT = 80;
   const {
@@ -64,11 +67,14 @@ const Toolbar = (props: any) => {
       sx={{
         display: 'flex',
         alignItems: 'center',
-        padding: '4px',
+        // padding: '4px',
         // paddingLeft: '56px',
         // paddingRight: '56px',
         flexDirection: 'row',
-        width: 'calc(100% - 0px)',
+        width: 'calc(100% - 112px)',
+        paddingLeft: '56px',
+        paddingRight: '56px',
+        boxShadow: '0px 0px 2px rgba(0, 0, 0, 0.25)!important',
       }}
     >
       <img
@@ -80,8 +86,8 @@ const Toolbar = (props: any) => {
         }}
       />
 
-      {currentRetro?.name &&
-        (location.pathname.includes('pulsecheck') || 
+      {currentRetro?.name &&!location.pathname.includes('startRetro')&&
+        (location.pathname.includes('pulsecheck') ||
           window.location.pathname.includes('board')) && (
           <Box
             sx={{ display: 'flex', flexDirection: 'row', alignItems: 'center' }}
@@ -167,14 +173,16 @@ const Toolbar = (props: any) => {
                 color: '#2C69A1',
                 marginLeft: '66px',
                 display: 'flex',
-                width: '240px',
+                width: '280px',
               }}
             >
               Code : {currentRetro?.humanId}
             </Typography>
-          </Box>
-        )}
-      <Button aria-describedby={id} sx={{borderRadius:'25%',marginLeft:'15px'}} onClick={handleClick}>
+            <Button
+        aria-describedby={id}
+        sx={{ borderRadius: '25%', marginLeft: '15px' }}
+        onClick={handleClick}
+      >
         <img src="/svgs/Info.svg" />
       </Button>
       <Popover
@@ -193,23 +201,28 @@ const Toolbar = (props: any) => {
       >
         <RetroDetails popover={true} close={handleClose}></RetroDetails>
       </Popover>
+          </Box>
+        )}
+   
       <Box component="span" sx={{ flex: '1 1 auto' }}></Box>
-      <Button
-        variant="contained"
-        sx={{
-          // background: '#159ADD',
-          // color: 'white',
-          borderRadius: '24px',
-          width: '148px',
-          height: '44px',
-          padding: '10px 20px',
-          marginRight: '40px',
-          fontWeight: 500,
-        }}
-        onClick={props.onFinishRetro}
-      >
-        FINISH RETRO
-      </Button>
+      {showFinishRetroButton && (
+        <Button
+          variant="contained"
+          sx={{
+            // background: '#159ADD',
+            // color: 'white',
+            borderRadius: '24px',
+            width: '148px',
+            height: '44px',
+            padding: '10px 20px',
+            marginRight: '40px',
+            fontWeight: 500,
+          }}
+          onClick={props.onFinishRetro}
+        >
+          FINISH RETRO
+        </Button>
+      )}
       <Avatar
         avatar={avatar}
         onClickAvatar={() => {}}

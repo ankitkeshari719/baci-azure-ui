@@ -35,7 +35,7 @@ const StartRetroButton = () => {
       type: ActionType.SET_LOADING,
       payload: { loadingFlag: true },
     });
-    saveAndProcessAction(BoardActionType.START_RETRO, {}).then(() => {
+    saveAndProcessAction(BoardActionType.START_RETRO, {creatorId:global.currentRetro?.creatorId,retroDuration:60}).then(() => {
       console.log('started retro');
       dispatch({
         type: ActionType.SET_LOADING,
@@ -46,7 +46,7 @@ const StartRetroButton = () => {
   };
 
   React.useEffect(() => {
-    // console.log(needsToShow);
+    console.log(retroStarted,"start retro button");
 
     if (retroStarted) {
       navigate(`/board/${retroId}/pulsecheck`);

@@ -8,7 +8,6 @@ import {
   Slide,
   styled,
   Switch,
-
   Tooltip,
   tooltipClasses,
   TooltipProps,
@@ -120,7 +119,7 @@ export default function PulseCheck() {
     const someBlank =
       qs.findIndex(q => q[0] === -1) !== -1 &&
       qs.findIndex(q => q[0] === -1) < QUICK_PULSE_CHECK_QUESTIONS.length;
-console.log('pulse check array',qs);
+    console.log('pulse check array', qs);
     const submitter = async () => {
       // Submit
       await saveAndProcessAction(BoardActionType.SUBMIT_PULSE_CHECK, {
@@ -237,12 +236,20 @@ console.log('pulse check array',qs);
   return (
     <Grid
       xs={12}
-      marginRight={commonStyles.m_80}
-      marginLeft={commonStyles.m_80}
+      container
+      item
+    
     >
-      <Toolbar/>
-
-      {/* {showSharePanel ? (
+      <Toolbar
+      />
+      <Grid
+        item
+        marginRight={commonStyles.m_80}
+        marginLeft={commonStyles.m_80}
+        xs={12}
+        
+      >
+        {/* {showSharePanel ? (
         <Box
           sx={{
             position: 'absolute',
@@ -662,34 +669,38 @@ console.log('pulse check array',qs);
             </Box>
           </Box>
         </Grid> */}
-      </Box>
+        </Box>
 
-      {/* button Section */}
-      <Box
-        sx={{
-          display: 'flex',
-          justifyContent: 'center',
-          paddingTop: '20px',
-          marginTop: '147px',
-        }}
-      >
-        <Button variant="outlined" className="secondaryButton" onClick={submit}>
-          <span className="secondaryButtonText">Submit and go to retro</span>
-        </Button>
-      </Box>
-      <Box
-        sx={{
-          display: 'flex',
-          justifyContent: 'center',
-          paddingTop: '20px',
-        }}
-      >
-        <Link sx={{ marginTop: '43px' }} className="infoLink" onClick={skip}>
-          Skip Pulse Check
-        </Link>
-      </Box>
+        {/* button Section */}
+        <Box
+          sx={{
+            display: 'flex',
+            justifyContent: 'center',
+            paddingTop: '20px',
+            marginTop: '147px',
+          }}
+        >
+          <Button
+            variant="outlined"
+            className="secondaryButton"
+            onClick={submit}
+          >
+            <span className="secondaryButtonText">Submit and go to retro</span>
+          </Button>
+        </Box>
+        <Box
+          sx={{
+            display: 'flex',
+            justifyContent: 'center',
+            paddingTop: '20px',
+          }}
+        >
+          <Link sx={{ marginTop: '43px' }} className="infoLink" onClick={skip}>
+            Skip Pulse Check
+          </Link>
+        </Box>
 
-      {/* <Slide direction="up" in={!introScreen}>
+        {/* <Slide direction="up" in={!introScreen}>
         <Box
           sx={{
             display: !introScreen ? 'flex' : 'none',
@@ -1019,6 +1030,7 @@ console.log('pulse check array',qs);
           </Box>
         </Box>
       </Slide> */}
+      </Grid>
     </Grid>
   );
 }
