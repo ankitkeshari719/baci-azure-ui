@@ -306,7 +306,7 @@ export function RetroCardGroup({
                     style={{
                       fontSize: '1rem',
                       marginLeft: '5px',
-                      marginTop: '3px',
+                      // marginTop: '3px',
                     }}
                   >
                     {group.reactions?.length ? group.reactions?.length : ''}

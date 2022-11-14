@@ -8,6 +8,7 @@ import commonStyles from './../style.module.scss';
 import gif from '../assets/img/participant_waiting.gif';
 import useLoadRetro from '../hooks/useLoadRetro';
 import StartRetroButton from '../elements/StartRetroButton';
+import { GlobalContext } from '../contexts/GlobalContext';
 
 const styles = {
   group90: {
@@ -17,6 +18,7 @@ const styles = {
 };
 
 export function ParticipantWaitingPage() {
+  const [global, dispatch] = React.useContext(GlobalContext);
   const [retroName, setRetroName] = React.useState(
     sessionStorage.getItem('retroname') || ''
   );
@@ -67,7 +69,7 @@ export function ParticipantWaitingPage() {
           className="alignCenter"
           mb="8px"
         >
-          Welcome to ‘{retroName}’ !
+          Welcome to ‘{global?.currentRetro?.name}’ !
         </Typography>
         <Typography
           color={commonStyles.primaryDark}

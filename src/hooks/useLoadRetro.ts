@@ -46,6 +46,7 @@ export default function useLoadRetro() {
       return;
     }
     if (id !== retroId) {
+      console.log("log")
       getRetro(id as string)
         .then(retro => {
           if (retro && retro.id) {

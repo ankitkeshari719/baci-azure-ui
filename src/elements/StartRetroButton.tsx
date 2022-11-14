@@ -41,7 +41,7 @@ const StartRetroButton = () => {
         type: ActionType.SET_LOADING,
         payload: { loadingFlag: false },
       });
-      navigate(`/board/${retroId}/pulsecheck`);
+      // navigate(`/board/${retroId}/pulsecheck`);
     });
   };
 

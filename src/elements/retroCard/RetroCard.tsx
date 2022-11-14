@@ -316,7 +316,7 @@ export function RetroCard({
           >
             <Box sx={{ display: 'flex', flexDirection: 'row' }}>
               <Avatar
-              onClickAvatar={()=>{}}
+                onClickAvatar={() => {}}
                 avatar={card.avatar}
                 css={{ width: '40px', height: '40px' }}
               />
@@ -575,7 +575,14 @@ export function RetroCard({
                     className="can"
                   >
                     <NestedDropdown
-                      menuItemsData={menuItemsData}
+                      menuItemsData={
+                        global.currentRetro?.creatorId === global.user.id
+                          ? menuItemsData
+                          : {
+                              label: menuItemsData.label,
+                              items: [menuItemsData.items[0]],
+                            }
+                      }
                       MenuProps={{ elevation: 3 }}
                       ButtonProps={{ variant: undefined }}
                       onClick={() => console.log('Clicked')}
@@ -617,12 +624,14 @@ export function RetroCard({
                     <ListItemText>Delete card</ListItemText>
                   </MenuItem>
                 ) : null}
-                <MenuItem>
-                  <ListItemIcon>
-                    <MoveDownIcon fontSize="small" />
-                  </ListItemIcon>
-                  <ListItemText>Move card</ListItemText>
-                </MenuItem>
+                {global.currentRetro?.creatorId === global.user.id && (
+                  <MenuItem>
+                    <ListItemIcon>
+                      <MoveDownIcon fontSize="small" />
+                    </ListItemIcon>
+                    <ListItemText>Move card</ListItemText>
+                  </MenuItem>
+                )}
                 {/* <Button onClick={handleClick1}>
                 <ListItemText>Move card</ListItemText>
               </Button> */}
