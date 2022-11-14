@@ -16,7 +16,7 @@ export default function useLoadRetro() {
   const { error, setError } = React.useContext(ErrorContext);
   const [global, dispatch] = React.useContext(GlobalContext);
   const {
-    state: { retroId, users, ended, loading },
+    state: { retroId, users, ended, loading, retroStarted },
     commitAction,
   } = React.useContext(BoardContext);
 
@@ -46,7 +46,7 @@ export default function useLoadRetro() {
       return;
     }
     if (id !== retroId) {
-      console.log("log")
+      console.log('log');
       getRetro(id as string)
         .then(retro => {
           if (retro && retro.id) {
@@ -68,8 +68,8 @@ export default function useLoadRetro() {
 
   // On load of new retro
   React.useEffect(() => {
-    console.log(!!retroId, loading,"as");
-    if (!!retroId ) {
+    console.log(!!retroId, loading, 'as');
+    if (!!retroId) {
       const userJoined = users.find(u => u.userId === global.user.id);
       if (!userJoined) {
         console.log('Join Retro called');
@@ -81,17 +81,17 @@ export default function useLoadRetro() {
             global.currentRetro && global.currentRetro.retroStatus,
             'status'
           );
-          if (
-            global.currentRetro &&
-            global.currentRetro.retroStatus === 'started'
-          ) {
+          if (global.currentRetro && retroStarted) {
             if (FEATURE_FLAGS.pulseCheck) {
               navigate(`/board/${retroId}/pulsecheck`);
               return;
             }
           } else {
-            console.log('route to waiting page');
-            navigate(`/board/${retroId}/waiting`);
+            if (global.currentRetro?.creatorId !== global.user.id)
+              navigate(`/board/${retroId}/waiting`);
+            else {
+              navigate(`/board/${retroId}/startRetro`);
+            }
             return;
           }
         });
