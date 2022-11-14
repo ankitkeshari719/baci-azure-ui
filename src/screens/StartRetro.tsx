@@ -7,6 +7,7 @@ import {
   MenuItem,
   Select,
   TextField,
+  Tooltip,
   Typography,
 } from '@mui/material';
 import * as React from 'react';
@@ -182,6 +183,9 @@ export function StartRetro() {
       downloadLink.click();
     }
   };
+  const handleTooltipClose=() => {
+    setIsCopied(false);
+  }
   return (
     <Grid container spacing={0} xs={12}>
       <Grid xs={12} sx={{ paddingLeft: '56px', paddingRight: '56px' }}>
@@ -247,6 +251,15 @@ export function StartRetro() {
                   text={global?.currentRetro?.joinUrl}
                   onCopy={() => setIsCopied(true)}
                 >
+                  <Tooltip
+                        onClose={handleTooltipClose}
+                          open={iscopied}
+                         style={{width: '20px', fontSize: '10px'}}
+                          disableTouchListener
+                          leaveDelay={1500}
+                          placement="top"
+                           title="Link Copied!"
+                        >
                   <Button
                     variant="outlined"
                     className="primaryButton"
@@ -255,6 +268,7 @@ export function StartRetro() {
                   >
                     <span className="primaryButtonText">Copy URL</span>
                   </Button>
+                  </Tooltip>
                 </CopyToClipboard>
               </Box>
 

@@ -314,36 +314,44 @@ console.log('pulse check array',qs);
               }}
             >
               {question} 
-              <Icons.QuestionMarkCircleOutline
+              <Tooltip
+                        
+                          placement="top"
+                           title={QUICK_PULSE_CHECK_QUESTIONS_INFO[index]}
+                        >
+                          <Icons.QuestionMarkCircleOutline
                 size={20}
                 color={commonStyles.secondaryMain}
+                style={{marginBottom: '-5px', marginLeft: '5px'}}
               />
+              </Tooltip>
+              
             </Typography>
 
             <Box sx={{ display: 'flex', marginTop: '48px' , justifyContent: 'center' }}>
-              <Box sx={{ width: '64px',height: '64px' }}>
+            <Box sx={{ width: '64px',height: '64px' }}>
                 <Box
                   style={{
-                    backgroundImage: 'url(' + happy + ')',
+                    backgroundImage: 'url(' + sad + ')',
                     width: '40px',
                     height: '40px',
-                   
-                  }}
-                  onClick={() => qs[index][1](3)}
+                    
+                   }}
+                   onClick={() => qs[index][1](1)}
                 >
-                   </Box>
+                  </Box>
                   <img
-                    src={happyMask}
+                    src={sadMask}
                     style={{
                       marginLeft: '-10px',
                       marginTop: '-50px',
                       width: '64px',
                       height: '64px',
-                      display: qs[index][0] === 3 ? 'block' : 'none'
+                      display: qs[index][0] === 1 ? 'block' : 'none'
                     }}
-					         
+                    
                   ></img>
-               
+                
               </Box>
               <Box sx={{ width: '64px',height: '64px' }}>
                 <Box
@@ -373,27 +381,28 @@ console.log('pulse check array',qs);
               <Box sx={{ width: '64px',height: '64px' }}>
                 <Box
                   style={{
-                    backgroundImage: 'url(' + sad + ')',
+                    backgroundImage: 'url(' + happy + ')',
                     width: '40px',
                     height: '40px',
-                    
-                   }}
-                   onClick={() => qs[index][1](1)}
+                   
+                  }}
+                  onClick={() => qs[index][1](3)}
                 >
-                  </Box>
+                   </Box>
                   <img
-                    src={sadMask}
+                    src={happyMask}
                     style={{
                       marginLeft: '-10px',
                       marginTop: '-50px',
                       width: '64px',
                       height: '64px',
-                      display: qs[index][0] === 1 ? 'block' : 'none'
+                      display: qs[index][0] === 3 ? 'block' : 'none'
                     }}
-                    
+					         
                   ></img>
-                
+               
               </Box>
+              
             </Box>
           </Box>
         </Grid>))}
