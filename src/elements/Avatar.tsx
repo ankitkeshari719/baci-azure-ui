@@ -5,7 +5,7 @@ const Avatar = (props: any) => {
 
   if (
     window.location.pathname.includes('join') ||
-    window.location.pathname.includes('startRetro')
+    window.location.pathname.includes('startRetro')|| window.location.pathname.includes('pulsecheck')|| window.location.pathname.includes('board')
   ) {
     avatar_src = '/avatars/animals/' + props.avatar + '.svg';
   } else if (!window.location.pathname.includes('join')) {

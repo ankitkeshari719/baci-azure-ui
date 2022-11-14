@@ -33,6 +33,7 @@ let theme = createTheme({
     },
     h3: {
       fontFamily: `'Poppins', 'Arial', sans-serif`,
+      fontSize: '24px'
     },
     h4: {
       fontFamily: `'Poppins', 'Arial', sans-serif`,

@@ -9,7 +9,7 @@ import {
   Switch,
   Tab,
   Tabs,
-  Toolbar,
+  // Toolbar,
   Typography,
   useMediaQuery,
 } from '@mui/material';
@@ -36,6 +36,9 @@ import RetroPropsPanel from '../elements/RetroPropsPanel';
 import SharePanel from '../elements/SharePanel';
 import useLoadRetro from '../hooks/useLoadRetro';
 import theme from '../theme/theme';
+import  FeedbackPopup  from  '../atoms/feedbackPopup'
+import Toolbar from '../elements/Toolbar';
+import SubToolbar from '../elements/SubToolbar';
 
 const ColumnContainer = ({
   children,
@@ -48,6 +51,7 @@ const ColumnContainer = ({
   return (
     <Grid
       item
+
       xs={isXsUp ? 12 : 6}
       md={12 / totalPanels}
       sx={{
@@ -87,7 +91,7 @@ export default function RetroBoard() {
   const [currentColumn, setCurrentColumn] = React.useState(0);
   const [showEditBox, setShowEditBox] = React.useState(false);
   const [justMyCards, setJustMyCards] = React.useState(false);
-
+  const [showFeedback, setshowFeedback] = React.useState(false);
   const [islanded, setIsLanded] = React.useState(true);
 
   const [showRetroPanel, setShowRetroPanel] = React.useState(false);
@@ -194,14 +198,18 @@ export default function RetroBoard() {
         )
       : [];
 
-
   const closeAllPanels = () => {
     setShowRetroPanel(false);
     setShowParticipantsPanel(false);
     setShowSharePanel(false);
   };
 
-  const totalPanels = columns ? columns.length + (isXsUp ? 1 : 0) : 0;
+  const totalPanels = columns
+    ? global.expandColumn != -1
+      ? 1
+      : columns.length
+    : 0;
+  // columns ? columns.length + (isXsUp ? 1 : 0) : 0;
 
   const LeftContainer = ({ index }: { index: number }) =>
     isSmUp && currentColumn === index ? (
@@ -254,22 +262,13 @@ export default function RetroBoard() {
           sessionStorage.removeItem('pulseCheckState');
           saveAndProcessAction(BoardActionType.END_RETRO, {}).then(() => {
             setConfirmAction(undefined);
+            navigate('/report/' + global.currentRetro?.id);
           });
-          //delete group before finishing retro
-          for (const column of columns) {
-            for (const group of column.groups) {
-              if (!group.name.includes('Ungrouped')) {
-                let groupId: String = group.id;
-                saveAndProcessAction(BoardActionType.DELETE_GROUP, {
-                  groupId,
-                }).then(() => {});
-              }
-            }
-          }
-        },
+         },
       });
     } else {
       //navigate(`/board/${global?.currentRetro?.id}/feedback`);
+      setshowFeedback(true);
     }
   };
   const create10Cards = async () => {
@@ -285,12 +284,12 @@ export default function RetroBoard() {
     }
   };
 
-  React.useEffect(() => {
-    // console.log(needsToShow);
-    if (ended && !needsToShow) {
-      navigate(`/board/${global?.currentRetro?.id}/feedback`);
-    }
-  }, [ended, needsToShow]);
+  // React.useEffect(() => {
+  //   // console.log(needsToShow);
+  //   if (ended && !needsToShow) {
+  //     navigate(`/board/${global?.currentRetro?.id}/feedback`);
+  //   }
+  // }, [ended, needsToShow]);
 
   return (
     <Box
@@ -300,7 +299,7 @@ export default function RetroBoard() {
         flexDirection: 'column',
       }}
     >
-      <AppBar component="div" color="primary" position="static" elevation={0}>
+      {/* <AppBar component="div" color="primary" position="static" elevation={0}>
         <Toolbar>
           {!isXsUp && !isSmUp ? (
             <CountdownTimer color={'#000'} bold={false} />
@@ -396,9 +395,13 @@ export default function RetroBoard() {
             )}
           </Grid>
         </Toolbar>
-      </AppBar>
+      </AppBar> */}
+      <Grid xs={12} item style={{ marginLeft: '56px', marginRight: '56px' }}>
+        <Toolbar></Toolbar>
+        <SubToolbar></SubToolbar>
+      </Grid>
 
-      {isXsUp ? (
+      {/* {isXsUp ? (
         <>
           <Tabs
             value={currentColumn}
@@ -543,12 +546,12 @@ export default function RetroBoard() {
             ) : null}
           </Grid>
         </AppBar>
-      ) : null}
+      ) : null} */}
 
       <Grid
         container
         spacing={0}
-        style={{ flexWrap: 'nowrap', flexGrow: 1, background: '#9EA6AC' }}
+        style={{ flexWrap: 'nowrap', flexGrow: 1, background: 'white' }}
       >
         {showRetroPanel || showParticipantsPanel || showSharePanel ? (
           <Box
@@ -579,62 +582,71 @@ export default function RetroBoard() {
             {showSharePanel ? <SharePanel onClose={closeAllPanels} /> : null}
           </Box>
         ) : null}
-
+        {showFeedback?  <FeedbackPopup show={true}></FeedbackPopup> : null}
         {useMemo(
           () =>
             (isXsUp
               ? [...getProcessedColumns(), undefined]
               : getProcessedColumns()
             ).map((column, index) => (
-              <React.Fragment key={column?.id}>
+              <React.Fragment key={column?.id.toString()}>
                 {(isXsUp && index === currentColumn) ||
-                (isSmUp &&
-                  (index === currentColumn || index === currentColumn + 1)) ||
-                (!isXsUp && !isSmUp) ? (
-                  <ColumnContainer totalPanels={totalPanels}>
-                    {!!column ? (
-                      <>
-                        <RetroColumn
-                          leftHeaderComponent={<LeftContainer index={index} />}
-                          rightHeaderComponent={
-                            <RightContainer index={index} />
-                          }
-                          column={column}
-                          columnId={column.id}
-                          noHeader={isXsUp}
-                          showEditBox={showEditBox}
-                          setShowEditBox={setShowEditBox}
-                          setIslanded={setIsLanded}
-                          cardGroups={column.groups}
-                        />
-                        {isXsUp && !showEditBox ? (
+                  (isSmUp &&
+                    (index === currentColumn || index === currentColumn + 1)) ||
+                  (!isXsUp &&
+                    !isSmUp &&
+                    (index === global.expandColumn ||
+                      global.expandColumn === -1) && (
+                      <ColumnContainer totalPanels={totalPanels}>
+                        {!!column ? (
                           <>
-                            <Fab
-                              aria-label="add"
-                              style={{
-                                position: 'fixed',
-                                bottom: '20px',
-                                right: '20px',
-                                background: 'black',
-                                color: 'white',
-                                zIndex: 100,
-                              }}
-                              onClick={() => setShowEditBox(true)}
-                            >
-                              <AddIcon />
-                            </Fab>
+                            <RetroColumn  
+                              leftHeaderComponent={
+                                <LeftContainer index={index} />
+                              }
+                              rightHeaderComponent={
+                                <RightContainer index={index} />
+                              }
+                              column={column}
+                              columnId={column.id}
+                              noHeader={isXsUp}
+                              showEditBox={showEditBox}
+                              setShowEditBox={setShowEditBox}
+                              setIslanded={setIsLanded}
+                              cardGroups={column.groups}
+                            />
+                            {isXsUp && !showEditBox ? (
+                              <>
+                                <Fab
+                                  aria-label="add"
+                                  style={{
+                                    position: 'fixed',
+                                    bottom: '20px',
+                                    right: '20px',
+                                    background: 'black',
+                                    color: 'white',
+                                    zIndex: 100,
+                                  }}
+                                  onClick={() => setShowEditBox(true)}
+                                >
+                                  <AddIcon />
+                                </Fab>
+                              </>
+                            ) : null}
                           </>
-                        ) : null}
-                      </>
-                    ) : (
-                      <FeedbackColumn
-                        noHeader={isXsUp}
-                        leftHeaderComponent={<LeftContainer index={index} />}
-                        rightHeaderComponent={<RightContainer index={index} />}
-                      />
-                    )}
-                  </ColumnContainer>
-                ) : null}
+                        ) : (
+                          <FeedbackColumn
+                            noHeader={isXsUp}
+                            leftHeaderComponent={
+                              <LeftContainer index={index} />
+                            }
+                            rightHeaderComponent={
+                              <RightContainer index={index} />
+                            }
+                          />
+                        )}
+                      </ColumnContainer>
+                    ))}
               </React.Fragment>
             )),
           [
@@ -644,6 +656,7 @@ export default function RetroBoard() {
             justMyCards,
             currentColumn,
             showEditBox,
+            global.expandColumn,
           ]
         )}
       </Grid>

@@ -8,11 +8,13 @@ import {
 } from '../types';
 
 import { UNGROUPED } from '../constants';
+// import { GlobalContext } from '../contexts/GlobalContext';
+import React from 'react';
 
 export enum BoardActionType {
   RESET_RETRO = 'resetRetro',
   LOAD_STATE = 'loadState',
-  SET_LOADING = 'setLoading',
+  //   SET_LOADING = 'setLoading',
   UPDATE_RETRO_DETAILS = 'updateRetroDetails',
   CREATE_GROUP = 'createGroup',
   ADD_NEW_CARD = 'addNewCard',
@@ -34,6 +36,7 @@ export enum BoardActionType {
   RESUME_TIMER = 'resumeTimer',
   INCREMENT_TIMER = 'incrementTimer',
   DECREMENT_TIMER = 'decrementTimer',
+  SET_TIMER = 'setTimer',
   EXPIRE_TIMER = 'expireTimer',
   SET_COLUMN_NAME = 'setColumnName',
   SUBMIT_PULSE_CHECK = 'submitPulseCheck',
@@ -118,7 +121,12 @@ export const validateAction = (
     }
     return {};
   };
-
+  const isFacilitator = (id: string): boolean => {
+    if (state.creatorId === id) {
+      return true;
+    }
+    return false;
+  };
   const isUpdateRetroDetailsValid = (
     retroName: string,
     retroGoal: string,
@@ -243,6 +251,13 @@ export const validateAction = (
       return true;
     }
     return false;
+  };
+  const isPublishColumnValid = (
+    columnId: any,
+    value: any,
+    userId: string
+  ): boolean => {
+    return isFacilitator(userId);
   };
 
   const isRemoveReactFromCardValid = (
@@ -444,6 +459,7 @@ export const validateAction = (
       );
     case BoardActionType.START_RETRO:
       return true;
+
     case BoardActionType.DELETE_CARD:
       return isDeleteCardValid(parameters.cardId, userId);
     case BoardActionType.MOVE_CARD:
@@ -507,16 +523,26 @@ export const validateAction = (
         parameters.amount,
         userId
       );
+    case BoardActionType.SET_TIMER:
+      return true;
     case BoardActionType.EXPIRE_TIMER:
       return canExpireTimer(userId);
     case BoardActionType.SET_COLUMN_NAME:
       return canSetColumnName(parameters.columnId, parameters.value, userId);
+    case BoardActionType.PUBLISH_COLUMN:
+      return isPublishColumnValid(
+        parameters.columnId,
+        parameters.value,
+        userId
+      );
     case BoardActionType.SUBMIT_PULSE_CHECK:
       return canSubmitPulseCheck(parameters.questions, userId);
     case BoardActionType.SUBMIT_FEEDBACK:
       return canSubmitFeedback(parameters.feedback, userId);
     case BoardActionType.END_RETRO:
       return canEndRetro(parameters.undo, userId);
+    // case BoardActionType.SET_LOADING:
+    //   return true;
     default:
       return false;
   }
@@ -528,7 +554,8 @@ export const processAction = (
   parameters: any,
   userId: string,
   date?: Date,
-  version?: number
+  version?: number,
+  avatar?: string
 ): void => {
   const {
     columns,
@@ -575,7 +602,7 @@ export const processAction = (
     }
     return {};
   };
-
+  // const [global, dispatch] = React.useContext(GlobalContext);
   const findGroup = (
     id: string
   ): {
@@ -604,7 +631,8 @@ export const processAction = (
     retroTimeframe?: string,
     fullPulseCheck?: boolean,
     creatorId?: string,
-    userId?: string
+    userId?: string,
+    avatar?: string
   ) => {
     if (retroName !== undefined) {
       state.retroName = retroName;
@@ -620,6 +648,9 @@ export const processAction = (
     }
     if (creatorId && creatorId === userId) {
       state.creatorId = creatorId;
+    }
+    if (avatar != undefined && avatar != '') {
+      state.avatar = avatar;
     }
     state.lastUpdatedBy = userId;
   };
@@ -650,7 +681,8 @@ export const processAction = (
     groupId: string,
     id: string,
     value: string,
-    userId: string
+    userId: string,
+    avatar: string
   ) => {
     if (!findCard(id).card) {
       const { group } = findGroup(groupId);
@@ -664,6 +696,7 @@ export const processAction = (
           createdBy: userId,
           lastUpdatedBy: userId,
           editCount: 0,
+          avatar: avatar,
         });
       }
     }
@@ -874,7 +907,7 @@ export const processAction = (
     userId: string
   ) => {
     const user = findUser(userId);
-    console.log(users);
+    console.log(users, 'flag');
     if (!user) {
       if (date && !state.startedDate) {
         state.startedDate = new Date(date);
@@ -948,6 +981,10 @@ export const processAction = (
     }
   };
 
+  const setTimer = (fromDuration: number, amount: number, userId: string) => {
+    state.countdownDuration = amount;
+  };
+
   const expireTimer = (userId: string) => {
     if (!state.countdownExpired) {
       state.countdownExpired = true;
@@ -992,10 +1029,14 @@ export const processAction = (
     if (userId === state.creatorId) {
       state.retroDuration = retroDuration;
       state.retroStarted = true;
-      columns[0].name = 'COnsole.log';
     }
   };
-
+  const publishRetro = (columnId: string, value: boolean, userId: string) => {
+    const column = findColumn(columnId);
+    if (column) {
+      column.publish = value;
+    }
+  };
   let noMatch = false;
   switch (actionName) {
     case BoardActionType.UPDATE_RETRO_DETAILS:
@@ -1005,7 +1046,8 @@ export const processAction = (
         parameters.retroTimeframe,
         parameters.fullPulseCheck,
         parameters.creatorId,
-        userId
+        userId,
+        avatar
       );
       break;
     case BoardActionType.CREATE_GROUP:
@@ -1017,7 +1059,13 @@ export const processAction = (
       );
       break;
     case BoardActionType.ADD_NEW_CARD:
-      addNewCard(parameters.groupId, parameters.id, parameters.value, userId);
+      addNewCard(
+        parameters.groupId,
+        parameters.id,
+        parameters.value,
+        userId,
+        parameters.avatar
+      );
       break;
     case BoardActionType.DELETE_CARD:
       deleteCard(parameters.cardId, userId);
@@ -1079,11 +1127,17 @@ export const processAction = (
     case BoardActionType.DECREMENT_TIMER:
       decrementTimer(parameters.fromDuration, parameters.amount, userId);
       break;
+    case BoardActionType.SET_TIMER:
+      setTimer(parameters.fromDuration, parameters.amount, userId);
+      break;
     case BoardActionType.EXPIRE_TIMER:
       expireTimer(userId);
       break;
     case BoardActionType.SET_COLUMN_NAME:
       setColumnName(parameters.columnId, parameters.value, userId);
+      break;
+    case BoardActionType.PUBLISH_COLUMN:
+      publishRetro(parameters.columnId, parameters.value, userId);
       break;
     case BoardActionType.SUBMIT_PULSE_CHECK:
       submitPulseCheck(parameters.questions, userId);
@@ -1096,6 +1150,13 @@ export const processAction = (
       break;
     case BoardActionType.START_RETRO:
       startRetro(parameters.retroDuration, userId);
+      break;
+
+      // case BoardActionType.SET_LOADING:
+      //   {
+      //     console.log(parameters,"set loading")
+      //     setLoading(parameters.flag);
+      //   }
       break;
     default:
       noMatch = true;

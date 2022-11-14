@@ -127,5 +127,6 @@ export default function App({ instance }: AppProps) {
         </SocketProvider>
       </ErrorBoundary>
     </ErrorProvider>
+    
   );
 }

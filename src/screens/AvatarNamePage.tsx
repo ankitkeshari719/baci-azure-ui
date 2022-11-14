@@ -21,6 +21,7 @@ import { useRetro } from '../helpers';
 import { ActionType, GlobalContext } from '../contexts/GlobalContext';
 import Avatar from '../elements/Avatar';
 import { avatarName } from '../constants/AvatarName';
+import { useAzureAuth } from '../msal/azureauth';
 const AVATAR_CHARACTER_LIMIT = 30;
 const styles = {
   heading: {
@@ -104,10 +105,14 @@ export function AvatarNamePage() {
     setAvatarSelectionError('');
     console.log(avatarName);
   };
-
+  useAzureAuth();
   const setName = () => {
     sessionStorage.removeItem('pulseCheckState');
     if (userName !== '' && selectedAvatar !== '') {
+      dispatch({
+        type: ActionType.SET_LOADING,
+        payload: { loadingFlag: true },
+      });
       dispatch({
         type: ActionType.SET_PREFERRED_NICKNAME,
         payload: { preferredNickname: userName, avatar: selectedAvatar },
@@ -116,6 +121,10 @@ export function AvatarNamePage() {
       if (!global.currentRetro || joining) {
         joinRetro().then(retro => {
           console.log('retro', retro);
+          dispatch({
+            type: ActionType.SET_LOADING,
+            payload: { loadingFlag: false },
+          });
           if (retro) {
             if (global.currentRetro?.creatorId === global.user?.id) {
               navigate('/board/' + retro.id + '/startRetro');
@@ -127,6 +136,10 @@ export function AvatarNamePage() {
           }
         });
       } else {
+        dispatch({
+          type: ActionType.SET_LOADING,
+          payload: { loadingFlag: false },
+        });
         navigate('/board/' + global.currentRetro?.id);
         setCaptureName(false);
       }
@@ -171,7 +184,7 @@ export function AvatarNamePage() {
               color={commonStyles.primaryDark}
               sx={styles.heading}
             >
-              Who you are in ‘{retroName}’?
+              Who you are in ‘{global.currentRetro?.name}’?
             </Typography>
             <FormControl>
               <TextField

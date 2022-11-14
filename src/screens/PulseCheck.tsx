@@ -8,7 +8,7 @@ import {
   Slide,
   styled,
   Switch,
-  Toolbar,
+
   Tooltip,
   tooltipClasses,
   TooltipProps,
@@ -45,6 +45,7 @@ import neutral from '../assets/img/neutral.png';
 import happyMask from '../assets/img/Happy_Mask.png';
 import sadMask from '../assets/img/sad_mask.png';
 import neutralMask from '../assets/img/Neutral_Mask.png';
+import Toolbar from '../elements/Toolbar';
 
 const BootstrapTooltip = styled(({ className, ...props }: TooltipProps) => (
   <Tooltip {...props} classes={{ popper: className }}>
@@ -239,6 +240,7 @@ console.log('pulse check array',qs);
       marginRight={commonStyles.m_80}
       marginLeft={commonStyles.m_80}
     >
+      <Toolbar/>
 
       {/* {showSharePanel ? (
         <Box
@@ -296,10 +298,10 @@ console.log('pulse check array',qs);
         }}
       >
        { QUICK_PULSE_CHECK_QUESTIONS.map((question, index) => (
-        <Grid item xs={4} sx={{display: 'flex', justifyContent: 'center'}}>
+        <Grid item xs={4} sx={{display: 'flex', justifyContent: 'center'}} key={index}>
           <Box
             sx={{
-              marginTop: '48px',
+              marginTop: '48px', 
               
             }}
           >
@@ -311,7 +313,7 @@ console.log('pulse check array',qs);
                 marginTop: '100px',
               }}
             >
-              {question}
+              {question} 
               <Icons.QuestionMarkCircleOutline
                 size={20}
                 color={commonStyles.secondaryMain}

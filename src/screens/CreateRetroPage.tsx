@@ -16,6 +16,10 @@ import './../global.scss';
 import { useNavigate, useParams } from 'react-router-dom';
 import { useRetro } from '../helpers';
 import { useAzureAuth } from '../msal/azureauth';
+import { BoardActionType } from '../statemachine/BoardStateMachine';
+import { BoardContext } from '../contexts/BoardContext';
+import { GlobalContext } from '../contexts/GlobalContext';
+import { ActionType } from '../contexts/GlobalContext';
 
 const styles = {
   createRetroText: {
@@ -33,24 +37,24 @@ const styles = {
   retroNameTextField: {
     minWidth: '322px',
     marginTop: '86px',
-    "& .MuiFormLabel-root": {
-      color: "rgba(0, 0, 0, 0.6) !important" ,
-      fontSize: '14px'
+    '& .MuiFormLabel-root': {
+      color: 'rgba(0, 0, 0, 0.6) !important',
+      fontSize: '14px',
     },
     '& .MuiFormLabel-root-MuiInputLabel-root.Mui-focused': {
-      color: "rgba(0, 0, 0, 0.6) !important" ,
-    }
+      color: 'rgba(0, 0, 0, 0.6) !important',
+    },
   },
   timeFramefield: {
     marginTop: '32px',
-    
-    "& label": {
-      color: "rgba(0, 0, 0, 0.6) !important" ,
+
+    '& label': {
+      color: 'rgba(0, 0, 0, 0.6) !important',
       fontSize: '14px',
-      "&.Mui-focused": {
-        color: "rgba(0, 0, 0, 0.6) !important" ,
-      }
-    }
+      '&.Mui-focused': {
+        color: 'rgba(0, 0, 0, 0.6) !important',
+      },
+    },
     // "&:MuiSelect-select-MuiInputBase-input-MuiInput-input:focus":{
     //     backgroundColor:'white'
     // }
@@ -75,7 +79,7 @@ export function CreateNewRetro() {
   const { id } = useParams();
   const retro = useRetro();
   const navigate = useNavigate();
-  
+
   const [codeError, setCodeError] = React.useState('');
   const [retroName, setRetroName] = React.useState('');
   const [codeWarning, setCodeWarning] = React.useState('');
@@ -84,8 +88,10 @@ export function CreateNewRetro() {
   const [localRetroName, setlocalRetroName] = React.useState(
     sessionStorage.getItem('retroname') || ''
   );
+  const [global, dispatch] = React.useContext(GlobalContext);
   const RETRONAME_CHARACTER_LIMIT = 80;
   const timeframeRef = React.useRef<HTMLSelectElement | null>(null);
+
   useAzureAuth();
 
   function handleRetronameChange(e: React.SetStateAction<string>) {
@@ -111,13 +117,24 @@ export function CreateNewRetro() {
     setRetroTimeframe(e);
     setisTimeFrameSet(false);
   }
+
   const create = async () => {
+    console.log('create');
     sessionStorage.setItem('retroname', retroName);
     setlocalRetroName(retroName);
+
     if (retroName !== '' && retroTimeframe !== '') {
+      dispatch({
+        type: ActionType.SET_LOADING,
+        payload: { loadingFlag: true },
+      });
       setCodeError('');
       setisTimeFrameSet(false);
       await retro.create({ name: retroName }, retroTimeframe, '');
+      dispatch({
+        type: ActionType.SET_LOADING,
+        payload: { loadingFlag: false },
+      });
       navigate('/retrodetails/');
     } else if (retroTimeframe === '' && retroName === '') {
       setisTimeFrameSet(true);
@@ -129,9 +146,9 @@ export function CreateNewRetro() {
     }
     sessionStorage.setItem('retroname', retroName);
   };
-const joinExistingRetro= () => {
+  const joinExistingRetro = () => {
     navigate('/');
-};
+  };
   return (
     <Grid container spacing={0} xs={12}>
       <Grid item xs={6}>
@@ -192,12 +209,12 @@ const joinExistingRetro= () => {
               <MenuItem value={'4 weeks'}>4 weeks</MenuItem>
               <MenuItem value={'N/A'}>N/A</MenuItem>
             </TextField>
-            </FormControl>
-            {isTimeFrameSet && (
-              <FormHelperText style={{ color: '#d32f2f', marginLeft: '5px' }}>
-                Please enter time frame
-              </FormHelperText>
-            )}
+          </FormControl>
+          {isTimeFrameSet && (
+            <FormHelperText style={{ color: '#d32f2f', marginLeft: '5px' }}>
+              Please enter time frame
+            </FormHelperText>
+          )}
           {/* </FormControl> */}
           <Box sx={{ display: 'flex', justifyContent: 'start' }}>
             <Button
@@ -212,7 +229,10 @@ const joinExistingRetro= () => {
             </Button>
           </Box>
           <Box>
-            <Button style={styles.existingRetroText}  onClick={joinExistingRetro}>
+            <Button
+              style={styles.existingRetroText}
+              onClick={joinExistingRetro}
+            >
               Join existing BACI retro
             </Button>
           </Box>
