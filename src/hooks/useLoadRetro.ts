@@ -46,6 +46,7 @@ export default function useLoadRetro() {
       return;
     }
     if (id !== retroId) {
+      console.log("log")
       getRetro(id as string)
         .then(retro => {
           if (retro && retro.id) {
@@ -67,12 +68,13 @@ export default function useLoadRetro() {
 
   // On load of new retro
   React.useEffect(() => {
-    if (!!retroId && !loading) {
+    console.log(!!retroId, loading,"as");
+    if (!!retroId ) {
       const userJoined = users.find(u => u.userId === global.user.id);
       if (!userJoined) {
         console.log('Join Retro called');
         saveAndProcessAction(BoardActionType.JOIN_RETRO, {
-          userNickname: global.preferredNickname,
+          userNickname: global.user.name,
           avatar: global.avatar,
         }).then(() => {
           console.log(

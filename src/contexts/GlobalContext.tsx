@@ -41,6 +41,7 @@ const GlobalContext = React.createContext<ContextType>([
 ]);
 
 function saveState(state: Global) {
+
   sessionStorage.setItem('GlobalContext', JSON.stringify(state));
   return state;
 }

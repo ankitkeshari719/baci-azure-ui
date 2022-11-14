@@ -148,6 +148,7 @@ export function RetroCardGroup({
           border: 'none',
           marginBottom: 0,
           paddingBottom: '5px',
+          width: '100%',
         }}
       >
         {group.name !== UNGROUPED ? (
@@ -176,10 +177,11 @@ export function RetroCardGroup({
                   px: 2,
                   py: 2,
                   paddingBottom: 0,
-                  paddingRight: 0,
+                  padding: 0,
+                  paddingLeft: '12px!important',
                   // width: '100%',
                   width: (nameSet ? name.length : 14) + 3 + 'ch',
-                  div: { padding: 0, position: 'initial', width: '100%' },
+                  div: { padding: 0, position: 'initial', width: '100%', },
                   position: 'initial',
                 }}
                 maxRows={2}
@@ -221,7 +223,7 @@ export function RetroCardGroup({
                   fontWeight: '600',
                   padding: 0,
                   color: nameSet ? groupFontColour : '#8D858A',
-                  paddingTop: '18px',
+                  // paddingTop: '18px',
                 }}
               >
                 {' '}
@@ -229,7 +231,9 @@ export function RetroCardGroup({
               </span>
               {group.name !== UNGROUPED && (
                 <Button
-                  sx={{ marginTop: '18px', position: 'initial' }}
+                
+                  sx={{  paddingTop:'10px' }}
+                  style={{paddingTop:"10px",marginTop:'10px'}}
                   disabled={ended}
                   onClick={() =>
                     !ended
@@ -251,9 +255,9 @@ export function RetroCardGroup({
                         d="M9.48073 1.4987C9.67288 1.03673 10.3273 1.03673 10.5195 1.4987L12.6454 6.61016C12.7264 6.80492 12.9096 6.93799 13.1199 6.95484L18.6381 7.39724C19.1369 7.43722 19.3391 8.05964 18.9591 8.38514L14.7548 11.9866C14.5946 12.1238 14.5246 12.3391 14.5736 12.5443L15.858 17.9292C15.9741 18.4159 15.4447 18.8005 15.0177 18.5397L10.2933 15.6541C10.1133 15.5441 9.8869 15.5441 9.7069 15.6541L4.98251 18.5397C4.55551 18.8005 4.02606 18.4159 4.14215 17.9292L5.42664 12.5443C5.47558 12.3391 5.40562 12.1238 5.24543 11.9866L1.04111 8.38514C0.661119 8.05964 0.863352 7.43722 1.36209 7.39724L6.88034 6.95484C7.0906 6.93799 7.27375 6.80492 7.35476 6.61016L9.48073 1.4987Z"
                         fill="#FBBC05"
                         stroke="#FBBC05"
-                        stroke-width="1.5"
+                        strokeWidth="1.5"
                         stroke-linecap="round"
-                        stroke-linejoin="round"
+                        strokeLinejoin="round"
                       />
                     </svg>
                   ) : (
@@ -271,9 +275,9 @@ export function RetroCardGroup({
                             d="M9.48073 1.4987C9.67288 1.03673 10.3273 1.03673 10.5195 1.4987L12.6454 6.61016C12.7264 6.80492 12.9096 6.93799 13.1199 6.95484L18.6381 7.39724C19.1369 7.43722 19.3391 8.05964 18.9591 8.38514L14.7548 11.9866C14.5946 12.1238 14.5246 12.3391 14.5736 12.5443L15.858 17.9292C15.9741 18.4159 15.4447 18.8005 15.0177 18.5397L10.2933 15.6541C10.1133 15.5441 9.8869 15.5441 9.7069 15.6541L4.98251 18.5397C4.55551 18.8005 4.02606 18.4159 4.14215 17.9292L5.42664 12.5443C5.47558 12.3391 5.40562 12.1238 5.24543 11.9866L1.04111 8.38514C0.661119 8.05964 0.863352 7.43722 1.36209 7.39724L6.88034 6.95484C7.0906 6.93799 7.27375 6.80492 7.35476 6.61016L9.48073 1.4987Z"
                             fill="#FBBC05"
                             stroke="#FBBC05"
-                            stroke-width="1.5"
+                            strokeWidth="1.5"
                             stroke-linecap="round"
-                            stroke-linejoin="round"
+                            strokeLinejoin="round"
                           />
                         </svg>
                       ) : (
@@ -289,9 +293,9 @@ export function RetroCardGroup({
                             d="M9.48073 1.4987C9.67288 1.03673 10.3273 1.03673 10.5195 1.4987L12.6454 6.61016C12.7264 6.80492 12.9096 6.93799 13.1199 6.95484L18.6381 7.39724C19.1369 7.43722 19.3391 8.05964 18.9591 8.38514L14.7548 11.9866C14.5946 12.1238 14.5246 12.3391 14.5736 12.5443L15.858 17.9292C15.9741 18.4159 15.4447 18.8005 15.0177 18.5397L10.2933 15.6541C10.1133 15.5441 9.8869 15.5441 9.7069 15.6541L4.98251 18.5397C4.55551 18.8005 4.02606 18.4159 4.14215 17.9292L5.42664 12.5443C5.47558 12.3391 5.40562 12.1238 5.24543 11.9866L1.04111 8.38514C0.661119 8.05964 0.863352 7.43722 1.36209 7.39724L6.88034 6.95484C7.0906 6.93799 7.27375 6.80492 7.35476 6.61016L9.48073 1.4987Z"
                             fill="white"
                             stroke="#FBBC05"
-                            stroke-width="1.5"
+                            strokeWidth="1.5"
                             stroke-linecap="round"
-                            stroke-linejoin="round"
+                            strokeLinejoin="round"
                           />
                         </svg>
                       )}
@@ -302,7 +306,7 @@ export function RetroCardGroup({
                     style={{
                       fontSize: '1rem',
                       marginLeft: '5px',
-                      marginTop: '3px',
+                      // marginTop: '3px',
                     }}
                   >
                     {group.reactions?.length ? group.reactions?.length : ''}
@@ -312,7 +316,15 @@ export function RetroCardGroup({
             </Grid>
             {/* <Box component="span">{' ( ' + group.cards.length + ' ) '}</Box> */}
             {group.cards.length > 1 && showCollapse ? (
-              <Grid item xs={2} sx={{display:"flex",flexDirection:"row",justifyContent:"flex-end"}}>
+              <Grid
+                item
+                xs={2}
+                sx={{
+                  display: 'flex',
+                  flexDirection: 'row',
+                  justifyContent: 'flex-end',
+                }}
+              >
                 <Button
                   onClick={event => {
                     onCollapse(event);
@@ -326,7 +338,15 @@ export function RetroCardGroup({
                 </Button>
               </Grid>
             ) : (
-              <Grid item xs={2} sx={{display:"flex",flexDirection:"row",justifyContent:"flex-end"}}>
+              <Grid
+                item
+                xs={2}
+                sx={{
+                  display: 'flex',
+                  flexDirection: 'row',
+                  justifyContent: 'flex-end',
+                }}
+              >
                 {' '}
                 {group.cards.length > 1 && (
                   <Button
@@ -347,8 +367,10 @@ export function RetroCardGroup({
         ) : null}
 
         {group.cards.length === 0 && group.name !== UNGROUPED ? (
-          <div>
-            <div
+          <Grid container lg={12} direction="row" justifyContent="center">
+            <Grid
+              item
+              lg={12}
               style={{
                 padding: '40px',
                 display: 'flex',
@@ -361,8 +383,8 @@ export function RetroCardGroup({
               >
                 <DeleteIcon />
               </Button>
-            </div>
-          </div>
+            </Grid>
+          </Grid>
         ) : (
           children
         )}

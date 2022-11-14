@@ -36,8 +36,9 @@ import RetroPropsPanel from '../elements/RetroPropsPanel';
 import SharePanel from '../elements/SharePanel';
 import useLoadRetro from '../hooks/useLoadRetro';
 import theme from '../theme/theme';
-import  FeedbackPopup  from  '../atoms/feedbackPopup'
+import FeedbackPopup from '../atoms/feedbackPopup';
 import Toolbar from '../elements/Toolbar';
+import SubToolbar from '../elements/SubToolbar';
 
 const ColumnContainer = ({
   children,
@@ -245,7 +246,7 @@ export default function RetroBoard() {
   ) => {
     await commitAction(actionName as BoardActionType, {
       parameters,
-      userId: global.user.id
+      userId: global.user.id,
     });
   };
 
@@ -262,7 +263,7 @@ export default function RetroBoard() {
             setConfirmAction(undefined);
             navigate('/report/' + global.currentRetro?.id);
           });
-         },
+        },
       });
     } else {
       //navigate(`/board/${global?.currentRetro?.id}/feedback`);
@@ -394,11 +395,12 @@ export default function RetroBoard() {
           </Grid>
         </Toolbar>
       </AppBar> */}
-      <Grid xs={12} style={{ marginLeft: '56px', marginRight: '56px' }}>
-        <Toolbar></Toolbar>
+      <Grid xs={12} item style={{ marginLeft: '56px', marginRight: '56px' }}>
+        <Toolbar onFinishRetro={finishRetro}></Toolbar>
+        <SubToolbar></SubToolbar>
       </Grid>
 
-      {isXsUp ? (
+      {/* {isXsUp ? (
         <>
           <Tabs
             value={currentColumn}
@@ -543,12 +545,12 @@ export default function RetroBoard() {
             ) : null}
           </Grid>
         </AppBar>
-      ) : null}
+      ) : null} */}
 
       <Grid
         container
         spacing={0}
-        style={{ flexWrap: 'nowrap', flexGrow: 1, background: '#9EA6AC' }}
+        style={{ flexWrap: 'nowrap', flexGrow: 1, background: 'white' }}
       >
         {showRetroPanel || showParticipantsPanel || showSharePanel ? (
           <Box
@@ -579,14 +581,14 @@ export default function RetroBoard() {
             {showSharePanel ? <SharePanel onClose={closeAllPanels} /> : null}
           </Box>
         ) : null}
-        {showFeedback?  <FeedbackPopup show={true}></FeedbackPopup> : null}
+        {showFeedback ? <FeedbackPopup show={true}></FeedbackPopup> : null}
         {useMemo(
           () =>
             (isXsUp
               ? [...getProcessedColumns(), undefined]
               : getProcessedColumns()
             ).map((column, index) => (
-              <React.Fragment key={column?.id}>
+              <React.Fragment key={column?.id.toString()}>
                 {(isXsUp && index === currentColumn) ||
                   (isSmUp &&
                     (index === currentColumn || index === currentColumn + 1)) ||

@@ -146,7 +146,7 @@ const styles = {
     height: '16.5px',
   },
 };
-export function RetroDetails() {
+export function RetroDetails(props: any) {
   const [global, dispatch] = React.useContext(GlobalContext);
   const [iscopied, setIsCopied] = React.useState(false);
   const navigate = useNavigate();
@@ -177,24 +177,42 @@ export function RetroDetails() {
     }
   };
   return (
-    <Grid container spacing={0} xs={12}>
-      <Grid item xs={6}>
-        <LandingLayout></LandingLayout>
-      </Grid>
-      <Grid item xs={6}>
+    <Grid container spacing={0} lg={12}>
+      {!props?.popover && (
+        <Grid item lg={6}>
+          <LandingLayout></LandingLayout>
+        </Grid>
+      )}
+      <Grid item lg={!props?.popover ? 6 : 12}>
         <Grid
           xs={12}
           marginRight={commonStyles.m_80}
           marginLeft={commonStyles.m_80}
         >
-          <Box style={styles.frame101}>
-            <Typography
-              variant="h2"
-              color={commonStyles.primaryDark}
-              className="alignCenter"
-            >
-              ‘{global.currentRetro?.name}’ retro is created successfully!
-            </Typography>
+          <Box
+            style={
+              !props?.popover
+                ? styles.frame101
+                : { marginTop: '50px', marginBottom: '50px' }
+            }
+          >
+            {!props?.popover ? (
+              <Typography
+                variant="h2"
+                color={commonStyles.primaryDark}
+                className="alignCenter"
+              >
+                ‘{global.currentRetro?.name}’ retro is created successfully!
+              </Typography>
+            ) : (
+              <Typography
+                variant="h2"
+                color={commonStyles.primaryDark}
+                className="alignCenter"
+              >
+                Name : ‘{global.currentRetro?.name}’
+              </Typography>
+            )}
             <Box style={styles.group100}>
               <Box style={styles.displayCenter}>
                 <Button sx={styles.nowAvailableAt}>now available at</Button>
@@ -202,12 +220,12 @@ export function RetroDetails() {
               <Box style={styles.displayCenter}>
                 {' '}
                 <a
-                  href="https://baci.app.com"
+                  href="https://baci.app/"
                   rel="noreferrer"
                   target="_blank"
                   style={styles.link}
                 >
-                  https://baciapp.com
+                  https://baci.app
                 </a>
               </Box>
             </Box>
@@ -282,14 +300,25 @@ export function RetroDetails() {
               sx={{ justifyContent: 'center', alignItems: 'center' }}
               mt="48px"
             >
-              <Button
-                variant="outlined"
-                className="secondaryButton"
-                style={styles.goToRetroBtn}
-                onClick={() => goToRetro()}
-              >
-                <span className="secondaryButtonText">Go to retro</span>
-              </Button>
+              {!props?.popover ? (
+                <Button
+                  variant="outlined"
+                  className="secondaryButton"
+                  style={styles.goToRetroBtn}
+                  onClick={() => goToRetro()}
+                >
+                  <span className="secondaryButtonText">Go to retro</span>
+                </Button>
+              ) : (
+                <Button
+                  variant="outlined"
+                  className="secondaryButton"
+                  style={styles.goToRetroBtn}
+                  onClick={() => props?.popover && props.close()}
+                >
+                  <span className="secondaryButtonText">Close</span>
+                </Button>
+              )}
             </Box>
           </Box>
         </Grid>

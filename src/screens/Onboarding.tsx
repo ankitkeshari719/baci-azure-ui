@@ -50,7 +50,7 @@ export function Onboarding() {
   const [humanId, setHumanId] = useState(id || '');
   const [retroName, setRetroName] = useState('');
   const [localRetroName, setlocalRetroName] = useState(
-    sessionStorage.getItem('retroname') || ''
+    global?.currentRetro?.name || ''
   );
   const [retroTimeframe, setRetroTimeframe] = useState('');
   const [userName, setUserName] = useState(
