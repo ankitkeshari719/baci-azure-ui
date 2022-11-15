@@ -130,7 +130,7 @@ const styles = {
   },
   joinurl: {
     color: commonStyles.primaryDark,
-    width: '218px',
+    minWidth: '218px',
     height: '61px',
     display: 'inline-block',
   },
@@ -179,7 +179,10 @@ export function RetroDetails(props: any) {
     }
   };
   const handleTooltipClose=() => {
-    setIsCopied(false);
+    setTimeout(()=>{
+      setIsCopied(false);
+    }, 1500)
+    
   }
   return (
     <Grid container spacing={0} lg={12}>
@@ -258,7 +261,10 @@ export function RetroDetails(props: any) {
               <Grid container spacing={2} mt="48px">
                 <Grid item xs={4}>
                   <Box sx={styles.group96}>
-                    <Box mt="80px">
+                    <Box mt="80px" style={{
+                          maxWidth: '154px',
+                          overflowX: 'hidden'
+                        }}>
                       <a
                         style={{
                           overflowWrap: 'break-word',
@@ -272,20 +278,18 @@ export function RetroDetails(props: any) {
                     <Box mt="75px">
                       <CopyToClipboard
                         text={global?.currentRetro?.joinUrl}
-                        
+                        onCopy={() => setIsCopied(true)}
                       >
                         <Tooltip
                         onClose={handleTooltipClose}
                           open={iscopied}
                          style={{width: '20px', fontSize: '10px'}}
-                          disableTouchListener
-                          leaveDelay={1500}
+                          enterNextDelay={1500}
                           placement="top"
                            title="Link Copied!"
                         >
                           <img
                             src={copy}
-                            onClick={() =>setIsCopied(true)}
                             style={(styles.copyURL, { marginTop: '15px' })}
                           ></img>
                         </Tooltip>
