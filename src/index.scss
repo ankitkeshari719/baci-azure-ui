@@ -91,7 +91,7 @@ body {
 }
 .selectedAvatar {
   border-radius: 50%;
-  border: 5px solid #73ad21;
+  border: 5px solid #159ADD;
 }
 .avatar {
   border-radius: 50%;
@@ -99,7 +99,7 @@ body {
 }
 .avatar:hover {
   border-radius: 50%;
-  border: 5px solid #d7f9a8;
+  border: 5px solid #159add91;
 }
 
 .css-duy8o2-MuiSelect-select-MuiInputBase-input-MuiOutlinedInput-input {
@@ -107,7 +107,12 @@ body {
   margin-left: 50px !important;
   padding-left: 18px !important;
   padding-right: 68px !important;
+  
   width: fit-content;
   // min-width: 100px !important;
   // width: fit-content !important;
+}
+
+.css-oqt7a2-MuiPaper-root-MuiMenu-paper-MuiPaper-root-MuiPopover-paper{
+  max-height:500px!important
 }

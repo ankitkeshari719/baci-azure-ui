@@ -112,8 +112,9 @@ export function LandingPage() {
       <Grid item xs={6}>
         <LandingLayout></LandingLayout>
       </Grid>
-      <Grid xs={6}>
+      <Grid item xs={6}>
         <Grid
+        item
           xs={12}
           marginRight={commonStyles.m_80}
           marginLeft={commonStyles.m_80}

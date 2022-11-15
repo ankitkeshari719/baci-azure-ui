@@ -297,6 +297,7 @@ export default function PulseCheck() {
         <img src={Bluepulse}></img>
         <span className="pulseLineGrey"></span>
         <img src={Greypulse}></img>
+        <span className="pulseLineGrey"></span>
       </Box>
       <Box
         sx={{

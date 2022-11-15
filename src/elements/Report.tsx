@@ -511,6 +511,23 @@ columns[WHAT_DIDNT_GO_WELL].groups.forEach(group =>
         </Box>
         <Box mt='48px' sx={styles.pulseCheckBox}>
         <Typography ml='24px' mt='24px' color='#343434' variant='h4' sx={styles.textOpacity}>Pulse Check</Typography>
+        <Box
+          sx={{
+            
+            margin: '20px',
+            display: 'flex',
+            justifyContent: 'center',
+            alignItems: 'center',
+          }}
+        >
+          {questions.length !== 0 ? (
+            <StackedBarChart questions={questions}></StackedBarChart>
+          ) : (
+            <span style={{ fontSize: '16px' }}>
+              No responses have been submitted
+            </span>
+          )}
+        </Box>{' '}
         </Box>
         <Box mt='48px' sx={styles.facilitatorFeedbackBox}>
         <Typography ml='24px' mt='24px' color='#343434' variant='h4' sx={styles.textOpacity}>Feedback for facilitator</Typography>

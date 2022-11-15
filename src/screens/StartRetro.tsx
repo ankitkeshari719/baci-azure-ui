@@ -28,7 +28,7 @@ import Toolbar from '../elements/Toolbar';
 
 const styles = {
   frame101: {
-    marginTop: '112px',
+    marginTop: '48px',
     marginBttom: '259px',
   },
   group100: {
@@ -80,7 +80,6 @@ const styles = {
     flexFlow: 'column',
     width: '375px',
     height: '375px',
-    marginLeft: '245px',
     top: '39.07%',
     bottom: '27.87%',
     background: '#FFFFFF',
@@ -97,8 +96,6 @@ const styles = {
     background: '#FFFFFF',
     width: '375px',
     height: '375px',
-    marginRight: '100px',
-    marginLeft: '100px',
     boxShadow: '0px 0px 20px rgba(0, 0, 0, 0.15)',
     borderRadius: '10px',
   },
@@ -187,11 +184,12 @@ export function StartRetro() {
     setIsCopied(false);
   }
   return (
-    <Grid container spacing={0} xs={12}>
-      <Grid xs={12} >
+    <Grid container spacing={0} >
+      <Grid xs={12} item  >
         <Toolbar></Toolbar>
       </Grid>
       <Grid
+      item
         xs={12}
         marginRight={commonStyles.m_80}
         marginLeft={commonStyles.m_80}
@@ -240,7 +238,7 @@ export function StartRetro() {
                 {global?.currentRetro?.humanId}
               </Typography>
             </div>
-            <Box sx={{ display: 'flex', marginTop: '70px' }}>
+            <Box sx={{ display: 'flex',justifyContent: 'space-evenly', marginTop: '70px' }}>
               <Box sx={styles.group96}>
                 <div style={styles.joinurl}>
                   <a style={{ overflowWrap: 'break-word' }}>

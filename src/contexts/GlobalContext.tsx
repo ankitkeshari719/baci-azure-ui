@@ -17,6 +17,7 @@ export enum ActionType {
   SET_PULSE_CHECK = 'setPulseCheck',
   SET_LOADING = 'setLoading',
   EXPAND_COLUMN = 'expandColumn',
+  SET_USER_SELECTED = 'setUserSelected',
 }
 
 export class ReducerPayload {
@@ -29,6 +30,7 @@ export class ReducerPayload {
   pulseCheckState?: PulseCheckSubmitStatus;
   loadingFlag?: boolean;
   expandColumn?: number;
+  usersSelected?: any[];
 }
 
 type ContextType = [
@@ -41,7 +43,6 @@ const GlobalContext = React.createContext<ContextType>([
 ]);
 
 function saveState(state: Global) {
-
   sessionStorage.setItem('GlobalContext', JSON.stringify(state));
   return state;
 }
@@ -91,11 +92,11 @@ function GlobalProvider(props: ComponentProps<any>) {
           ...state,
           preferredNickname: action.payload?.preferredNickname,
           avatar: action.payload?.avatar,
-          
+
           user: {
             ...state.user,
-            name: action.payload?.preferredNickname+"",
-            avatar:action.payload?.avatar+"",
+            name: action.payload?.preferredNickname + '',
+            avatar: action.payload?.avatar + '',
           },
         });
       case ActionType.SET_SNACK_MESSAGE:
@@ -122,6 +123,11 @@ function GlobalProvider(props: ComponentProps<any>) {
         return saveState({
           ...state,
           expandColumn: action.payload?.expandColumn,
+        });
+      case ActionType.SET_USER_SELECTED:
+        return saveState({
+          ...state,
+          usersSelected: action.payload?.usersSelected,
         });
     }
     return saveState({ ...state });

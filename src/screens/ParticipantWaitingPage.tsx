@@ -62,7 +62,7 @@ export function ParticipantWaitingPage() {
     }, 10000);
   });
   return (
-    <Grid container xs={12}>
+    <Grid container>
       <Toolbar/>
       <Box style={styles.group90}>
         <Typography
