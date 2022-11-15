@@ -919,6 +919,7 @@ export const processAction = (
         avatar,
         feedback: [],
         pulseCheckQuestions: [],
+        checked: true,
       });
     } else if (user?.userNickname !== userNickname) {
       user.userNickname = userNickname;
@@ -1025,8 +1026,12 @@ export const processAction = (
     }
   };
 
-  const startRetro = (retroDuration: number, userId: string,creator:string) => {
-    console.log("userId",creator,",",userId)
+  const startRetro = (
+    retroDuration: number,
+    userId: string,
+    creator: string
+  ) => {
+    console.log('userId', creator, ',', userId);
     if (userId === creator) {
       state.retroDuration = retroDuration;
       state.retroStarted = true;
@@ -1150,7 +1155,7 @@ export const processAction = (
       endRetro(parameters.undo, date, userId);
       break;
     case BoardActionType.START_RETRO:
-      startRetro(parameters.retroDuration, userId,parameters.creatorId);
+      startRetro(parameters.retroDuration, userId, parameters.creatorId);
       break;
 
       // case BoardActionType.SET_LOADING:

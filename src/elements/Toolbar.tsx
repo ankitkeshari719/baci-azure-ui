@@ -22,8 +22,9 @@ const Toolbar = (props: any) => {
   const location = useLocation();
   const showFinishRetroButton =
     !location.pathname.includes('pulsecheck') &&
-    !location.pathname.includes('report')&&!location.pathname.includes('startRetro');
-  const [editing, setEditing] = React.useState(false);
+    !location.pathname.includes('report') &&
+    !location.pathname.includes('startRetro');
+  const [editing, setEditing] = React.useState(true);
   const RETRONAME_CHARACTER_LIMIT = 80;
   const {
     state: { retroName, retroGoal, retroTimeframe },
@@ -86,7 +87,8 @@ const Toolbar = (props: any) => {
         }}
       />
 
-      {currentRetro?.name &&!location.pathname.includes('startRetro')&&
+      {currentRetro?.name &&
+        !location.pathname.includes('startRetro') &&
         (location.pathname.includes('pulsecheck') ||
           window.location.pathname.includes('board')) && (
           <Box
@@ -96,12 +98,15 @@ const Toolbar = (props: any) => {
               <TextField
                 multiline
                 fullWidth
-                InputLabelProps={{
-                  style: { fontSize: 0 },
-                }}
+                InputLabelProps={
+                  {
+                    // style: { fontSize: 0 },
+                  }
+                }
                 sx={{
                   fieldset: { border: 'none' },
                   color: '#2C69A1',
+                  // minWidth: '200px',
                   minWidth: '200px',
                   marginLeft: '34px',
                   div: { padding: 0, position: 'initial' },
@@ -152,16 +157,18 @@ const Toolbar = (props: any) => {
               />
             ) : (
               <Typography
+            
                 sx={{
                   color: '#2C69A1',
                   marginLeft: '34px',
                   fontSize: '24px!important',
                   ag: 'H3',
-                  minWidth: '200px',
+                  minWidth: '350px',
+                  maxWidth:'350px'
                 }}
-                onClick={() => {
-                  setEditing(true);
-                }}
+                // onClick={() => {
+                //   setEditing(true);
+                // }}
               >
                 {localRetroName}
               </Typography>
@@ -171,39 +178,38 @@ const Toolbar = (props: any) => {
               sx={{
                 fontSize: '20px',
                 color: '#2C69A1',
-                marginLeft: '66px',
-                display: 'flex',
-                width: '280px',
+                // marginLeft: '66px',
+                width: currentRetro?.creatorId === user.id ? '270px' : '150px',
               }}
             >
               Code : {currentRetro?.humanId}
             </Typography>
             <Button
-        aria-describedby={id}
-        sx={{ borderRadius: '25%', marginLeft: '15px' }}
-        onClick={handleClick}
-      >
-        <img src="/svgs/Info.svg" />
-      </Button>
-      <Popover
-        id={id}
-        open={open}
-        anchorEl={anchorEl}
-        onClose={handleClose}
-        anchorOrigin={{
-          vertical: 'bottom',
-          horizontal: 'center',
-        }}
-        transformOrigin={{
-          vertical: 'top',
-          horizontal: 'center',
-        }}
-      >
-        <RetroDetails popover={true} close={handleClose}></RetroDetails>
-      </Popover>
+              aria-describedby={id}
+              sx={{ borderRadius: '25%', marginLeft: '15px' }}
+              onClick={handleClick}
+            >
+              <img src="/svgs/Info.svg" />
+            </Button>
+            <Popover
+              id={id}
+              open={open}
+              anchorEl={anchorEl}
+              onClose={handleClose}
+              anchorOrigin={{
+                vertical: 'bottom',
+                horizontal: 'center',
+              }}
+              transformOrigin={{
+                vertical: 'top',
+                horizontal: 'center',
+              }}
+            >
+              <RetroDetails popover={true} close={handleClose}></RetroDetails>
+            </Popover>
           </Box>
         )}
-   
+
       <Box component="span" sx={{ flex: '1 1 auto' }}></Box>
       {showFinishRetroButton && (
         <Button

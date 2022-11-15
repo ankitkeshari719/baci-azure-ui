@@ -571,6 +571,7 @@ export function RetroColumn({
             container
             alignItems="center"
             justifyContent="space-between"
+            item
             xs={12}
             md={12}
             lg={12}
@@ -640,6 +641,7 @@ export function RetroColumn({
               container
               justifyContent="flex-end"
               direction="row"
+              item
               lg={4}
               md={5}
               xs={5}
@@ -774,6 +776,7 @@ export function RetroColumn({
                     {cardGroups.map((group, i) => (
                       <Grid
                         container
+                        item
                         lg={12}
                         key={group.id}
                         ref={e => (groupRefs[i] = e)}

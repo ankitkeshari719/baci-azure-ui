@@ -148,6 +148,11 @@ export default function RetroBoard() {
   //       })
   //     : [];
 
+  const isMatch = (element: any, index: number, array: any): boolean => {
+    console.log(element, index, array);
+    return true;
+  };
+
   const getProcessedColumns = () =>
     columns
       ? columns.map(
@@ -178,18 +183,31 @@ export default function RetroBoard() {
               groups: groups
                 .map(group => {
                   const cards = group.cards.filter(
-                    card => !justMyCards || card.createdBy === global.user.id
+                    // card => !justMyCards || card.createdBy === global.user.id
+
+                    card =>
+                      global.user?.id !== global.currentRetro?.creatorId
+                        ? card
+                        : global.usersSelected?.some((user, index) => {
+                            return user?.userId === card?.createdBy;
+                          })
                   );
                   return {
                     ...group,
                     cards,
                   };
                 })
-                .filter(
-                  group =>
-                    !justMyCards ||
-                    group.name === UNGROUPED ||
-                    group.cards.length !== 0
+                .filter(group =>
+                  // !justMyCards ||
+                  // group.name === UNGROUPED ||
+                  // group.cards.length !== 0
+
+                  global.usersSelected?.some((user, index) => {
+                    return (
+                      user?.userId === group?.createdBy ||
+                      group?.name === UNGROUPED
+                    );
+                  })
                 ),
             };
           }
@@ -281,6 +299,9 @@ export default function RetroBoard() {
         value: sentence(),
       });
     }
+  };
+  const selectedUserIdArray = (value: any) => {
+    console.log(value, 'value');
   };
 
   // React.useEffect(() => {
@@ -396,8 +417,8 @@ export default function RetroBoard() {
         </Toolbar>
       </AppBar> */}
       <Grid xs={12} item>
-        <Toolbar onFinishRetro={finishRetro} ></Toolbar>
-        <SubToolbar></SubToolbar>
+        <Toolbar onFinishRetro={finishRetro}></Toolbar>
+        <SubToolbar selectedUserIdArray={selectedUserIdArray}></SubToolbar>
       </Grid>
 
       {/* {isXsUp ? (
@@ -656,6 +677,7 @@ export default function RetroBoard() {
             currentColumn,
             showEditBox,
             global.expandColumn,
+            global.usersSelected,
           ]
         )}
       </Grid>

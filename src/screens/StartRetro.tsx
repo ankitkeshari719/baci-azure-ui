@@ -184,11 +184,12 @@ export function StartRetro() {
     setIsCopied(false);
   }
   return (
-    <Grid container spacing={0} xs={12}>
-      <Grid xs={12} >
+    <Grid container spacing={0} >
+      <Grid xs={12} item  >
         <Toolbar></Toolbar>
       </Grid>
       <Grid
+      item
         xs={12}
         marginRight={commonStyles.m_80}
         marginLeft={commonStyles.m_80}

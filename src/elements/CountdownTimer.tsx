@@ -209,7 +209,7 @@ export function CountdownTimer({
 
   return (
     <Box sx={{ display: 'flex', flexDirection: 'row' }}>
-      <Button
+      { global.user?.id === global.currentRetro?.creatorId&&<Button
         aria-describedby={id}
         sx={{ color: color, fontWeight: bold ? '700' : '400' }}
         onClick={async event => {
@@ -251,7 +251,7 @@ export function CountdownTimer({
         >
           <AccessTimeIcon></AccessTimeIcon>
         </Box>
-      </Button>
+      </Button>}
       {countdownFrom === -1 && !countdownPaused && !countdownExpired ? (
         <></>
       ) : countdownExpired ? (
