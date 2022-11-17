@@ -208,7 +208,7 @@ export function AvatarNamePage() {
     }
   }, []);
   return (
-    <Grid container spacing={0}>
+    <Grid container spacing={0} style={{overflowY:"auto"}}>
       <Grid item xs={6}>
         <LandingLayout></LandingLayout>
       </Grid>
@@ -225,7 +225,7 @@ export function AvatarNamePage() {
                 <Typography
                   variant="h1"
                   color={commonStyles.primaryDark}
-                  mt="254px"
+                  mt="234px"
                 >
                   Welcome to the BACI
                 </Typography>
@@ -241,7 +241,7 @@ export function AvatarNamePage() {
               <Typography
                 variant="h3"
                 color={commonStyles.primaryDark}
-                mt="271px"
+                mt="251px"
               >
                 Who you are in ‘{global.currentRetro?.name}’?
               </Typography>

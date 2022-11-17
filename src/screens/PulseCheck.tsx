@@ -698,6 +698,7 @@ export default function PulseCheck() {
             display: 'flex',
             justifyContent: 'center',
             paddingTop: '20px',
+            cursor:"pointer"
           }}
         >
           <Link sx={{ marginTop: '43px' }} className="infoLink" onClick={skip}>
