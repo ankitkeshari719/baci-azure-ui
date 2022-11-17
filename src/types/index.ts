@@ -39,6 +39,7 @@ export class Global {
   };
   loadingFlag?: boolean = false;
   expandColumn?: number = -1;
+  usersSelected?: any[] = [];
 }
 
 export interface Card {
@@ -105,6 +106,7 @@ export class BoardState {
     avatar: string;
     feedback: FeedbackEntry[];
     pulseCheckQuestions: PulseCheckEntry[];
+    checked:boolean
   }[] = [];
   countdownFrom: number = -1;
   countdownDuration: number = 5 * 60 * 1000;
@@ -116,6 +118,7 @@ export class BoardState {
   fullPulseCheck: boolean = false;
   lastUpdatedBy?: string;
   ended: boolean = false;
+  retroStatus?:string;
   retroStarted: boolean = false;
   loadingFlag: boolean = false;
   retroDuration: number = 90;

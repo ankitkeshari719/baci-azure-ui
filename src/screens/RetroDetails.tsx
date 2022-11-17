@@ -193,6 +193,7 @@ export function RetroDetails(props: any) {
       )}
       <Grid item lg={!props?.popover ? 6 : 12}>
         <Grid
+        item
           xs={12}
           marginRight={commonStyles.m_80}
           marginLeft={commonStyles.m_80}

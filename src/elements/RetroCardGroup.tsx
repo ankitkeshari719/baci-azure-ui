@@ -285,7 +285,7 @@ export function RetroCardGroup({
                           fill="#FBBC05"
                           stroke="#FBBC05"
                           strokeWidth="1.5"
-                          stroke-linecap="round"
+                          strokeLinecap="round"
                           strokeLinejoin="round"
                         />
                       </svg>
@@ -305,7 +305,7 @@ export function RetroCardGroup({
                               fill="#FBBC05"
                               stroke="#FBBC05"
                               strokeWidth="1.5"
-                              stroke-linecap="round"
+                              strokeLinecap="round"
                               strokeLinejoin="round"
                             />
                           </svg>
@@ -323,7 +323,7 @@ export function RetroCardGroup({
                               fill="white"
                               stroke="#FBBC05"
                               strokeWidth="1.5"
-                              stroke-linecap="round"
+                              strokeLinecap="round"
                               strokeLinejoin="round"
                             />
                           </svg>
@@ -397,7 +397,7 @@ export function RetroCardGroup({
         ) : null}
 
         {group.cards.length === 0 && group.name !== UNGROUPED ? (
-          <Grid container lg={12} direction="row" justifyContent="center">
+          <Grid container direction="row" justifyContent="center">
             <Grid
               item
               lg={12}

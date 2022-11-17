@@ -1,6 +1,11 @@
 import {
   Box,
   Button,
+  Dialog,
+  DialogActions,
+  DialogContent,
+  DialogContentText,
+  DialogTitle,
   InputAdornment,
   Popover,
   TextField,
@@ -16,15 +21,18 @@ import { BoardActionType } from '../statemachine/BoardStateMachine';
 import { StartRetro } from '../screens/StartRetro';
 import PulseCheck from '../screens/PulseCheck';
 import { RetroDetails } from '../screens/RetroDetails';
+import commonStyles from './../style.module.scss';
 // import { ReactComponent as InfoSvg } from '../../public/svgs/Info.svg';
 const Toolbar = (props: any) => {
   const [{ avatar, currentRetro, user }] = React.useContext(GlobalContext);
   const location = useLocation();
   const showFinishRetroButton =
     !location.pathname.includes('pulsecheck') &&
-    !location.pathname.includes('report')&&!location.pathname.includes('startRetro');
-  const [editing, setEditing] = React.useState(false);
+    !location.pathname.includes('report') &&
+    !location.pathname.includes('startRetro');
+  const [editing, setEditing] = React.useState(true);
   const RETRONAME_CHARACTER_LIMIT = 80;
+  const [openDialog, setOpenDialog] = React.useState(false);
   const {
     state: { retroName, retroGoal, retroTimeframe },
     commitAction,
@@ -86,7 +94,8 @@ const Toolbar = (props: any) => {
         }}
       />
 
-      {currentRetro?.name &&!location.pathname.includes('startRetro')&&
+      {currentRetro?.name &&
+        !location.pathname.includes('startRetro') &&
         (location.pathname.includes('pulsecheck') ||
           window.location.pathname.includes('board')) && (
           <Box
@@ -96,12 +105,15 @@ const Toolbar = (props: any) => {
               <TextField
                 multiline
                 fullWidth
-                InputLabelProps={{
-                  style: { fontSize: 0 },
-                }}
+                InputLabelProps={
+                  {
+                    // style: { fontSize: 0 },
+                  }
+                }
                 sx={{
                   fieldset: { border: 'none' },
                   color: '#2C69A1',
+                  // minWidth: '200px',
                   minWidth: '200px',
                   marginLeft: '34px',
                   div: { padding: 0, position: 'initial' },
@@ -157,11 +169,12 @@ const Toolbar = (props: any) => {
                   marginLeft: '34px',
                   fontSize: '24px!important',
                   ag: 'H3',
-                  minWidth: '200px',
+                  minWidth: '350px',
+                  maxWidth: '350px',
                 }}
-                onClick={() => {
-                  setEditing(true);
-                }}
+                // onClick={() => {
+                //   setEditing(true);
+                // }}
               >
                 {localRetroName}
               </Typography>
@@ -171,58 +184,165 @@ const Toolbar = (props: any) => {
               sx={{
                 fontSize: '20px',
                 color: '#2C69A1',
-                marginLeft: '66px',
-                display: 'flex',
-                width: '280px',
+                // marginLeft: '66px',
+                width: currentRetro?.creatorId === user.id ? '270px' : '150px',
               }}
             >
               Code : {currentRetro?.humanId}
             </Typography>
             <Button
-        aria-describedby={id}
-        sx={{ borderRadius: '25%', marginLeft: '15px' }}
-        onClick={handleClick}
-      >
-        <img src="/svgs/Info.svg" />
-      </Button>
-      <Popover
-        id={id}
-        open={open}
-        anchorEl={anchorEl}
-        onClose={handleClose}
-        anchorOrigin={{
-          vertical: 'bottom',
-          horizontal: 'center',
-        }}
-        transformOrigin={{
-          vertical: 'top',
-          horizontal: 'center',
-        }}
-      >
-        <RetroDetails popover={true} close={handleClose}></RetroDetails>
-      </Popover>
+              aria-describedby={id}
+              sx={{ borderRadius: '25%', marginLeft: '15px' }}
+              onClick={handleClick}
+            >
+              <img src="/svgs/Info.svg" />
+            </Button>
+            <Popover
+              id={id}
+              open={open}
+              anchorEl={anchorEl}
+              onClose={handleClose}
+              anchorOrigin={{
+                vertical: 'bottom',
+                horizontal: 'center',
+              }}
+              transformOrigin={{
+                vertical: 'top',
+                horizontal: 'center',
+              }}
+            >
+              <RetroDetails popover={true} close={handleClose}></RetroDetails>
+            </Popover>
           </Box>
         )}
-   
+
       <Box component="span" sx={{ flex: '1 1 auto' }}></Box>
       {showFinishRetroButton && (
-        <Button
-          variant="contained"
-          sx={{
-            // background: '#159ADD',
-            // color: 'white',
-            borderRadius: '24px',
-            width: '148px',
-            height: '44px',
-            padding: '10px 20px',
-            marginRight: '40px',
-            fontWeight: 500,
-          }}
-          onClick={props.onFinishRetro}
-        >
-          FINISH RETRO
-        </Button>
+        <>
+          {currentRetro?.creatorId === user.id ? (
+            <Button
+              variant="contained"
+              sx={{
+                // background: '#159ADD',
+                // color: 'white',
+                borderRadius: '24px',
+                width: '148px',
+                height: '44px',
+                padding: '10px 20px',
+                marginRight: '40px',
+                fontWeight: 500,
+              }}
+              onClick={() => setOpenDialog(true)}
+            >
+              FINISH RETRO
+            </Button>
+          ) : (
+            <Button
+              variant="contained"
+              sx={{
+                // background: '#159ADD',
+                // color: 'white',
+                borderRadius: '24px',
+                width: '148px',
+                height: '44px',
+                padding: '10px 20px',
+                marginRight: '40px',
+                fontWeight: 500,
+              }}
+              onClick={() => props.onFinishRetro()}
+            >
+              LEAVE RETRO
+            </Button>
+          )}
+        </>
       )}
+      <Dialog
+        open={openDialog}
+        onClose={() => setOpenDialog(false)}
+        aria-labelledby="alert-dialog-title"
+        aria-describedby="alert-dialog-description"
+      >
+        {/* <DialogTitle
+          id="alert-dialog-title"
+          align="center"
+          sx={{ background: '/svgs/Finish.svg' }}
+        > */}
+        <div
+          style={{
+            display: 'flex',
+            width: '100%',
+            justifyContent: 'center',
+            marginTop: '15px',
+          }}
+        >
+          <span
+            style={{
+              background: 'url(/svgs/Finish.svg)',
+              width: '288px',
+              height: '209px',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+            }}
+          >
+            <span
+              style={{
+                paddingTop: '100px',
+                color: commonStyles.secondaryMain,
+                fontSize: '28px',
+              }}
+            >
+              Finish Retro ?
+            </span>
+          </span>
+        </div>
+
+        <DialogContent>
+          {/* <DialogContentText
+            id="alert-dialog-description"
+            color="#343434"
+            size="20px"
+          > */}
+          <span
+            style={{
+              color: '#343434',
+              fontSize: '20px',
+              width: '488px',
+              display: 'flex',
+              flexDirection: 'column',
+              alignItems: 'center',
+            }}
+          >
+            <span> This will end retro for all participants.</span>
+            <span> All participants will see feedback screen.</span>
+          </span>
+          {/* </DialogContentText> */}
+        </DialogContent>
+        <DialogActions style={{ display: 'flex', flexDirection: 'column' }}>
+          <Button
+            sx={{ borderRadius: '24px', fontSize: '16px', marginTop: '15px' }}
+            onClick={() => {
+              props.onFinishRetro(), setOpenDialog(false);
+            }}
+            variant="contained"
+            autoFocus
+          >
+            END RETRO AND VIEW SUMMARY
+          </Button>
+          <Button
+            sx={{
+              borderRadius: '24px',
+              fontSize: '16px',
+              marginTop: '15px',
+              marginBottom: '15px',
+            }}
+            variant="outlined"
+            onClick={() => setOpenDialog(false)}
+          >
+            CONTINUE WITH RETRO
+          </Button>
+        </DialogActions>
+      </Dialog>
       <Avatar
         avatar={avatar}
         onClickAvatar={() => {}}

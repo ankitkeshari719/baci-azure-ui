@@ -97,3 +97,7 @@ body {
 #multiple-checkbox .css-duy8o2-MuiSelect-select-MuiInputBase-input-MuiOutlinedInput-input {
   padding: 0px
 }
+
+.css-oqt7a2-MuiPaper-root-MuiMenu-paper-MuiPaper-root-MuiPopover-paper{
+  max-height:500px!important;
+}

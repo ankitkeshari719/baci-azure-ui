@@ -27,7 +27,7 @@ import { UserAvatar } from '../atoms/UserAvatar';
 import { BoardContext } from '../contexts/BoardContext';
 import { BoardActionType } from '../statemachine/BoardStateMachine';
 import { ConfirmContext } from '../contexts/ConfirmContext';
-import { GlobalContext } from '../contexts/GlobalContext';
+import { ActionType, GlobalContext } from '../contexts/GlobalContext';
 import { CountdownTimer } from '../elements/CountdownTimer';
 import { FeedbackColumn } from '../elements/FeedbackColumn';
 import ParticipantsPanel from '../elements/ParticipantsPanel';
@@ -82,6 +82,7 @@ export default function RetroBoard() {
       creatorId,
       ended,
       needsToShow,
+      retroStatus,
     },
     commitAction,
   } = React.useContext(BoardContext);
@@ -148,6 +149,11 @@ export default function RetroBoard() {
   //       })
   //     : [];
 
+  const isMatch = (element: any, index: number, array: any): boolean => {
+    console.log(element, index, array);
+    return true;
+  };
+
   const getProcessedColumns = () =>
     columns
       ? columns.map(
@@ -178,18 +184,31 @@ export default function RetroBoard() {
               groups: groups
                 .map(group => {
                   const cards = group.cards.filter(
-                    card => !justMyCards || card.createdBy === global.user.id
+                    // card => !justMyCards || card.createdBy === global.user.id
+
+                    card =>
+                      global.user?.id !== global.currentRetro?.creatorId
+                        ? card
+                        : global.usersSelected?.some((user, index) => {
+                            return user?.userId === card?.createdBy;
+                          })
                   );
                   return {
                     ...group,
                     cards,
                   };
                 })
-                .filter(
-                  group =>
-                    !justMyCards ||
-                    group.name === UNGROUPED ||
-                    group.cards.length !== 0
+                .filter(group =>
+                  // !justMyCards ||
+                  // group.name === UNGROUPED ||
+                  // group.cards.length !== 0
+
+                  global.usersSelected?.some((user, index) => {
+                    return (
+                      user?.userId === group?.createdBy ||
+                      group?.name === UNGROUPED
+                    );
+                  })
                 ),
             };
           }
@@ -251,23 +270,72 @@ export default function RetroBoard() {
   };
 
   const finishRetro = () => {
-    if (creatorId === global.user.id) {
+    console.log(
+      creatorId === global.user.id,
+      ' ',
+      creatorId,
+      '  ',
+      global.user.id
+    );
+    if (global.currentRetro?.creatorId === global.user.id) {
+      console.log('ende retro');
       sessionStorage.removeItem('retoname');
-      setConfirmAction({
-        action: 'Finish Retro',
-        title: 'Finish Retro',
-        text: 'This action will take All Participants to the Feedback screen.',
-        onConfirm: () => {
-          sessionStorage.removeItem('pulseCheckState');
-          saveAndProcessAction(BoardActionType.END_RETRO, {}).then(() => {
-            setConfirmAction(undefined);
-            navigate('/report/' + global.currentRetro?.id);
-          });
-        },
+      // setConfirmAction({
+      //   action: 'Finish Retro',
+      //   title: 'Finish Retro',
+      //   text: 'This action will take All Participants to the Feedback screen.',
+      //   onConfirm: () => {
+      dispatch({
+        type: ActionType.SET_LOADING,
+        payload: { loadingFlag: true },
       });
+
+      sessionStorage.removeItem('pulseCheckState');
+
+      saveAndProcessAction(BoardActionType.UPDATE_RETRO_DETAILS, {
+        retroStatus: 'ended',
+      }).then(
+        () => {
+          saveAndProcessAction(BoardActionType.END_RETRO, {})
+            .then(() => {
+              setConfirmAction(undefined);
+              navigate('/report/' + global.currentRetro?.id);
+            })
+            .then(
+              () => {
+                dispatch({
+                  type: ActionType.SET_LOADING,
+                  payload: { loadingFlag: false },
+                });
+              },
+              () => {
+                dispatch({
+                  type: ActionType.SET_LOADING,
+                  payload: { loadingFlag: false },
+                });
+              }
+            );
+        },
+        () => {
+          dispatch({
+            type: ActionType.SET_LOADING,
+            payload: { loadingFlag: false },
+          });
+        }
+      );
+
+      // },
+      // });
     } else {
       //navigate(`/board/${global?.currentRetro?.id}/feedback`);
-      setshowFeedback(true);
+      setConfirmAction({
+        action: 'Leave Retro',
+        title: 'Leave Retro',
+        text: 'Do you really want to leave the retro ?',
+        onConfirm: () => {
+          setshowFeedback(true);
+        },
+      });
     }
   };
   const create10Cards = async () => {
@@ -283,12 +351,29 @@ export default function RetroBoard() {
     }
   };
 
-  // React.useEffect(() => {
-  //   // console.log(needsToShow);
-  //   if (ended && !needsToShow) {
-  //     navigate(`/board/${global?.currentRetro?.id}/feedback`);
-  //   }
-  // }, [ended, needsToShow]);
+  React.useEffect(() => {
+    // console.log(needsToShow);
+    console.log('ended', ended, retroStatus);
+    if (ended && !needsToShow) {
+      if (global?.currentRetro?.creatorId != global?.user.id) {
+        const currentUser = users?.filter(
+          card => card.userId === global?.user.id
+        );
+        if (
+          currentUser?.length == 1 &&
+          currentUser[0].pulseCheckQuestions.length == 0
+        ) {
+          console.log('ended', true," ",currentUser[0].pulseCheckQuestions);
+          setshowFeedback(true);
+        }
+      } else {
+        console.log('ended', false);
+
+        setshowFeedback(false);
+      }
+      // navigate(`/board/${global?.currentRetro?.id}/feedback`);
+    }
+  }, [ended]);
 
   return (
     <Box
@@ -396,7 +481,7 @@ export default function RetroBoard() {
         </Toolbar>
       </AppBar> */}
       <Grid xs={12} item>
-        <Toolbar onFinishRetro={finishRetro} ></Toolbar>
+        <Toolbar onFinishRetro={finishRetro}></Toolbar>
         <SubToolbar></SubToolbar>
       </Grid>
 
@@ -656,6 +741,7 @@ export default function RetroBoard() {
             currentColumn,
             showEditBox,
             global.expandColumn,
+            global.usersSelected,
           ]
         )}
       </Grid>

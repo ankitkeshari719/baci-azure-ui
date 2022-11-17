@@ -104,10 +104,15 @@ body {
 
 .css-duy8o2-MuiSelect-select-MuiInputBase-input-MuiOutlinedInput-input {
   padding: 0px !important;
-  margin-left: 50px !important;
-  padding-left: 18px !important;
-  padding-right: 68px !important;
-  width: fit-content;
+  margin-left: 10px !important;
+  // padding-left: 18px !important;
+  // padding-right: 68px !important;
+  
+  // width: fit-content;
   // min-width: 100px !important;
   // width: fit-content !important;
+}
+
+.css-oqt7a2-MuiPaper-root-MuiMenu-paper-MuiPaper-root-MuiPopover-paper{
+  max-height:500px!important
 }

@@ -555,7 +555,8 @@ export const processAction = (
   userId: string,
   date?: Date,
   version?: number,
-  avatar?: string
+  avatar?: string,
+
 ): void => {
   const {
     columns,
@@ -632,7 +633,8 @@ export const processAction = (
     fullPulseCheck?: boolean,
     creatorId?: string,
     userId?: string,
-    avatar?: string
+    avatar?: string,
+    retroStatus?:string
   ) => {
     if (retroName !== undefined) {
       state.retroName = retroName;
@@ -651,6 +653,9 @@ export const processAction = (
     }
     if (avatar != undefined && avatar != '') {
       state.avatar = avatar;
+    }
+    if(retroStatus!=undefined){
+      state.retroStatus=retroStatus;
     }
     state.lastUpdatedBy = userId;
   };
@@ -919,6 +924,7 @@ export const processAction = (
         avatar,
         feedback: [],
         pulseCheckQuestions: [],
+        checked: true,
       });
     } else if (user?.userNickname !== userNickname) {
       user.userNickname = userNickname;
@@ -1014,6 +1020,7 @@ export const processAction = (
   };
 
   const endRetro = (undo: boolean, date: Date | undefined, userId: string) => {
+    console.log("endRetro",userId,state.creatorId,state.ended,undo)
     if (userId === state.creatorId && state.ended !== !undo) {
       state.ended = !undo;
       if (state.ended && date && state.endedDate === undefined) {
@@ -1025,8 +1032,12 @@ export const processAction = (
     }
   };
 
-  const startRetro = (retroDuration: number, userId: string,creator:string) => {
-    console.log("userId",creator,",",userId)
+  const startRetro = (
+    retroDuration: number,
+    userId: string,
+    creator: string
+  ) => {
+    console.log('userId', creator, ',', userId);
     if (userId === creator) {
       state.retroDuration = retroDuration;
       state.retroStarted = true;
@@ -1048,7 +1059,8 @@ export const processAction = (
         parameters.fullPulseCheck,
         parameters.creatorId,
         userId,
-        avatar
+        avatar,
+        parameters.retroStatus
       );
       break;
     case BoardActionType.CREATE_GROUP:
@@ -1150,7 +1162,7 @@ export const processAction = (
       endRetro(parameters.undo, date, userId);
       break;
     case BoardActionType.START_RETRO:
-      startRetro(parameters.retroDuration, userId,parameters.creatorId);
+      startRetro(parameters.retroDuration, userId, parameters.creatorId);
       break;
 
       // case BoardActionType.SET_LOADING:
