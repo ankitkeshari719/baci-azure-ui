@@ -89,6 +89,7 @@ export function CountdownTimer({
       countdownDuration,
       countdownPaused,
       countdownExpired,
+      ended,
     },
     commitAction,
   } = React.useContext(BoardContext);
@@ -200,7 +201,7 @@ export function CountdownTimer({
     if (
       !previousExpired.current &&
       countdownExpired &&
-      global.user.id === global.currentRetro?.creatorId
+      global.user.userType==2
     ) {
       audio.play();
     }
@@ -209,49 +210,51 @@ export function CountdownTimer({
 
   return (
     <Box sx={{ display: 'flex', flexDirection: 'row' }}>
-      { global.user?.id === global.currentRetro?.creatorId&&<Button
-        aria-describedby={id}
-        sx={{ color: color, fontWeight: bold ? '700' : '400' }}
-        onClick={async event => {
-          handleClick(event);
-          isRetroCreator();
-          setCountdownWindowOpen(!countdownWindowOpen);
-          if (countdownExpired) {
-            await saveAndProcessAction(BoardActionType.STOP_TIMER, {});
-          }
-        }}
-      >
-        <Box
-          sx={{
-            background:
-              countdownFrom === -1 && !countdownPaused && !countdownExpired
-                ? 'white'
-                : '#EE7538',
-            borderRadius: '50px',
-            height: '25px',
-            minWidth: 0,
-            color:
-              countdownFrom === -1 && !countdownPaused && !countdownExpired
-                ? '#4E4E4E'
-                : 'white',
-            padding: '5px',
-            // border: '1px solid #159ADD',
-            '&:hover': {
-              background:
-                countdownFrom === -1 && !countdownPaused && !countdownExpired
-                  ? '#EE7538'
-                  : 'white',
-              color:
-                countdownFrom === -1 && !countdownPaused && !countdownExpired
-                  ? 'white'
-                  : '#4E4E4E',
-              // border: '1px solid #159ADD',
-            },
+      {global.user?.userType==2 && !ended && (
+        <Button
+          aria-describedby={id}
+          sx={{ color: color, fontWeight: bold ? '700' : '400' }}
+          onClick={async event => {
+            handleClick(event);
+            isRetroCreator();
+            setCountdownWindowOpen(!countdownWindowOpen);
+            if (countdownExpired) {
+              await saveAndProcessAction(BoardActionType.STOP_TIMER, {});
+            }
           }}
         >
-          <AccessTimeIcon></AccessTimeIcon>
-        </Box>
-      </Button>}
+          <Box
+            sx={{
+              background:
+                countdownFrom === -1 && !countdownPaused && !countdownExpired
+                  ? 'white'
+                  : '#EE7538',
+              borderRadius: '50px',
+              height: '25px',
+              minWidth: 0,
+              color:
+                countdownFrom === -1 && !countdownPaused && !countdownExpired
+                  ? '#4E4E4E'
+                  : 'white',
+              padding: '5px',
+              // border: '1px solid #159ADD',
+              '&:hover': {
+                background:
+                  countdownFrom === -1 && !countdownPaused && !countdownExpired
+                    ? '#EE7538'
+                    : 'white',
+                color:
+                  countdownFrom === -1 && !countdownPaused && !countdownExpired
+                    ? 'white'
+                    : '#4E4E4E',
+                // border: '1px solid #159ADD',
+              },
+            }}
+          >
+            <AccessTimeIcon></AccessTimeIcon>
+          </Box>
+        </Button>
+      )}
       {countdownFrom === -1 && !countdownPaused && !countdownExpired ? (
         <></>
       ) : countdownExpired ? (
@@ -433,10 +436,9 @@ export function CountdownTimer({
                           display: 'flex',
                           flexDirection: 'column',
                           alignItems: 'center',
-                      
                         }}
                       >
-                        <span style={{height:'130px'}}>
+                        <span style={{ height: '130px' }}>
                           <TextField
                             // onChange={handleNameChange}
                             value={minutes < 10 ? '0' + minutes : minutes}
@@ -479,45 +481,44 @@ export function CountdownTimer({
                     {/* {minutes} */}:
                     {/* {seconds < 10 ? '0' + seconds : seconds} */}
                     {countdownFrom === -1 && !countdownPaused ? (
-                         <span
-                         style={{
-                           display: 'flex',
-                           flexDirection: 'column',
-                           alignItems: 'center',
-                       
-                         }}
-                       >
-                         <span style={{height:'130px'}}>
-                      <TextField
-                        // onChange={handleNameChange}
-                        value={seconds < 10 ? '0' + seconds : seconds}
-                        onChange={async event => {
-                          await saveAndProcessAction(
-                            BoardActionType.SET_TIMER,
-                            {
-                              fromDuration: countdownDuration,
-                              amount:
-                                +event.target.value * 1000 +
-                                minutes * 60 * 1000,
-                            }
-                          );
+                      <span
+                        style={{
+                          display: 'flex',
+                          flexDirection: 'column',
+                          alignItems: 'center',
                         }}
-                        inputProps={{
-                          style: { fontSize: '64px' },
-                          min: 0,
-                          max: 60,
-                          maxLength: 2,
-                        }} // font size of input text
-                        InputLabelProps={{ style: { fontSize: 0 } }} // font size of input label
-                        type="number"
-                        sx={{
-                          fontWeight: 300,
-                          width: '122px',
-                          height: '80px',
-                        }}
-                      />
-                      </span>
-                      <span style={{ fontSize: '16px', color: '#676767' }}>
+                      >
+                        <span style={{ height: '130px' }}>
+                          <TextField
+                            // onChange={handleNameChange}
+                            value={seconds < 10 ? '0' + seconds : seconds}
+                            onChange={async event => {
+                              await saveAndProcessAction(
+                                BoardActionType.SET_TIMER,
+                                {
+                                  fromDuration: countdownDuration,
+                                  amount:
+                                    +event.target.value * 1000 +
+                                    minutes * 60 * 1000,
+                                }
+                              );
+                            }}
+                            inputProps={{
+                              style: { fontSize: '64px' },
+                              min: 0,
+                              max: 60,
+                              maxLength: 2,
+                            }} // font size of input text
+                            InputLabelProps={{ style: { fontSize: 0 } }} // font size of input label
+                            type="number"
+                            sx={{
+                              fontWeight: 300,
+                              width: '122px',
+                              height: '80px',
+                            }}
+                          />
+                        </span>
+                        <span style={{ fontSize: '16px', color: '#676767' }}>
                           sec
                         </span>
                       </span>

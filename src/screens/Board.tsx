@@ -277,7 +277,7 @@ export default function RetroBoard() {
       '  ',
       global.user.id
     );
-    if (global.currentRetro?.creatorId === global.user.id) {
+    if (global.user.userType==2) {
       console.log('ende retro');
       sessionStorage.removeItem('retoname');
       // setConfirmAction({
@@ -293,6 +293,8 @@ export default function RetroBoard() {
       sessionStorage.removeItem('pulseCheckState');
 
       saveAndProcessAction(BoardActionType.UPDATE_RETRO_DETAILS, {
+        creatorId: global.currentRetro?.creatorId,
+        userId: global.user.id,
         retroStatus: 'ended',
       }).then(
         () => {
@@ -355,7 +357,7 @@ export default function RetroBoard() {
     // console.log(needsToShow);
     console.log('ended', ended, retroStatus);
     if (ended && !needsToShow) {
-      if (global?.currentRetro?.creatorId != global?.user.id) {
+      if (global.user.userType!==2) {
         const currentUser = users?.filter(
           card => card.userId === global?.user.id
         );
@@ -363,7 +365,7 @@ export default function RetroBoard() {
           currentUser?.length == 1 &&
           currentUser[0].pulseCheckQuestions.length == 0
         ) {
-          console.log('ended', true," ",currentUser[0].pulseCheckQuestions);
+          console.log('ended', true, ' ', currentUser[0].pulseCheckQuestions);
           setshowFeedback(true);
         }
       } else {
@@ -635,7 +637,13 @@ export default function RetroBoard() {
       <Grid
         container
         spacing={0}
-        style={{ flexWrap: 'nowrap', flexGrow: 1, background: 'white' }}
+        style={{
+          flexWrap: 'nowrap',
+          flexGrow: 1,
+          background: 'white',
+          paddingLeft: '42px',
+          paddingRight: '42px',
+        }}
       >
         {showRetroPanel || showParticipantsPanel || showSharePanel ? (
           <Box

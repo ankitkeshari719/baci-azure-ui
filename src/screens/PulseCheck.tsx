@@ -190,6 +190,8 @@ export default function PulseCheck() {
         action: 'Switch',
         onConfirm: async () => {
           await saveAndProcessAction(BoardActionType.UPDATE_RETRO_DETAILS, {
+            creatorId:currentRetro?.creatorId,
+            userId:user.id,
             fullPulseCheck: true,
           });
           setConfirmAction(undefined);
@@ -203,6 +205,8 @@ export default function PulseCheck() {
         onConfirm: async () => {
           await saveAndProcessAction(BoardActionType.UPDATE_RETRO_DETAILS, {
             fullPulseCheck: false,
+            creatorId:currentRetro?.creatorId,
+            userId:user.id,
           });
           setConfirmAction(undefined);
         },

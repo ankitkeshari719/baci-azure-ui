@@ -191,6 +191,7 @@ export default function RetroPropsPanel({
                         BoardActionType.UPDATE_RETRO_DETAILS,
                         {
                           retroName: localRetroName,
+                          
                         }
                       );
                       (e.target as HTMLInputElement).blur();

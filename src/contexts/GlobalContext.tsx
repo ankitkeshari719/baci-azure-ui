@@ -31,6 +31,7 @@ export class ReducerPayload {
   loadingFlag?: boolean;
   expandColumn?: number;
   usersSelected?: any[];
+  userType?: number;
 }
 
 type ContextType = [
@@ -97,6 +98,7 @@ function GlobalProvider(props: ComponentProps<any>) {
             ...state.user,
             name: action.payload?.preferredNickname + '',
             avatar: action.payload?.avatar + '',
+            userType: action.payload?.userType ? action.payload.userType : 0,
           },
         });
       case ActionType.SET_SNACK_MESSAGE:
