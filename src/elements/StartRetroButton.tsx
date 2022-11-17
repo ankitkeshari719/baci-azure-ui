@@ -35,18 +35,33 @@ const StartRetroButton = () => {
       type: ActionType.SET_LOADING,
       payload: { loadingFlag: true },
     });
-    saveAndProcessAction(BoardActionType.START_RETRO, {creatorId:global.currentRetro?.creatorId,retroDuration:60}).then(() => {
-      console.log('started retro');
-      dispatch({
-        type: ActionType.SET_LOADING,
-        payload: { loadingFlag: false },
-      });
-      // navigate(`/board/${retroId}/pulsecheck`);
+    saveAndProcessAction(BoardActionType.UPDATE_RETRO_DETAILS, {
+      retroStatus: 'started',
+    }).then(() => {
+      saveAndProcessAction(BoardActionType.START_RETRO, {
+        creatorId: global.currentRetro?.creatorId,
+        retroDuration: 60,
+      }).then(
+        () => {
+          console.log('started retro');
+          dispatch({
+            type: ActionType.SET_LOADING,
+            payload: { loadingFlag: false },
+          });
+          // navigate(`/board/${retroId}/pulsecheck`);
+        },
+        () => {
+          dispatch({
+            type: ActionType.SET_LOADING,
+            payload: { loadingFlag: false },
+          });
+        }
+      );
     });
   };
 
   React.useEffect(() => {
-    console.log(retroStarted,"start retro button");
+    console.log(retroStarted, 'start retro button');
 
     if (retroStarted) {
       navigate(`/board/${retroId}/pulsecheck`);

@@ -555,7 +555,8 @@ export const processAction = (
   userId: string,
   date?: Date,
   version?: number,
-  avatar?: string
+  avatar?: string,
+
 ): void => {
   const {
     columns,
@@ -632,7 +633,8 @@ export const processAction = (
     fullPulseCheck?: boolean,
     creatorId?: string,
     userId?: string,
-    avatar?: string
+    avatar?: string,
+    retroStatus?:string
   ) => {
     if (retroName !== undefined) {
       state.retroName = retroName;
@@ -651,6 +653,9 @@ export const processAction = (
     }
     if (avatar != undefined && avatar != '') {
       state.avatar = avatar;
+    }
+    if(retroStatus!=undefined){
+      state.retroStatus=retroStatus;
     }
     state.lastUpdatedBy = userId;
   };
@@ -1015,6 +1020,7 @@ export const processAction = (
   };
 
   const endRetro = (undo: boolean, date: Date | undefined, userId: string) => {
+    console.log("endRetro",userId,state.creatorId,state.ended,undo)
     if (userId === state.creatorId && state.ended !== !undo) {
       state.ended = !undo;
       if (state.ended && date && state.endedDate === undefined) {
@@ -1053,7 +1059,8 @@ export const processAction = (
         parameters.fullPulseCheck,
         parameters.creatorId,
         userId,
-        avatar
+        avatar,
+        parameters.retroStatus
       );
       break;
     case BoardActionType.CREATE_GROUP:
