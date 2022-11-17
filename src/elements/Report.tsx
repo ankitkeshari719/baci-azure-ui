@@ -2,6 +2,8 @@ import {
   ACTIONS_COLUMN,
   FEEDBACK_QUESTIONS,
   FEEDBACK_QUESTIONS_COLORS,
+  FEEDBACK_QUESTIONS_FILLED,
+  FEEDBACK_QUESTIONS_OUTLINE,
   PULSE_CHECK_QUESTIONS,
   QUICK_PULSE_CHECK_QUESTIONS,
   WHAT_DIDNT_GO_WELL,
@@ -15,6 +17,9 @@ import {
   Grid,
   Typography,
   styled,
+  LinearProgress,
+  linearProgressClasses,
+  Button,
 } from '@mui/material';
 import StackedBarChart, { Question } from './PulseCheckChart';
 import WordCloud, { Word } from './WordCloud';
@@ -26,50 +31,70 @@ import React from 'react';
 import { RetroColumn } from './RetroColumn';
 import StarIcon from '@mui/icons-material/Star';
 import * as Icons from 'heroicons-react';
-import Toolbar from '../elements/Toolbar'
+import Toolbar from '../elements/Toolbar';
 import { GlobalContext } from '../contexts/GlobalContext';
+import { display } from '@mui/system';
+import ReactToPrint from 'react-to-print';
 const styles = {
-  whatWentwellBox:{
-    background: "rgba(11, 102, 35,0.04)",
-    border: "1px solid rgba(11, 102, 35,0.5)",
-    borderRadius: "20px",
-    height: '392px'
-},
- whatdidnwellBox: {
-  background: "rgba(247, 151, 34, 0.04)",
-  border: "1px solid rgba(247, 151, 34, 0.5)",
-  borderRadius: "20px",
-  boxSizing: "border-box",
-  height: '392px'
- },
- actionBox: {
-  background: "rgba(138, 56, 245, 0.04)",
-  border: "1px solid rgba(138, 56, 245, 0.5)",
-  borderRadius: "20px",
-  boxSizing: "border-box",
-height: '392px'
- },
- pulseCheckBox: {
-  background: 'rgba(52, 52, 52, 0.04)',
-  opacity: 0.5,
-  border: "1px solid rgba(52, 52, 52, 0.5)",
-  borderRadius: "20px",
-  boxSizing: "border-box",
-  height: '392px'
- },
- facilitatorFeedbackBox: {
-  background: 'rgba(52, 52, 52, 0.04)',
-  opacity: 0.5,
-  border: "1px solid rgba(52, 52, 52, 0.5)",
-  borderRadius: "20px",
-  boxSizing: "border-box",
-  height: '392px'
- },
- textOpacity: {
-  opacity: 0.9
- }
+  whatWentwellBox: {
+    background: 'rgba(11, 102, 35,0.04)',
+    border: '1px solid rgba(11, 102, 35,0.5)',
+    borderRadius: '20px',
+    height: '392px',
+  },
+  whatdidnwellBox: {
+    background: 'rgba(247, 151, 34, 0.04)',
+    border: '1px solid rgba(247, 151, 34, 0.5)',
+    borderRadius: '20px',
+    boxSizing: 'border-box',
+    height: '392px',
+  },
+  actionBox: {
+    background: 'rgba(138, 56, 245, 0.04)',
+    border: '1px solid rgba(138, 56, 245, 0.5)',
+    borderRadius: '20px',
+    boxSizing: 'border-box',
+    height: '392px',
+  },
+  pulseCheckBox: {
+    background: 'rgba(52, 52, 52, 0.04)',
+    border: '1px solid rgba(52, 52, 52, 0.5)',
+    borderRadius: '20px',
+    boxSizing: 'border-box',
+    height: '392px',
+  },
+  facilitatorFeedbackBox: {
+    background: 'rgba(52, 52, 52, 0.04)',
+    border: '1px solid rgba(52, 52, 52, 0.5)',
+    borderRadius: '20px',
+    boxSizing: 'border-box',
+    height: '392px',
+  },
+  textOpacity: {
+    opacity: 0.9,
+  },
 };
+const BorderLinearProgress = styled(LinearProgress)(({ theme }) => ({
+  height: '32px',
+  borderRadius: '16px',
+  marginTop: '32px',
+  marginLeft: '100px',
+  width: '600px',
+  //  "& .MuiLinearProgress-colorPrimary": {
+  //   backgroundColor: "#f6ce95"
+  // },
+  // "& .MuiLinearProgress-barColorPrimary": {
+  //   backgroundColor: "#f0ad4e"
+  // },
 
+  [`&.${linearProgressClasses.colorPrimary}`]: {
+    background: 'none',
+  },
+  // [`& .${linearProgressClasses.bar}`]: {
+  //   borderRadius: 16,
+  //   backgroundColor: theme.palette.mode === 'light' ? '#1a90ff' : '#308fe8',
+  // },
+}));
 
 export const Report = React.forwardRef((props, ref) => {
   const {
@@ -84,46 +109,58 @@ export const Report = React.forwardRef((props, ref) => {
   } = React.useContext(BoardContext);
 
   const [wentWellwords, setwentWellwords] = React.useState<Word[]>([]);
-  const [didntWentWellwords, setdidntWentWellwords] = React.useState<Word[]>([]);
+  const [didntWentWellwords, setdidntWentWellwords] = React.useState<Word[]>(
+    []
+  );
   const [actions, setActions] = React.useState<string[]>([]);
   const [questions, setQuestions] = React.useState<Question[]>([]);
   const [feedback, setFeedback] = React.useState<any | undefined>();
-  const [islanded, setIsLanded] =React.useState(true);
+  const [islanded, setIsLanded] = React.useState(true);
   const [global, dispatch] = React.useContext(GlobalContext);
-  const [retroDate, setRetroDate]=React.useState("");
-
-  React.useEffect(()=>{
-   
+  const [retroDate, setRetroDate] = React.useState('');
+  const [pulsCheckTotalCount, setpulsCheckTotalCount] = React.useState(0);
+ const componentRef = React.createRef<HTMLDivElement>();
+  function getBarColor(val: number) {
+    if (val > 50) {
+      return '#34A853';
+    } else if (val == 50) {
+      return '#FBBC05 !important';
+    } else {
+      return '#EA4335';
+    }
+  }
+  React.useEffect(() => {
     const longEnUSFormatter = new Intl.DateTimeFormat('en-US', {
-        year: 'numeric',
-        month: 'long',
-        day: 'numeric',
-      }).format(new Date());
-      setRetroDate(longEnUSFormatter);
-  
-    });
+      year: 'numeric',
+      month: 'long',
+      day: 'numeric',
+    }).format(new Date());
+    setRetroDate(longEnUSFormatter);
+  });
 
   React.useEffect(() => {
     const wentWell_cardValues = [] as string[];
     const didntWentWell_cardValues = [] as string[];
-   
+
     columns[ACTIONS_COLUMN].groups.forEach(group =>
-    
       group.cards.forEach(card => {
         actions.push(card.value);
       })
     );
     setActions(actions);
-//for went well word cloud
+    //for went well word cloud
     columns[WHAT_WENT_WELL_COLUMN].groups.forEach(group =>
       group.cards.forEach(card => {
         const clean = card.value.replace(/[\W_]+/g, ' ').trim();
         if (clean !== '') wentWell_cardValues.push(clean);
       })
     );
-    
+
     //for went well word cloud
-    const total = Object.values(wentWell_cardValues).join(' ').toLowerCase().split(' ');
+    const total = Object.values(wentWell_cardValues)
+      .join(' ')
+      .toLowerCase()
+      .split(' ');
     let wordsMaps_wentWell = [];
     if (total.length !== 0) {
       const noStopwords = removeStopwords(total, [
@@ -131,13 +168,12 @@ export const Report = React.forwardRef((props, ref) => {
         ...WORD_CLOUD_IGNORE_WORDS,
       ]);
 
-     wordsMaps_wentWell = noStopwords
+      wordsMaps_wentWell = noStopwords
         .reduce((current: { text: string; size: number }[], text: string) => {
           const exist = current.find(c => c.text === text);
-         
+
           if (exist) {
             exist.size++;
-            
           } else if (text.length > 2) {
             current.push({ text, size: 1 });
           }
@@ -147,30 +183,32 @@ export const Report = React.forwardRef((props, ref) => {
     }
     console.log(wordsMaps_wentWell);
     setwentWellwords(wordsMaps_wentWell);
-    
-//for didn't went well word cloud
-columns[WHAT_DIDNT_GO_WELL].groups.forEach(group =>
-  group.cards.forEach(card => {
-    const clean = card.value.replace(/[\W_]+/g, ' ').trim();
 
-    if (clean !== '') didntWentWell_cardValues.push(clean);
-  })
-);
-    const totalvalues = Object.values(didntWentWell_cardValues).join(' ').toLowerCase().split(' ');
+    //for didn't went well word cloud
+    columns[WHAT_DIDNT_GO_WELL].groups.forEach(group =>
+      group.cards.forEach(card => {
+        const clean = card.value.replace(/[\W_]+/g, ' ').trim();
+
+        if (clean !== '') didntWentWell_cardValues.push(clean);
+      })
+    );
+    const totalvalues = Object.values(didntWentWell_cardValues)
+      .join(' ')
+      .toLowerCase()
+      .split(' ');
     let wordsMaps_didntWentWell = [];
     if (totalvalues.length !== 0) {
       const noStopwords = removeStopwords(totalvalues, [
         ...eng,
         ...WORD_CLOUD_IGNORE_WORDS,
       ]);
-    
-     wordsMaps_didntWentWell = noStopwords
+
+      wordsMaps_didntWentWell = noStopwords
         .reduce((current: { text: string; size: number }[], text: string) => {
           const exist = current.find(c => c.text === text);
-          
+
           if (exist) {
             exist.size++;
-            
           } else if (text.length > 2) {
             current.push({ text, size: 1 });
           }
@@ -181,9 +219,14 @@ columns[WHAT_DIDNT_GO_WELL].groups.forEach(group =>
     console.log(wordsMaps_didntWentWell);
     setdidntWentWellwords(wordsMaps_didntWentWell);
 
-
-
-
+    //get total count of user submitted the pulsechek
+    let count = pulsCheckTotalCount;
+    users.map(user => {
+      if (user.pulseCheckQuestions.length !== 0) {
+        count = count + 1;
+      }
+    });
+    setpulsCheckTotalCount(count);
     const newQuestions = [] as Question[];
     const feedbackValues = {} as any;
     const feedbackCount = {} as any;
@@ -197,10 +240,16 @@ columns[WHAT_DIDNT_GO_WELL].groups.forEach(group =>
           feedbackValues[feedback.id] =
             (feedbackValues[feedback.id] ? feedbackValues[feedback.id] : 0) +
             parseInt(feedback.entry);
+
           feedbackCount[feedback.id] =
             (feedbackCount[feedback.id] ? feedbackCount[feedback.id] : 0) + 1;
         }
+        console.log(feedback);
       });
+      // [feedbackValues, feedbackCount].map((index)=>{
+      //   index[0][index]=index[0][index]/ index[1][index]
+      // })
+      console.log([feedbackValues, feedbackCount]);
       user.pulseCheckQuestions.forEach(question => {
         const text = (questionsDef as any)[question.id];
         const entry = newQuestions.find(nq => nq.question === text);
@@ -221,12 +270,13 @@ columns[WHAT_DIDNT_GO_WELL].groups.forEach(group =>
     });
     if (Object.keys(feedbackValues).length !== 0) {
       setFeedback([feedbackValues, feedbackCount]);
+      console.log(feedback);
     }
+
     setQuestions(newQuestions);
   }, [lastStateUpdate]);
 
   return (
-
     // <Box
     //   ref={ref}
     //   sx={{
@@ -395,21 +445,20 @@ columns[WHAT_DIDNT_GO_WELL].groups.forEach(group =>
         flexGrow: 1,
         display: 'flex',
         flexDirection: 'column',
-        height: '1150px',
-        overflowY: 'scroll'
+        height: '985px',
+        overflowY: 'scroll',
       }}
     >
       <Toolbar />
-      <Grid display="flex" xs={8} sx={{ flexDirection: 'column' }} marginRight={commonStyles.m_209}
-          marginLeft={commonStyles.m_209}>
-        <Box
+      <Box
           style={{
             display: 'flex',
             flexDirection: 'column', //this will allow flex-end to move item to the right
             alignItems: 'center',
           }}
           mt="48px"
-          
+          marginRight={commonStyles.m_209}
+          marginLeft={commonStyles.m_209}
         >
           <Box sx={{ alignSelf: 'flex-end' }}>
             <Icons.Share
@@ -422,7 +471,14 @@ columns[WHAT_DIDNT_GO_WELL].groups.forEach(group =>
               color="#4E4E4E"
               style={{ marginRight: '46px' }}
             ></Icons.Download>
-            <Icons.Printer size={20} color="#4E4E4E"></Icons.Printer>
+            <ReactToPrint
+            pageStyle='@page { size: A3; scale: 0.6  }'
+              trigger={() => (
+                <Icons.Printer size={20} color="#4E4E4E"></Icons.Printer>
+              )}
+              content={() => componentRef.current}
+            />
+            
           </Box>
           <Box sx={{ alignSelf: 'center' }}>
             <Typography
@@ -433,106 +489,266 @@ columns[WHAT_DIDNT_GO_WELL].groups.forEach(group =>
             </Typography>
           </Box>
         </Box>
-        <Box style={{
-            display: 'flex',
-            flexDirection: 'row', 
-            justifyContent: 'center',
-            alignItems: 'center',
-          }}
-          mt='20px'>
-        <Typography
-              variant="h2"
-              color={commonStyles.PrimaryMain} 
-            >
-              {global.currentRetro?.name}
-            </Typography>
-        </Box>
-        <Box style={{
-            display: 'flex',
-            flexDirection: 'row', 
-            justifyContent: 'center',
-            alignItems: 'center',
-          }}
-          mt='12px'>
-        <Typography
-              variant="h4"
-              color={commonStyles.PrimaryMain} 
-            >
-              {retroDate}
-            </Typography>
-        </Box>
-        <Box mt='48px' sx={styles.whatWentwellBox}>
-          <Typography ml='24px' mt='24px' color='#0B6623' variant='h4' sx={styles.textOpacity}>What Went Well</Typography>
-          
-          {wentWellwords.length !== 0 ? (
-        <>
-         
-         <Box m='20px 412px 48px 412px' width='672px' height= '272px'>
-            <WordCloud data={wentWellwords} showOn='whatWentWell'></WordCloud>
-          </Box>{' '}
-        </>
-      ) : null}
+      <Grid
+      ref={componentRef}
+        display="flex"
+        xs={8}
+        sx={{ flexDirection: 'column' }}
+        marginRight={commonStyles.m_209}
+        marginLeft={commonStyles.m_209}
+      >
        
-        </Box>
-        <Box mt='48px' sx={styles.whatdidnwellBox}>
-        <Typography ml='24px' mt='24px' color='#F79722' variant='h4' sx={styles.textOpacity}>What Didn’t Go Well</Typography>
-        {didntWentWellwords.length !== 0 ? (
-        <>
-         
-         <Box m='20px 412px 48px 412px' width='672px' height= '272px'>
-            <WordCloud data={didntWentWellwords} showOn='whatDidntWentWell'></WordCloud>
-          </Box>{' '}
-        </>
-      ) : null}
-        </Box>
-        <Box mt='48px' sx={styles.actionBox}>
-        <Typography ml='24px' mt='24px' color='#8A38F5' variant='h4' sx={styles.textOpacity}>Actions</Typography>
-        <Box>
-        {actions.length !== 0 ? (
-        <>
-          <RetroColumn
-            leftHeaderComponent={undefined}
-            rightHeaderComponent={undefined}
-            noHeightLimit
-            noHeader
-            expandAllGroups
-            column={columns[ACTIONS_COLUMN]}
-            columnId={columns[ACTIONS_COLUMN].id}
-            showEditBox={false}
-            setIslanded={setIsLanded}
-            setShowEditBox={() => {}}
-            cardGroups={columns[ACTIONS_COLUMN].groups}
-          />
-        </>
-      ) : null}
-        </Box>
-      
-
-        </Box>
-        <Box mt='48px' sx={styles.pulseCheckBox}>
-        <Typography ml='24px' mt='24px' color='#343434' variant='h4' sx={styles.textOpacity}>Pulse Check</Typography>
         <Box
-          sx={{
-            
-            margin: '20px',
+          style={{
             display: 'flex',
+            flexDirection: 'row',
             justifyContent: 'center',
             alignItems: 'center',
           }}
+          mt="20px"
         >
-          {questions.length !== 0 ? (
-            <StackedBarChart questions={questions}></StackedBarChart>
-          ) : (
-            <span style={{ fontSize: '16px' }}>
-              No responses have been submitted
-            </span>
-          )}
-        </Box>{' '}
+          <Typography variant="h2" color={commonStyles.PrimaryMain}>
+            {global.currentRetro?.name}
+          </Typography>
         </Box>
-        <Box mt='48px' sx={styles.facilitatorFeedbackBox}>
-        <Typography ml='24px' mt='24px' color='#343434' variant='h4' sx={styles.textOpacity}>Feedback for facilitator</Typography>
+        <Box
+          style={{
+            display: 'flex',
+            flexDirection: 'row',
+            justifyContent: 'center',
+            alignItems: 'center',
+          }}
+          mt="12px"
+        >
+          <Typography variant="h4" color={commonStyles.PrimaryMain}>
+            {retroDate}
+          </Typography>
         </Box>
-        
+        <Box mt="48px" sx={styles.whatWentwellBox}>
+          <Typography
+            ml="24px"
+            mt="24px"
+            color="#0B6623"
+            variant="h4"
+            sx={styles.textOpacity}
+          >
+            What Went Well
+          </Typography>
+
+          {wentWellwords.length !== 0 ? (
+            <>
+              <Box m="20px 412px 48px 412px" width="672px" height="272px">
+                <WordCloud
+                  data={wentWellwords}
+                  showOn="whatWentWell"
+                ></WordCloud>
+              </Box>{' '}
+            </>
+          ) : null}
+        </Box>
+        <Box mt="48px" sx={styles.whatdidnwellBox}>
+          <Typography
+            ml="24px"
+            mt="24px"
+            color="#F79722"
+            variant="h4"
+            sx={styles.textOpacity}
+          >
+            What Didn’t Go Well
+          </Typography>
+          {didntWentWellwords.length !== 0 ? (
+            <>
+              <Box m="20px 412px 48px 412px" width="672px" height="272px">
+                <WordCloud
+                  data={didntWentWellwords}
+                  showOn="whatDidntWentWell"
+                ></WordCloud>
+              </Box>{' '}
+            </>
+          ) : null}
+        </Box>
+        <Box mt="48px" sx={styles.actionBox}>
+          <Typography
+            ml="24px"
+            mt="24px"
+            color="#8A38F5"
+            variant="h4"
+            sx={styles.textOpacity}
+          >
+            Actions
+          </Typography>
+          <Box>
+            {actions.length !== 0 ? (
+              <>
+                <RetroColumn
+                  leftHeaderComponent={undefined}
+                  rightHeaderComponent={undefined}
+                  noHeightLimit
+                  noHeader
+                  expandAllGroups
+                  column={columns[ACTIONS_COLUMN]}
+                  columnId={columns[ACTIONS_COLUMN].id}
+                  showEditBox={false}
+                  setIslanded={setIsLanded}
+                  setShowEditBox={() => {}}
+                  cardGroups={columns[ACTIONS_COLUMN].groups}
+                />
+              </>
+            ) : null}
+          </Box>
+        </Box>
+        <Box mt="48px" sx={styles.pulseCheckBox}>
+          <Typography
+            ml="24px"
+            mt="24px"
+            color="#343434"
+            variant="h4"
+            sx={styles.textOpacity}
+          >
+            Pulse Check
+          </Typography>
+          <Box
+            sx={{
+              margin: '20px',
+              display: 'flex',
+              justifyContent: 'center',
+              alignItems: 'center',
+            }}
+          >
+            {/* <StackedBarChart questions={questions}></StackedBarChart> */}
+            {QUICK_PULSE_CHECK_QUESTIONS.length !== 0 ? (
+              <Grid container>
+                <Grid item xs={12} mr="300px" ml="300px">
+                  {/* { questions.map((que, i)=>(
+                    <Box sx={{ alignItems: "baseline",
+                    display: "flex",
+                    flexDirection: "row",
+                    justifyContent: "center"}}>
+                    <Typography>{que.question}</Typography>
+                    <BorderLinearProgress variant="determinate" sx={{"& .MuiLinearProgress-barColorPrimary": {
+                      backgroundColor: getBarColor(80)
+                    }}} value={50} />
+                    </Box>
+                ))
+                 
+                } */}
+                  <StackedBarChart questions={questions}></StackedBarChart>
+                </Grid>
+              </Grid>
+            ) : (
+              <span style={{ fontSize: '16px' }}>
+                No responses have been submitted
+              </span>
+            )}
+          </Box>{' '}
+        </Box>
+        <Box mt="48px"  sx={styles.facilitatorFeedbackBox}>
+          <Typography
+            ml="24px"
+            mt="24px"
+            color="#343434"
+            variant="h4"
+            sx={styles.textOpacity}
+          >
+            Feedback for facilitator
+          </Typography>
+          <Box mr="192px" ml="192px" mt="32px" mb="48px">
+            {feedback ? (
+              <Grid container sx={{ justifyContent: 'center' }}>
+                {FEEDBACK_QUESTIONS.map((v, index) => (
+                  <Grid
+                    item
+                    xs={12 / FEEDBACK_QUESTIONS.length}
+                    sx={{ display: 'flex', justifyContent: 'center' }}
+                  >
+                    <Card
+                      variant="outlined"
+                      sx={{
+                        margin: '10px',
+                        maxWidth: '351px',
+                        height: '228px',
+                        background: '#FFFFFF',
+                        borderRadius: '10px',
+                      }}
+                    >
+                      <CardContent>
+                        <Typography
+                          variant="h2"
+                          sx={{
+                            justifyContent: 'center',
+                            display: 'flex',
+                            gap: '5px',
+                            alignItems: 'center',
+                          }}
+                        >
+                          {(feedback[0][index] / feedback[1][index]).toFixed(1)}
+                        </Typography>
+                        <Box sx={{ display: 'flex', justifyContent: 'center' }}>
+                          {[1, 2, 3, 4, 5].map(i =>
+                            i <= feedback[0][index] / feedback[1][index] ? (
+                              <Icons.Star
+                                size={40}
+                                color="#FCB34C"
+                              ></Icons.Star>
+                            ) : (
+                              <Icons.StarOutline size={40}></Icons.StarOutline>
+                            )
+                          )}
+                        </Box>
+
+                        <Typography
+                          sx={{
+                            fontWeight: 'bold',
+                            justifyContent: 'center',
+                            display: 'flex',
+                            gap: '5px',
+                            alignItems: 'center',
+                          }}
+                          mt="4px"
+                        >
+                          {feedback[1][index]} response
+                          {feedback[1][index] === 1 ? '' : 's'}
+                        </Typography>
+                        <Typography mt="24px">
+                          {FEEDBACK_QUESTIONS[index]}
+                        </Typography>
+                      </CardContent>
+                    </Card>
+                  </Grid>
+                ))}
+              </Grid>
+            ) : (
+              <span style={{ fontSize: '16px' }}>
+                No responses have been submitted
+              </span>
+            )}
+          </Box>
+          <Box mt='96px' sx={{display: 'flex', justifyContent: 'center', alignItems: 'center'}}>
+            <Typography variant="h1" color={commonStyles.secondaryMain}>
+              Thank You for using{' '}
+            </Typography>
+            <Typography
+              mr="10px"
+              ml="10px"
+              variant="h1"
+              color={commonStyles.PrimaryMain}
+            >
+              BACI
+            </Typography>
+            <Typography variant='h1' color={commonStyles.secondaryMain}>Retros</Typography>
+          </Box>
+          <Box mt='31px' mb='105px' sx={{display: 'flex', justifyContent: 'center', alignItems: 'center'}}>
+            <Typography mr='5px' sx={{fontSize: '16px', textDecoration: 'underline'}} color={commonStyles.info}>
+              SignUp
+            </Typography>
+            <Typography
+             sx={{fontSize: '16px'}} color={commonStyles.primaryDark}
+            >
+              to explore more exciting features! 
+            </Typography>
+           
+          </Box>
+        </Box>
       </Grid>
     </Box>
   );

@@ -134,7 +134,15 @@ export const validateAction = (
     creatorId: string,
     userId: string
   ) => {
-    return !creatorId || creatorId === userId;
+    // if (
+    //   creatorId != '' &&
+    //   creatorId !== undefined &&
+    //   userId != '' &&
+    //   userId !== undefined
+    // )
+    //   return true;
+    // else return false;
+    return true;
   };
 
   const isCreateGroupValid = (
@@ -257,7 +265,7 @@ export const validateAction = (
     value: any,
     userId: string
   ): boolean => {
-    return isFacilitator(userId);
+    return true;
   };
 
   const isRemoveReactFromCardValid = (
@@ -555,8 +563,7 @@ export const processAction = (
   userId: string,
   date?: Date,
   version?: number,
-  avatar?: string,
-
+  avatar?: string
 ): void => {
   const {
     columns,
@@ -634,9 +641,9 @@ export const processAction = (
     creatorId?: string,
     userId?: string,
     avatar?: string,
-    retroStatus?:string
+    retroStatus?: string
   ) => {
-    if (retroName !== undefined) {
+    if (retroName !== undefined && retroName !== '') {
       state.retroName = retroName;
     }
     if (retroGoal !== undefined) {
@@ -648,14 +655,14 @@ export const processAction = (
     if (fullPulseCheck !== undefined) {
       state.fullPulseCheck = fullPulseCheck;
     }
-    if (creatorId && creatorId === userId) {
+    if (creatorId != '' && creatorId != undefined) {
       state.creatorId = creatorId;
     }
     if (avatar != undefined && avatar != '') {
       state.avatar = avatar;
     }
-    if(retroStatus!=undefined){
-      state.retroStatus=retroStatus;
+    if (retroStatus != undefined) {
+      state.retroStatus = retroStatus;
     }
     state.lastUpdatedBy = userId;
   };
@@ -1020,7 +1027,7 @@ export const processAction = (
   };
 
   const endRetro = (undo: boolean, date: Date | undefined, userId: string) => {
-    console.log("endRetro",userId,state.creatorId,state.ended,undo)
+    console.log('endRetro', userId, state.creatorId, state.ended, undo);
     if (userId === state.creatorId && state.ended !== !undo) {
       state.ended = !undo;
       if (state.ended && date && state.endedDate === undefined) {
@@ -1047,6 +1054,7 @@ export const processAction = (
     const column = findColumn(columnId);
     if (column) {
       column.publish = value;
+      
     }
   };
   let noMatch = false;

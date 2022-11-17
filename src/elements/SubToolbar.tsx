@@ -37,7 +37,7 @@ const MenuProps = {
 
 const SubToolbar = (props: any) => {
   const {
-    state: { columns, users, retroName, lastStateUpdate },
+    state: { columns, users, retroName, lastStateUpdate, ended },
   } = React.useContext(BoardContext);
   const [global, dispatch] = React.useContext(GlobalContext);
   // const classes = React.useStyles();
@@ -97,8 +97,6 @@ const SubToolbar = (props: any) => {
     }
   }, [userSelected]);
   useEffect(() => {
-
-
     dispatch({
       type: ActionType.SET_USER_SELECTED,
       payload: { usersSelected: userNameIdArray },
@@ -199,8 +197,7 @@ const SubToolbar = (props: any) => {
           }}
           value={userSelected}
           onChange={event => {
-            global.user.id === global.currentRetro?.creatorId &&
-              handleChange(event);
+            global.user.userType == 2 && handleChange(event);
           }}
           IconComponent={() => <></>}
           input={
@@ -229,7 +226,7 @@ const SubToolbar = (props: any) => {
               //     ))}
               // </>
               <>
-                {global.user.id === global.currentRetro?.creatorId ? (
+                {global.user.userType == 2 ? (
                   <img src="/svgs/Subtract.svg"></img>
                 ) : (
                   <img src="/svgs/Down.svg"></img>
@@ -240,7 +237,7 @@ const SubToolbar = (props: any) => {
           }}
           MenuProps={MenuProps}
         >
-          {global.user.id === global.currentRetro?.creatorId && (
+          {global.user.userType == 2 && !ended && (
             <MenuItem
               value="all"
 
@@ -264,7 +261,7 @@ const SubToolbar = (props: any) => {
             </MenuItem>
           )}
 
-          {global.user.id === global.currentRetro?.creatorId && (
+          {global.user.userType == 2 && !ended && (
             <hr
               style={{
                 width: '100%',
@@ -280,7 +277,7 @@ const SubToolbar = (props: any) => {
               key={user.userId + index}
               value={user.userId + '@' + index}
             >
-              {global.user.id === global.currentRetro?.creatorId && (
+              {global.user.userType === 2 && !ended && (
                 <Checkbox
                   checked={userSelected.indexOf(user.userId + '@' + index) > -1}
                 />
@@ -292,6 +289,7 @@ const SubToolbar = (props: any) => {
                 }}
                 css={{
                   width: '40px',
+                  height: '40px',
                   marginLeft: '20px',
                   marginRight: '8px',
                 }}
@@ -301,7 +299,9 @@ const SubToolbar = (props: any) => {
           ))}
         </Select>
 
-        <img style={{ marginLeft: '15px' }} src="/svgs/Line 13.svg"></img>
+        {global.user.userType == 2 && (
+          <img style={{ marginLeft: '15px' }} src="/svgs/Line 13.svg"></img>
+        )}
       </Box>
 
       <CountdownTimer color={'#2B9FDE'} bold={true}></CountdownTimer>

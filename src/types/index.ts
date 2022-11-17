@@ -19,6 +19,7 @@ export class User {
   name: string = '';
   nickname?: string = '';
   avatar: string = '';
+  userType: number = 0;
 }
 
 export class SnackMessageClass {
@@ -37,6 +38,7 @@ export class Global {
     retroId: '',
     pulseSubmitState: false,
   };
+
   loadingFlag?: boolean = false;
   expandColumn?: number = -1;
   usersSelected?: any[] = [];
@@ -96,7 +98,7 @@ export interface FeedbackEntry {
 
 export class BoardState {
   retroId: string = '';
-  publishColumn: any[] = [];
+  // publishColumn: any[] = [];
   loading: boolean = true;
   columns: Column[] = [];
   creatorId: string = '';
@@ -106,7 +108,7 @@ export class BoardState {
     avatar: string;
     feedback: FeedbackEntry[];
     pulseCheckQuestions: PulseCheckEntry[];
-    checked:boolean
+    checked: boolean;
   }[] = [];
   countdownFrom: number = -1;
   countdownDuration: number = 5 * 60 * 1000;
@@ -118,7 +120,7 @@ export class BoardState {
   fullPulseCheck: boolean = false;
   lastUpdatedBy?: string;
   ended: boolean = false;
-  retroStatus?:string;
+  retroStatus?: string;
   retroStarted: boolean = false;
   loadingFlag: boolean = false;
   retroDuration: number = 90;

@@ -5,6 +5,7 @@ import { BoardActionType } from '../statemachine/BoardStateMachine';
 import shortid from 'shortid';
 import { Button } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
+import { getRetro } from '../msal/services';
 const styles = {
   goToRetroBtn: {
     height: '44px',
@@ -37,7 +38,17 @@ const StartRetroButton = () => {
     });
     saveAndProcessAction(BoardActionType.UPDATE_RETRO_DETAILS, {
       retroStatus: 'started',
-    }).then(() => {
+      creatorId: global.currentRetro?.creatorId,
+      userId: global.user?.id,
+    }).then(async () => {
+      if (global.currentRetro?.id) {
+        const retrievedRetro = await getRetro(global.currentRetro.id);
+        dispatch({
+          type: ActionType.SET_CURRENT_RETRO,
+          payload: { retro: retrievedRetro },
+        });
+      }
+
       saveAndProcessAction(BoardActionType.START_RETRO, {
         creatorId: global.currentRetro?.creatorId,
         retroDuration: 60,

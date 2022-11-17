@@ -54,13 +54,13 @@ export const FEEDBACK_QUESTIONS_COLORS = ['#FCB34C', '#FCB34C', '#FCB34C'];
 export const FEEDBACK_QUESTIONS_OUTLINE = [
   <Icons.StarOutline size={20} />,
   <Icons.StarOutline size={20} />,
-  <Icons.StarOutline size={20}/>,
+  <Icons.StarOutline size={20} />,
 ];
 
 export const FEEDBACK_QUESTIONS_FILLED = [
   <Icons.Star size={20} />,
   <Icons.Star size={20} />,
-  <Icons.Star size={20}/>,
+  <Icons.Star size={20} />,
 ];
 
 export const PULSE_CHECK_QUESTIONS = [
@@ -106,8 +106,8 @@ export const INITIAL_COLUMNS = [
     order: 0,
     cardColour: CARD_COLOURS[0],
     cardColourHover: CARD_HOVER_COLOURS[0],
-    groupColour:GROUP_COLOURS[0],
-    groupFontColour:GROUP_FONT_COLOURS[0],
+    groupColour: GROUP_COLOURS[0],
+    groupFontColour: GROUP_FONT_COLOURS[0],
     groups: [
       {
         id: UNGROUPED + 1,
@@ -119,7 +119,7 @@ export const INITIAL_COLUMNS = [
         lockedBy: undefined,
       },
     ],
-    publish:false
+    publish: false,
   },
   {
     id: '1',
@@ -127,8 +127,8 @@ export const INITIAL_COLUMNS = [
     order: 1,
     cardColour: CARD_COLOURS[1],
     cardColourHover: CARD_HOVER_COLOURS[1],
-    groupColour:GROUP_COLOURS[1],
-    groupFontColour:GROUP_FONT_COLOURS[1],
+    groupColour: GROUP_COLOURS[1],
+    groupFontColour: GROUP_FONT_COLOURS[1],
     groups: [
       {
         id: UNGROUPED + 2,
@@ -140,7 +140,7 @@ export const INITIAL_COLUMNS = [
         lockedBy: undefined,
       },
     ],
-    publish:false
+    publish: false,
   },
   {
     id: '2',
@@ -148,8 +148,8 @@ export const INITIAL_COLUMNS = [
     order: 2,
     cardColour: CARD_COLOURS[2],
     cardColourHover: CARD_HOVER_COLOURS[2],
-    groupColour:GROUP_COLOURS[2],
-    groupFontColour:GROUP_FONT_COLOURS[2],
+    groupColour: GROUP_COLOURS[2],
+    groupFontColour: GROUP_FONT_COLOURS[2],
     groups: [
       {
         id: UNGROUPED + 3,
@@ -161,10 +161,15 @@ export const INITIAL_COLUMNS = [
         lockedBy: undefined,
       },
     ],
-    publish:false
+    publish: false,
   },
 ];
 
 export const WHAT_WENT_WELL_COLUMN = 0;
-export const WHAT_DIDNT_GO_WELL =1;
+export const WHAT_DIDNT_GO_WELL = 1;
 export const ACTIONS_COLUMN = 2;
+
+export const UserTypeArray = [
+  { id: 1, type: 'Facilitator' },
+  { id: 2, type: 'Participant' },
+];

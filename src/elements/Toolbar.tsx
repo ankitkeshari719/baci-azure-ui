@@ -25,16 +25,17 @@ import commonStyles from './../style.module.scss';
 // import { ReactComponent as InfoSvg } from '../../public/svgs/Info.svg';
 const Toolbar = (props: any) => {
   const [{ avatar, currentRetro, user }] = React.useContext(GlobalContext);
+
   const location = useLocation();
   const showFinishRetroButton =
     !location.pathname.includes('pulsecheck') &&
     !location.pathname.includes('report') &&
     !location.pathname.includes('startRetro');
-  const [editing, setEditing] = React.useState(true);
+  // const [editing, setEditing] = React.useState(true);
   const RETRONAME_CHARACTER_LIMIT = 80;
   const [openDialog, setOpenDialog] = React.useState(false);
   const {
-    state: { retroName, retroGoal, retroTimeframe },
+    state: { retroName, retroGoal, retroTimeframe, ended },
     commitAction,
   } = React.useContext(BoardContext);
   const [localRetroName, setLocalRetroName] = React.useState(
@@ -66,7 +67,7 @@ const Toolbar = (props: any) => {
   ) => {
     await commitAction(actionName as BoardActionType, {
       parameters,
-      userId: user.id,
+      userId: user?.id,
     });
   };
 
@@ -101,7 +102,7 @@ const Toolbar = (props: any) => {
           <Box
             sx={{ display: 'flex', flexDirection: 'row', alignItems: 'center' }}
           >
-            {currentRetro?.creatorId === user.id ? (
+            {user.userType == 2 ? (
               <TextField
                 multiline
                 fullWidth
@@ -147,6 +148,8 @@ const Toolbar = (props: any) => {
                     BoardActionType.UPDATE_RETRO_DETAILS,
                     {
                       retroName: localRetroName,
+                      creatorId: currentRetro.creatorId,
+                      userId: user.id,
                     }
                   );
                 }}
@@ -156,6 +159,8 @@ const Toolbar = (props: any) => {
                       BoardActionType.UPDATE_RETRO_DETAILS,
                       {
                         retroName: localRetroName,
+                        creatorId: currentRetro.creatorId,
+                        userId: user.id,
                       }
                     );
                     (e.target as HTMLInputElement).blur();
@@ -185,7 +190,7 @@ const Toolbar = (props: any) => {
                 fontSize: '20px',
                 color: '#2C69A1',
                 // marginLeft: '66px',
-                width: currentRetro?.creatorId === user.id ? '270px' : '150px',
+                width: user.userType == 2 ? '270px' : '150px',
               }}
             >
               Code : {currentRetro?.humanId}
@@ -217,9 +222,9 @@ const Toolbar = (props: any) => {
         )}
 
       <Box component="span" sx={{ flex: '1 1 auto' }}></Box>
-      {showFinishRetroButton && (
+      {showFinishRetroButton && !ended && (
         <>
-          {currentRetro?.creatorId === user.id ? (
+          {user.userType == 2 ? (
             <Button
               variant="contained"
               sx={{
