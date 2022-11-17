@@ -97,20 +97,20 @@ export default function useLoadRetro() {
         });
         return;
       }
-      if (ended) {
-        if (userJoined?.feedback.length !== 0) {
-          if (
-            FEATURE_FLAGS.report &&
-            global.currentRetro?.creatorId === global.user.id
-          ) {
-            navigate('/report/' + global.currentRetro.id);
-          } else {
-            navigate(`/offboarding`);
-          }
-        } else {
-          navigate(`/board/${retroId}/feedback`);
-        }
-      }
+      // if (ended) {
+      //   if (userJoined?.feedback.length !== 0) {
+      //     if (
+      //       FEATURE_FLAGS.report &&
+      //       global.currentRetro?.creatorId === global.user.id
+      //     ) {
+      //       navigate('/report/' + global.currentRetro.id);
+      //     } else {
+      //       navigate(`/offboarding`);
+      //     }
+      //   } else {
+      //     navigate(`/board/${retroId}/feedback`);
+      //   }
+      // }
     }
   }, [retroId, loading]);
 }

@@ -118,6 +118,7 @@ export class BoardState {
   fullPulseCheck: boolean = false;
   lastUpdatedBy?: string;
   ended: boolean = false;
+  retroStatus?:string;
   retroStarted: boolean = false;
   loadingFlag: boolean = false;
   retroDuration: number = 90;

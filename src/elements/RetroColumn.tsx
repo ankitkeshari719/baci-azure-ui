@@ -804,7 +804,7 @@ export function RetroColumn({
                         >
                           {group.name === UNGROUPED ||
                           !groupCollapsed[i] ||
-                          group.cards.length < 2 ||
+                          group.cards.length < 1 ||
                           expandAllGroups ? (
                             <div
                               style={{

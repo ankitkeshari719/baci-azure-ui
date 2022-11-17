@@ -97,8 +97,8 @@ const SubToolbar = (props: any) => {
     }
   }, [userSelected]);
   useEffect(() => {
-    console.log('selectedUserIdArray', userNameIdArray);
-    props.selectedUserIdArray(userNameIdArray);
+
+
     dispatch({
       type: ActionType.SET_USER_SELECTED,
       payload: { usersSelected: userNameIdArray },
