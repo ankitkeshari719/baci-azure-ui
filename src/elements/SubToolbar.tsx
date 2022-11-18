@@ -152,6 +152,7 @@ const SubToolbar = (props: any) => {
               avatar={user.avatar}
               css={{
                 width: '40px',
+                height:'40px',
                 marginLeft: '0',
                 marginRight: '-8px',
                 border:

@@ -39,7 +39,7 @@ const Toolbar = (props: any) => {
     commitAction,
   } = React.useContext(BoardContext);
   const [localRetroName, setLocalRetroName] = React.useState(
-    retroName || currentRetro?.name
+    currentRetro?.name
   );
   const [anchorEl, setAnchorEl] = React.useState<HTMLButtonElement | null>(
     null
@@ -58,7 +58,7 @@ const Toolbar = (props: any) => {
   const id = open ? 'simple-popover' : undefined;
 
   React.useEffect(() => {
-    setLocalRetroName(retroName);
+    if (retroName && retroName !== '') setLocalRetroName(retroName);
   }, [retroName]);
 
   const saveAndProcessAction = async (
@@ -102,7 +102,7 @@ const Toolbar = (props: any) => {
           <Box
             sx={{ display: 'flex', flexDirection: 'row', alignItems: 'center' }}
           >
-            {user.userType == 2 ? (
+            {user.userType == 2 && !ended ? (
               <TextField
                 multiline
                 fullWidth
