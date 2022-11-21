@@ -22,6 +22,7 @@ import { StartRetro } from '../screens/StartRetro';
 import PulseCheck from '../screens/PulseCheck';
 import { RetroDetails } from '../screens/RetroDetails';
 import commonStyles from './../style.module.scss';
+import SessionEndingMessage from '../atoms/SessionEndingMessage';
 // import { ReactComponent as InfoSvg } from '../../public/svgs/Info.svg';
 const Toolbar = (props: any) => {
   const [{ avatar, currentRetro, user }] = React.useContext(GlobalContext);
@@ -35,15 +36,25 @@ const Toolbar = (props: any) => {
   const RETRONAME_CHARACTER_LIMIT = 80;
   const [openDialog, setOpenDialog] = React.useState(false);
   const {
-    state: { retroName, retroGoal, retroTimeframe, ended },
+    state: {
+      retroName,
+      retroGoal,
+      retroTimeframe,
+      startedTimeStamp,
+      retroDuration,
+      ended,
+    },
     commitAction,
   } = React.useContext(BoardContext);
+
   const [localRetroName, setLocalRetroName] = React.useState(
     currentRetro?.name
   );
   const [anchorEl, setAnchorEl] = React.useState<HTMLButtonElement | null>(
     null
   );
+  const [showSessionEndMessage, setShowSessionEndMessage] =
+    React.useState(false);
 
   const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
     console.log('handleClick');
@@ -53,13 +64,28 @@ const Toolbar = (props: any) => {
   const handleClose = () => {
     setAnchorEl(null);
   };
-
   const open = Boolean(anchorEl);
   const id = open ? 'simple-popover' : undefined;
 
   React.useEffect(() => {
     if (retroName && retroName !== '') setLocalRetroName(retroName);
   }, [retroName]);
+
+  React.useEffect(() => {
+    const timer = setTimeout(() => {
+      const start: number =
+        startedTimeStamp != undefined ? startedTimeStamp : 0;
+      const warningDuration: number = (retroDuration - 2) * 60 * 1000;
+      const endTime = start + warningDuration;
+      const currentEpoch = Date.now();
+      console.log(endTime <= currentEpoch, 'Time', showSessionEndMessage);
+
+      if (endTime <= currentEpoch && !location.pathname.includes('waiting')) {
+        setShowSessionEndMessage(true);
+      }
+    }, 1000);
+    // return () => clearTimeout(timer);
+  }, []);
 
   const saveAndProcessAction = async (
     actionName: BoardActionType,
@@ -242,22 +268,32 @@ const Toolbar = (props: any) => {
               FINISH RETRO
             </Button>
           ) : (
-            <Button
-              variant="contained"
-              sx={{
-                // background: '#159ADD',
-                // color: 'white',
-                borderRadius: '24px',
-                width: '148px',
-                height: '44px',
-                padding: '10px 20px',
-                marginRight: '40px',
-                fontWeight: 500,
-              }}
-              onClick={() => props.onFinishRetro()}
-            >
-              LEAVE RETRO
-            </Button>
+            <>
+              {' '}
+              <Button
+                variant="contained"
+                sx={{
+                  // background: '#159ADD',
+                  // color: 'white',
+                  borderRadius: '24px',
+                  width: '148px',
+                  height: '44px',
+                  padding: '10px 20px',
+                  marginRight: '40px',
+                  fontWeight: 500,
+                }}
+                onClick={() => props.onFinishRetro()}
+              >
+                LEAVE RETRO
+              </Button>
+              {showSessionEndMessage && (
+                <SessionEndingMessage
+                  hideSessionEndingMessage={() => {
+                    setShowSessionEndMessage(false);
+                  }}
+                />
+              )}
+            </>
           )}
         </>
       )}

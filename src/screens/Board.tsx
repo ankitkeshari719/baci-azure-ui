@@ -363,7 +363,7 @@ export default function RetroBoard() {
         );
         if (
           currentUser?.length == 1 &&
-          currentUser[0].pulseCheckQuestions.length == 0
+          currentUser[0].feedback.length == 0
         ) {
           console.log('ended', true, ' ', currentUser[0].pulseCheckQuestions);
           setshowFeedback(true);

@@ -127,6 +127,26 @@ export function RetroColumn({
   //   console.log(groupCollapsed);
   // }, [groupCollapsed]);
 
+  React.useEffect(() => {
+    if (columnId == '0') {
+      let elem = document.getElementById('publish' + columnId);
+      // if (elem != null && elem != undefined) {elem.style.backgroundColor = 'red';
+      // if (elem != null && elem != undefined) {elem.style.border = '1px solid red';
+
+    // elem.
+    // }
+
+      // let rect = elem?.getBoundingClientRect();
+      // console.log(elem, 'elem', columnId, ' ', rect);
+      // for (const key in rect) {
+      //   if (typeof rect[key] !== 'function') {
+      //     let para = document.createElement('p');
+      //     para.textContent = `${key} : ${rect[key]}`;
+      //     container.appendChild(para);
+      //   }
+      // }
+    }
+  }, []);
   const findCardInGroup = (group: CardGroup, id: string) =>
     group.cards.find(card => card.id === id);
 
@@ -646,7 +666,7 @@ export function RetroColumn({
                 md={5}
                 xs={5}
               >
-                {global.user.userType == 2 &&!ended&& (
+                {global.user.userType == 2 && !ended && (
                   <>
                     {column.publish ? (
                       <Typography style={{ color: '#808080' }}>
@@ -654,6 +674,7 @@ export function RetroColumn({
                       </Typography>
                     ) : (
                       <Typography
+                        id={'publish' + columnId}
                         onClick={() => publishColumn(true)}
                         sx={{
                           color: '#159ADD',
@@ -1065,8 +1086,7 @@ export function RetroColumn({
           {useMemo(
             () => (
               <>
-                {!column.publish &&
-               global.user.userType!==2 ? (
+                {!column.publish && global.user.userType !== 2 ? (
                   <Box
                     sx={{
                       display: 'flex',
@@ -1099,6 +1119,7 @@ export function RetroColumn({
                                   item
                                   lg={3}
                                   md={3}
+                                  
                                   sx={{ marginBottom: '20px' }}
                                 >
                                   {/* <Box sx={{width:"100%"}}> */}
@@ -1189,7 +1210,7 @@ export function RetroColumn({
                                 {group.cards.map(
                                   (card: RetroCardType, j: number) =>
                                     (card.createdBy === global.user.id ||
-                                     global.user.userType==2 ||
+                                      global.user.userType == 2 ||
                                       column.publish) && (
                                       <React.Fragment key={card.id}>
                                         {group.name === UNGROUPED ||
@@ -1239,7 +1260,7 @@ export function RetroColumn({
                                               >
                                                 <span
                                                   className={
-                                                   global.user.userType==2
+                                                    global.user.userType == 2
                                                       ? 'handle'
                                                       : ''
                                                   }

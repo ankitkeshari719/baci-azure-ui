@@ -6,6 +6,7 @@ import shortid from 'shortid';
 import { Button } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
 import { getRetro } from '../msal/services';
+import RetroTimeInputDialog from '../atoms/RetroTimeInputDialog';
 const styles = {
   goToRetroBtn: {
     height: '44px',
@@ -17,6 +18,8 @@ const StartRetroButton = () => {
     state: { retroId, retroStarted, retroDuration },
     commitAction,
   } = React.useContext(BoardContext);
+  const [open, setOpen] = React.useState(false);
+  const [selectedValue, setSelectedValue] = React.useState(60);
   const navigate = useNavigate();
 
   const [global, dispatch] = React.useContext(GlobalContext);
@@ -31,7 +34,7 @@ const StartRetroButton = () => {
     });
   };
 
-  const startRetro = () => {
+  const startRetro = (duration: number) => {
     dispatch({
       type: ActionType.SET_LOADING,
       payload: { loadingFlag: true },
@@ -51,7 +54,7 @@ const StartRetroButton = () => {
 
       saveAndProcessAction(BoardActionType.START_RETRO, {
         creatorId: global.currentRetro?.creatorId,
-        retroDuration: 60,
+        retroDuration: duration,
       }).then(
         () => {
           console.log('started retro');
@@ -78,18 +81,41 @@ const StartRetroButton = () => {
       navigate(`/board/${retroId}/pulsecheck`);
     }
   }, [retroStarted]);
+
+  const handleClickOpen = () => {
+    setOpen(true);
+  };
+
+  const handleClose = (value: any) => {
+    setOpen(false);
+  };
+  const handleSubmit = (value: any) => {
+    setOpen(false);
+    console.log(value);
+    setSelectedValue(value);
+    startRetro(value);
+  };
   return (
     <>
       {global?.currentRetro?.creatorId === global?.user?.id && (
         // <button onClick={startRetro}>Start</button>
-        <Button
-          variant="outlined"
-          className="secondaryButton"
-          style={styles.goToRetroBtn}
-          onClick={() => startRetro()}
-        >
-          <span className="secondaryButtonText">Start retro</span>
-        </Button>
+        <>
+          {' '}
+          <Button
+            variant="outlined"
+            className="secondaryButton"
+            style={styles.goToRetroBtn}
+            onClick={() => setOpen(true)}
+          >
+            <span className="secondaryButtonText">Start retro</span>
+          </Button>
+          <RetroTimeInputDialog
+            selectedValue={selectedValue}
+            open={open}
+            onClose={handleClose}
+            onSubmit={handleSubmit}
+          />
+        </>
       )}
     </>
   );
