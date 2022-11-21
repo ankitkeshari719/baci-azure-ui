@@ -291,7 +291,7 @@ export function RetroDetails(props: any) {
                         >
                           <img
                             src={copy}
-                            style={(styles.copyURL, { marginTop: '15px' })}
+                            style={(styles.copyURL, { marginTop: '0' })}
                           ></img>
                         </Tooltip>
                       </CopyToClipboard>

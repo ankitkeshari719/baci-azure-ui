@@ -22,6 +22,7 @@ import { ActionType, GlobalContext } from '../contexts/GlobalContext';
 import Avatar from '../elements/Avatar';
 import { avatarName } from '../constants/AvatarName';
 import { useAzureAuth } from '../msal/azureauth';
+import { UserTypeArray } from '../constants';
 const AVATAR_CHARACTER_LIMIT = 30;
 const styles = {
   heading: {
@@ -80,10 +81,9 @@ export function AvatarNamePage() {
   const [joining, setJoining] = React.useState(id ? true : false);
   const [captureName, setCaptureName] = React.useState(id ? true : false);
 
-
-  React.useEffect(()=>{
-    setAvatarList(avatarName.sort(() => Math.random() - 0.5))
-  },[])
+  React.useEffect(() => {
+    setAvatarList(avatarName.sort(() => Math.random() - 0.5));
+  }, []);
   const joinRetro = async (
     retrunBool: boolean
   ): Promise<RetroType | undefined> => {
@@ -124,9 +124,17 @@ export function AvatarNamePage() {
         type: ActionType.SET_LOADING,
         payload: { loadingFlag: true },
       });
+      const userTypeValue: number =
+        global?.user?.id == global.currentRetro?.creatorId
+          ? UserTypeArray[1].id
+          : UserTypeArray[0].id;
       dispatch({
         type: ActionType.SET_PREFERRED_NICKNAME,
-        payload: { preferredNickname: userName, avatar: selectedAvatar },
+        payload: {
+          preferredNickname: userName,
+          avatar: selectedAvatar,
+          userType: userTypeValue,
+        },
       });
       console.log('disptach');
       if (!global.currentRetro || joining) {
@@ -200,7 +208,7 @@ export function AvatarNamePage() {
     }
   }, []);
   return (
-    <Grid container spacing={0}>
+    <Grid container spacing={0} style={{overflowY:"auto"}}>
       <Grid item xs={6}>
         <LandingLayout></LandingLayout>
       </Grid>
@@ -213,20 +221,32 @@ export function AvatarNamePage() {
         >
           <Box>
             {!global.currentRetro?.creatorId ? (
-              <><Typography
-                variant="h1"
-                color={commonStyles.primaryDark}
-                mt="254px"
-              >
-                Welcome to the BACI
-              </Typography><Typography variant="h3" color={commonStyles.primaryDark} mt="30px">
+              <>
+                <Typography
+                  variant="h1"
+                  color={commonStyles.primaryDark}
+                  mt="234px"
+                >
+                  Welcome to the BACI
+                </Typography>
+                <Typography
+                  variant="h3"
+                  color={commonStyles.primaryDark}
+                  mt="30px"
+                >
                   Who you are in ‘{global.currentRetro?.name}’?
-                </Typography></>
-            ): ( <Typography variant="h3" color={commonStyles.primaryDark} mt="271px">
-            Who you are in ‘{global.currentRetro?.name}’?
-          </Typography>)}
+                </Typography>
+              </>
+            ) : (
+              <Typography
+                variant="h3"
+                color={commonStyles.primaryDark}
+                mt="251px"
+              >
+                Who you are in ‘{global.currentRetro?.name}’?
+              </Typography>
+            )}
 
-           
             <FormControl>
               <TextField
                 id="standard-helperText"
@@ -269,16 +289,23 @@ export function AvatarNamePage() {
               {/* </Box> */}
             </Box>
             {avatarSelectionError !== '' && (
-              <Box sx={{ color: '#d32f2f',  fontFamily: 'Poppins',
-              fontWeight: 400,
-              fontSize: "0.75rem",
-              lineHeight: 1.66,
-              letterSpacing: "0.03333em",
-              textAlign: "left",
-              marginTop: "3px",
-              marginRight: "0",
-              marginBottom: "0",
-              marginLeft: "0" }}>{avatarSelectionError}</Box>
+              <Box
+                sx={{
+                  color: '#d32f2f',
+                  fontFamily: 'Poppins',
+                  fontWeight: 400,
+                  fontSize: '0.75rem',
+                  lineHeight: 1.66,
+                  letterSpacing: '0.03333em',
+                  textAlign: 'left',
+                  marginTop: '3px',
+                  marginRight: '0',
+                  marginBottom: '0',
+                  marginLeft: '0',
+                }}
+              >
+                {avatarSelectionError}
+              </Box>
             )}
             <Button
               variant="outlined"
