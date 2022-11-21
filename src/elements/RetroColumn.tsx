@@ -1096,6 +1096,7 @@ if(!location.pathname.includes('report')){
                                  item
                                  lg={3}
                                  md={3}
+                                 xs={2}
                                  sx={{ marginBottom: '20px' }}
                                >
                                  {/* <Box sx={{width:"100%"}}> */}
@@ -1200,6 +1201,7 @@ if(!location.pathname.includes('report')){
                                              item
                                              lg={4}
                                              md={4}
+                                             xs={6}
                                              ref={e =>
                                                cardRefCollector(
                                                  e as HTMLDivElement,

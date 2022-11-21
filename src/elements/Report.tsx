@@ -54,7 +54,7 @@ const styles = {
     border: '1px solid rgba(138, 56, 245, 0.5)',
     borderRadius: '20px',
     boxSizing: 'border-box',
-    height: '392px',
+    minHeight: '392px',
   },
   pulseCheckBox: {
     background: 'rgba(52, 52, 52, 0.04)',
@@ -73,6 +73,7 @@ const styles = {
   textOpacity: {
     opacity: 0.9,
   },
+  
 };
 const BorderLinearProgress = styled(LinearProgress)(({ theme }) => ({
   height: '32px',
@@ -220,13 +221,14 @@ export const Report = React.forwardRef((props, ref) => {
     setdidntWentWellwords(wordsMaps_didntWentWell);
 
     //get total count of user submitted the pulsechek
-    let count = pulsCheckTotalCount;
+    
     users.map(user => {
       if (user.pulseCheckQuestions.length !== 0) {
-        count = count + 1;
+        setpulsCheckTotalCount(pulsCheckTotalCount + 1);
       }
     });
-    setpulsCheckTotalCount(count);
+   
+    console.log('total count', pulsCheckTotalCount);
     const newQuestions = [] as Question[];
     const feedbackValues = {} as any;
     const feedbackCount = {} as any;
@@ -270,10 +272,46 @@ export const Report = React.forwardRef((props, ref) => {
     });
     if (Object.keys(feedbackValues).length !== 0) {
       setFeedback([feedbackValues, feedbackCount]);
-      console.log(feedback);
+      
     }
 
     setQuestions(newQuestions);
+    console.log('format',newQuestions,feedbackValues,feedbackCount);
+    let percent1: any , percent2, percent3;
+    percent1=(Number(Object.values(feedbackValues)[0])/Number(Object.values(feedbackCount)[0])) * 100;
+    percent2=(Number(Object.values(feedbackValues)[1])/Number(Object.values(feedbackCount)[1])) * 100;
+    percent3=(Number(Object.values(feedbackValues)[2])/Number(Object.values(feedbackCount)[2])) * 100;
+    console.log('percent',percent1,percent2,percent3);
+    let totalCount= [];
+    questions[0]
+    questions.map((item, index)=> {
+      
+    })
+
+    //data in format pulse check
+    // let data;
+    // let question1: { question: string; option: string; count: number; }[] =[];
+    // let question2: { question: string; option: string; count: number; }[] =[];
+    // let question3: { question: string; option: string; count: number; }[] =[];
+    // if (questions.length !== 0) {
+    //   const options = ['1', '2', '3'];
+    //    data = options.flatMap(option =>
+    //     questions.map(d => ({
+    //       question: d.question,
+    //       option,
+    //       count: (d as any)[option] as number,
+    //     })))};
+    //     data?.map((item, index) => {
+    //       if(item.question === QUICK_PULSE_CHECK_QUESTIONS[0]){
+    //         question1.push(item);
+    //       } else if(item.question === QUICK_PULSE_CHECK_QUESTIONS[1]){
+    //         question2.push(item);
+    //       } else if(item.question === QUICK_PULSE_CHECK_QUESTIONS[2]){
+    //         question3.push(item);
+    //       }
+    //     })
+    // console.log('report screen',question1, question2, question3);
+
   }, [lastStateUpdate]);
 
   return (
@@ -440,64 +478,64 @@ export const Report = React.forwardRef((props, ref) => {
     //   </>
     //   {/* ) : null} */}
     // </Box>
-    <Box
-      style={{
-        flexGrow: 1,
-        display: 'flex',
-        flexDirection: 'column',
-        height: '985px',
-        overflowY: 'scroll',
-      }}
+    <Box  style={{
+      height: '985px',
+      overflowY: 'scroll',
+    }}>
+    <Grid
+    container
+     
     >
       <Toolbar />
-      <Box
+      <Grid container
           style={{
             display: 'flex',
-            flexDirection: 'column', //this will allow flex-end to move item to the right
-            alignItems: 'center',
+            flexDirection: 'row',
+            justifyContent: 'center' //this will allow flex-end to move item to the right
           }}
           mt="48px"
-          marginRight={commonStyles.m_209}
-          marginLeft={commonStyles.m_209}
         >
-          <Box sx={{ alignSelf: 'flex-end' }}>
-            <Icons.Share
-              size={20}
-              color="#4E4E4E"
-              style={{ marginRight: '46px' }}
-            ></Icons.Share>
-            <Icons.Download
-              size={20}
-              color="#4E4E4E"
-              style={{ marginRight: '46px' }}
-            ></Icons.Download>
-            <ReactToPrint
-            pageStyle='@page { size: A3; scale: 0.6  }'
-              trigger={() => (
-                <Icons.Printer size={20} color="#4E4E4E"></Icons.Printer>
-              )}
-              content={() => componentRef.current}
-            />
-            
-          </Box>
-          <Box sx={{ alignSelf: 'center' }}>
-            <Typography
-              color={commonStyles.secondaryMain}
-              fontSize={commonStyles.font16}
-            >
-              Summary
-            </Typography>
-          </Box>
-        </Box>
+          <Grid lg={8}>
+            <Grid item display='flex' justifyContent='center'>
+              <Typography
+                color={commonStyles.secondaryMain}
+                fontSize={commonStyles.font16}
+              >
+                Summary
+              </Typography>
+            </Grid>
+            <Grid item  display='flex' justifyContent='flex-end'>
+              <Icons.Share
+                size={20}
+                color="#4E4E4E"
+                style={{ marginRight: '46px' }}
+              ></Icons.Share>
+              <Icons.Download
+                size={20}
+                color="#4E4E4E"
+                style={{ marginRight: '46px' }}
+              ></Icons.Download>
+              <ReactToPrint
+              pageStyle='@page { size: A4; scale: 0.90 }'
+                trigger={() => (
+                  <Icons.Printer size={20} color="#4E4E4E"></Icons.Printer>
+                )}
+                content={() => componentRef.current}
+              />
+              
+            </Grid>
+          </Grid>
+        </Grid>
+    <Grid container direction='row' alignItems='center' justifyContent='center'>
       <Grid
       ref={componentRef}
         display="flex"
-        xs={8}
-        sx={{ flexDirection: 'column' }}
-        marginRight={commonStyles.m_209}
-        marginLeft={commonStyles.m_209}
+        lg={8}
+        xs={12}
+        direction='column'
+        item
       >
-       
+       <Grid item sx={{ flexDirection: 'row' }}>
         <Box
           style={{
             display: 'flex',
@@ -537,12 +575,12 @@ export const Report = React.forwardRef((props, ref) => {
 
           {wentWellwords.length !== 0 ? (
             <>
-              <Box m="20px 412px 48px 412px" width="672px" height="272px">
+              <Grid item display='flex' justifyContent='center' alignItems='center'  height="272px">
                 <WordCloud
                   data={wentWellwords}
                   showOn="whatWentWell"
                 ></WordCloud>
-              </Box>{' '}
+              </Grid>{' '}
             </>
           ) : null}
         </Box>
@@ -558,12 +596,12 @@ export const Report = React.forwardRef((props, ref) => {
           </Typography>
           {didntWentWellwords.length !== 0 ? (
             <>
-              <Box m="20px 412px 48px 412px" width="672px" height="272px">
+              <Grid item display='flex' justifyContent='center' alignItems='center'  height="272px">
                 <WordCloud
                   data={didntWentWellwords}
                   showOn="whatDidntWentWell"
                 ></WordCloud>
-              </Box>{' '}
+              </Grid>{' '}
             </>
           ) : null}
         </Box>
@@ -597,7 +635,8 @@ export const Report = React.forwardRef((props, ref) => {
             ) : null}
           </Box>
         </Box>
-        <Box mt="48px" sx={styles.pulseCheckBox}>
+        <Grid item mt="48px" sx={styles.pulseCheckBox} >
+          <Grid item>
           <Typography
             ml="24px"
             mt="24px"
@@ -607,6 +646,8 @@ export const Report = React.forwardRef((props, ref) => {
           >
             Pulse Check
           </Typography>
+          </Grid>
+          
           <Box
             sx={{
               margin: '20px',
@@ -617,9 +658,9 @@ export const Report = React.forwardRef((props, ref) => {
           >
             {/* <StackedBarChart questions={questions}></StackedBarChart> */}
             {QUICK_PULSE_CHECK_QUESTIONS.length !== 0 ? (
-              <Grid container>
-                <Grid item xs={12} mr="300px" ml="300px">
-                  {/* { questions.map((que, i)=>(
+              <Grid container >
+                <Grid item xs={12} flexDirection='row' justifyContent='center'>
+                  { questions.map((que, i)=>(
                     <Box sx={{ alignItems: "baseline",
                     display: "flex",
                     flexDirection: "row",
@@ -631,8 +672,8 @@ export const Report = React.forwardRef((props, ref) => {
                     </Box>
                 ))
                  
-                } */}
-                  <StackedBarChart questions={questions}></StackedBarChart>
+                }
+                  {/* <StackedBarChart questions={questions}></StackedBarChart> */}
                 </Grid>
               </Grid>
             ) : (
@@ -641,8 +682,9 @@ export const Report = React.forwardRef((props, ref) => {
               </span>
             )}
           </Box>{' '}
-        </Box>
-        <Box mt="48px"  sx={styles.facilitatorFeedbackBox}>
+        </Grid>
+        <Grid mt="48px" item  flexDirection='row' justifyContent='center'  sx={styles.facilitatorFeedbackBox}>
+          <Grid item>
           <Typography
             ml="24px"
             mt="24px"
@@ -652,9 +694,11 @@ export const Report = React.forwardRef((props, ref) => {
           >
             Feedback for facilitator
           </Typography>
-          <Box mr="192px" ml="192px" mt="32px" mb="48px">
+          </Grid>
+          
+          <Grid item  mt="32px" mb="48px">
             {feedback ? (
-              <Grid container sx={{ justifyContent: 'center' }}>
+              <Grid container sx={{flexDirection: 'row' ,justifyContent: 'center' }}>
                 {FEEDBACK_QUESTIONS.map((v, index) => (
                   <Grid
                     item
@@ -666,7 +710,7 @@ export const Report = React.forwardRef((props, ref) => {
                       sx={{
                         margin: '10px',
                         maxWidth: '351px',
-                        height: '228px',
+                        height: '238px',
                         background: '#FFFFFF',
                         borderRadius: '10px',
                       }}
@@ -709,7 +753,7 @@ export const Report = React.forwardRef((props, ref) => {
                           {feedback[1][index]} response
                           {feedback[1][index] === 1 ? '' : 's'}
                         </Typography>
-                        <Typography mt="24px">
+                        <Typography mt="24px" mb='25px'>
                           {FEEDBACK_QUESTIONS[index]}
                         </Typography>
                       </CardContent>
@@ -722,7 +766,9 @@ export const Report = React.forwardRef((props, ref) => {
                 No responses have been submitted
               </span>
             )}
-          </Box>
+          </Grid>
+          </Grid>
+          </Grid>
           <Box mt='96px' sx={{display: 'flex', justifyContent: 'center', alignItems: 'center'}}>
             <Typography variant="h1" color={commonStyles.secondaryMain}>
               Thank You for using{' '}
@@ -748,8 +794,10 @@ export const Report = React.forwardRef((props, ref) => {
             </Typography>
            
           </Box>
-        </Box>
+    
       </Grid>
+      </Grid>
+    </Grid>
     </Box>
   );
 });
