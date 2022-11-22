@@ -15,7 +15,7 @@ env:
   REACT_APP_RATE_APP: false
   REACT_APP_REPORT: true
   REACT_APP_STRESS_TEST: true
-  REACT_APP_API_URL: https://baciapi.azurewebsites.net
+  REACT_APP_API_URL: https://dev-api-container-app.thankfulriver-cedadc7d.australiaeast.azurecontainerapps.io
 
 jobs:
   build_and_deploy_job:
