@@ -12,7 +12,7 @@ let featureFlags = {
 };
 //let api_url = "http://localhost:8081";
 //let api_url = env_api_url;
-if (env === 'production') {
+if (env == 'production') {
     let featureFlags = {
         feedback: false,
         pulseCheck: false,
@@ -22,7 +22,7 @@ if (env === 'production') {
     };
     let api_url = "https://prod-api-container-app.happywave-6f9d3247.australiaeast.azurecontainerapps.io";
     log.setLevel(log.levels.ERROR);
-} else if (env === 'test') {
+} else if (env == 'test') {
     let featureFlags = {
         feedback: true,
         pulseCheck: true,
@@ -32,7 +32,7 @@ if (env === 'production') {
     };
     let api_url = "https://baciapi.azurewebsites.net";
     log.setLevel(log.levels.TRACE);
-} else if (env === 'development') {
+} else if (env == 'development') {
     let featureFlags = {
         feedback: true,
         pulseCheck: true,
