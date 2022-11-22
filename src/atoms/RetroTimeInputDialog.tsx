@@ -5,15 +5,19 @@ import {
   DialogContent,
   DialogTitle,
   FormControl,
+  FormHelperText,
   Grid,
+  Input,
   InputLabel,
   List,
   MenuItem,
   Select,
   SelectChangeEvent,
+  TextField,
   Typography,
 } from '@mui/material';
 import React from 'react';
+import { FEATURE_FLAGS_SET } from '../constants/FeatureFlags';
 export interface RetroTimeInputDialogProps {
   open: boolean;
   selectedValue: any;
@@ -22,31 +26,49 @@ export interface RetroTimeInputDialogProps {
 }
 const RetroTimeInputDialog = (props: RetroTimeInputDialogProps) => {
   const { onClose, onSubmit, selectedValue, open } = props;
-  const hrArray = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12];
-
-  const [hr, setHr] = React.useState(1 + '');
-  const [min, setMin] = React.useState(0 + '');
+  const [endEpochTime, setEndEpochTime] = React.useState(0);
+  const [currentTime, setCurrentTime] = React.useState('');
+  const currentEpoch = Date.now();
   const handleClose = () => {
     onClose(selectedValue);
   };
 
-  const getHour = (input: number) => {
-    console.log((input / 60) * 100);
-  };
+  function formatAMPM(date: any) {
+    var hours = date.getHours();
+    var minutes = date.getMinutes();
+    var ampm = hours >= 12 ? 'pm' : 'am';
+    hours = hours % 12;
+    hours = hours ? hours : 12; // the hour '0' should be '12'
+    minutes = minutes < 10 ? '0' + minutes : minutes;
+    var strTime = hours + ':' + minutes + ' ' + ampm;
+    return strTime;
+  }
 
-  const handleHr = (event: SelectChangeEvent) => {
-    if (min === '0' && event.target.value == '0') {
-    } else setHr(+event.target.value + '');
+  const getValueInMinutes = () => {};
+  const getCurrentTimeInEpoch = (flag: boolean) => {
+    const epochTime = Date.now();
+    const endEpochTime = epochTime + 60 * 60 * 1000;
+    const dateTime = new Date(endEpochTime);
+    const currentTime = new Date(epochTime);
+    if (flag) return endEpochTime;
+
+    // setMinTime(currentTime.getHours()+":"+currentTime.getMinutes())
+    const hr =
+      dateTime.getHours() < 10
+        ? '0' + dateTime.getHours()
+        : dateTime.getHours() + '';
+    const min =
+      dateTime.getMinutes() < 10
+        ? '0' + dateTime.getMinutes()
+        : dateTime.getMinutes() + '';
+
+    console.log(hr, ' - ', min);
+    return hr + ':' + min;
   };
-  const handleMin = (event: SelectChangeEvent) => {
-    if (hr === '0' && event.target.value == '0') {
-    } else setMin(+event.target.value + '');
-  };
-  const getValueInMinutes = () => {
-    const hrToMinute = +hr * 60;
-    const minute = +min;
-    return hrToMinute + minute;
-  };
+  React.useEffect(() => {
+    setCurrentTime(formatAMPM(new Date()));
+    setEndEpochTime(+getCurrentTimeInEpoch(true));
+  }, []);
   return (
     <Dialog
       onClose={handleClose}
@@ -91,43 +113,47 @@ const RetroTimeInputDialog = (props: RetroTimeInputDialogProps) => {
       </Typography>
 
       <DialogContent sx={{ marginTop: '50px', marginBottom: '30px' }}>
-        <FormControl sx={{ minWidth: 60, marginRight: '10px' }}>
-          <InputLabel id="demo-simple-select-standard-label">Hr</InputLabel>
-          <Select
-            labelId="demo-simple-select-standard-label"
-            id="demo-simple-select-standard"
-            value={hr}
-            onChange={handleHr}
-            label="Hr"
-          >
-            {min !== '0' && <MenuItem value="0">00</MenuItem>}
-            {hrArray.map((object, index) => {
-              return (
-                <MenuItem value={object + ''} key={object + index}>
-                  {object < 10 ? '0' + object : object}
-                </MenuItem>
+        <FormControl
+          sx={{ m: 1 }}
+          variant="standard"
+          error={currentEpoch > endEpochTime}
+        >
+          <InputLabel htmlFor="standard-adornment-amount">
+            Select End Time
+          </InputLabel>
+          <Input
+            sx={{ minWidth: '220px' }}
+            id="time"
+            type="time"
+            //   InputProps={{sx:{width:'200px'}}}
+            defaultValue={getCurrentTimeInEpoch(false)}
+            onChange={(event: any) => {
+              console.log(
+                'value',
+                event.target.value,
+                ' ',
+                getCurrentTimeInEpoch(false)
               );
-            })}
-          </Select>
-        </FormControl>
-        <FormControl sx={{ minWidth: 60, marginLeft: '10px' }}>
-          <InputLabel id="demo-simple-select-standard-label">Min</InputLabel>
-          <Select
-            labelId="demo-simple-select-standard-label"
-            id="demo-simple-select-standard"
-            value={min}
-            onChange={handleMin}
-            label="Min"
-          >
-            {hr !== '0' && <MenuItem value="0">00</MenuItem>}
-            {hrArray.map((object, index) => {
-              return (
-                <MenuItem value={object + ''} key={object}>
-                  {object < 10 ? '0' + object : object}
-                </MenuItem>
+              const current = new Date();
+              const hr = event.target.value.split(':');
+              current.setHours(hr[0]);
+              current.setMinutes(hr[1]);
+              setEndEpochTime(current.getTime());
+              console.log(
+                current,
+                'current',
+                current.getTime(),
+                '  ',
+                currentEpoch
               );
-            })}
-          </Select>
+            }}
+          />
+          {currentEpoch > endEpochTime && (
+            <FormHelperText sx={{ color: 'orange' }}>
+              Please select end time greater than{' '}
+              {formatAMPM(new Date(currentEpoch))}
+            </FormHelperText>
+          )}
         </FormControl>
       </DialogContent>
       <DialogActions>
@@ -138,7 +164,7 @@ const RetroTimeInputDialog = (props: RetroTimeInputDialogProps) => {
             boxShadow: '0px 2px 4px rgba(0, 0, 0, 0.25)',
             borderRadius: '24px',
           }}
-          onClick={() => onSubmit(getValueInMinutes())}
+          onClick={() => onSubmit(endEpochTime)}
         >
           START RETRO
         </Button>

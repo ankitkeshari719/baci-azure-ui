@@ -277,7 +277,7 @@ export default function RetroBoard() {
       '  ',
       global.user.id
     );
-    if (global.user.userType==2) {
+    if (global.user.userType == 2) {
       console.log('ende retro');
       sessionStorage.removeItem('retoname');
       // setConfirmAction({
@@ -330,14 +330,15 @@ export default function RetroBoard() {
       // });
     } else {
       //navigate(`/board/${global?.currentRetro?.id}/feedback`);
-      setConfirmAction({
-        action: 'Leave Retro',
-        title: 'Leave Retro',
-        text: 'Do you really want to leave the retro ?',
-        onConfirm: () => {
-          setshowFeedback(true);
-        },
-      });
+      // setConfirmAction({
+      //   action: 'Leave Retro',
+      //   title: 'Leave Retro',
+      //   text: 'Do you really want to leave the retro ?',
+      //   onConfirm: () => {
+
+      //   },
+      // });
+      setshowFeedback(true);
     }
   };
   const create10Cards = async () => {
@@ -357,14 +358,11 @@ export default function RetroBoard() {
     // console.log(needsToShow);
     console.log('ended', ended, retroStatus);
     if (ended && !needsToShow) {
-      if (global.user.userType!==2) {
+      if (global.user.userType !== 2) {
         const currentUser = users?.filter(
           card => card.userId === global?.user.id
         );
-        if (
-          currentUser?.length == 1 &&
-          currentUser[0].feedback.length == 0
-        ) {
+        if (currentUser?.length == 1 && currentUser[0].feedback.length == 0) {
           console.log('ended', true, ' ', currentUser[0].pulseCheckQuestions);
           setshowFeedback(true);
         }

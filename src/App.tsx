@@ -64,7 +64,7 @@ function MainContent() {
     //   </Box>
     // </Box>
     <Grid container spacing={0}>
-       <Outlet />
+      <Outlet />
     </Grid>
   );
 }
@@ -131,6 +131,5 @@ export default function App({ instance }: AppProps) {
         </SocketProvider>
       </ErrorBoundary>
     </ErrorProvider>
-    
   );
 }
