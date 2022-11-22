@@ -10,9 +10,6 @@ on:
       - dev
 
 env:
-  DAY_OF_WEEK: Monday
-  REACT_APP_NODE_ENV: test
-  REACT_APP_API_URL_ENV: https://baciapi.azurewebsites.net
   REACT_APP_FEEDBACK: true
   REACT_APP_PULSE_CHECK: true
   REACT_APP_RATE_APP: false
