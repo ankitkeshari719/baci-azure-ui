@@ -72,18 +72,22 @@ const Toolbar = (props: any) => {
   }, [retroName]);
 
   React.useEffect(() => {
-    const timer = setTimeout(() => {
-      const start: number =
-        startedTimeStamp != undefined ? startedTimeStamp : 0;
-      const warningDuration: number = (retroDuration - 2) * 60 * 1000;
-      const endTime = start + warningDuration;
-      const currentEpoch = Date.now();
-      console.log(endTime <= currentEpoch, 'Time', showSessionEndMessage);
+    if (user.userType != 2) {
+      const timer = setInterval(() => {
+        const start: number =
+          startedTimeStamp != undefined ? startedTimeStamp : 0;
+        const warningDuration: number = (retroDuration - 2) * 60 * 1000;
+        const endTime = start + warningDuration;
+        const currentEpoch = Date.now();
+        console.log(endTime <= currentEpoch, 'Time', showSessionEndMessage);
 
-      if (endTime <= currentEpoch && !location.pathname.includes('waiting')) {
-        setShowSessionEndMessage(true);
-      }
-    }, 1000);
+        if (endTime <= currentEpoch && !location.pathname.includes('waiting')) {
+          setShowSessionEndMessage(true);
+          clearTimeout(timer);
+        }
+      }, 1000);
+    }
+
     // return () => clearTimeout(timer);
   }, []);
 
