@@ -9,6 +9,17 @@ on:
     branches:
       - dev
 
+env:
+  DAY_OF_WEEK: Monday
+  REACT_APP_NODE_ENV: test
+  REACT_APP_API_URL_ENV: https://baciapi.azurewebsites.net
+  REACT_APP_FEEDBACK: true
+  REACT_APP_PULSE_CHECK: true
+  REACT_APP_RATE_APP: false
+  REACT_APP_REPORT: true
+  REACT_APP_STRESS_TEST: true
+  REACT_APP_API_URL: https://baciapi.azurewebsites.net
+
 jobs:
   build_and_deploy_job:
     if: github.event_name == 'push' || (github.event_name == 'pull_request' && github.event.action != 'closed')
