@@ -208,25 +208,24 @@ export function AvatarNamePage() {
     }
   }, []);
   return (
-    <Grid container spacing={0} style={{overflowY:"auto"}}>
+    <Grid container spacing={0} style={{ overflowY: 'auto' }}>
       <Grid item xs={6}>
         <LandingLayout></LandingLayout>
       </Grid>
       <Grid item xs={6}>
         <Grid
           item
-          xs={12}
+          container
           marginRight={commonStyles.m_80}
           marginLeft={commonStyles.m_80}
+          flexDirection="column"
+          justifyContent="center"
+          sx={{ height: '100vh' }}
         >
           <Box>
             {!global.currentRetro?.creatorId ? (
               <>
-                <Typography
-                  variant="h1"
-                  color={commonStyles.primaryDark}
-                  mt="234px"
-                >
+                <Typography variant="h1" color={commonStyles.primaryDark}>
                   Welcome to the BACI
                 </Typography>
                 <Typography
@@ -238,11 +237,7 @@ export function AvatarNamePage() {
                 </Typography>
               </>
             ) : (
-              <Typography
-                variant="h3"
-                color={commonStyles.primaryDark}
-                mt="251px"
-              >
+              <Typography variant="h3" color={commonStyles.primaryDark}>
                 Who you are in ‘{global.currentRetro?.name}’?
               </Typography>
             )}
