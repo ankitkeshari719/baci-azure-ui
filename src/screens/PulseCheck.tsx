@@ -248,9 +248,10 @@ export default function PulseCheck() {
       />
       <Grid
         item
-        marginRight={commonStyles.m_80}
-        marginLeft={commonStyles.m_80}
+        pr={commonStyles.m_80}
+        pl={commonStyles.m_80}
         xs={12}
+        sx={{overflowY:'scroll',height:'calc(100vh)'}}
         
       >
         {/* {showSharePanel ? (
