@@ -25,6 +25,7 @@ import QRCode from 'qrcode.react';
 import * as Icons from 'heroicons-react';
 import StartRetroButton from '../elements/StartRetroButton';
 import Toolbar from '../elements/Toolbar';
+import useLoadRetro from '../hooks/useLoadRetro';
 
 const styles = {
   frame101: {
@@ -163,6 +164,7 @@ export function StartRetro() {
   const shareRetroDetails = () => {
     navigator.share(shareData);
   };
+  useLoadRetro()
   function goToRetro() {
     navigate('/join/' + global?.currentRetro?.humanId);
   }

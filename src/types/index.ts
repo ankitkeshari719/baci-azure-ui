@@ -126,6 +126,7 @@ export class BoardState {
   retroDuration: number = 90;
   needsToShow: boolean = false;
   startedDate: Date | undefined;
+  startedTimeStamp: number | undefined;
   endedDate: Date | undefined;
   lastStateUpdate: Date | undefined;
   avatar: string | undefined;
