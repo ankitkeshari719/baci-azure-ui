@@ -10,7 +10,7 @@ let featureFlags = {
     report: true,
     stressTest: true,
 };
-let api_url = "http://localhost:8081";
+//let api_url = "http://localhost:8081";
 //let api_url = env_api_url;
 if (env === 'production') {
     featureFlags = {
