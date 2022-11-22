@@ -84,13 +84,14 @@ export function LandingPage() {
       setCodeError('');
     }
     if (!foundRetro) {
-      foundRetro = await retro.getById(humanId);
+      setCodeError('Sorry, wrong code. Please try again');
+      //foundRetro = await retro.getById(humanId);
     }
     dispatch({
       type: ActionType.SET_CURRENT_RETRO,
       payload: { retro: foundRetro },
     });
-    if (foundRetro) {
+    if (foundRetro !== undefined) {
       navigate('/join/' + humanId);
       return foundRetro;
     } else {
@@ -154,7 +155,7 @@ export function LandingPage() {
               }
             }}
             value={humanId}
-            onChange={e => setHumanId(e.currentTarget.value)}
+            onChange={e => {setHumanId(e.currentTarget.value); setCodeError('')}}
           />
           {codeError !== '' && (
             <FormHelperText style={{ color: '#d32f2f', marginLeft: '5px' }}>

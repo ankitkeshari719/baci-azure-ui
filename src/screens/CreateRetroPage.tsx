@@ -130,12 +130,24 @@ export function CreateNewRetro() {
       });
       setCodeError('');
       setisTimeFrameSet(false);
-      await retro.create({ name: retroName }, retroTimeframe, '');
-      dispatch({
-        type: ActionType.SET_LOADING,
-        payload: { loadingFlag: false },
-      });
-      navigate('/retrodetails/');
+      await retro.create({ name: retroName }, retroTimeframe, '').then(
+        res => {
+          dispatch({
+            type: ActionType.SET_LOADING,
+            payload: { loadingFlag: false },
+          });
+          navigate('/join/' + res.humanId);
+
+          // navigate('/retrodetails/');
+        },
+        err => {
+          console.log('err', err);
+          dispatch({
+            type: ActionType.SET_LOADING,
+            payload: { loadingFlag: false },
+          });
+        }
+      );
     } else if (retroTimeframe === '' && retroName === '') {
       setisTimeFrameSet(true);
       setCodeError('Please enter retro name');

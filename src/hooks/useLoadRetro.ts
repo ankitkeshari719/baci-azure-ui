@@ -46,7 +46,6 @@ export default function useLoadRetro() {
       return;
     }
     if (id !== retroId) {
-      console.log('log');
       getRetro(id as string)
         .then(retro => {
           if (retro && retro.id) {
@@ -68,7 +67,6 @@ export default function useLoadRetro() {
 
   // On load of new retro
   React.useEffect(() => {
-    console.log(!!retroId, loading, 'as');
     if (!!retroId) {
       const userJoined = users.find(u => u.userId === global.user.id);
       if (!userJoined) {

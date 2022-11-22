@@ -1048,6 +1048,7 @@ export const processAction = (
     if (userId === creator) {
       state.retroDuration = retroDuration;
       state.retroStarted = true;
+      state.startedTimeStamp=Date.now();
     }
   };
   const publishRetro = (columnId: string, value: boolean, userId: string) => {
