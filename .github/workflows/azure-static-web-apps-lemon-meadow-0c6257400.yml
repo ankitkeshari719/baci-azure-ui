@@ -8,6 +8,10 @@ on:
     types: [opened, synchronize, reopened, closed]
     branches:
       - test
+env:
+  DAY_OF_WEEK: Monday
+  REACT_APP_NODE_ENV: test
+  REACT_APP_API_URL_ENV: https://baciapi.azurewebsites.net
 
 jobs:
   build_and_deploy_job:
@@ -31,8 +35,6 @@ jobs:
           azure_static_web_apps_api_token: ${{ secrets.AZURE_STATIC_WEB_APPS_API_TOKEN_LEMON_MEADOW_0C6257400 }}
           repo_token: ${{ secrets.GITHUB_TOKEN }} # Used for Github integrations (i.e. PR comments)
           action: "upload"
-          REACT_APP_NODE_ENV: "test"
-          REACT_APP_API_URL_ENV: "https://baciapi.azurewebsites.net"
           ###### Repository/Build Configurations - These values can be configured to match your app requirements. ######
           # For more information regarding Static Web App workflow configurations, please visit: https://aka.ms/swaworkflowconfig
           app_location: "/" # App source code path
