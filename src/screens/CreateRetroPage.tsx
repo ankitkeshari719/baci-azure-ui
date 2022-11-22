@@ -25,7 +25,6 @@ const styles = {
   createRetroText: {
     height: '38px',
     left: '1040px',
-    marginTop: '300px',
     fontFamily: "'Poppins'",
     fontStyle: 'normal',
     fontWeight: 500,
@@ -154,7 +153,7 @@ export function CreateNewRetro() {
       <Grid item xs={6}>
         <LandingLayout></LandingLayout>
       </Grid>
-      <Grid xs={6}>
+      <Grid xs={6} display= 'flex' justifyContent='center' alignItems= 'center'>
         <Grid
           xs={12}
           marginRight={commonStyles.m_80}

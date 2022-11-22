@@ -15,6 +15,7 @@ import { Onboarding } from './screens/Onboarding';
 import { ParticipantWaitingPage } from './screens/ParticipantWaitingPage';
 import { CreateNewRetro } from './screens/CreateRetroPage';
 import { AvatarNamePage } from './screens/AvatarNamePage';
+
 import PulseCheck from './screens/PulseCheck';
 import ReportScreen from './screens/ReportScreen';
 import { SnackMessage } from './elements/SnackMessage';
@@ -42,6 +43,7 @@ import Button from '@material-ui/core/Button';
 import { SocketProvider } from './contexts/SocketProvider';
 import { StartRetro } from './screens/StartRetro';
 import { Grid } from '@mui/material';
+import { PageNotFound } from './screens/PageNotFound';
 
 type AppProps = {
   instance: IPublicClientApplication;
@@ -96,6 +98,8 @@ export default function App({ instance }: AppProps) {
                           path="/offboarding"
                           element={<Offboarding></Offboarding>}
                         />
+                        <Route path="*" 
+                        element={<PageNotFound></PageNotFound>} />
                         <Route path="/board" element={<MainContent />}>
                           <Route
                             path=":id/waiting"

@@ -169,6 +169,7 @@ const Toolbar = (props: any) => {
               />
             ) : (
               <Typography
+             
                 sx={{
                   color: '#2C69A1',
                   marginLeft: '34px',
@@ -176,6 +177,9 @@ const Toolbar = (props: any) => {
                   ag: 'H3',
                   minWidth: '350px',
                   maxWidth: '350px',
+                  overflow: 'hidden',
+                  textOverflow: 'ellipsis',
+                  display: 'inline-block'
                 }}
                 // onClick={() => {
                 //   setEditing(true);

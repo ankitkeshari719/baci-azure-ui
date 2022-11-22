@@ -147,7 +147,7 @@ const styles = {
   },
   copyURL: {
     height: '36px',
-    marginTop: '81.29px',
+    marginTop: '120.29px',
   },
 };
 export function StartRetro() {
@@ -191,8 +191,9 @@ export function StartRetro() {
       <Grid
       item
         xs={12}
-        marginRight={commonStyles.m_80}
-        marginLeft={commonStyles.m_80}
+        sx={{height: 'calc(100vh - 100px)', overflowY: 'auto'}}
+        pr={commonStyles.m_80}
+        pl={commonStyles.m_80}
       >
         <Box style={styles.frame101}>
           <Typography

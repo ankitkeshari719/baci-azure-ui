@@ -113,7 +113,7 @@ export function LandingPage() {
       <Grid item xs={6}>
         <LandingLayout></LandingLayout>
       </Grid>
-      <Grid item xs={6}>
+      <Grid item xs={6} display= 'flex' justifyContent='center' alignItems= 'center'>
         <Grid
         item
           xs={12}
@@ -139,9 +139,9 @@ export function LandingPage() {
             </Button>
             <Button style={styles.newUserText}>New user?Register</Button>
           </Box> */}
-          <Box component="div" whiteSpace="normal" sx={styles.retroJoiningText}>
+          <Typography variant="h2" color={commonStyles.primaryDark} >
             What BACI retro are you joining today?
-          </Box>
+          </Typography>
 
           <TextField
             autoFocus
