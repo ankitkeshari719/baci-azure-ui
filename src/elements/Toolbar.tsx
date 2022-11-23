@@ -15,7 +15,7 @@ import React from 'react';
 import { GlobalContext } from '../contexts/GlobalContext';
 import Avatar from './Avatar';
 import BACILogo from '../assets/img/bacilogo.png';
-import { useLocation } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import { BoardContext } from '../contexts/BoardContext';
 import { BoardActionType } from '../statemachine/BoardStateMachine';
 import { StartRetro } from '../screens/StartRetro';
@@ -26,8 +26,9 @@ import SessionEndingMessage from '../atoms/SessionEndingMessage';
 import LeaveRetroDialog from '../atoms/LeaveRetroDialog';
 // import { ReactComponent as InfoSvg } from '../../public/svgs/Info.svg';
 const Toolbar = (props: any) => {
-  const [{ avatar, currentRetro, user }] = React.useContext(GlobalContext);
-
+  const [{ avatar, currentRetro, user, leaveRetro }] =
+    React.useContext(GlobalContext);
+  const navigate = useNavigate();
   const location = useLocation();
   const showFinishRetroButton =
     !location.pathname.includes('pulsecheck') &&
@@ -75,7 +76,7 @@ const Toolbar = (props: any) => {
   }, [retroName]);
 
   React.useEffect(() => {
-    if (user.userType != 2 &&  showFinishRetroButton) {
+    if (user.userType != 2 && showFinishRetroButton && !leaveRetro) {
       const timer = setInterval(() => {
         const endTime = retroDuration - 5 * 60 * 1000;
         const currentEpoch = Date.now();
@@ -88,8 +89,6 @@ const Toolbar = (props: any) => {
       }, 1000);
       return () => clearTimeout(timer);
     }
-
- 
   }, [retroDuration !== 0]);
 
   const saveAndProcessAction = async (
@@ -281,23 +280,25 @@ const Toolbar = (props: any) => {
           ) : (
             <>
               {' '}
-              <Button
-                id="leaveRetro"
-                variant="contained"
-                sx={{
-                  // background: '#159ADD',
-                  // color: 'white',
-                  borderRadius: '24px',
-                  width: '148px',
-                  height: '44px',
-                  padding: '10px 20px',
-                  marginRight: '40px',
-                  fontWeight: 500,
-                }}
-                onClick={() => setLeaveDiaOpen(true)}
-              >
-                LEAVE RETRO
-              </Button>
+              {!leaveRetro && (
+                <Button
+                  id="leaveRetro"
+                  variant="contained"
+                  sx={{
+                    // background: '#159ADD',
+                    // color: 'white',
+                    borderRadius: '24px',
+                    width: '148px',
+                    height: '44px',
+                    padding: '10px 20px',
+                    marginRight: '40px',
+                    fontWeight: 500,
+                  }}
+                  onClick={() => setLeaveDiaOpen(true)}
+                >
+                  LEAVE RETRO
+                </Button>
+              )}
               {showSessionEndMessage && (
                 <SessionEndingMessage
                   hideSessionEndingMessage={() => {
@@ -404,6 +405,32 @@ const Toolbar = (props: any) => {
           </Button>
         </DialogActions>
       </Dialog>
+
+      {location.pathname.includes('report') && (
+        <>
+          {' '}
+          <Typography
+            color={commonStyles.secondaryMain}
+            fontSize="28px"
+            fontWeight="500"
+            mr="15px"
+          >
+            Retro Finished
+          </Typography>
+          <Button
+            variant="contained"
+            sx={{
+              borderRadius: '24px',
+              padding: '10px 20px',
+              width: '162px',
+              marginRight: '15px',
+            }}
+            onClick={() => navigate('/board/' + currentRetro?.id)}
+          >
+            REVIEW BOARD
+          </Button>
+        </>
+      )}
       <Avatar
         avatar={avatar}
         onClickAvatar={() => {}}

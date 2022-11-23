@@ -56,7 +56,7 @@ export function Offboarding() {
 
   return (
     <>
-      <Box >
+      <Box>
         <Toolbar />
       </Box>
       <CssBaseline />
@@ -218,7 +218,11 @@ export function Offboarding() {
               </Typography>
             </Box>
             <Box mt="52px">
-              <Button variant="outlined" className="secondaryButton">
+              <Button
+                variant="outlined"
+                className="secondaryButton"
+                onClick={() => navigate('/board/' + global.currentRetro?.id)}
+              >
                 <span className="secondaryButtonText">Show board</span>
               </Button>
             </Box>

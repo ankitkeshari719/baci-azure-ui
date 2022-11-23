@@ -152,7 +152,7 @@ const SubToolbar = (props: any) => {
               avatar={user.avatar}
               css={{
                 width: '40px',
-                height:'40px',
+                height: '40px',
                 marginLeft: '0',
                 marginRight: '-8px',
                 border:
@@ -300,12 +300,14 @@ const SubToolbar = (props: any) => {
           ))}
         </Select>
 
-        {global.user.userType == 2 && (
+        {global.user.userType == 2 && !ended && (
           <img style={{ marginLeft: '15px' }} src="/svgs/Line 13.svg"></img>
         )}
       </Box>
 
-      <CountdownTimer color={'#2B9FDE'} bold={true}></CountdownTimer>
+      {!ended && (
+        <CountdownTimer color={'#2B9FDE'} bold={true}></CountdownTimer>
+      )}
     </Box>
   );
 };

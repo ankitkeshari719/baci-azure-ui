@@ -127,7 +127,6 @@ export function RetroColumn({
   //   console.log(groupCollapsed);
   // }, [groupCollapsed]);
 
- 
   const findCardInGroup = (group: CardGroup, id: string) =>
     group.cards.find(card => card.id === id);
 
@@ -647,7 +646,7 @@ export function RetroColumn({
                 md={5}
                 xs={5}
               >
-                {global.user.userType == 2 && !ended && (
+                {global.user.userType == 2 && (!ended || !global.leaveRetro) && (
                   <>
                     {column.publish ? (
                       <Typography style={{ color: '#808080' }}>
@@ -656,11 +655,15 @@ export function RetroColumn({
                     ) : (
                       <Typography
                         id={'publish' + columnId}
-                        onClick={() => publishColumn(true)}
+                        onClick={() => {
+                          if (!ended) {
+                            publishColumn(true);
+                          }
+                        }}
                         sx={{
                           color: '#159ADD',
                           textDecorationLline: 'underline',
-                          cursor: 'pointer',
+                          cursor: !ended ? 'pointer' : "auto",
                         }}
                       >
                         Publish
@@ -866,6 +869,7 @@ export function RetroColumn({
                                                 }}
                                                 disabled={
                                                   ended ||
+                                                  global.leaveRetro ||
                                                   (card.locked &&
                                                     card.lockedBy !==
                                                       global.user.id)
@@ -942,7 +946,9 @@ export function RetroColumn({
             ),
             [column.groups, groupCollapsed]
           )}
-          {!ended && ((!isXsUp && mouseOver) || (isXsUp && showEditBox)) ? (
+          {!ended &&
+          !global.leaveRetro &&
+          ((!isXsUp && mouseOver) || (isXsUp && showEditBox)) ? (
             <Box
               style={{
                 background: 'white',
@@ -1223,6 +1229,7 @@ export function RetroColumn({
                                                 }}
                                                 disabled={
                                                   ended ||
+                                                  global.leaveRetro ||
                                                   (card.locked &&
                                                     card.lockedBy !==
                                                       global.user.id)

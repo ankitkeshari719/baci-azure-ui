@@ -350,7 +350,7 @@ export function RetroCard({
                     fullWidth
                     inputRef={editFieldRef}
                     InputProps={{
-                      readOnly: ended,
+                      readOnly: ended || global.leaveRetro,
                     }}
                     value={value}
                     sx={{
@@ -531,7 +531,10 @@ export function RetroCard({
                 component="span"
                 sx={{ display: 'flex', alignItems: 'center' }}
               >
-                {card.createdBy === global.user.id && !hideButtons && !ended ? (
+                {card.createdBy === global.user.id &&
+                !hideButtons &&
+                !ended &&
+                !global.leaveRetro ? (
                   <Button
                     sx={{ minWidth: '0px', position: 'initial' }}
                     onClick={e => {
@@ -564,6 +567,7 @@ export function RetroCard({
                 {/* { card.createdBy===global.user.id && !hideButtons && !ended ? ():null} */}
                 {!hideButtons &&
                 !ended &&
+                !global.leaveRetro &&
                 (card.createdBy === global.user.id ||
                   global.currentRetro?.creatorId === global.user.id) ? (
                   // <Button

@@ -18,6 +18,8 @@ export enum ActionType {
   SET_LOADING = 'setLoading',
   EXPAND_COLUMN = 'expandColumn',
   SET_USER_SELECTED = 'setUserSelected',
+  SET_LEAVE_RETRO = 'setLeaveRetro',
+  SET_FEEDBACK = 'setFeedback',
 }
 
 export class ReducerPayload {
@@ -32,6 +34,8 @@ export class ReducerPayload {
   expandColumn?: number;
   usersSelected?: any[];
   userType?: number;
+  leaveRetro?: boolean;
+  feedbackSubmit?: boolean;
 }
 
 type ContextType = [
@@ -130,6 +134,16 @@ function GlobalProvider(props: ComponentProps<any>) {
         return saveState({
           ...state,
           usersSelected: action.payload?.usersSelected,
+        });
+      case ActionType.SET_LEAVE_RETRO:
+        return saveState({
+          ...state,
+          leaveRetro: action.payload?.leaveRetro,
+        });
+      case ActionType.SET_FEEDBACK:
+        return saveState({
+          ...state,
+          feedbackSubmit: action.payload?.feedbackSubmit,
         });
     }
     return saveState({ ...state });

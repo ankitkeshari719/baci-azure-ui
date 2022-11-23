@@ -42,6 +42,8 @@ export class Global {
   loadingFlag?: boolean = false;
   expandColumn?: number = -1;
   usersSelected?: any[] = [];
+  leaveRetro?: boolean = false;
+  feedbackSubmit?: boolean = false;
 }
 
 export interface Card {

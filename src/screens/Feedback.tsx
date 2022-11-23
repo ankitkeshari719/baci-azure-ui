@@ -186,10 +186,8 @@ export default function Feedback() {
         </AppBar>
       ) : null}
 
-      <Box
-       
-      >
-        <FeedbackPopup show={true}></FeedbackPopup>
+      <Box>
+        <FeedbackPopup show={true} showThankYou={ended}></FeedbackPopup>
       </Box>
     </Box>
   );

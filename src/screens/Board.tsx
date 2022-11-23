@@ -299,25 +299,21 @@ export default function RetroBoard() {
         retroStatus: 'ended',
       }).then(
         () => {
-          saveAndProcessAction(BoardActionType.END_RETRO, {})
-            .then(() => {
-              setConfirmAction(undefined);
+          saveAndProcessAction(BoardActionType.END_RETRO, {}).then(
+            () => {
+              dispatch({
+                type: ActionType.SET_LOADING,
+                payload: { loadingFlag: false },
+              });
               navigate('/report/' + global.currentRetro?.id);
-            })
-            .then(
-              () => {
-                dispatch({
-                  type: ActionType.SET_LOADING,
-                  payload: { loadingFlag: false },
-                });
-              },
-              () => {
-                dispatch({
-                  type: ActionType.SET_LOADING,
-                  payload: { loadingFlag: false },
-                });
-              }
-            );
+            },
+            () => {
+              dispatch({
+                type: ActionType.SET_LOADING,
+                payload: { loadingFlag: false },
+              });
+            }
+          );
         },
         () => {
           dispatch({
@@ -339,6 +335,10 @@ export default function RetroBoard() {
 
       //   },
       // });
+      dispatch({
+        type: ActionType.SET_LEAVE_RETRO,
+        payload: { leaveRetro: true },
+      });
       setshowFeedback(true);
     }
   };
@@ -358,7 +358,7 @@ export default function RetroBoard() {
   React.useEffect(() => {
     // console.log(needsToShow);
     console.log('ended', ended, retroStatus);
-    if (ended && !needsToShow) {
+    if (ended || global.leaveRetro) {
       if (global.user.userType !== 2) {
         const currentUser = users?.filter(
           card => card.userId === global?.user.id
@@ -679,7 +679,9 @@ export default function RetroBoard() {
             {showSharePanel ? <SharePanel onClose={closeAllPanels} /> : null}
           </Box>
         ) : null}
-        {showFeedback ? <FeedbackPopup show={true}></FeedbackPopup> : null}
+        {showFeedback ? (
+          <FeedbackPopup show={true} showThankYou={ended}></FeedbackPopup>
+        ) : null}
         {useMemo(
           () =>
             (isXsUp
