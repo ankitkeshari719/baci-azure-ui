@@ -518,7 +518,7 @@ export const Report = React.forwardRef((props, ref) => {
               <ReactToPrint
               pageStyle='@page { size: A4; scale: 0.90 }'
                 trigger={() => (
-                  <Icons.Printer size={20} color="#4E4E4E"></Icons.Printer>
+                  <Icons.Printer size={20} color="#4E4E4E" style={{cursor: 'pointer'}}></Icons.Printer>
                 )}
                 content={() => componentRef.current}
               />
@@ -677,9 +677,9 @@ export const Report = React.forwardRef((props, ref) => {
                 </Grid>
               </Grid>
             ) : (
-              <span style={{ fontSize: '16px' }}>
-                No responses have been submitted
-              </span>
+              <Box display= 'flex' justifyContent='center' alignItems='center'>
+                <Typography>No responses have been submitted</Typography>
+              </Box>
             )}
           </Box>{' '}
         </Grid>
@@ -762,9 +762,9 @@ export const Report = React.forwardRef((props, ref) => {
                 ))}
               </Grid>
             ) : (
-              <span style={{ fontSize: '16px' }}>
-                No responses have been submitted
-              </span>
+              <Box display= 'flex' justifyContent='center' alignItems='center'>
+                <Typography>No responses have been submitted</Typography>
+              </Box>
             )}
           </Grid>
           </Grid>

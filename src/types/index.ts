@@ -123,7 +123,7 @@ export class BoardState {
   retroStatus?: string;
   retroStarted: boolean = false;
   loadingFlag: boolean = false;
-  retroDuration: number = 90;
+  retroDuration: number = 0;
   needsToShow: boolean = false;
   startedDate: Date | undefined;
   startedTimeStamp: number | undefined;

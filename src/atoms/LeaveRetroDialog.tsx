@@ -17,7 +17,9 @@ import {
 
 const LeaveRetroDialog = (props: any) => {
   const { onClose, open } = props;
-  const handleClose = () => {};
+  const handleClose = () => {
+    onClose(false);
+  };
 
   return (
     <Dialog
@@ -50,20 +52,21 @@ const LeaveRetroDialog = (props: any) => {
         Are you done with the retro?
       </Typography>
 
-      <DialogContent sx={{ marginTop: '50px', marginBottom: '30px' }}>
-        <Typography sx={{ fontSize: '20px' }}>
+      <DialogContent sx={{ marginTop: '30px', marginBottom: '30px' }}>
+        <Typography sx={{ fontSize: '20px' }} align="center">
           In case of any doubts, please confirm with facilitator before leaving
         </Typography>
       </DialogContent>
-      <DialogActions>
+      <DialogActions sx={{display:"flex",flexDirection:'column',alignItems:'center'}}>
         <Button
           variant="contained"
           sx={{
             padding: '10px 20px',
             boxShadow: '0px 2px 4px rgba(0, 0, 0, 0.25)',
             borderRadius: '24px',
+            width:'200px'
           }}
-          onClick={() => handleClose()}
+          onClick={() => onClose(true)}
         >
           LEAVE RETRO
         </Button>
@@ -73,6 +76,8 @@ const LeaveRetroDialog = (props: any) => {
             padding: '10px 20px',
             boxShadow: '0px 2px 4px rgba(0, 0, 0, 0.25)',
             borderRadius: '24px',
+            width:'200px',
+            marginTop:'20px'
           }}
           onClick={() => handleClose()}
         >

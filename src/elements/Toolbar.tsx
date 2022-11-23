@@ -23,6 +23,7 @@ import PulseCheck from '../screens/PulseCheck';
 import { RetroDetails } from '../screens/RetroDetails';
 import commonStyles from './../style.module.scss';
 import SessionEndingMessage from '../atoms/SessionEndingMessage';
+import LeaveRetroDialog from '../atoms/LeaveRetroDialog';
 // import { ReactComponent as InfoSvg } from '../../public/svgs/Info.svg';
 const Toolbar = (props: any) => {
   const [{ avatar, currentRetro, user }] = React.useContext(GlobalContext);
@@ -31,10 +32,12 @@ const Toolbar = (props: any) => {
   const showFinishRetroButton =
     !location.pathname.includes('pulsecheck') &&
     !location.pathname.includes('report') &&
-    !location.pathname.includes('startRetro');
+    !location.pathname.includes('startRetro') &&
+    !location.pathname.includes('offboarding');
   // const [editing, setEditing] = React.useState(true);
   const RETRONAME_CHARACTER_LIMIT = 80;
   const [openDialog, setOpenDialog] = React.useState(false);
+  const [leaveDiaOpen, setLeaveDiaOpen] = React.useState(false);
   const {
     state: {
       retroName,
@@ -74,12 +77,9 @@ const Toolbar = (props: any) => {
   React.useEffect(() => {
     if (user.userType != 2) {
       const timer = setInterval(() => {
-        const start: number =
-          startedTimeStamp != undefined ? startedTimeStamp : 0;
-        const warningDuration: number = (retroDuration - 2) * 60 * 1000;
-        const endTime = start + warningDuration;
+        const endTime = retroDuration - 5 * 60 * 1000;
         const currentEpoch = Date.now();
-        console.log(endTime <= currentEpoch, 'Time', showSessionEndMessage);
+     
 
         if (endTime <= currentEpoch && !location.pathname.includes('waiting')) {
           setShowSessionEndMessage(true);
@@ -89,7 +89,7 @@ const Toolbar = (props: any) => {
     }
 
     // return () => clearTimeout(timer);
-  }, []);
+  }, [retroDuration !== 0]);
 
   const saveAndProcessAction = async (
     actionName: BoardActionType,
@@ -199,6 +199,7 @@ const Toolbar = (props: any) => {
               />
             ) : (
               <Typography
+             
                 sx={{
                   color: '#2C69A1',
                   marginLeft: '34px',
@@ -206,6 +207,9 @@ const Toolbar = (props: any) => {
                   ag: 'H3',
                   minWidth: '350px',
                   maxWidth: '350px',
+                  overflow: 'hidden',
+                  textOverflow: 'ellipsis',
+                  display: 'inline-block'
                 }}
                 // onClick={() => {
                 //   setEditing(true);
@@ -286,7 +290,7 @@ const Toolbar = (props: any) => {
                   marginRight: '40px',
                   fontWeight: 500,
                 }}
-                onClick={() => props.onFinishRetro()}
+                onClick={() => setLeaveDiaOpen(true)}
               >
                 LEAVE RETRO
               </Button>
@@ -301,6 +305,14 @@ const Toolbar = (props: any) => {
           )}
         </>
       )}
+      <LeaveRetroDialog
+        open={leaveDiaOpen}
+        onClose={(value: any) => {
+          console.log(value, 'value');
+          if (value) props.onFinishRetro();
+          setLeaveDiaOpen(false);
+        }}
+      />
       <Dialog
         open={openDialog}
         onClose={() => setOpenDialog(false)}

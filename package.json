@@ -41,12 +41,8 @@
     "web-vitals": "^2.1.4"
   },
   "scripts": {
-    "start": "set REACT_APP_NODE_ENV=development&&react-scripts start",
-    "build-dev": "set REACT_APP_NODE_ENV=development && GENERATE_SOURCEMAP=false react-scripts build",
-    "build-test": "set REACT_APP_NODE_ENV=test && GENERATE_SOURCEMAP=false react-scripts build",
-    "build-prod": "set REACT_APP_NODE_ENV=production && GENERATE_SOURCEMAP=false react-scripts build",
-    "winBuild": "set \"GENERATE_SOURCEMAP=false\" && react-scripts build",
-    "azBuild": "set REACT_APP_NODE_ENV=development && react-scripts build",
+    "start": "react-scripts start",
+    "build": "GENERATE_SOURCEMAP=false react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
     "emulator:auth": "firebase emulators:start --only auth",
