@@ -113,7 +113,7 @@ function BoardProvider(props: ComponentProps<any>) {
         history.current = loadedContextParsed.history;
         lastActionTimestamp.current = loadedContextParsed.lastActionTimestamp;
         lastActionId.current = loadedContextParsed.lastActionId;
-   
+
         Object.assign(state, loadedContextParsed.state);
         return true;
       }
@@ -267,7 +267,7 @@ function BoardProvider(props: ComponentProps<any>) {
       } else {
         clearState();
         state.retroId = currentRetro?.id;
-   
+
         // state.creatorId=currentRetro?.creatorId;
       }
 
@@ -338,6 +338,8 @@ function BoardProvider(props: ComponentProps<any>) {
     }
   }, [currentRetro?.id]);
 
+  
+
   return (
     <BoardContext.Provider value={{ state, commitAction }}>
       {!currentRetro && !state.loading ? (
@@ -369,6 +371,7 @@ function BoardProvider(props: ComponentProps<any>) {
           <CircularProgress />
         </Box>
       )}
+    
       {/* </Grid>
         </DialogContent>
       </Dialog> */}

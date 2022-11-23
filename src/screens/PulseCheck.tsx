@@ -251,7 +251,7 @@ export default function PulseCheck() {
         pr={commonStyles.m_80}
         pl={commonStyles.m_80}
         xs={12}
-        sx={{overflowY:'scroll',height:'calc(100vh)'}}
+        sx={{overflowY:'auto',height:'calc(90vh)'}}
         
       >
         {/* {showSharePanel ? (
@@ -288,7 +288,7 @@ export default function PulseCheck() {
             fontSize: '20px',
             marginBottom: '40px',
             padding: '20px',
-            marginTop: '100px',
+            marginTop: '48px',
           }}
           className="alignCenter"
         >
@@ -683,7 +683,7 @@ export default function PulseCheck() {
             display: 'flex',
             justifyContent: 'center',
             paddingTop: '20px',
-            marginTop: '147px',
+            marginTop: '100px',
           }}
         >
           <Button

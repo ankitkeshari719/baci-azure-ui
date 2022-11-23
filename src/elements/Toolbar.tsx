@@ -75,20 +75,21 @@ const Toolbar = (props: any) => {
   }, [retroName]);
 
   React.useEffect(() => {
-    if (user.userType != 2) {
+    if (user.userType != 2 &&  showFinishRetroButton) {
       const timer = setInterval(() => {
         const endTime = retroDuration - 5 * 60 * 1000;
         const currentEpoch = Date.now();
-     
 
+        console.log(endTime, 'epoch', retroDuration, 'current', currentEpoch);
         if (endTime <= currentEpoch && !location.pathname.includes('waiting')) {
           setShowSessionEndMessage(true);
           clearTimeout(timer);
         }
       }, 1000);
+      return () => clearTimeout(timer);
     }
 
-    // return () => clearTimeout(timer);
+ 
   }, [retroDuration !== 0]);
 
   const saveAndProcessAction = async (
@@ -110,7 +111,9 @@ const Toolbar = (props: any) => {
         // paddingLeft: '56px',
         // paddingRight: '56px',
         flexDirection: 'row',
-        width: 'calc(100% - 112px)',
+        width: !location.pathname.includes('offboarding')
+          ? 'calc(100% - 112px)'
+          : 'calc(100%)',
         paddingLeft: '56px',
         paddingRight: '56px',
         boxShadow: '0px 0px 2px rgba(0, 0, 0, 0.25)!important',
@@ -199,7 +202,6 @@ const Toolbar = (props: any) => {
               />
             ) : (
               <Typography
-             
                 sx={{
                   color: '#2C69A1',
                   marginLeft: '34px',
@@ -209,7 +211,7 @@ const Toolbar = (props: any) => {
                   maxWidth: '350px',
                   overflow: 'hidden',
                   textOverflow: 'ellipsis',
-                  display: 'inline-block'
+                  display: 'inline-block',
                 }}
                 // onClick={() => {
                 //   setEditing(true);
@@ -261,6 +263,7 @@ const Toolbar = (props: any) => {
           {user.userType == 2 ? (
             <Button
               variant="contained"
+              id="finishRetro"
               sx={{
                 // background: '#159ADD',
                 // color: 'white',
@@ -279,6 +282,7 @@ const Toolbar = (props: any) => {
             <>
               {' '}
               <Button
+                id="leaveRetro"
                 variant="contained"
                 sx={{
                   // background: '#159ADD',

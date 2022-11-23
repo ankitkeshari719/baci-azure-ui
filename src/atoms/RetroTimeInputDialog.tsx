@@ -50,7 +50,9 @@ const RetroTimeInputDialog = (props: RetroTimeInputDialogProps) => {
     const endEpochTime = epochTime + 60 * 60 * 1000;
     const dateTime = new Date(endEpochTime);
     const currentTime = new Date(epochTime);
+    console.log(endEpochTime,"endEpochTime")
     if (flag) return endEpochTime;
+
 
     // setMinTime(currentTime.getHours()+":"+currentTime.getMinutes())
     const hr =
