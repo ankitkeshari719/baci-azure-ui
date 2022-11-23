@@ -39,6 +39,7 @@ import theme from '../theme/theme';
 import FeedbackPopup from '../atoms/feedbackPopup';
 import Toolbar from '../elements/Toolbar';
 import SubToolbar from '../elements/SubToolbar';
+import FirstTimeExperience from '../elements/FirstTimeExperience';
 
 const ColumnContainer = ({
   children,
@@ -383,6 +384,12 @@ export default function RetroBoard() {
         flexDirection: 'column',
       }}
     >
+      {global?.user.userType == 2 && !ended && (
+        <FirstTimeExperience facilitator={true} />
+      )}
+      {global?.user.userType != 2 && !ended && (
+        <FirstTimeExperience facilitator={false} />
+      )}
       {/* <AppBar component="div" color="primary" position="static" elevation={0}>
         <Toolbar>
           {!isXsUp && !isSmUp ? (

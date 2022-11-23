@@ -127,26 +127,7 @@ export function RetroColumn({
   //   console.log(groupCollapsed);
   // }, [groupCollapsed]);
 
-  React.useEffect(() => {
-    if (columnId == '0') {
-      let elem = document.getElementById('publish' + columnId);
-      // if (elem != null && elem != undefined) {elem.style.backgroundColor = 'red';
-      // if (elem != null && elem != undefined) {elem.style.border = '1px solid red';
-
-    // elem.
-    // }
-
-      // let rect = elem?.getBoundingClientRect();
-      // console.log(elem, 'elem', columnId, ' ', rect);
-      // for (const key in rect) {
-      //   if (typeof rect[key] !== 'function') {
-      //     let para = document.createElement('p');
-      //     para.textContent = `${key} : ${rect[key]}`;
-      //     container.appendChild(para);
-      //   }
-      // }
-    }
-  }, []);
+ 
   const findCardInGroup = (group: CardGroup, id: string) =>
     group.cards.find(card => card.id === id);
 
