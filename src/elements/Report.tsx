@@ -61,7 +61,8 @@ export const options = {
     x: {
       title: {
         display: true,
-        text: '% Response'
+        text: '% Response',
+        color: '#343434'
       },
       min: 0,
       max: 100,
@@ -752,7 +753,7 @@ export const Report = React.forwardRef((props, ref) => {
                       >
                         {questions.length !== 0 ? (
                           <Bar
-                          style={{width: '600px', height: '270px', border: 'none'}}
+                          style={{width: '700px', height: '250px', border: 'none'}}
                             options={options}
                             data={{
                               labels: QUICK_PULSE_CHECK_QUESTIONS,             // datasets is an array of objects where each object represents a set of data to display corresponding to the labels above. for brevity, we'll keep it at one object
