@@ -59,9 +59,31 @@ export const options = {
   indexAxis: 'y' as const,
   scales: {
     x: {
-      beginAtZero: true
+      title: {
+        display: true,
+        text: '% Response'
+      },
+      min: 0,
+      max: 100,
+      ticks: {
+        // forces step size to be 50 units
+        stepSize: 10
+      },
+      
+
     },
+    y:{
+      border: {
+        display: false
+      },
+      grid: {
+        display: false,
+        drawOnChartArea: false,
+        drawTicks: true,
+      },
+    }
   },
+ 
   elements: {
     bar: {
       
@@ -327,9 +349,12 @@ export const Report = React.forwardRef((props, ref) => {
     })
     console.log('sample', sampleArray);
     let tempArr : any = [];
-    tempArr.push([sampleArray[0][0], sampleArray[1][0], sampleArray[2][0]]);
-    tempArr.push([sampleArray[0][1], sampleArray[1][1], sampleArray[2][1]]);
-    tempArr.push([sampleArray[0][2], sampleArray[1][2], sampleArray[2][2]]);
+    if(sampleArray.length === 3){
+      tempArr.push([sampleArray[0][0], sampleArray[1][0], sampleArray[2][0]]);
+      tempArr.push([sampleArray[0][1], sampleArray[1][1], sampleArray[2][1]]);
+      tempArr.push([sampleArray[0][2], sampleArray[1][2], sampleArray[2][2]]);
+    }
+
     setBarData(tempArr);
     console.log('bar', barData);
     console.log('format', newQuestions, feedbackValues, feedbackCount);
@@ -719,7 +744,6 @@ export const Report = React.forwardRef((props, ref) => {
                     <>
                       <Box
                         sx={{
-                          border: '2px solid gray',
                           margin: '20px',
                           display: 'flex',
                           justifyContent: 'center',
