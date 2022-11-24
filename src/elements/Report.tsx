@@ -55,13 +55,21 @@ ChartJS.register(
 );
 export const options = {
   responsive: true,
+  maintainAspectRatio: false,
+  indexAxis: 'y' as const,
+  scales: {
+    x: {
+      beginAtZero: true
+    },
+  },
+  elements: {
+    bar: {
+      
+    },
+  },
   plugins: {
     legend: {
-      position: 'top' as const,
-    },
-    title: {
-      display: true,
-      text: 'Chart.js Bar Chart',
+      position: 'right' as const,
     },
   },
 };
@@ -142,13 +150,16 @@ export const Report = React.forwardRef((props, ref) => {
   const [didntWentWellwords, setdidntWentWellwords] = React.useState<Word[]>(
     []
   );
+  const [barData, setBarData] = React.useState<
+    { 1: any; 2: any; 3: any }[]
+  >([]);
   const [actions, setActions] = React.useState<string[]>([]);
   const [questions, setQuestions] = React.useState<Question[]>([]);
   const [feedback, setFeedback] = React.useState<any | undefined>();
   const [islanded, setIsLanded] = React.useState(true);
   const [global, dispatch] = React.useContext(GlobalContext);
   const [retroDate, setRetroDate] = React.useState('');
-  const [pulsCheckTotalCount, setpulsCheckTotalCount] = React.useState(0);
+
   const componentRef = React.createRef<HTMLDivElement>();
   function getBarColor(val: number) {
     if (val > 50) {
@@ -251,16 +262,10 @@ export const Report = React.forwardRef((props, ref) => {
 
     //get total count of user submitted the pulsechek
 
-    users.map(user => {
-      if (user.pulseCheckQuestions.length !== 0) {
-        setpulsCheckTotalCount(pulsCheckTotalCount + 1);
-      }
-    });
-
-    console.log('total count', pulsCheckTotalCount);
     const newQuestions = [] as Question[];
     const feedbackValues = {} as any;
     const feedbackCount = {} as any;
+    let totalPulseCheckCount = 0;
     const questionsDef = fullPulseCheck
       ? PULSE_CHECK_QUESTIONS
       : QUICK_PULSE_CHECK_QUESTIONS;
@@ -282,15 +287,16 @@ export const Report = React.forwardRef((props, ref) => {
       // })
       console.log([feedbackValues, feedbackCount]);
       user.pulseCheckQuestions.forEach(question => {
+        totalPulseCheckCount = totalPulseCheckCount + 1;
         const text = (questionsDef as any)[question.id];
         const entry = newQuestions.find(nq => nq.question === text);
         if (question.entry !== -1) {
           if (!entry) {
             newQuestions.push({
               question: text,
-              '1': 0,
-              '2': 0,
-              '3': 0,
+              1: 0,
+              2: 0,
+              3: 0,
               [String(question.entry)]: 1,
             } as any);
           } else {
@@ -299,55 +305,30 @@ export const Report = React.forwardRef((props, ref) => {
         }
       });
     });
+
+    console.log('total pulsecount', totalPulseCheckCount);
     if (Object.keys(feedbackValues).length !== 0) {
       setFeedback([feedbackValues, feedbackCount]);
     }
 
     setQuestions(newQuestions);
-    console.log('format', newQuestions, feedbackValues, feedbackCount);
-    let percent1: any, percent2, percent3;
-    percent1 =
-      (Number(Object.values(feedbackValues)[0]) /
-        Number(Object.values(feedbackCount)[0])) *
-      100;
-    percent2 =
-      (Number(Object.values(feedbackValues)[1]) /
-        Number(Object.values(feedbackCount)[1])) *
-      100;
-    percent3 =
-      (Number(Object.values(feedbackValues)[2]) /
-        Number(Object.values(feedbackCount)[2])) *
-      100;
-    console.log('percent', percent1, percent2, percent3);
-    let totalCount = [];
-    questions[0];
-    questions.map((item, index) => {});
-
-    //data in format pulse check
-    let data;
-    let question1: { question: string; option: string; count: number }[] = [];
-    let question2: { question: string; option: string; count: number }[] = [];
-    let question3: { question: string; option: string; count: number }[] = [];
-    if (questions.length !== 0) {
-      const options = ['1', '2', '3'];
-      data = options.flatMap(option =>
-        questions.map(d => ({
-          question: d.question,
-          option,
-          count: (d as any)[option] as number,
-        }))
-      );
-    }
-    data?.map((item, index) => {
-      if (item.question === QUICK_PULSE_CHECK_QUESTIONS[0]) {
-        question1.push(item);
-      } else if (item.question === QUICK_PULSE_CHECK_QUESTIONS[1]) {
-        question2.push(item);
-      } else if (item.question === QUICK_PULSE_CHECK_QUESTIONS[2]) {
-        question3.push(item);
-      }
+    //formated data for bar chart
+    const newArr = newQuestions.map(({ question, ...rest }) => {
+      return rest;
     });
-    console.log('report screen', question1, question2, question3);
+    newArr.map(data => {
+      data[1] = Math.round((data[1] / totalPulseCheckCount) * 100);
+      data[2] = Math.round((data[2] / totalPulseCheckCount) * 100);
+      data[3] = Math.round((data[3] / totalPulseCheckCount) * 100);
+    });
+    let sampleArray: any = [];
+    newArr.map(data => {
+      return sampleArray.push(Object.values(data));
+    })
+    console.log('sample', sampleArray);
+    setBarData(sampleArray);
+    console.log('bar', barData);
+    console.log('format', newQuestions, feedbackValues, feedbackCount);
   }, [lastStateUpdate]);
 
   return (
@@ -732,43 +713,6 @@ export const Report = React.forwardRef((props, ref) => {
                     //   </Grid>
                     // </Grid>
                     <>
-                      <Typography
-                        variant="h5"
-                        sx={{
-                          margin: '10px',
-                          fontSize: '18px',
-                          marginTop: '30px',
-                        }}
-                      >
-                        Pulse Check
-                      </Typography>
-                      <Bar
-                        data={{
-                          labels: ['Red', 'Orange', 'Blue'],
-
-                          // datasets is an array of objects where each object represents a set of data to display corresponding to the labels above. for brevity, we'll keep it at one object
-
-                          datasets: [
-                            {
-                              label: 'Popularity of colours',
-
-                              data: [55, 23, 96],
-
-                              // you can set indiviual colors for each bar
-
-                              backgroundColor: [
-                                'rgba(255, 255, 255, 0.6)',
-
-                                'rgba(255, 255, 255, 0.6)',
-
-                                'rgba(255, 255, 255, 0.6)',
-                              ],
-
-                              borderWidth: 1,
-                            },
-                          ],
-                        }}
-                      ></Bar>
                       <Box
                         sx={{
                           border: '2px solid gray',
@@ -779,9 +723,31 @@ export const Report = React.forwardRef((props, ref) => {
                         }}
                       >
                         {questions.length !== 0 ? (
-                          <StackedBarChart
-                            questions={questions}
-                          ></StackedBarChart>
+                          <Bar
+                          style={{width: '600px', height: '270px', border: 'none'}}
+                            options={options}
+                            data={{
+                              labels: QUICK_PULSE_CHECK_QUESTIONS,             // datasets is an array of objects where each object represents a set of data to display corresponding to the labels above. for brevity, we'll keep it at one object
+
+                              datasets: [
+                                {
+                                  data: barData[0],
+                                  label: 'Happy',
+                                  backgroundColor: '#84CA97',
+                                },
+                                {
+                                  data: barData[1],
+                                  label: 'Neutral',
+                                  backgroundColor: '#FBBC05',
+                                },
+                                {
+                                  data: barData[2],
+                                  label: 'Sad',
+                                  backgroundColor: '#F28D85',
+                                },
+                              ],
+                            }}
+                          ></Bar>
                         ) : (
                           <span style={{ fontSize: '16px' }}>
                             No responses have been submitted
