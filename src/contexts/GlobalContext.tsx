@@ -58,7 +58,7 @@ function loadState() {
     ? JSON.parse(savedContext)
     : initialGlobalState();
   parsingSavedContext.loadingFlag = false;
-  console.log('loadingFlag', parsingSavedContext);
+
   // return savedContext ? JSON.parse(savedContext) : initialGlobalState();
   return parsingSavedContext;
 }
@@ -75,7 +75,7 @@ function GlobalProvider(props: ComponentProps<any>) {
     switch (action.type) {
       case ActionType.SET_USER:
         if (action.payload?.user && action.payload?.user.id) {
-          console.log('user', action.payload?.user);
+        
           return saveState({ ...state, user: action.payload?.user as User });
         }
         break;

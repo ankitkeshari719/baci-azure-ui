@@ -23,7 +23,7 @@ const Avatar = (props: any) => {
       }`}
       src={avatar_src}
       onClick={() => {
-        console.log(props.avatar, 'avatar');
+  
         props.onClickAvatar(props.avatar);
       }}
     ></img>

@@ -35,6 +35,36 @@ import Toolbar from '../elements/Toolbar';
 import { GlobalContext } from '../contexts/GlobalContext';
 import { display } from '@mui/system';
 import ReactToPrint from 'react-to-print';
+import { Bar } from 'react-chartjs-2';
+import {
+  Chart as ChartJS,
+  CategoryScale,
+  LinearScale,
+  BarElement,
+  Title,
+  Tooltip,
+  Legend,
+} from 'chart.js';
+ChartJS.register(
+  CategoryScale,
+  LinearScale,
+  BarElement,
+  Title,
+  Tooltip,
+  Legend
+);
+export const options = {
+  responsive: true,
+  plugins: {
+    legend: {
+      position: 'top' as const,
+    },
+    title: {
+      display: true,
+      text: 'Chart.js Bar Chart',
+    },
+  },
+};
 const styles = {
   whatWentwellBox: {
     background: 'rgba(11, 102, 35,0.04)',
@@ -73,7 +103,6 @@ const styles = {
   textOpacity: {
     opacity: 0.9,
   },
-  
 };
 const BorderLinearProgress = styled(LinearProgress)(({ theme }) => ({
   height: '32px',
@@ -120,7 +149,7 @@ export const Report = React.forwardRef((props, ref) => {
   const [global, dispatch] = React.useContext(GlobalContext);
   const [retroDate, setRetroDate] = React.useState('');
   const [pulsCheckTotalCount, setpulsCheckTotalCount] = React.useState(0);
- const componentRef = React.createRef<HTMLDivElement>();
+  const componentRef = React.createRef<HTMLDivElement>();
   function getBarColor(val: number) {
     if (val > 50) {
       return '#34A853';
@@ -221,13 +250,13 @@ export const Report = React.forwardRef((props, ref) => {
     setdidntWentWellwords(wordsMaps_didntWentWell);
 
     //get total count of user submitted the pulsechek
-    
+
     users.map(user => {
       if (user.pulseCheckQuestions.length !== 0) {
         setpulsCheckTotalCount(pulsCheckTotalCount + 1);
       }
     });
-   
+
     console.log('total count', pulsCheckTotalCount);
     const newQuestions = [] as Question[];
     const feedbackValues = {} as any;
@@ -272,46 +301,53 @@ export const Report = React.forwardRef((props, ref) => {
     });
     if (Object.keys(feedbackValues).length !== 0) {
       setFeedback([feedbackValues, feedbackCount]);
-      
     }
 
     setQuestions(newQuestions);
-    console.log('format',newQuestions,feedbackValues,feedbackCount);
-    let percent1: any , percent2, percent3;
-    percent1=(Number(Object.values(feedbackValues)[0])/Number(Object.values(feedbackCount)[0])) * 100;
-    percent2=(Number(Object.values(feedbackValues)[1])/Number(Object.values(feedbackCount)[1])) * 100;
-    percent3=(Number(Object.values(feedbackValues)[2])/Number(Object.values(feedbackCount)[2])) * 100;
-    console.log('percent',percent1,percent2,percent3);
-    let totalCount= [];
-    questions[0]
-    questions.map((item, index)=> {
-      
-    })
+    console.log('format', newQuestions, feedbackValues, feedbackCount);
+    let percent1: any, percent2, percent3;
+    percent1 =
+      (Number(Object.values(feedbackValues)[0]) /
+        Number(Object.values(feedbackCount)[0])) *
+      100;
+    percent2 =
+      (Number(Object.values(feedbackValues)[1]) /
+        Number(Object.values(feedbackCount)[1])) *
+      100;
+    percent3 =
+      (Number(Object.values(feedbackValues)[2]) /
+        Number(Object.values(feedbackCount)[2])) *
+      100;
+    console.log('percent', percent1, percent2, percent3);
+    let totalCount = [];
+    questions[0];
+    questions.map((item, index) => {});
 
     //data in format pulse check
-    // let data;
-    // let question1: { question: string; option: string; count: number; }[] =[];
-    // let question2: { question: string; option: string; count: number; }[] =[];
-    // let question3: { question: string; option: string; count: number; }[] =[];
-    // if (questions.length !== 0) {
-    //   const options = ['1', '2', '3'];
-    //    data = options.flatMap(option =>
-    //     questions.map(d => ({
-    //       question: d.question,
-    //       option,
-    //       count: (d as any)[option] as number,
-    //     })))};
-    //     data?.map((item, index) => {
-    //       if(item.question === QUICK_PULSE_CHECK_QUESTIONS[0]){
-    //         question1.push(item);
-    //       } else if(item.question === QUICK_PULSE_CHECK_QUESTIONS[1]){
-    //         question2.push(item);
-    //       } else if(item.question === QUICK_PULSE_CHECK_QUESTIONS[2]){
-    //         question3.push(item);
-    //       }
-    //     })
-    // console.log('report screen',question1, question2, question3);
-
+    let data;
+    let question1: { question: string; option: string; count: number }[] = [];
+    let question2: { question: string; option: string; count: number }[] = [];
+    let question3: { question: string; option: string; count: number }[] = [];
+    if (questions.length !== 0) {
+      const options = ['1', '2', '3'];
+      data = options.flatMap(option =>
+        questions.map(d => ({
+          question: d.question,
+          option,
+          count: (d as any)[option] as number,
+        }))
+      );
+    }
+    data?.map((item, index) => {
+      if (item.question === QUICK_PULSE_CHECK_QUESTIONS[0]) {
+        question1.push(item);
+      } else if (item.question === QUICK_PULSE_CHECK_QUESTIONS[1]) {
+        question2.push(item);
+      } else if (item.question === QUICK_PULSE_CHECK_QUESTIONS[2]) {
+        question3.push(item);
+      }
+    });
+    console.log('report screen', question1, question2, question3);
   }, [lastStateUpdate]);
 
   return (
@@ -380,31 +416,31 @@ export const Report = React.forwardRef((props, ref) => {
     //     </>
     //   ) : null}
 
-    //   <>
-    //     <Typography
-    //       variant="h5"
-    //       sx={{ margin: '10px', fontSize: '18px', marginTop: '30px' }}
-    //     >
-    //       Pulse Check
-    //     </Typography>
-    //     <Box
-    //       sx={{
-    //         border: '2px solid gray',
-    //         margin: '20px',
-    //         display: 'flex',
-    //         justifyContent: 'center',
-    //         alignItems: 'center',
-    //       }}
-    //     >
-    //       {questions.length !== 0 ? (
-    //         <StackedBarChart questions={questions}></StackedBarChart>
-    //       ) : (
-    //         <span style={{ fontSize: '16px' }}>
-    //           No responses have been submitted
-    //         </span>
-    //       )}
-    //     </Box>{' '}
-    //   </>
+    // <>
+    //   <Typography
+    //     variant="h5"
+    //     sx={{ margin: '10px', fontSize: '18px', marginTop: '30px' }}
+    //   >
+    //     Pulse Check
+    //   </Typography>
+    //    <Box
+    //      sx={{
+    //       border: '2px solid gray',
+    //       margin: '20px',
+    //       display: 'flex',
+    //       justifyContent: 'center',
+    //       alignItems: 'center',
+    //     }}
+    //   >
+    //     {questions.length !== 0 ? (
+    //       <StackedBarChart questions={questions}></StackedBarChart>
+    //     ) : (
+    //       <span style={{ fontSize: '16px' }}>
+    //         No responses have been submitted
+    //       </span>
+    //     )}
+    //   </Box>{' '}
+    // </>
 
     //   {/* {feedback ? ( */}
     //   <>
@@ -478,25 +514,25 @@ export const Report = React.forwardRef((props, ref) => {
     //   </>
     //   {/* ) : null} */}
     // </Box>
-    <Box  style={{
-      height: '985px',
-      overflowY: 'scroll',
-    }}>
-    <Grid
-    container
-     
+    <Box
+      style={{
+        height: '985px',
+        overflowY: 'scroll',
+      }}
     >
-      <Toolbar />
-      <Grid container
+      <Grid container>
+        <Toolbar />
+        <Grid
+          container
           style={{
             display: 'flex',
             flexDirection: 'row',
-            justifyContent: 'center' //this will allow flex-end to move item to the right
+            justifyContent: 'center', //this will allow flex-end to move item to the right
           }}
           mt="48px"
         >
           <Grid lg={8}>
-            <Grid item display='flex' justifyContent='center'>
+            <Grid item display="flex" justifyContent="center">
               <Typography
                 color={commonStyles.secondaryMain}
                 fontSize={commonStyles.font16}
@@ -504,7 +540,7 @@ export const Report = React.forwardRef((props, ref) => {
                 Summary
               </Typography>
             </Grid>
-            <Grid item  display='flex' justifyContent='flex-end'>
+            <Grid item display="flex" justifyContent="flex-end">
               <Icons.Share
                 size={20}
                 color="#4E4E4E"
@@ -516,288 +552,412 @@ export const Report = React.forwardRef((props, ref) => {
                 style={{ marginRight: '46px' }}
               ></Icons.Download>
               <ReactToPrint
-              pageStyle='@page { size: A4; scale: 0.90 }'
+                pageStyle="@page { size: A4; scale: 0.90 }"
                 trigger={() => (
-                  <Icons.Printer size={20} color="#4E4E4E" style={{cursor: 'pointer'}}></Icons.Printer>
+                  <Icons.Printer
+                    size={20}
+                    color="#4E4E4E"
+                    style={{ cursor: 'pointer' }}
+                  ></Icons.Printer>
                 )}
                 content={() => componentRef.current}
               />
-              
             </Grid>
           </Grid>
         </Grid>
-    <Grid container direction='row' alignItems='center' justifyContent='center'>
-      <Grid
-      ref={componentRef}
-        display="flex"
-        lg={8}
-        xs={12}
-        direction='column'
-        item
-      >
-       <Grid item sx={{ flexDirection: 'row' }}>
-        <Box
-          style={{
-            display: 'flex',
-            flexDirection: 'row',
-            justifyContent: 'center',
-            alignItems: 'center',
-          }}
-          mt="20px"
+        <Grid
+          container
+          direction="row"
+          alignItems="center"
+          justifyContent="center"
         >
-          <Typography variant="h2" color={commonStyles.PrimaryMain}>
-            {global.currentRetro?.name}
-          </Typography>
-        </Box>
-        <Box
-          style={{
-            display: 'flex',
-            flexDirection: 'row',
-            justifyContent: 'center',
-            alignItems: 'center',
-          }}
-          mt="12px"
-        >
-          <Typography variant="h4" color={commonStyles.PrimaryMain}>
-            {retroDate}
-          </Typography>
-        </Box>
-        <Box mt="48px" sx={styles.whatWentwellBox}>
-          <Typography
-            ml="24px"
-            mt="24px"
-            color="#0B6623"
-            variant="h4"
-            sx={styles.textOpacity}
+          <Grid
+            ref={componentRef}
+            display="flex"
+            lg={8}
+            xs={12}
+            direction="column"
+            item
           >
-            What Went Well
-          </Typography>
+            <Grid item sx={{ flexDirection: 'row' }}>
+              <Box
+                style={{
+                  display: 'flex',
+                  flexDirection: 'row',
+                  justifyContent: 'center',
+                  alignItems: 'center',
+                }}
+                mt="20px"
+              >
+                <Typography variant="h2" color={commonStyles.PrimaryMain}>
+                  {global.currentRetro?.name}
+                </Typography>
+              </Box>
+              <Box
+                style={{
+                  display: 'flex',
+                  flexDirection: 'row',
+                  justifyContent: 'center',
+                  alignItems: 'center',
+                }}
+                mt="12px"
+              >
+                <Typography variant="h4" color={commonStyles.PrimaryMain}>
+                  {retroDate}
+                </Typography>
+              </Box>
+              <Box mt="48px" sx={styles.whatWentwellBox}>
+                <Typography
+                  ml="24px"
+                  mt="24px"
+                  color="#0B6623"
+                  variant="h4"
+                  sx={styles.textOpacity}
+                >
+                  What Went Well
+                </Typography>
 
-          {wentWellwords.length !== 0 ? (
-            <>
-              <Grid item display='flex' justifyContent='center' alignItems='center'  height="272px">
-                <WordCloud
-                  data={wentWellwords}
-                  showOn="whatWentWell"
-                ></WordCloud>
-              </Grid>{' '}
-            </>
-          ) : null}
-        </Box>
-        <Box mt="48px" sx={styles.whatdidnwellBox}>
-          <Typography
-            ml="24px"
-            mt="24px"
-            color="#F79722"
-            variant="h4"
-            sx={styles.textOpacity}
-          >
-            What Didn’t Go Well
-          </Typography>
-          {didntWentWellwords.length !== 0 ? (
-            <>
-              <Grid item display='flex' justifyContent='center' alignItems='center'  height="272px">
-                <WordCloud
-                  data={didntWentWellwords}
-                  showOn="whatDidntWentWell"
-                ></WordCloud>
-              </Grid>{' '}
-            </>
-          ) : null}
-        </Box>
-        <Box mt="48px" sx={styles.actionBox}>
-          <Typography
-            ml="24px"
-            mt="24px"
-            color="#8A38F5"
-            variant="h4"
-            sx={styles.textOpacity}
-          >
-            Actions
-          </Typography>
-          <Box>
-            {actions.length !== 0 ? (
-              <>
-                <RetroColumn
-                  leftHeaderComponent={undefined}
-                  rightHeaderComponent={undefined}
-                  noHeightLimit
-                  noHeader
-                  expandAllGroups
-                  column={columns[ACTIONS_COLUMN]}
-                  columnId={columns[ACTIONS_COLUMN].id}
-                  showEditBox={false}
-                  setIslanded={setIsLanded}
-                  setShowEditBox={() => {}}
-                  cardGroups={columns[ACTIONS_COLUMN].groups}
-                />
-              </>
-            ) : null}
-          </Box>
-        </Box>
-        <Grid item mt="48px" sx={styles.pulseCheckBox} >
-          <Grid item>
-          <Typography
-            ml="24px"
-            mt="24px"
-            color="#343434"
-            variant="h4"
-            sx={styles.textOpacity}
-          >
-            Pulse Check
-          </Typography>
-          </Grid>
-          
-          <Box
-            sx={{
-              margin: '20px',
-              display: 'flex',
-              justifyContent: 'center',
-              alignItems: 'center',
-            }}
-          >
-            {/* <StackedBarChart questions={questions}></StackedBarChart> */}
-            {QUICK_PULSE_CHECK_QUESTIONS.length !== 0 ? (
-              <Grid container >
-                <Grid item xs={12} flexDirection='row' justifyContent='center'>
-                  { questions.map((que, i)=>(
-                    <Box sx={{ alignItems: "baseline",
-                    display: "flex",
-                    flexDirection: "row",
-                    justifyContent: "center"}}>
-                    <Typography>{que.question}</Typography>
-                    <BorderLinearProgress variant="determinate" sx={{"& .MuiLinearProgress-barColorPrimary": {
-                      backgroundColor: getBarColor(80)
-                    }}} value={50} />
-                    </Box>
-                ))
-                 
-                }
+                {wentWellwords.length !== 0 ? (
+                  <>
+                    <Grid
+                      item
+                      display="flex"
+                      justifyContent="center"
+                      alignItems="center"
+                      height="272px"
+                    >
+                      <WordCloud
+                        data={wentWellwords}
+                        showOn="whatWentWell"
+                      ></WordCloud>
+                    </Grid>{' '}
+                  </>
+                ) : null}
+              </Box>
+              <Box mt="48px" sx={styles.whatdidnwellBox}>
+                <Typography
+                  ml="24px"
+                  mt="24px"
+                  color="#F79722"
+                  variant="h4"
+                  sx={styles.textOpacity}
+                >
+                  What Didn’t Go Well
+                </Typography>
+                {didntWentWellwords.length !== 0 ? (
+                  <>
+                    <Grid
+                      item
+                      display="flex"
+                      justifyContent="center"
+                      alignItems="center"
+                      height="272px"
+                    >
+                      <WordCloud
+                        data={didntWentWellwords}
+                        showOn="whatDidntWentWell"
+                      ></WordCloud>
+                    </Grid>{' '}
+                  </>
+                ) : null}
+              </Box>
+              <Box mt="48px" sx={styles.actionBox}>
+                <Typography
+                  ml="24px"
+                  mt="24px"
+                  color="#8A38F5"
+                  variant="h4"
+                  sx={styles.textOpacity}
+                >
+                  Actions
+                </Typography>
+                <Box>
+                  {actions.length !== 0 ? (
+                    <>
+                      <RetroColumn
+                        leftHeaderComponent={undefined}
+                        rightHeaderComponent={undefined}
+                        noHeightLimit
+                        noHeader
+                        expandAllGroups
+                        column={columns[ACTIONS_COLUMN]}
+                        columnId={columns[ACTIONS_COLUMN].id}
+                        showEditBox={false}
+                        setIslanded={setIsLanded}
+                        setShowEditBox={() => {}}
+                        cardGroups={columns[ACTIONS_COLUMN].groups}
+                      />
+                    </>
+                  ) : null}
+                </Box>
+              </Box>
+              <Grid item mt="48px" sx={styles.pulseCheckBox}>
+                <Grid item>
+                  <Typography
+                    ml="24px"
+                    mt="24px"
+                    color="#343434"
+                    variant="h4"
+                    sx={styles.textOpacity}
+                  >
+                    Pulse Check
+                  </Typography>
+                </Grid>
+                <Box
+                  sx={{
+                    margin: '20px',
+                    display: 'flex',
+                    justifyContent: 'center',
+                    alignItems: 'center',
+                  }}
+                >
                   {/* <StackedBarChart questions={questions}></StackedBarChart> */}
+                  {QUICK_PULSE_CHECK_QUESTIONS.length !== 0 ? (
+                    // <Grid container >
+                    //   <Grid item xs={12} flexDirection='row' justifyContent='center'>
+                    //     { questions.map((que, i)=>(
+                    //       <Box sx={{ alignItems: "baseline",
+                    //       display: "flex",
+                    //       flexDirection: "row",
+                    //       justifyContent: "center"}}>
+                    //       <Typography>{que.question}</Typography>
+                    //       <BorderLinearProgress variant="determinate" sx={{"& .MuiLinearProgress-barColorPrimary": {
+                    //         backgroundColor: getBarColor(80)
+                    //       }}} value={50} />
+                    //       </Box>
+                    //   ))
+
+                    //   }
+                    //     {/* <StackedBarChart questions={questions}></StackedBarChart> */}
+                    //   </Grid>
+                    // </Grid>
+                    <>
+                      <Typography
+                        variant="h5"
+                        sx={{
+                          margin: '10px',
+                          fontSize: '18px',
+                          marginTop: '30px',
+                        }}
+                      >
+                        Pulse Check
+                      </Typography>
+                      <Bar
+                        data={{
+                          labels: ['Red', 'Orange', 'Blue'],
+
+                          // datasets is an array of objects where each object represents a set of data to display corresponding to the labels above. for brevity, we'll keep it at one object
+
+                          datasets: [
+                            {
+                              label: 'Popularity of colours',
+
+                              data: [55, 23, 96],
+
+                              // you can set indiviual colors for each bar
+
+                              backgroundColor: [
+                                'rgba(255, 255, 255, 0.6)',
+
+                                'rgba(255, 255, 255, 0.6)',
+
+                                'rgba(255, 255, 255, 0.6)',
+                              ],
+
+                              borderWidth: 1,
+                            },
+                          ],
+                        }}
+                      ></Bar>
+                      <Box
+                        sx={{
+                          border: '2px solid gray',
+                          margin: '20px',
+                          display: 'flex',
+                          justifyContent: 'center',
+                          alignItems: 'center',
+                        }}
+                      >
+                        {questions.length !== 0 ? (
+                          <StackedBarChart
+                            questions={questions}
+                          ></StackedBarChart>
+                        ) : (
+                          <span style={{ fontSize: '16px' }}>
+                            No responses have been submitted
+                          </span>
+                        )}
+                      </Box>{' '}
+                    </>
+                  ) : (
+                    <Box
+                      display="flex"
+                      justifyContent="center"
+                      alignItems="center"
+                    >
+                      <Typography>No responses have been submitted</Typography>
+                    </Box>
+                  )}
+                </Box>{' '}
+              </Grid>
+              <Grid
+                mt="48px"
+                item
+                flexDirection="row"
+                justifyContent="center"
+                sx={styles.facilitatorFeedbackBox}
+              >
+                <Grid item>
+                  <Typography
+                    ml="24px"
+                    mt="24px"
+                    color="#343434"
+                    variant="h4"
+                    sx={styles.textOpacity}
+                  >
+                    Feedback for facilitator
+                  </Typography>
+                </Grid>
+
+                <Grid item mt="32px" mb="48px">
+                  {feedback ? (
+                    <Grid
+                      container
+                      sx={{ flexDirection: 'row', justifyContent: 'center' }}
+                    >
+                      {FEEDBACK_QUESTIONS.map((v, index) => (
+                        <Grid
+                          item
+                          xs={12 / FEEDBACK_QUESTIONS.length}
+                          sx={{ display: 'flex', justifyContent: 'center' }}
+                        >
+                          <Card
+                            variant="outlined"
+                            sx={{
+                              margin: '10px',
+                              maxWidth: '351px',
+                              height: '238px',
+                              background: '#FFFFFF',
+                              borderRadius: '10px',
+                            }}
+                          >
+                            <CardContent>
+                              <Typography
+                                variant="h2"
+                                sx={{
+                                  justifyContent: 'center',
+                                  display: 'flex',
+                                  gap: '5px',
+                                  alignItems: 'center',
+                                }}
+                              >
+                                {(
+                                  feedback[0][index] / feedback[1][index]
+                                ).toFixed(1)}
+                              </Typography>
+                              <Box
+                                sx={{
+                                  display: 'flex',
+                                  justifyContent: 'center',
+                                }}
+                              >
+                                {[1, 2, 3, 4, 5].map(i =>
+                                  i <=
+                                  feedback[0][index] / feedback[1][index] ? (
+                                    <Icons.Star
+                                      size={40}
+                                      color="#FCB34C"
+                                    ></Icons.Star>
+                                  ) : (
+                                    <Icons.StarOutline
+                                      size={40}
+                                    ></Icons.StarOutline>
+                                  )
+                                )}
+                              </Box>
+
+                              <Typography
+                                sx={{
+                                  fontWeight: 'bold',
+                                  justifyContent: 'center',
+                                  display: 'flex',
+                                  gap: '5px',
+                                  alignItems: 'center',
+                                }}
+                                mt="4px"
+                              >
+                                {feedback[1][index]} response
+                                {feedback[1][index] === 1 ? '' : 's'}
+                              </Typography>
+                              <Typography mt="24px" mb="25px">
+                                {FEEDBACK_QUESTIONS[index]}
+                              </Typography>
+                            </CardContent>
+                          </Card>
+                        </Grid>
+                      ))}
+                    </Grid>
+                  ) : (
+                    <Box
+                      display="flex"
+                      justifyContent="center"
+                      alignItems="center"
+                    >
+                      <Typography>No responses have been submitted</Typography>
+                    </Box>
+                  )}
                 </Grid>
               </Grid>
-            ) : (
-              <Box display= 'flex' justifyContent='center' alignItems='center'>
-                <Typography>No responses have been submitted</Typography>
-              </Box>
-            )}
-          </Box>{' '}
+            </Grid>
+            <Box
+              mt="96px"
+              sx={{
+                display: 'flex',
+                justifyContent: 'center',
+                alignItems: 'center',
+              }}
+            >
+              <Typography variant="h1" color={commonStyles.secondaryMain}>
+                Thank You for using{' '}
+              </Typography>
+              <Typography
+                mr="10px"
+                ml="10px"
+                variant="h1"
+                color={commonStyles.PrimaryMain}
+              >
+                BACI
+              </Typography>
+              <Typography variant="h1" color={commonStyles.secondaryMain}>
+                Retros
+              </Typography>
+            </Box>
+            <Box
+              mt="31px"
+              mb="105px"
+              sx={{
+                display: 'flex',
+                justifyContent: 'center',
+                alignItems: 'center',
+              }}
+            >
+              <Typography
+                mr="5px"
+                sx={{ fontSize: '16px', textDecoration: 'underline' }}
+                color={commonStyles.info}
+              >
+                SignUp
+              </Typography>
+              <Typography
+                sx={{ fontSize: '16px' }}
+                color={commonStyles.primaryDark}
+              >
+                to explore more exciting features!
+              </Typography>
+            </Box>
+          </Grid>
         </Grid>
-        <Grid mt="48px" item  flexDirection='row' justifyContent='center'  sx={styles.facilitatorFeedbackBox}>
-          <Grid item>
-          <Typography
-            ml="24px"
-            mt="24px"
-            color="#343434"
-            variant="h4"
-            sx={styles.textOpacity}
-          >
-            Feedback for facilitator
-          </Typography>
-          </Grid>
-          
-          <Grid item  mt="32px" mb="48px">
-            {feedback ? (
-              <Grid container sx={{flexDirection: 'row' ,justifyContent: 'center' }}>
-                {FEEDBACK_QUESTIONS.map((v, index) => (
-                  <Grid
-                    item
-                    xs={12 / FEEDBACK_QUESTIONS.length}
-                    sx={{ display: 'flex', justifyContent: 'center' }}
-                  >
-                    <Card
-                      variant="outlined"
-                      sx={{
-                        margin: '10px',
-                        maxWidth: '351px',
-                        height: '238px',
-                        background: '#FFFFFF',
-                        borderRadius: '10px',
-                      }}
-                    >
-                      <CardContent>
-                        <Typography
-                          variant="h2"
-                          sx={{
-                            justifyContent: 'center',
-                            display: 'flex',
-                            gap: '5px',
-                            alignItems: 'center',
-                          }}
-                        >
-                          {(feedback[0][index] / feedback[1][index]).toFixed(1)}
-                        </Typography>
-                        <Box sx={{ display: 'flex', justifyContent: 'center' }}>
-                          {[1, 2, 3, 4, 5].map(i =>
-                            i <= feedback[0][index] / feedback[1][index] ? (
-                              <Icons.Star
-                                size={40}
-                                color="#FCB34C"
-                              ></Icons.Star>
-                            ) : (
-                              <Icons.StarOutline size={40}></Icons.StarOutline>
-                            )
-                          )}
-                        </Box>
-
-                        <Typography
-                          sx={{
-                            fontWeight: 'bold',
-                            justifyContent: 'center',
-                            display: 'flex',
-                            gap: '5px',
-                            alignItems: 'center',
-                          }}
-                          mt="4px"
-                        >
-                          {feedback[1][index]} response
-                          {feedback[1][index] === 1 ? '' : 's'}
-                        </Typography>
-                        <Typography mt="24px" mb='25px'>
-                          {FEEDBACK_QUESTIONS[index]}
-                        </Typography>
-                      </CardContent>
-                    </Card>
-                  </Grid>
-                ))}
-              </Grid>
-            ) : (
-              <Box display= 'flex' justifyContent='center' alignItems='center'>
-                <Typography>No responses have been submitted</Typography>
-              </Box>
-            )}
-          </Grid>
-          </Grid>
-          </Grid>
-          <Box mt='96px' sx={{display: 'flex', justifyContent: 'center', alignItems: 'center'}}>
-            <Typography variant="h1" color={commonStyles.secondaryMain}>
-              Thank You for using{' '}
-            </Typography>
-            <Typography
-              mr="10px"
-              ml="10px"
-              variant="h1"
-              color={commonStyles.PrimaryMain}
-            >
-              BACI
-            </Typography>
-            <Typography variant='h1' color={commonStyles.secondaryMain}>Retros</Typography>
-          </Box>
-          <Box mt='31px' mb='105px' sx={{display: 'flex', justifyContent: 'center', alignItems: 'center'}}>
-            <Typography mr='5px' sx={{fontSize: '16px', textDecoration: 'underline'}} color={commonStyles.info}>
-              SignUp
-            </Typography>
-            <Typography
-             sx={{fontSize: '16px'}} color={commonStyles.primaryDark}
-            >
-              to explore more exciting features! 
-            </Typography>
-           
-          </Box>
-    
       </Grid>
-      </Grid>
-    </Grid>
     </Box>
   );
 });
