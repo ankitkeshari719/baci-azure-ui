@@ -20,6 +20,7 @@ export enum ActionType {
   SET_USER_SELECTED = 'setUserSelected',
   SET_LEAVE_RETRO = 'setLeaveRetro',
   SET_FEEDBACK = 'setFeedback',
+  CREATE_RETRO = 'createRetro',
 }
 
 export class ReducerPayload {
@@ -48,17 +49,17 @@ const GlobalContext = React.createContext<ContextType>([
 ]);
 
 function saveState(state: Global) {
-  sessionStorage.setItem('GlobalContext', JSON.stringify(state));
+  localStorage.setItem('GlobalContext', JSON.stringify(state));
   return state;
 }
 
 function loadState() {
-  const savedContext = sessionStorage.getItem('GlobalContext');
+  const savedContext = localStorage.getItem('GlobalContext');
   var parsingSavedContext = savedContext
     ? JSON.parse(savedContext)
     : initialGlobalState();
   parsingSavedContext.loadingFlag = false;
-  console.log('loadingFlag', parsingSavedContext);
+
   // return savedContext ? JSON.parse(savedContext) : initialGlobalState();
   return parsingSavedContext;
 }
@@ -75,7 +76,6 @@ function GlobalProvider(props: ComponentProps<any>) {
     switch (action.type) {
       case ActionType.SET_USER:
         if (action.payload?.user && action.payload?.user.id) {
-          console.log('user', action.payload?.user);
           return saveState({ ...state, user: action.payload?.user as User });
         }
         break;
@@ -145,6 +145,10 @@ function GlobalProvider(props: ComponentProps<any>) {
           ...state,
           feedbackSubmit: action.payload?.feedbackSubmit,
         });
+      case ActionType.CREATE_RETRO:
+        let tempState: any = new Global();
+        tempState.user = { id: state.user.id };
+        return saveState(tempState);
     }
     return saveState({ ...state });
   }

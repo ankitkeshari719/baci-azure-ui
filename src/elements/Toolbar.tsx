@@ -46,6 +46,7 @@ const Toolbar = (props: any) => {
       retroTimeframe,
       startedTimeStamp,
       retroDuration,
+      users,
       ended,
     },
     commitAction,
@@ -431,15 +432,17 @@ const Toolbar = (props: any) => {
           </Button>
         </>
       )}
-      <Avatar
-        avatar={avatar}
-        onClickAvatar={() => {}}
-        css={{
-          width: '56px',
-          height: '56px',
-          borderRadius: '50%',
-        }}
-      ></Avatar>
+      {avatar && (
+        <Avatar
+          avatar={avatar}
+          onClickAvatar={() => {}}
+          css={{
+            width: '56px',
+            height: '56px',
+            borderRadius: '50%',
+          }}
+        ></Avatar>
+      )}
     </Box>
   );
 };

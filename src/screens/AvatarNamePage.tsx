@@ -23,6 +23,7 @@ import Avatar from '../elements/Avatar';
 import { avatarName } from '../constants/AvatarName';
 import { useAzureAuth } from '../msal/azureauth';
 import { UserTypeArray } from '../constants';
+import { BoardContext } from '../contexts/BoardContext';
 const AVATAR_CHARACTER_LIMIT = 30;
 const styles = {
   heading: {
@@ -61,8 +62,20 @@ const styles = {
 export function AvatarNamePage() {
   const [global, dispatch] = React.useContext(GlobalContext);
   const [retroName, setRetroName] = React.useState(
-    sessionStorage.getItem('retroname') || ''
+    localStorage.getItem('retroname') || ''
   );
+  const {
+    state: {
+      users,
+      creatorId,
+      retroId,
+      retroStarted,
+      ended,
+      needsToShow,
+      retroStatus,
+    },
+    commitAction,
+  } = React.useContext(BoardContext);
   const [selectedAvatar, setAvatar] = React.useState('');
   const [avatarList, setAvatarList] = React.useState<string[]>([]);
 
@@ -84,10 +97,12 @@ export function AvatarNamePage() {
   React.useEffect(() => {
     setAvatarList(avatarName.sort(() => Math.random() - 0.5));
   }, []);
+
   const joinRetro = async (
     retrunBool: boolean
   ): Promise<RetroType | undefined> => {
     let foundRetro = await retro.getByHumanId(humanId);
+
     if (humanId === '') {
       setCodeError('Please enter access code');
     } else {
@@ -116,9 +131,9 @@ export function AvatarNamePage() {
     setAvatarSelectionError('');
     console.log(avatarName);
   };
-  useAzureAuth();
+
   const setName = () => {
-    sessionStorage.removeItem('pulseCheckState');
+    localStorage.removeItem('pulseCheckState');
     if (userName !== '' && selectedAvatar !== '') {
       dispatch({
         type: ActionType.SET_LOADING,
@@ -136,7 +151,6 @@ export function AvatarNamePage() {
           userType: userTypeValue,
         },
       });
-      console.log('disptach');
       if (!global.currentRetro || joining) {
         joinRetro(false).then(retro => {
           console.log('retro', retro);
@@ -186,6 +200,14 @@ export function AvatarNamePage() {
     setUserName(e);
   };
   React.useEffect(() => {
+    if (
+      !global.user.id ||
+      global.user.id == undefined ||
+      global.user.id == null
+    ) {
+      // useAzureAuth();
+    } else {
+    }
     if (!global.currentRetro?.name) {
       dispatch({
         type: ActionType.SET_LOADING,
@@ -207,6 +229,48 @@ export function AvatarNamePage() {
       );
     }
   }, []);
+
+  React.useEffect(() => {
+    if (
+      retroId != undefined &&
+      retroId != '' &&
+      retroId == global?.currentRetro?.id
+    ) {
+      console.log(global?.user.id);
+      const currentUser: any = users.find(
+        user => user.userId === global.user.id
+      );
+      console.log(users, 'users', currentUser);
+
+      if (currentUser) {
+        const userTypeValue: number =
+          global?.user?.id == global.currentRetro?.creatorId
+            ? UserTypeArray[1].id
+            : UserTypeArray[0].id;
+        dispatch({
+          type: ActionType.SET_USER,
+          payload: {
+            user: {
+              id: currentUser.userId,
+              name: currentUser.userNickname,
+              avatar: currentUser.avatar,
+              userType: userTypeValue,
+            },
+          },
+        });
+
+        if (ended || retroStarted) {
+          if (ended && currentUser.userId == creatorId) {
+            navigate('/report/' + global.currentRetro?.id);
+          } else {
+            if (currentUser?.pulseCheckQuestions?.length > 0)
+              navigate('/board/' + global.currentRetro?.id);
+            else navigate('/board/' + global.currentRetro?.id + '/pulseCheck');
+          }
+        }
+      }
+    }
+  }, [users, global.user.id != '']);
   return (
     <Grid container spacing={0} style={{ overflowY: 'auto' }}>
       <Grid item xs={6}>

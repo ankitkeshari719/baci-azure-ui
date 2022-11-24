@@ -41,6 +41,7 @@ import Toolbar from '../elements/Toolbar';
 import SubToolbar from '../elements/SubToolbar';
 import FirstTimeExperience from '../elements/FirstTimeExperience';
 
+
 const ColumnContainer = ({
   children,
   totalPanels,
@@ -280,7 +281,7 @@ export default function RetroBoard() {
     );
     if (global.user.userType == 2) {
       console.log('ende retro');
-      sessionStorage.removeItem('retoname');
+      localStorage.removeItem('retoname');
       // setConfirmAction({
       //   action: 'Finish Retro',
       //   title: 'Finish Retro',
@@ -291,7 +292,7 @@ export default function RetroBoard() {
         payload: { loadingFlag: true },
       });
 
-      sessionStorage.removeItem('pulseCheckState');
+      localStorage.removeItem('pulseCheckState');
 
       saveAndProcessAction(BoardActionType.UPDATE_RETRO_DETAILS, {
         creatorId: global.currentRetro?.creatorId,
@@ -688,7 +689,7 @@ export default function RetroBoard() {
               ? [...getProcessedColumns(), undefined]
               : getProcessedColumns()
             ).map((column, index) => (
-              <React.Fragment key={column?.id.toString()}>
+              <React.Fragment key={index}>
                 {(isXsUp && index === currentColumn) ||
                   (isSmUp &&
                     (index === currentColumn || index === currentColumn + 1)) ||
@@ -696,7 +697,7 @@ export default function RetroBoard() {
                     !isSmUp &&
                     (index === global.expandColumn ||
                       global.expandColumn === -1) && (
-                      <ColumnContainer totalPanels={totalPanels}>
+                      <ColumnContainer totalPanels={totalPanels} key={index+"1"}>
                         {!!column ? (
                           <>
                             <RetroColumn

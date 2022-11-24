@@ -50,7 +50,6 @@ const RetroTimeInputDialog = (props: RetroTimeInputDialogProps) => {
     const endEpochTime = epochTime + 60 * 60 * 1000;
     const dateTime = new Date(endEpochTime);
     const currentTime = new Date(epochTime);
-    console.log(endEpochTime,"endEpochTime")
     if (flag) return endEpochTime;
 
 
@@ -64,7 +63,7 @@ const RetroTimeInputDialog = (props: RetroTimeInputDialogProps) => {
         ? '0' + dateTime.getMinutes()
         : dateTime.getMinutes() + '';
 
-    console.log(hr, ' - ', min);
+
     return hr + ':' + min;
   };
   React.useEffect(() => {
@@ -124,30 +123,19 @@ const RetroTimeInputDialog = (props: RetroTimeInputDialogProps) => {
             Select End Time
           </InputLabel>
           <Input
-            sx={{ minWidth: '220px' }}
+            // sx={{ minWidth: '220px' }}
             id="time"
             type="time"
             //   InputProps={{sx:{width:'200px'}}}
             defaultValue={getCurrentTimeInEpoch(false)}
             onChange={(event: any) => {
-              console.log(
-                'value',
-                event.target.value,
-                ' ',
-                getCurrentTimeInEpoch(false)
-              );
+            
               const current = new Date();
               const hr = event.target.value.split(':');
               current.setHours(hr[0]);
               current.setMinutes(hr[1]);
               setEndEpochTime(current.getTime());
-              console.log(
-                current,
-                'current',
-                current.getTime(),
-                '  ',
-                currentEpoch
-              );
+            
             }}
           />
           {currentEpoch > endEpochTime && (

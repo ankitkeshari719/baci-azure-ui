@@ -89,9 +89,9 @@ export default function PulseCheck() {
     // console.log(
     //   'gPulseCheckState',
 
-    //   sessionStorage.getItem('pulseCheckState')
+    //   localStorage.getItem('pulseCheckState')
     // );
-    const gPulseCheckState = sessionStorage.getItem('pulseCheckState');
+    const gPulseCheckState = localStorage.getItem('pulseCheckState');
     if (gPulseCheckState) {
       const parseGPulseCheckState = JSON.parse(gPulseCheckState);
       if (
@@ -140,7 +140,7 @@ export default function PulseCheck() {
         retroId: currentRetro?.id + '',
         pulseSubmitState: true,
       };
-      sessionStorage.setItem(
+      localStorage.setItem(
         'pulseCheckState',
         JSON.stringify(pulseCheckState)
       );

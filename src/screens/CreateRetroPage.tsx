@@ -85,7 +85,7 @@ export function CreateNewRetro() {
   const [retroTimeframe, setRetroTimeframe] = React.useState('');
   const [isTimeFrameSet, setisTimeFrameSet] = React.useState(id ? true : false);
   const [localRetroName, setlocalRetroName] = React.useState(
-    sessionStorage.getItem('retroname') || ''
+    localStorage.getItem('retroname') || ''
   );
   const [global, dispatch] = React.useContext(GlobalContext);
   const RETRONAME_CHARACTER_LIMIT = 80;
@@ -119,7 +119,7 @@ export function CreateNewRetro() {
 
   const create = async () => {
     console.log('create');
-    sessionStorage.setItem('retroname', retroName);
+    localStorage.setItem('retroname', retroName);
     setlocalRetroName(retroName);
 
     if (retroName !== '' && retroTimeframe !== '') {
@@ -131,6 +131,7 @@ export function CreateNewRetro() {
       setisTimeFrameSet(false);
       await retro.create({ name: retroName }, retroTimeframe, '').then(
         res => {
+          dispatch({ type: ActionType.CREATE_RETRO, payload: {} });
           dispatch({
             type: ActionType.SET_LOADING,
             payload: { loadingFlag: false },
@@ -155,18 +156,25 @@ export function CreateNewRetro() {
     } else if (retroTimeframe === '') {
       setisTimeFrameSet(true);
     }
-    sessionStorage.setItem('retroname', retroName);
+    localStorage.setItem('retroname', retroName);
   };
   const joinExistingRetro = () => {
     navigate('/');
   };
   return (
-    <Grid container spacing={0} xs={12}>
+    <Grid container spacing={0}>
       <Grid item xs={6}>
         <LandingLayout></LandingLayout>
       </Grid>
-      <Grid xs={6} display= 'flex' justifyContent='center' alignItems= 'center'>
+      <Grid
+        item
+        xs={6}
+        display="flex"
+        justifyContent="center"
+        alignItems="center"
+      >
         <Grid
+          item
           xs={12}
           marginRight={commonStyles.m_80}
           marginLeft={commonStyles.m_80}

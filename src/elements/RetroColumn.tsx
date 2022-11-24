@@ -556,7 +556,7 @@ export function RetroColumn({
           setMouseOver(true);
         }}
       >
-        <div style={{ display: 'flex', flexDirection: 'column', flexGrow: 1 }}>
+        <div style={{ display: 'flex', flexDirection: 'column', flexGrow: 1,width:'100px' }}>
           <div
             style={{
               display: 'flex',
@@ -573,6 +573,7 @@ export function RetroColumn({
               container
               alignItems="center"
               justifyContent="space-between"
+              item
               xs={12}
               md={12}
               lg={12}
@@ -642,6 +643,7 @@ export function RetroColumn({
                 container
                 justifyContent="flex-end"
                 direction="row"
+                item
                 lg={4}
                 md={5}
                 xs={5}
@@ -739,7 +741,7 @@ export function RetroColumn({
                                 <Grid
                                   item
                                   lg={global?.expandColumn !== -1 ? 2 : 6}
-                                  md={global?.expandColumn !== -1 ? 2 : 5}
+                                  md={global?.expandColumn !== -1 ? 2 : 4}
                                   sx={{ marginBottom: '20px' }}
                                 >
                                   {/* <Box sx={{width:"100%"}}> */}
@@ -781,6 +783,7 @@ export function RetroColumn({
                         <Grid
                           container
                           lg={12}
+                          item
                           key={group.id}
                           ref={e => (groupRefs[i] = e)}
                           style={{
@@ -849,7 +852,7 @@ export function RetroColumn({
                                               md={
                                                 global?.expandColumn !== -1
                                                   ? 2
-                                                  : 5
+                                                  : 4
                                               }
                                               ref={e =>
                                                 cardRefCollector(
@@ -1147,6 +1150,7 @@ export function RetroColumn({
                       {cardGroups.map((group, i) => (
                         <Grid
                           container
+                          item
                           lg={12}
                           key={group.id}
                           ref={e => (groupRefs[i] = e)}

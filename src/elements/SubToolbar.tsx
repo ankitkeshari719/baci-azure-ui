@@ -123,8 +123,8 @@ const SubToolbar = (props: any) => {
         width: 'calc(100%-112px)',
       }}
     >
-      <Box sx={{ display: 'flex', marginRight: '15px' }}>
-        <Typography
+      <Box sx={{ display: 'flex', marginRight: '15px',alignItems:'center' }}>
+        <Box
           sx={{
             color: '#808080',
             fontSize: '28px',
@@ -143,7 +143,7 @@ const SubToolbar = (props: any) => {
           >
             PARTICIPANTS
           </Typography>
-        </Typography>
+        </Box>
         <>
           {' '}
           {users?.map((user, index) => (
