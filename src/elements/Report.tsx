@@ -326,7 +326,11 @@ export const Report = React.forwardRef((props, ref) => {
       return sampleArray.push(Object.values(data));
     })
     console.log('sample', sampleArray);
-    setBarData(sampleArray);
+    let tempArr : any = [];
+    tempArr.push([sampleArray[0][0], sampleArray[1][0], sampleArray[2][0]]);
+    tempArr.push([sampleArray[0][1], sampleArray[1][1], sampleArray[2][1]]);
+    tempArr.push([sampleArray[0][2], sampleArray[1][2], sampleArray[2][2]]);
+    setBarData(tempArr);
     console.log('bar', barData);
     console.log('format', newQuestions, feedbackValues, feedbackCount);
   }, [lastStateUpdate]);
