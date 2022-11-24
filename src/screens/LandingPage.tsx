@@ -77,6 +77,7 @@ export function LandingPage() {
 
   useAzureAuth();
   const joinRetro = async (): Promise<RetroType | undefined> => {
+
     let foundRetro = await retro.getByHumanId(humanId);
     if (humanId === '') {
       setCodeError('Please enter access code');
@@ -109,7 +110,7 @@ export function LandingPage() {
   }
 
   return (
-    <Grid container spacing={0} xs={12}>
+    <Grid container spacing={0} >
       <Grid item xs={6}>
         <LandingLayout></LandingLayout>
       </Grid>

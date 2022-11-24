@@ -66,8 +66,8 @@ export function Onboarding() {
    console.log("loging")
     if (window.location.pathname.includes('join')) {
       setStarted(false);
-      if (sessionStorage.getItem('BoardContext') !== null) {
-        let data: any = sessionStorage.getItem('BoardContext');
+      if (localStorage.getItem('BoardContext') !== null) {
+        let data: any = localStorage.getItem('BoardContext');
         data = JSON.parse(data);
         for (const item of [...data.history]) {
           setRetroName(item.action.parameters.retroName);
@@ -76,7 +76,7 @@ export function Onboarding() {
     }
   }, []);
   const create = async () => {
-    sessionStorage.setItem('retroname', retroName);
+    localStorage.setItem('retroname', retroName);
     setlocalRetroName('"' + retroName + '"');
     if (retroName !== '' && retroTimeframe !== '') {
       setCodeError('');
@@ -90,7 +90,7 @@ export function Onboarding() {
     } else if (retroTimeframe === '') {
       setisTimeFrameSet(true);
     }
-    sessionStorage.setItem('retroname', '"' + retroName + '"');
+    localStorage.setItem('retroname', '"' + retroName + '"');
     setCaptureName(false);
     // console.log(started, joining, global.currentRetro);
   };
@@ -200,7 +200,7 @@ export function Onboarding() {
 
 
   const setName = () => {
-    sessionStorage.removeItem('pulseCheckState');
+    localStorage.removeItem('pulseCheckState');
     if (userName !== '') {
       dispatch({
         type: ActionType.SET_PREFERRED_NICKNAME,
@@ -252,7 +252,7 @@ export function Onboarding() {
   const canShare = navigator.canShare && navigator.canShare(shareData);
 
   useAzureAuth();
-  useAzureAuth();
+  // useAzureAuth();
 
   return (
     <>
