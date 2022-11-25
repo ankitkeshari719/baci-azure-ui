@@ -21,7 +21,7 @@ const styles = {
 export function ParticipantWaitingPage() {
   const [global, dispatch] = React.useContext(GlobalContext);
   const [retroName, setRetroName] = React.useState(
-    sessionStorage.getItem('retroname') || ''
+    localStorage.getItem('retroname') || ''
   );
   const [animateFirst, setAnimateFirst] = React.useState(false);
   const [animatesecond, setAnimatesecond] = React.useState(false);
@@ -62,7 +62,7 @@ export function ParticipantWaitingPage() {
     }, 10000);
   });
   return (
-    <Grid container xs={12}>
+    <Grid container>
       <Toolbar/>
       <Box style={styles.group90}>
         <Typography

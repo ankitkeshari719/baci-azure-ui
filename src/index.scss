@@ -53,6 +53,7 @@ body {
   width: 100vw;
   height: 100vh;
   height: var(--app-height);
+  
 }
 
 #editLogo:hover {
@@ -91,7 +92,7 @@ body {
 }
 .selectedAvatar {
   border-radius: 50%;
-  border: 5px solid #73ad21;
+  border: 5px solid #159ADD;
 }
 .avatar {
   border-radius: 50%;
@@ -99,15 +100,20 @@ body {
 }
 .avatar:hover {
   border-radius: 50%;
-  border: 5px solid #d7f9a8;
+  border: 5px solid #159add91;
 }
 
-.css-duy8o2-MuiSelect-select-MuiInputBase-input-MuiOutlinedInput-input {
+#as.css-duy8o2-MuiSelect-select-MuiInputBase-input-MuiOutlinedInput-input {
   padding: 0px !important;
-  margin-left: 50px !important;
-  padding-left: 18px !important;
-  padding-right: 68px !important;
-  width: fit-content;
+  margin-left: 10px !important;
+  // padding-left: 18px !important;
+  // padding-right: 68px !important;
+  
+  // width: fit-content;
   // min-width: 100px !important;
   // width: fit-content !important;
+}
+
+#as.css-oqt7a2-MuiPaper-root-MuiMenu-paper-MuiPaper-root-MuiPopover-paper{
+  max-height:500px!important
 }

@@ -22,6 +22,8 @@ import { ActionType, GlobalContext } from '../contexts/GlobalContext';
 import Avatar from '../elements/Avatar';
 import { avatarName } from '../constants/AvatarName';
 import { useAzureAuth } from '../msal/azureauth';
+import { UserTypeArray } from '../constants';
+import { BoardContext } from '../contexts/BoardContext';
 const AVATAR_CHARACTER_LIMIT = 30;
 const styles = {
   heading: {
@@ -60,8 +62,20 @@ const styles = {
 export function AvatarNamePage() {
   const [global, dispatch] = React.useContext(GlobalContext);
   const [retroName, setRetroName] = React.useState(
-    sessionStorage.getItem('retroname') || ''
+    localStorage.getItem('retroname') || ''
   );
+  const {
+    state: {
+      users,
+      creatorId,
+      retroId,
+      retroStarted,
+      ended,
+      needsToShow,
+      retroStatus,
+    },
+    commitAction,
+  } = React.useContext(BoardContext);
   const [selectedAvatar, setAvatar] = React.useState('');
   const [avatarList, setAvatarList] = React.useState<string[]>([]);
 
@@ -80,14 +94,15 @@ export function AvatarNamePage() {
   const [joining, setJoining] = React.useState(id ? true : false);
   const [captureName, setCaptureName] = React.useState(id ? true : false);
 
+  React.useEffect(() => {
+    setAvatarList(avatarName.sort(() => Math.random() - 0.5));
+  }, []);
 
-  React.useEffect(()=>{
-    setAvatarList(avatarName.sort(() => Math.random() - 0.5))
-  },[])
   const joinRetro = async (
     retrunBool: boolean
   ): Promise<RetroType | undefined> => {
     let foundRetro = await retro.getByHumanId(humanId);
+
     if (humanId === '') {
       setCodeError('Please enter access code');
     } else {
@@ -116,19 +131,26 @@ export function AvatarNamePage() {
     setAvatarSelectionError('');
     console.log(avatarName);
   };
-  useAzureAuth();
+
   const setName = () => {
-    sessionStorage.removeItem('pulseCheckState');
+    localStorage.removeItem('pulseCheckState');
     if (userName !== '' && selectedAvatar !== '') {
       dispatch({
         type: ActionType.SET_LOADING,
         payload: { loadingFlag: true },
       });
+      const userTypeValue: number =
+        global?.user?.id == global.currentRetro?.creatorId
+          ? UserTypeArray[1].id
+          : UserTypeArray[0].id;
       dispatch({
         type: ActionType.SET_PREFERRED_NICKNAME,
-        payload: { preferredNickname: userName, avatar: selectedAvatar },
+        payload: {
+          preferredNickname: userName,
+          avatar: selectedAvatar,
+          userType: userTypeValue,
+        },
       });
-      console.log('disptach');
       if (!global.currentRetro || joining) {
         joinRetro(false).then(retro => {
           console.log('retro', retro);
@@ -178,6 +200,14 @@ export function AvatarNamePage() {
     setUserName(e);
   };
   React.useEffect(() => {
+    if (
+      !global.user.id ||
+      global.user.id == undefined ||
+      global.user.id == null
+    ) {
+      // useAzureAuth();
+    } else {
+    }
     if (!global.currentRetro?.name) {
       dispatch({
         type: ActionType.SET_LOADING,
@@ -199,34 +229,83 @@ export function AvatarNamePage() {
       );
     }
   }, []);
+
+  React.useEffect(() => {
+    if (
+      retroId != undefined &&
+      retroId != '' &&
+      retroId == global?.currentRetro?.id
+    ) {
+      console.log(global?.user.id);
+      const currentUser: any = users.find(
+        user => user.userId === global.user.id
+      );
+      console.log(users, 'users', currentUser);
+
+      if (currentUser) {
+        const userTypeValue: number =
+          global?.user?.id == global.currentRetro?.creatorId
+            ? UserTypeArray[1].id
+            : UserTypeArray[0].id;
+        dispatch({
+          type: ActionType.SET_USER,
+          payload: {
+            user: {
+              id: currentUser.userId,
+              name: currentUser.userNickname,
+              avatar: currentUser.avatar,
+              userType: userTypeValue,
+            },
+          },
+        });
+
+        if (ended || retroStarted) {
+          if (ended && currentUser.userId == creatorId) {
+            navigate('/report/' + global.currentRetro?.id);
+          } else {
+            if (currentUser?.pulseCheckQuestions?.length > 0)
+              navigate('/board/' + global.currentRetro?.id);
+            else navigate('/board/' + global.currentRetro?.id + '/pulseCheck');
+          }
+        }
+      }
+    }
+  }, [users, global.user.id != '']);
   return (
-    <Grid container spacing={0}>
+    <Grid container spacing={0} style={{ overflowY: 'auto' }}>
       <Grid item xs={6}>
         <LandingLayout></LandingLayout>
       </Grid>
       <Grid item xs={6}>
         <Grid
           item
-          xs={12}
+          container
           marginRight={commonStyles.m_80}
           marginLeft={commonStyles.m_80}
+          flexDirection="column"
+          justifyContent="center"
+          sx={{ height: '100vh' }}
         >
           <Box>
             {!global.currentRetro?.creatorId ? (
-              <><Typography
-                variant="h1"
-                color={commonStyles.primaryDark}
-                mt="254px"
-              >
-                Welcome to the BACI
-              </Typography><Typography variant="h3" color={commonStyles.primaryDark} mt="30px">
+              <>
+                <Typography variant="h1" color={commonStyles.primaryDark}>
+                  Welcome to the BACI
+                </Typography>
+                <Typography
+                  variant="h3"
+                  color={commonStyles.primaryDark}
+                  mt="30px"
+                >
                   Who you are in ‘{global.currentRetro?.name}’?
-                </Typography></>
-            ): ( <Typography variant="h3" color={commonStyles.primaryDark} mt="271px">
-            Who you are in ‘{global.currentRetro?.name}’?
-          </Typography>)}
+                </Typography>
+              </>
+            ) : (
+              <Typography variant="h3" color={commonStyles.primaryDark}>
+                Who you are in ‘{global.currentRetro?.name}’?
+              </Typography>
+            )}
 
-           
             <FormControl>
               <TextField
                 id="standard-helperText"
@@ -269,16 +348,23 @@ export function AvatarNamePage() {
               {/* </Box> */}
             </Box>
             {avatarSelectionError !== '' && (
-              <Box sx={{ color: '#d32f2f',  fontFamily: 'Poppins',
-              fontWeight: 400,
-              fontSize: "0.75rem",
-              lineHeight: 1.66,
-              letterSpacing: "0.03333em",
-              textAlign: "left",
-              marginTop: "3px",
-              marginRight: "0",
-              marginBottom: "0",
-              marginLeft: "0" }}>{avatarSelectionError}</Box>
+              <Box
+                sx={{
+                  color: '#d32f2f',
+                  fontFamily: 'Poppins',
+                  fontWeight: 400,
+                  fontSize: '0.75rem',
+                  lineHeight: 1.66,
+                  letterSpacing: '0.03333em',
+                  textAlign: 'left',
+                  marginTop: '3px',
+                  marginRight: '0',
+                  marginBottom: '0',
+                  marginLeft: '0',
+                }}
+              >
+                {avatarSelectionError}
+              </Box>
             )}
             <Button
               variant="outlined"

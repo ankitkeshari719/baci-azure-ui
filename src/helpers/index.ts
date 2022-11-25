@@ -53,7 +53,8 @@ export const useRetro = () => {
           retroName: retro?.name,
           retroTimeframe,
           retroGoal,
-          creatorId: state.user.id,
+          creatorId: state.currentRetro?.creatorId,
+          userId:state.user.id
         },
         userId: state.user.id,
         timestamp: 0,

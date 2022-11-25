@@ -5,7 +5,7 @@ const Avatar = (props: any) => {
 
   if (
     window.location.pathname.includes('join') ||
-    window.location.pathname.includes('startRetro')|| window.location.pathname.includes('pulsecheck')|| window.location.pathname.includes('board')
+    window.location.pathname.includes('startRetro')|| window.location.pathname.includes('pulsecheck')|| window.location.pathname.includes('board')|| window.location.pathname.includes('report')
   ) {
     avatar_src = '/avatars/animals/' + props.avatar + '.svg';
   } else if (!window.location.pathname.includes('join')) {
@@ -23,7 +23,7 @@ const Avatar = (props: any) => {
       }`}
       src={avatar_src}
       onClick={() => {
-        console.log(props.avatar, 'avatar');
+  
         props.onClickAvatar(props.avatar);
       }}
     ></img>

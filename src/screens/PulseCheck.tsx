@@ -89,9 +89,9 @@ export default function PulseCheck() {
     // console.log(
     //   'gPulseCheckState',
 
-    //   sessionStorage.getItem('pulseCheckState')
+    //   localStorage.getItem('pulseCheckState')
     // );
-    const gPulseCheckState = sessionStorage.getItem('pulseCheckState');
+    const gPulseCheckState = localStorage.getItem('pulseCheckState');
     if (gPulseCheckState) {
       const parseGPulseCheckState = JSON.parse(gPulseCheckState);
       if (
@@ -140,7 +140,7 @@ export default function PulseCheck() {
         retroId: currentRetro?.id + '',
         pulseSubmitState: true,
       };
-      sessionStorage.setItem(
+      localStorage.setItem(
         'pulseCheckState',
         JSON.stringify(pulseCheckState)
       );
@@ -190,6 +190,8 @@ export default function PulseCheck() {
         action: 'Switch',
         onConfirm: async () => {
           await saveAndProcessAction(BoardActionType.UPDATE_RETRO_DETAILS, {
+            creatorId:currentRetro?.creatorId,
+            userId:user.id,
             fullPulseCheck: true,
           });
           setConfirmAction(undefined);
@@ -203,6 +205,8 @@ export default function PulseCheck() {
         onConfirm: async () => {
           await saveAndProcessAction(BoardActionType.UPDATE_RETRO_DETAILS, {
             fullPulseCheck: false,
+            creatorId:currentRetro?.creatorId,
+            userId:user.id,
           });
           setConfirmAction(undefined);
         },
@@ -244,9 +248,10 @@ export default function PulseCheck() {
       />
       <Grid
         item
-        marginRight={commonStyles.m_80}
-        marginLeft={commonStyles.m_80}
+        pr={commonStyles.m_80}
+        pl={commonStyles.m_80}
         xs={12}
+        sx={{overflowY:'auto',height:'calc(90vh)'}}
         
       >
         {/* {showSharePanel ? (
@@ -283,7 +288,7 @@ export default function PulseCheck() {
             fontSize: '20px',
             marginBottom: '40px',
             padding: '20px',
-            marginTop: '100px',
+            marginTop: '48px',
           }}
           className="alignCenter"
         >
@@ -297,6 +302,7 @@ export default function PulseCheck() {
         <img src={Bluepulse}></img>
         <span className="pulseLineGrey"></span>
         <img src={Greypulse}></img>
+        <span className="pulseLineGrey"></span>
       </Box>
       <Box
         sx={{
@@ -677,7 +683,7 @@ export default function PulseCheck() {
             display: 'flex',
             justifyContent: 'center',
             paddingTop: '20px',
-            marginTop: '147px',
+            marginTop: '100px',
           }}
         >
           <Button
@@ -693,6 +699,7 @@ export default function PulseCheck() {
             display: 'flex',
             justifyContent: 'center',
             paddingTop: '20px',
+            cursor:"pointer"
           }}
         >
           <Link sx={{ marginTop: '43px' }} className="infoLink" onClick={skip}>

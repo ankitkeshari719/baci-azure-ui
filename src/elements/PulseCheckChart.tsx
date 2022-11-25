@@ -29,7 +29,7 @@ const PulseCheckChart: FunctionComponent<PulseCheckChartProps> = ({
           count: (d as any)[option] as number,
         }))
       ); // pivot
-
+console.log('test data',data);
       const svg = StackedBarChartSVG(data, {
         x: (d: any) => d.count,
         y: (d: any) => d.question,
@@ -41,7 +41,7 @@ const PulseCheckChart: FunctionComponent<PulseCheckChartProps> = ({
           d => d.question // sort y by x
         ),
         zDomain: options,
-        colors: ['#F3715B', '#FCB34C', '#5BA8DD'], //schemeSpectral[options.length],
+        colors: ['#FBBC05', '#34A853', '#EA4335'], //schemeSpectral[options.length],
         width: 600,
         paddingTop: 10,
         paddingBottom: 10,

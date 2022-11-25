@@ -27,7 +27,7 @@ import { UserAvatar } from '../atoms/UserAvatar';
 import { BoardContext } from '../contexts/BoardContext';
 import { BoardActionType } from '../statemachine/BoardStateMachine';
 import { ConfirmContext } from '../contexts/ConfirmContext';
-import { GlobalContext } from '../contexts/GlobalContext';
+import { ActionType, GlobalContext } from '../contexts/GlobalContext';
 import { CountdownTimer } from '../elements/CountdownTimer';
 import { FeedbackColumn } from '../elements/FeedbackColumn';
 import ParticipantsPanel from '../elements/ParticipantsPanel';
@@ -39,6 +39,8 @@ import theme from '../theme/theme';
 import FeedbackPopup from '../atoms/feedbackPopup';
 import Toolbar from '../elements/Toolbar';
 import SubToolbar from '../elements/SubToolbar';
+import FirstTimeExperience from '../elements/FirstTimeExperience';
+
 
 const ColumnContainer = ({
   children,
@@ -82,6 +84,7 @@ export default function RetroBoard() {
       creatorId,
       ended,
       needsToShow,
+      retroStatus,
     },
     commitAction,
   } = React.useContext(BoardContext);
@@ -148,6 +151,11 @@ export default function RetroBoard() {
   //       })
   //     : [];
 
+  const isMatch = (element: any, index: number, array: any): boolean => {
+    console.log(element, index, array);
+    return true;
+  };
+
   const getProcessedColumns = () =>
     columns
       ? columns.map(
@@ -178,18 +186,31 @@ export default function RetroBoard() {
               groups: groups
                 .map(group => {
                   const cards = group.cards.filter(
-                    card => !justMyCards || card.createdBy === global.user.id
+                    // card => !justMyCards || card.createdBy === global.user.id
+
+                    card =>
+                      global.user?.id !== global.currentRetro?.creatorId
+                        ? card
+                        : global.usersSelected?.some((user, index) => {
+                            return user?.userId === card?.createdBy;
+                          })
                   );
                   return {
                     ...group,
                     cards,
                   };
                 })
-                .filter(
-                  group =>
-                    !justMyCards ||
-                    group.name === UNGROUPED ||
-                    group.cards.length !== 0
+                .filter(group =>
+                  // !justMyCards ||
+                  // group.name === UNGROUPED ||
+                  // group.cards.length !== 0
+
+                  global.usersSelected?.some((user, index) => {
+                    return (
+                      user?.userId === group?.createdBy ||
+                      group?.name === UNGROUPED
+                    );
+                  })
                 ),
             };
           }
@@ -251,22 +272,74 @@ export default function RetroBoard() {
   };
 
   const finishRetro = () => {
-    if (creatorId === global.user.id) {
-      sessionStorage.removeItem('retoname');
-      setConfirmAction({
-        action: 'Finish Retro',
-        title: 'Finish Retro',
-        text: 'This action will take All Participants to the Feedback screen.',
-        onConfirm: () => {
-          sessionStorage.removeItem('pulseCheckState');
-          saveAndProcessAction(BoardActionType.END_RETRO, {}).then(() => {
-            setConfirmAction(undefined);
-            navigate('/report/' + global.currentRetro?.id);
-          });
-        },
+    console.log(
+      creatorId === global.user.id,
+      ' ',
+      creatorId,
+      '  ',
+      global.user.id
+    );
+    if (global.user.userType == 2) {
+      console.log('ende retro');
+      localStorage.removeItem('retoname');
+      // setConfirmAction({
+      //   action: 'Finish Retro',
+      //   title: 'Finish Retro',
+      //   text: 'This action will take All Participants to the Feedback screen.',
+      //   onConfirm: () => {
+      dispatch({
+        type: ActionType.SET_LOADING,
+        payload: { loadingFlag: true },
       });
+
+      localStorage.removeItem('pulseCheckState');
+
+      saveAndProcessAction(BoardActionType.UPDATE_RETRO_DETAILS, {
+        creatorId: global.currentRetro?.creatorId,
+        userId: global.user.id,
+        retroStatus: 'ended',
+      }).then(
+        () => {
+          saveAndProcessAction(BoardActionType.END_RETRO, {}).then(
+            () => {
+              dispatch({
+                type: ActionType.SET_LOADING,
+                payload: { loadingFlag: false },
+              });
+              navigate('/report/' + global.currentRetro?.id);
+            },
+            () => {
+              dispatch({
+                type: ActionType.SET_LOADING,
+                payload: { loadingFlag: false },
+              });
+            }
+          );
+        },
+        () => {
+          dispatch({
+            type: ActionType.SET_LOADING,
+            payload: { loadingFlag: false },
+          });
+        }
+      );
+
+      // },
+      // });
     } else {
       //navigate(`/board/${global?.currentRetro?.id}/feedback`);
+      // setConfirmAction({
+      //   action: 'Leave Retro',
+      //   title: 'Leave Retro',
+      //   text: 'Do you really want to leave the retro ?',
+      //   onConfirm: () => {
+
+      //   },
+      // });
+      dispatch({
+        type: ActionType.SET_LEAVE_RETRO,
+        payload: { leaveRetro: true },
+      });
       setshowFeedback(true);
     }
   };
@@ -283,12 +356,26 @@ export default function RetroBoard() {
     }
   };
 
-  // React.useEffect(() => {
-  //   // console.log(needsToShow);
-  //   if (ended && !needsToShow) {
-  //     navigate(`/board/${global?.currentRetro?.id}/feedback`);
-  //   }
-  // }, [ended, needsToShow]);
+  React.useEffect(() => {
+    // console.log(needsToShow);
+    console.log('ended', ended, retroStatus);
+    if (ended || global.leaveRetro) {
+      if (global.user.userType !== 2) {
+        const currentUser = users?.filter(
+          card => card.userId === global?.user.id
+        );
+        if (currentUser?.length == 1 && currentUser[0].feedback.length == 0) {
+          console.log('ended', true, ' ', currentUser[0].pulseCheckQuestions);
+          setshowFeedback(true);
+        }
+      } else {
+        console.log('ended', false);
+
+        setshowFeedback(false);
+      }
+      // navigate(`/board/${global?.currentRetro?.id}/feedback`);
+    }
+  }, [ended]);
 
   return (
     <Box
@@ -298,6 +385,12 @@ export default function RetroBoard() {
         flexDirection: 'column',
       }}
     >
+      {global?.user.userType == 2 && !ended && (
+        <FirstTimeExperience facilitator={true} />
+      )}
+      {global?.user.userType != 2 && !ended && (
+        <FirstTimeExperience facilitator={false} />
+      )}
       {/* <AppBar component="div" color="primary" position="static" elevation={0}>
         <Toolbar>
           {!isXsUp && !isSmUp ? (
@@ -396,7 +489,7 @@ export default function RetroBoard() {
         </Toolbar>
       </AppBar> */}
       <Grid xs={12} item>
-        <Toolbar onFinishRetro={finishRetro} ></Toolbar>
+        <Toolbar onFinishRetro={finishRetro}></Toolbar>
         <SubToolbar></SubToolbar>
       </Grid>
 
@@ -550,7 +643,13 @@ export default function RetroBoard() {
       <Grid
         container
         spacing={0}
-        style={{ flexWrap: 'nowrap', flexGrow: 1, background: 'white' }}
+        style={{
+          flexWrap: 'nowrap',
+          flexGrow: 1,
+          background: 'white',
+          paddingLeft: '42px',
+          paddingRight: '42px',
+        }}
       >
         {showRetroPanel || showParticipantsPanel || showSharePanel ? (
           <Box
@@ -581,14 +680,16 @@ export default function RetroBoard() {
             {showSharePanel ? <SharePanel onClose={closeAllPanels} /> : null}
           </Box>
         ) : null}
-        {showFeedback ? <FeedbackPopup show={true}></FeedbackPopup> : null}
+        {showFeedback ? (
+          <FeedbackPopup show={true} showThankYou={ended}></FeedbackPopup>
+        ) : null}
         {useMemo(
           () =>
             (isXsUp
               ? [...getProcessedColumns(), undefined]
               : getProcessedColumns()
             ).map((column, index) => (
-              <React.Fragment key={column?.id.toString()}>
+              <React.Fragment key={index}>
                 {(isXsUp && index === currentColumn) ||
                   (isSmUp &&
                     (index === currentColumn || index === currentColumn + 1)) ||
@@ -596,7 +697,7 @@ export default function RetroBoard() {
                     !isSmUp &&
                     (index === global.expandColumn ||
                       global.expandColumn === -1) && (
-                      <ColumnContainer totalPanels={totalPanels}>
+                      <ColumnContainer totalPanels={totalPanels} key={index+"1"}>
                         {!!column ? (
                           <>
                             <RetroColumn
@@ -656,6 +757,7 @@ export default function RetroBoard() {
             currentColumn,
             showEditBox,
             global.expandColumn,
+            global.usersSelected,
           ]
         )}
       </Grid>

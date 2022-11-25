@@ -77,6 +77,7 @@ export function LandingPage() {
 
   useAzureAuth();
   const joinRetro = async (): Promise<RetroType | undefined> => {
+
     let foundRetro = await retro.getByHumanId(humanId);
     if (humanId === '') {
       setCodeError('Please enter access code');
@@ -84,13 +85,14 @@ export function LandingPage() {
       setCodeError('');
     }
     if (!foundRetro) {
-      foundRetro = await retro.getById(humanId);
+      setCodeError('Sorry, wrong code. Please try again');
+      //foundRetro = await retro.getById(humanId);
     }
     dispatch({
       type: ActionType.SET_CURRENT_RETRO,
       payload: { retro: foundRetro },
     });
-    if (foundRetro) {
+    if (foundRetro !== undefined) {
       navigate('/join/' + humanId);
       return foundRetro;
     } else {
@@ -108,12 +110,13 @@ export function LandingPage() {
   }
 
   return (
-    <Grid container spacing={0} xs={12}>
+    <Grid container spacing={0} >
       <Grid item xs={6}>
         <LandingLayout></LandingLayout>
       </Grid>
-      <Grid xs={6}>
+      <Grid item xs={6} display= 'flex' justifyContent='center' alignItems= 'center'>
         <Grid
+        item
           xs={12}
           marginRight={commonStyles.m_80}
           marginLeft={commonStyles.m_80}
@@ -137,9 +140,9 @@ export function LandingPage() {
             </Button>
             <Button style={styles.newUserText}>New user?Register</Button>
           </Box> */}
-          <Box component="div" whiteSpace="normal" sx={styles.retroJoiningText}>
+          <Typography variant="h2" color={commonStyles.primaryDark} >
             What BACI retro are you joining today?
-          </Box>
+          </Typography>
 
           <TextField
             autoFocus
@@ -153,7 +156,7 @@ export function LandingPage() {
               }
             }}
             value={humanId}
-            onChange={e => setHumanId(e.currentTarget.value)}
+            onChange={e => {setHumanId(e.currentTarget.value); setCodeError('')}}
           />
           {codeError !== '' && (
             <FormHelperText style={{ color: '#d32f2f', marginLeft: '5px' }}>

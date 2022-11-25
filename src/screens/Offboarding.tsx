@@ -56,8 +56,11 @@ export function Offboarding() {
 
   return (
     <>
+      <Box>
+        <Toolbar />
+      </Box>
       <CssBaseline />
-      <Slide direction="up" in={!done}  key="rate">
+      <Slide direction="up" in={!done} key="rate">
         <Box
           sx={{
             display: !done ? 'flex' : 'none',
@@ -200,27 +203,45 @@ export function Offboarding() {
       </Slide>
       <Slide direction="up" in={done} key="thank-you">
         <Box>
-          <Toolbar/>
-          <Box sx={{display:'flex', justifyContent: 'center', flexDirection: 'column', alignItems: 'center'}}>
-            <Box mt='40px'>
-{/* need add gif */}
+          <Box
+            sx={{
+              display: 'flex',
+              justifyContent: 'center',
+              flexDirection: 'column',
+              alignItems: 'center',
+            }}
+          >
+            <Box mt="40px">{/* need add gif */}</Box>
+            <Box mt="40px">
+              <Typography variant="h4" color={commonStyles.PrimaryMain}>
+                Your feedback is submitted successfully!
+              </Typography>
             </Box>
-            <Box mt='40px'>
-              <Typography variant='h4' color={commonStyles.PrimaryMain}>Your feedback is submitted successfully!</Typography>
-            </Box>
-            <Box mt='52px'>
+            <Box mt="52px">
               <Button
-              variant="outlined"
-              className="secondaryButton"
-            >
-              <span className="secondaryButtonText">Show board</span>
-            </Button>
+                variant="outlined"
+                className="secondaryButton"
+                onClick={() => navigate('/board/' + global.currentRetro?.id)}
+              >
+                <span className="secondaryButtonText">Show board</span>
+              </Button>
             </Box>
-            <Box mt='40px' sx={{display: 'inline-flex'}}>
-              <Typography variant='h1' color={commonStyles.secondaryMain}>Thank You for using </Typography><Typography mr='10px' ml='10px' variant='h1' color={commonStyles.PrimaryMain}>BACI</Typography>
-              <Typography variant='h1' color={commonStyles.secondaryMain}>Retros</Typography>
+            <Box mt="40px" sx={{ display: 'inline-flex' }}>
+              <Typography variant="h1" color={commonStyles.secondaryMain}>
+                Thank You for using{' '}
+              </Typography>
+              <Typography
+                mr="10px"
+                ml="10px"
+                variant="h1"
+                color={commonStyles.PrimaryMain}
+              >
+                BACI
+              </Typography>
+              <Typography variant="h1" color={commonStyles.secondaryMain}>
+                Retros
+              </Typography>
             </Box>
-            
           </Box>
         </Box>
         {/* <Box

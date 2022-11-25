@@ -134,7 +134,15 @@ export const validateAction = (
     creatorId: string,
     userId: string
   ) => {
-    return !creatorId || creatorId === userId;
+    // if (
+    //   creatorId != '' &&
+    //   creatorId !== undefined &&
+    //   userId != '' &&
+    //   userId !== undefined
+    // )
+    //   return true;
+    // else return false;
+    return true;
   };
 
   const isCreateGroupValid = (
@@ -257,7 +265,7 @@ export const validateAction = (
     value: any,
     userId: string
   ): boolean => {
-    return isFacilitator(userId);
+    return true;
   };
 
   const isRemoveReactFromCardValid = (
@@ -632,9 +640,10 @@ export const processAction = (
     fullPulseCheck?: boolean,
     creatorId?: string,
     userId?: string,
-    avatar?: string
+    avatar?: string,
+    retroStatus?: string
   ) => {
-    if (retroName !== undefined) {
+    if (retroName !== undefined && retroName !== '') {
       state.retroName = retroName;
     }
     if (retroGoal !== undefined) {
@@ -646,11 +655,14 @@ export const processAction = (
     if (fullPulseCheck !== undefined) {
       state.fullPulseCheck = fullPulseCheck;
     }
-    if (creatorId && creatorId === userId) {
+    if (creatorId != '' && creatorId != undefined) {
       state.creatorId = creatorId;
     }
     if (avatar != undefined && avatar != '') {
       state.avatar = avatar;
+    }
+    if (retroStatus != undefined) {
+      state.retroStatus = retroStatus;
     }
     state.lastUpdatedBy = userId;
   };
@@ -919,6 +931,7 @@ export const processAction = (
         avatar,
         feedback: [],
         pulseCheckQuestions: [],
+        checked: true,
       });
     } else if (user?.userNickname !== userNickname) {
       user.userNickname = userNickname;
@@ -1014,6 +1027,7 @@ export const processAction = (
   };
 
   const endRetro = (undo: boolean, date: Date | undefined, userId: string) => {
+    console.log('endRetro', userId, state.creatorId, state.ended, undo);
     if (userId === state.creatorId && state.ended !== !undo) {
       state.ended = !undo;
       if (state.ended && date && state.endedDate === undefined) {
@@ -1025,17 +1039,23 @@ export const processAction = (
     }
   };
 
-  const startRetro = (retroDuration: number, userId: string,creator:string) => {
-    console.log("userId",creator,",",userId)
+  const startRetro = (
+    retroDuration: number,
+    userId: string,
+    creator: string
+  ) => {
+    console.log('userId', creator, ',', userId);
     if (userId === creator) {
       state.retroDuration = retroDuration;
       state.retroStarted = true;
+      state.startedTimeStamp=Date.now();
     }
   };
   const publishRetro = (columnId: string, value: boolean, userId: string) => {
     const column = findColumn(columnId);
     if (column) {
       column.publish = value;
+      
     }
   };
   let noMatch = false;
@@ -1048,7 +1068,8 @@ export const processAction = (
         parameters.fullPulseCheck,
         parameters.creatorId,
         userId,
-        avatar
+        avatar,
+        parameters.retroStatus
       );
       break;
     case BoardActionType.CREATE_GROUP:
@@ -1150,7 +1171,7 @@ export const processAction = (
       endRetro(parameters.undo, date, userId);
       break;
     case BoardActionType.START_RETRO:
-      startRetro(parameters.retroDuration, userId,parameters.creatorId);
+      startRetro(parameters.retroDuration, userId, parameters.creatorId);
       break;
 
       // case BoardActionType.SET_LOADING:

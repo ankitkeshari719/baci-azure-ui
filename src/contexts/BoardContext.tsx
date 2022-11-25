@@ -38,7 +38,6 @@ export interface ReducerPayload {
   parameters: any;
   userId: string;
   version?: number;
-
 }
 
 const SNAPSHOTS_ENABLED = true;
@@ -78,6 +77,7 @@ function BoardProvider(props: ComponentProps<any>) {
   const snapshotUnsubscriber = React.useRef<() => void>(() => {});
 
   function saveState(state: BoardState) {
+    console.log(state,'imp');
     const value = stringifyDate.stringify({
       boardId: currentRetro?.id,
       history: history.current,
@@ -114,6 +114,7 @@ function BoardProvider(props: ComponentProps<any>) {
         history.current = loadedContextParsed.history;
         lastActionTimestamp.current = loadedContextParsed.lastActionTimestamp;
         lastActionId.current = loadedContextParsed.lastActionId;
+
         Object.assign(state, loadedContextParsed.state);
         return true;
       }
@@ -155,7 +156,6 @@ function BoardProvider(props: ComponentProps<any>) {
   };
 
   const processActions = (actions: Action[]): BoardState | undefined => {
-    console.log('start Retro Action');
     const actionSortFunction = (actionA: Action, actionB: Action) =>
       actionA.sourceActionTimestamp !== actionB.sourceActionTimestamp
         ? actionA.sourceActionTimestamp - actionB.sourceActionTimestamp
@@ -226,8 +226,7 @@ function BoardProvider(props: ComponentProps<any>) {
           action.parameters,
           action.userId,
           action.date,
-          action.version,
-
+          action.version
         );
       }
 
@@ -252,6 +251,7 @@ function BoardProvider(props: ComponentProps<any>) {
       }
       lastActionId.current = action.id;
     }
+
     saveState(newState);
     setState(newState);
     return newState;
@@ -263,18 +263,22 @@ function BoardProvider(props: ComponentProps<any>) {
       let loadedState = false;
       if (state.retroId === '' && loadState()) {
         loadedState = true;
+
         setState(state);
       } else {
         clearState();
         state.retroId = currentRetro?.id;
+
+        // state.creatorId=currentRetro?.creatorId;
       }
+
       getRetroActions(
         currentRetro?.id as string,
         user.id,
         lastActionTimestamp.current
       ).then(actions => {
         if (actions.length === 0 && !loadedState) {
-          // setState({ ...initialBoardState(currentRetro?.id), loading: false });
+          setState({ ...initialBoardState(currentRetro?.id), loading: false });
         }
         if (actions.length !== 0) {
           const newState = processActions(actions);
@@ -288,6 +292,10 @@ function BoardProvider(props: ComponentProps<any>) {
           (snapshot: { retroId: string; action: any }[]) => {
             const results = [] as any[];
             snapshot.forEach((change: { retroId: string; action: any }) => {
+              // console.log("change",change)
+              // if(change?.action?.actionName==="updateRetroDetails"){
+
+              // }
               // if ((change.type === "modified" || change.type === "added") && !change.doc.metadata.hasPendingWrites) {
               if (
                 change.retroId === currentRetro?.id &&
@@ -362,6 +370,7 @@ function BoardProvider(props: ComponentProps<any>) {
           <CircularProgress />
         </Box>
       )}
+
       {/* </Grid>
         </DialogContent>
       </Dialog> */}
