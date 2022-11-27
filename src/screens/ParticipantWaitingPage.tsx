@@ -14,7 +14,7 @@ import { GlobalContext } from '../contexts/GlobalContext';
 const styles = {
   group90: {
     width: '100%',
-    margin: '112px 645px 362px 644px',
+    // margin: '112px 645px 362px 644px',
   },
 };
 
