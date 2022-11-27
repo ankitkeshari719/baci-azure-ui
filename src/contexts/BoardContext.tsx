@@ -77,7 +77,7 @@ function BoardProvider(props: ComponentProps<any>) {
   const snapshotUnsubscriber = React.useRef<() => void>(() => {});
 
   function saveState(state: BoardState) {
-    console.log(state,'imp');
+    // console.log(state,'imp');
     const value = stringifyDate.stringify({
       boardId: currentRetro?.id,
       history: history.current,

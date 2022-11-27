@@ -4,7 +4,7 @@ import React from 'react';
 
 const FirstTimeExperience = (props: any) => {
   const [showManual, setShowManual] = React.useState(
-    localStorage.getItem('showManual')
+    sessionStorage.getItem('showManual')
   );
   React.useEffect(() => {
 
@@ -20,11 +20,11 @@ const FirstTimeExperience = (props: any) => {
     //
   }, [showManual && props.facilitator == true]);
   React.useEffect(() => {
-    console.log(
-      localStorage.getItem('showManual'),
-      'data',
-      props.facilitator
-    );
+    // console.log(
+    //   sessionStorage.getItem('showManual'),
+    //   'data',
+    //   props.facilitator
+    // );
     if (showManual == undefined || showManual == null || showManual == '1') {
       if (props.facilitator === false) showLeaveInfo();
     }
@@ -34,7 +34,7 @@ const FirstTimeExperience = (props: any) => {
 
   const doneWithManual = () => {
     setShowManual('2');
-    localStorage.setItem('showManual', '2');
+    sessionStorage.setItem('showManual', '2');
   };
 
   const showPublishInfo = () => {
@@ -113,7 +113,7 @@ const FirstTimeExperience = (props: any) => {
   };
 
   const showFinishInfo = () => {
-    localStorage.setItem('showManual', '1');
+    sessionStorage.setItem('showManual', '1');
     let elem = document.getElementById('publish0');
     let publishPaper = document.getElementById('publishPaper');
     if (publishPaper !== undefined && publishPaper !== null)

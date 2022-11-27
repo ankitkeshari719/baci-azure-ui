@@ -458,7 +458,7 @@ export function RetroCard({
                   sx={{ minWidth: '0px', position: 'initial' }}
                   disabled={ended}
                   onClick={e => {
-                    console.log('e', e, ended, userReacted);
+                    // console.log('e', e, ended, userReacted);
                     !ended
                       ? userReacted
                         ? removeReactFromCard(card.id)

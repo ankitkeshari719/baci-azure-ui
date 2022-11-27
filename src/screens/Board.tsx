@@ -152,7 +152,7 @@ export default function RetroBoard() {
   //     : [];
 
   const isMatch = (element: any, index: number, array: any): boolean => {
-    console.log(element, index, array);
+    // console.log(element, index, array);
     return true;
   };
 
@@ -281,7 +281,7 @@ export default function RetroBoard() {
     );
     if (global.user.userType == 2) {
       console.log('ende retro');
-      localStorage.removeItem('retoname');
+      sessionStorage.removeItem('retoname');
       // setConfirmAction({
       //   action: 'Finish Retro',
       //   title: 'Finish Retro',
@@ -292,7 +292,7 @@ export default function RetroBoard() {
         payload: { loadingFlag: true },
       });
 
-      localStorage.removeItem('pulseCheckState');
+      sessionStorage.removeItem('pulseCheckState');
 
       saveAndProcessAction(BoardActionType.UPDATE_RETRO_DETAILS, {
         creatorId: global.currentRetro?.creatorId,
@@ -358,18 +358,18 @@ export default function RetroBoard() {
 
   React.useEffect(() => {
     // console.log(needsToShow);
-    console.log('ended', ended, retroStatus);
+    // console.log('ended', ended, retroStatus);
     if (ended || global.leaveRetro) {
       if (global.user.userType !== 2) {
         const currentUser = users?.filter(
           card => card.userId === global?.user.id
         );
         if (currentUser?.length == 1 && currentUser[0].feedback.length == 0) {
-          console.log('ended', true, ' ', currentUser[0].pulseCheckQuestions);
+          // console.log('ended', true, ' ', currentUser[0].pulseCheckQuestions);
           setshowFeedback(true);
         }
       } else {
-        console.log('ended', false);
+        // console.log('ended', false);
 
         setshowFeedback(false);
       }

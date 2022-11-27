@@ -62,7 +62,7 @@ const Toolbar = (props: any) => {
     React.useState(false);
 
   const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
-    console.log('handleClick');
+    // console.log('handleClick');
     setAnchorEl(event.currentTarget);
   };
 
@@ -82,7 +82,7 @@ const Toolbar = (props: any) => {
         const endTime = retroDuration - 5 * 60 * 1000;
         const currentEpoch = Date.now();
 
-        console.log(endTime, 'epoch', retroDuration, 'current', currentEpoch);
+        // console.log(endTime, 'epoch', retroDuration, 'current', currentEpoch);
         if (endTime <= currentEpoch && !location.pathname.includes('waiting')) {
           setShowSessionEndMessage(true);
           clearTimeout(timer);
@@ -314,7 +314,7 @@ const Toolbar = (props: any) => {
       <LeaveRetroDialog
         open={leaveDiaOpen}
         onClose={(value: any) => {
-          console.log(value, 'value');
+          // console.log(value, 'value');
           if (value) props.onFinishRetro();
           setLeaveDiaOpen(false);
         }}
@@ -432,9 +432,9 @@ const Toolbar = (props: any) => {
           </Button>
         </>
       )}
-      {avatar && (
+      {user?.avatar && (
         <Avatar
-          avatar={avatar}
+          avatar={user?.avatar}
           onClickAvatar={() => {}}
           css={{
             width: '56px',

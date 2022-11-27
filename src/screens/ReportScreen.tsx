@@ -60,7 +60,7 @@ const longEnUSFormatter = new Intl.DateTimeFormat('en-US', {
     day: 'numeric',
   }).format(new Date());
   setRetroDate(longEnUSFormatter);
-  console.log(longEnUSFormatter, typeof(longEnUSFormatter));
+  // console.log(longEnUSFormatter, typeof(longEnUSFormatter));
 });
 
   const handleClickOpen = () => {

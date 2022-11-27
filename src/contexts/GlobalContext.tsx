@@ -49,12 +49,12 @@ const GlobalContext = React.createContext<ContextType>([
 ]);
 
 function saveState(state: Global) {
-  localStorage.setItem('GlobalContext', JSON.stringify(state));
+  sessionStorage.setItem('GlobalContext', JSON.stringify(state));
   return state;
 }
 
 function loadState() {
-  const savedContext = localStorage.getItem('GlobalContext');
+  const savedContext = sessionStorage.getItem('GlobalContext');
   var parsingSavedContext = savedContext
     ? JSON.parse(savedContext)
     : initialGlobalState();

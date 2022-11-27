@@ -89,9 +89,9 @@ export default function PulseCheck() {
     // console.log(
     //   'gPulseCheckState',
 
-    //   localStorage.getItem('pulseCheckState')
+    //   sessionStorage.getItem('pulseCheckState')
     // );
-    const gPulseCheckState = localStorage.getItem('pulseCheckState');
+    const gPulseCheckState = sessionStorage.getItem('pulseCheckState');
     if (gPulseCheckState) {
       const parseGPulseCheckState = JSON.parse(gPulseCheckState);
       if (
@@ -99,7 +99,7 @@ export default function PulseCheck() {
         parseGPulseCheckState.pulseSubmitState &&
         parseGPulseCheckState?.retroId === currentRetro?.id
       ) {
-        console.log('already pulse checked');
+        // console.log('already pulse checked');
 
         navigate('/board/' + currentRetro?.id);
         dispatch({
@@ -119,7 +119,7 @@ export default function PulseCheck() {
     const someBlank =
       qs.findIndex(q => q[0] === -1) !== -1 &&
       qs.findIndex(q => q[0] === -1) < QUICK_PULSE_CHECK_QUESTIONS.length;
-    console.log('pulse check array', qs);
+    // console.log('pulse check array', qs);
     const submitter = async () => {
       // Submit
       await saveAndProcessAction(BoardActionType.SUBMIT_PULSE_CHECK, {
@@ -140,7 +140,7 @@ export default function PulseCheck() {
         retroId: currentRetro?.id + '',
         pulseSubmitState: true,
       };
-      localStorage.setItem(
+      sessionStorage.setItem(
         'pulseCheckState',
         JSON.stringify(pulseCheckState)
       );

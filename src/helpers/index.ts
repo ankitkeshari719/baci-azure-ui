@@ -37,7 +37,7 @@ export const useRetro = () => {
           window.location.port ? ':' + window.location.port : ''
         }/join/${humanId}`,
       } as Retro;
-      console.log(state.user, 'state', state);
+      // console.log(state.user, 'state', state);
       const id = await createRetro(currentRetro, state.user);
       const retrievedRetro = await getRetro(id);
 

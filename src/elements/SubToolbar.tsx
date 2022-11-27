@@ -66,7 +66,7 @@ const SubToolbar = (props: any) => {
     const {
       target: { value },
     } = event;
-    console.log(value);
+    // console.log(value);
 
     if (value[value.length - 1] === 'all') {
       setUserSelected(

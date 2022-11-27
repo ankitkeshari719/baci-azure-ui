@@ -29,7 +29,7 @@ const PulseCheckChart: FunctionComponent<PulseCheckChartProps> = ({
           count: (d as any)[option] as number,
         }))
       ); // pivot
-console.log('test data',data);
+// console.log('test data',data);
       const svg = StackedBarChartSVG(data, {
         x: (d: any) => d.count,
         y: (d: any) => d.question,
