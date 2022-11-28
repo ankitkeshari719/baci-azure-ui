@@ -844,6 +844,7 @@ export const Report = React.forwardRef((props, ref) => {
                                   display: 'flex',
                                   gap: '5px',
                                   alignItems: 'center',
+                                  fontWeight: 500
                                 }}
                               >
                                 {(
@@ -855,17 +856,22 @@ export const Report = React.forwardRef((props, ref) => {
                                   display: 'flex',
                                   justifyContent: 'center',
                                 }}
+                                mt='14.5px'
+                                mb='14.5px'
                               >
                                 {[1, 2, 3, 4, 5].map(i =>
                                   i <=
                                   feedback[0][index] / feedback[1][index] ? (
                                     <Icons.Star
-                                      size={40}
+                                      size={22}
                                       color="#FCB34C"
+                                      style={{margin: '8px'}}
                                     ></Icons.Star>
                                   ) : (
                                     <Icons.StarOutline
-                                      size={40}
+                                      size={22}
+                                      color='#808080'
+                                      style={{margin: '8px'}}
                                     ></Icons.StarOutline>
                                   )
                                 )}
@@ -873,18 +879,26 @@ export const Report = React.forwardRef((props, ref) => {
 
                               <Typography
                                 sx={{
-                                  fontWeight: 'bold',
+                                  fontWeight: 400,
+                                  fontSize: '16px',
                                   justifyContent: 'center',
                                   display: 'flex',
-                                  gap: '5px',
+                                  color: '#808080',
                                   alignItems: 'center',
                                 }}
                                 mt="4px"
                               >
-                                {feedback[1][index]} response
+                                {feedback[1][index]} Response
                                 {feedback[1][index] === 1 ? '' : 's'}
                               </Typography>
-                              <Typography mt="24px" mb="25px">
+                              <Typography mt="24px" mb="25px" sx={{
+                                  fontWeight: 400,
+                                  fontSize: '16px',
+                                  justifyContent: 'center',
+                                  display: 'flex',
+                                  color: '#343434',
+                                  alignItems: 'center',
+                                }}>
                                 {FEEDBACK_QUESTIONS[index]}
                               </Typography>
                             </CardContent>
