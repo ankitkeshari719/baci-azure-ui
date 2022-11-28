@@ -22,7 +22,7 @@ import React from 'react';
 import { addFeedback } from '../msal/services';
 import commonStyles from './../style.module.scss';
 import './../global.scss';
-
+import   successAnimation  from './../assets/img/success-animation.gif'
 import { useNavigate } from 'react-router-dom';
 import Toolbar from '../elements/Toolbar';
 
@@ -202,7 +202,7 @@ export function Offboarding() {
         </Box>
       </Slide>
       <Slide direction="up" in={done} key="thank-you">
-        <Box>
+        <Box sx={{ height: 'calc(100vh - 100px)', overflowY: 'auto' }}>
           <Box
             sx={{
               display: 'flex',
@@ -211,7 +211,7 @@ export function Offboarding() {
               alignItems: 'center',
             }}
           >
-            <Box mt="40px">{/* need add gif */}</Box>
+            <Box mt="40px"><img src={successAnimation} style={{width: '300px', height: '300px'}}></img></Box>
             <Box mt="40px">
               <Typography variant="h4" color={commonStyles.PrimaryMain}>
                 Your feedback is submitted successfully!
@@ -223,7 +223,7 @@ export function Offboarding() {
                 className="secondaryButton"
                 onClick={() => navigate('/board/' + global.currentRetro?.id)}
               >
-                <span className="secondaryButtonText">Show board</span>
+                <span className="secondaryButtonText">Review board</span>
               </Button>
             </Box>
             <Box mt="40px" sx={{ display: 'inline-flex' }}>

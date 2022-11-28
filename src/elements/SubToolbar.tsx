@@ -146,23 +146,26 @@ const SubToolbar = (props: any) => {
         </Box>
         <>
           {' '}
-          {users?.map((user, index) => (
-            <Avatar
-              key={user.userId}
-              avatar={user.avatar}
-              onClickAvatar={() => {}}
-              css={{
-                width: '40px',
-                height: '40px',
-                marginLeft: '0',
-                marginRight: '-8px',
-                border:
-                  userSelected.indexOf(user.userId + '@' + index) > -1
-                    ? `3px solid` + commonStyles.PrimaryMain
-                    : '3px solid transparent',
-              }}
-            />
-          ))}
+          {users?.map(
+            (user, index) =>
+              index < 4 && (
+                <Avatar
+                  key={user.userId}
+                  avatar={user.avatar}
+                  onClickAvatar={() => {}}
+                  css={{
+                    width: '40px',
+                    height: '40px',
+                    marginLeft: '0',
+                    marginRight: '-8px',
+                    border:
+                      userSelected.indexOf(user.userId + '@' + index) > -1
+                        ? `3px solid` + commonStyles.PrimaryMain
+                        : '3px solid transparent',
+                  }}
+                />
+              )
+          )}
         </>
         {/* <Button
           style={{ marginLeft: '15px' }}

@@ -56,6 +56,7 @@ export default function FeedbackPopup(props: {
   const { commitAction } = React.useContext(BoardContext);
   const [global, dispatch] = React.useContext(GlobalContext);
   const { setConfirmAction } = React.useContext(ConfirmContext);
+  const [isBarSet, setIsBarSet] = React.useState(true);
   const [barvalue, setbarvalue] = React.useState(0);
   const [showThankYou, setShowThankYou] = React.useState(false);
 
@@ -64,11 +65,21 @@ export default function FeedbackPopup(props: {
   const handleNext = () => {
     let newIndex = index + 1;
     setIndex(newIndex);
+    setIsBarSet(true);
+    
   };
   const handlePrevious = () => {
     let newIndex = index - 1;
     setIndex(newIndex);
+    setIsBarSet(false);
   };
+  function setFeedbackBar(index: number){
+    console.log('feedback', qs);
+    if(isBarSet && qs[index][0] === 0){
+      setbarvalue(barvalue + 100 / qs.length);
+      setIsBarSet(false);
+    }
+    }
   React.useEffect(() => {
     setShowThankYou(props.showThankYou);
     if (props.showThankYou) {
@@ -214,7 +225,8 @@ export default function FeedbackPopup(props: {
                     }}
                     onClick={() => {
                       qs[index][1](i);
-                      setbarvalue(barvalue + 100 / qs.length);
+                      setFeedbackBar(index);
+                      
                     }}
                     onTouchStart={() => qs[index][1](i)}
                   >
