@@ -382,7 +382,7 @@ export function RetroCard({
                       fontSize: '0.85rem',
                       cursor: 'pointer',
                       wordWrap: 'break-word',
-                      textAlign: 'justify',
+                      textAlign: 'left',
                       color: '#343434',
                     }}
                     onClick={e => {
@@ -456,9 +456,9 @@ export function RetroCard({
               {!hideButtons ? (
                 <Button
                   sx={{ minWidth: '0px', position: 'initial' }}
-                  disabled={ended}
+                  disabled={ended || global.leaveRetro}
                   onClick={e => {
-                    console.log('e', e, ended, userReacted);
+                    // console.log('e', e, ended, userReacted);
                     !ended
                       ? userReacted
                         ? removeReactFromCard(card.id)

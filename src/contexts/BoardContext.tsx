@@ -77,6 +77,7 @@ function BoardProvider(props: ComponentProps<any>) {
   const snapshotUnsubscriber = React.useRef<() => void>(() => {});
 
   function saveState(state: BoardState) {
+    // console.log(state,'imp');
     const value = stringifyDate.stringify({
       boardId: currentRetro?.id,
       history: history.current,
@@ -338,8 +339,6 @@ function BoardProvider(props: ComponentProps<any>) {
     }
   }, [currentRetro?.id]);
 
-  
-
   return (
     <BoardContext.Provider value={{ state, commitAction }}>
       {!currentRetro && !state.loading ? (
@@ -371,7 +370,7 @@ function BoardProvider(props: ComponentProps<any>) {
           <CircularProgress />
         </Box>
       )}
-    
+
       {/* </Grid>
         </DialogContent>
       </Dialog> */}

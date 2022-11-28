@@ -7,7 +7,7 @@ const FirstTimeExperience = (props: any) => {
     sessionStorage.getItem('showManual')
   );
   React.useEffect(() => {
-    console.log(sessionStorage.getItem('showManual'), 'data', props);
+
     if (
       showManual == undefined ||
       (showManual == null && props.facilitator == true)
@@ -20,11 +20,11 @@ const FirstTimeExperience = (props: any) => {
     //
   }, [showManual && props.facilitator == true]);
   React.useEffect(() => {
-    console.log(
-      sessionStorage.getItem('showManual'),
-      'data',
-      props.facilitator
-    );
+    // console.log(
+    //   sessionStorage.getItem('showManual'),
+    //   'data',
+    //   props.facilitator
+    // );
     if (showManual == undefined || showManual == null || showManual == '1') {
       if (props.facilitator === false) showLeaveInfo();
     }

@@ -41,6 +41,7 @@ import Toolbar from '../elements/Toolbar';
 import SubToolbar from '../elements/SubToolbar';
 import FirstTimeExperience from '../elements/FirstTimeExperience';
 
+
 const ColumnContainer = ({
   children,
   totalPanels,
@@ -151,7 +152,7 @@ export default function RetroBoard() {
   //     : [];
 
   const isMatch = (element: any, index: number, array: any): boolean => {
-    console.log(element, index, array);
+    // console.log(element, index, array);
     return true;
   };
 
@@ -206,8 +207,9 @@ export default function RetroBoard() {
 
                   global.usersSelected?.some((user, index) => {
                     return (
-                      user?.userId === group?.createdBy ||
-                      group?.name === UNGROUPED
+                      // user?.userId === group?.createdBy ||
+                      // group?.name === UNGROUPED
+                      true
                     );
                   })
                 ),
@@ -357,18 +359,18 @@ export default function RetroBoard() {
 
   React.useEffect(() => {
     // console.log(needsToShow);
-    console.log('ended', ended, retroStatus);
+    // console.log('ended', ended, retroStatus);
     if (ended || global.leaveRetro) {
       if (global.user.userType !== 2) {
         const currentUser = users?.filter(
           card => card.userId === global?.user.id
         );
         if (currentUser?.length == 1 && currentUser[0].feedback.length == 0) {
-          console.log('ended', true, ' ', currentUser[0].pulseCheckQuestions);
+          // console.log('ended', true, ' ', currentUser[0].pulseCheckQuestions);
           setshowFeedback(true);
         }
       } else {
-        console.log('ended', false);
+        // console.log('ended', false);
 
         setshowFeedback(false);
       }
@@ -688,7 +690,7 @@ export default function RetroBoard() {
               ? [...getProcessedColumns(), undefined]
               : getProcessedColumns()
             ).map((column, index) => (
-              <React.Fragment key={column?.id.toString()}>
+              <React.Fragment key={index}>
                 {(isXsUp && index === currentColumn) ||
                   (isSmUp &&
                     (index === currentColumn || index === currentColumn + 1)) ||
@@ -696,7 +698,7 @@ export default function RetroBoard() {
                     !isSmUp &&
                     (index === global.expandColumn ||
                       global.expandColumn === -1) && (
-                      <ColumnContainer totalPanels={totalPanels}>
+                      <ColumnContainer totalPanels={totalPanels} key={index+"1"}>
                         {!!column ? (
                           <>
                             <RetroColumn

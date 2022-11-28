@@ -20,6 +20,7 @@ export enum ActionType {
   SET_USER_SELECTED = 'setUserSelected',
   SET_LEAVE_RETRO = 'setLeaveRetro',
   SET_FEEDBACK = 'setFeedback',
+  CREATE_RETRO = 'createRetro',
 }
 
 export class ReducerPayload {
@@ -75,7 +76,6 @@ function GlobalProvider(props: ComponentProps<any>) {
     switch (action.type) {
       case ActionType.SET_USER:
         if (action.payload?.user && action.payload?.user.id) {
-        
           return saveState({ ...state, user: action.payload?.user as User });
         }
         break;
@@ -145,6 +145,10 @@ function GlobalProvider(props: ComponentProps<any>) {
           ...state,
           feedbackSubmit: action.payload?.feedbackSubmit,
         });
+      case ActionType.CREATE_RETRO:
+        let tempState: any = new Global();
+        tempState.user = { id: state.user.id };
+        return saveState(tempState);
     }
     return saveState({ ...state });
   }

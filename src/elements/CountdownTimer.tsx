@@ -269,7 +269,7 @@ export function CountdownTimer({
           {`Time's up!`}
         </Typography>
       ) : (
-        <Typography color="inherit" fontWeight="inherit">
+        <Box color="inherit" fontWeight="inherit">
           <Countdown
             ref={countdownRef}
             autoStart={false}
@@ -291,7 +291,7 @@ export function CountdownTimer({
               </Typography>
             )}
           />
-        </Typography>
+        </Box>
       )}
 
       {/* <Draggable> */}

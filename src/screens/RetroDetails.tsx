@@ -185,7 +185,7 @@ export function RetroDetails(props: any) {
     
   }
   return (
-    <Grid container spacing={0} lg={12}>
+    <Grid container spacing={0} >
       {!props?.popover && (
         <Grid item lg={6}>
           <LandingLayout></LandingLayout>
