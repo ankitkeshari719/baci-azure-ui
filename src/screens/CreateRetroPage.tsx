@@ -93,6 +93,12 @@ export function CreateNewRetro() {
 
   useAzureAuth();
 
+  React.useEffect(() => {
+    dispatch({
+      type: ActionType.CLOSE_CURRENT_RETRO,
+    });
+  }, []);
+
   function handleRetronameChange(e: React.SetStateAction<string>) {
     if (e == '') {
       setCodeWarning('');
