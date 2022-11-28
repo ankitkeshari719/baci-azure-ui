@@ -9,6 +9,7 @@ import {
   InputAdornment,
   Popover,
   TextField,
+  Tooltip,
   Typography,
 } from '@mui/material';
 import React from 'react';
@@ -138,6 +139,7 @@ const Toolbar = (props: any) => {
             sx={{ display: 'flex', flexDirection: 'row', alignItems: 'center' }}
           >
             {user.userType == 2 && !ended ? (
+              <Tooltip title={localRetroName+""}>
               <TextField
               // noWrap
                 // multiline
@@ -212,6 +214,7 @@ const Toolbar = (props: any) => {
                   }
                 }}
               />
+              </Tooltip>
             ) : (
               <Typography
               noWrap
