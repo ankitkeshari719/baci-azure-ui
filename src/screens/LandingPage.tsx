@@ -109,6 +109,12 @@ export function LandingPage() {
     navigate('/createretro/');
   }
 
+  React.useEffect(()=>{
+    dispatch({
+      type: ActionType.CLOSE_CURRENT_RETRO
+    });
+    
+  },[])
   return (
     <Grid container spacing={0} >
       <Grid item xs={6}>
