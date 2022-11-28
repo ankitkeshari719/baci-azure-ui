@@ -130,7 +130,8 @@ const Toolbar = (props: any) => {
       />
 
       {currentRetro?.name &&
-        !location.pathname.includes('startRetro') && !location.pathname.includes('offboarding')  &&
+        !location.pathname.includes('startRetro') &&
+        !location.pathname.includes('offboarding') &&
         (location.pathname.includes('pulsecheck') ||
           window.location.pathname.includes('board')) && (
           <Box
@@ -138,7 +139,8 @@ const Toolbar = (props: any) => {
           >
             {user.userType == 2 && !ended ? (
               <TextField
-                multiline
+              // noWrap
+                // multiline
                 fullWidth
                 InputLabelProps={
                   {
@@ -151,7 +153,13 @@ const Toolbar = (props: any) => {
                   // minWidth: '200px',
                   minWidth: '200px',
                   marginLeft: '34px',
+                  overflow: 'hidden !important',
+                  textOverflow: 'ellipsis',
                   div: { padding: 0, position: 'initial' },
+                  "& .MuiInputBase-input": {
+                    overflow: "hidden",
+                    textOverflow: "ellipsis"
+                  }
                 }}
                 InputProps={{
                   style: {
@@ -159,6 +167,9 @@ const Toolbar = (props: any) => {
                     color: '#2C69A1',
                     // borderBottom: 'none!important',
                     borderBottom: '0px solid!important',
+                    overflow: 'hidden !important',
+                    textOverflow: 'ellipsis',
+                    // height:'100px'
                   },
 
                   // endAdornment: (
@@ -203,6 +214,7 @@ const Toolbar = (props: any) => {
               />
             ) : (
               <Typography
+              noWrap
                 sx={{
                   color: '#2C69A1',
                   marginLeft: '34px',
@@ -213,6 +225,9 @@ const Toolbar = (props: any) => {
                   overflow: 'hidden',
                   textOverflow: 'ellipsis',
                   display: 'inline-block',
+                  // height:'56px'
+                  // overflow: 'hidden !important',
+                  // textOverflow: 'ellipsis',
                 }}
                 // onClick={() => {
                 //   setEditing(true);
