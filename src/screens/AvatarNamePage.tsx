@@ -62,7 +62,7 @@ const styles = {
 export function AvatarNamePage() {
   const [global, dispatch] = React.useContext(GlobalContext);
   const [retroName, setRetroName] = React.useState(
-    localStorage.getItem('retroname') || ''
+    sessionStorage.getItem('retroname') || ''
   );
   const {
     state: {
@@ -97,7 +97,7 @@ export function AvatarNamePage() {
   React.useEffect(() => {
     setAvatarList(avatarName.sort(() => Math.random() - 0.5));
   }, []);
-
+  useAzureAuth();
   const joinRetro = async (
     retrunBool: boolean
   ): Promise<RetroType | undefined> => {
@@ -129,11 +129,11 @@ export function AvatarNamePage() {
   const onClickAvatar = (avatarName: any) => {
     setAvatar(avatarName);
     setAvatarSelectionError('');
-    console.log(avatarName);
+    // console.log(avatarName);
   };
 
   const setName = () => {
-    localStorage.removeItem('pulseCheckState');
+    sessionStorage.removeItem('pulseCheckState');
     if (userName !== '' && selectedAvatar !== '') {
       dispatch({
         type: ActionType.SET_LOADING,
@@ -153,7 +153,7 @@ export function AvatarNamePage() {
       });
       if (!global.currentRetro || joining) {
         joinRetro(false).then(retro => {
-          console.log('retro', retro);
+          // console.log('retro', retro);
           dispatch({
             type: ActionType.SET_LOADING,
             payload: { loadingFlag: false },
@@ -205,7 +205,7 @@ export function AvatarNamePage() {
       global.user.id == undefined ||
       global.user.id == null
     ) {
-      // useAzureAuth();
+      useAzureAuth;
     } else {
     }
     if (!global.currentRetro?.name) {
@@ -215,10 +215,13 @@ export function AvatarNamePage() {
       });
       joinRetro(true).then(
         res => {
+          // console.log("res")
           dispatch({
             type: ActionType.SET_LOADING,
             payload: { loadingFlag: false },
           });
+       
+          data123();
         },
         err => {
           dispatch({
@@ -227,20 +230,23 @@ export function AvatarNamePage() {
           });
         }
       );
+    } else {
+      data123();
     }
-  }, []);
+  }, [users, global?.user?.id]);
 
-  React.useEffect(() => {
+  const data123 = (): any => {
     if (
       retroId != undefined &&
       retroId != '' &&
-      retroId == global?.currentRetro?.id
+      retroId == global?.currentRetro?.id &&
+      global.user.id != ''
     ) {
-      console.log(global?.user.id);
+      // console.log(global?.user.id);
       const currentUser: any = users.find(
         user => user.userId === global.user.id
       );
-      console.log(users, 'users', currentUser);
+      // console.log(users, 'users', currentUser, global.user.id);
 
       if (currentUser) {
         const userTypeValue: number =
@@ -260,17 +266,24 @@ export function AvatarNamePage() {
         });
 
         if (ended || retroStarted) {
-          if (ended && currentUser.userId == creatorId) {
+          if (ended && currentUser.userId == global.currentRetro?.creatorId) {
             navigate('/report/' + global.currentRetro?.id);
           } else {
             if (currentUser?.pulseCheckQuestions?.length > 0)
               navigate('/board/' + global.currentRetro?.id);
             else navigate('/board/' + global.currentRetro?.id + '/pulseCheck');
           }
+        } else {
+      
+          if (currentUser.userId == global.currentRetro?.creatorId) {
+            navigate('/board/' + global.currentRetro?.id + '/startRetro');
+          } else {
+            navigate('/board/' + global.currentRetro?.id + '/waiting');
+          }
         }
       }
     }
-  }, [users, global.user.id != '']);
+  };
   return (
     <Grid container spacing={0} style={{ overflowY: 'auto' }}>
       <Grid item xs={6}>

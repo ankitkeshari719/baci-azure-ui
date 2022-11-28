@@ -33,12 +33,13 @@ export default function useLoadRetro() {
   };
 
   React.useEffect(() => {
-    if (!global.preferredNickname && id) {
+    if (!global?.user?.name && id) {
+    
       navigate('/join/' + id);
       return;
     }
     if ((!id || id === '') && global.currentRetro?.id) {
-      navigate('/join/' + global.currentRetro?.humanId);
+      navigate('/');
       return;
     }
     if ((!id || id === '') && !global.currentRetro?.id) {
@@ -70,15 +71,15 @@ export default function useLoadRetro() {
     if (!!retroId) {
       const userJoined = users.find(u => u.userId === global.user.id);
       if (!userJoined) {
-        console.log('Join Retro called');
+        // console.log('Join Retro called');
         saveAndProcessAction(BoardActionType.JOIN_RETRO, {
           userNickname: global.user.name,
           avatar: global.avatar,
         }).then(() => {
-          console.log(
-            global.currentRetro && global.currentRetro.retroStatus,
-            'status'
-          );
+          // console.log(
+          //   global.currentRetro && global.currentRetro.retroStatus,
+          //   'status'
+          // );
           if (global.currentRetro && retroStarted) {
             if (FEATURE_FLAGS.pulseCheck) {
               navigate(`/board/${retroId}/pulsecheck`);

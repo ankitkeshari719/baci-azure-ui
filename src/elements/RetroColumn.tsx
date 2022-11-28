@@ -152,7 +152,7 @@ export function RetroColumn({
 
   const addNewCard = async (cardGroupId: string, value: string) => {
     const id = shortid.generate();
-    console.log(id, 'id');
+    // console.log(id, 'id');
     await saveAndProcessAction(BoardActionType.ADD_NEW_CARD, {
       groupId: cardGroupId,
       id,
@@ -189,7 +189,7 @@ export function RetroColumn({
   };
 
   const publishColumn = async (value: boolean) => {
-    console.log('publish');
+    // console.log('publish');
     if (true) {
       dispatch({
         type: ActionType.SET_LOADING,
@@ -205,14 +205,14 @@ export function RetroColumn({
         });
       });
     } else {
-      console.log('already published');
+      // console.log('already published');
     }
   };
 
   const submit = async (text: string) => {
     setIslanded(false);
 
-    console.log(cardGroups);
+    // console.log(cardGroups);
     dispatch({
       type: ActionType.SET_LOADING,
       payload: { loadingFlag: true },
@@ -688,7 +688,7 @@ export function RetroColumn({
                       });
                     }}
                     src="/svgs/Expand.svg"
-                    style={{ width: '20px', marginLeft: '15px' }}
+                    style={{ width: '20px', marginLeft: '15px',cursor:'pointer' }}
                   />
                 ) : (
                   <img
@@ -699,7 +699,7 @@ export function RetroColumn({
                       });
                     }}
                     src="/svgs/Shrink.svg"
-                    style={{ width: '20px', marginLeft: '15px' }}
+                    style={{ width: '20px', marginLeft: '15px',cursor:'pointer' }}
                   />
                 )}
               </Grid>

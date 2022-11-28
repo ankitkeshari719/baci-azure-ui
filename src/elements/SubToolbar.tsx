@@ -66,7 +66,7 @@ const SubToolbar = (props: any) => {
     const {
       target: { value },
     } = event;
-    console.log(value);
+    // console.log(value);
 
     if (value[value.length - 1] === 'all') {
       setUserSelected(
@@ -123,7 +123,7 @@ const SubToolbar = (props: any) => {
         width: 'calc(100%-112px)',
       }}
     >
-      <Box sx={{ display: 'flex', marginRight: '15px',alignItems:'center' }}>
+      <Box sx={{ display: 'flex', marginRight: '15px', alignItems: 'center' }}>
         <Box
           sx={{
             color: '#808080',
@@ -146,22 +146,26 @@ const SubToolbar = (props: any) => {
         </Box>
         <>
           {' '}
-          {users?.map((user, index) => (
-            <Avatar
-              key={user.userId}
-              avatar={user.avatar}
-              css={{
-                width: '40px',
-                height: '40px',
-                marginLeft: '0',
-                marginRight: '-8px',
-                border:
-                  userSelected.indexOf(user.userId + '@' + index) > -1
-                    ? `3px solid` + commonStyles.PrimaryMain
-                    : '3px solid transparent',
-              }}
-            />
-          ))}
+          {users?.map(
+            (user, index) =>
+              index < 4 && (
+                <Avatar
+                  key={user.userId}
+                  avatar={user.avatar}
+                  onClickAvatar={() => {}}
+                  css={{
+                    width: '40px',
+                    height: '40px',
+                    marginLeft: '0',
+                    marginRight: '-8px',
+                    border:
+                      userSelected.indexOf(user.userId + '@' + index) > -1
+                        ? `3px solid` + commonStyles.PrimaryMain
+                        : '3px solid transparent',
+                  }}
+                />
+              )
+          )}
         </>
         {/* <Button
           style={{ marginLeft: '15px' }}
@@ -274,6 +278,7 @@ const SubToolbar = (props: any) => {
 
           {users.map((user, index) => (
             <MenuItem
+              disabled={global.user.userType != 2}
               id="item"
               key={user.userId + index}
               value={user.userId + '@' + index}

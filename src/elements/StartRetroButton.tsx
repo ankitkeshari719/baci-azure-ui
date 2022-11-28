@@ -57,7 +57,7 @@ const StartRetroButton = () => {
         retroDuration: duration,
       }).then(
         () => {
-          console.log('started retro');
+          // console.log('started retro');
           dispatch({
             type: ActionType.SET_LOADING,
             payload: { loadingFlag: false },
@@ -75,7 +75,7 @@ const StartRetroButton = () => {
   };
 
   React.useEffect(() => {
-    console.log(retroStarted, 'start retro button');
+    // console.log(retroStarted, 'start retro button');
 
     if (retroStarted) {
       navigate(`/board/${retroId}/pulsecheck`);
@@ -91,7 +91,7 @@ const StartRetroButton = () => {
   };
   const handleSubmit = (value: any) => {
     setOpen(false);
-    console.log(value);
+    // console.log(value);
     setSelectedValue(value);
     startRetro(value);
   };

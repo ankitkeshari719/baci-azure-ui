@@ -64,7 +64,7 @@ const styles = {
   emailImg: {
     width: '96px',
     height: '96px',
-    margin: '35px 44px 0px 45px',
+  
   },
   group95: {
     marginTop: '27.5px',
@@ -124,23 +124,22 @@ const styles = {
     marginLeft: '46%',
   },
   div97: {
-    marginTop: '27.75px',
-    marginBottom: '17.5px',
+    // marginTop: '27.75px',
+    // marginBottom: '17.5px',
   },
   div98: {
-    marginTop: '19.12px',
-    marginBottom: '17.5px',
+    // marginTop: '19.12px',
+    // marginBottom: '17.5px',
   },
   joinurl: {
     color: commonStyles.primaryDark,
     width: '153px',
-    display: 'inline-block',
-    margin: '41px 16px 0px 16px',
   },
   qrCode: {
-    margin: '43px 53px 0px 52px',
+  
     width: '80px',
     height: '80px',
+  
   },
   goToRetroBtn: {
     height: '44px',
@@ -148,7 +147,6 @@ const styles = {
   },
   copyURL: {
     height: '36px',
-    marginTop: '120.29px',
   },
 };
 export function StartRetro() {
@@ -164,7 +162,7 @@ export function StartRetro() {
   const shareRetroDetails = () => {
     navigator.share(shareData);
   };
-  useLoadRetro()
+  useLoadRetro();
   function goToRetro() {
     navigate('/join/' + global?.currentRetro?.humanId);
   }
@@ -182,18 +180,18 @@ export function StartRetro() {
       downloadLink.click();
     }
   };
-  const handleTooltipClose=() => {
+  const handleTooltipClose = () => {
     setIsCopied(false);
-  }
+  };
   return (
-    <Grid container spacing={0} >
-      <Grid xs={12} item  >
+    <Grid container spacing={0}>
+      <Grid xs={12} item>
         <Toolbar></Toolbar>
       </Grid>
       <Grid
-      item
+        item
         xs={12}
-        sx={{height: 'calc(100vh - 100px)', overflowY: 'auto'}}
+        sx={{ height: 'calc(100vh - 100px)', overflowY: 'auto' }}
         pr={commonStyles.m_80}
         pl={commonStyles.m_80}
       >
@@ -241,43 +239,56 @@ export function StartRetro() {
                 {global?.currentRetro?.humanId}
               </Typography>
             </div>
-            <Box sx={{ display: 'flex',justifyContent: 'space-evenly', marginTop: '70px' }}>
+            <Box
+              sx={{
+                display: 'flex',
+                justifyContent: 'space-evenly',
+                marginTop: '70px',
+              }}
+            >
               <Box sx={styles.group96}>
-                <div style={styles.joinurl}>
-                  <a style={{ overflowWrap: 'break-word' }}>
-                    {global?.currentRetro?.joinUrl}
-                  </a>
-                </div>
-                <CopyToClipboard
-                  text={global?.currentRetro?.joinUrl}
-                  onCopy={() => setIsCopied(true)}
-                >
-                  <Tooltip
+                
+                  <Box  style={styles.joinurl} height='70%' sx={{display:'flex', justifyContent:'center', alignItems:'center'}}>
+                    <a style={{ overflowWrap: 'break-word' }}>
+                      {global?.currentRetro?.joinUrl}
+                    </a>
+                  </Box>
+                  <Box >
+                    <CopyToClipboard
+                      text={global?.currentRetro?.joinUrl}
+                      onCopy={() => setIsCopied(true)}
+                    >
+                      <Tooltip
                         onClose={handleTooltipClose}
-                          open={iscopied}
-                         style={{width: '20px', fontSize: '10px'}}
-                          disableTouchListener
-                          leaveDelay={1500}
-                          placement="top"
-                           title="Link Copied!"
+                        open={iscopied}
+                        style={{ width: '20px', fontSize: '10px' }}
+                        disableTouchListener
+                        leaveDelay={1500}
+                        placement="top"
+                        title="Link Copied!"
+                      >
+                        <Button
+                          variant="outlined"
+                          className="primaryButton"
+                          startIcon={<Icons.Link size={20} />}
+                          style={styles.copyURL}
                         >
-                  <Button
-                    variant="outlined"
-                    className="primaryButton"
-                    startIcon={<Icons.Link size={20} />}
-                    style={styles.copyURL}
-                  >
-                    <span className="primaryButtonText">Copy URL</span>
-                  </Button>
-                  </Tooltip>
-                </CopyToClipboard>
+                          <span className="primaryButtonText">Copy URL</span>
+                        </Button>
+                      </Tooltip>
+                    </CopyToClipboard>
+                  </Box>
+                
               </Box>
 
               <Box sx={styles.group97}>
+                <Box height='70%' sx={{display:'flex', justifyContent:'center', alignItems:'center'}}>
                 <QRCode
                   value={global.currentRetro?.joinUrl || ''}
                   style={styles.qrCode}
                 />
+                </Box>
+              
                 <div style={styles.div97}>
                   <Button
                     variant="outlined"
@@ -292,7 +303,10 @@ export function StartRetro() {
               </Box>
 
               <Box sx={styles.group98}>
+                <Box height='70%' sx={{display:'flex', justifyContent:'center', alignItems:'center'}}>
                 <img src={email} alt="email" style={styles.emailImg} />
+                </Box>
+                
                 <div style={styles.div98}>
                   <Button
                     variant="outlined"

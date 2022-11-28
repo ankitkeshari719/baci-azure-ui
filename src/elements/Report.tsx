@@ -245,7 +245,7 @@ export const Report = React.forwardRef((props, ref) => {
         }, [])
         .filter((entry: { text: string; size: number }) => entry.size >= 2);
     }
-    console.log(wordsMaps_wentWell);
+    // console.log(wordsMaps_wentWell);
     setwentWellwords(wordsMaps_wentWell);
 
     //for didn't went well word cloud
@@ -280,7 +280,7 @@ export const Report = React.forwardRef((props, ref) => {
         }, [])
         .filter((entry: { text: string; size: number }) => entry.size >= 2);
     }
-    console.log(wordsMaps_didntWentWell);
+    // console.log(wordsMaps_didntWentWell);
     setdidntWentWellwords(wordsMaps_didntWentWell);
 
     //get total count of user submitted the pulsechek
@@ -303,12 +303,12 @@ export const Report = React.forwardRef((props, ref) => {
           feedbackCount[feedback.id] =
             (feedbackCount[feedback.id] ? feedbackCount[feedback.id] : 0) + 1;
         }
-        console.log(feedback);
+        // console.log(feedback);
       });
       // [feedbackValues, feedbackCount].map((index)=>{
       //   index[0][index]=index[0][index]/ index[1][index]
       // })
-      console.log([feedbackValues, feedbackCount]);
+      // console.log([feedbackValues, feedbackCount]);
       user.pulseCheckQuestions.forEach(question => {
         totalPulseCheckCount = totalPulseCheckCount + 1;
         const text = (questionsDef as any)[question.id];
@@ -329,7 +329,7 @@ export const Report = React.forwardRef((props, ref) => {
       });
     });
 
-    console.log('total pulsecount', totalPulseCheckCount);
+    // console.log('total pulsecount', totalPulseCheckCount);
     if (Object.keys(feedbackValues).length !== 0) {
       setFeedback([feedbackValues, feedbackCount]);
     }
@@ -348,7 +348,7 @@ export const Report = React.forwardRef((props, ref) => {
     newArr.map(data => {
       return sampleArray.push(Object.values(data));
     })
-    console.log('sample', sampleArray);
+    // console.log('sample', sampleArray);
     let tempArr : any = [];
     if(sampleArray.length === 3){
       tempArr.push([sampleArray[0][0], sampleArray[1][0], sampleArray[2][0]]);
@@ -357,8 +357,8 @@ export const Report = React.forwardRef((props, ref) => {
     }
 
     setBarData(tempArr);
-    console.log('bar', barData);
-    console.log('format', newQuestions, feedbackValues, feedbackCount);
+    // console.log('bar', barData);
+    // console.log('format', newQuestions, feedbackValues, feedbackCount);
   }, [lastStateUpdate]);
 
   return (
@@ -844,6 +844,7 @@ export const Report = React.forwardRef((props, ref) => {
                                   display: 'flex',
                                   gap: '5px',
                                   alignItems: 'center',
+                                  fontWeight: 500
                                 }}
                               >
                                 {(
@@ -855,17 +856,22 @@ export const Report = React.forwardRef((props, ref) => {
                                   display: 'flex',
                                   justifyContent: 'center',
                                 }}
+                                mt='14.5px'
+                                mb='14.5px'
                               >
                                 {[1, 2, 3, 4, 5].map(i =>
                                   i <=
                                   feedback[0][index] / feedback[1][index] ? (
                                     <Icons.Star
-                                      size={40}
+                                      size={22}
                                       color="#FCB34C"
+                                      style={{margin: '8px'}}
                                     ></Icons.Star>
                                   ) : (
                                     <Icons.StarOutline
-                                      size={40}
+                                      size={22}
+                                      color='#808080'
+                                      style={{margin: '8px'}}
                                     ></Icons.StarOutline>
                                   )
                                 )}
@@ -873,18 +879,26 @@ export const Report = React.forwardRef((props, ref) => {
 
                               <Typography
                                 sx={{
-                                  fontWeight: 'bold',
+                                  fontWeight: 400,
+                                  fontSize: '16px',
                                   justifyContent: 'center',
                                   display: 'flex',
-                                  gap: '5px',
+                                  color: '#808080',
                                   alignItems: 'center',
                                 }}
                                 mt="4px"
                               >
-                                {feedback[1][index]} response
+                                {feedback[1][index]} Response
                                 {feedback[1][index] === 1 ? '' : 's'}
                               </Typography>
-                              <Typography mt="24px" mb="25px">
+                              <Typography mt="24px" mb="25px" sx={{
+                                  fontWeight: 400,
+                                  fontSize: '16px',
+                                  justifyContent: 'center',
+                                  display: 'flex',
+                                  color: '#343434',
+                                  alignItems: 'center',
+                                }}>
                                 {FEEDBACK_QUESTIONS[index]}
                               </Typography>
                             </CardContent>

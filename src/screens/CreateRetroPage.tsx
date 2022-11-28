@@ -85,7 +85,7 @@ export function CreateNewRetro() {
   const [retroTimeframe, setRetroTimeframe] = React.useState('');
   const [isTimeFrameSet, setisTimeFrameSet] = React.useState(id ? true : false);
   const [localRetroName, setlocalRetroName] = React.useState(
-    localStorage.getItem('retroname') || ''
+    sessionStorage.getItem('retroname') || ''
   );
   const [global, dispatch] = React.useContext(GlobalContext);
   const RETRONAME_CHARACTER_LIMIT = 80;
@@ -118,8 +118,8 @@ export function CreateNewRetro() {
   }
 
   const create = async () => {
-    console.log('create');
-    localStorage.setItem('retroname', retroName);
+    // console.log('create');
+    sessionStorage.setItem('retroname', retroName);
     setlocalRetroName(retroName);
 
     if (retroName !== '' && retroTimeframe !== '') {
@@ -156,7 +156,7 @@ export function CreateNewRetro() {
     } else if (retroTimeframe === '') {
       setisTimeFrameSet(true);
     }
-    localStorage.setItem('retroname', retroName);
+    sessionStorage.setItem('retroname', retroName);
   };
   const joinExistingRetro = () => {
     navigate('/');

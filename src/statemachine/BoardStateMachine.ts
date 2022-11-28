@@ -919,12 +919,12 @@ export const processAction = (
     userId: string
   ) => {
     const user = findUser(userId);
-    console.log(users, 'flag');
+    // console.log(users, 'flag');
     if (!user) {
       if (date && !state.startedDate) {
         state.startedDate = new Date(date);
       }
-      console.log(state.users);
+      // console.log(state.users);
       state.users.push({
         userId,
         userNickname,
@@ -1027,7 +1027,7 @@ export const processAction = (
   };
 
   const endRetro = (undo: boolean, date: Date | undefined, userId: string) => {
-    console.log('endRetro', userId, state.creatorId, state.ended, undo);
+    // console.log('endRetro', userId, state.creatorId, state.ended, undo);
     if (userId === state.creatorId && state.ended !== !undo) {
       state.ended = !undo;
       if (state.ended && date && state.endedDate === undefined) {
@@ -1044,7 +1044,7 @@ export const processAction = (
     userId: string,
     creator: string
   ) => {
-    console.log('userId', creator, ',', userId);
+    // console.log('userId', creator, ',', userId);
     if (userId === creator) {
       state.retroDuration = retroDuration;
       state.retroStarted = true;

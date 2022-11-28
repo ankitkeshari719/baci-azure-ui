@@ -202,13 +202,13 @@ export function RetroCardGroup({
                 value={nameSet ? name : 'Name grouping'}
                 multiline
                 onChange={event => {
-                  console.log(
-                    event.target.value.replace(
-                      ' ( ' + group.cards.length + ' ) ',
-                      ''
-                    ),
-                    'value'
-                  );
+                  // console.log(
+                  //   event.target.value.replace(
+                  //     ' ( ' + group.cards.length + ' ) ',
+                  //     ''
+                  //   ),
+                  //   'value'
+                  // );
                   setName(
                     event.target.value.replace(
                       ' ( ' + group.cards.length + ' ) ',
