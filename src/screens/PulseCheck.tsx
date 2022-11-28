@@ -88,11 +88,12 @@ export default function PulseCheck() {
 
   useLoadRetro();
   function setPulseBar(value: any) {
-    if ((value === 0 && pulse1 == false)) {
+    console.log(qs, value);
+    if ((value === 0 && pulse1 == false || qs[value][0] !== -1)) {
       setPulse1(true);
-    } else if ((value = 1 && pulse2 == false)) {
+    } else if ((value = 1 && pulse2 == false || qs[value][0] !== -1)) {
       setPulse2(true);
-    } else if ((value = 2 && pulse3 == false)) {
+    } else if ((value = 2 && pulse3 == false || qs[value][0] !== -1)) {
       setPulse3(true);
     }
   }
