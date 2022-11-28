@@ -34,6 +34,7 @@ const Toolbar = (props: any) => {
     !location.pathname.includes('pulsecheck') &&
     !location.pathname.includes('report') &&
     !location.pathname.includes('startRetro') &&
+    !location.pathname.includes('waiting') &&
     !location.pathname.includes('offboarding');
   // const [editing, setEditing] = React.useState(true);
   const RETRONAME_CHARACTER_LIMIT = 80;
@@ -129,7 +130,7 @@ const Toolbar = (props: any) => {
       />
 
       {currentRetro?.name &&
-        !location.pathname.includes('startRetro') &&
+        !location.pathname.includes('startRetro') && !location.pathname.includes('offboarding')  &&
         (location.pathname.includes('pulsecheck') ||
           window.location.pathname.includes('board')) && (
           <Box

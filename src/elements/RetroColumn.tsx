@@ -688,7 +688,7 @@ export function RetroColumn({
                       });
                     }}
                     src="/svgs/Expand.svg"
-                    style={{ width: '20px', marginLeft: '15px' }}
+                    style={{ width: '20px', marginLeft: '15px',cursor:'pointer' }}
                   />
                 ) : (
                   <img
@@ -699,7 +699,7 @@ export function RetroColumn({
                       });
                     }}
                     src="/svgs/Shrink.svg"
-                    style={{ width: '20px', marginLeft: '15px' }}
+                    style={{ width: '20px', marginLeft: '15px',cursor:'pointer' }}
                   />
                 )}
               </Grid>
