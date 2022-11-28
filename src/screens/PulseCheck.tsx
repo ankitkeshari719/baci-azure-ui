@@ -68,7 +68,7 @@ export default function PulseCheck() {
 
   const [{ user, currentRetro }, dispatch] = React.useContext(GlobalContext);
   const {
-    state: { fullPulseCheck },
+    state: { fullPulseCheck, users },
     commitAction,
   } = React.useContext(BoardContext);
   const { setConfirmAction } = React.useContext(ConfirmContext);
@@ -89,11 +89,11 @@ export default function PulseCheck() {
   useLoadRetro();
   function setPulseBar(value: any) {
     console.log(qs, value);
-    if ((value === 0 && pulse1 == false || qs[value][0] !== -1)) {
+    if ((value === 0 && pulse1 == false) || qs[value][0] !== -1) {
       setPulse1(true);
-    } else if ((value = 1 && pulse2 == false || qs[value][0] !== -1)) {
+    } else if ((value = (1 && pulse2 == false) || qs[value][0] !== -1)) {
       setPulse2(true);
-    } else if ((value = 2 && pulse3 == false || qs[value][0] !== -1)) {
+    } else if ((value = (2 && pulse3 == false) || qs[value][0] !== -1)) {
       setPulse3(true);
     }
   }
@@ -103,6 +103,29 @@ export default function PulseCheck() {
 
     //   sessionStorage.getItem('pulseCheckState')
     // );
+    if (
+      users.length > 0 &&
+      user != undefined &&
+      user.id != undefined &&
+      user.id != ''
+    ) {
+      const currentUser: any = users.find(user1 => user1.userId === user.id);
+      console.log("current user",currentUser.pulseCheckQuestions.length>0)
+      if(currentUser.pulseCheckQuestions.length>0){
+        navigate('/board/' + currentRetro?.id);
+        dispatch({
+          type: ActionType.SET_SNACK_MESSAGE,
+          payload: {
+            snackMessage: {
+              snackMessageType: 'warning',
+              message: 'You have already submitted the pulse check feedback.',
+            },
+          },
+        });
+        return
+      }
+    }
+
     const gPulseCheckState = sessionStorage.getItem('pulseCheckState');
     if (gPulseCheckState) {
       const parseGPulseCheckState = JSON.parse(gPulseCheckState);
@@ -124,8 +147,9 @@ export default function PulseCheck() {
           },
         });
       }
+      return
     }
-  }, []);
+  }, [users,user?.id&&user?.id!=""]);
 
   const submit = () => {
     const someBlank =
