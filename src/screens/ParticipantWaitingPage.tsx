@@ -14,14 +14,18 @@ import { GlobalContext } from '../contexts/GlobalContext';
 const styles = {
   group90: {
     width: '100%',
-    margin: '112px 645px 362px 644px',
+    height: '100vh',
+    display: 'flex',
+    flexDirection: 'column',
+    justifyContent: 'center',
+    // margin: '112px 645px 362px 644px',
   },
 };
 
 export function ParticipantWaitingPage() {
   const [global, dispatch] = React.useContext(GlobalContext);
   const [retroName, setRetroName] = React.useState(
-    localStorage.getItem('retroname') || ''
+    sessionStorage.getItem('retroname') || ''
   );
   const [animateFirst, setAnimateFirst] = React.useState(false);
   const [animatesecond, setAnimatesecond] = React.useState(false);
@@ -63,8 +67,17 @@ export function ParticipantWaitingPage() {
   });
   return (
     <Grid container>
-      <Toolbar/>
-      <Box style={styles.group90}>
+      <Toolbar />
+      <Box
+        style={{
+          width: '100%',
+          height: '100vh',
+          display: 'flex',
+          flexDirection: 'column',
+          justifyContent: 'center',
+          // margin: '112px 645px 362px 644px',
+        }}
+      >
         <Typography
           variant="h2"
           color={commonStyles.primaryDark}

@@ -63,11 +63,11 @@ export function Onboarding() {
   const AVATAR_CHARACTER_LIMIT = 30;
   const RETRONAME_CHARACTER_LIMIT = 80;
   React.useEffect(() => {
-   console.log("loging")
+  //  console.log("loging")
     if (window.location.pathname.includes('join')) {
       setStarted(false);
-      if (localStorage.getItem('BoardContext') !== null) {
-        let data: any = localStorage.getItem('BoardContext');
+      if (sessionStorage.getItem('BoardContext') !== null) {
+        let data: any = sessionStorage.getItem('BoardContext');
         data = JSON.parse(data);
         for (const item of [...data.history]) {
           setRetroName(item.action.parameters.retroName);
@@ -76,7 +76,7 @@ export function Onboarding() {
     }
   }, []);
   const create = async () => {
-    localStorage.setItem('retroname', retroName);
+    sessionStorage.setItem('retroname', retroName);
     setlocalRetroName('"' + retroName + '"');
     if (retroName !== '' && retroTimeframe !== '') {
       setCodeError('');
@@ -90,7 +90,7 @@ export function Onboarding() {
     } else if (retroTimeframe === '') {
       setisTimeFrameSet(true);
     }
-    localStorage.setItem('retroname', '"' + retroName + '"');
+    sessionStorage.setItem('retroname', '"' + retroName + '"');
     setCaptureName(false);
     // console.log(started, joining, global.currentRetro);
   };
@@ -200,7 +200,7 @@ export function Onboarding() {
 
 
   const setName = () => {
-    localStorage.removeItem('pulseCheckState');
+    sessionStorage.removeItem('pulseCheckState');
     if (userName !== '') {
       dispatch({
         type: ActionType.SET_PREFERRED_NICKNAME,
