@@ -207,8 +207,9 @@ export default function RetroBoard() {
 
                   global.usersSelected?.some((user, index) => {
                     return (
-                      user?.userId === group?.createdBy ||
-                      group?.name === UNGROUPED
+                      // user?.userId === group?.createdBy ||
+                      // group?.name === UNGROUPED
+                      true
                     );
                   })
                 ),
