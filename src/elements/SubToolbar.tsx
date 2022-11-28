@@ -123,7 +123,7 @@ const SubToolbar = (props: any) => {
         width: 'calc(100%-112px)',
       }}
     >
-      <Box sx={{ display: 'flex', marginRight: '15px',alignItems:'center' }}>
+      <Box sx={{ display: 'flex', marginRight: '15px', alignItems: 'center' }}>
         <Box
           sx={{
             color: '#808080',
@@ -150,6 +150,7 @@ const SubToolbar = (props: any) => {
             <Avatar
               key={user.userId}
               avatar={user.avatar}
+              onClickAvatar={() => {}}
               css={{
                 width: '40px',
                 height: '40px',
@@ -274,6 +275,7 @@ const SubToolbar = (props: any) => {
 
           {users.map((user, index) => (
             <MenuItem
+              disabled={global.user.userType != 2}
               id="item"
               key={user.userId + index}
               value={user.userId + '@' + index}
