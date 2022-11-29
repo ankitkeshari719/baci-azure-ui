@@ -186,7 +186,7 @@ const SubToolbar = (props: any) => {
             fieldset: {
               border: 'none',
               div: { padding: 0 },
-              opacity:1
+              opacity: 1,
             },
             // padding: '1px!important',
             // width: '20px',
@@ -279,7 +279,13 @@ const SubToolbar = (props: any) => {
 
           {users.map((user, index) => (
             <MenuItem
-              disabled={global.user.userType != 2}
+              // disabled={global.user.userType != 2}
+              // style={{ hover: 'none!important', cursor: 'text' }}
+              sx={{
+                hover: global.user.userType != 2 ? 'none!important':'',
+                cursor: global.user.userType != 2 ? 'text':"",
+                background: global.user.userType != 2 ? 'white!important':'',
+              }}
               id="item"
               key={user.userId + index}
               value={user.userId + '@' + index}
