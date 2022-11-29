@@ -79,13 +79,18 @@ const Toolbar = (props: any) => {
   }, [retroName]);
 
   React.useEffect(() => {
-    if (user.userType != 2 && showFinishRetroButton && !leaveRetro) {
+    // if (user.userType != 2 && showFinishRetroButton && !leaveRetro) {
+    if (showFinishRetroButton && !leaveRetro) {
       const timer = setInterval(() => {
         const endTime = retroDuration - 5 * 60 * 1000;
         const currentEpoch = Date.now();
 
         // console.log(endTime, 'epoch', retroDuration, 'current', currentEpoch);
-        if (endTime <= currentEpoch && !location.pathname.includes('waiting')) {
+        if (
+          endTime <= currentEpoch &&
+          !location.pathname.includes('startRetro') &&
+          !location.pathname.includes('waiting')
+        ) {
           setShowSessionEndMessage(true);
           clearTimeout(timer);
         }
@@ -139,69 +144,58 @@ const Toolbar = (props: any) => {
             sx={{ display: 'flex', flexDirection: 'row', alignItems: 'center' }}
           >
             {user.userType == 2 && !ended ? (
-              <Tooltip title={localRetroName+""}>
-              <TextField
-              // noWrap
-                // multiline
-                fullWidth
-                InputLabelProps={
-                  {
-                    // style: { fontSize: 0 },
+              <Tooltip title={localRetroName + ''}>
+                <TextField
+                  // noWrap
+                  // multiline
+                  fullWidth
+                  InputLabelProps={
+                    {
+                      // style: { fontSize: 0 },
+                    }
                   }
-                }
-                sx={{
-                  fieldset: { border: 'none' },
-                  color: '#2C69A1',
-                  // minWidth: '200px',
-                  minWidth: '200px',
-                  marginLeft: '34px',
-                  overflow: 'hidden !important',
-                  textOverflow: 'ellipsis',
-                  div: { padding: 0, position: 'initial' },
-                  "& .MuiInputBase-input": {
-                    overflow: "hidden",
-                    textOverflow: "ellipsis"
-                  }
-                }}
-                InputProps={{
-                  style: {
-                    fontSize: 24,
+                  sx={{
+                    fieldset: { border: 'none' },
                     color: '#2C69A1',
-                    // borderBottom: 'none!important',
-                    borderBottom: '0px solid!important',
+                    // minWidth: '200px',
+                    minWidth: '200px',
+                    marginLeft: '34px',
                     overflow: 'hidden !important',
                     textOverflow: 'ellipsis',
-                    // height:'100px'
-                  },
+                    div: { padding: 0, position: 'initial' },
+                    '& .MuiInputBase-input': {
+                      overflow: 'hidden',
+                      textOverflow: 'ellipsis',
+                    },
+                  }}
+                  InputProps={{
+                    style: {
+                      fontSize: 24,
+                      color: '#2C69A1',
+                      // borderBottom: 'none!important',
+                      borderBottom: '0px solid!important',
+                      overflow: 'hidden !important',
+                      textOverflow: 'ellipsis',
+                      // height:'100px'
+                    },
 
-                  // endAdornment: (
-                  //   <InputAdornment position="start">
-                  //     <Button
-                  //       onClick={() => {
-                  //         setEditing(false);
-                  //       }}
-                  //     >
-                  //       save
-                  //     </Button>
-                  //   </InputAdornment>
-                  // ),
-                }}
-                value={localRetroName}
-                onChange={e => {
-                  setLocalRetroName(e.currentTarget.value);
-                }}
-                onBlur={async () => {
-                  await saveAndProcessAction(
-                    BoardActionType.UPDATE_RETRO_DETAILS,
-                    {
-                      retroName: localRetroName,
-                      creatorId: currentRetro.creatorId,
-                      userId: user.id,
-                    }
-                  );
-                }}
-                onKeyDown={async e => {
-                  if (e.keyCode === 13) {
+                    // endAdornment: (
+                    //   <InputAdornment position="start">
+                    //     <Button
+                    //       onClick={() => {
+                    //         setEditing(false);
+                    //       }}
+                    //     >
+                    //       save
+                    //     </Button>
+                    //   </InputAdornment>
+                    // ),
+                  }}
+                  value={localRetroName}
+                  onChange={e => {
+                    setLocalRetroName(e.currentTarget.value);
+                  }}
+                  onBlur={async () => {
                     await saveAndProcessAction(
                       BoardActionType.UPDATE_RETRO_DETAILS,
                       {
@@ -210,14 +204,25 @@ const Toolbar = (props: any) => {
                         userId: user.id,
                       }
                     );
-                    (e.target as HTMLInputElement).blur();
-                  }
-                }}
-              />
+                  }}
+                  onKeyDown={async e => {
+                    if (e.keyCode === 13) {
+                      await saveAndProcessAction(
+                        BoardActionType.UPDATE_RETRO_DETAILS,
+                        {
+                          retroName: localRetroName,
+                          creatorId: currentRetro.creatorId,
+                          userId: user.id,
+                        }
+                      );
+                      (e.target as HTMLInputElement).blur();
+                    }
+                  }}
+                />
               </Tooltip>
             ) : (
               <Typography
-              noWrap
+                noWrap
                 sx={{
                   color: '#2C69A1',
                   marginLeft: '34px',
@@ -280,23 +285,32 @@ const Toolbar = (props: any) => {
       {showFinishRetroButton && !ended && (
         <>
           {user.userType == 2 ? (
-            <Button
-              variant="contained"
-              id="finishRetro"
-              sx={{
-                // background: '#159ADD',
-                // color: 'white',
-                borderRadius: '24px',
-                width: '148px',
-                height: '44px',
-                padding: '10px 20px',
-                marginRight: '40px',
-                fontWeight: 500,
-              }}
-              onClick={() => setOpenDialog(true)}
-            >
-              FINISH RETRO
-            </Button>
+            <>
+              <Button
+                variant="contained"
+                id="finishRetro"
+                sx={{
+                  // background: '#159ADD',
+                  // color: 'white',
+                  borderRadius: '24px',
+                  width: '148px',
+                  height: '44px',
+                  padding: '10px 20px',
+                  marginRight: '40px',
+                  fontWeight: 500,
+                }}
+                onClick={() => setOpenDialog(true)}
+              >
+                FINISH RETRO
+              </Button>
+              {showSessionEndMessage && (
+                <SessionEndingMessage
+                  hideSessionEndingMessage={() => {
+                    setShowSessionEndMessage(false);
+                  }}
+                />
+              )}
+            </>
           ) : (
             <>
               {' '}

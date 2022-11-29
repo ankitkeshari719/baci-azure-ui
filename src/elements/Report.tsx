@@ -542,7 +542,7 @@ export const Report = React.forwardRef((props, ref) => {
           }}
           mt="48px"
         >
-          <Grid lg={8}>
+          <Grid lg={8} item>
             <Grid item display="flex" justifyContent="center">
               <Typography
                 color={commonStyles.secondaryMain}
@@ -552,7 +552,7 @@ export const Report = React.forwardRef((props, ref) => {
               </Typography>
             </Grid>
             <Grid item display="flex" justifyContent="flex-end">
-              <Icons.Share
+              {/* <Icons.Share
                 size={20}
                 color="#4E4E4E"
                 style={{ marginRight: '46px' }}
@@ -561,7 +561,7 @@ export const Report = React.forwardRef((props, ref) => {
                 size={20}
                 color="#4E4E4E"
                 style={{ marginRight: '46px' }}
-              ></Icons.Download>
+              ></Icons.Download> */}
               <ReactToPrint
                 pageStyle="@page { size: A4; scale: 0.90 }"
                 trigger={() => (
@@ -825,6 +825,7 @@ export const Report = React.forwardRef((props, ref) => {
                           item
                           xs={12 / FEEDBACK_QUESTIONS.length}
                           sx={{ display: 'flex', justifyContent: 'center' }}
+                          key={index+"feed"}
                         >
                           <Card
                             variant="outlined"
@@ -863,12 +864,15 @@ export const Report = React.forwardRef((props, ref) => {
                                   i <=
                                   feedback[0][index] / feedback[1][index] ? (
                                     <Icons.Star
+                                    key={i+""}
                                       size={22}
                                       color="#FCB34C"
                                       style={{margin: '8px'}}
                                     ></Icons.Star>
                                   ) : (
                                     <Icons.StarOutline
+                                    key={i+""}
+
                                       size={22}
                                       color='#808080'
                                       style={{margin: '8px'}}
