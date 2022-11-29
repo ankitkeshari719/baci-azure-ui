@@ -158,7 +158,7 @@ export function StartRetro() {
     text: 'Join the retro',
     url: global.currentRetro?.joinUrl,
   };
-
+  const canShare = navigator.canShare && navigator.canShare(shareData);
   const shareRetroDetails = () => {
     navigator.share(shareData);
   };
@@ -308,7 +308,7 @@ export function StartRetro() {
                 </Box>
                 
                 <div style={styles.div98}>
-                  <Button
+                  {canShare&&<Button
                     variant="outlined"
                     className="primaryButton"
                     startIcon={<EmailOutlined />}
@@ -316,7 +316,7 @@ export function StartRetro() {
                     onClick={shareRetroDetails}
                   >
                     <span className="primaryButtonText">Invite via email</span>
-                  </Button>
+                  </Button>}
                 </div>
               </Box>
             </Box>
