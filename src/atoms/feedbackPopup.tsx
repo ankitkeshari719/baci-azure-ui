@@ -74,7 +74,7 @@ export default function FeedbackPopup(props: {
     setIsBarSet(false);
   };
   function setFeedbackBar(index: number){
-    console.log('feedback', qs);
+    // console.log('feedback', qs);
     if(isBarSet && qs[index][0] === 0){
       setbarvalue(barvalue + 100 / qs.length);
       setIsBarSet(false);

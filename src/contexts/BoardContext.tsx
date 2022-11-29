@@ -164,7 +164,7 @@ function BoardProvider(props: ComponentProps<any>) {
     actions.sort(actionSortFunction);
 
     actions.forEach(action => {
-      console.log(action,"action")
+      // console.log(action,"action")
       const existingActionIndex = history.current.findIndex(
         (a: { action: { id: string } }) => a.action.id === action.id
       );

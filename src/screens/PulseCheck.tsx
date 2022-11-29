@@ -88,7 +88,7 @@ export default function PulseCheck() {
 
   useLoadRetro();
   function setPulseBar(value: any) {
-    console.log(qs, value);
+    // console.log(qs, value);
     if ((value === 0 && pulse1 == false) || qs[value][0] !== -1) {
       setPulse1(true);
     } else if ((value = (1 && pulse2 == false) || qs[value][0] !== -1)) {
@@ -110,7 +110,7 @@ export default function PulseCheck() {
       user.id != ''
     ) {
       const currentUser: any = users.find(user1 => user1.userId === user.id);
-      console.log("current user",currentUser.pulseCheckQuestions.length>0)
+      // console.log("current user",currentUser.pulseCheckQuestions.length>0)
       if(currentUser.pulseCheckQuestions.length>0){
         navigate('/board/' + currentRetro?.id);
         dispatch({
