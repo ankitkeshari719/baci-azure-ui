@@ -9,12 +9,18 @@ import {
   TextField,
   Tooltip,
   Typography,
+  Link,
 } from '@mui/material';
 import * as React from 'react';
 import { LandingLayout } from './LandingLayout';
 import commonStyles from './../style.module.scss';
 import './../global.scss';
-import { Link, Navigate, useNavigate, useParams } from 'react-router-dom';
+import {
+  Link as RouterLink,
+  Navigate,
+  useNavigate,
+  useParams,
+} from 'react-router-dom';
 import { useRetro } from '../helpers';
 
 import email from '../assets/img/emailbox.png';
@@ -26,7 +32,7 @@ import * as Icons from 'heroicons-react';
 import StartRetroButton from '../elements/StartRetroButton';
 import Toolbar from '../elements/Toolbar';
 import useLoadRetro from '../hooks/useLoadRetro';
-
+import { EmailShareButton, WhatsappShareButton } from 'react-share';
 const styles = {
   frame101: {
     marginTop: '48px',
@@ -64,7 +70,6 @@ const styles = {
   emailImg: {
     width: '96px',
     height: '96px',
-  
   },
   group95: {
     marginTop: '27.5px',
@@ -136,10 +141,8 @@ const styles = {
     width: '153px',
   },
   qrCode: {
-  
     width: '80px',
     height: '80px',
-  
   },
   goToRetroBtn: {
     height: '44px',
@@ -158,10 +161,12 @@ export function StartRetro() {
     text: 'Join the retro',
     url: global.currentRetro?.joinUrl,
   };
-  const canShare = navigator.canShare && navigator.canShare(shareData);
+
   const shareRetroDetails = () => {
+    // navigator.share(shareData);
     navigator.share(shareData);
   };
+  const canShare = navigator.canShare && navigator.canShare(shareData);
   useLoadRetro();
   function goToRetro() {
     navigate('/join/' + global?.currentRetro?.humanId);
@@ -247,48 +252,61 @@ export function StartRetro() {
               }}
             >
               <Box sx={styles.group96}>
-                
-                  <Box  style={styles.joinurl} height='70%' sx={{display:'flex', justifyContent:'center', alignItems:'center'}}>
-                    <a style={{ overflowWrap: 'break-word' }}>
-                      {global?.currentRetro?.joinUrl}
-                    </a>
-                  </Box>
-                  <Box >
-                    <CopyToClipboard
-                      text={global?.currentRetro?.joinUrl}
-                      onCopy={() => setIsCopied(true)}
+                <Box
+                  style={styles.joinurl}
+                  height="70%"
+                  sx={{
+                    display: 'flex',
+                    justifyContent: 'center',
+                    alignItems: 'center',
+                  }}
+                >
+                  <a style={{ overflowWrap: 'break-word' }}>
+                    {global?.currentRetro?.joinUrl}
+                  </a>
+                </Box>
+                <Box>
+                  <CopyToClipboard
+                    text={global?.currentRetro?.joinUrl}
+                    onCopy={() => setIsCopied(true)}
+                  >
+                    <Tooltip
+                      onClose={handleTooltipClose}
+                      open={iscopied}
+                      style={{ width: '20px', fontSize: '10px' }}
+                      disableTouchListener
+                      leaveDelay={1500}
+                      placement="top"
+                      title="Link Copied!"
                     >
-                      <Tooltip
-                        onClose={handleTooltipClose}
-                        open={iscopied}
-                        style={{ width: '20px', fontSize: '10px' }}
-                        disableTouchListener
-                        leaveDelay={1500}
-                        placement="top"
-                        title="Link Copied!"
+                      <Button
+                        variant="outlined"
+                        className="primaryButton"
+                        startIcon={<Icons.Link size={20} />}
+                        style={styles.copyURL}
                       >
-                        <Button
-                          variant="outlined"
-                          className="primaryButton"
-                          startIcon={<Icons.Link size={20} />}
-                          style={styles.copyURL}
-                        >
-                          <span className="primaryButtonText">Copy URL</span>
-                        </Button>
-                      </Tooltip>
-                    </CopyToClipboard>
-                  </Box>
-                
+                        <span className="primaryButtonText">Copy URL</span>
+                      </Button>
+                    </Tooltip>
+                  </CopyToClipboard>
+                </Box>
               </Box>
 
               <Box sx={styles.group97}>
-                <Box height='70%' sx={{display:'flex', justifyContent:'center', alignItems:'center'}}>
-                <QRCode
-                  value={global.currentRetro?.joinUrl || ''}
-                  style={styles.qrCode}
-                />
+                <Box
+                  height="70%"
+                  sx={{
+                    display: 'flex',
+                    justifyContent: 'center',
+                    alignItems: 'center',
+                  }}
+                >
+                  <QRCode
+                    value={global.currentRetro?.joinUrl || ''}
+                    style={styles.qrCode}
+                  />
                 </Box>
-              
+
                 <div style={styles.div97}>
                   <Button
                     variant="outlined"
@@ -302,23 +320,43 @@ export function StartRetro() {
                 </div>
               </Box>
 
+              {/* {canShare && ( */}
               <Box sx={styles.group98}>
-                <Box height='70%' sx={{display:'flex', justifyContent:'center', alignItems:'center'}}>
-                <img src={email} alt="email" style={styles.emailImg} />
+                <Box
+                  height="70%"
+                  sx={{
+                    display: 'flex',
+                    justifyContent: 'center',
+                    alignItems: 'center',
+                  }}
+                >
+                  <img src={email} alt="email" style={styles.emailImg} />
                 </Box>
-                
+
                 <div style={styles.div98}>
-                  {canShare&&<Button
-                    variant="outlined"
-                    className="primaryButton"
-                    startIcon={<EmailOutlined />}
-                    style={styles.copyURL}
-                    onClick={shareRetroDetails}
+                  <EmailShareButton
+                    url={global.currentRetro?.joinUrl + ''}
+                    style={{
+                      color: '#159ADD',
+                      fontSize: '16px',
+                      fontWeight: '500',
+                      borderRadius: '24px',
+                      letterSpacing: '0.4',
+                      border: '1px solid rgba(21, 154, 221, 0.5)',
+                      height: '36px',
+                      paddingLeft: '15px',
+                      paddingRight: '15px',
+                      display:'flex',
+                      flexDirection:'row',
+                      alignItems:'center'
+                    }}
                   >
-                    <span className="primaryButtonText">Invite via email</span>
-                  </Button>}
+                    <Icons.Link size={20} style={{marginRight:'8px'}} />
+                    INVITE VIA EMAIL
+                  </EmailShareButton>
                 </div>
               </Box>
+              {/* )} */}
             </Box>
           </Box>
           <Box

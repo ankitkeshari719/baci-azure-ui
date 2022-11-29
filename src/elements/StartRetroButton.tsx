@@ -75,10 +75,10 @@ const StartRetroButton = () => {
   };
 
   React.useEffect(() => {
-    // console.log(retroStarted, 'start retro button');
+    console.log(retroId, 'retroId',retroId || global.currentRetro?.id);
 
-    if (retroStarted) {
-      navigate(`/board/${retroId}/pulsecheck`);
+    if (retroStarted && retroId != undefined && retroId != '') {
+      navigate(`/board/${retroId || global.currentRetro?.id}/pulsecheck`);
     }
   }, [retroStarted]);
 

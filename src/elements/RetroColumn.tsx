@@ -171,13 +171,34 @@ export function RetroColumn({
     autoFocusCardId.current = cardId;
   };
 
-  const mergeCards = async (cardId1: string, cardId2: string) => {
-    await saveAndProcessAction(BoardActionType.MERGE_CARDS, {
-      cardId1,
-      cardId2,
-      order: column.groups.length,
-      groupId: shortid.generate(),
+  const createGroup = async (groupId: string) => {
+    await saveAndProcessAction(BoardActionType.CREATE_GROUP, {
+      groupId,
+      columnId,
+      order: 0,
     });
+  };
+  const mergeCards = async (cardId1: string, cardId2: string) => {
+    const groupId = shortid.generate();
+    dispatch({
+      type: ActionType.SET_LOADING,
+      payload: { loadingFlag: true },
+    });
+    await createGroup(groupId);
+    await moveCard(cardId1, groupId, 0);
+    await moveCard(cardId2, groupId, 1).then(()=>{
+      dispatch({
+        type: ActionType.SET_LOADING,
+        payload: { loadingFlag: false },
+      });
+    })
+
+    // await saveAndProcessAction(BoardActionType.MERGE_CARDS, {
+    //   cardId1,
+    //   cardId2,
+    //   order: column.groups.length,
+    //   groupId: shortid.generate(),
+    // });
     autoFocusCardId.current = cardId1;
   };
 
@@ -556,7 +577,14 @@ export function RetroColumn({
           setMouseOver(true);
         }}
       >
-        <div style={{ display: 'flex', flexDirection: 'column', flexGrow: 1,width:'100px' }}>
+        <div
+          style={{
+            display: 'flex',
+            flexDirection: 'column',
+            flexGrow: 1,
+            width: '100px',
+          }}
+        >
           <div
             style={{
               display: 'flex',
@@ -665,7 +693,7 @@ export function RetroColumn({
                         sx={{
                           color: '#159ADD',
                           textDecorationLline: 'underline',
-                          cursor: !ended ? 'pointer' : "auto",
+                          cursor: !ended ? 'pointer' : 'auto',
                         }}
                       >
                         Publish
@@ -688,7 +716,11 @@ export function RetroColumn({
                       });
                     }}
                     src="/svgs/Expand.svg"
-                    style={{ width: '20px', marginLeft: '15px',cursor:'pointer' }}
+                    style={{
+                      width: '20px',
+                      marginLeft: '15px',
+                      cursor: 'pointer',
+                    }}
                   />
                 ) : (
                   <img
@@ -699,7 +731,11 @@ export function RetroColumn({
                       });
                     }}
                     src="/svgs/Shrink.svg"
-                    style={{ width: '20px', marginLeft: '15px',cursor:'pointer' }}
+                    style={{
+                      width: '20px',
+                      marginLeft: '15px',
+                      cursor: 'pointer',
+                    }}
                   />
                 )}
               </Grid>
