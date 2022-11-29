@@ -101,3 +101,7 @@ body {
 .css-oqt7a2-MuiPaper-root-MuiMenu-paper-MuiPaper-root-MuiPopover-paper{
   max-height:500px!important;
 }
+.css-8ny1cp-MuiButtonBase-root-MuiMenuItem-root.Mui-disabled{
+  opacity: 1!important;
+  background: white!important;
+}
