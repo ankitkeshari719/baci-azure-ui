@@ -186,6 +186,7 @@ const SubToolbar = (props: any) => {
             fieldset: {
               border: 'none',
               div: { padding: 0 },
+              opacity:1
             },
             // padding: '1px!important',
             // width: '20px',

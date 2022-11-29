@@ -34,7 +34,6 @@ export default function useLoadRetro() {
 
   React.useEffect(() => {
     if (!global?.user?.name && id) {
-    
       navigate('/join/' + id);
       return;
     }
@@ -82,7 +81,9 @@ export default function useLoadRetro() {
           // );
           if (global.currentRetro && retroStarted) {
             if (FEATURE_FLAGS.pulseCheck) {
-              navigate(`/board/${retroId}/pulsecheck`);
+              navigate(
+                `/board/${retroId || global.currentRetro?.id}/pulsecheck`
+              );
               return;
             }
           } else {
