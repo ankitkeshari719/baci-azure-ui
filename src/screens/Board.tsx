@@ -273,15 +273,15 @@ export default function RetroBoard() {
   };
 
   const finishRetro = () => {
-    console.log(
-      creatorId === global.user.id,
-      ' ',
-      creatorId,
-      '  ',
-      global.user.id
-    );
+    // console.log(
+    //   creatorId === global.user.id,
+    //   ' ',
+    //   creatorId,
+    //   '  ',
+    //   global.user.id
+    // );
     if (global.user.userType == 2) {
-      console.log('ende retro');
+      // console.log('end retro');
       sessionStorage.removeItem('retoname');
       // setConfirmAction({
       //   action: 'Finish Retro',
