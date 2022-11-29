@@ -201,17 +201,17 @@ export default function RetroBoard() {
                   };
                 })
                 .filter(group =>
-                  // !justMyCards ||
-                  // group.name === UNGROUPED ||
-                  // group.cards.length !== 0
+                  !justMyCards ||
+                  group.name === UNGROUPED ||
+                  group.cards.length !== 0
 
-                  global.usersSelected?.some((user, index) => {
-                    return (
-                      // user?.userId === group?.createdBy ||
-                      // group?.name === UNGROUPED
-                      true
-                    );
-                  })
+                  // global.usersSelected?.some((user, index) => {
+                  //   return (
+                  //     // user?.userId === group?.createdBy ||
+                  //     // group?.name === UNGROUPED
+                  //     true
+                  //   );
+                  // })
                 ),
             };
           }
