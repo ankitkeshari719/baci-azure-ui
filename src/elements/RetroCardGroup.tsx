@@ -199,10 +199,11 @@ export function RetroCardGroup({
                   position: 'initial',
                 }}
                 maxRows={2}
+                inputProps={{ maxLength: 25 }}
                 value={nameSet ? name : 'Name grouping'}
                 multiline
                 onChange={event => {
-                  // console.log(
+                  // 
                   //   event.target.value.replace(
                   //     ' ( ' + group.cards.length + ' ) ',
                   //     ''
