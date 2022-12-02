@@ -307,7 +307,8 @@ const SubToolbar = (props: any) => {
                   marginRight: '8px',
                 }}
               />
-              <ListItemText primary={user.userNickname} />
+              <ListItemText sx={{'&& .MuiListItemText-primary':{minWidth: '100px', overflow: 'hidden', textOverflow : 'ellipsis'}
+                }} primary={user.userNickname} />
             </MenuItem>
           ))}
         </Select>
