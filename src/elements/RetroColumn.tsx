@@ -186,12 +186,12 @@ export function RetroColumn({
     });
     await createGroup(groupId);
     await moveCard(cardId1, groupId, 0);
-    await moveCard(cardId2, groupId, 1).then(()=>{
+    await moveCard(cardId2, groupId, 1).then(() => {
       dispatch({
         type: ActionType.SET_LOADING,
         payload: { loadingFlag: false },
       });
-    })
+    });
 
     // await saveAndProcessAction(BoardActionType.MERGE_CARDS, {
     //   cardId1,
@@ -831,6 +831,7 @@ export function RetroColumn({
                           }}
                         >
                           <RetroCardGroup
+                            admin={global.user.userType == 2}
                             group={group}
                             column={column}
                             columnId={column.id}
@@ -1199,6 +1200,7 @@ export function RetroColumn({
                           }}
                         >
                           <RetroCardGroup
+                            admin={global.user.userType == 2}
                             group={group}
                             column={column}
                             columnId={column.id}
