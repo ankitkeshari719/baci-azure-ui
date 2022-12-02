@@ -427,14 +427,14 @@ export const validateAction = (
   ) => {
     // Can submit pulse check only once
     const user = findUser(userId);
-    if (!user || user.pulseCheckQuestions.length !== 0) return false;
+    if (!user || user.pulseCheckQuestions?.length !== 0) return false;
     return true;
   };
 
   const canSubmitFeedback = (feedback: FeedbackEntry[], userId: string) => {
     // Can submit feedback only once
     const user = findUser(userId);
-    if (!user || user.feedback.length !== 0) return false;
+    if (!user || user.feedback?.length !== 0) return false;
     return true;
   };
 

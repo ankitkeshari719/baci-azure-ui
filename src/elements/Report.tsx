@@ -309,7 +309,7 @@ export const Report = React.forwardRef((props, ref) => {
       //   index[0][index]=index[0][index]/ index[1][index]
       // })
       // console.log([feedbackValues, feedbackCount]);
-      user.pulseCheckQuestions.forEach(question => {
+      user?.pulseCheckQuestions.forEach(question => {
         totalPulseCheckCount = totalPulseCheckCount + 1;
         const text = (questionsDef as any)[question.id];
         const entry = newQuestions.find(nq => nq.question === text);
