@@ -779,6 +779,7 @@ export function RetroColumn({
                                   lg={global?.expandColumn !== -1 ? 2 : 6}
                                   md={global?.expandColumn !== -1 ? 2 : 4}
                                   sx={{ marginBottom: '20px' }}
+                                  key={j+"0"}
                                 >
                                   {/* <Box sx={{width:"100%"}}> */}
                                   <RetroCard
@@ -1148,6 +1149,7 @@ export function RetroColumn({
                                   md={3}
                                   xs={6}
                                   sx={{ marginBottom: '20px' }}
+                                  key={j+"0"}
                                 >
                                   {/* <Box sx={{width:"100%"}}> */}
                                   <RetroCard
