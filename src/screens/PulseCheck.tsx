@@ -111,7 +111,7 @@ export default function PulseCheck() {
     ) {
       const currentUser: any = users.find(user1 => user1.userId === user.id);
       // console.log("current user",currentUser.pulseCheckQuestions.length>0)
-      if(currentUser.pulseCheckQuestions.length>0){
+      if(currentUser?.pulseCheckQuestions.length>0){
         navigate('/board/' + currentRetro?.id);
         dispatch({
           type: ActionType.SET_SNACK_MESSAGE,

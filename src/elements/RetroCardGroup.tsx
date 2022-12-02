@@ -40,6 +40,7 @@ const TextFieldNoBorderWrapper = styled('div')({
 });
 
 export function RetroCardGroup({
+  admin,
   group,
   column,
   columnId,
@@ -47,6 +48,7 @@ export function RetroCardGroup({
   showCollapse,
   onCollapse,
 }: {
+  admin: boolean;
   group: CardGroup;
   column: Column;
   columnId: string;
@@ -54,7 +56,7 @@ export function RetroCardGroup({
   showCollapse: boolean;
   onCollapse: (value: any) => void;
 }) {
-  const [global,dispatch] = React.useContext(GlobalContext);
+  const [global, dispatch] = React.useContext(GlobalContext);
 
   const {
     state: { columns, ended },
@@ -203,33 +205,39 @@ export function RetroCardGroup({
                 value={nameSet ? name : 'Name grouping'}
                 multiline
                 onChange={event => {
-                  // 
+                  //
                   //   event.target.value.replace(
                   //     ' ( ' + group.cards.length + ' ) ',
                   //     ''
                   //   ),
                   //   'value'
                   // );
-                  setName(
-                    event.target.value.replace(
-                      ' ( ' + group.cards.length + ' ) ',
-                      ''
-                    )
-                  );
+                  if (admin) {
+                    setName(
+                      event.target.value.replace(
+                        ' ( ' + group.cards.length + ' ) ',
+                        ''
+                      )
+                    );
+                  }
                 }}
                 InputProps={{
                   readOnly: ended,
                 }}
                 onFocus={async event => {
-                  setNameSet(true);
-                  await lockGroup(group.id, true);
+                  if (admin) {
+                    setNameSet(true);
+                    await lockGroup(group.id, true);
+                  }
                 }}
                 onBlur={async () => {
-                  lockGroup(group.id, false);
-                  if (!name) {
-                    setNameSet(false);
-                  } else {
-                    await setGroupName(group.id, name);
+                  if (admin) {
+                    lockGroup(group.id, false);
+                    if (!name) {
+                      setNameSet(false);
+                    } else {
+                      await setGroupName(group.id, name);
+                    }
                   }
                 }}
               />
@@ -408,12 +416,14 @@ export function RetroCardGroup({
                 justifyContent: 'center',
               }}
             >
-              <Button
-                sx={{ position: 'initial', color: '#727D84' }}
-                onClick={() => deleteGroup(group.id)}
-              >
-                <DeleteIcon />
-              </Button>
+              {admin && (
+                <Button
+                  sx={{ position: 'initial', color: '#727D84' }}
+                  onClick={() => deleteGroup(group.id)}
+                >
+                  <DeleteIcon />
+                </Button>
+              )}
             </Grid>
           </Grid>
         ) : (
