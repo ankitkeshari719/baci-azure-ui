@@ -145,6 +145,7 @@ const styles = {
   },
   copyURL: {
     height: '16.5px',
+    cursor:'pointer'
   },
 
 };
@@ -280,6 +281,7 @@ export function RetroDetails(props: any) {
                       <CopyToClipboard
                         text={global?.currentRetro?.joinUrl}
                         onCopy={() => setIsCopied(true)}
+                    
                       >
                         <Tooltip
                         onClose={handleTooltipClose}
@@ -291,7 +293,7 @@ export function RetroDetails(props: any) {
                         >
                           <img
                             src={copy}
-                            style={(styles.copyURL, { marginTop: '0' })}
+                            style={(styles.copyURL, { marginTop: '0',cursor:'pointer' })}
                           ></img>
                         </Tooltip>
                       </CopyToClipboard>
