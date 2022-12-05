@@ -215,12 +215,12 @@ export function StartRetro() {
             <Box style={styles.displayCenter}>
               {' '}
               <a
-                href="https://baci.app.com"
+                href="https://baci.app"
                 rel="noreferrer"
                 target="_blank"
                 style={styles.link}
               >
-                https://baci.app.com
+                https://baci.app
               </a>
             </Box>
           </Box>
