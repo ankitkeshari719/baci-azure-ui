@@ -5,6 +5,7 @@ import {
   ListItemIcon,
   Popover,
   TextField,
+  Tooltip,
   Typography,
 } from '@mui/material';
 import React, { useEffect } from 'react';
@@ -307,7 +308,11 @@ const SubToolbar = (props: any) => {
                   marginRight: '8px',
                 }}
               />
-              <ListItemText primary={user.userNickname} />
+              <Tooltip title={user.userNickname}>
+              <ListItemText sx={{'&& .MuiListItemText-primary':{minWidth: '100px', overflow: 'hidden', textOverflow : 'ellipsis'}
+                }} primary={user.userNickname} />
+              </Tooltip>
+            
             </MenuItem>
           ))}
         </Select>
