@@ -203,7 +203,7 @@ export function CountdownTimer({
       countdownExpired &&
       global.user.userType==2
     ) {
-      audio.play();
+      // audio.play(); 
     }
     previousExpired.current = countdownExpired;
   }, [countdownExpired]);

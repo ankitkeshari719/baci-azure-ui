@@ -11,6 +11,7 @@ const SessionEndingMessage = ({
     <div
       style={{
         position: 'absolute',
+        zIndex:'2',
         top: '0',
         right: isXsUp ? 0 : '140px',
         background: '#EE7538',
@@ -58,12 +59,14 @@ const SessionEndingMessage = ({
         Consider finalising actions and hitting "LEAVE RETRO" button.
       </Typography>
       <Typography
+        // type="button"
         onClick={hideSessionEndingMessage}
         onTouchStart={hideSessionEndingMessage}
         sx={{
           textDecorationLine: 'underline',
           marginTop: '18px',
           cursor: 'pointer',
+          zIndex: '1000',
         }}
       >
         Got It

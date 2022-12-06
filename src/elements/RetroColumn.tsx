@@ -564,11 +564,13 @@ export function RetroColumn({
         sx={{
           height: noHeightLimit
             ? 'auto'
-            : 'auto'
-            ? 'calc(var(--app-height) - 165px)'
-            : 'calc(var(--app-height) - 150px)',
+            : isXsUp
+            ? 'calc(var(--app-height) - 115px)'
+            : 'calc(var(--app-height) - 160px)',
           borderRadius: '8px',
-          border: '1px solid #0B6623',
+          border: isXsUp ? 'none' : '1px solid #0B6623',
+          padding: isXsUp ? '10px' : '0px',
+          paddingBottom: 0,
         }}
         onMouseOver={() => {
           setMouseOver(true);
@@ -585,179 +587,183 @@ export function RetroColumn({
             width: '100px',
           }}
         >
-          <div
-            style={{
-              display: 'flex',
-              flexDirection: 'row',
-              justifyContent: 'space-between',
-              alignItems: 'center',
-              paddingRight: '15px',
-              marginBottom: '25px',
-              background: groupColour,
-              borderRadius: '8px',
-            }}
-          >
-            <Grid
-              container
-              alignItems="center"
-              justifyContent="space-between"
-              item
-              xs={12}
-              md={12}
-              lg={12}
+          {!isXsUp && (
+            <div
+              style={{
+                display: 'flex',
+                flexDirection: 'row',
+                justifyContent: 'space-between',
+                alignItems: 'center',
+                paddingRight: '15px',
+                marginBottom: '25px',
+                background: groupColour,
+                borderRadius: '8px',
+              }}
             >
-              <Grid item lg={8} md={6} xs={6}>
-                <div>
-                  {!noHeader && (
-                    <Typography
-                      align="center"
-                      sx={{
-                        userSelect: 'none',
-                        display: 'flex',
-                        // fontSize: '0.9rem',
-                        color: groupFontColour + '!important',
-                        fontSize: '16px',
-                        padding: '10px',
-                      }}
-                    >
-                      {true ? (
-                        <>{columnName}</>
-                      ) : (
-                        <>
-                          {' '}
-                          {leftHeaderComponent}
-                          <TextField
-                            maxRows={2}
-                            disabled={true}
-                            sx={{
-                              fieldset: { border: 'none' },
-                              flex: 10,
-                              // padding: '10px',
-                              div: { padding: 0, position: 'initial' },
-                              textarea: {
-                                // textAlign: 'center',
-                                color: groupFontColour + '!important',
-                                fontSize: '16px',
-                                fontWeight: 600,
-                              },
-
-                              position: 'initial',
-                              display: 'flex',
-                              // alignItems: 'center',
-                              // justifyContent: 'left',
-                            }}
-                            multiline
-                            fullWidth
-                            value={columnName}
-                            onKeyDown={e => {
-                              if (e.keyCode === 13) {
-                                submitColumnName(columnName);
-                                (e.target as HTMLInputElement).blur();
-                              }
-                            }}
-                            onChange={e => setColumnName(e.currentTarget.value)}
-                            onBlur={() => submitColumnName(columnName)}
-                            onSubmit={() => submitColumnName(columnName)}
-                          ></TextField>
-                          {rightHeaderComponent}
-                        </>
-                      )}
-                    </Typography>
-                  )}
-                </div>
-              </Grid>
-
               <Grid
                 container
-                justifyContent="flex-end"
-                direction="row"
+                alignItems="center"
+                justifyContent="space-between"
                 item
-                lg={4}
-                md={5}
-                xs={5}
+                xs={12}
+                md={12}
+                lg={12}
               >
-                {global.user.userType == 2 && (!ended || !global.leaveRetro) && (
-                  <>
-                    {column.publish ? (
-                      <Typography style={{ color: '#808080' }}>
-                        Published
-                      </Typography>
-                    ) : (
+                <Grid item lg={8} md={6} xs={6}>
+                  <div>
+                    {!noHeader && (
                       <Typography
-                        id={'publish' + columnId}
-                        onClick={() => {
-                          if (!ended) {
-                            publishColumn(true);
-                          }
-                        }}
-                        onTouchStart={() => {
-                          if (!ended) {
-                            publishColumn(true);
-                          }
-                        }}
+                        align="center"
                         sx={{
-                          color: '#159ADD',
-                          textDecorationLline: 'underline',
-                          cursor: !ended ? 'pointer' : 'auto',
+                          userSelect: 'none',
+                          display: 'flex',
+                          // fontSize: '0.9rem',
+                          color: groupFontColour + '!important',
+                          fontSize: '16px',
+                          padding: '10px',
                         }}
                       >
-                        Publish
+                        {true ? (
+                          <>{columnName}</>
+                        ) : (
+                          <>
+                            {' '}
+                            {leftHeaderComponent}
+                            <TextField
+                              maxRows={2}
+                              disabled={true}
+                              sx={{
+                                fieldset: { border: 'none' },
+                                flex: 10,
+                                // padding: '10px',
+                                div: { padding: 0, position: 'initial' },
+                                textarea: {
+                                  // textAlign: 'center',
+                                  color: groupFontColour + '!important',
+                                  fontSize: '16px',
+                                  fontWeight: 600,
+                                },
+
+                                position: 'initial',
+                                display: 'flex',
+                                // alignItems: 'center',
+                                // justifyContent: 'left',
+                              }}
+                              multiline
+                              fullWidth
+                              value={columnName}
+                              onKeyDown={e => {
+                                if (e.keyCode === 13) {
+                                  submitColumnName(columnName);
+                                  (e.target as HTMLInputElement).blur();
+                                }
+                              }}
+                              onChange={e =>
+                                setColumnName(e.currentTarget.value)
+                              }
+                              onBlur={() => submitColumnName(columnName)}
+                              onSubmit={() => submitColumnName(columnName)}
+                            ></TextField>
+                            {rightHeaderComponent}
+                          </>
+                        )}
                       </Typography>
                     )}
-                  </>
-                )}
-                {/* {global.currentRetro?.creatorId === global.user.id && (
+                  </div>
+                </Grid>
+
+                <Grid
+                  container
+                  justifyContent="flex-end"
+                  direction="row"
+                  item
+                  lg={4}
+                  md={5}
+                  xs={5}
+                >
+                  {global.user.userType == 2 && (!ended || !global.leaveRetro) && (
+                    <>
+                      {column.publish ? (
+                        <Typography style={{ color: '#808080' }}>
+                          Published
+                        </Typography>
+                      ) : (
+                        <Typography
+                          id={'publish' + columnId}
+                          onClick={() => {
+                            if (!ended) {
+                              publishColumn(true);
+                            }
+                          }}
+                          onTouchStart={() => {
+                            if (!ended) {
+                              publishColumn(true);
+                            }
+                          }}
+                          sx={{
+                            color: '#159ADD',
+                            textDecorationLline: 'underline',
+                            cursor: !ended ? 'pointer' : 'auto',
+                          }}
+                        >
+                          Publish
+                        </Typography>
+                      )}
+                    </>
+                  )}
+                  {/* {global.currentRetro?.creatorId === global.user.id && (
                  <img
                    src="/svgs/Unlock.svg"
                    style={{ width: '20px', marginLeft: '15px' }}
                  />
                )} */}
-                {global.expandColumn === -1 ? (
-                  <img
-                    onClick={() => {
-                      dispatch({
-                        type: ActionType.EXPAND_COLUMN,
-                        payload: { expandColumn: +column.id },
-                      });
-                    }}
-                    onTouchStart={() => {
-                      dispatch({
-                        type: ActionType.EXPAND_COLUMN,
-                        payload: { expandColumn: +column.id },
-                      });
-                    }}
-                    src="/svgs/Expand.svg"
-                    style={{
-                      width: '20px',
-                      marginLeft: '15px',
-                      cursor: 'pointer',
-                    }}
-                  />
-                ) : (
-                  <img
-                    onTouchStart={() => {
-                      dispatch({
-                        type: ActionType.EXPAND_COLUMN,
-                        payload: { expandColumn: -1 },
-                      });
-                    }}
-                    onClick={() => {
-                      dispatch({
-                        type: ActionType.EXPAND_COLUMN,
-                        payload: { expandColumn: -1 },
-                      });
-                    }}
-                    src="/svgs/Shrink.svg"
-                    style={{
-                      width: '20px',
-                      marginLeft: '15px',
-                      cursor: 'pointer',
-                    }}
-                  />
-                )}
+                  {global.expandColumn === -1 ? (
+                    <img
+                      onClick={() => {
+                        dispatch({
+                          type: ActionType.EXPAND_COLUMN,
+                          payload: { expandColumn: +column.id },
+                        });
+                      }}
+                      onTouchStart={() => {
+                        dispatch({
+                          type: ActionType.EXPAND_COLUMN,
+                          payload: { expandColumn: +column.id },
+                        });
+                      }}
+                      src="/svgs/Expand.svg"
+                      style={{
+                        width: '20px',
+                        marginLeft: '15px',
+                        cursor: 'pointer',
+                      }}
+                    />
+                  ) : (
+                    <img
+                      onTouchStart={() => {
+                        dispatch({
+                          type: ActionType.EXPAND_COLUMN,
+                          payload: { expandColumn: -1 },
+                        });
+                      }}
+                      onClick={() => {
+                        dispatch({
+                          type: ActionType.EXPAND_COLUMN,
+                          payload: { expandColumn: -1 },
+                        });
+                      }}
+                      src="/svgs/Shrink.svg"
+                      style={{
+                        width: '20px',
+                        marginLeft: '15px',
+                        cursor: 'pointer',
+                      }}
+                    />
+                  )}
+                </Grid>
               </Grid>
-            </Grid>
-          </div>
+            </div>
+          )}
           {/* </Box> */}
           {useMemo(
             () => (
@@ -774,7 +780,7 @@ export function RetroColumn({
                     }}
                     ref={containerRef}
                     style={{
-                      overflowY: noHeightLimit ? 'auto' : 'scroll',
+                      overflowY: noHeightLimit ? 'auto' : 'auto',
                       userSelect: 'none',
                       flexGrow: 2,
                     }}
@@ -828,7 +834,7 @@ export function RetroColumn({
                     <div
                       ref={containerRef}
                       style={{
-                        overflowY: noHeightLimit ? 'auto' : 'scroll',
+                        overflowY: noHeightLimit ? 'auto' : 'auto',
                         userSelect: 'none',
                         flexGrow: 2,
                       }}
@@ -1148,7 +1154,7 @@ export function RetroColumn({
                     }}
                     ref={containerRef}
                     style={{
-                      overflowY: noHeightLimit ? 'auto' : 'scroll',
+                      overflowY: noHeightLimit ? 'auto' : 'auto',
                       userSelect: 'none',
                       flexGrow: 2,
                     }}
@@ -1203,7 +1209,7 @@ export function RetroColumn({
                     <div
                       ref={containerRef}
                       style={{
-                        overflowY: noHeightLimit ? 'auto' : 'scroll',
+                        overflowY: noHeightLimit ? 'auto' : 'auto',
                         userSelect: 'none',
                         flexGrow: 2,
                       }}
