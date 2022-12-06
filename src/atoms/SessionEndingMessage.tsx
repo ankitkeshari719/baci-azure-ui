@@ -1,13 +1,18 @@
 import { Typography, Box, Button } from '@mui/material';
-import React from 'react';
 
-const SessionEndingMessage = (props: any) => {
+const SessionEndingMessage = ({
+  isXsUp,
+  hideSessionEndingMessage,
+}: {
+  isXsUp: boolean;
+  hideSessionEndingMessage: (event: any) => void;
+}) => {
   return (
     <div
       style={{
         position: 'absolute',
         top: '0',
-        right: '140px',
+        right: isXsUp ? 0 : '140px',
         background: '#EE7538',
         borderRadius: '0px 0px 20px 20px',
         boxShadow: '0px 1px 10px rgba(0, 0, 0, 0.15)',
@@ -53,7 +58,7 @@ const SessionEndingMessage = (props: any) => {
         Consider finalising actions and hitting "LEAVE RETRO" button.
       </Typography>
       <Typography
-        onClick={props.hideSessionEndingMessage}
+        onClick={hideSessionEndingMessage}
         sx={{
           textDecorationLine: 'underline',
           marginTop: '18px',

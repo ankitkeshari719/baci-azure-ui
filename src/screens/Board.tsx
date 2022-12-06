@@ -41,7 +41,6 @@ import Toolbar from '../elements/Toolbar';
 import SubToolbar from '../elements/SubToolbar';
 import FirstTimeExperience from '../elements/FirstTimeExperience';
 
-
 const ColumnContainer = ({
   children,
   totalPanels,
@@ -200,10 +199,11 @@ export default function RetroBoard() {
                     cards,
                   };
                 })
-                .filter(group =>
-                  !justMyCards ||
-                  group.name === UNGROUPED ||
-                  group.cards.length !== 0
+                .filter(
+                  group =>
+                    !justMyCards ||
+                    group.name === UNGROUPED ||
+                    group.cards.length !== 0
 
                   // global.usersSelected?.some((user, index) => {
                   //   return (
@@ -489,9 +489,10 @@ export default function RetroBoard() {
           </Grid>
         </Toolbar>
       </AppBar> */}
+
       <Grid xs={12} item>
         <Toolbar onFinishRetro={finishRetro}></Toolbar>
-        <SubToolbar></SubToolbar>
+        {!isXsUp && <SubToolbar></SubToolbar>}
       </Grid>
 
       {/* {isXsUp ? (
@@ -652,7 +653,7 @@ export default function RetroBoard() {
           paddingRight: '42px',
         }}
       >
-        {showRetroPanel || showParticipantsPanel || showSharePanel ? (
+        {/* {showRetroPanel || showParticipantsPanel || showSharePanel ? (
           <Box
             sx={{
               position: 'absolute',
@@ -680,7 +681,7 @@ export default function RetroBoard() {
             ) : null}
             {showSharePanel ? <SharePanel onClose={closeAllPanels} /> : null}
           </Box>
-        ) : null}
+        ) : null} */}
         {showFeedback ? (
           <FeedbackPopup show={true} showThankYou={ended}></FeedbackPopup>
         ) : null}
@@ -698,7 +699,10 @@ export default function RetroBoard() {
                     !isSmUp &&
                     (index === global.expandColumn ||
                       global.expandColumn === -1) && (
-                      <ColumnContainer totalPanels={totalPanels} key={index+"1"}>
+                      <ColumnContainer
+                        totalPanels={totalPanels}
+                        key={index + '1'}
+                      >
                         {!!column ? (
                           <>
                             <RetroColumn
