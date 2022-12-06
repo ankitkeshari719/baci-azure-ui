@@ -222,6 +222,7 @@ export function CountdownTimer({
               await saveAndProcessAction(BoardActionType.STOP_TIMER, {});
             }
           }}
+
         >
           <Box
             sx={{

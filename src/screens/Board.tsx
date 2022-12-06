@@ -649,8 +649,8 @@ export default function RetroBoard() {
           flexWrap: 'nowrap',
           flexGrow: 1,
           background: 'white',
-          paddingLeft: '42px',
-          paddingRight: '42px',
+          paddingLeft: isXsUp ? 0 : '42px',
+          paddingRight: isXsUp ? 0 : '42px',
         }}
       >
         {/* {showRetroPanel || showParticipantsPanel || showSharePanel ? (
@@ -687,77 +687,62 @@ export default function RetroBoard() {
         ) : null}
         {useMemo(
           () =>
-            (isXsUp
+            (false
               ? [...getProcessedColumns(), undefined]
               : getProcessedColumns()
             ).map((column, index) => (
               <React.Fragment key={index}>
-                {(isXsUp && index === currentColumn) ||
-                  (isSmUp &&
-                    (index === currentColumn || index === currentColumn + 1)) ||
-                  (!isXsUp &&
-                    !isSmUp &&
-                    (index === global.expandColumn ||
-                      global.expandColumn === -1) && (
-                      <ColumnContainer
-                        totalPanels={totalPanels}
-                        key={index + '1'}
-                      >
-                        {!!column ? (
+                {index == 0 && (
+                  <ColumnContainer totalPanels={totalPanels} key={index + '1'}>
+                    {!!column ? (
+                      <>
+                        <RetroColumn
+                          leftHeaderComponent={<LeftContainer index={index} />}
+                          rightHeaderComponent={
+                            <RightContainer index={index} />
+                          }
+                          column={column}
+                          columnId={column.id}
+                          noHeader={false}
+                          showEditBox={showEditBox}
+                          setShowEditBox={setShowEditBox}
+                          setIslanded={setIsLanded}
+                          cardGroups={column.groups}
+                        />
+                        {/* {!showEditBox ? (
                           <>
-                            <RetroColumn
-                              leftHeaderComponent={
-                                <LeftContainer index={index} />
-                              }
-                              rightHeaderComponent={
-                                <RightContainer index={index} />
-                              }
-                              column={column}
-                              columnId={column.id}
-                              noHeader={isXsUp}
-                              showEditBox={showEditBox}
-                              setShowEditBox={setShowEditBox}
-                              setIslanded={setIsLanded}
-                              cardGroups={column.groups}
-                            />
-                            {isXsUp && !showEditBox ? (
-                              <>
-                                <Fab
-                                  aria-label="add"
-                                  style={{
-                                    position: 'fixed',
-                                    bottom: '20px',
-                                    right: '20px',
-                                    background: 'black',
-                                    color: 'white',
-                                    zIndex: 100,
-                                  }}
-                                  onClick={() => setShowEditBox(true)}
-                                >
-                                  <AddIcon />
-                                </Fab>
-                              </>
-                            ) : null}
+                            <Fab
+                              aria-label="add"
+                              style={{
+                                position: 'fixed',
+                                bottom: '20px',
+                                right: '20px',
+                                background: 'black',
+                                color: 'white',
+                                zIndex: 100,
+                              }}
+                              onClick={() => setShowEditBox(true)}
+                            >
+                              <AddIcon />
+                            </Fab>
                           </>
-                        ) : (
-                          <FeedbackColumn
-                            noHeader={isXsUp}
-                            leftHeaderComponent={
-                              <LeftContainer index={index} />
-                            }
-                            rightHeaderComponent={
-                              <RightContainer index={index} />
-                            }
-                          />
-                        )}
-                      </ColumnContainer>
-                    ))}
+                        ) : null} */}
+                      </>
+                    ) : (
+                      <FeedbackColumn
+                        noHeader={isXsUp}
+                        leftHeaderComponent={<LeftContainer index={index} />}
+                        rightHeaderComponent={<RightContainer index={index} />}
+                      />
+                    )}
+                  </ColumnContainer>
+                )}
               </React.Fragment>
             )),
           [
             lastStateUpdate,
-            isXsUp,
-            isSmUp,
+            // isXsUp,
+            // isSmUp,
             justMyCards,
             currentColumn,
             showEditBox,

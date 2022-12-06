@@ -17,6 +17,7 @@ export function PageNotFound() {
               variant="outlined"
               className="secondaryButton"
               onClick={() => goToLanding()}
+              onTouchStart={() => goToLanding()}
             >
               <span className="secondaryButtonText">Go back to Home</span>
             </Button>

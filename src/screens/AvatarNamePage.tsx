@@ -384,6 +384,7 @@ export function AvatarNamePage() {
               className="secondaryButton"
               style={styles.goOnBtn}
               onClick={setName}
+              onTouchStart={setName}
             >
               <span className="secondaryButtonText">Go on..</span>
             </Button>

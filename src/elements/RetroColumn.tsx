@@ -564,7 +564,7 @@ export function RetroColumn({
         sx={{
           height: noHeightLimit
             ? 'auto'
-            : isXsUp
+            : 'auto'
             ? 'calc(var(--app-height) - 165px)'
             : 'calc(var(--app-height) - 150px)',
           borderRadius: '8px',
@@ -690,6 +690,11 @@ export function RetroColumn({
                             publishColumn(true);
                           }
                         }}
+                        onTouchStart={() => {
+                          if (!ended) {
+                            publishColumn(true);
+                          }
+                        }}
                         sx={{
                           color: '#159ADD',
                           textDecorationLline: 'underline',
@@ -715,6 +720,12 @@ export function RetroColumn({
                         payload: { expandColumn: +column.id },
                       });
                     }}
+                    onTouchStart={() => {
+                      dispatch({
+                        type: ActionType.EXPAND_COLUMN,
+                        payload: { expandColumn: +column.id },
+                      });
+                    }}
                     src="/svgs/Expand.svg"
                     style={{
                       width: '20px',
@@ -724,6 +735,12 @@ export function RetroColumn({
                   />
                 ) : (
                   <img
+                    onTouchStart={() => {
+                      dispatch({
+                        type: ActionType.EXPAND_COLUMN,
+                        payload: { expandColumn: -1 },
+                      });
+                    }}
                     onClick={() => {
                       dispatch({
                         type: ActionType.EXPAND_COLUMN,
@@ -779,7 +796,7 @@ export function RetroColumn({
                                   lg={global?.expandColumn !== -1 ? 2 : 6}
                                   md={global?.expandColumn !== -1 ? 2 : 4}
                                   sx={{ marginBottom: '20px' }}
-                                  key={j+"0"}
+                                  key={j + '0'}
                                 >
                                   {/* <Box sx={{width:"100%"}}> */}
                                   <RetroCard
@@ -892,6 +909,7 @@ export function RetroColumn({
                                                   ? 2
                                                   : 4
                                               }
+                                              xs={12}
                                               ref={e =>
                                                 cardRefCollector(
                                                   e as HTMLDivElement,
@@ -987,105 +1005,109 @@ export function RetroColumn({
             ),
             [column.groups, groupCollapsed]
           )}
-          {!ended &&
-          !global.leaveRetro &&
-          ((!isXsUp && mouseOver) || (isXsUp && showEditBox)) ? (
-            <Box
-              style={{
-                background: 'white',
-                borderRadius: '0px 0px 8px 8px',
-                // margin: '3px',
-                borderTop: '1px solid #F0F0F0',
-                bottom: '0px',
-                padding: '10px',
-                display: 'flex',
-                ...(isXsUp
-                  ? { position: 'fixed', width: '100vw', height: '8rem' }
-                  : {}),
-              }}
-              onMouseOver={() => {
-                setMouseOver(true);
-              }}
-              onMouseOut={() => {
-                setMouseOver(true);
-              }}
-            >
-              <TextFieldNoBorderWrapper
-                sx={{
-                  color: '#8E8E8E',
-                  flexGrow: 10,
-                  maxWidth: 'unset',
-                  flexDirection: 'column',
-                }}
-              >
-                <TextField
-                  fullWidth
-                  multiline
-                  inputProps={{
-                    maxLength: MAX_CARD_TEXT_LENGTH,
-                    style: {
-                      padding: 0,
-                    },
-                  }}
-                  autoFocus
-                  sx={{
-                    padding: 0,
-                    input: { padding: 0 },
-                    div: { padding: 0, position: 'initial' },
-                    position: 'initial',
-                    textarea: {
-                      fontStyle: valueSet ? 'normal' : 'italic',
-                      color: valueSet ? '#000' : '#8D858A',
-                    },
-                  }}
-                  value={valueSet ? value : 'Share one thought'}
-                  onChange={event => {
-                    setValue(event.target.value);
-                  }}
-                  onFocus={event => {
-                    setValueSet(true);
-                  }}
-                  onBlur={() => {
-                    if (!value) {
-                      setValueSet(false);
-                    }
-                  }}
-                  onKeyDown={e => {
-                    if (e.keyCode === 13) {
-                      submit(value);
-                      (e.target as HTMLInputElement).blur();
-                    }
-                  }}
-                ></TextField>
-                {value && value.length >= MAX_CARD_TEXT_LENGTH - 20 ? (
-                  <Typography
-                    style={{
-                      fontSize: '0.75rem',
-                      textAlign: 'right',
-                      whiteSpace: 'nowrap',
-                    }}
-                  >
-                    Characters remaining: {MAX_CARD_TEXT_LENGTH - value.length}
-                  </Typography>
-                ) : null}
-              </TextFieldNoBorderWrapper>
-              <div
+          {
+            !ended && !global.leaveRetro && (
+              // ((!isXsUp && mouseOver) || (isXsUp && showEditBox)) ? (
+              <Box
                 style={{
+                  background: 'white',
+                  borderRadius: '0px 0px 8px 8px',
+                  // margin: '3px',
+                  borderTop: '1px solid #F0F0F0',
+                  bottom: '0px',
+                  padding: '10px',
                   display: 'flex',
-                  justifyContent: 'flex-end',
-                  flexDirection: 'column',
+                  ...(false
+                    ? { position: 'fixed', width: '100vw', height: '8rem' }
+                    : {}),
+                }}
+                onMouseOver={() => {
+                  setMouseOver(true);
+                }}
+                onMouseOut={() => {
+                  setMouseOver(true);
                 }}
               >
-                <Button
-                  style={{ position: 'initial' }}
-                  disabled={!value || value.length === 0}
-                  onClick={() => submit(value)}
+                <TextFieldNoBorderWrapper
+                  sx={{
+                    color: '#8E8E8E',
+                    flexGrow: 10,
+                    maxWidth: 'unset',
+                    flexDirection: 'column',
+                  }}
                 >
-                  <SendIcon></SendIcon>
-                </Button>
-              </div>
-            </Box>
-          ) : null}
+                  <TextField
+                    fullWidth
+                    multiline
+                    inputProps={{
+                      maxLength: MAX_CARD_TEXT_LENGTH,
+                      style: {
+                        padding: 0,
+                      },
+                    }}
+                    autoFocus
+                    sx={{
+                      padding: 0,
+                      input: { padding: 0 },
+                      div: { padding: 0, position: 'initial' },
+                      position: 'initial',
+                      textarea: {
+                        fontStyle: valueSet ? 'normal' : 'italic',
+                        color: valueSet ? '#000' : '#8D858A',
+                      },
+                    }}
+                    value={valueSet ? value : 'Share one thought'}
+                    onChange={event => {
+                      setValue(event.target.value);
+                    }}
+                    onFocus={event => {
+                      setValueSet(true);
+                    }}
+                    onBlur={() => {
+                      if (!value) {
+                        setValueSet(false);
+                      }
+                    }}
+                    onKeyDown={e => {
+                      if (e.keyCode === 13) {
+                        submit(value);
+                        (e.target as HTMLInputElement).blur();
+                      }
+                    }}
+                  ></TextField>
+                  {value && value.length >= MAX_CARD_TEXT_LENGTH - 20 ? (
+                    <Typography
+                      style={{
+                        fontSize: '0.75rem',
+                        textAlign: 'right',
+                        whiteSpace: 'nowrap',
+                      }}
+                    >
+                      Characters remaining:{' '}
+                      {MAX_CARD_TEXT_LENGTH - value.length}
+                    </Typography>
+                  ) : null}
+                </TextFieldNoBorderWrapper>
+                <div
+                  style={{
+                    display: 'flex',
+                    justifyContent: 'flex-end',
+                    flexDirection: 'column',
+                  }}
+                >
+                  <Button
+                    style={{ position: 'initial' }}
+                    disabled={!value || value.length === 0}
+                    onClick={() => submit(value)}
+                    onTouchStart={() => submit(value)}
+                  >
+                    <SendIcon></SendIcon>
+                  </Button>
+                </div>
+              </Box>
+            )
+            // ) : null
+          }
         </div>
       </ColumnComponent>
     );
@@ -1149,7 +1171,7 @@ export function RetroColumn({
                                   md={3}
                                   xs={6}
                                   sx={{ marginBottom: '20px' }}
-                                  key={j+"0"}
+                                  key={j + '0'}
                                 >
                                   {/* <Box sx={{width:"100%"}}> */}
                                   <RetroCard

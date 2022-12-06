@@ -153,7 +153,7 @@ export default function FeedbackPopup(props: {
         mr="23px"
         mt="23px"
       >
-        <img src={closeImage} onClick={closeFeedback}></img>
+        <img src={closeImage} onClick={closeFeedback} onTouchStart={closeFeedback}></img>
       </Box>
       {showThankYou ? (
         <DialogContent

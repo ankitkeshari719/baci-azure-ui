@@ -137,8 +137,8 @@ const Toolbar = (props: any) => {
             : 'calc(100%)',
           paddingLeft: isXsUp ? '16px' : '56px',
           paddingRight: isXsUp ? '16px' : '56px',
-          paddingTop: isXsUp ?'14px':0,
-          paddingBottom: isXsUp ?'14px':0,
+          paddingTop: isXsUp ? '14px' : 0,
+          paddingBottom: isXsUp ? '14px' : 0,
           boxShadow: '0px 0px 2px rgba(0, 0, 0, 0.25)!important',
         }}
       >
@@ -329,6 +329,7 @@ const Toolbar = (props: any) => {
                     display: isXsUp ? 'none' : 'block',
                   }}
                   onClick={() => setOpenDialog(true)}
+                  onTouchStart={() => setOpenDialog(true)}
                 >
                   FINISH RETRO
                 </Button>
@@ -360,6 +361,7 @@ const Toolbar = (props: any) => {
                       display: isXsUp ? 'none' : 'block',
                     }}
                     onClick={() => setLeaveDiaOpen(true)}
+                    onTouchStart={() => setLeaveDiaOpen(true)}
                   >
                     LEAVE RETRO
                   </Button>
@@ -452,6 +454,9 @@ const Toolbar = (props: any) => {
               onClick={() => {
                 props.onFinishRetro(), setOpenDialog(false);
               }}
+              onTouchStart={() => {
+                props.onFinishRetro(), setOpenDialog(false);
+              }}
               variant="contained"
               autoFocus
             >
@@ -466,6 +471,7 @@ const Toolbar = (props: any) => {
               }}
               variant="outlined"
               onClick={() => setOpenDialog(false)}
+              onTouchStart={() => setOpenDialog(false)}
             >
               CONTINUE WITH RETRO
             </Button>
@@ -508,6 +514,7 @@ const Toolbar = (props: any) => {
                 position: 'initial',
               }}
               onClick={handleClick1}
+             
             >
               <img src="/svgs/MobileMenu.svg" />
             </Button>
@@ -594,6 +601,7 @@ const Toolbar = (props: any) => {
           flexDirection: 'row-reverse!important',
           width: '100%!important',
           marginTop: '10px',
+          marginBottom: isXsUp ? '10px' : 0,
         }}
       >
         {!leaveRetro && (
@@ -612,6 +620,7 @@ const Toolbar = (props: any) => {
               position: 'initial',
             }}
             onClick={() => setLeaveDiaOpen(true)}
+            onTouchStart={() => setLeaveDiaOpen(true)}
           >
             LEAVE RETRO
           </Button>

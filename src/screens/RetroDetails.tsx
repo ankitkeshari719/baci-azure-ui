@@ -311,6 +311,7 @@ export function RetroDetails(props: any) {
                         src={download}
                         style={styles.copyURL}
                         onClick={downloadQRCode}
+                        onTouchStart={downloadQRCode}
                       ></img>
                     </div>
                   </Box>
@@ -323,6 +324,7 @@ export function RetroDetails(props: any) {
                         src={send}
                         style={styles.copyURL}
                         onClick={shareRetroDetails}
+                        onTouchStart={shareRetroDetails}
                       ></img>
                     </div>
                   </Box>
@@ -340,6 +342,7 @@ export function RetroDetails(props: any) {
                   className="secondaryButton"
                   style={styles.goToRetroBtn}
                   onClick={() => goToRetro()}
+                  onTouchStart={() => goToRetro()}
                 >
                   <span className="secondaryButtonText">Go to retro</span>
                 </Button>
@@ -349,6 +352,7 @@ export function RetroDetails(props: any) {
                   className="secondaryButton"
                   style={styles.goToRetroBtn}
                   onClick={() => props?.popover && props.close()}
+                  onTouchStart={() => props?.popover && props.close()}
                 >
                   <span className="secondaryButtonText">Close</span>
                 </Button>
