@@ -65,12 +65,12 @@ color: #4285F4;
     background-color: $grey30;
 }
 .identityWillbeConfidentialText {
-font-weight: 400;
-font-size: 14px;
-line-height: 18px;
-text-align: center;
-letter-spacing: 0.4px;
-color: #EE7538;
+font-weight: 400 !important;
+font-size: 14px !important;
+line-height: 18px !important;
+text-align: center !important;
+letter-spacing: 0.4px !important;
+color: #EE7538 !important;
 }
 .popupNextBtn {
 margin-right: 107px !important;

@@ -51,6 +51,12 @@ let theme = createTheme({
       fontSize: '18px',
       letterSpacing: ' 0.5px',
     },
+    h6: {
+      fontFamily: `'Poppins'`,
+      fontWeight: 400,
+      fontSize: '16px !important',
+      letterSpacing: ' 0.6px',
+    },
   },
 
   shape: {
