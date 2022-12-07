@@ -541,6 +541,10 @@ export function RetroCard({
                       setEditing(true);
                       setAnchorEl(null);
                     }}
+                    onTouchStart={e => {
+                      setEditing(true);
+                      setAnchorEl(null);
+                    }}
                   >
                     {/* <img id="editLogo" src="/svgs/Edit.svg" /> */}
                     <svg
@@ -608,6 +612,7 @@ export function RetroCard({
                       MenuProps={{ elevation: 3 }}
                       ButtonProps={{ variant: undefined }}
                       onClick={() => console.log('Clicked')}
+                      
                     />
                   </Box>
                 ) : null}
@@ -663,12 +668,18 @@ export function RetroCard({
                 onClose={() => setAnchorEl1(null)}
               > */}
                 {cardIsGrouped ? (
-                  <MenuItem onClick={() => handleMove(ungroupedGroupId)}>
+                  <MenuItem
+                    onClick={() => handleMove(ungroupedGroupId)}
+                    onTouchStart={() => handleMove(ungroupedGroupId)}
+                  >
                     <ListItemIcon></ListItemIcon>
                     <ListItemText>out of Grouping</ListItemText>
                   </MenuItem>
                 ) : null}
-                <MenuItem onClick={() => handleMove()}>
+                <MenuItem
+                  onClick={() => handleMove()}
+                  onTouchStart={() => handleMove()}
+                >
                   <ListItemIcon></ListItemIcon>
                   <ListItemText>to New Grouping</ListItemText>
                 </MenuItem>
@@ -681,6 +692,7 @@ export function RetroCard({
                     <MenuItem
                       key={group.id}
                       onClick={() => handleMove(group.id)}
+                      onTouchStart={() => handleMove(group.id)}
                     >
                       <ListItemIcon />
                       <ListItemText>
@@ -726,6 +738,10 @@ export function RetroCard({
                     cancelEdit();
                     e.stopPropagation();
                   }}
+                  onTouchStart={e => {
+                    cancelEdit();
+                    e.stopPropagation();
+                  }}
                 >
                   {/* <CloseIcon sx={{ height: '20px', color: 'black' }} /> */}
                   CLOSE
@@ -733,6 +749,10 @@ export function RetroCard({
                 <Button
                   sx={{ minWidth: '0px', padding: 0, position: 'initial' }}
                   onClick={e => {
+                    submit(value);
+                    e.stopPropagation();
+                  }}
+                  onTouchStart={e => {
                     submit(value);
                     e.stopPropagation();
                   }}

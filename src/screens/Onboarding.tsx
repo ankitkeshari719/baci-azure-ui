@@ -346,6 +346,7 @@ export function Onboarding() {
                 minWidth: '300px',
               }}
               onClick={() => joinRetro()}
+              onTouchStart={()=>joinRetro()}
             >
               Go on...
             </Button>
@@ -755,6 +756,7 @@ export function Onboarding() {
             <Link
               sx={{ textAlign: 'center', cursor: 'pointer' }}
               onClick={reset}
+              onTouchStart={reset}
             >
               To return to the main page click here
             </Link>

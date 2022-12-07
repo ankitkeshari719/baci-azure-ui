@@ -19,7 +19,11 @@ export default function ErrorDialog() {
           </Grid>
         </DialogContent>
         <DialogActions>
-          <Button onClick={() => location.reload()} autoFocus>
+          <Button
+            onClick={() => location.reload()}
+            onTouchStart={() => location.reload()}
+            autoFocus
+          >
             Reload
           </Button>
         </DialogActions>

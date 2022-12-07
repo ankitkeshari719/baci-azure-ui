@@ -565,10 +565,12 @@ export function RetroColumn({
           height: noHeightLimit
             ? 'auto'
             : isXsUp
-            ? 'calc(var(--app-height) - 165px)'
-            : 'calc(var(--app-height) - 150px)',
+            ? 'calc(var(--app-height) - 115px)'
+            : 'calc(var(--app-height) - 160px)',
           borderRadius: '8px',
-          border: '1px solid #0B6623',
+          border: isXsUp ? 'none' : '1px solid #0B6623',
+          padding: isXsUp ? '10px' : '0px',
+          paddingBottom: 0,
         }}
         onMouseOver={() => {
           setMouseOver(true);
@@ -585,162 +587,183 @@ export function RetroColumn({
             width: '100px',
           }}
         >
-          <div
-            style={{
-              display: 'flex',
-              flexDirection: 'row',
-              justifyContent: 'space-between',
-              alignItems: 'center',
-              paddingRight: '15px',
-              marginBottom: '25px',
-              background: groupColour,
-              borderRadius: '8px',
-            }}
-          >
-            <Grid
-              container
-              alignItems="center"
-              justifyContent="space-between"
-              item
-              xs={12}
-              md={12}
-              lg={12}
+          {!isXsUp && (
+            <div
+              style={{
+                display: 'flex',
+                flexDirection: 'row',
+                justifyContent: 'space-between',
+                alignItems: 'center',
+                paddingRight: '15px',
+                marginBottom: '25px',
+                background: groupColour,
+                borderRadius: '8px',
+              }}
             >
-              <Grid item lg={8} md={6} xs={6}>
-                <div>
-                  {!noHeader && (
-                    <Typography
-                      align="center"
-                      sx={{
-                        userSelect: 'none',
-                        display: 'flex',
-                        // fontSize: '0.9rem',
-                        color: groupFontColour + '!important',
-                        fontSize: '16px',
-                        padding: '10px',
-                      }}
-                    >
-                      {true ? (
-                        <>{columnName}</>
-                      ) : (
-                        <>
-                          {' '}
-                          {leftHeaderComponent}
-                          <TextField
-                            maxRows={2}
-                            disabled={true}
-                            sx={{
-                              fieldset: { border: 'none' },
-                              flex: 10,
-                              // padding: '10px',
-                              div: { padding: 0, position: 'initial' },
-                              textarea: {
-                                // textAlign: 'center',
-                                color: groupFontColour + '!important',
-                                fontSize: '16px',
-                                fontWeight: 600,
-                              },
-
-                              position: 'initial',
-                              display: 'flex',
-                              // alignItems: 'center',
-                              // justifyContent: 'left',
-                            }}
-                            multiline
-                            fullWidth
-                            value={columnName}
-                            onKeyDown={e => {
-                              if (e.keyCode === 13) {
-                                submitColumnName(columnName);
-                                (e.target as HTMLInputElement).blur();
-                              }
-                            }}
-                            onChange={e => setColumnName(e.currentTarget.value)}
-                            onBlur={() => submitColumnName(columnName)}
-                            onSubmit={() => submitColumnName(columnName)}
-                          ></TextField>
-                          {rightHeaderComponent}
-                        </>
-                      )}
-                    </Typography>
-                  )}
-                </div>
-              </Grid>
-
               <Grid
                 container
-                justifyContent="flex-end"
-                direction="row"
+                alignItems="center"
+                justifyContent="space-between"
                 item
-                lg={4}
-                md={5}
-                xs={5}
+                xs={12}
+                md={12}
+                lg={12}
               >
-                {global.user.userType == 2 && (!ended || !global.leaveRetro) && (
-                  <>
-                    {column.publish ? (
-                      <Typography style={{ color: '#808080' }}>
-                        Published
-                      </Typography>
-                    ) : (
+                <Grid item lg={8} md={6} xs={6}>
+                  <div>
+                    {!noHeader && (
                       <Typography
-                        id={'publish' + columnId}
-                        onClick={() => {
-                          if (!ended) {
-                            publishColumn(true);
-                          }
-                        }}
+                        align="center"
                         sx={{
-                          color: '#159ADD',
-                          textDecorationLline: 'underline',
-                          cursor: !ended ? 'pointer' : 'auto',
+                          userSelect: 'none',
+                          display: 'flex',
+                          // fontSize: '0.9rem',
+                          color: groupFontColour + '!important',
+                          fontSize: '16px',
+                          padding: '10px',
                         }}
                       >
-                        Publish
+                        {true ? (
+                          <>{columnName}</>
+                        ) : (
+                          <>
+                            {' '}
+                            {leftHeaderComponent}
+                            <TextField
+                              maxRows={2}
+                              disabled={true}
+                              sx={{
+                                fieldset: { border: 'none' },
+                                flex: 10,
+                                // padding: '10px',
+                                div: { padding: 0, position: 'initial' },
+                                textarea: {
+                                  // textAlign: 'center',
+                                  color: groupFontColour + '!important',
+                                  fontSize: '16px',
+                                  fontWeight: 600,
+                                },
+
+                                position: 'initial',
+                                display: 'flex',
+                                // alignItems: 'center',
+                                // justifyContent: 'left',
+                              }}
+                              multiline
+                              fullWidth
+                              value={columnName}
+                              onKeyDown={e => {
+                                if (e.keyCode === 13) {
+                                  submitColumnName(columnName);
+                                  (e.target as HTMLInputElement).blur();
+                                }
+                              }}
+                              onChange={e =>
+                                setColumnName(e.currentTarget.value)
+                              }
+                              onBlur={() => submitColumnName(columnName)}
+                              onSubmit={() => submitColumnName(columnName)}
+                            ></TextField>
+                            {rightHeaderComponent}
+                          </>
+                        )}
                       </Typography>
                     )}
-                  </>
-                )}
-                {/* {global.currentRetro?.creatorId === global.user.id && (
+                  </div>
+                </Grid>
+
+                <Grid
+                  container
+                  justifyContent="flex-end"
+                  direction="row"
+                  item
+                  lg={4}
+                  md={5}
+                  xs={5}
+                >
+                  {global.user.userType == 2 && (!ended || !global.leaveRetro) && (
+                    <>
+                      {column.publish ? (
+                        <Typography style={{ color: '#808080' }}>
+                          Published
+                        </Typography>
+                      ) : (
+                        <Typography
+                          id={'publish' + columnId}
+                          onClick={() => {
+                            if (!ended) {
+                              publishColumn(true);
+                            }
+                          }}
+                          onTouchStart={() => {
+                            if (!ended) {
+                              publishColumn(true);
+                            }
+                          }}
+                          sx={{
+                            color: '#159ADD',
+                            textDecorationLline: 'underline',
+                            cursor: !ended ? 'pointer' : 'auto',
+                          }}
+                        >
+                          Publish
+                        </Typography>
+                      )}
+                    </>
+                  )}
+                  {/* {global.currentRetro?.creatorId === global.user.id && (
                  <img
                    src="/svgs/Unlock.svg"
                    style={{ width: '20px', marginLeft: '15px' }}
                  />
                )} */}
-                {global.expandColumn === -1 ? (
-                  <img
-                    onClick={() => {
-                      dispatch({
-                        type: ActionType.EXPAND_COLUMN,
-                        payload: { expandColumn: +column.id },
-                      });
-                    }}
-                    src="/svgs/Expand.svg"
-                    style={{
-                      width: '20px',
-                      marginLeft: '15px',
-                      cursor: 'pointer',
-                    }}
-                  />
-                ) : (
-                  <img
-                    onClick={() => {
-                      dispatch({
-                        type: ActionType.EXPAND_COLUMN,
-                        payload: { expandColumn: -1 },
-                      });
-                    }}
-                    src="/svgs/Shrink.svg"
-                    style={{
-                      width: '20px',
-                      marginLeft: '15px',
-                      cursor: 'pointer',
-                    }}
-                  />
-                )}
+                  {global.expandColumn === -1 ? (
+                    <img
+                      onClick={() => {
+                        dispatch({
+                          type: ActionType.EXPAND_COLUMN,
+                          payload: { expandColumn: +column.id },
+                        });
+                      }}
+                      onTouchStart={() => {
+                        dispatch({
+                          type: ActionType.EXPAND_COLUMN,
+                          payload: { expandColumn: +column.id },
+                        });
+                      }}
+                      src="/svgs/Expand.svg"
+                      style={{
+                        width: '20px',
+                        marginLeft: '15px',
+                        cursor: 'pointer',
+                      }}
+                    />
+                  ) : (
+                    <img
+                      onTouchStart={() => {
+                        dispatch({
+                          type: ActionType.EXPAND_COLUMN,
+                          payload: { expandColumn: -1 },
+                        });
+                      }}
+                      onClick={() => {
+                        dispatch({
+                          type: ActionType.EXPAND_COLUMN,
+                          payload: { expandColumn: -1 },
+                        });
+                      }}
+                      src="/svgs/Shrink.svg"
+                      style={{
+                        width: '20px',
+                        marginLeft: '15px',
+                        cursor: 'pointer',
+                      }}
+                    />
+                  )}
+                </Grid>
               </Grid>
-            </Grid>
-          </div>
+            </div>
+          )}
           {/* </Box> */}
           {useMemo(
             () => (
@@ -757,7 +780,7 @@ export function RetroColumn({
                     }}
                     ref={containerRef}
                     style={{
-                      overflowY: noHeightLimit ? 'auto' : 'scroll',
+                      overflowY: noHeightLimit ? 'auto' : 'auto',
                       userSelect: 'none',
                       flexGrow: 2,
                     }}
@@ -779,7 +802,7 @@ export function RetroColumn({
                                   lg={global?.expandColumn !== -1 ? 2 : 6}
                                   md={global?.expandColumn !== -1 ? 2 : 4}
                                   sx={{ marginBottom: '20px' }}
-                                  key={j+"0"}
+                                  key={j + '0'}
                                 >
                                   {/* <Box sx={{width:"100%"}}> */}
                                   <RetroCard
@@ -811,7 +834,7 @@ export function RetroColumn({
                     <div
                       ref={containerRef}
                       style={{
-                        overflowY: noHeightLimit ? 'auto' : 'scroll',
+                        overflowY: noHeightLimit ? 'auto' : 'auto',
                         userSelect: 'none',
                         flexGrow: 2,
                       }}
@@ -892,6 +915,7 @@ export function RetroColumn({
                                                   ? 2
                                                   : 4
                                               }
+                                              xs={12}
                                               ref={e =>
                                                 cardRefCollector(
                                                   e as HTMLDivElement,
@@ -987,105 +1011,109 @@ export function RetroColumn({
             ),
             [column.groups, groupCollapsed]
           )}
-          {!ended &&
-          !global.leaveRetro &&
-          ((!isXsUp && mouseOver) || (isXsUp && showEditBox)) ? (
-            <Box
-              style={{
-                background: 'white',
-                borderRadius: '0px 0px 8px 8px',
-                // margin: '3px',
-                borderTop: '1px solid #F0F0F0',
-                bottom: '0px',
-                padding: '10px',
-                display: 'flex',
-                ...(isXsUp
-                  ? { position: 'fixed', width: '100vw', height: '8rem' }
-                  : {}),
-              }}
-              onMouseOver={() => {
-                setMouseOver(true);
-              }}
-              onMouseOut={() => {
-                setMouseOver(true);
-              }}
-            >
-              <TextFieldNoBorderWrapper
-                sx={{
-                  color: '#8E8E8E',
-                  flexGrow: 10,
-                  maxWidth: 'unset',
-                  flexDirection: 'column',
-                }}
-              >
-                <TextField
-                  fullWidth
-                  multiline
-                  inputProps={{
-                    maxLength: MAX_CARD_TEXT_LENGTH,
-                    style: {
-                      padding: 0,
-                    },
-                  }}
-                  autoFocus
-                  sx={{
-                    padding: 0,
-                    input: { padding: 0 },
-                    div: { padding: 0, position: 'initial' },
-                    position: 'initial',
-                    textarea: {
-                      fontStyle: valueSet ? 'normal' : 'italic',
-                      color: valueSet ? '#000' : '#8D858A',
-                    },
-                  }}
-                  value={valueSet ? value : 'Share one thought'}
-                  onChange={event => {
-                    setValue(event.target.value);
-                  }}
-                  onFocus={event => {
-                    setValueSet(true);
-                  }}
-                  onBlur={() => {
-                    if (!value) {
-                      setValueSet(false);
-                    }
-                  }}
-                  onKeyDown={e => {
-                    if (e.keyCode === 13) {
-                      submit(value);
-                      (e.target as HTMLInputElement).blur();
-                    }
-                  }}
-                ></TextField>
-                {value && value.length >= MAX_CARD_TEXT_LENGTH - 20 ? (
-                  <Typography
-                    style={{
-                      fontSize: '0.75rem',
-                      textAlign: 'right',
-                      whiteSpace: 'nowrap',
-                    }}
-                  >
-                    Characters remaining: {MAX_CARD_TEXT_LENGTH - value.length}
-                  </Typography>
-                ) : null}
-              </TextFieldNoBorderWrapper>
-              <div
+          {
+            !ended && !global.leaveRetro && (
+              // ((!isXsUp && mouseOver) || (isXsUp && showEditBox)) ? (
+              <Box
                 style={{
+                  background: 'white',
+                  borderRadius: '0px 0px 8px 8px',
+                  // margin: '3px',
+                  borderTop: '1px solid #F0F0F0',
+                  bottom: '0px',
+                  padding: '10px',
                   display: 'flex',
-                  justifyContent: 'flex-end',
-                  flexDirection: 'column',
+                  ...(false
+                    ? { position: 'fixed', width: '100vw', height: '8rem' }
+                    : {}),
+                }}
+                onMouseOver={() => {
+                  setMouseOver(true);
+                }}
+                onMouseOut={() => {
+                  setMouseOver(true);
                 }}
               >
-                <Button
-                  style={{ position: 'initial' }}
-                  disabled={!value || value.length === 0}
-                  onClick={() => submit(value)}
+                <TextFieldNoBorderWrapper
+                  sx={{
+                    color: '#8E8E8E',
+                    flexGrow: 10,
+                    maxWidth: 'unset',
+                    flexDirection: 'column',
+                  }}
                 >
-                  <SendIcon></SendIcon>
-                </Button>
-              </div>
-            </Box>
-          ) : null}
+                  <TextField
+                    fullWidth
+                    multiline
+                    inputProps={{
+                      maxLength: MAX_CARD_TEXT_LENGTH,
+                      style: {
+                        padding: 0,
+                      },
+                    }}
+                    autoFocus
+                    sx={{
+                      padding: 0,
+                      input: { padding: 0 },
+                      div: { padding: 0, position: 'initial' },
+                      position: 'initial',
+                      textarea: {
+                        fontStyle: valueSet ? 'normal' : 'italic',
+                        color: valueSet ? '#000' : '#8D858A',
+                      },
+                    }}
+                    value={valueSet ? value : 'Share one thought'}
+                    onChange={event => {
+                      setValue(event.target.value);
+                    }}
+                    onFocus={event => {
+                      setValueSet(true);
+                    }}
+                    onBlur={() => {
+                      if (!value) {
+                        setValueSet(false);
+                      }
+                    }}
+                    onKeyDown={e => {
+                      if (e.keyCode === 13) {
+                        submit(value);
+                        (e.target as HTMLInputElement).blur();
+                      }
+                    }}
+                  ></TextField>
+                  {value && value.length >= MAX_CARD_TEXT_LENGTH - 20 ? (
+                    <Typography
+                      style={{
+                        fontSize: '0.75rem',
+                        textAlign: 'right',
+                        whiteSpace: 'nowrap',
+                      }}
+                    >
+                      Characters remaining:{' '}
+                      {MAX_CARD_TEXT_LENGTH - value.length}
+                    </Typography>
+                  ) : null}
+                </TextFieldNoBorderWrapper>
+                <div
+                  style={{
+                    display: 'flex',
+                    justifyContent: 'flex-end',
+                    flexDirection: 'column',
+                  }}
+                >
+                  <Button
+                    style={{ position: 'initial' }}
+                    disabled={!value || value.length === 0}
+                    onClick={() => submit(value)}
+                    onTouchStart={() => submit(value)}
+                  >
+                    <SendIcon></SendIcon>
+                  </Button>
+                </div>
+              </Box>
+            )
+            // ) : null
+          }
         </div>
       </ColumnComponent>
     );
@@ -1126,7 +1154,7 @@ export function RetroColumn({
                     }}
                     ref={containerRef}
                     style={{
-                      overflowY: noHeightLimit ? 'auto' : 'scroll',
+                      overflowY: noHeightLimit ? 'auto' : 'auto',
                       userSelect: 'none',
                       flexGrow: 2,
                     }}
@@ -1149,7 +1177,7 @@ export function RetroColumn({
                                   md={3}
                                   xs={6}
                                   sx={{ marginBottom: '20px' }}
-                                  key={j+"0"}
+                                  key={j + '0'}
                                 >
                                   {/* <Box sx={{width:"100%"}}> */}
                                   <RetroCard
@@ -1181,7 +1209,7 @@ export function RetroColumn({
                     <div
                       ref={containerRef}
                       style={{
-                        overflowY: noHeightLimit ? 'auto' : 'scroll',
+                        overflowY: noHeightLimit ? 'auto' : 'auto',
                         userSelect: 'none',
                         flexGrow: 2,
                       }}

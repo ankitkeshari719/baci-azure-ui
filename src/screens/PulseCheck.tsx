@@ -111,7 +111,7 @@ export default function PulseCheck() {
     ) {
       const currentUser: any = users.find(user1 => user1.userId === user.id);
       // console.log("current user",currentUser.pulseCheckQuestions.length>0)
-      if(currentUser?.pulseCheckQuestions.length>0){
+      if (currentUser?.pulseCheckQuestions.length > 0) {
         navigate('/board/' + currentRetro?.id);
         dispatch({
           type: ActionType.SET_SNACK_MESSAGE,
@@ -122,7 +122,7 @@ export default function PulseCheck() {
             },
           },
         });
-        return
+        return;
       }
     }
 
@@ -147,9 +147,9 @@ export default function PulseCheck() {
           },
         });
       }
-      return
+      return;
     }
-  }, [users,user?.id&&user?.id!=""]);
+  }, [users, user?.id && user?.id != '']);
 
   const submit = () => {
     const someBlank =
@@ -390,6 +390,10 @@ export default function PulseCheck() {
                         qs[index][1](1);
                         setPulseBar(index);
                       }}
+                      onTouchStart={() => {
+                        qs[index][1](1);
+                        setPulseBar(index);
+                      }}
                     ></Box>
                     <img
                       src={sadMask}
@@ -409,6 +413,10 @@ export default function PulseCheck() {
                         width: '40px',
                         height: '40px',
                         marginRight: '32px',
+                      }}
+                      onTouchStart={() => {
+                        qs[index][1](2);
+                        setPulseBar(index);
                       }}
                       onClick={() => {
                         qs[index][1](2);
@@ -432,6 +440,10 @@ export default function PulseCheck() {
                         backgroundImage: 'url(' + happy + ')',
                         width: '40px',
                         height: '40px',
+                      }}
+                      onTouchStart={() => {
+                        qs[index][1](3);
+                        setPulseBar(index);
                       }}
                       onClick={() => {
                         qs[index][1](3);
@@ -724,6 +736,7 @@ export default function PulseCheck() {
             variant="outlined"
             className="secondaryButton"
             onClick={submit}
+            onTouchStart={submit}
           >
             <span className="secondaryButtonText">Submit and go to retro</span>
           </Button>
@@ -736,7 +749,7 @@ export default function PulseCheck() {
             cursor: 'pointer',
           }}
         >
-          <Link sx={{ marginTop: '43px' }} className="infoLink" onClick={skip}>
+          <Link sx={{ marginTop: '43px' }} className="infoLink" onClick={skip} onTouchStart={skip} >
             Skip Pulse Check
           </Link>
         </Box>
