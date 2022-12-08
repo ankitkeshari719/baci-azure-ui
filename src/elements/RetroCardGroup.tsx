@@ -273,13 +273,13 @@ export function RetroCardGroup({
                       alignItems: 'center',
                     }}
                     disabled={ended}
-                    onTouchStart={() =>
-                      !ended
-                        ? userReacted
-                          ? addReactToGroup(group.id, '')
-                          : addReactToGroup(group.id, '👍')
-                        : null
-                    }
+                    // onTouchStart={() =>
+                    //   !ended
+                    //     ? userReacted
+                    //       ? addReactToGroup(group.id, '')
+                    //       : addReactToGroup(group.id, '👍')
+                    //     : null
+                    // }
                     onClick={() =>
                       !ended
                         ? userReacted
@@ -375,7 +375,7 @@ export function RetroCardGroup({
                   onClick={event => {
                     onCollapse(event);
                   }}
-                  onTouchStart={onCollapse}
+                  // onTouchStart={onCollapse}
                   // sx={{ position: 'initial' }}
                 >
                   {/* <CloseFullscreenIcon
@@ -400,7 +400,7 @@ export function RetroCardGroup({
                     onClick={event => {
                       onCollapse(event);
                     }}
-                    onTouchStart={onCollapse}
+                    // onTouchStart={onCollapse}
                     sx={{ position: 'initial' }}
                   >
                     {/* <OpenInFullIcon
@@ -429,7 +429,7 @@ export function RetroCardGroup({
                 <Button
                   sx={{ position: 'initial', color: '#727D84' }}
                   onClick={() => deleteGroup(group.id)}
-                  onTouchStart={() => deleteGroup(group.id)}
+                  // onTouchStart={() => deleteGroup(group.id)}
                 >
                   <DeleteIcon />
                 </Button>

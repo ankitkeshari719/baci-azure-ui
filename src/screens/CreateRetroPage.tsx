@@ -246,7 +246,7 @@ export function CreateNewRetro() {
               variant="outlined"
               className="secondaryButton"
               onClick={create}
-              onTouchStart={create}
+              // onTouchStart={create}
               sx={styles.proceedButton}
             >
               <span className="secondaryButtonText">
@@ -258,7 +258,7 @@ export function CreateNewRetro() {
             <Button
               style={styles.existingRetroText}
               onClick={joinExistingRetro}
-              onTouchStart={joinExistingRetro}
+              // onTouchStart={joinExistingRetro}
             >
               Join existing BACI retro
             </Button>

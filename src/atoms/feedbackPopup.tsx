@@ -157,7 +157,9 @@ export default function FeedbackPopup(props: {
         mr="23px"
         mt="23px"
       >
-        <img src={closeImage} onClick={closeFeedback} onTouchStart={closeFeedback}></img>
+        <img src={closeImage} onClick={closeFeedback}
+        //  onTouchStart={closeFeedback}
+         ></img>
       </Box>
       {showThankYou ? (
         <DialogContent
@@ -232,7 +234,7 @@ export default function FeedbackPopup(props: {
                       setFeedbackBar(index);
                       
                     }}
-                    onTouchStart={() => qs[index][1](i)}
+                    // onTouchStart={() => qs[index][1](i)}
                   >
                     {i > qs[index][0]
                       ? FEEDBACK_QUESTIONS_OUTLINE[index]

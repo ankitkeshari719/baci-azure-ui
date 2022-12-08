@@ -318,7 +318,7 @@ export function StartRetro() {
                     startIcon={<Icons.Qrcode size={20} />}
                     style={styles.copyURL}
                     onClick={downloadQRCode}
-                    onTouchStart={downloadQRCode}
+                    // onTouchStart={downloadQRCode}
                   >
                     <span className="primaryButtonText">download qr code</span>
                   </Button>

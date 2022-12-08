@@ -224,7 +224,7 @@ const FirstTimeExperience = (props: any) => {
                     width: '100px',
                   }}
                   onClick={showFinishInfo}
-                  onTouchStart={showFinishInfo}
+                  // onTouchStart={showFinishInfo}
                 >
                   Next
                 </Button>
@@ -235,7 +235,7 @@ const FirstTimeExperience = (props: any) => {
                     cursor: 'pointer',
                   }}
                   onClick={doneWithManual}
-                  onTouchStart={doneWithManual}
+                  // onTouchStart={doneWithManual}
                 >
                   Skip Intro
                 </Typography>
@@ -286,7 +286,7 @@ const FirstTimeExperience = (props: any) => {
                     cursor: 'pointer',
                   }}
                   onClick={showPublishInfo}
-                  onTouchStart={showPublishInfo}
+                  // onTouchStart={showPublishInfo}
                 >
                   Back
                 </Typography>
@@ -299,7 +299,7 @@ const FirstTimeExperience = (props: any) => {
                     width: '100px',
                   }}
                   onClick={doneWithManual}
-                  onTouchStart={doneWithManual}
+                  // onTouchStart={doneWithManual}
                 >
                   Done
                 </Button>
@@ -347,7 +347,7 @@ const FirstTimeExperience = (props: any) => {
                 width: '100px',
               }}
               onClick={doneWithManual}
-              onTouchStart={doneWithManual}
+              // onTouchStart={doneWithManual}
             >
               GOT IT
             </Button>

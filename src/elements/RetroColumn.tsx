@@ -695,11 +695,11 @@ export function RetroColumn({
                               publishColumn(true);
                             }
                           }}
-                          onTouchStart={() => {
-                            if (!ended) {
-                              publishColumn(true);
-                            }
-                          }}
+                          // onTouchStart={() => {
+                          //   if (!ended) {
+                          //     publishColumn(true);
+                          //   }
+                          // }}
                           sx={{
                             color: '#159ADD',
                             textDecorationLline: 'underline',
@@ -725,12 +725,12 @@ export function RetroColumn({
                           payload: { expandColumn: +column.id },
                         });
                       }}
-                      onTouchStart={() => {
-                        dispatch({
-                          type: ActionType.EXPAND_COLUMN,
-                          payload: { expandColumn: +column.id },
-                        });
-                      }}
+                      // onTouchStart={() => {
+                      //   dispatch({
+                      //     type: ActionType.EXPAND_COLUMN,
+                      //     payload: { expandColumn: +column.id },
+                      //   });
+                      // }}
                       src="/svgs/Expand.svg"
                       style={{
                         width: '20px',
@@ -740,12 +740,12 @@ export function RetroColumn({
                     />
                   ) : (
                     <img
-                      onTouchStart={() => {
-                        dispatch({
-                          type: ActionType.EXPAND_COLUMN,
-                          payload: { expandColumn: -1 },
-                        });
-                      }}
+                      // onTouchStart={() => {
+                      //   dispatch({
+                      //     type: ActionType.EXPAND_COLUMN,
+                      //     payload: { expandColumn: -1 },
+                      //   });
+                      // }}
                       onClick={() => {
                         dispatch({
                           type: ActionType.EXPAND_COLUMN,
@@ -801,6 +801,7 @@ export function RetroColumn({
                                   item
                                   lg={global?.expandColumn !== -1 ? 2 : 6}
                                   md={global?.expandColumn !== -1 ? 2 : 4}
+                                  xs={12}
                                   sx={{ marginBottom: '20px' }}
                                   key={j + '0'}
                                 >
@@ -1062,7 +1063,7 @@ export function RetroColumn({
                         color: valueSet ? '#000' : '#8D858A',
                       },
                     }}
-                    value={valueSet ? value : 'Share one thought'}
+                    value={valueSet ? value : 'Add your thoughts...'}
                     onChange={event => {
                       setValue(event.target.value);
                     }}
@@ -1105,7 +1106,7 @@ export function RetroColumn({
                     style={{ position: 'initial' }}
                     disabled={!value || value.length === 0}
                     onClick={() => submit(value)}
-                    onTouchStart={() => submit(value)}
+                    // onTouchStart={() => submit(value)}
                   >
                     <SendIcon></SendIcon>
                   </Button>

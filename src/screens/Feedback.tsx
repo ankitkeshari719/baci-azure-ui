@@ -180,7 +180,7 @@ export default function Feedback() {
               justifySelf: 'flex-end',
             }}
             onClick={backToBoard}
-            onTouchStart={backToBoard}
+            // onTouchStart={backToBoard}
           >
             Back to Board
           </Button>

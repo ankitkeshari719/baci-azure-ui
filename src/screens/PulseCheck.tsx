@@ -398,10 +398,10 @@ export default function PulseCheck() {
                         qs[index][1](1);
                         setPulseBar(index);
                       }}
-                      onTouchStart={() => {
-                        qs[index][1](1);
-                        setPulseBar(index);
-                      }}
+                      // onTouchStart={() => {
+                      //   qs[index][1](1);
+                      //   setPulseBar(index);
+                      // }}
                     ></Box>
                     <img
                       src={sadMask}
@@ -421,10 +421,10 @@ export default function PulseCheck() {
                         height: '40px',
                         marginRight: '32px',
                       }}
-                      onTouchStart={() => {
-                        qs[index][1](2);
-                        setPulseBar(index);
-                      }}
+                      // onTouchStart={() => {
+                      //   qs[index][1](2);
+                      //   setPulseBar(index);
+                      // }}
                       onClick={() => {
                         qs[index][1](2);
                         setPulseBar(index);
@@ -447,10 +447,10 @@ export default function PulseCheck() {
                         width: '40px',
                         height: '40px',
                       }}
-                      onTouchStart={() => {
-                        qs[index][1](3);
-                        setPulseBar(index);
-                      }}
+                      // onTouchStart={() => {
+                      //   qs[index][1](3);
+                      //   setPulseBar(index);
+                      // }}
                       onClick={() => {
                         qs[index][1](3);
                         setPulseBar(index);
@@ -486,7 +486,7 @@ export default function PulseCheck() {
             variant="outlined"
             className="secondaryButton"
             onClick={submit}
-            sx={{}}
+            // onTouchStart={submit}
           >
             <span className="secondaryButtonText">Submit and go to retro</span>
           </Button>
@@ -503,6 +503,337 @@ export default function PulseCheck() {
             Skip Pulse Check
           </Link>
         </Box>
+
+        {/* <Slide direction="up" in={!introScreen}>
+        <Box
+          sx={{
+            display: !introScreen ? 'flex' : 'none',
+            overflowY: 'scroll',
+            flexDirection: 'column',
+            justifyContent: 'flex-start',
+            userSelect: 'none',
+            background: 'white',
+          }}
+          ref={scrollableRef}
+          onScroll={onScroll}
+        >
+          <Box
+            sx={{
+              display: 'flex',
+              width: '100%',
+              height: 'calc(var(--app-height) - 45px)',
+              padding: '20px',
+              flexDirection: 'column',
+              justifyContent: 'flex-start',
+              alignItems: 'center',
+            }}
+          >
+            <Grid container spacing={2} sx={{ display: 'flex', width: '100%' }}>
+              {!isXsUp && !isSmUp ? (
+                <Grid item xs={2}>
+                  &nbsp;
+                </Grid>
+              ) : null}
+              <Grid
+                item
+                xs={isXsUp || isSmUp ? 12 : 8}
+                sx={{
+                  display: 'flex',
+                  justifyContent: 'center',
+                  alignItems: 'center',
+                }}
+              >
+                <Typography
+                  variant="h5"
+                  sx={{ fontSize: '0.9rem', fontWeight: 'bold' }}
+                >
+                  How have you been feeling at work about...
+                </Typography>
+              </Grid>
+              {!isXsUp && !isSmUp ? (
+                <Grid
+                  item
+                  xs={2}
+                  style={{
+                    flexDirection: 'row',
+                    display: 'flex',
+                    alignItems: 'flex-end',
+                    justifyContent: 'flex-end',
+                  }}
+                >
+                  {user.id === currentRetro?.creatorId ? (
+                    <FormControlLabel
+                      sx={{
+                        color: fullPulseCheck ? '#727D84' : '#9EA6AC',
+                        'span:nth-child(2)': {
+                          overflow: 'hidden',
+                          whiteSpace: 'nowrap',
+                          textOverflow: 'ellipsis',
+                          maxWidth: '150px',
+                        },
+                      }}
+                      control={
+                        <Switch
+                          color="info"
+                          checked={fullPulseCheck}
+                          onChange={fullCheckSwitch}
+                        />
+                      }
+                      label="Full Pulse Check"
+                    />
+                  ) : null}
+                </Grid>
+              ) : null}
+            </Grid>
+
+            <div
+              style={{
+                maxWidth: '1000px',
+                marginTop: '20px',
+                marginBottom: isXsUp ? '0' : '20px',
+                border: '1px solid white',
+                boxShadow: isXsUp
+                  ? 'inset -2px -2px 15px 2px rgba(0,0,0,0.1)'
+                  : '',
+              }}
+            >
+              <Grid container sx={{ justifyContent: 'center' }}>
+                {(fullPulseCheck
+                  ? PULSE_CHECK_QUESTIONS
+                  : QUICK_PULSE_CHECK_QUESTIONS
+                ).map((question, index) => (
+                  <Grid
+                    ref={questionRef}
+                    item
+                    xs={isXsUp ? 12 : 3.8}
+                    sx={{
+                      fontSize: '0.7rem',
+                      fontWeight: 'bold',
+                      background: 'none',
+                      padding: '20px',
+                      display: 'flex',
+                      flexDirection: 'column',
+                      scrollSnapAlign: 'start',
+                      borderTop:
+                        isXsUp || (index > 2 && index < 6)
+                          ? '1px solid lightgray'
+                          : '',
+                      borderBottom:
+                        !isXsUp && index > 2 && index < 6
+                          ? '1px solid lightgray'
+                          : '',
+                      borderLeft:
+                        !isXsUp && (index % 3 === 1 || index === 6)
+                          ? '1px solid lightgray'
+                          : '',
+                      borderRight:
+                        !isXsUp && (index % 3 === 1 || index === 6)
+                          ? '1px solid lightgray'
+                          : '',
+                    }}
+                  >
+                    <Typography
+                      variant="h6"
+                      sx={{
+                        fontSize: isXsUp ? '1rem' : '0.9rem',
+                        textAlign: 'center',
+                      }}
+                    >
+                      {index + 1}
+                      {isXsUp ? (
+                        <>
+                          {'/' +
+                            (fullPulseCheck
+                              ? PULSE_CHECK_QUESTIONS_INFO
+                              : QUICK_PULSE_CHECK_QUESTIONS_INFO
+                            ).length}
+                          <br></br>
+                        </>
+                      ) : (
+                        '.'
+                      )}
+                      &nbsp;
+                      <span>{question}</span>
+                      <BootstrapTooltip
+                        disableTouchListener
+                        open={qsTooltipOpen === index}
+                        title={
+                          (fullPulseCheck
+                            ? PULSE_CHECK_QUESTIONS_INFO
+                            : QUICK_PULSE_CHECK_QUESTIONS_INFO)[index]
+                        }
+                        placement="top"
+                        arrow
+                      >
+                        <Button
+                          style={{
+                            padding: 0,
+                            marginLeft: '10px',
+                            minWidth: 0,
+                          }}
+                          onClick={() =>
+                            setQsTooltipOpen(
+                              qsTooltipOpen === index ? -1 : index
+                            )
+                          }
+                          onTouchStart={() =>
+                            setQsTooltipOpen(
+                              qsTooltipOpen === index ? -1 : index
+                            )
+                          }
+                          onMouseEnter={() => setQsTooltipOpen(index)}
+                          onMouseLeave={() => setQsTooltipOpen(-1)}
+                        >
+                          <HelpCenterIcon></HelpCenterIcon>
+                        </Button>
+                      </BootstrapTooltip>
+                    </Typography>
+                    <div
+                      style={{
+                        padding: '10px',
+                        flex: 1,
+                        display: 'flex',
+                        alignItems: 'flex-end',
+                      }}
+                    >
+                      <Grid container gap={1} sx={{ justifyContent: 'center' }}>
+                        <Grid
+                          item
+                          xs={3}
+                          sx={{ display: 'flex', alignItems: 'flex-end' }}
+                        >
+                          <Button
+                            sx={
+                              qs[index][0] === 1
+                                ? {
+                                    backgroundColor: '#F3715B',
+                                    ':hover': { background: '#F3715B' },
+                                  }
+                                : { ':hover': { background: '#F3715B44' } }
+                            }
+                            onClick={() => qs[index][1](1)}
+                          >
+                            <img src="/images/sad-button.png" width="70%" />
+                          </Button>
+                        </Grid>
+                        <Grid
+                          item
+                          xs={3}
+                          sx={{ display: 'flex', alignItems: 'flex-end' }}
+                        >
+                          <Button
+                            sx={
+                              qs[index][0] === 2
+                                ? {
+                                    backgroundColor: '#FCB34C',
+                                    ':hover': { background: '#FCB34C' },
+                                  }
+                                : { ':hover': { background: '#FCB34C44' } }
+                            }
+                            onClick={() => qs[index][1](2)}
+                          >
+                            <img src="/images/neutral-button.png" width="70%" />
+                          </Button>
+                        </Grid>
+                        <Grid
+                          item
+                          xs={3}
+                          sx={{ display: 'flex', alignItems: 'flex-end' }}
+                        >
+                          <Button
+                            sx={
+                              qs[index][0] === 3
+                                ? {
+                                    backgroundColor: '#5BA8DD',
+                                    ':hover': { background: '#5BA8DD' },
+                                  }
+                                : { ':hover': { background: '#5BA8DD44' } }
+                            }
+                            onClick={() => qs[index][1](3)}
+                          >
+                            <img src="/images/happy-button.png" width="70%" />
+                          </Button>
+                        </Grid>
+                      </Grid>
+                    </div>
+                    {showBlankErrors && qs[index][0] === -1 ? (
+                      <Typography
+                        sx={{
+                          fontSize: '0.7rem',
+                          color: '#FCB34C',
+                          fontWeight: 'bold',
+                          textAlign: 'center',
+                        }}
+                      >
+                        This question is blank
+                      </Typography>
+                    ) : null}
+                  </Grid>
+                ))}
+              </Grid>
+            </div>
+            <Box
+              sx={{
+                display: 'flex',
+                flexDirection: 'column',
+                justifyContent: 'center',
+                paddingTop: '20px',
+              }}
+            >
+              <Button
+                variant="outlined"
+                sx={{
+                  ':hover': { background: '#159ADD' },
+                  background: '#159ADD',
+                  color: '#fff',
+                  minWidth: '300px',
+                }}
+                onClick={submit}
+              >
+                Submit & Go to Board
+              </Button>
+              <Link
+                sx={{
+                  textAlign: 'center',
+                  cursor: 'pointer',
+                  margin: '20px 0',
+                  color: '#727D84',
+                  textDecorationColor: '#727D84',
+                  fontSize: '0.9rem',
+                }}
+                onClick={skip}
+              >
+                Skip Pulse Check
+              </Link>
+            </Box>
+            {scrollDownButton ? (
+              <div
+                style={{
+                  opacity: scrollDownButton ? 1 : 0,
+                  transition: 'opacity 300ms',
+                  position: 'fixed',
+                  bottom: 0,
+                  left: 0,
+                  right: 0,
+                  height: '50px',
+                  minWidth: '100vw',
+                  display: 'flex',
+                  alignContent: 'center',
+                  justifyContent: 'center',
+                  background: 'white',
+                }}
+              >
+                <Button
+                  onClick={e => scrollDown()}
+                  style={{ minHeight: '30px' }}
+                >
+                  <KeyboardArrowDownIcon />
+                </Button>
+              </div>
+            ) : null}
+          </Box>
+        </Box>
+      </Slide> */}
       </Grid>
     </Grid>
   );

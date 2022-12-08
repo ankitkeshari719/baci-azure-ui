@@ -124,7 +124,7 @@ export function Offboarding() {
                     <Button
                       sx={{ color: '#FCB34C', padding: 0 }}
                       onClick={() => setRating(i)}
-                      onTouchStart={() => setRating(i)}
+                      // onTouchStart={() => setRating(i)}
                     >
                       {i > rating ? (
                         <EmojiEventsOutlinedIcon sx={{ fontSize: 40 }} />
@@ -177,7 +177,7 @@ export function Offboarding() {
                 minWidth: '300px',
               }}
               onClick={() => submitFeedback()}
-              onTouchStart={() => submitFeedback()}
+              // onTouchStart={() => submitFeedback()}
             >
               Submit
             </Button>
@@ -199,7 +199,7 @@ export function Offboarding() {
                 fontSize: '0.9rem',
               }}
               onClick={() => setDone(true)}
-              onTouchStart={() => setDone(true)}
+              // onTouchStart={() => setDone(true)}
             >
               Skip
             </Link>
@@ -227,7 +227,7 @@ export function Offboarding() {
                 variant="outlined"
                 className="secondaryButton"
                 onClick={() => navigate('/board/' + global.currentRetro?.id)}
-                onTouchStart={() => navigate('/board/' + global.currentRetro?.id)}
+                // onTouchStart={() => navigate('/board/' + global.currentRetro?.id)}
               >
                 <span className="secondaryButtonText">Review board</span>
               </Button>

@@ -202,7 +202,7 @@ const SubToolbar = (props: any) => {
             // setShowSelect(false);
             setOpenUserSelect(true);
           }}
-          onTouchStart={() => setOpenUserSelect(true)}
+          // onTouchStart={() => setOpenUserSelect(true)}
           value={userSelected}
           onChange={event => {
             global.user.userType == 2 && handleChange(event);

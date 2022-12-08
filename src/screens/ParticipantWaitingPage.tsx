@@ -69,7 +69,10 @@ export function ParticipantWaitingPage() {
   });
   return (
     <Grid container>
-      <Toolbar />
+      <Grid xs={12} item>
+        <Toolbar />
+      </Grid>
+
       <Box
         style={{
           width: '100%',

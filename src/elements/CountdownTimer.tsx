@@ -98,7 +98,7 @@ export function CountdownTimer({
   const [countdownWindowOpen, setCountdownWindowOpen] = React.useState(false);
   const timedelta = React.useRef(0);
   const previousExpired = React.useRef(false);
-  const audio = new Audio('../sounds/ding.mp3');
+  // const audio = new Audio('../sounds/ding.mp3');
 
   //
   const [anchorEl, setAnchorEl] = React.useState<HTMLButtonElement | null>(
@@ -338,9 +338,9 @@ export function CountdownTimer({
             </Box>
             <Box sx={{ position: 'absolute', right: '26px', top: '20px' }}>
               <Button
-                onTouchStart={event => {
-                  handleClose();
-                }}
+                // onTouchStart={event => {
+                //   handleClose();
+                // }}
                 onClick={event => {
                   handleClose();
                 }}
@@ -591,22 +591,28 @@ export function CountdownTimer({
                 {countdownFrom !== -1 && !countdownPaused && (
                   <RoundButtonOrange
                     onClick={pauseTimer}
-                    onTouchStart={pauseTimer}
+                    // onTouchStart={pauseTimer}
                   >
                     <Pause></Pause>
                   </RoundButtonOrange>
                 )}
                 {countdownFrom === -1 && countdownPaused && (
-                  <RoundButton onClick={resumeTimer} onTouchStart={resumeTimer}>
+                  <RoundButton onClick={resumeTimer} 
+                  // onTouchStart={resumeTimer}
+                  >
                     <PlayArrowIcon></PlayArrowIcon>
                   </RoundButton>
                 )}
                 {countdownFrom === -1 && !countdownPaused ? (
-                  <RoundButton onClick={startTimer} onTouchStart={startTimer}>
+                  <RoundButton onClick={startTimer} 
+                  // onTouchStart={startTimer}
+                  >
                     <PlayArrowIcon></PlayArrowIcon>
                   </RoundButton>
                 ) : (
-                  <RoundButtonRed onClick={stopTimer} onTouchStart={stopTimer}>
+                  <RoundButtonRed onClick={stopTimer} 
+                  // onTouchStart={stopTimer}
+                  >
                     <Stop></Stop>
                   </RoundButtonRed>
                 )}

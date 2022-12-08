@@ -329,7 +329,7 @@ const Toolbar = (props: any) => {
                     display: isXsUp ? 'none' : 'block',
                   }}
                   onClick={() => setOpenDialog(true)}
-                  onTouchStart={() => setOpenDialog(true)}
+                  // onTouchStart={() => setOpenDialog(true)}
                 >
                   FINISH RETRO
                 </Button>
@@ -361,7 +361,7 @@ const Toolbar = (props: any) => {
                       display: isXsUp ? 'none' : 'block',
                     }}
                     onClick={() => setLeaveDiaOpen(true)}
-                    onTouchStart={() => setLeaveDiaOpen(true)}
+                    // onTouchStart={() => setLeaveDiaOpen(true)}
                   >
                     LEAVE RETRO
                   </Button>
@@ -454,9 +454,9 @@ const Toolbar = (props: any) => {
               onClick={() => {
                 props.onFinishRetro(), setOpenDialog(false);
               }}
-              onTouchStart={() => {
-                props.onFinishRetro(), setOpenDialog(false);
-              }}
+              // onTouchStart={() => {
+              //   props.onFinishRetro(), setOpenDialog(false);
+              // }}
               variant="contained"
               autoFocus
             >
@@ -471,7 +471,7 @@ const Toolbar = (props: any) => {
               }}
               variant="outlined"
               onClick={() => setOpenDialog(false)}
-              onTouchStart={() => setOpenDialog(false)}
+              // onTouchStart={() => setOpenDialog(false)}
             >
               CONTINUE WITH RETRO
             </Button>
@@ -620,7 +620,7 @@ const Toolbar = (props: any) => {
               position: 'initial',
             }}
             onClick={() => setLeaveDiaOpen(true)}
-            onTouchStart={() => setLeaveDiaOpen(true)}
+            // onTouchStart={() => setLeaveDiaOpen(true)}
           >
             LEAVE RETRO
           </Button>

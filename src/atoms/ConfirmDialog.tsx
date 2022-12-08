@@ -36,10 +36,10 @@ export default function ConfirmDialog({
         </DialogContentText>
       </DialogContent>
       <DialogActions>
-        <Button onClick={onCancel} onTouchStart={onCancel}>
+        <Button onClick={onCancel} >
           Cancel
         </Button>
-        <Button onClick={onConfirm} onTouchStart={onConfirm}>
+        <Button onClick={onConfirm} >
           {action}
         </Button>
       </DialogActions>

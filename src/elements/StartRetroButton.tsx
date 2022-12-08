@@ -106,7 +106,7 @@ const StartRetroButton = () => {
             className="secondaryButton"
             style={styles.goToRetroBtn}
             onClick={() => setOpen(true)}
-            onTouchStart={() => setOpen(true)}
+            // onTouchStart={() => setOpen(true)}
           >
             <span className="secondaryButtonText">Start retro</span>
           </Button>

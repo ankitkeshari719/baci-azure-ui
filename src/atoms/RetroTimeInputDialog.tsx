@@ -87,7 +87,7 @@ const RetroTimeInputDialog = (props: RetroTimeInputDialogProps) => {
     >
       <img
         onClick={handleClose}
-        onTouchStart={handleClose}
+        // onTouchStart={handleClose}
         style={{
           position: 'absolute',
           right: '20px',
@@ -156,7 +156,7 @@ const RetroTimeInputDialog = (props: RetroTimeInputDialogProps) => {
             borderRadius: '24px',
           }}
           onClick={() => onSubmit(endEpochTime)}
-          onTouchStart={()=>onSubmit(endEpochTime)}
+          // onTouchStart={()=>onSubmit(endEpochTime)}
         >
           START RETRO
         </Button>

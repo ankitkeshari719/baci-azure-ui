@@ -61,7 +61,7 @@ const SessionEndingMessage = ({
       <Typography
         // type="button"
         onClick={hideSessionEndingMessage}
-        onTouchStart={hideSessionEndingMessage}
+        // onTouchStart={hideSessionEndingMessage}
         sx={{
           textDecorationLine: 'underline',
           marginTop: '18px',

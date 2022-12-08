@@ -21,7 +21,7 @@ export default function ErrorDialog() {
         <DialogActions>
           <Button
             onClick={() => location.reload()}
-            onTouchStart={() => location.reload()}
+            // onTouchStart={() => location.reload()}
             autoFocus
           >
             Reload

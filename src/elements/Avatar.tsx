@@ -26,10 +26,10 @@ const Avatar = (props: any) => {
   
         props.onClickAvatar(props.avatar);
       }}
-      onTouchStart={() => {
+      // onTouchStart={() => {
   
-        props.onClickAvatar(props.avatar);
-      }}
+      //   props.onClickAvatar(props.avatar);
+      // }}
     ></img>
   );
 };
