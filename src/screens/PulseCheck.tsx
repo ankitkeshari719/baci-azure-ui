@@ -274,7 +274,9 @@ export default function PulseCheck() {
 
   return (
     <Grid xs={12} container item>
-      <Toolbar />
+      <Grid xs={12} item>
+        <Toolbar />
+      </Grid>
       <Grid
         item
         pr={isXsUp ? '0px' : commonStyles.m_80}
@@ -323,7 +325,11 @@ export default function PulseCheck() {
           >
             Let's start with a quick Pulse Check to see how you are feeling
           </Typography>
-          <Typography fontSize="14px" color={commonStyles.secondaryMain} className='alignCenter'>
+          <Typography
+            fontSize="14px"
+            color={commonStyles.secondaryMain}
+            className="alignCenter"
+          >
             Your identity will be confidential
           </Typography>
         </Box>
@@ -387,7 +393,12 @@ export default function PulseCheck() {
                     justifyContent: 'center',
                   }}
                 >
-                  <Box sx={{ width: !isXsUp ? '64px' : '52px', height: !isXsUp ? '64px' : '52px' }}>
+                  <Box
+                    sx={{
+                      width: !isXsUp ? '64px' : '52px',
+                      height: !isXsUp ? '64px' : '52px',
+                    }}
+                  >
                     <Box
                       style={{
                         backgroundImage: 'url(' + sad + ')',
@@ -406,14 +417,20 @@ export default function PulseCheck() {
                     <img
                       src={sadMask}
                       style={{
-                        marginLeft: !isXsUp ? '-10px': '-6px',
-                        marginTop: !isXsUp ? '-50px': '-45px',
-                        width: !isXsUp ? '64px' : '52px', height: !isXsUp ? '64px' : '52px' ,
+                        marginLeft: !isXsUp ? '-10px' : '-6px',
+                        marginTop: !isXsUp ? '-50px' : '-45px',
+                        width: !isXsUp ? '64px' : '52px',
+                        height: !isXsUp ? '64px' : '52px',
                         display: qs[index][0] === 1 ? 'block' : 'none',
                       }}
                     ></img>
                   </Box>
-                  <Box sx={{ width: !isXsUp ? '64px' : '52px', height: !isXsUp ? '64px' : '52px' }}>
+                  <Box
+                    sx={{
+                      width: !isXsUp ? '64px' : '52px',
+                      height: !isXsUp ? '64px' : '52px',
+                    }}
+                  >
                     <Box
                       style={{
                         backgroundImage: 'url(' + neutral + ')',
@@ -433,14 +450,20 @@ export default function PulseCheck() {
                     <img
                       src={neutralMask}
                       style={{
-                        marginLeft: !isXsUp ? '-10px': '-6px',
-                        marginTop: !isXsUp ? '-50px': '-45px',
-                        width: !isXsUp ? '64px' : '52px', height: !isXsUp ? '64px' : '52px' ,
+                        marginLeft: !isXsUp ? '-10px' : '-6px',
+                        marginTop: !isXsUp ? '-50px' : '-45px',
+                        width: !isXsUp ? '64px' : '52px',
+                        height: !isXsUp ? '64px' : '52px',
                         display: qs[index][0] === 2 ? 'block' : 'none',
                       }}
                     ></img>
                   </Box>
-                  <Box sx={{ width: !isXsUp ? '64px' : '52px', height: !isXsUp ? '64px' : '52px'  }}>
+                  <Box
+                    sx={{
+                      width: !isXsUp ? '64px' : '52px',
+                      height: !isXsUp ? '64px' : '52px',
+                    }}
+                  >
                     <Box
                       style={{
                         backgroundImage: 'url(' + happy + ')',
@@ -459,10 +482,10 @@ export default function PulseCheck() {
                     <img
                       src={happyMask}
                       style={{
-                        marginLeft: !isXsUp ? '-10px': '-6px',
-                        marginTop: !isXsUp ? '-50px': '-45px',
-                        width: isXsUp ? '52px': '64px',
-                         height: isXsUp ? '52px': '64px',
+                        marginLeft: !isXsUp ? '-10px' : '-6px',
+                        marginTop: !isXsUp ? '-50px' : '-45px',
+                        width: isXsUp ? '52px' : '64px',
+                        height: isXsUp ? '52px' : '64px',
                         display: qs[index][0] === 3 ? 'block' : 'none',
                       }}
                     ></img>
@@ -499,7 +522,12 @@ export default function PulseCheck() {
             cursor: 'pointer',
           }}
         >
-          <Link sx={{ marginTop: '43px' }} className="infoLink" onClick={skip} onTouchStart={skip} >
+          <Link
+            sx={{ marginTop: '43px' }}
+            className="infoLink"
+            onClick={skip}
+            // onTouchStart={skip}
+          >
             Skip Pulse Check
           </Link>
         </Box>

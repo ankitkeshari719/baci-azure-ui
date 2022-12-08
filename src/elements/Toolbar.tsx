@@ -514,7 +514,6 @@ const Toolbar = (props: any) => {
                 position: 'initial',
               }}
               onClick={handleClick1}
-             
             >
               <img src="/svgs/MobileMenu.svg" />
             </Button>
@@ -604,7 +603,7 @@ const Toolbar = (props: any) => {
           marginBottom: isXsUp ? '10px' : 0,
         }}
       >
-        {!leaveRetro && (
+        {!leaveRetro && showFinishRetroButton && (
           <Button
             id="leaveRetro"
             variant="contained"
