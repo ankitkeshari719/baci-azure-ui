@@ -8,6 +8,7 @@ import {
   DialogTitle,
   styled,
   Typography,
+  useMediaQuery,
 } from '@mui/material';
 import {
   FEATURE_FLAGS,
@@ -30,12 +31,13 @@ import { FeedbackEntry } from '../types';
 import { ConfirmContext } from '../contexts/ConfirmContext';
 import { useNavigate } from 'react-router-dom';
 import closeImage from '../assets/img/Vectorclose.png';
+import theme from '../theme/theme';
 const BorderLinearProgress = styled(LinearProgress)(({ theme }) => ({
   height: '6px',
   borderRadius: '4px',
   marginTop: '32px',
-  marginLeft: '100px',
-  width: '600px',
+  
+
   [`&.${linearProgressClasses.colorPrimary}`]: {
     backgroundColor:
       theme.palette.grey[theme.palette.mode === 'light' ? 200 : 800],
@@ -59,7 +61,7 @@ export default function FeedbackPopup(props: {
   const [isBarSet, setIsBarSet] = React.useState(true);
   const [barvalue, setbarvalue] = React.useState(0);
   const [showThankYou, setShowThankYou] = React.useState(false);
-
+  const isXsUp = useMediaQuery(theme.breakpoints.between('xs', 'sm'));
   const navigate = useNavigate();
 
   const handleNext = () => {
@@ -75,8 +77,11 @@ export default function FeedbackPopup(props: {
   };
   function setFeedbackBar(index: number){
     // console.log('feedback', qs);
+    console.log(isBarSet, qs, index);
     if(isBarSet && qs[index][0] === 0){
+      console.log(isBarSet, qs, index);
       setbarvalue(barvalue + 100 / qs.length);
+        console.log('barvalue', barvalue);
       setIsBarSet(false);
     }
     }
@@ -135,11 +140,10 @@ export default function FeedbackPopup(props: {
       keepMounted
       PaperProps={{
         sx: {
-          width: '800px',
-          maxWidth: '800px',
-          height: '400px',
-          maxHeight: '400px',
-          overflowY: 'hidden',
+          width: !isXsUp ? '800px' : '100vh',
+          maxWidth: !isXsUp ? '800px' : '100vh',
+          height: !isXsUp ? '400px' : '100vh',
+          maxHeight:!isXsUp ? '400px' : '100vh',
         },
       }}
       sx={{
@@ -153,7 +157,9 @@ export default function FeedbackPopup(props: {
         mr="23px"
         mt="23px"
       >
-        <img src={closeImage} onClick={closeFeedback}></img>
+        <img src={closeImage} onClick={closeFeedback}
+        //  onTouchStart={closeFeedback}
+         ></img>
       </Box>
       {showThankYou ? (
         <DialogContent
@@ -176,17 +182,17 @@ export default function FeedbackPopup(props: {
         <>
           <DialogTitle
             mt="20px"
-            variant="h3"
+            variant= {!isXsUp ? "h3" : 'h5'}
             color={commonStyles.secondaryMain}
             textAlign="center"
             p="0px !important"
           >
             Please help facilitator with your feedback
           </DialogTitle>
-          <Typography className="identityWillbeConfidentialText">
+          <Typography  className="identityWillbeConfidentialText">
             Your identity will be confidential
           </Typography>
-          <BorderLinearProgress variant="determinate" value={barvalue} />
+          <BorderLinearProgress variant="determinate" value={barvalue} style={{width: isXsUp? '300px' : '600px',marginLeft: isXsUp ? '25px' : '100px', }} />
           <DialogContent
             sx={{
               display: 'flex',
@@ -198,9 +204,8 @@ export default function FeedbackPopup(props: {
             <Box>
               <Box>
                 <Typography
-                  variant="h4"
-                  mt="32px"
-                  width="488px"
+                  variant={!isXsUp ? "h4" : 'h5'}
+                  mt={!isXsUp ? "32px" : '48px'}
                   height="56px"
                   id="alert-dialog-slide-description"
                 >
@@ -214,7 +219,8 @@ export default function FeedbackPopup(props: {
                   display: 'flex',
                   flexDirection: 'row',
                   justifyContent: 'center',
-                  marginLeft: '25%',
+                  marginTop: !isXsUp? '0px' : '30px',
+                  marginLeft:  !isXsUp? '25%' : '12%',
                 }}
               >
                 {[1, 2, 3, 4, 5].map(i => (
@@ -228,7 +234,7 @@ export default function FeedbackPopup(props: {
                       setFeedbackBar(index);
                       
                     }}
-                    onTouchStart={() => qs[index][1](i)}
+                    // onTouchStart={() => qs[index][1](i)}
                   >
                     {i > qs[index][0]
                       ? FEEDBACK_QUESTIONS_OUTLINE[index]
@@ -239,26 +245,24 @@ export default function FeedbackPopup(props: {
             </Box>
           </DialogContent>
           <DialogActions>
-            <Box sx={{ width: '100%' }}>
+            <Box sx={{ width: '100%' ,display: 'flex', justifyContent: 'space-between'}} m='20px'>
               {index >= 1 && (
                 <Button className="popupPrevBtn" onClick={handlePrevious}>
                   Previous
                 </Button>
               )}
-              {!(index === FEEDBACK_QUESTIONS_COLORS.length - 1) && (
+              {!(index === FEEDBACK_QUESTIONS_COLORS.length - 1) ? (
                 <Button className="popupNextBtn" onClick={handleNext}>
                   Next
                 </Button>
-              )}
-              {index === FEEDBACK_QUESTIONS_COLORS.length - 1 && (
-                <Button
-                  variant="outlined"
-                  className="submitfeedback"
-                  onClick={submitFeedback}
-                >
-                  <span className="secondaryButtonText">Submit Feedback</span>
-                </Button>
-              )}
+              ) : (<Button
+                variant="outlined"
+                className="submitfeedback"
+                onClick={submitFeedback}
+              >
+                <span className="secondaryButtonText">Submit Feedback</span>
+              </Button>)}
+             
             </Box>
           </DialogActions>
         </>

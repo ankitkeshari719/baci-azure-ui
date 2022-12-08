@@ -36,8 +36,12 @@ export default function ConfirmDialog({
         </DialogContentText>
       </DialogContent>
       <DialogActions>
-        <Button onClick={onCancel}>Cancel</Button>
-        <Button onClick={onConfirm}>{action}</Button>
+        <Button onClick={onCancel} >
+          Cancel
+        </Button>
+        <Button onClick={onConfirm} >
+          {action}
+        </Button>
       </DialogActions>
     </Dialog>
   );

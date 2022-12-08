@@ -63,8 +63,7 @@ const BootstrapTooltip = styled(({ className, ...props }: TooltipProps) => (
 export default function PulseCheck() {
   const navigate = useNavigate();
 
-  const isXsUp = useMediaQuery(theme.breakpoints.only('xs'));
-  const isSmUp = useMediaQuery(theme.breakpoints.only('sm'));
+  const isXsUp = useMediaQuery(theme.breakpoints.between('xs', 'sm'));
 
   const [{ user, currentRetro }, dispatch] = React.useContext(GlobalContext);
   const {
@@ -111,7 +110,7 @@ export default function PulseCheck() {
     ) {
       const currentUser: any = users.find(user1 => user1.userId === user.id);
       // console.log("current user",currentUser.pulseCheckQuestions.length>0)
-      if(currentUser?.pulseCheckQuestions.length>0){
+      if (currentUser?.pulseCheckQuestions.length > 0) {
         navigate('/board/' + currentRetro?.id);
         dispatch({
           type: ActionType.SET_SNACK_MESSAGE,
@@ -122,7 +121,7 @@ export default function PulseCheck() {
             },
           },
         });
-        return
+        return;
       }
     }
 
@@ -147,9 +146,9 @@ export default function PulseCheck() {
           },
         });
       }
-      return
+      return;
     }
-  }, [users,user?.id&&user?.id!=""]);
+  }, [users, user?.id && user?.id != '']);
 
   const submit = () => {
     const someBlank =
@@ -275,12 +274,15 @@ export default function PulseCheck() {
 
   return (
     <Grid xs={12} container item>
-      <Toolbar />
+      <Grid xs={12} item>
+        <Toolbar />
+      </Grid>
       <Grid
         item
-        pr={commonStyles.m_80}
-        pl={commonStyles.m_80}
+        pr={isXsUp ? '0px' : commonStyles.m_80}
+        pl={isXsUp ? '0px' : commonStyles.m_80}
         xs={12}
+        lg={12}
         sx={{ overflowY: 'auto', height: 'calc(90vh)' }}
       >
         {/* {showSharePanel ? (
@@ -312,10 +314,10 @@ export default function PulseCheck() {
           }}
         >
           <Typography
-            variant="h4"
+            variant={isXsUp ? 'h6' : 'h4'}
             sx={{
               fontSize: '20px',
-              marginBottom: '40px',
+              marginBottom: isXsUp ? '20px' : '40px',
               padding: '20px',
               marginTop: '48px',
             }}
@@ -323,40 +325,52 @@ export default function PulseCheck() {
           >
             Let's start with a quick Pulse Check to see how you are feeling
           </Typography>
+          <Typography
+            fontSize="14px"
+            color={commonStyles.secondaryMain}
+            className="alignCenter"
+          >
+            Your identity will be confidential
+          </Typography>
         </Box>
-        <Box mt="48px" sx={{ display: 'flex', justifyContent: 'center' }}>
-          <span className={pulse1 ? 'pulseLineBlue' : 'pulseLineGrey'}></span>
-          <img src={pulse1 ? Bluepulse : Greypulse}></img>
-          <span className={pulse2 ? 'pulseLineBlue' : 'pulseLineGrey'}></span>
-          <img src={pulse2 ? Bluepulse : Greypulse}></img>
-          <span className={pulse3 ? 'pulseLineBlue' : 'pulseLineGrey'}></span>
-          <img src={pulse3 ? Bluepulse : Greypulse}></img>
-          <span className={pulse3 ? 'pulseLineBlue' : 'pulseLineGrey'}></span>
-        </Box>
+        {!isXsUp && (
+          <Box mt="48px" sx={{ display: 'flex', justifyContent: 'center' }}>
+            <span className={pulse1 ? 'pulseLineBlue' : 'pulseLineGrey'}></span>
+            <img src={pulse1 ? Bluepulse : Greypulse}></img>
+            <span className={pulse2 ? 'pulseLineBlue' : 'pulseLineGrey'}></span>
+            <img src={pulse2 ? Bluepulse : Greypulse}></img>
+            <span className={pulse3 ? 'pulseLineBlue' : 'pulseLineGrey'}></span>
+            <img src={pulse3 ? Bluepulse : Greypulse}></img>
+            <span className={pulse3 ? 'pulseLineBlue' : 'pulseLineGrey'}></span>
+          </Box>
+        )}
+
         <Box
           sx={{
             display: 'flex',
-            flexDirection: 'row',
+            alignItems: 'center',
+            flexDirection: isXsUp ? 'column' : 'row',
           }}
         >
           {QUICK_PULSE_CHECK_QUESTIONS.map((question, index) => (
             <Grid
               item
-              xs={4}
+              xs={8}
+              lg={4}
               sx={{ display: 'flex', justifyContent: 'center' }}
               key={index}
             >
               <Box
                 sx={{
-                  marginTop: '48px',
+                  marginTop: isXsUp ? '0px' : '48px',
                 }}
               >
                 <Typography
-                  variant="h5"
+                  variant={isXsUp ? 'h6' : 'h5'}
                   sx={{
-                    marginBottom: '40px',
+                    marginBottom: isXsUp ? '0px' : '40px',
                     padding: '20px',
-                    marginTop: '100px',
+                    marginTop: isXsUp ? '0px' : '100px',
                   }}
                 >
                   {question}
@@ -375,11 +389,16 @@ export default function PulseCheck() {
                 <Box
                   sx={{
                     display: 'flex',
-                    marginTop: '48px',
+                    marginTop: isXsUp ? '0px' : '48px',
                     justifyContent: 'center',
                   }}
                 >
-                  <Box sx={{ width: '64px', height: '64px' }}>
+                  <Box
+                    sx={{
+                      width: !isXsUp ? '64px' : '52px',
+                      height: !isXsUp ? '64px' : '52px',
+                    }}
+                  >
                     <Box
                       style={{
                         backgroundImage: 'url(' + sad + ')',
@@ -390,19 +409,28 @@ export default function PulseCheck() {
                         qs[index][1](1);
                         setPulseBar(index);
                       }}
+                      // onTouchStart={() => {
+                      //   qs[index][1](1);
+                      //   setPulseBar(index);
+                      // }}
                     ></Box>
                     <img
                       src={sadMask}
                       style={{
-                        marginLeft: '-10px',
-                        marginTop: '-50px',
-                        width: '64px',
-                        height: '64px',
+                        marginLeft: !isXsUp ? '-10px' : '-6px',
+                        marginTop: !isXsUp ? '-50px' : '-45px',
+                        width: !isXsUp ? '64px' : '52px',
+                        height: !isXsUp ? '64px' : '52px',
                         display: qs[index][0] === 1 ? 'block' : 'none',
                       }}
                     ></img>
                   </Box>
-                  <Box sx={{ width: '64px', height: '64px' }}>
+                  <Box
+                    sx={{
+                      width: !isXsUp ? '64px' : '52px',
+                      height: !isXsUp ? '64px' : '52px',
+                    }}
+                  >
                     <Box
                       style={{
                         backgroundImage: 'url(' + neutral + ')',
@@ -410,6 +438,10 @@ export default function PulseCheck() {
                         height: '40px',
                         marginRight: '32px',
                       }}
+                      // onTouchStart={() => {
+                      //   qs[index][1](2);
+                      //   setPulseBar(index);
+                      // }}
                       onClick={() => {
                         qs[index][1](2);
                         setPulseBar(index);
@@ -418,21 +450,30 @@ export default function PulseCheck() {
                     <img
                       src={neutralMask}
                       style={{
-                        marginLeft: '-10px',
-                        marginTop: '-50px',
-                        width: '64px',
-                        height: '64px',
+                        marginLeft: !isXsUp ? '-10px' : '-6px',
+                        marginTop: !isXsUp ? '-50px' : '-45px',
+                        width: !isXsUp ? '64px' : '52px',
+                        height: !isXsUp ? '64px' : '52px',
                         display: qs[index][0] === 2 ? 'block' : 'none',
                       }}
                     ></img>
                   </Box>
-                  <Box sx={{ width: '64px', height: '64px' }}>
+                  <Box
+                    sx={{
+                      width: !isXsUp ? '64px' : '52px',
+                      height: !isXsUp ? '64px' : '52px',
+                    }}
+                  >
                     <Box
                       style={{
                         backgroundImage: 'url(' + happy + ')',
                         width: '40px',
                         height: '40px',
                       }}
+                      // onTouchStart={() => {
+                      //   qs[index][1](3);
+                      //   setPulseBar(index);
+                      // }}
                       onClick={() => {
                         qs[index][1](3);
                         setPulseBar(index);
@@ -441,10 +482,10 @@ export default function PulseCheck() {
                     <img
                       src={happyMask}
                       style={{
-                        marginLeft: '-10px',
-                        marginTop: '-50px',
-                        width: '64px',
-                        height: '64px',
+                        marginLeft: !isXsUp ? '-10px' : '-6px',
+                        marginTop: !isXsUp ? '-50px' : '-45px',
+                        width: isXsUp ? '52px' : '64px',
+                        height: isXsUp ? '52px' : '64px',
                         display: qs[index][0] === 3 ? 'block' : 'none',
                       }}
                     ></img>
@@ -453,262 +494,6 @@ export default function PulseCheck() {
               </Box>
             </Grid>
           ))}
-          {/* <Grid item xs={4} sx={{display: 'flex', justifyContent: 'center'}}>
-          <Box
-            sx={{
-              marginTop: '48px',
-            }}
-          >
-            <Typography
-              variant="h5"
-              sx={{
-                marginBottom: '40px',
-                padding: '20px',
-                marginTop: '100px',
-              }}
-            >
-              1. People & Resources{' '}
-              <Icons.QuestionMarkCircleOutline
-                size={20}
-                color={commonStyles.secondaryMain}
-              />
-            </Typography>
-
-            <Box sx={{ display: 'flex', marginTop: '48px' }}>
-              <Box sx={{ marginRight: '32px', marginLeft: '21px' }}>
-                <div
-                  style={{
-                    backgroundImage: 'url(' + happy + ')',
-                    width: '40px',
-                    height: '40px',
-                  }}
-                >
-                  <img
-                    src={happyMask}
-                    style={{
-                      marginLeft: '-10px',
-                      marginTop: '-10px',
-                      width: '64px',
-                      height: '64px',
-                    }}
-                  ></img>
-                </div>
-              </Box>
-              <Box>
-                <div
-                  style={{
-                    backgroundImage: 'url(' + neutral + ')',
-                    width: '40px',
-                    height: '40px',
-                    marginRight: '32px',
-                  }}
-                >
-                  <img
-                    src={neutralMask}
-                    style={{
-                      marginLeft: '-10px',
-                      marginTop: '-10px',
-                      width: '64px',
-                      height: '64px',
-                    }}
-                    onClick={() => qs[0][1](0)}
-                  ></img>
-                </div>
-              </Box>
-              <Box>
-                <div
-                  style={{
-                    backgroundImage: 'url(' + sad + ')',
-                    width: '40px',
-                    height: '40px',
-                   }}
-                  
-                >
-                  <img
-                    src={sadMask}
-                    style={{
-                      marginLeft: '-10px',
-                      marginTop: '-10px',
-                      width: '64px',
-                      height: '64px',
-                    }}
-                    onClick={() => qs[0][1](1)}
-                  ></img>
-                </div>
-              </Box>
-            </Box>
-          </Box>
-        </Grid>
-        2nd pulse
-        <Grid item xs={4} sx={{display: 'flex', justifyContent: 'center'}}>
-          <Box
-            sx={{
-              marginTop: '48px',
-            }}
-          >
-            <Typography
-              variant="h5"
-              sx={{
-                marginBottom: '40px',
-                padding: '20px',
-                marginTop: '100px',
-              }}
-            >
-              2. Work Processes
-              <Icons.QuestionMarkCircleOutline
-                size={20}
-                color={commonStyles.secondaryMain}
-              />
-            </Typography>
-
-            <Box sx={{ display: 'flex', marginTop: '48px' }}>
-              <Box sx={{ marginRight: '32px', marginLeft: '21px' }}>
-                <div
-                  style={{
-                    backgroundImage: 'url(' + happy + ')',
-                    width: '40px',
-                    height: '40px',
-                  }}
-                  onClick={() => qs[1][1](2)}
-                >
-                  <img
-                    src={happyMask}
-                    style={{
-                      marginLeft: '-10px',
-                      marginTop: '-10px',
-                      width: '64px',
-                      height: '64px',
-                    }}
-                  ></img>
-                </div>
-              </Box>
-              <Box>
-                <div
-                  style={{
-                    backgroundImage: 'url(' + neutral + ')',
-                    width: '40px',
-                    height: '40px',
-                    marginRight: '32px',
-                  }}
-                >
-                  <img
-                    src={neutralMask}
-                    style={{
-                      marginLeft: '-10px',
-                      marginTop: '-10px',
-                      width: '64px',
-                      height: '64px',
-                    }}
-                  ></img>
-                </div>
-              </Box>
-              <Box>
-                <div
-                  style={{
-                    backgroundImage: 'url(' + sad + ')',
-                    width: '40px',
-                    height: '40px',
-                  }}
-                  onClick={() => qs[2][1](3)}
-                >
-                  <img
-                    src={sadMask}
-                    style={{
-                      marginLeft: '-10px',
-                      marginTop: '-10px',
-                      width: '64px',
-                      height: '64px',
-                    }}
-                  ></img>
-                </div>
-              </Box>
-            </Box>
-          </Box>
-        </Grid>
-       3rd pulse
-        <Grid item xs={4} sx={{display: 'flex', justifyContent: 'center'}}>
-          <Box
-            sx={{
-              marginTop: '48px',
-            }}
-          >
-            <Typography
-              variant="h5"
-              sx={{
-                marginBottom: '40px',
-                padding: '20px',
-                marginTop: '100px',
-              }}
-            >
-              3. Technical Tools
-              <Icons.QuestionMarkCircleOutline
-                size={20}
-                color={commonStyles.secondaryMain}
-              />
-            </Typography>
-
-            <Box sx={{ display: 'flex', marginTop: '48px' }}>
-              <Box sx={{ marginRight: '32px', marginLeft: '21px' }}>
-                <div
-                  style={{
-                    backgroundImage: 'url(' + happy + ')',
-                    width: '40px',
-                    height: '40px',
-                  }}
-                >
-                  <img
-                    src={happyMask}
-                    style={{
-                      marginLeft: '-10px',
-                      marginTop: '-10px',
-                      width: '64px',
-                      height: '64px',
-                    }}
-                  ></img>
-                </div>
-              </Box>
-              <Box>
-                <div
-                  style={{
-                    backgroundImage: 'url(' + neutral + ')',
-                    width: '40px',
-                    height: '40px',
-                    marginRight: '32px',
-                  }}
-                >
-                  <img
-                    src={neutralMask}
-                    style={{
-                      marginLeft: '-10px',
-                      marginTop: '-10px',
-                      width: '64px',
-                      height: '64px',
-                    }}
-                  ></img>
-                </div>
-              </Box>
-              <Box>
-                <div
-                  style={{
-                    backgroundImage: 'url(' + sad + ')',
-                    width: '40px',
-                    height: '40px',
-                  }}
-                >
-                  <img
-                    src={sadMask}
-                    style={{
-                      marginLeft: '-10px',
-                      marginTop: '-10px',
-                      width: '64px',
-                      height: '64px',
-                    }}
-                  ></img>
-                </div>
-              </Box>
-            </Box>
-          </Box>
-        </Grid> */}
         </Box>
 
         {/* button Section */}
@@ -717,13 +502,14 @@ export default function PulseCheck() {
             display: 'flex',
             justifyContent: 'center',
             paddingTop: '20px',
-            marginTop: '100px',
+            marginTop: isXsUp ? '0px' : '100px',
           }}
         >
           <Button
             variant="outlined"
             className="secondaryButton"
             onClick={submit}
+            // onTouchStart={submit}
           >
             <span className="secondaryButtonText">Submit and go to retro</span>
           </Button>
@@ -732,11 +518,16 @@ export default function PulseCheck() {
           sx={{
             display: 'flex',
             justifyContent: 'center',
-            paddingTop: '20px',
+            marginTop: !isXsUp ? '20px' : '0px',
             cursor: 'pointer',
           }}
         >
-          <Link sx={{ marginTop: '43px' }} className="infoLink" onClick={skip}>
+          <Link
+            sx={{ marginTop: '43px' }}
+            className="infoLink"
+            onClick={skip}
+            // onTouchStart={skip}
+          >
             Skip Pulse Check
           </Link>
         </Box>

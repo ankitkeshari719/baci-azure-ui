@@ -1,4 +1,4 @@
-import { Box, Grid, Paper, Typography } from '@mui/material';
+import { Box, Grid, Paper, Typography, useMediaQuery } from '@mui/material';
 import React from 'react';
 import ReactDOM from 'react-dom';
 import LandingImage from '../assets/img/landingimage.png';
@@ -10,6 +10,7 @@ import useLoadRetro from '../hooks/useLoadRetro';
 import StartRetroButton from '../elements/StartRetroButton';
 import Toolbar from '../elements/Toolbar';
 import { GlobalContext } from '../contexts/GlobalContext';
+import theme from '../theme/theme';
 
 const styles = {
   group90: {
@@ -30,6 +31,7 @@ export function ParticipantWaitingPage() {
   const [animateFirst, setAnimateFirst] = React.useState(false);
   const [animatesecond, setAnimatesecond] = React.useState(false);
   const [animateThird, setAnimateThird] = React.useState(false);
+  const isXsUp = useMediaQuery(theme.breakpoints.between('xs', 'sm'));
   useLoadRetro();
   React.useEffect(() => {
     // setTimeout(() => {
@@ -67,7 +69,10 @@ export function ParticipantWaitingPage() {
   });
   return (
     <Grid container>
-      <Toolbar />
+      <Grid xs={12} item>
+        <Toolbar />
+      </Grid>
+
       <Box
         style={{
           width: '100%',
@@ -79,7 +84,7 @@ export function ParticipantWaitingPage() {
         }}
       >
         <Typography
-          variant="h2"
+          variant={isXsUp ? 'h4': 'h2'}
           color={commonStyles.primaryDark}
           className="alignCenter"
           mb="8px"
@@ -89,7 +94,7 @@ export function ParticipantWaitingPage() {
         <Typography
           color={commonStyles.primaryDark}
           className="alignCenter"
-          variant="h4"
+          variant={isXsUp ? 'h6': 'h4'}
           mb="52px"
         >
           Let’s go over last 2 weeks
@@ -97,15 +102,15 @@ export function ParticipantWaitingPage() {
         <Typography
           color={commonStyles.secondaryMain}
           className="alignCenter"
-          variant="h4"
+          variant={isXsUp ? 'h6': 'h4'}
           mb="32px"
         >
           Relax while facilitator starts the retro...
         </Typography>
         <Box sx={{ display: 'flex', justifyContent: 'center' }}>
-          <img src={gif}></img>
+          <img width={isXsUp ? '280px' : '500px'} src={gif}></img>
         </Box>
-        {animateFirst && (
+        {animateFirst && !isXsUp  &&(
           <Box
             mt="16px"
             style={{
@@ -133,7 +138,7 @@ export function ParticipantWaitingPage() {
             </h4>
           </Box>
         )}
-        {animatesecond && (
+        {animatesecond && !isXsUp  &&(
           <Box
             mt="16px"
             style={{
@@ -161,7 +166,7 @@ export function ParticipantWaitingPage() {
             </h4>
           </Box>
         )}
-        {animateThird && (
+        {animateThird && !isXsUp  &&(
           <Box
             mt="16px"
             style={{

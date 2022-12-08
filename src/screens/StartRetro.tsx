@@ -10,6 +10,7 @@ import {
   Tooltip,
   Typography,
   Link,
+  useMediaQuery,
 } from '@mui/material';
 import * as React from 'react';
 import { LandingLayout } from './LandingLayout';
@@ -33,6 +34,7 @@ import StartRetroButton from '../elements/StartRetroButton';
 import Toolbar from '../elements/Toolbar';
 import useLoadRetro from '../hooks/useLoadRetro';
 import { EmailShareButton, WhatsappShareButton } from 'react-share';
+import theme from '../theme/theme';
 const styles = {
   frame101: {
     marginTop: '48px',
@@ -156,6 +158,7 @@ export function StartRetro() {
   const [global, dispatch] = React.useContext(GlobalContext);
   const [iscopied, setIsCopied] = React.useState(false);
   const navigate = useNavigate();
+  const isXsUp = useMediaQuery(theme.breakpoints.between('xs', 'sm'));
   const shareData = {
     title: 'Retro',
     text: 'Join the retro',
@@ -189,6 +192,7 @@ export function StartRetro() {
     setIsCopied(false);
   };
   return (
+    
     <Grid container spacing={0}>
       <Grid xs={12} item>
         <Toolbar></Toolbar>
@@ -314,6 +318,7 @@ export function StartRetro() {
                     startIcon={<Icons.Qrcode size={20} />}
                     style={styles.copyURL}
                     onClick={downloadQRCode}
+                    // onTouchStart={downloadQRCode}
                   >
                     <span className="primaryButtonText">download qr code</span>
                   </Button>

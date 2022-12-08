@@ -9,6 +9,7 @@ import {
   Slider,
   TextField,
   Typography,
+  useMediaQuery,
 } from '@mui/material';
 import { useContext, useState } from 'react';
 
@@ -25,12 +26,14 @@ import './../global.scss';
 import   successAnimation  from './../assets/img/success-animation.gif'
 import { useNavigate } from 'react-router-dom';
 import Toolbar from '../elements/Toolbar';
+import theme from '../theme/theme';
 
 export function Offboarding() {
   const [global, dispatch] = useContext(GlobalContext);
   const [rating, setRating] = useState(-1);
   const [comments, setComments] = useState('');
   const [done, setDone] = useState(!FEATURE_FLAGS.rateApp);
+  const isXsUp = useMediaQuery(theme.breakpoints.between('xs', 'sm'));
   const navigate = useNavigate();
 
   const endOffboarding = () => {
@@ -121,7 +124,7 @@ export function Offboarding() {
                     <Button
                       sx={{ color: '#FCB34C', padding: 0 }}
                       onClick={() => setRating(i)}
-                      onTouchStart={() => setRating(i)}
+                      // onTouchStart={() => setRating(i)}
                     >
                       {i > rating ? (
                         <EmojiEventsOutlinedIcon sx={{ fontSize: 40 }} />
@@ -174,6 +177,7 @@ export function Offboarding() {
                 minWidth: '300px',
               }}
               onClick={() => submitFeedback()}
+              // onTouchStart={() => submitFeedback()}
             >
               Submit
             </Button>
@@ -195,6 +199,7 @@ export function Offboarding() {
                 fontSize: '0.9rem',
               }}
               onClick={() => setDone(true)}
+              // onTouchStart={() => setDone(true)}
             >
               Skip
             </Link>
@@ -212,7 +217,7 @@ export function Offboarding() {
             }}
           >
             <Box mt="40px"><img src={successAnimation} style={{width: '300px', height: '300px'}}></img></Box>
-            <Box mt="40px">
+            <Box mt="40px" className='alignCenter'>
               <Typography variant="h4" color={commonStyles.PrimaryMain}>
                 Your feedback is submitted successfully!
               </Typography>
@@ -222,23 +227,24 @@ export function Offboarding() {
                 variant="outlined"
                 className="secondaryButton"
                 onClick={() => navigate('/board/' + global.currentRetro?.id)}
+                // onTouchStart={() => navigate('/board/' + global.currentRetro?.id)}
               >
                 <span className="secondaryButtonText">Review board</span>
               </Button>
             </Box>
-            <Box mt="40px" sx={{ display: 'inline-flex' }}>
-              <Typography variant="h1" color={commonStyles.secondaryMain}>
+            <Box mt="40px" sx={{ display: isXsUp ? 'block' :'inline-flex' }} className='alignCenter'>
+              <Typography variant={isXsUp ? 'h3': 'h1'} color={commonStyles.secondaryMain}>
                 Thank You for using{' '}
               </Typography>
               <Typography
                 mr="10px"
                 ml="10px"
-                variant="h1"
+                variant={isXsUp ? 'h3': 'h1'}
                 color={commonStyles.PrimaryMain}
               >
                 BACI
               </Typography>
-              <Typography variant="h1" color={commonStyles.secondaryMain}>
+              <Typography variant={isXsUp ? 'h3': 'h1'} color={commonStyles.secondaryMain}>
                 Retros
               </Typography>
             </Box>

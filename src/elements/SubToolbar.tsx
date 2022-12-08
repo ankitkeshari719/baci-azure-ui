@@ -202,6 +202,7 @@ const SubToolbar = (props: any) => {
             // setShowSelect(false);
             setOpenUserSelect(true);
           }}
+          // onTouchStart={() => setOpenUserSelect(true)}
           value={userSelected}
           onChange={event => {
             global.user.userType == 2 && handleChange(event);
@@ -283,9 +284,9 @@ const SubToolbar = (props: any) => {
               // disabled={global.user.userType != 2}
               // style={{ hover: 'none!important', cursor: 'text' }}
               sx={{
-                hover: global.user.userType != 2 ? 'none!important':'',
-                cursor: global.user.userType != 2 ? 'text':"",
-                background: global.user.userType != 2 ? 'white!important':'',
+                hover: global.user.userType != 2 ? 'none!important' : '',
+                cursor: global.user.userType != 2 ? 'text' : '',
+                background: global.user.userType != 2 ? 'white!important' : '',
               }}
               id="item"
               key={user.userId + index}
@@ -309,10 +310,17 @@ const SubToolbar = (props: any) => {
                 }}
               />
               <Tooltip title={user.userNickname}>
-              <ListItemText sx={{'&& .MuiListItemText-primary':{minWidth: '100px', overflow: 'hidden', textOverflow : 'ellipsis'}
-                }} primary={user.userNickname} />
+                <ListItemText
+                  sx={{
+                    '&& .MuiListItemText-primary': {
+                      minWidth: '100px',
+                      overflow: 'hidden',
+                      textOverflow: 'ellipsis',
+                    },
+                  }}
+                  primary={user.userNickname}
+                />
               </Tooltip>
-            
             </MenuItem>
           ))}
         </Select>

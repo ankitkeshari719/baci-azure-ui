@@ -158,6 +158,7 @@ export function LandingPage() {
                 className="secondaryButton"
                 style={{width: '100%'}}
                 onClick={() => joinRetro()}
+                // onTouchStart={() => joinRetro()}
               >
                 <span className="secondaryButtonText">Go on..</span>
               </Button>
@@ -214,11 +215,15 @@ export function LandingPage() {
                 className="secondaryButton"
                 style={styles.signInMargin}
                 onClick={() => joinRetro()}
+                // onTouchStart={() => joinRetro()}
               >
                 <span className="secondaryButtonText">Go on..</span>
               </Button>
               <Button
                 style={styles.newUserText}
+                // onTouchStart={() => {
+                //   CreateNewRetro();
+                // }}
                 onClick={() => {
                   CreateNewRetro();
                 }}
