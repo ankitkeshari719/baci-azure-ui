@@ -605,7 +605,7 @@ const Toolbar = (props: any) => {
       >
         {!leaveRetro && showFinishRetroButton && (
           <Button
-            id="leaveRetro"
+            id="leaveRetroIsXsUp"
             variant="contained"
             sx={{
               // background: '#159ADD',
