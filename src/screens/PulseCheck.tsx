@@ -283,7 +283,7 @@ export default function PulseCheck() {
         pl={isXsUp ? '0px' : commonStyles.m_80}
         xs={12}
         lg={12}
-        sx={{ overflowY: 'auto', height: 'calc(90vh)' }}
+        sx={{ overflowY: 'auto', height: isXsUp?'calc(80vh)':'calc(90vh)' }}
       >
         {/* {showSharePanel ? (
         <Box
