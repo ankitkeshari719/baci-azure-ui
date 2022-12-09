@@ -377,118 +377,55 @@ export function AvatarNamePage() {
               )}
             </FormControl>
           </Box>
-          {!isXsUp ? (
-            <Box>
-              <Typography sx={styles.chooseAvatarText}>
-                Choose your avatar
-              </Typography>
-              <Box sx={styles.avatarBox}>
-                {/* <Avatar avatar={`Animals-avatar_${i}avatar`}></Avatar>; */}
-                {/* <Box> */}
-                {avatarList
-                  // .sort(() => Math.random() - 0.5)
-                  .map((avatar: any, index) => (
-                    <Avatar
-                      key={index}
-                      avatar={avatar}
-                      css={styles.avatarSvg}
-                      onClickAvatar={onClickAvatar}
-                      selectedAvatar={selectedAvatar}
-                    ></Avatar>
-                  ))}
-                {/* </Box> */}
-              </Box>
-              {avatarSelectionError !== '' && (
-                <Box
-                  sx={{
-                    color: '#d32f2f',
-                    fontFamily: 'Poppins',
-                    fontWeight: 400,
-                    fontSize: '0.75rem',
-                    lineHeight: 1.66,
-                    letterSpacing: '0.03333em',
-                    textAlign: 'left',
-                    marginTop: '3px',
-                    marginRight: '0',
-                    marginBottom: '0',
-                    marginLeft: '0',
-                  }}
-                >
-                  {avatarSelectionError}
-                </Box>
-              )}
-              <Button
-                variant="outlined"
-                className="secondaryButton"
-                style={styles.goOnBtn}
-                onClick={setName}
-              >
-                <span className="secondaryButtonText">Go on..</span>
-              </Button>
+          <Box>
+            <Typography sx={styles.chooseAvatarText}>
+              Choose your avatar
+            </Typography>
+            <Box sx={styles.avatarBox}>
+              {/* <Avatar avatar={`Animals-avatar_${i}avatar`}></Avatar>; */}
+              {/* <Box> */}
+              {avatarList
+                // .sort(() => Math.random() - 0.5)
+                .map((avatar: any, index) => (
+                  <Avatar
+                    key={index}
+                    avatar={avatar}
+                    css={styles.avatarSvg}
+                    onClickAvatar={onClickAvatar}
+                    selectedAvatar={selectedAvatar}
+                  ></Avatar>
+                ))}
+              {/* </Box> */}
             </Box>
-          ) : (
-            <>
-              <Box mt="42px">
-                <Box display='flex'>
-                  {selectedAvatar && (
-                    <Avatar
-                      avatar={selectedAvatar}
-                      css={{
-                        width: '50px',
-                        height: '50px',
-                        borderRadius: '50%',
-                      }}
-                    ></Avatar>
-                  )}
-                  <Button onClick={() => setOpenAvatarDialog(true)}>
-                    <span className="primaryButtonText">Select Avatar</span>
-                  </Button>
-                </Box>
-
-                <Button
-                  variant="outlined"
-                  className="secondaryButton"
-                  style={styles.goOnBtn}
-                  onClick={setName}
-                >
-                  <span className="secondaryButtonText">Go on..</span>
-                </Button>
+            {avatarSelectionError !== '' && (
+              <Box
+                sx={{
+                  color: '#d32f2f',
+                  fontFamily: 'Poppins',
+                  fontWeight: 400,
+                  fontSize: '0.75rem',
+                  lineHeight: 1.66,
+                  letterSpacing: '0.03333em',
+                  textAlign: 'left',
+                  marginTop: '3px',
+                  marginRight: '0',
+                  marginBottom: '0',
+                  marginLeft: '0',
+                }}
+              >
+                {avatarSelectionError}
               </Box>
-              <Dialog open={openAvatarDialog} sx={{ height: '90vh' }}>
-                <DialogTitle>
-                  <Typography>Select Avatar</Typography>
-                </DialogTitle>
-                <Box
-                  sx={{
-                    width: '90%',
-                    padding: '16px',
-                    height: '60%',
-                    overflowY: 'scroll',
-                  }}
-                >
-                  {avatarList.map((avatar: any, index) => (
-                    <Avatar
-                      key={index}
-                      avatar={avatar}
-                      css={styles.avatarSvgXs}
-                      onClickAvatar={onClickAvatar}
-                      selectedAvatar={selectedAvatar}
-                    ></Avatar>
-                  ))}
-                </Box>
-                <Box display="flex" justifyContent="center" mb="10px">
-                  <Button
-                    variant="outlined"
-                    className="secondaryButton"
-                    onClick={() => setOpenAvatarDialog(false)}
-                    sx={{ width: '90%' }}
-                  >
-                    <span className="secondaryButtonText">Select</span>
-                  </Button>
-                </Box>
-              </Dialog>
-            </>
-          )}
+            )}
+            <Button
+              variant="outlined"
+              className="secondaryButton"
+              style={styles.goOnBtn}
+              onClick={setName}
+              onTouchStart={setName}
+            >
+              <span className="secondaryButtonText">Go on..</span>
+            </Button>
+          </Box>
         </Grid>
       </Grid>
     </Grid>

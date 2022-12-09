@@ -522,12 +522,7 @@ export default function PulseCheck() {
             cursor: 'pointer',
           }}
         >
-          <Link
-            sx={{ marginTop: '43px' }}
-            className="infoLink"
-            onClick={skip}
-            // onTouchStart={skip}
-          >
+          <Link sx={{ marginTop: '43px' }} className="infoLink" onClick={skip} onTouchStart={skip} >
             Skip Pulse Check
           </Link>
         </Box>
