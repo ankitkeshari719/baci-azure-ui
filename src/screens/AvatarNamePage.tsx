@@ -63,8 +63,6 @@ const styles = {
   avatarSvgXs: {
     width: '50px',
     height: '50px',
-    marginBottom: '15px',
-    marginRight: '15px',
     borderRadius: '50%',
   },
 };
@@ -315,7 +313,7 @@ export function AvatarNamePage() {
           flexDirection="column"
           justifyContent="center"
           sx={{
-            height: !isXsUp ? '100vh' : '70vh',
+            height: !isXsUp ? '100vh' : '50vh',
             width: isXsUp ? '90%' : '100%',
           }}
         >
@@ -429,7 +427,7 @@ export function AvatarNamePage() {
           ) : (
             <>
               <Box mt="42px">
-                <Box display='flex'>
+                <Box display="flex">
                   {selectedAvatar && (
                     <Avatar
                       avatar={selectedAvatar}
@@ -464,6 +462,10 @@ export function AvatarNamePage() {
                     padding: '16px',
                     height: '60%',
                     overflowY: 'scroll',
+                    display: 'flex',
+                    flexDirection: 'row',
+                    flexWrap: 'wrap',
+                    justifyContent: 'space-evenly',
                   }}
                 >
                   {avatarList.map((avatar: any, index) => (
