@@ -21,7 +21,7 @@ import ReportScreen from './screens/ReportScreen';
 import { SnackMessage } from './elements/SnackMessage';
 import { ThemeProvider } from '@mui/material/styles';
 import theme from './theme/theme';
-import './index.scss';
+// import './index.scss';
 //import { useFirebase } from './firebase';
 //import { useAuth } from './firebase/auth';
 import { useAzureAuth } from './msal/azureauth';
