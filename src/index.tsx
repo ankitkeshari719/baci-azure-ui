@@ -1,4 +1,4 @@
-import './index.css';
+import './Index.scss';
 import App from './App';
 import React from 'react';
 import ReactDOM from 'react-dom';
