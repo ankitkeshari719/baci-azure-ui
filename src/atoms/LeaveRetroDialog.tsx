@@ -33,8 +33,10 @@ const LeaveRetroDialog = (props: any) => {
           display: 'flex',
           flexDirection: 'column',
           alignItems: 'center',
+          
         },
-      }}
+        }}
+      sx={{'&& .MuiDialog-paper': {overflowX: 'hidden'}}}
     >
       <img
         onClick={handleClose}

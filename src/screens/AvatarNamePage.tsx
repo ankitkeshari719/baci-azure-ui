@@ -452,7 +452,7 @@ export function AvatarNamePage() {
                   <span className="secondaryButtonText">Go on..</span>
                 </Button>
               </Box>
-              <Dialog open={openAvatarDialog} sx={{ height: '90vh' }}>
+              <Dialog open={openAvatarDialog} sx={{ height: '90vh' ,'&& .MuiDialog-paper': {overflowX: 'hidden'}}}>
                 <DialogTitle>
                   <Typography>Select Avatar</Typography>
                 </DialogTitle>

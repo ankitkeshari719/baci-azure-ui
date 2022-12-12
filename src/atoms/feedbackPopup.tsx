@@ -140,15 +140,21 @@ export default function FeedbackPopup(props: {
       keepMounted
       PaperProps={{
         sx: {
-          width: !isXsUp ? '800px' : '100vh',
-          maxWidth: !isXsUp ? '800px' : '100vh',
-          height: !isXsUp ? '400px' : '100vh',
-          maxHeight:!isXsUp ? '400px' : '100vh',
+          width:'800px',
+          maxWidth: '800px',
+          height: '400px',
+          maxHeight:'400px',
+          padding: '50px',
+          display: 'flex',
+          flexDirection: 'column',
+          alignItems: 'center',
+          overflowX: 'hidden'
         },
       }}
       sx={{
         boxShadow: '0px 1px 10px rgba(0, 0, 0, 0.15)',
         borderRadius: '20px',
+        overflowX: 'hidden'
       }}
       aria-describedby="alert-dialog-slide-description"
     >
@@ -157,7 +163,12 @@ export default function FeedbackPopup(props: {
         mr="23px"
         mt="23px"
       >
-        <img src={closeImage} onClick={closeFeedback}
+        <img src={closeImage} style={{
+          position: 'absolute',
+          right: '20px',
+          top: '10px',
+          cursor: 'pointer',
+        }} onClick={closeFeedback}
         //  onTouchStart={closeFeedback}
          ></img>
       </Box>
@@ -167,6 +178,7 @@ export default function FeedbackPopup(props: {
             display: 'flex',
             flexDirection: 'column',
             alignItems: 'center',
+            overflowX: 'hidden'
           }}
         >
           <img src="/images/RetroFinish.gif"></img>
@@ -192,20 +204,22 @@ export default function FeedbackPopup(props: {
           <Typography  className="identityWillbeConfidentialText">
             Your identity will be confidential
           </Typography>
-          <BorderLinearProgress variant="determinate" value={barvalue} style={{width: isXsUp? '300px' : '600px',marginLeft: isXsUp ? '25px' : '100px', }} />
+          <BorderLinearProgress variant="determinate" value={barvalue} style={{width: isXsUp? '268px' : '600px',marginLeft: isXsUp ? '25px' : '100px', }} />
           <DialogContent
             sx={{
               display: 'flex',
               justifyContent: 'center',
               textAlign: 'center',
               overflowY: 'hidden',
+              overflowX: 'hidden',
+              padding: '0px'
             }}
           >
             <Box>
               <Box>
                 <Typography
                   variant={!isXsUp ? "h4" : 'h5'}
-                  mt={!isXsUp ? "32px" : '48px'}
+                  mt={!isXsUp ? "32px" : '43px'}
                   height="56px"
                   id="alert-dialog-slide-description"
                 >
@@ -244,14 +258,9 @@ export default function FeedbackPopup(props: {
               </Box>
             </Box>
           </DialogContent>
-          <DialogActions>
-            <Box sx={{ width: '100%' ,display: 'flex', justifyContent: 'space-between'}} m='20px'>
-              {index >= 1 && (
-                <Button className="popupPrevBtn" onClick={handlePrevious}>
-                  Previous
-                </Button>
-              )}
-              {!(index === FEEDBACK_QUESTIONS_COLORS.length - 1) ? (
+          <DialogActions sx={{width: '100%'}}>
+          <Box sx={{width: '100%', display: 'flex', justifyContent: 'space-between', alignItems: 'center',flexDirection: !(index === FEEDBACK_QUESTIONS_COLORS.length - 1) ? 'row-reverse' : 'column'}} >
+          {!(index === FEEDBACK_QUESTIONS_COLORS.length - 1) ? (
                 <Button className="popupNextBtn" onClick={handleNext}>
                   Next
                 </Button>
@@ -259,11 +268,19 @@ export default function FeedbackPopup(props: {
                 variant="outlined"
                 className="submitfeedback"
                 onClick={submitFeedback}
+                sx={{marginBottom:'5px' }}
               >
                 <span className="secondaryButtonText">Submit Feedback</span>
               </Button>)}
+           
+              {index >= 1 && (
+                <Button className="popupPrevBtn" onClick={handlePrevious} >
+                  Previous
+                </Button>
+              )}
              
-            </Box>
+             
+ </Box>
           </DialogActions>
         </>
       )}
