@@ -431,7 +431,6 @@ export default function RetroBoard() {
   }, [ended]);
 
   const getColumns = () => {
-   
     return columns;
   };
 
@@ -461,15 +460,17 @@ export default function RetroBoard() {
       {global?.user.userType == 2 && !ended && (
         <FirstTimeExperience facilitator={true} />
       )}
-      {global?.user.userType != 2 && !ended && (
-        <FirstTimeExperience facilitator={false} />
-      )}
-
+      {global?.user.userType != 2 &&
+        !ended &&
+        (isXsUp ? (
+          <FirstTimeExperience facilitator={false} isXsUp={true} />
+        ) : (
+          <FirstTimeExperience facilitator={false} isXsUp={false} />
+        ))}
       <Grid xs={12} item>
         <Toolbar onFinishRetro={finishRetro}></Toolbar>
         {!isXsUp && <SubToolbar></SubToolbar>}
       </Grid>
-
       <Grid
         container
         spacing={0}
