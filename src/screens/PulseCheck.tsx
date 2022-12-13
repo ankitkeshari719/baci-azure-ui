@@ -283,7 +283,7 @@ export default function PulseCheck() {
         pl={isXsUp ? '0px' : commonStyles.m_80}
         xs={12}
         lg={12}
-        sx={{ overflowY: 'auto', height: isXsUp?'calc(80vh)':'calc(90vh)' }}
+        sx={{ overflowY:isXsUp? 'scroll' : 'auto', height: isXsUp?'calc(80vh)':'calc(90vh)' }}
       >
         {/* {showSharePanel ? (
         <Box
@@ -522,7 +522,7 @@ export default function PulseCheck() {
             cursor: 'pointer',
           }}
         >
-          <Link sx={{ marginTop: '43px' }} className="infoLink" onClick={skip} onTouchStart={skip} >
+          <Link sx={{ marginTop: '43px' }} className="infoLink" onClick={skip}  >
             Skip Pulse Check
           </Link>
         </Box>

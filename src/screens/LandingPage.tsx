@@ -116,12 +116,18 @@ export function LandingPage() {
       type: ActionType.CLOSE_CURRENT_RETRO,
     });
   }, []);
+  React.useEffect(() => {
+   sessionStorage.removeItem('BoardContext');
+   sessionStorage.removeItem('GlobalContext');
+   sessionStorage.removeItem('retroname');
+   sessionStorage.removeItem('showManual');
+  });
   return (
     <>
       {isXsUp ? (
-        <Box height="100vh">
+        <Box height={window.innerHeight} sx={{overflowY: 'auto'}}>
           <LandingLayout></LandingLayout>
-          <Box sx={{display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', height: '50vh', overflowY: 'auto'}}>
+          <Box sx={{display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', height: '48vh', overflowY: 'auto'}}>
             <Typography
               variant="h3"
               color={commonStyles.primaryDark}

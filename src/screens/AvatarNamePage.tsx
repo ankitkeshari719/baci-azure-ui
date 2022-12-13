@@ -294,7 +294,7 @@ export function AvatarNamePage() {
     }
   };
   return (
-    <Grid container spacing={0} style={{ overflowY: 'auto' }}>
+    <Grid container spacing={0} style={{ overflowY: 'auto' }} height={window.innerHeight} >
       <Grid item xs={isXsUp ? 12 : 6}>
         <LandingLayout></LandingLayout>
       </Grid>
@@ -461,7 +461,7 @@ export function AvatarNamePage() {
                     width: '90%',
                     padding: '16px',
                     height: '60%',
-                    overflowY: 'scroll',
+                    overflowY: 'auto',
                     display: 'flex',
                     flexDirection: 'row',
                     flexWrap: 'wrap',
