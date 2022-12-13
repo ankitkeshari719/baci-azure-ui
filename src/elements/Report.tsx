@@ -571,7 +571,7 @@ export const Report = React.forwardRef((props, ref) => {
                     style={{ cursor: 'pointer' }}
                   ></Icons.Printer>
                 )}
-                content={() => componentRef.current}
+                content={() =>componentRef.current}
               />
             </Grid>
           </Grid>
