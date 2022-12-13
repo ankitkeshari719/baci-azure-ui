@@ -84,7 +84,7 @@ export function LandingLayout() {
           <Box>
             <img
               src={LandingMobileImage}
-              style={{ width: '100%', height: window.innerHeight/2}}
+              style={{ width: '100%', height: '48vh'}}
             ></img>
             <Box
               sx={{
@@ -93,7 +93,7 @@ export function LandingLayout() {
                 alignItems: 'center',
                 justifyContent: 'center',
                 position: 'absolute',
-                height:  window.innerHeight/2,
+                height:  '48vh',
                 width: '100%',
                 top: '0px',
               }}
