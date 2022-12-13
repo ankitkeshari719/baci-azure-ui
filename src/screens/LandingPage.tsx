@@ -119,7 +119,7 @@ export function LandingPage() {
   return (
     <>
       {isXsUp ? (
-        <Box height={window.innerHeight} sx={{overflowY:isXsUp ? 'scroll': 'auto'}}>
+        <Box height={window.innerHeight} sx={{overflowY: 'auto'}}>
           <LandingLayout></LandingLayout>
           <Box sx={{display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', height: '50vh', overflowY: 'auto'}}>
             <Typography

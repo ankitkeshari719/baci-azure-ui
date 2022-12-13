@@ -294,7 +294,7 @@ export function AvatarNamePage() {
     }
   };
   return (
-    <Grid container spacing={0} style={{ overflowY:isXsUp ? 'scroll' : 'auto' , height:isXsUp ? '90vh': '100vh'}} >
+    <Grid container spacing={0} style={{ overflowY: 'auto' }} height={window.innerHeight} >
       <Grid item xs={isXsUp ? 12 : 6}>
         <LandingLayout></LandingLayout>
       </Grid>
