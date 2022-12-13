@@ -6,7 +6,7 @@ import LandingMobileImage from '../assets/img/Mobile_home_Image.png';
 import BACILogo from '../assets/img/bacilogo.png';
 import commomStyles from './../style.module.scss';
 import theme from '../theme/theme';
-
+import { LazyLoadImage } from 'react-lazy-load-image-component';
 const styles = {
   mainDiv: {
     backgroundImage: `url(${LandingImage})`,
@@ -82,56 +82,61 @@ export function LandingLayout() {
       <>
         {isXsUp ? (
           <Box>
-           <img
+            <img
               src={LandingMobileImage}
               style={{ width: '100%', height: window.innerHeight/2}}
             ></img>
-                <Box
-                  sx={{
-                    display: 'flex',
-                    flexDirection: 'column',
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                    position: 'absolute',
-                    height: window.innerHeight/2,
-                    width: '100%',
-                    top: '0px'
-                  }}
-                >
-                  <Box>
-                    <img src={BACILogo} alt="Logo" style={styles.logoImageXs} />
-                  </Box>
-                  <Box display="flex" mt="32px">
-                    <Typography variant="h5" color={commomStyles.grey} mr="6px">
-                      Pause
-                    </Typography>
-                    <Typography color={commomStyles.secondaryMain} mr="6px">
-                      .
-                    </Typography>
-                    <Typography variant="h5" color={commomStyles.grey} mr="6px">
-                      Think
-                    </Typography>
-                    <Typography color={commomStyles.secondaryMain} mr="6px">
-                      .
-                    </Typography>
-                    <Typography variant="h5" color={commomStyles.grey} mr="6px">
-                      Act
-                    </Typography>
-                    <Typography color={commomStyles.secondaryMain} mr="6px">
-                      .
-                    </Typography>
-                    <Typography
-                      variant="h5"
-                      color={commomStyles.secondaryMain}
-                      mr="6px"
-                    >
-                      Grow
-                    </Typography>
-                  </Box>
-                </Box>
+            <Box
+              sx={{
+                display: 'flex',
+                flexDirection: 'column',
+                alignItems: 'center',
+                justifyContent: 'center',
+                position: 'absolute',
+                height:  window.innerHeight/2,
+                width: '100%',
+                top: '0px',
+              }}
+            >
+              <Box>
+                <LazyLoadImage
+                  style={styles.logoImage}
+                  alt="logo"
+                  // height={image.height}
+                  src={BACILogo} // use normal <img> attributes as props
+                  // width={image.width}
+                />
+                {/* <img src={BACILogo} alt="Logo" style={styles.logoImageXs} /> */}
               </Box>
-
-          
+              <Box display="flex" mt="32px">
+                <Typography variant="h5" color={commomStyles.grey} mr="6px">
+                  Pause
+                </Typography>
+                <Typography color={commomStyles.secondaryMain} mr="6px">
+                  .
+                </Typography>
+                <Typography variant="h5" color={commomStyles.grey} mr="6px">
+                  Think
+                </Typography>
+                <Typography color={commomStyles.secondaryMain} mr="6px">
+                  .
+                </Typography>
+                <Typography variant="h5" color={commomStyles.grey} mr="6px">
+                  Act
+                </Typography>
+                <Typography color={commomStyles.secondaryMain} mr="6px">
+                  .
+                </Typography>
+                <Typography
+                  variant="h5"
+                  color={commomStyles.secondaryMain}
+                  mr="6px"
+                >
+                  Grow
+                </Typography>
+              </Box>
+            </Box>
+          </Box>
         ) : (
           <>
             <img
@@ -142,23 +147,35 @@ export function LandingLayout() {
               <Box>
                 <img src={BACILogo} alt="Logo" style={styles.logoImage} />
               </Box>
-              <Box display='flex' mt="93px" ml='58px'>
+              <Box display="flex" mt="93px" ml="58px">
                 <Typography variant="h1" color={commomStyles.grey} mr="6px">
                   Pause
                 </Typography>
-                <Typography color={commomStyles.secondaryMain} mr="6px" fontSize='32px'>
+                <Typography
+                  color={commomStyles.secondaryMain}
+                  mr="6px"
+                  fontSize="32px"
+                >
                   .
                 </Typography>
                 <Typography variant="h1" color={commomStyles.grey} mr="6px">
                   Think
                 </Typography>
-                <Typography color={commomStyles.secondaryMain} mr="6px" fontSize='32px'>
+                <Typography
+                  color={commomStyles.secondaryMain}
+                  mr="6px"
+                  fontSize="32px"
+                >
                   .
                 </Typography>
                 <Typography variant="h1" color={commomStyles.grey} mr="6px">
                   Act
                 </Typography>
-                <Typography color={commomStyles.secondaryMain} mr="6px" fontSize='32px'>
+                <Typography
+                  color={commomStyles.secondaryMain}
+                  mr="6px"
+                  fontSize="32px"
+                >
                   .
                 </Typography>
                 <Typography
