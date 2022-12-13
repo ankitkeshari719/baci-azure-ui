@@ -223,7 +223,7 @@ export default function FeedbackPopup(props: {
               overflowX: 'hidden',
             }}
           >
-            <Box>
+            <Box sx={{display: 'flex', flexDirection : 'column', alignItems: 'center'}}>
               <Box>
                 <Typography
                   variant={!isXsUp ? 'h4' : 'h5'}
@@ -242,7 +242,6 @@ export default function FeedbackPopup(props: {
                   flexDirection: 'row',
                   justifyContent: 'center',
                   marginTop: !isXsUp ? '5px' : '30px',
-                  marginLeft: !isXsUp ? '25%' : '2%',
                 }}
               >
                 {[1, 2, 3, 4, 5].map(i => (
