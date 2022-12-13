@@ -62,33 +62,29 @@ export const options = {
       title: {
         display: true,
         text: '% Response',
-        color: '#343434'
+        color: '#343434',
       },
       min: 0,
       max: 100,
       ticks: {
         // forces step size to be 50 units
-        stepSize: 10
+        stepSize: 10,
       },
-      
-
     },
-    y:{
+    y: {
       border: {
-        display: false
+        display: false,
       },
       grid: {
         display: false,
         drawOnChartArea: false,
         drawTicks: true,
       },
-    }
-  },
- 
-  elements: {
-    bar: {
-      
     },
+  },
+
+  elements: {
+    bar: {},
   },
   plugins: {
     legend: {
@@ -173,9 +169,9 @@ export const Report = React.forwardRef((props, ref) => {
   const [didntWentWellwords, setdidntWentWellwords] = React.useState<Word[]>(
     []
   );
-  const [barData, setBarData] = React.useState<
-    { 1: any; 2: any; 3: any }[]
-  >([]);
+  const [barData, setBarData] = React.useState<{ 1: any; 2: any; 3: any }[]>(
+    []
+  );
   const [actions, setActions] = React.useState<string[]>([]);
   const [questions, setQuestions] = React.useState<Question[]>([]);
   const [feedback, setFeedback] = React.useState<any | undefined>();
@@ -347,10 +343,10 @@ export const Report = React.forwardRef((props, ref) => {
     let sampleArray: any = [];
     newArr.map(data => {
       return sampleArray.push(Object.values(data));
-    })
+    });
     // console.log('sample', sampleArray);
-    let tempArr : any = [];
-    if(sampleArray.length === 3){
+    let tempArr: any = [];
+    if (sampleArray.length === 3) {
       tempArr.push([sampleArray[0][0], sampleArray[1][0], sampleArray[2][0]]);
       tempArr.push([sampleArray[0][1], sampleArray[1][1], sampleArray[2][1]]);
       tempArr.push([sampleArray[0][2], sampleArray[1][2], sampleArray[2][2]]);
@@ -532,7 +528,9 @@ export const Report = React.forwardRef((props, ref) => {
       }}
     >
       <Grid container>
-        <Toolbar />
+        <Grid xs={12} item>
+          <Toolbar />
+        </Grid>
         <Grid
           container
           style={{
@@ -753,10 +751,14 @@ export const Report = React.forwardRef((props, ref) => {
                       >
                         {questions.length !== 0 ? (
                           <Bar
-                          style={{width: '700px', height: '250px', border: 'none'}}
+                            style={{
+                              width: '700px',
+                              height: '250px',
+                              border: 'none',
+                            }}
                             options={options}
                             data={{
-                              labels: QUICK_PULSE_CHECK_QUESTIONS,             // datasets is an array of objects where each object represents a set of data to display corresponding to the labels above. for brevity, we'll keep it at one object
+                              labels: QUICK_PULSE_CHECK_QUESTIONS, // datasets is an array of objects where each object represents a set of data to display corresponding to the labels above. for brevity, we'll keep it at one object
 
                               datasets: [
                                 {
@@ -825,7 +827,7 @@ export const Report = React.forwardRef((props, ref) => {
                           item
                           xs={12 / FEEDBACK_QUESTIONS.length}
                           sx={{ display: 'flex', justifyContent: 'center' }}
-                          key={index+"feed"}
+                          key={index + 'feed'}
                         >
                           <Card
                             variant="outlined"
@@ -845,7 +847,7 @@ export const Report = React.forwardRef((props, ref) => {
                                   display: 'flex',
                                   gap: '5px',
                                   alignItems: 'center',
-                                  fontWeight: 500
+                                  fontWeight: 500,
                                 }}
                               >
                                 {(
@@ -857,25 +859,24 @@ export const Report = React.forwardRef((props, ref) => {
                                   display: 'flex',
                                   justifyContent: 'center',
                                 }}
-                                mt='14.5px'
-                                mb='14.5px'
+                                mt="14.5px"
+                                mb="14.5px"
                               >
                                 {[1, 2, 3, 4, 5].map(i =>
                                   i <=
                                   feedback[0][index] / feedback[1][index] ? (
                                     <Icons.Star
-                                    key={i+""}
+                                      key={i + ''}
                                       size={22}
                                       color="#FCB34C"
-                                      style={{margin: '8px'}}
+                                      style={{ margin: '8px' }}
                                     ></Icons.Star>
                                   ) : (
                                     <Icons.StarOutline
-                                    key={i+""}
-
+                                      key={i + ''}
                                       size={22}
-                                      color='#808080'
-                                      style={{margin: '8px'}}
+                                      color="#808080"
+                                      style={{ margin: '8px' }}
                                     ></Icons.StarOutline>
                                   )
                                 )}
@@ -895,14 +896,18 @@ export const Report = React.forwardRef((props, ref) => {
                                 {feedback[1][index]} Response
                                 {feedback[1][index] === 1 ? '' : 's'}
                               </Typography>
-                              <Typography mt="24px" mb="25px" sx={{
+                              <Typography
+                                mt="24px"
+                                mb="25px"
+                                sx={{
                                   fontWeight: 400,
                                   fontSize: '16px',
                                   justifyContent: 'center',
                                   display: 'flex',
                                   color: '#343434',
                                   alignItems: 'center',
-                                }}>
+                                }}
+                              >
                                 {FEEDBACK_QUESTIONS[index]}
                               </Typography>
                             </CardContent>

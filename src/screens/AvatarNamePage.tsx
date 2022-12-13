@@ -461,7 +461,7 @@ export function AvatarNamePage() {
                     width: '90%',
                     padding: '16px',
                     height: '60%',
-                    overflowY: 'scroll',
+                    overflowY: 'auto',
                     display: 'flex',
                     flexDirection: 'row',
                     flexWrap: 'wrap',
