@@ -7,6 +7,7 @@ import {
   Paper,
   TextField,
   Typography,
+  useMediaQuery,
 } from '@mui/material';
 import * as React from 'react';
 import ReactDOM from 'react-dom';
@@ -20,6 +21,7 @@ import { Retro as RetroType } from '../types';
 import { useRetro } from '../helpers';
 import { ActionType, GlobalContext } from '../contexts/GlobalContext';
 import { useAzureAuth } from '../msal/azureauth';
+import theme from '../theme/theme';
 
 // import {primaryButton,primaryButtonText, secondaryButton,secondaryButtonText } from './../style.module.scss';
 const styles = {
@@ -49,14 +51,13 @@ const styles = {
   signInMargin: {
     //margin: '2% 6% 1% 1%',
     marginTop: '32px',
-    width: '108px',
     height: '44px',
   },
   joiningTextMargin: {
     margin: '30% 10% 40% 10%',
   },
   accessCodeTextField: {
-    minWidth: '322px',
+    minWidth: '288px',
     marginTop: '86px',
     height: '48px',
     '& .MuiFormLabel-root': {
@@ -74,10 +75,11 @@ export function LandingPage() {
   const [humanId, setHumanId] = React.useState(id || '');
   const [codeError, setCodeError] = React.useState('');
   const [global, dispatch] = React.useContext(GlobalContext);
+  const isXsUp = useMediaQuery(theme.breakpoints.between('xs', 'sm'));
+  const isSmUp = useMediaQuery(theme.breakpoints.only('sm'));
 
   useAzureAuth();
   const joinRetro = async (): Promise<RetroType | undefined> => {
-
     let foundRetro = await retro.getByHumanId(humanId);
     if (humanId === '') {
       setCodeError('Please enter access code');
@@ -109,85 +111,135 @@ export function LandingPage() {
     navigate('/createretro/');
   }
 
-  React.useEffect(()=>{
+  React.useEffect(() => {
     dispatch({
-      type: ActionType.CLOSE_CURRENT_RETRO
+      type: ActionType.CLOSE_CURRENT_RETRO,
     });
-    
-  },[])
+  }, []);
+  React.useEffect(() => {
+   sessionStorage.removeItem('BoardContext');
+   sessionStorage.removeItem('GlobalContext');
+   sessionStorage.removeItem('retroname');
+   sessionStorage.removeItem('showManual');
+  });
   return (
-    <Grid container spacing={0} >
-      <Grid item xs={6}>
-        <LandingLayout></LandingLayout>
-      </Grid>
-      <Grid item xs={6} display= 'flex' justifyContent='center' alignItems= 'center'>
-        <Grid
-        item
-          xs={12}
-          marginRight={commonStyles.m_80}
-          marginLeft={commonStyles.m_80}
-        >
-          {/* <Box
-            sx={{
-              display: 'flex',
-              flexDirection: 'row-reverse',
-              p: 1,
-              m: 1,
-              bgcolor: 'background.paper',
-              borderRadius: 1,
-            }}
-          >
-            <Button
-              variant="outlined"
-              className="primaryButton"
-              style={styles.signInMargin}
+    <>
+      {isXsUp ? (
+        <Box height={window.innerHeight} sx={{overflowY: 'auto'}}>
+          <LandingLayout></LandingLayout>
+          <Box sx={{display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', height: '48vh', overflowY: 'auto'}}>
+            <Typography
+              variant="h3"
+              color={commonStyles.primaryDark}
+              sx={{  textAlign: 'center' }}
             >
-              <span className="primaryButtonText">Sign In</span>
-            </Button>
-            <Button style={styles.newUserText}>New user?Register</Button>
-          </Box> */}
-          <Typography variant="h2" color={commonStyles.primaryDark} >
-            What BACI retro are you joining today?
-          </Typography>
+              What BACI retro are you joining today?
+            </Typography>
 
-          <TextField
-            autoFocus
-            variant="standard"
-            label="Retro access code"
-            error={!!codeError}
-            sx={styles.accessCodeTextField}
-            onKeyDown={e => {
-              if (e.keyCode === 13) {
-                joinRetro();
-              }
-            }}
-            value={humanId}
-            onChange={e => {setHumanId(e.currentTarget.value); setCodeError('')}}
-          />
-          {codeError !== '' && (
-            <FormHelperText style={{ color: '#d32f2f', marginLeft: '5px' }}>
-              {codeError}
-            </FormHelperText>
-          )}
+            <TextField
+              autoFocus
+              variant="standard"
+              label="Retro access code"
+              error={!!codeError}
+              sx={{...styles.accessCodeTextField, minWidth: '90%', marginTop: '48px'}}
+              onKeyDown={e => {
+                if (e.keyCode === 13) {
+                  joinRetro();
+                }
+              }}
+              value={humanId}
+              onChange={e => {
+                setHumanId(e.currentTarget.value);
+                setCodeError('');
+              }}
+            />
+            {codeError !== '' && (
+              <FormHelperText style={{ color: '#d32f2f', marginLeft: '5px' }}>
+                {codeError}
+              </FormHelperText>
+            )}
+            <Box style={{width: '90%'}} pt='48px'>
+              <Button
+                variant="outlined"
+                className="secondaryButton"
+                style={{width: '100%'}}
+                onClick={() => joinRetro()}
+                //onTouchStart={() => joinRetro()}
+              >
+                <span className="secondaryButtonText">Go on..</span>
+              </Button>
+            </Box>
+          </Box>
+        </Box>
+      ) : (
+        <Grid container spacing={0}>
+          <Grid item xs={6}>
+            <LandingLayout></LandingLayout>
+          </Grid>
+          <Grid
+            item
+            xs={6}
+            display="flex"
+            justifyContent="center"
+            alignItems="center"
+          >
+            <Grid
+              item
+              xs={12}
+              marginRight={commonStyles.m_80}
+              marginLeft={commonStyles.m_80}
+            >
+              <Typography variant="h2" color={commonStyles.primaryDark}>
+                What BACI retro are you joining today?
+              </Typography>
 
-          <Button
-            variant="outlined"
-            className="secondaryButton"
-            style={styles.signInMargin}
-            onClick={() => joinRetro()}
-          >
-            <span className="secondaryButtonText">Go on..</span>
-          </Button>
-          <Button
-            style={styles.newUserText}
-            onClick={() => {
-              CreateNewRetro();
-            }}
-          >
-            Create New Retro
-          </Button>
+              <TextField
+                autoFocus
+                variant="standard"
+                label="Retro access code"
+                error={!!codeError}
+                sx={styles.accessCodeTextField}
+                onKeyDown={e => {
+                  if (e.keyCode === 13) {
+                    joinRetro();
+                  }
+                }}
+                value={humanId}
+                onChange={e => {
+                  setHumanId(e.currentTarget.value);
+                  setCodeError('');
+                }}
+              />
+              {codeError !== '' && (
+                <FormHelperText style={{ color: '#d32f2f', marginLeft: '5px' }}>
+                  {codeError}
+                </FormHelperText>
+              )}
+
+              <Button
+                variant="outlined"
+                className="secondaryButton"
+                style={styles.signInMargin}
+                onClick={() => joinRetro()}
+                // onTouchStart={() => joinRetro()}
+              >
+                <span className="secondaryButtonText">Go on..</span>
+              </Button>
+              <Button
+                style={styles.newUserText}
+                // onTouchStart={() => {
+                //   CreateNewRetro();
+                // }}
+                onClick={() => {
+                  CreateNewRetro();
+                }}
+              >
+                Create New Retro
+              </Button>
+            </Grid>
+          </Grid>
         </Grid>
-      </Grid>
-    </Grid>
+      )}
+    </>
   );
 }

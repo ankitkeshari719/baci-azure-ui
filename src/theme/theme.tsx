@@ -27,9 +27,9 @@ let theme = createTheme({
     h1: {
       fontFamily: `'Poppins', 'Arial', sans-serif`,
       fontSize: '36px',
-      fontWeight: 500,
-      fontStyle: 'normal',
+      fontWeight: '500',
       lineHeight: '48px',
+      letterSpacing: ' 0.5px',
     },
     h2: {
       fontFamily: `'Poppins', 'Arial', sans-serif`,
@@ -38,16 +38,24 @@ let theme = createTheme({
     h3: {
       fontFamily: `'Poppins', 'Arial', sans-serif`,
       fontSize: '24px',
+      lineHeight: '32px',
+      letterSpacing: '0.5px'
     },
     h4: {
       fontFamily: `'Poppins', 'Arial', sans-serif`,
       fontSize: '20px',
     },
     h5: {
-      fontFamily: `'Poppins', 'Arial', sans-serif`,
+      fontFamily: `'Poppins'`,
       fontWeight: 600,
-      fontSize: 18,
-      letterSpacing: 0.5,
+      fontSize: '18px',
+      letterSpacing: ' 0.5px',
+    },
+    h6: {
+      fontFamily: `'Poppins'`,
+      fontWeight: 400,
+      fontSize: '16px !important',
+      letterSpacing: ' 0.6px',
     },
   },
 
@@ -71,6 +79,11 @@ let theme = createTheme({
 theme = {
   ...theme,
   components: {
+    // MuiUseMediaQuery: {
+    //   defaultProps: {
+    //     ssrMatchMedia,
+    //   },
+    // },
     MuiDrawer: {
       styleOverrides: {
         paper: {

@@ -33,11 +33,14 @@ const LeaveRetroDialog = (props: any) => {
           display: 'flex',
           flexDirection: 'column',
           alignItems: 'center',
+          
         },
-      }}
+        }}
+      sx={{'&& .MuiDialog-paper': {overflowX: 'hidden'}}}
     >
       <img
         onClick={handleClose}
+        // onTouchStart={handleClose}
         style={{
           position: 'absolute',
           right: '20px',
@@ -67,6 +70,7 @@ const LeaveRetroDialog = (props: any) => {
             width:'200px'
           }}
           onClick={() => onClose(true)}
+          // onTouchStart={()=>onClose(true)}
         >
           LEAVE RETRO
         </Button>
@@ -80,6 +84,7 @@ const LeaveRetroDialog = (props: any) => {
             marginTop:'20px'
           }}
           onClick={() => handleClose()}
+          // onTouchStart={()=>handleClose()}
         >
           BACK TO BOARD
         </Button>

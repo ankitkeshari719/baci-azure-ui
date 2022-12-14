@@ -1,12 +1,15 @@
 import {
   Box,
   Button,
+  Dialog,
+  DialogTitle,
   FormControl,
   FormHelperText,
   Grid,
   Paper,
   TextField,
   Typography,
+  useMediaQuery,
 } from '@mui/material';
 import * as React from 'react';
 import ReactDOM from 'react-dom';
@@ -15,7 +18,7 @@ import BACILogo from '../assets/img/bacilogo.png';
 import { LandingLayout } from './LandingLayout';
 import commonStyles from './../style.module.scss';
 import './../global.scss';
-import { useNavigate, useParams } from 'react-router-dom';
+import { Link, useNavigate, useParams } from 'react-router-dom';
 import { Retro as RetroType } from '../types';
 import { useRetro } from '../helpers';
 import { ActionType, GlobalContext } from '../contexts/GlobalContext';
@@ -24,14 +27,14 @@ import { avatarName } from '../constants/AvatarName';
 import { useAzureAuth } from '../msal/azureauth';
 import { UserTypeArray } from '../constants';
 import { BoardContext } from '../contexts/BoardContext';
+import theme from '../theme/theme';
+import { display } from '@mui/system';
 const AVATAR_CHARACTER_LIMIT = 30;
 const styles = {
   heading: {
     marginTop: '254px',
   },
   avatarfield: {
-    marginTop: '60px',
-    width: '322px',
     '& .MuiFormLabel-root': {
       color: 'rgba(0, 0, 0, 0.6) !important',
       fontSize: '14px',
@@ -55,6 +58,11 @@ const styles = {
     height: '60px',
     marginBottom: '30px',
     marginRight: '30px',
+    borderRadius: '50%',
+  },
+  avatarSvgXs: {
+    width: '50px',
+    height: '50px',
     borderRadius: '50%',
   },
 };
@@ -93,6 +101,8 @@ export function AvatarNamePage() {
   );
   const [joining, setJoining] = React.useState(id ? true : false);
   const [captureName, setCaptureName] = React.useState(id ? true : false);
+  const isXsUp = useMediaQuery(theme.breakpoints.between('xs', 'sm'));
+  const [openAvatarDialog, setOpenAvatarDialog] = React.useState(false);
 
   React.useEffect(() => {
     setAvatarList(avatarName.sort(() => Math.random() - 0.5));
@@ -220,7 +230,7 @@ export function AvatarNamePage() {
             type: ActionType.SET_LOADING,
             payload: { loadingFlag: false },
           });
-       
+
           data123();
         },
         err => {
@@ -274,8 +284,7 @@ export function AvatarNamePage() {
             else navigate('/board/' + global.currentRetro?.id + '/pulseCheck');
           }
         } else {
-      
-          if (currentUser.userId == global.currentRetro?.creatorId) {
+          if (currentUser.userId == global.currentRetro?.creatorId && !isXsUp) {
             navigate('/board/' + global.currentRetro?.id + '/startRetro');
           } else {
             navigate('/board/' + global.currentRetro?.id + '/waiting');
@@ -285,19 +294,28 @@ export function AvatarNamePage() {
     }
   };
   return (
-    <Grid container spacing={0} style={{ overflowY: 'auto' }}>
-      <Grid item xs={6}>
+    <Grid container spacing={0} style={{ overflowY: 'auto' }} height={window.innerHeight} >
+      <Grid item xs={isXsUp ? 12 : 6}>
         <LandingLayout></LandingLayout>
       </Grid>
-      <Grid item xs={6}>
+      <Grid
+        item
+        xs={isXsUp ? 12 : 6}
+        display="flex"
+        justifyContent="center"
+        alignItems="center"
+      >
         <Grid
           item
           container
-          marginRight={commonStyles.m_80}
-          marginLeft={commonStyles.m_80}
+          marginRight={isXsUp ? '0px' : commonStyles.m_80}
+          marginLeft={isXsUp ? '0px' : commonStyles.m_80}
           flexDirection="column"
           justifyContent="center"
-          sx={{ height: '100vh' }}
+          sx={{
+            height: !isXsUp ? '100vh' : '50vh',
+            width: isXsUp ? '90%' : '100%',
+          }}
         >
           <Box>
             {!global.currentRetro?.creatorId ? (
@@ -313,18 +331,35 @@ export function AvatarNamePage() {
                   Who you are in ‘{global.currentRetro?.name}’?
                 </Typography>
               </>
-            ) : (
+            ) : !isXsUp ? (
               <Typography variant="h3" color={commonStyles.primaryDark}>
                 Who you are in ‘{global.currentRetro?.name}’?
               </Typography>
+            ) : (
+              <>
+                <Typography
+                  variant="h3"
+                  color={commonStyles.primaryDark}
+                  className="alignCenter"
+                >
+                  Welcome to BACI
+                </Typography>
+                <Typography
+                  variant="h5"
+                  color={commonStyles.primaryDark}
+                  className="alignCenter"
+                >
+                  Pick Your Avatar
+                </Typography>
+              </>
             )}
 
-            <FormControl>
+            <FormControl sx={{ width: !isXsUp ? '322px' : '100%' }}>
               <TextField
                 id="standard-helperText"
                 label="Choose your name for this retro"
                 variant="standard"
-                sx={styles.avatarfield}
+                sx={{ ...styles.avatarfield, marginTop: '32px' }}
                 value={userName}
                 onChange={e => handleUsername(e.currentTarget.value)}
                 inputProps={{
@@ -340,54 +375,122 @@ export function AvatarNamePage() {
               )}
             </FormControl>
           </Box>
-          <Box>
-            <Typography sx={styles.chooseAvatarText}>
-              Choose your avatar
-            </Typography>
-            <Box sx={styles.avatarBox}>
-              {/* <Avatar avatar={`Animals-avatar_${i}avatar`}></Avatar>; */}
-              {/* <Box> */}
-              {avatarList
-                // .sort(() => Math.random() - 0.5)
-                .map((avatar: any, index) => (
-                  <Avatar
-                    key={index}
-                    avatar={avatar}
-                    css={styles.avatarSvg}
-                    onClickAvatar={onClickAvatar}
-                    selectedAvatar={selectedAvatar}
-                  ></Avatar>
-                ))}
-              {/* </Box> */}
-            </Box>
-            {avatarSelectionError !== '' && (
-              <Box
-                sx={{
-                  color: '#d32f2f',
-                  fontFamily: 'Poppins',
-                  fontWeight: 400,
-                  fontSize: '0.75rem',
-                  lineHeight: 1.66,
-                  letterSpacing: '0.03333em',
-                  textAlign: 'left',
-                  marginTop: '3px',
-                  marginRight: '0',
-                  marginBottom: '0',
-                  marginLeft: '0',
-                }}
-              >
-                {avatarSelectionError}
+          {!isXsUp ? (
+            <Box>
+              <Typography sx={styles.chooseAvatarText}>
+                Choose your avatar
+              </Typography>
+              <Box sx={styles.avatarBox}>
+                {/* <Avatar avatar={`Animals-avatar_${i}avatar`}></Avatar>; */}
+                {/* <Box> */}
+                {avatarList
+                  // .sort(() => Math.random() - 0.5)
+                  .map((avatar: any, index) => (
+                    <Avatar
+                      key={index}
+                      avatar={avatar}
+                      css={styles.avatarSvg}
+                      onClickAvatar={onClickAvatar}
+                      selectedAvatar={selectedAvatar}
+                    ></Avatar>
+                  ))}
+                {/* </Box> */}
               </Box>
-            )}
-            <Button
-              variant="outlined"
-              className="secondaryButton"
-              style={styles.goOnBtn}
-              onClick={setName}
-            >
-              <span className="secondaryButtonText">Go on..</span>
-            </Button>
-          </Box>
+              {avatarSelectionError !== '' && (
+                <Box
+                  sx={{
+                    color: '#d32f2f',
+                    fontFamily: 'Poppins',
+                    fontWeight: 400,
+                    fontSize: '0.75rem',
+                    lineHeight: 1.66,
+                    letterSpacing: '0.03333em',
+                    textAlign: 'left',
+                    marginTop: '3px',
+                    marginRight: '0',
+                    marginBottom: '0',
+                    marginLeft: '0',
+                  }}
+                >
+                  {avatarSelectionError}
+                </Box>
+              )}
+              <Button
+                variant="outlined"
+                className="secondaryButton"
+                style={styles.goOnBtn}
+                onClick={setName}
+              >
+                <span className="secondaryButtonText">Go on..</span>
+              </Button>
+            </Box>
+          ) : (
+            <>
+              <Box mt="42px">
+                <Box display="flex">
+                  {selectedAvatar && (
+                    <Avatar
+                      avatar={selectedAvatar}
+                      css={{
+                        width: '50px',
+                        height: '50px',
+                        borderRadius: '50%',
+                      }}
+                    ></Avatar>
+                  )}
+                  <Button onClick={() => setOpenAvatarDialog(true)}>
+                    <span className="primaryButtonText">Select Avatar</span>
+                  </Button>
+                </Box>
+
+                <Button
+                  variant="outlined"
+                  className="secondaryButton"
+                  style={styles.goOnBtn}
+                  onClick={setName}
+                >
+                  <span className="secondaryButtonText">Go on..</span>
+                </Button>
+              </Box>
+              <Dialog open={openAvatarDialog} sx={{ height: '90vh' ,'&& .MuiDialog-paper': {overflowX: 'hidden'}}}>
+                <DialogTitle>
+                  <Typography>Select Avatar</Typography>
+                </DialogTitle>
+                <Box
+                  sx={{
+                    width: '90%',
+                    padding: '16px',
+                    height: '60%',
+                    overflowY: 'auto',
+                    display: 'flex',
+                    flexDirection: 'row',
+                    flexWrap: 'wrap',
+                    justifyContent: 'space-evenly',
+                  }}
+                >
+                  {avatarList.map((avatar: any, index) => (
+                    <Avatar
+                      key={index}
+                      avatar={avatar}
+                      css={styles.avatarSvgXs}
+                      onClickAvatar={onClickAvatar}
+                      selectedAvatar={selectedAvatar}
+                    ></Avatar>
+                  ))}
+                </Box>
+                <Box display="flex" justifyContent="center" mb="10px">
+                  <Button
+                    variant="outlined"
+                    className="secondaryButton"
+                    onClick={() => setOpenAvatarDialog(false)}
+                    sx={{ width: '90%' }}
+                  >
+                    <span className="secondaryButtonText">Select</span>
+                  </Button>
+                </Box>
+              </Dialog>
+            </>
+          )}
         </Grid>
       </Grid>
     </Grid>

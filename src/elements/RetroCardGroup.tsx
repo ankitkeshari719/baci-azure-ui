@@ -173,80 +173,100 @@ export function RetroCardGroup({
               item
               xs={10}
               sx={{
-                height: '30px',
+                // height: '30px',
                 display: 'flex',
                 flexDirection: 'row',
                 alignItems: 'center',
               }}
             >
-              <TextField
-                type="text"
-                sx={{
-                  // flexGrow: 22,
-                  fontStyle: nameSet ? 'normal' : 'italic',
-                  textarea: {
-                    fontWeight: '600',
+              {admin ? (
+                <TextField
+                  type="text"
+                  sx={{
+                    // flexGrow: 22,
+                    fontStyle: nameSet ? 'normal' : 'italic',
+                    textarea: {
+                      fontWeight: '600',
+                      padding: 0,
+                      color: nameSet ? groupFontColour : '#8D858A',
+                    },
+                    fieldset: { border: 'none' },
+                    px: 2,
+                    py: 2,
+                    paddingBottom: 0,
                     padding: 0,
-                    color: nameSet ? groupFontColour : '#8D858A',
-                  },
-                  fieldset: { border: 'none' },
-                  px: 2,
-                  py: 2,
-                  paddingBottom: 0,
-                  padding: 0,
-                  paddingLeft: '12px!important',
-                  // width: '100%',
-                  width: (nameSet ? name.length : 14) + 3 + 'ch',
-                  div: { padding: 0, position: 'initial', width: '100%' },
-                  position: 'initial',
-                }}
-                maxRows={2}
-                inputProps={{ maxLength: 25 }}
-                value={nameSet ? name : 'Name grouping'}
-                multiline
-                onChange={event => {
-                  //
-                  //   event.target.value.replace(
-                  //     ' ( ' + group.cards.length + ' ) ',
-                  //     ''
-                  //   ),
-                  //   'value'
-                  // );
-                  if (admin) {
-                    setName(
-                      event.target.value.replace(
-                        ' ( ' + group.cards.length + ' ) ',
-                        ''
-                      )
-                    );
-                  }
-                }}
-                InputProps={{
-                  readOnly: ended,
-                }}
-                onFocus={async event => {
-                  if (admin) {
-                    setNameSet(true);
-                    await lockGroup(group.id, true);
-                  }
-                }}
-                onBlur={async () => {
-                  if (admin) {
-                    lockGroup(group.id, false);
-                    if (!name) {
-                      setNameSet(false);
-                    } else {
-                      await setGroupName(group.id, name);
+                    paddingLeft: '12px!important',
+                    width: '80%',
+                    // width: (nameSet ? name.length : 14) + 3 + 'ch',
+                    div: { padding: 0, position: 'initial', width: '100%' },
+                    position: 'initial',
+                  }}
+                  maxRows={2}
+                  inputProps={{ maxLength: 25 }}
+                  value={nameSet ? name : 'Name grouping'}
+                  multiline
+                  onChange={event => {
+                    //
+                    //   event.target.value.replace(
+                    //     ' ( ' + group.cards.length + ' ) ',
+                    //     ''
+                    //   ),
+                    //   'value'
+                    // );
+                    if (admin) {
+                      setName(
+                        event.target.value.replace(
+                          ' ( ' + group.cards.length + ' ) ',
+                          ''
+                        )
+                      );
                     }
-                  }
-                }}
-              />
+                  }}
+                  InputProps={{
+                    readOnly: ended,
+                  }}
+                  onFocus={async event => {
+                    if (admin) {
+                      setNameSet(true);
+                      await lockGroup(group.id, true);
+                    }
+                  }}
+                  onBlur={async () => {
+                    if (admin) {
+                      lockGroup(group.id, false);
+                      if (!name) {
+                        setNameSet(false);
+                      } else {
+                        await setGroupName(group.id, name);
+                      }
+                    }
+                  }}
+                />
+              ) : (
+                <Typography
+                  
+                  sx={{
+                    color: nameSet ? groupFontColour : '#8D858A',
+                    paddingLeft: '12px!important',
+                    whiteSpace: 'nowrap',
+                    width: '70%',
+                    overflow: 'hidden',
+                    textOverflow: 'ellipsis',
+                    
+                  }}
+                >
+                  {nameSet ? name : 'Name grouping'}
+                </Typography>
+              )}
+
+
               <span
                 style={{
                   fontWeight: '600',
                   padding: 0,
                   color: nameSet ? groupFontColour : '#8D858A',
                   // paddingTop: '18px',
+                  width: '60px',
                 }}
               >
                 {' '}
@@ -259,6 +279,7 @@ export function RetroCardGroup({
                     flexDirection: 'row',
                     alignItems: 'center',
                     height: '100%',
+                    // width: '55px',
                     // marginTop:'10px'
                   }}
                 >
@@ -267,12 +288,21 @@ export function RetroCardGroup({
                     sx={{
                       display: 'flex',
                       height: '26px',
+                      padding:0,
                       paddingTop: '3px',
+
                       paddingBottom: '3px',
                       width: '26px!important',
                       alignItems: 'center',
                     }}
                     disabled={ended}
+                    // onTouchStart={() =>
+                    //   !ended
+                    //     ? userReacted
+                    //       ? addReactToGroup(group.id, '')
+                    //       : addReactToGroup(group.id, '👍')
+                    //     : null
+                    // }
                     onClick={() =>
                       !ended
                         ? userReacted
@@ -368,6 +398,7 @@ export function RetroCardGroup({
                   onClick={event => {
                     onCollapse(event);
                   }}
+                  // onTouchStart={onCollapse}
                   // sx={{ position: 'initial' }}
                 >
                   {/* <CloseFullscreenIcon
@@ -392,6 +423,7 @@ export function RetroCardGroup({
                     onClick={event => {
                       onCollapse(event);
                     }}
+                    // onTouchStart={onCollapse}
                     sx={{ position: 'initial' }}
                   >
                     {/* <OpenInFullIcon
@@ -420,6 +452,7 @@ export function RetroCardGroup({
                 <Button
                   sx={{ position: 'initial', color: '#727D84' }}
                   onClick={() => deleteGroup(group.id)}
+                  // onTouchStart={() => deleteGroup(group.id)}
                 >
                   <DeleteIcon />
                 </Button>

@@ -1,13 +1,15 @@
-import { Button, Paper, Typography } from '@mui/material';
+import { Button, Paper, Typography, useMediaQuery } from '@mui/material';
 import { Box } from '@mui/system';
 import React from 'react';
+import theme from '../theme/theme';
 
 const FirstTimeExperience = (props: any) => {
+  const isXsUp = useMediaQuery(theme.breakpoints.only('xs'));
   const [showManual, setShowManual] = React.useState(
     sessionStorage.getItem('showManual')
   );
+  // const [isXsUp, setXsUp] = React.useState(props.isXsUp);
   React.useEffect(() => {
-
     if (
       showManual == undefined ||
       (showManual == null && props.facilitator == true)
@@ -25,12 +27,13 @@ const FirstTimeExperience = (props: any) => {
     //   'data',
     //   props.facilitator
     // );
+    console.log(isXsUp, 'size');
     if (showManual == undefined || showManual == null || showManual == '1') {
       if (props.facilitator === false) showLeaveInfo();
     }
 
     //
-  }, [showManual && props.facilitator == false]);
+  }, [isXsUp, showManual && props.facilitator == false]);
 
   const doneWithManual = () => {
     setShowManual('2');
@@ -81,7 +84,17 @@ const FirstTimeExperience = (props: any) => {
     let publishPaper = document.getElementById('publishPaper');
     if (publishPaper !== undefined && publishPaper !== null)
       publishPaper.style.display = 'none';
-    let leaveRetro = document.getElementById('leaveRetro');
+    let id = 'leaveRetro';
+    if (isXsUp) {
+      console.log(isXsUp, 'isXsup');
+      id = 'leaveRetroIsXsUp';
+    } else {
+      id = 'leaveRetro';
+    }
+    console.log(id, 'id');
+    let leaveRetro = document.getElementById(id);
+    console.log(leaveRetro && leaveRetro.getBoundingClientRect(), 'bounding');
+
     if (leaveRetro != null && leaveRetro != undefined) {
       var d = document.getElementById('publishDiv');
       var leaveRetroPaper = document.getElementById('leaveRetroPaper');
@@ -98,15 +111,22 @@ const FirstTimeExperience = (props: any) => {
         d.style.padding = '10px';
         if (leaveRetroPaper != null && leaveRetroPaper != undefined) {
           leaveRetroPaper.style.display = 'flex';
-          leaveRetroPaper.style.top =
-            leaveRetro.getBoundingClientRect().y +
-            leaveRetro.getBoundingClientRect().width / 2 +
-            'px';
-          leaveRetroPaper.style.left =
-            leaveRetro.getBoundingClientRect().x -
-            leaveRetroPaper.getBoundingClientRect().width +
-            10 +
-            'px';
+          leaveRetroPaper.style.top = isXsUp
+            ? leaveRetro.getBoundingClientRect().y +
+              leaveRetro.getBoundingClientRect().width / 1.5 +
+              'px'
+            : leaveRetro.getBoundingClientRect().y +
+              leaveRetro.getBoundingClientRect().width / 2 +
+              'px';
+          leaveRetroPaper.style.left = isXsUp
+            ? leaveRetro.getBoundingClientRect().x -
+              leaveRetroPaper.getBoundingClientRect().width / 1.5 +
+              10 +
+              'px'
+            : leaveRetro.getBoundingClientRect().x -
+              leaveRetroPaper.getBoundingClientRect().width +
+              10 +
+              'px';
         }
       }
     }
@@ -224,6 +244,7 @@ const FirstTimeExperience = (props: any) => {
                     width: '100px',
                   }}
                   onClick={showFinishInfo}
+                  // onTouchStart={showFinishInfo}
                 >
                   Next
                 </Button>
@@ -234,6 +255,7 @@ const FirstTimeExperience = (props: any) => {
                     cursor: 'pointer',
                   }}
                   onClick={doneWithManual}
+                  // onTouchStart={doneWithManual}
                 >
                   Skip Intro
                 </Typography>
@@ -284,6 +306,7 @@ const FirstTimeExperience = (props: any) => {
                     cursor: 'pointer',
                   }}
                   onClick={showPublishInfo}
+                  // onTouchStart={showPublishInfo}
                 >
                   Back
                 </Typography>
@@ -296,6 +319,7 @@ const FirstTimeExperience = (props: any) => {
                     width: '100px',
                   }}
                   onClick={doneWithManual}
+                  // onTouchStart={doneWithManual}
                 >
                   Done
                 </Button>
@@ -307,7 +331,7 @@ const FirstTimeExperience = (props: any) => {
           <Paper
             id="leaveRetroPaper"
             sx={{
-              width: '350px',
+              width: isXsUp ? '70%' : '350px',
               height: '208px',
               zIndex: '100001',
               position: 'absolute',
@@ -343,6 +367,7 @@ const FirstTimeExperience = (props: any) => {
                 width: '100px',
               }}
               onClick={doneWithManual}
+              // onTouchStart={doneWithManual}
             >
               GOT IT
             </Button>

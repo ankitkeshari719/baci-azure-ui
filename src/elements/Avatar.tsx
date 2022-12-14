@@ -1,5 +1,5 @@
 import React from 'react';
-
+import { LazyLoadImage } from 'react-lazy-load-image-component';
 const Avatar = (props: any) => {
   let avatar_src: any;
 
@@ -13,20 +13,46 @@ const Avatar = (props: any) => {
   }
 
   return (
-    <img
-      style={props.css}
-      className={`${
-        window.location.pathname.includes('join') &&
-        props.avatar == props.selectedAvatar
-          ? 'selectedAvatar'
-          : 'avatar'
-      }`}
-      src={avatar_src}
-      onClick={() => {
+
+
+    <LazyLoadImage
+    className={`${
+      window.location.pathname.includes('join') &&
+      props.avatar == props.selectedAvatar
+        ? 'selectedAvatar'
+        : 'avatar'
+    }`}
+    style={props.css}
+    // alt={image.alt}
+    // height={image.height}
+    src={avatar_src}// use normal <img> attributes as props
+    // width={image.width}
+    onClick={() => {
   
-        props.onClickAvatar(props.avatar);
-      }}
-    ></img>
+      props.onClickAvatar(props.avatar);
+    }}
+     />
+
+
+    // <img
+    //   style={props.css}
+      // className={`${
+      //   window.location.pathname.includes('join') &&
+      //   props.avatar == props.selectedAvatar
+      //     ? 'selectedAvatar'
+      //     : 'avatar'
+      // }`}
+    //   src={avatar_src}
+
+    //   onClick={() => {
+  
+    //     props.onClickAvatar(props.avatar);
+    //   }}
+    //   // onTouchStart={() => {
+  
+    //   //   props.onClickAvatar(props.avatar);
+    //   // }}
+    // ></img>
   );
 };
 

@@ -40,7 +40,58 @@ import FeedbackPopup from '../atoms/feedbackPopup';
 import Toolbar from '../elements/Toolbar';
 import SubToolbar from '../elements/SubToolbar';
 import FirstTimeExperience from '../elements/FirstTimeExperience';
+import { styled } from '@mui/material/styles';
 
+interface StyledTabsProps {
+  children?: React.ReactNode;
+  value: number;
+  color: string;
+  onChange: (event: React.SyntheticEvent, newValue: number) => void;
+}
+
+const StyledTabs = styled((props: StyledTabsProps) => (
+  <Tabs
+    scrollButtons="auto"
+    allowScrollButtonsMobile
+    variant="scrollable"
+    {...props}
+    TabIndicatorProps={{ children: <span className="MuiTabs-indicatorSpan" /> }}
+  />
+))(({ color }) => ({
+  color: 'red',
+  '& .MuiTabs-indicator': {
+    display: 'flex',
+    justifyContent: 'center',
+    backgroundColor: color,
+  },
+  '& .MuiTabs-indicatorSpan': {
+    maxWidth: 40,
+    width: '100%',
+    backgroundColor: color,
+  },
+}));
+
+interface StyledTabProps {
+  label: string;
+  color: string;
+}
+
+const StyledTab = styled((props: StyledTabProps) => (
+  <Tab disableRipple {...props} />
+))(({ theme, color }) => ({
+  textTransform: 'none',
+  fontSize: '16px',
+  fontWeight: '400',
+  marginRight: theme.spacing(1),
+  color: color,
+  '&.Mui-selected': {
+    color: color,
+    fontWeight: '600',
+  },
+  '&.Mui-focusVisible': {
+    backgroundColor: 'rgba(100, 95, 228, 0.32)',
+  },
+}));
 
 const ColumnContainer = ({
   children,
@@ -200,10 +251,11 @@ export default function RetroBoard() {
                     cards,
                   };
                 })
-                .filter(group =>
-                  !justMyCards ||
-                  group.name === UNGROUPED ||
-                  group.cards.length !== 0
+                .filter(
+                  group =>
+                    !justMyCards ||
+                    group.name === UNGROUPED ||
+                    group.cards.length !== 0
 
                   // global.usersSelected?.some((user, index) => {
                   //   return (
@@ -378,269 +430,47 @@ export default function RetroBoard() {
     }
   }, [ended]);
 
+  const getColumns = () => {
+    return columns;
+  };
+
+  function a11yProps(index: number) {
+    return {
+      id: `simple-tab-${index}`,
+      'aria-controls': `simple-tabpanel-${index}`,
+    };
+  }
+  const [value, setValue] = React.useState(0);
+
+  const handleChange = (event: React.SyntheticEvent, newValue: number) => {
+    console.log(newValue, 'value');
+    setValue(newValue);
+  };
+
   return (
     <Box
       style={{
         flexGrow: 1,
         display: 'flex',
         flexDirection: 'column',
+        overflowY: 'auto',
+        height: 'calc(var(--app-height))',
       }}
     >
       {global?.user.userType == 2 && !ended && (
         <FirstTimeExperience facilitator={true} />
       )}
-      {global?.user.userType != 2 && !ended && (
-        <FirstTimeExperience facilitator={false} />
-      )}
-      {/* <AppBar component="div" color="primary" position="static" elevation={0}>
-        <Toolbar>
-          {!isXsUp && !isSmUp ? (
-            <CountdownTimer color={'#000'} bold={false} />
-          ) : null}
-
-          <Grid container alignItems="center" spacing={1}>
-            <Grid
-              item
-              xs
-              style={{
-                display: 'flex',
-                flexDirection: 'row',
-                ...(isXsUp
-                  ? {
-                      flexGrow: 3,
-                      justifyContent: 'center',
-                    }
-                  : {}),
-              }}
-            >
-              <Button
-                color="secondary"
-                onClick={() => {
-                  setShowRetroPanel(!showRetroPanel);
-                  setShowParticipantsPanel(false);
-                  setShowSharePanel(false);
-                }}
-              >
-                <Container
-                  color="inherit"
-                  sx={{
-                    alignItems: 'center',
-                    display: 'flex',
-                    cursor: 'pointer',
-                  }}
-                >
-                  <Typography
-                    variant="h5"
-                    component="h1"
-                    sx={{
-                      whiteSpace: 'nowrap',
-                      textOverflow: 'ellipsis',
-                      maxWidth: '40vw',
-                      height: '100%',
-                      display: 'block',
-                      overflow: 'hidden',
-                    }}
-                  >
-                    {retroName}
-                  </Typography>
-                  <KeyboardArrowDownIcon
-                    sx={{ height: '30px' }}
-                  ></KeyboardArrowDownIcon>
-                </Container>
-              </Button>
-            </Grid>
-            {useMemo(
-              () => (
-                <Grid
-                  item
-                  xs
-                  sx={{
-                    display: 'flex',
-                    justifyContent: 'end',
-                    cursor: 'pointer',
-                  }}
-                  onClick={() => {
-                    setShowRetroPanel(false);
-                    setShowParticipantsPanel(!showParticipantsPanel);
-                    setShowSharePanel(false);
-                  }}
-                >
-                  {users.map((user, i) =>
-                    i === 2 ? (
-                      <span
-                        key={user.userId}
-                        style={{ marginLeft: '-8px', zIndex: 2 - i }}
-                      >
-                        <UserAvatar userNickname={'+' + (users.length - 2)} />
-                      </span>
-                    ) : i < 2 ? (
-                      <span style={{ marginLeft: '-8px', zIndex: 2 - i }}>
-                        <UserAvatar
-                          key={user.userId}
-                          userNickname={user.userNickname}
-                        />
-                      </span>
-                    ) : null
-                  )}
-                </Grid>
-              ),
-              [lastStateUpdate]
-            )}
-          </Grid>
-        </Toolbar>
-      </AppBar> */}
+      {global?.user.userType != 2 &&
+        !ended &&
+        (isXsUp ? (
+          <FirstTimeExperience facilitator={false} isXsUp={true} />
+        ) : (
+          <FirstTimeExperience facilitator={false} isXsUp={false} />
+        ))}
       <Grid xs={12} item>
         <Toolbar onFinishRetro={finishRetro}></Toolbar>
-        <SubToolbar></SubToolbar>
+        {!isXsUp && <SubToolbar></SubToolbar>}
       </Grid>
-
-      {/* {isXsUp ? (
-        <>
-          <Tabs
-            value={currentColumn}
-            onChange={(event, value) => setCurrentColumn(value)}
-            variant="scrollable"
-            scrollButtons="auto"
-            sx={{
-              '.Mui-selected ': { color: 'black' },
-              '.MuiTabs-indicator': { background: '#159ADD' },
-            }}
-          >
-            {[
-              ...columns,
-              ...(FEATURE_FLAGS.feedback
-                ? [{ id: 'feedback', name: 'FINISH RETRO' }]
-                : []),
-            ].map((column, index) => (
-              <Tab key={column.id} label={column.name} />
-            ))}
-          </Tabs>
-        </>
-      ) : null}
-
-      {!isXsUp || currentColumn !== totalPanels - 1 ? (
-        <AppBar
-          component="div"
-          position="static"
-          elevation={0}
-          sx={{
-            zIndex: 0,
-            display: 'flex',
-            flexDirection: 'row',
-            background: 'white',
-            color: '#159ADD',
-            padding: '5px 15px',
-          }}
-        >
-          <Grid container spacing={2}>
-            <Grid item xs={isXsUp ? 6 : isSmUp ? 6 : 2}>
-              {isXsUp || isSmUp ? (
-                <CountdownTimer color={'#2B9FDE'} bold={true} />
-              ) : FEATURE_FLAGS.stressTest ? (
-                <Button
-                  variant="outlined"
-                  sx={{ padding: '4px', marginLeft: '4px', borderRadius: 0 }}
-                  onClick={() => create10Cards()}
-                >
-                  Create 10 cards
-                </Button>
-              ) : null}
-            </Grid>
-
-            {!isXsUp && !isSmUp ? (
-              <Grid
-                item
-                xs={6}
-                style={{
-                  display: 'flex',
-                  flexDirection: 'row',
-                  justifyContent: 'center',
-                  alignItems: 'center',
-                }}
-              >
-                <Box
-                  sx={{
-                    color: 'black',
-                    border: '2px #FECE8B solid',
-                    padding: '3px',
-                  }}
-                >
-                  Retro Access Code: {global.currentRetro?.humanId}
-                </Box>
-                <Button
-                  variant="outlined"
-                  sx={{
-                    background: '#FECE8B',
-                    color: 'black',
-                    padding: '4px',
-                    marginLeft: '4px',
-                    borderRadius: 0,
-                    borderColor: '#FECE8B',
-                  }}
-                  onClick={() => setShowSharePanel(!showSharePanel)}
-                >
-                  Share
-                </Button>
-              </Grid>
-            ) : null}
-
-            <Grid
-              item
-              xs={isXsUp ? 6 : 2}
-              style={{
-                flexDirection: 'row',
-                display: 'flex',
-                alignItems: 'flex-end',
-                justifyContent: 'flex-end',
-              }}
-            >
-              <FormControlLabel
-                sx={{
-                  color: justMyCards ? '#727D84' : '#9EA6AC',
-                  'span:nth-child(2)': {
-                    overflow: 'hidden',
-                    whiteSpace: 'nowrap',
-                    textOverflow: 'ellipsis',
-                    maxWidth: '150px',
-                  },
-                }}
-                control={
-                  <Switch
-                    color="info"
-                    checked={justMyCards}
-                    onChange={e => setJustMyCards(e.target.checked)}
-                  />
-                }
-                label="My cards only"
-              />
-            </Grid>
-
-            {!isXsUp && FEATURE_FLAGS.feedback ? (
-              <Grid
-                item
-                xs={isSmUp ? 4 : 2}
-                sx={{ display: 'flex', justifyContent: 'flex-end' }}
-              >
-                <Button
-                  variant="outlined"
-                  sx={{
-                    ':hover': { background: '#695F9B' },
-                    background: '#695F9B',
-                    color: '#fff',
-                    overflow: 'hidden',
-                    whiteSpace: 'nowrap',
-                    textOverflow: 'ellipsis',
-                  }}
-                  onClick={finishRetro}
-                >
-                  Finish Retro
-                </Button>
-              </Grid>
-            ) : null}
-          </Grid>
-        </AppBar>
-      ) : null} */}
-
       <Grid
         container
         spacing={0}
@@ -648,57 +478,74 @@ export default function RetroBoard() {
           flexWrap: 'nowrap',
           flexGrow: 1,
           background: 'white',
-          paddingLeft: '42px',
-          paddingRight: '42px',
+          paddingLeft: isXsUp ? 0 : '42px',
+          paddingRight: isXsUp ? 0 : '42px',
         }}
       >
-        {showRetroPanel || showParticipantsPanel || showSharePanel ? (
-          <Box
-            sx={{
-              position: 'absolute',
-              background: '#88888888',
-              width: '100vw',
-              height: '100%',
-              display: 'flex',
-              zIndex: 22,
-              paddingTop: '2px',
-            }}
-            onClick={() => {
-              setShowParticipantsPanel(false);
-              setShowRetroPanel(false);
-              setShowSharePanel(false);
-            }}
-          >
-            {showRetroPanel ? (
-              <RetroPropsPanel
-                onClose={closeAllPanels}
-                setShowSharePanel={setShowSharePanel}
-              />
-            ) : null}
-            {showParticipantsPanel ? (
-              <ParticipantsPanel onClose={closeAllPanels} />
-            ) : null}
-            {showSharePanel ? <SharePanel onClose={closeAllPanels} /> : null}
-          </Box>
-        ) : null}
         {showFeedback ? (
           <FeedbackPopup show={true} showThankYou={ended}></FeedbackPopup>
         ) : null}
-        {useMemo(
-          () =>
-            (isXsUp
-              ? [...getProcessedColumns(), undefined]
-              : getProcessedColumns()
-            ).map((column, index) => (
-              <React.Fragment key={index}>
-                {(isXsUp && index === currentColumn) ||
-                  (isSmUp &&
-                    (index === currentColumn || index === currentColumn + 1)) ||
-                  (!isXsUp &&
-                    !isSmUp &&
-                    (index === global.expandColumn ||
-                      global.expandColumn === -1) && (
-                      <ColumnContainer totalPanels={totalPanels} key={index+"1"}>
+        <Box
+          sx={{
+            display: 'flex',
+            flexDirection: isXsUp ? 'column' : 'column',
+            width: '100%',
+          }}
+        >
+          {isXsUp && getColumns().length !== 0 ? (
+            <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
+              <StyledTabs
+                color={getColumns()[value].groupFontColour}
+                value={value}
+                onChange={handleChange}
+                aria-label="basic tabs example"
+                sx={{ color: 'green!important' }}
+              >
+                <StyledTab
+                  color={getColumns()[0].groupFontColour}
+                  label={getColumns()[0].name}
+                  {...a11yProps(0)}
+                  sx={{ fontSize: '16px' }}
+                />
+                ;
+                <StyledTab
+                  color={getColumns()[1].groupFontColour}
+                  label={getColumns()[1].name}
+                  {...a11yProps(1)}
+                  sx={{ fontSize: '16px' }}
+                />
+                ;
+                <StyledTab
+                  color={getColumns()[2].groupFontColour}
+                  label={getColumns()[2].name}
+                  {...a11yProps(2)}
+                  sx={{ fontSize: '16px' }}
+                />
+                ;
+                {/* {getColumns().map((column, index) => {
+                  <Tab key={index} label="vishal" {...a11yProps(index)} />;
+                })} */}
+              </StyledTabs>
+            </Box>
+          ) : (
+            <></>
+          )}
+          <div style={{ display: 'flex', flexDirection: 'row', width: '100%' }}>
+            {useMemo(
+              () =>
+                (false
+                  ? [...getProcessedColumns(), undefined]
+                  : getProcessedColumns()
+                ).map((column, index) => (
+                  <React.Fragment key={index}>
+                    {((isXsUp && index == value) ||
+                      (!isXsUp &&
+                        (global.expandColumn == -1 ||
+                          index == global.expandColumn))) && (
+                      <ColumnContainer
+                        totalPanels={totalPanels}
+                        key={index + '1'}
+                      >
                         {!!column ? (
                           <>
                             <RetroColumn
@@ -710,30 +557,30 @@ export default function RetroBoard() {
                               }
                               column={column}
                               columnId={column.id}
-                              noHeader={isXsUp}
+                              noHeader={false}
                               showEditBox={showEditBox}
                               setShowEditBox={setShowEditBox}
                               setIslanded={setIsLanded}
                               cardGroups={column.groups}
                             />
-                            {isXsUp && !showEditBox ? (
-                              <>
-                                <Fab
-                                  aria-label="add"
-                                  style={{
-                                    position: 'fixed',
-                                    bottom: '20px',
-                                    right: '20px',
-                                    background: 'black',
-                                    color: 'white',
-                                    zIndex: 100,
-                                  }}
-                                  onClick={() => setShowEditBox(true)}
-                                >
-                                  <AddIcon />
-                                </Fab>
-                              </>
-                            ) : null}
+                            {/* {!showEditBox ? (
+                          <>
+                            <Fab
+                              aria-label="add"
+                              style={{
+                                position: 'fixed',
+                                bottom: '20px',
+                                right: '20px',
+                                background: 'black',
+                                color: 'white',
+                                zIndex: 100,
+                              }}
+                              onClick={() => setShowEditBox(true)}
+                            >
+                              <AddIcon />
+                            </Fab>
+                          </>
+                        ) : null} */}
                           </>
                         ) : (
                           <FeedbackColumn
@@ -747,20 +594,23 @@ export default function RetroBoard() {
                           />
                         )}
                       </ColumnContainer>
-                    ))}
-              </React.Fragment>
-            )),
-          [
-            lastStateUpdate,
-            isXsUp,
-            isSmUp,
-            justMyCards,
-            currentColumn,
-            showEditBox,
-            global.expandColumn,
-            global.usersSelected,
-          ]
-        )}
+                    )}
+                  </React.Fragment>
+                )),
+              [
+                lastStateUpdate,
+                isXsUp,
+                value,
+                // isSmUp,
+                justMyCards,
+                currentColumn,
+                showEditBox,
+                global.expandColumn,
+                global.usersSelected,
+              ]
+            )}
+          </div>
+        </Box>
       </Grid>
     </Box>
   );
