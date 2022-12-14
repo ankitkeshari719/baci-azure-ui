@@ -29,6 +29,7 @@ import commonStyles from './../style.module.scss';
 import SessionEndingMessage from '../atoms/SessionEndingMessage';
 import LeaveRetroDialog from '../atoms/LeaveRetroDialog';
 import theme from '../theme/theme';
+import { CountdownTimer } from './CountdownTimer';
 // import { ReactComponent as InfoSvg } from '../../public/svgs/Info.svg';
 const Toolbar = (props: any) => {
   const isXsUp = useMediaQuery(theme.breakpoints.only('xs'));
@@ -559,7 +560,7 @@ const Toolbar = (props: any) => {
                 <Avatar
                   avatar={user?.avatar}
                   onClickAvatar={() => {
-                    console.log("click")
+                    console.log('click');
                   }}
                   css={{
                     width: '44px',
@@ -600,6 +601,7 @@ const Toolbar = (props: any) => {
         sx={{
           display: isXsUp ? 'flex' : 'none',
           flexDirection: 'row-reverse!important',
+          justifyContent:"space-between",
           width: '100%!important',
           marginTop: '10px',
           marginBottom: isXsUp ? '10px' : 0,
@@ -625,6 +627,9 @@ const Toolbar = (props: any) => {
           >
             LEAVE RETRO
           </Button>
+        )}
+        {!ended && (
+          <CountdownTimer color={'#2B9FDE'} bold={true}></CountdownTimer>
         )}
       </Box>
     </Box>
