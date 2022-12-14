@@ -558,7 +558,9 @@ const Toolbar = (props: any) => {
               >
                 <Avatar
                   avatar={user?.avatar}
-                  onClickAvatar={() => {}}
+                  onClickAvatar={() => {
+                    console.log("click")
+                  }}
                   css={{
                     width: '44px',
                     height: '44px',

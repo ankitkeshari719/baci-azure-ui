@@ -265,7 +265,7 @@ function BoardProvider(props: ComponentProps<any>) {
       if (state.retroId === '' && loadState()) {
         loadedState = true;
 
-        setState(state);
+        setState({...state});
       } else {
         clearState();
         state.retroId = currentRetro?.id;

@@ -235,7 +235,7 @@ export function RetroCard({
 
     groups
       .filter(group => group.id !== currentGroupId && group.name !== UNGROUPED)
-      .map((group, i) =>
+      .forEach((group, i) =>
         items.push({
           label: 'to ' + functionToReturnGroupName(group.name, i),
           callback: () => handleMove(group.id),
@@ -412,11 +412,12 @@ export function RetroCard({
                           : '',
                     }}
                     className={
-                      card.createdBy === global.user.id &&
-                      !ended &&
-                      !hideButtons
-                        ? ''
-                        : ''
+                      // card.createdBy === global.user.id &&
+                      // !ended &&
+                      // !hideButtons
+                      //   ? ''
+                      //   : 
+                        ''
                     }
                   >
                     {card.value}
@@ -460,10 +461,10 @@ export function RetroCard({
                   onClick={e => {
                     // console.log('e', e, ended, userReacted);
                     !ended
-                      ? userReacted
+                      && userReacted
                         ? removeReactFromCard(card.id)
                         : addReactToCard(card.id)
-                      : null;
+                      ;
                     e.stopPropagation();
                   }}
                   // onTouchStart={e => {
