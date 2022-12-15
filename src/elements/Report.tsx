@@ -335,13 +335,13 @@ export const Report = React.forwardRef((props, ref) => {
     const newArr = newQuestions.map(({ question, ...rest }) => {
       return rest;
     });
-    newArr.map(data => {
+    newArr.forEach(data => {
       data[1] = Math.round((data[1] / totalPulseCheckCount) * 100);
       data[2] = Math.round((data[2] / totalPulseCheckCount) * 100);
       data[3] = Math.round((data[3] / totalPulseCheckCount) * 100);
     });
     let sampleArray: any = [];
-    newArr.map(data => {
+    newArr.forEach(data => {
       return sampleArray.push(Object.values(data));
     });
     // console.log('sample', sampleArray);

@@ -153,7 +153,9 @@ const SubToolbar = (props: any) => {
                 <Avatar
                   key={user.userId}
                   avatar={user.avatar}
-                  onClickAvatar={() => {}}
+                  onClickAvatar={() => {
+                    console.log("click")
+                  }}
                   css={{
                     width: '40px',
                     height: '40px',
@@ -300,7 +302,7 @@ const SubToolbar = (props: any) => {
               <Avatar
                 avatar={user.avatar}
                 onClickAvatar={() => {
-                  null;
+            console.log("click")
                 }}
                 css={{
                   width: '40px',
