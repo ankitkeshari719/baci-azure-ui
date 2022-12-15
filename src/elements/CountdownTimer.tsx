@@ -8,6 +8,7 @@ import {
   styled,
   Popover,
   TextField,
+  useMediaQuery,
 } from '@mui/material';
 
 import AccessTimeIcon from '@mui/icons-material/AccessTime';
@@ -22,6 +23,7 @@ import React from 'react';
 import RemoveIcon from '@mui/icons-material/Remove';
 import { Stop } from '@mui/icons-material';
 import { BoardActionType } from '../statemachine/BoardStateMachine';
+import theme from '../theme/theme';
 
 const RoundButton = styled('button')({
   background: '#159ADD',
@@ -98,6 +100,7 @@ export function CountdownTimer({
   const [countdownWindowOpen, setCountdownWindowOpen] = React.useState(false);
   const timedelta = React.useRef(0);
   const previousExpired = React.useRef(false);
+  const isXsUp = useMediaQuery(theme.breakpoints.only('xs'));
   // const audio = new Audio('../sounds/ding.mp3');
 
   //
@@ -201,16 +204,16 @@ export function CountdownTimer({
     if (
       !previousExpired.current &&
       countdownExpired &&
-      global.user.userType==2
+      global.user.userType == 2
     ) {
-      // audio.play(); 
+      // audio.play();
     }
     previousExpired.current = countdownExpired;
   }, [countdownExpired]);
 
   return (
     <Box sx={{ display: 'flex', flexDirection: 'row' }}>
-      {global.user?.userType==2 && !ended && (
+      {global.user?.userType == 2 && !ended && (
         <Button
           aria-describedby={id}
           sx={{ color: color, fontWeight: bold ? '700' : '400' }}
@@ -222,7 +225,6 @@ export function CountdownTimer({
               await saveAndProcessAction(BoardActionType.STOP_TIMER, {});
             }
           }}
-
         >
           <Box
             sx={{
@@ -263,8 +265,9 @@ export function CountdownTimer({
           sx={{
             display: 'flex',
             animation: `${scale} 500ms linear 10`,
-            fontSize: '40px',
+            fontSize: isXsUp ? '30px' : '40px',
             color: '#EE7538',
+            marginLeft: isXsUp ? '16px' : 0,
           }}
         >
           {`Time's up!`}
@@ -286,7 +289,13 @@ export function CountdownTimer({
               await saveAndProcessAction(BoardActionType.EXPIRE_TIMER, {})
             }
             renderer={({ minutes, seconds }) => (
-              <Typography sx={{ fontSize: '56px', color: '#EE7538' }}>
+              <Typography
+                sx={{
+                  fontSize: isXsUp ? '30px' : '56px',
+                  color: '#EE7538',
+                  marginLeft: isXsUp ? '16px' : 0,
+                }}
+              >
                 {minutes < 10 ? '0' + minutes : minutes}:
                 {seconds < 10 ? '0' + seconds : seconds}
               </Typography>
@@ -597,21 +606,24 @@ export function CountdownTimer({
                   </RoundButtonOrange>
                 )}
                 {countdownFrom === -1 && countdownPaused && (
-                  <RoundButton onClick={resumeTimer} 
-                  // onTouchStart={resumeTimer}
+                  <RoundButton
+                    onClick={resumeTimer}
+                    // onTouchStart={resumeTimer}
                   >
                     <PlayArrowIcon></PlayArrowIcon>
                   </RoundButton>
                 )}
                 {countdownFrom === -1 && !countdownPaused ? (
-                  <RoundButton onClick={startTimer} 
-                  // onTouchStart={startTimer}
+                  <RoundButton
+                    onClick={startTimer}
+                    // onTouchStart={startTimer}
                   >
                     <PlayArrowIcon></PlayArrowIcon>
                   </RoundButton>
                 ) : (
-                  <RoundButtonRed onClick={stopTimer} 
-                  // onTouchStart={stopTimer}
+                  <RoundButtonRed
+                    onClick={stopTimer}
+                    // onTouchStart={stopTimer}
                   >
                     <Stop></Stop>
                   </RoundButtonRed>

@@ -488,7 +488,7 @@ export default function RetroBoard() {
         <Box
           sx={{
             display: 'flex',
-            flexDirection: isXsUp ? 'column' : 'column',
+            flexDirection:  'column',
             width: '100%',
           }}
         >

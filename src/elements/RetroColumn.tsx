@@ -780,7 +780,8 @@ export function RetroColumn({
                     }}
                     ref={containerRef}
                     style={{
-                      overflowY: noHeightLimit ? 'auto' : 'auto',
+                      // overflowY: noHeightLimit ? 'auto' : 'auto',
+                      overflowY:  'auto',
                       userSelect: 'none',
                       flexGrow: 2,
                     }}
@@ -835,7 +836,7 @@ export function RetroColumn({
                     <div
                       ref={containerRef}
                       style={{
-                        overflowY: noHeightLimit ? 'auto' : 'auto',
+                        overflowY: 'auto',
                         userSelect: 'none',
                         flexGrow: 2,
                       }}
@@ -1211,7 +1212,7 @@ export function RetroColumn({
                     <div
                       ref={containerRef}
                       style={{
-                        overflowY: noHeightLimit ? 'auto' : 'auto',
+                        overflowY: 'auto',
                         userSelect: 'none',
                         flexGrow: 2,
                       }}
