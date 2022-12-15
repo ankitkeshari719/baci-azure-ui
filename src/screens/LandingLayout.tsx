@@ -81,7 +81,7 @@ export function LandingLayout() {
     <>
       <>
         {isXsUp ? (
-          <Box>
+          <Box sx={{position: 'relative'}}>
             <img
               src={LandingMobileImage}
               style={{ width: '100%', height: '48vh'}}
@@ -100,7 +100,7 @@ export function LandingLayout() {
             >
               <Box>
                 <LazyLoadImage
-                  style={styles.logoImage}
+                  style={styles.logoImageXs}
                   alt="logo"
                   // height={image.height}
                   src={BACILogo} // use normal <img> attributes as props

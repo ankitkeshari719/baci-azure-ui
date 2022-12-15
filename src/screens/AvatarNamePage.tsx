@@ -63,6 +63,8 @@ const styles = {
   avatarSvgXs: {
     width: '50px',
     height: '50px',
+    marginBottom: '15px',
+    marginRight: '15px',
     borderRadius: '50%',
   },
 };
@@ -294,7 +296,7 @@ export function AvatarNamePage() {
     }
   };
   return (
-    <Grid container spacing={0} style={{ overflowY: 'auto' }} height={window.innerHeight} >
+    <Grid container spacing={0} style={{ overflowY: 'auto' }}>
       <Grid item xs={isXsUp ? 12 : 6}>
         <LandingLayout></LandingLayout>
       </Grid>
@@ -310,14 +312,20 @@ export function AvatarNamePage() {
           container
           marginRight={isXsUp ? '0px' : commonStyles.m_80}
           marginLeft={isXsUp ? '0px' : commonStyles.m_80}
-          flexDirection="column"
-          justifyContent="center"
+          flexDirection="row"
           sx={{
-            height: !isXsUp ? '100vh' : '50vh',
+            height: !isXsUp ? '100vh' : '48vh',
             width: isXsUp ? '90%' : '100%',
           }}
         >
-          <Box>
+          <Box
+            sx={{
+              display: 'flex',
+              justifyContent: 'end',
+              flexDirection: 'column',
+              width: '100%',
+            }}
+          >
             {!global.currentRetro?.creatorId ? (
               <>
                 <Typography variant="h1" color={commonStyles.primaryDark}>
@@ -452,7 +460,7 @@ export function AvatarNamePage() {
                   <span className="secondaryButtonText">Go on..</span>
                 </Button>
               </Box>
-              <Dialog open={openAvatarDialog} sx={{ height: '90vh' ,'&& .MuiDialog-paper': {overflowX: 'hidden'}}}>
+              <Dialog open={openAvatarDialog} sx={{ height: '90vh' }}>
                 <DialogTitle>
                   <Typography>Select Avatar</Typography>
                 </DialogTitle>
@@ -461,11 +469,7 @@ export function AvatarNamePage() {
                     width: '90%',
                     padding: '16px',
                     height: '60%',
-                    overflowY: 'auto',
-                    display: 'flex',
-                    flexDirection: 'row',
-                    flexWrap: 'wrap',
-                    justifyContent: 'space-evenly',
+                    overflowY: 'scroll',
                   }}
                 >
                   {avatarList.map((avatar: any, index) => (
