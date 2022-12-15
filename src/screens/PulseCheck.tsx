@@ -2,6 +2,10 @@ import {
   AppBar,
   Box,
   Button,
+  Dialog,
+  DialogActions,
+  DialogContent,
+  DialogTitle,
   FormControlLabel,
   Grid,
   Link,
@@ -46,6 +50,7 @@ import sadMask from '../assets/img/sad_mask.png';
 import neutralMask from '../assets/img/Neutral_Mask.png';
 import Toolbar from '../elements/Toolbar';
 
+
 const BootstrapTooltip = styled(({ className, ...props }: TooltipProps) => (
   <Tooltip {...props} classes={{ popper: className }}>
     {props.children}
@@ -81,10 +86,12 @@ export default function PulseCheck() {
   const [pulse1, setPulse1] = React.useState(false);
   const [pulse2, setPulse2] = React.useState(false);
   const [pulse3, setPulse3] = React.useState(false);
+  const [openHelpPopup, SetOpenHelpPopup] = React.useState(false);
   const pulseProgressTotal = 3;
   const scrollableRef = React.useRef<HTMLDivElement>(null);
   const questionRef = React.useRef<HTMLDivElement>(null);
-
+  const [popupTitle, setPopupTitle] = React.useState('');
+  const [popupContent, setPopupContent] = React.useState('');
   useLoadRetro();
   function setPulseBar(value: any) {
     // console.log(qs, value);
@@ -271,7 +278,13 @@ export default function PulseCheck() {
       );
     }
   };
-
+  const handleClose = () => {
+    SetOpenHelpPopup(false);
+  };
+  function setPopupData(index: any) {
+    setPopupTitle(QUICK_PULSE_CHECK_QUESTIONS[index]);
+    setPopupContent(QUICK_PULSE_CHECK_QUESTIONS_INFO[index]);
+  }
   return (
     <Grid xs={12} container item>
       <Grid xs={12} item>
@@ -283,27 +296,11 @@ export default function PulseCheck() {
         pl={isXsUp ? '0px' : commonStyles.m_80}
         xs={12}
         lg={12}
-        sx={{ overflowY:isXsUp? 'scroll' : 'auto', height: isXsUp?'calc(80vh)':'calc(90vh)' }}
+        sx={{
+          overflowY: isXsUp ? 'scroll' : 'auto',
+          height: isXsUp ? 'calc(80vh)' : 'calc(90vh)',
+        }}
       >
-        {/* {showSharePanel ? (
-        <Box
-          sx={{
-            position: 'absolute',
-            background: '#88888888',
-            top: '46px',
-            width: '100vw',
-            height: 'calc(var(--app-height) - 46px)',
-            display: 'flex',
-            zIndex: 22,
-          }}
-          onClick={() => {
-            setShowSharePanel(false);
-          }}
-        >
-          <SharePanel onClose={() => setShowSharePanel(false)} />
-        </Box>
-      ) : null} */}
-
         <Box
           sx={{
             userSelect: 'none',
@@ -374,17 +371,66 @@ export default function PulseCheck() {
                   }}
                 >
                   {question}
-                  <Tooltip
-                    placement="top"
-                    title={QUICK_PULSE_CHECK_QUESTIONS_INFO[index]}
-                  >
+                  {isXsUp ? (
                     <Icons.QuestionMarkCircleOutline
                       size={20}
                       color={commonStyles.secondaryMain}
-                      style={{ marginBottom: '-5px', marginLeft: '5px' }}
+                      style={{
+                        marginBottom: '-5px',
+                        marginLeft: '5px',
+                        cursor: 'pointer',
+                      }}
+                      onClick={() => {
+                        SetOpenHelpPopup(true);
+                        setPopupData(index);
+                      }}
                     />
-                  </Tooltip>
+                  ) : (
+                    <Tooltip
+                      placement="top"
+                      title={QUICK_PULSE_CHECK_QUESTIONS_INFO[index]}
+                    >
+                      <Icons.QuestionMarkCircleOutline
+                        size={20}
+                        color={commonStyles.secondaryMain}
+                        style={{ marginBottom: '-5px', marginLeft: '5px' }}
+                      />
+                    </Tooltip>
+                  )}
                 </Typography>
+
+                <>
+                  <Dialog open={openHelpPopup} onClose={handleClose}>
+                    <DialogTitle
+                      sx={{ display: 'flex', justifyContent: 'center' }}
+                    >
+                      <Typography
+                        variant="h6"
+                        mt='40px'
+                        color={commonStyles.secondaryMain}
+                      >
+                        {popupTitle}
+                      </Typography>
+                    </DialogTitle>
+                    <DialogContent>
+                      <Grid container justifyContent="center">
+                        <Typography variant="h5" color={commonStyles.grey60} mt='20px' mb='20px'>
+                          {popupContent}
+                        </Typography>
+                      </Grid>
+                    </DialogContent>
+                    <DialogActions>
+                      <Button
+                        variant="outlined"
+                        className="secondaryButton"
+                        onClick={handleClose}
+                        sx={{marginBottom: '40px', width: '100%'}}
+                      >
+                        <span className="secondaryButtonText">close</span>
+                      </Button>
+                    </DialogActions>
+                  </Dialog>
+                </>
 
                 <Box
                   sx={{
@@ -522,7 +568,7 @@ export default function PulseCheck() {
             cursor: 'pointer',
           }}
         >
-          <Link sx={{ marginTop: '43px' }} className="infoLink" onClick={skip}  >
+          <Link sx={{ marginTop: '43px' }} className="infoLink" onClick={skip}>
             Skip Pulse Check
           </Link>
         </Box>
