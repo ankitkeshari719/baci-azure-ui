@@ -1,4 +1,6 @@
 import { Typography, Box, Button } from '@mui/material';
+import React from 'react';
+import { GlobalContext } from '../contexts/GlobalContext';
 
 const SessionEndingMessage = ({
   isXsUp,
@@ -7,11 +9,12 @@ const SessionEndingMessage = ({
   isXsUp: boolean;
   hideSessionEndingMessage: (event: any) => void;
 }) => {
+  const [global, dispatch] = React.useContext(GlobalContext);
   return (
     <div
       style={{
         position: 'absolute',
-        zIndex:'2',
+        zIndex: '2',
         top: '0',
         right: isXsUp ? 0 : '140px',
         background: '#EE7538',
@@ -56,7 +59,8 @@ const SessionEndingMessage = ({
         The session is ending soon!
       </Typography>
       <Typography align="right">
-        Consider finalising actions and hitting "LEAVE RETRO" button.
+        Consider finalising actions and hitting{' '}
+        {global.user.userType == 2 ? 'FINISH RETRO' : 'LEAVE RETRO'} button.
       </Typography>
       <Typography
         // type="button"

@@ -336,7 +336,7 @@ export function RetroCard({
               <Avatar
                 onClickAvatar={() => {}}
                 avatar={card.avatar}
-                css={{ width: '40px', height: '40px' }}
+                css={{ width: '40px', height: '40px', border: 'none' }}
               />
 
               <Box
@@ -364,16 +364,37 @@ export function RetroCard({
                       if (e.key === 'Escape') {
                         cancelEdit();
                       }
-                      if (e.keyCode === 13) {
+                      const tempValue = value;
+                      const removedEnter = tempValue.replace(/[\r\n]/gm, '');
+                      setValue(removedEnter);
+                      const removedSpaces = removedEnter.replace(/ /g, '');
+                      if (
+                        e.keyCode === 13 &&
+                        removedSpaces &&
+                        removedSpaces.length !== 0
+                      ) {
                         submit(value);
                         (e.target as HTMLInputElement).blur();
                       }
                     }}
-                    onChange={e =>
-                      setValue(
-                        e.currentTarget.value.substring(0, MAX_CARD_TEXT_LENGTH)
-                      )
-                    }
+                    onChange={e => {
+                      const tempValue = value;
+                      const removedEnter = tempValue.replace(/[\r\n]/gm, '');
+                      // setValue(removedEnter);
+                      const removedSpaces = removedEnter.replace(/ /g, '');
+
+                      if (removedSpaces.length === 0) {
+                        setValue('');
+                      }
+
+                      if (e.target.value !== ' ' && e.target.value != '  \n')
+                        setValue(
+                          e.currentTarget.value.substring(
+                            0,
+                            MAX_CARD_TEXT_LENGTH
+                          )
+                        );
+                    }}
                     onSubmit={() => submit(value)}
                   ></TextField>
                 ) : (
@@ -416,8 +437,8 @@ export function RetroCard({
                       // !ended &&
                       // !hideButtons
                       //   ? ''
-                      //   : 
-                        ''
+                      //   :
+                      ''
                     }
                   >
                     {card.value}
@@ -460,11 +481,9 @@ export function RetroCard({
                   disabled={ended || global.leaveRetro}
                   onClick={e => {
                     // console.log('e', e, ended, userReacted);
-                    !ended
-                      && userReacted
-                        ? removeReactFromCard(card.id)
-                        : addReactToCard(card.id)
-                      ;
+                    !ended && userReacted
+                      ? removeReactFromCard(card.id)
+                      : addReactToCard(card.id);
                     e.stopPropagation();
                   }}
                   // onTouchStart={e => {
@@ -613,7 +632,6 @@ export function RetroCard({
                       MenuProps={{ elevation: 3 }}
                       ButtonProps={{ variant: undefined }}
                       onClick={() => console.log('Clicked')}
-                      
                     />
                   </Box>
                 ) : null}
@@ -749,6 +767,11 @@ export function RetroCard({
                 </Button>
                 <Button
                   sx={{ minWidth: '0px', padding: 0, position: 'initial' }}
+                  disabled={
+                    !value ||
+                    value.length === 0 ||
+                    value.replace(/[\r\n]/gm, '').replace(/ /g, '').length === 0
+                  }
                   onClick={e => {
                     submit(value);
                     e.stopPropagation();
