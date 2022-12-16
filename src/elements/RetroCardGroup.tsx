@@ -244,7 +244,6 @@ export function RetroCardGroup({
                 />
               ) : (
                 <Typography
-                  
                   sx={{
                     color: nameSet ? groupFontColour : '#8D858A',
                     paddingLeft: '12px!important',
@@ -252,13 +251,11 @@ export function RetroCardGroup({
                     width: '70%',
                     overflow: 'hidden',
                     textOverflow: 'ellipsis',
-                    
                   }}
                 >
                   {nameSet ? name : 'Name grouping'}
                 </Typography>
               )}
-
 
               <span
                 style={{
@@ -288,14 +285,14 @@ export function RetroCardGroup({
                     sx={{
                       display: 'flex',
                       height: '26px',
-                      padding:0,
+                      padding: 0,
                       paddingTop: '3px',
 
                       paddingBottom: '3px',
                       width: '26px!important',
                       alignItems: 'center',
                     }}
-                    disabled={ended}
+                    disabled={ended || global.leaveRetro}
                     // onTouchStart={() =>
                     //   !ended
                     //     ? userReacted
@@ -330,7 +327,7 @@ export function RetroCardGroup({
                       </svg>
                     ) : (
                       <>
-                        {ended ? (
+                        {ended || global.leaveRetro ? (
                           // <img src="/svgs/Star.svg" />
                           <svg
                             width="20"
@@ -384,7 +381,7 @@ export function RetroCardGroup({
               )}
             </Grid>
             {/* <Box component="span">{' ( ' + group.cards.length + ' ) '}</Box> */}
-            {group.cards.length > 1 && showCollapse ? (
+            {group.cards.length > 0 && showCollapse ? (
               <Grid
                 item
                 xs={2}
@@ -418,7 +415,7 @@ export function RetroCardGroup({
                 }}
               >
                 {' '}
-                {group.cards.length > 1 && (
+                {group.cards.length > 0 && (
                   <Button
                     onClick={event => {
                       onCollapse(event);

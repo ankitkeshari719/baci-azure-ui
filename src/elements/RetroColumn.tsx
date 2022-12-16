@@ -82,6 +82,7 @@ export function RetroColumn({
   const [groupCollapsed, setGroupCollapsed] = React.useState<boolean[]>(
     cardGroups.map(() => true)
   );
+
   const {
     state: { columns, ended },
     commitAction,
@@ -653,7 +654,7 @@ export function RetroColumn({
                               fullWidth
                               value={columnName}
                               onKeyDown={e => {
-                                if (e.keyCode === 13) {
+                                if (e.keyCode === 13 && value.length !== 0) {
                                   submitColumnName(columnName);
                                   (e.target as HTMLInputElement).blur();
                                 }
@@ -781,7 +782,7 @@ export function RetroColumn({
                     ref={containerRef}
                     style={{
                       // overflowY: noHeightLimit ? 'auto' : 'auto',
-                      overflowY:  'auto',
+                      overflowY: 'auto',
                       userSelect: 'none',
                       flexGrow: 2,
                     }}
@@ -791,7 +792,11 @@ export function RetroColumn({
                       // rowSpacing={1}
                       columnSpacing={'20px'}
                       direction="row"
-                      justifyContent="space-between"
+                      justifyContent={
+                        global?.expandColumn === -1
+                          ? 'space-between'
+                          : 'flex-start'
+                      }
                     >
                       {cardGroups.map((group, i) => (
                         <>
@@ -873,7 +878,7 @@ export function RetroColumn({
                           >
                             {group.name === UNGROUPED ||
                             !groupCollapsed[i] ||
-                            group.cards.length < 2 ||
+                            group.cards.length < 1 ||
                             expandAllGroups ? (
                               <div
                                 style={{
@@ -1066,6 +1071,7 @@ export function RetroColumn({
                     }}
                     value={valueSet ? value : 'Add your thoughts...'}
                     onChange={event => {
+                      if(event.target.value!==" ")
                       setValue(event.target.value);
                     }}
                     onFocus={event => {
@@ -1077,7 +1083,15 @@ export function RetroColumn({
                       }
                     }}
                     onKeyDown={e => {
-                      if (e.keyCode === 13) {
+                      const tempValue = value;
+                      const removedEnter = tempValue.replace(/[\r\n]/gm, '');
+                      setValue(removedEnter);
+                      const removedSpaces = removedEnter.replace(/ /g, '');
+                      if (
+                        e.keyCode === 13 &&
+                        removedSpaces &&
+                        removedSpaces.length !== 0
+                      ) {
                         submit(value);
                         (e.target as HTMLInputElement).blur();
                       }
@@ -1105,7 +1119,12 @@ export function RetroColumn({
                 >
                   <Button
                     style={{ position: 'initial' }}
-                    disabled={!value || value.length === 0}
+                    disabled={
+                      // !value ||value.replace(/ /g, '').length === 0||
+                      value.length === 0 ||
+                      !value || value.replace(/[\r\n]/gm, '').replace(/ /g, '').length === 0
+                      
+                    }
                     onClick={() => submit(value)}
                     // onTouchStart={() => submit(value)}
                   >
@@ -1239,7 +1258,7 @@ export function RetroColumn({
                             columnId={column.id}
                             showCollapse={
                               group.name !== UNGROUPED &&
-                              group.cards.length > 1 &&
+                              group.cards.length > 0 &&
                               !groupCollapsed[i]
                             }
                             onCollapse={value => {
@@ -1249,7 +1268,7 @@ export function RetroColumn({
                           >
                             {group.name === UNGROUPED ||
                             !groupCollapsed[i] ||
-                            group.cards.length < 2 ||
+                            group.cards.length < 1 ||
                             expandAllGroups ? (
                               <div
                                 style={{
@@ -1278,7 +1297,7 @@ export function RetroColumn({
                                         {group.name === UNGROUPED ||
                                         j <
                                           (groupCollapsed[i]
-                                            ? 2
+                                            ? 1
                                             : group.cards.length) ? (
                                           <>
                                             <Grid

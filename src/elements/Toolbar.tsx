@@ -591,6 +591,7 @@ const Toolbar = (props: any) => {
                   width: '56px',
                   height: '56px',
                   borderRadius: '50%',
+                  border: 'none',
                 }}
               ></Avatar>
             )}
@@ -601,7 +602,7 @@ const Toolbar = (props: any) => {
         sx={{
           display: isXsUp ? 'flex' : 'none',
           flexDirection: 'row-reverse!important',
-          justifyContent:"space-between",
+          justifyContent: 'space-between',
           width: '100%!important',
           marginTop: '10px',
           marginBottom: isXsUp ? '10px' : 0,
