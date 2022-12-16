@@ -74,6 +74,7 @@ export function LandingPage() {
 
   const [humanId, setHumanId] = React.useState(id || '');
   const [codeError, setCodeError] = React.useState('');
+  const [height, setHeight] = React.useState('');
   const [global, dispatch] = React.useContext(GlobalContext);
   const isXsUp = useMediaQuery(theme.breakpoints.between('xs', 'sm'));
   const isSmUp = useMediaQuery(theme.breakpoints.only('sm'));
@@ -110,7 +111,9 @@ export function LandingPage() {
     setCodeError('');
     navigate('/createretro/');
   }
-
+  React.useEffect(() =>{
+    setHeight('48vh')
+  })
   React.useEffect(() => {
     dispatch({
       type: ActionType.CLOSE_CURRENT_RETRO,
@@ -127,7 +130,7 @@ export function LandingPage() {
       {isXsUp ? (
         <Box height={window.innerHeight} sx={{overflowY: 'auto'}}>
           <LandingLayout></LandingLayout>
-          <Box sx={{display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', height: '48vh', overflowY: 'auto'}}>
+          <Box sx={{display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', height: height, overflowY: 'auto'}}>
             <Typography
               variant="h3"
               color={commonStyles.primaryDark}
