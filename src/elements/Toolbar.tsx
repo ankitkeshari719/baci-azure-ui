@@ -144,26 +144,29 @@ const Toolbar = (props: any) => {
         }}
       >
         {location.pathname.includes('report') ? (
-          <img
-          src={BACILogo}
-          alt="Logo"
-          onClick={() => navigate('/') }
-          style={{
-            width: isXsUp ? '53px' : '82px',
-            height: isXsUp ? '18px' : '28px',
-          }}
-        />
-        ) : (
+          <>
+            <Button  onClick={() => navigate('/')}>
               <img
-              src={BACILogo}
-              alt="Logo"
-              style={{
-                width: isXsUp ? '53px' : '82px',
-                height: isXsUp ? '18px' : '28px',
-              }}
+                src={BACILogo}
+                alt="Logo"
+               
+                style={{
+                  width: isXsUp ? '53px' : '82px',
+                  height: isXsUp ? '18px' : '28px',
+                }}
               />
+            </Button>
+          </>
+        ) : (
+          <img
+            src={BACILogo}
+            alt="Logo"
+            style={{
+              width: isXsUp ? '53px' : '82px',
+              height: isXsUp ? '18px' : '28px',
+            }}
+          />
         )}
-        
 
         {currentRetro?.name &&
           !location.pathname.includes('startRetro') &&
