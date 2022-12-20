@@ -271,7 +271,7 @@ export default function FeedbackPopup(props: {
                 sx={{
                   width: '100%',
                   display: 'flex',
-                  justifyContent: 'space-between',
+                  justifyContent:(index >= 1 )? 'space-between' : 'flex-end',
                 }}
                 m="20px"
               >
@@ -299,14 +299,13 @@ export default function FeedbackPopup(props: {
                 sx={{
                   width: '100%',
                   display: 'flex',
-                  justifyContent: 'space-between',
+                  justifyContent:(index >= 1 )? 'space-between' : 'flex-end',
                   alignItems: 'center',
                   flexDirection: !(
-                    index ===
-                    FEEDBACK_QUESTIONS_COLORS.length - 1
-                  )
-                    ? 'row-reverse'
-                    : 'column',
+                    index >= 1
+                  ) 
+                    ? 'row'
+                    : 'row-reverse',
                 }}
               >
                 {!(index === FEEDBACK_QUESTIONS_COLORS.length - 1) ? (

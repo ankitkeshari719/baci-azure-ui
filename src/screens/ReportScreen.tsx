@@ -298,7 +298,7 @@ const longEnUSFormatter = new Intl.DateTimeFormat('en-US', {
         </div>
       </AppBar> */}
     
-        <Report  />
+        <Report  ref={componentRef}/>
       
     </Box>
   );

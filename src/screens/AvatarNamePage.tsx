@@ -190,7 +190,8 @@ export function AvatarNamePage() {
       }
     } else {
       if (userName === '') setCodeError('Please enter avatar name');
-      else setAvatarSelectionError('Please select avatar');
+      else {setAvatarSelectionError('Please select avatar');
+    console.log(avatarSelectionError)}
     }
   };
   const handleUsername = (e: string) => {
@@ -449,8 +450,12 @@ export function AvatarNamePage() {
                   <Button onClick={() => setOpenAvatarDialog(true)}>
                     <span className="primaryButtonText">Select Avatar</span>
                   </Button>
-                </Box>
-
+                 </Box>
+                 {avatarSelectionError !== '' && 
+                      <FormHelperText sx={{ color: 'red', marginLeft: '10px' }}>
+                      {avatarSelectionError}
+                      </FormHelperText>
+                  }
                 <Button
                   variant="outlined"
                   className="secondaryButton"
