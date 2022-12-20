@@ -178,8 +178,8 @@ export const Report = React.forwardRef((props, ref) => {
   const [islanded, setIsLanded] = React.useState(true);
   const [global, dispatch] = React.useContext(GlobalContext);
   const [retroDate, setRetroDate] = React.useState('');
-
-  const componentRef = React.createRef<HTMLDivElement>();
+  let componentRef = React.useRef(null);
+ // const componentRef = React.createRef<HTMLDivElement>();
   function getBarColor(val: number) {
     if (val > 50) {
       return '#34A853';
@@ -567,7 +567,8 @@ export const Report = React.forwardRef((props, ref) => {
                     color="#4E4E4E"
                     style={{ cursor: 'pointer', padding: '20px' }}
                   ></Icons.Printer>
-                )}
+                )
+              }
                 content={() =>componentRef.current}
               />
             </Grid>
@@ -580,14 +581,15 @@ export const Report = React.forwardRef((props, ref) => {
           justifyContent="center"
         >
           <Grid
-           ref={componentRef}
+          
             display="flex"
             lg={8}
+            md={12}
             xs={12}
             flexDirection="column"
             item
           >
-            <Grid item sx={{ flexDirection: 'row' }} >
+            <Grid item sx={{ flexDirection: 'row' }}  ref={componentRef}>
               <Box
 
                 style={{
@@ -670,7 +672,7 @@ export const Report = React.forwardRef((props, ref) => {
                   </>
                 ) : null}
               </Box>
-              <Box mt="48px" sx={styles.actionBox}>
+              <Box mt="48px" sx={styles.actionBox} className='page-break '>
                 <Typography
                   ml="24px"
                   mt="24px"
