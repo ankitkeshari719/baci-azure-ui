@@ -143,14 +143,27 @@ const Toolbar = (props: any) => {
           boxShadow: '0px 0px 2px rgba(0, 0, 0, 0.25)!important',
         }}
       >
-        <img
+        {location.pathname.includes('report') ? (
+          <img
           src={BACILogo}
           alt="Logo"
+          onClick={() => navigate('/') }
           style={{
             width: isXsUp ? '53px' : '82px',
             height: isXsUp ? '18px' : '28px',
           }}
         />
+        ) : (
+              <img
+              src={BACILogo}
+              alt="Logo"
+              style={{
+                width: isXsUp ? '53px' : '82px',
+                height: isXsUp ? '18px' : '28px',
+              }}
+              />
+        )}
+        
 
         {currentRetro?.name &&
           !location.pathname.includes('startRetro') &&
