@@ -7,6 +7,7 @@ import {
   Typography,
   useMediaQuery,
   Link,
+  Tooltip,
 } from '@mui/material';
 import React, { ReactElement, useEffect, useMemo } from 'react';
 import Draggable, { DraggableData, DraggableEvent } from 'react-draggable';
@@ -611,66 +612,87 @@ export function RetroColumn({
                 lg={12}
               >
                 <Grid item lg={8} md={6} xs={6}>
-                  <div>
-                    {!noHeader && (
-                      <Typography
-                        align="center"
-                        sx={{
-                          userSelect: 'none',
-                          display: 'flex',
-                          // fontSize: '0.9rem',
-                          color: groupFontColour + '!important',
-                          fontSize: '16px',
-                          padding: '10px',
-                        }}
-                      >
-                        {true ? (
-                          <>{columnName}</>
-                        ) : (
-                          <>
-                            {' '}
-                            {leftHeaderComponent}
-                            <TextField
-                              maxRows={2}
-                              disabled={true}
-                              sx={{
-                                fieldset: { border: 'none' },
-                                flex: 10,
-                                // padding: '10px',
-                                div: { padding: 0, position: 'initial' },
-                                textarea: {
-                                  // textAlign: 'center',
-                                  color: groupFontColour + '!important',
-                                  fontSize: '16px',
-                                  fontWeight: 600,
-                                },
+                  <Tooltip title={columnName}>
+                    <div>
+                      {!noHeader && (
+                        <Typography
+                          align="center"
+                          sx={{
+                            userSelect: 'none',
+                            display: 'flex',
+                            // fontSize: '0.9rem',
+                            color: groupFontColour + '!important',
+                            fontSize: '16px',
+                            padding: '10px',
+                          }}
+                        >
+                          {global.user.userType == 2 &&
+                          (!ended || !global.leaveRetro) ? (
+                            <>
+                              {' '}
+                              {leftHeaderComponent}
+                              <TextField
+                                maxRows={2}
+                                sx={{
+                                  fieldset: { border: 'none' },
+                                  flex: 10,
+                                  // padding: '10px',
+                                  div: { padding: 0, position: 'initial' },
+                                  textarea: {
+                                    // textAlign: 'center',
+                                    color: groupFontColour + '!important',
+                                    fontSize: '16px',
+                                    fontWeight: 600,
+                                  },
 
-                                position: 'initial',
-                                display: 'flex',
-                                // alignItems: 'center',
-                                // justifyContent: 'left',
-                              }}
-                              multiline
-                              fullWidth
-                              value={columnName}
-                              onKeyDown={e => {
-                                if (e.keyCode === 13 && value.length !== 0) {
-                                  submitColumnName(columnName);
-                                  (e.target as HTMLInputElement).blur();
+                                  position: 'initial',
+                                  display: 'flex',
+                                  // alignItems: 'center',
+                                  // justifyContent: 'left',
+                                }}
+                                inputProps={{ maxLength: 150 }}
+                                multiline
+                                fullWidth
+                                value={columnName}
+                                onKeyDown={e => {
+                                  if (e.keyCode === 13 && value.length !== 0) {
+                                    submitColumnName(columnName);
+                                    (e.target as HTMLInputElement).blur();
+                                  }
+                                }}
+                                onChange={e =>
+                                  setColumnName(e.currentTarget.value)
                                 }
+                                onBlur={() => submitColumnName(columnName)}
+                                onSubmit={() => submitColumnName(columnName)}
+                              ></TextField>
+                              {rightHeaderComponent}
+                            </>
+                          ) : (
+                            <Typography
+                              noWrap
+                              sx={{
+                                // minWidth: isXsUp ? '150px' : '350px',
+                                // maxWidth: isXsUp ? '150px' : '350px',
+                                width: '100%',
+                                overflow: 'hidden',
+                                textOverflow: 'ellipsis',
+                                display: 'inline-block',
+                                // height:'56px'
+                                // overflow: 'hidden !important',
+                                // textOverflow: 'ellipsis',
                               }}
-                              onChange={e =>
-                                setColumnName(e.currentTarget.value)
-                              }
-                              onBlur={() => submitColumnName(columnName)}
-                              onSubmit={() => submitColumnName(columnName)}
-                            ></TextField>
-                            {rightHeaderComponent}
-                          </>
-                        )}
-                      </Typography>
-                    )}
-                  </div>
+                              // onClick={() => {
+                              //   setEditing(true);
+                              // }}
+                            >
+                              {columnName}
+                            </Typography>
+                          )}
+                        </Typography>
+                      )}
+                    </div>
+                  </Tooltip>
                 </Grid>
 
                 <Grid
@@ -1071,8 +1093,8 @@ export function RetroColumn({
                     }}
                     value={valueSet ? value : 'Add your thoughts...'}
                     onChange={event => {
-                      if(event.target.value!==" ")
-                      setValue(event.target.value);
+                      if (event.target.value !== ' ')
+                        setValue(event.target.value);
                     }}
                     onFocus={event => {
                       setValueSet(true);
@@ -1122,8 +1144,9 @@ export function RetroColumn({
                     disabled={
                       // !value ||value.replace(/ /g, '').length === 0||
                       value.length === 0 ||
-                      !value || value.replace(/[\r\n]/gm, '').replace(/ /g, '').length === 0
-                      
+                      !value ||
+                      value.replace(/[\r\n]/gm, '').replace(/ /g, '').length ===
+                        0
                     }
                     onClick={() => submit(value)}
                     // onTouchStart={() => submit(value)}
