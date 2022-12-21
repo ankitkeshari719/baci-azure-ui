@@ -33,7 +33,7 @@ import { CountdownTimer } from './CountdownTimer';
 // import { ReactComponent as InfoSvg } from '../../public/svgs/Info.svg';
 const Toolbar = (props: any) => {
   const isXsUp = useMediaQuery(theme.breakpoints.only('xs'));
-  const [{ avatar, currentRetro, user, leaveRetro }] =
+  const [{ avatar, currentRetro, user, leaveRetro, loadingFlag }] =
     React.useContext(GlobalContext);
   const navigate = useNavigate();
   const location = useLocation();
@@ -88,11 +88,18 @@ const Toolbar = (props: any) => {
 
   const open = Boolean(anchorEl);
   const id = open ? 'simple-popover' : undefined;
-
+  const [showSummaryButton, setShowSummaryButton] = React.useState(false);
   React.useEffect(() => {
     if (retroName && retroName !== '') setLocalRetroName(retroName);
   }, [retroName]);
+  React.useEffect(() => {
+    console.log('flaggg', loadingFlag);
 
+      if (!loadingFlag && ended) {
+        setShowSummaryButton(true);
+      }
+  
+  });
   React.useEffect(() => {
     // if (user.userType != 2 && showFinishRetroButton && !leaveRetro) {
     if (showFinishRetroButton && !leaveRetro) {
@@ -145,11 +152,10 @@ const Toolbar = (props: any) => {
       >
         {location.pathname.includes('report') ? (
           <>
-            <Button  onClick={() => navigate('/')}>
+            <Button onClick={() => navigate('/')}>
               <img
                 src={BACILogo}
                 alt="Logo"
-               
                 style={{
                   width: isXsUp ? '53px' : '82px',
                   height: isXsUp ? '18px' : '28px',
@@ -395,6 +401,19 @@ const Toolbar = (props: any) => {
             )}
           </>
         )}
+        {showSummaryButton && !location.pathname.includes('report') && (
+          <Button
+            variant="outlined"
+            className="secondaryButton"
+            style={{
+              marginRight: '40px',
+            }}
+            onClick={() => navigate('/report/' + currentRetro?.id)}
+            // onTouchStart={() => joinRetro()}
+          >
+            <span className="secondaryButtonText">View Summary</span>
+          </Button>
+        )}
         <LeaveRetroDialog
           open={leaveDiaOpen}
           onClose={(value: any) => {
@@ -514,7 +533,9 @@ const Toolbar = (props: any) => {
                 width: '162px',
                 marginRight: '15px',
               }}
-              onClick={() => navigate('/board/' + currentRetro?.id)}
+              onClick={() => {
+                navigate('/board/' + currentRetro?.id);
+              }}
             >
               REVIEW BOARD
             </Button>
