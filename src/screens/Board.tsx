@@ -84,9 +84,15 @@ const StyledTab = styled((props: StyledTabProps) => (
   fontWeight: '400',
   marginRight: theme.spacing(1),
   color: color,
+
   '&.Mui-selected': {
     color: color,
     fontWeight: '600',
+
+    // overflow: 'hidden',
+    // textOverflow: 'ellipsis',
+    // display: 'inline-block',
+    width: '99%',
   },
   '&.Mui-focusVisible': {
     backgroundColor: 'rgba(100, 95, 228, 0.32)',
@@ -488,7 +494,7 @@ export default function RetroBoard() {
         <Box
           sx={{
             display: 'flex',
-            flexDirection:  'column',
+            flexDirection: 'column',
             width: '100%',
           }}
         >
@@ -507,14 +513,12 @@ export default function RetroBoard() {
                   {...a11yProps(0)}
                   sx={{ fontSize: '16px' }}
                 />
-                ;
                 <StyledTab
                   color={getColumns()[1].groupFontColour}
                   label={getColumns()[1].name}
                   {...a11yProps(1)}
                   sx={{ fontSize: '16px' }}
                 />
-                ;
                 <StyledTab
                   color={getColumns()[2].groupFontColour}
                   label={getColumns()[2].name}
