@@ -31,9 +31,6 @@ import theme from '../theme/theme';
 import { display } from '@mui/system';
 const AVATAR_CHARACTER_LIMIT = 30;
 const styles = {
-  heading: {
-    marginTop: '254px',
-  },
   avatarfield: {
     '& .MuiFormLabel-root': {
       color: 'rgba(0, 0, 0, 0.6) !important',
@@ -64,7 +61,7 @@ const styles = {
     width: '50px',
     height: '50px',
     marginBottom: '15px',
-    marginRight: '15px',
+    // marginRight: '15px',
     borderRadius: '50%',
   },
 };
@@ -105,9 +102,10 @@ export function AvatarNamePage() {
   const [captureName, setCaptureName] = React.useState(id ? true : false);
   const isXsUp = useMediaQuery(theme.breakpoints.between('xs', 'sm'));
   const [openAvatarDialog, setOpenAvatarDialog] = React.useState(false);
-
+  const [height, setHeight] = React.useState(0);
   React.useEffect(() => {
     setAvatarList(avatarName.sort(() => Math.random() - 0.5));
+    setHeight(window.innerHeight);
   }, []);
   useAzureAuth();
   const joinRetro = async (
@@ -190,8 +188,10 @@ export function AvatarNamePage() {
       }
     } else {
       if (userName === '') setCodeError('Please enter avatar name');
-      else {setAvatarSelectionError('Please select avatar');
-    console.log(avatarSelectionError)}
+      else {
+        setAvatarSelectionError('Please select avatar');
+        console.log(avatarSelectionError);
+      }
     }
   };
   const handleUsername = (e: string) => {
@@ -315,7 +315,8 @@ export function AvatarNamePage() {
           marginLeft={isXsUp ? '0px' : commonStyles.m_80}
           flexDirection="row"
           sx={{
-            height: !isXsUp ? '100vh' : '48vh',
+            height: !isXsUp ? height : (height - 100) / 2,
+
             width: isXsUp ? '90%' : '100%',
           }}
         >
@@ -435,7 +436,7 @@ export function AvatarNamePage() {
             </Box>
           ) : (
             <>
-              <Box mt="42px">
+              <Box mt="5%">
                 <Box display="flex">
                   {selectedAvatar && (
                     <Avatar
@@ -450,12 +451,12 @@ export function AvatarNamePage() {
                   <Button onClick={() => setOpenAvatarDialog(true)}>
                     <span className="primaryButtonText">Select Avatar</span>
                   </Button>
-                 </Box>
-                 {avatarSelectionError !== '' && 
-                      <FormHelperText sx={{ color: 'red', marginLeft: '10px' }}>
-                      {avatarSelectionError}
-                      </FormHelperText>
-                  }
+                </Box>
+                {avatarSelectionError !== '' && (
+                  <FormHelperText sx={{ color: 'red', marginLeft: '10px' }}>
+                    {avatarSelectionError}
+                  </FormHelperText>
+                )}
                 <Button
                   variant="outlined"
                   className="secondaryButton"
@@ -465,7 +466,7 @@ export function AvatarNamePage() {
                   <span className="secondaryButtonText">Go on..</span>
                 </Button>
               </Box>
-              <Dialog open={openAvatarDialog} sx={{ height: '90vh' }}>
+              <Dialog open={openAvatarDialog} sx={{ height: height - 100 }}>
                 <DialogTitle>
                   <Typography>Select Avatar</Typography>
                 </DialogTitle>
@@ -473,7 +474,10 @@ export function AvatarNamePage() {
                   sx={{
                     width: '90%',
                     padding: '16px',
-                    height: '60%',
+                    height: height / 2,
+                    display: 'flex',
+                    flexWrap: 'wrap',
+                    justifyContent: 'space-between',
                     overflowY: 'scroll',
                   }}
                 >
@@ -493,6 +497,7 @@ export function AvatarNamePage() {
                     className="secondaryButton"
                     onClick={() => setOpenAvatarDialog(false)}
                     sx={{ width: '90%' }}
+                    disabled={selectedAvatar == ''}
                   >
                     <span className="secondaryButtonText">Select</span>
                   </Button>
