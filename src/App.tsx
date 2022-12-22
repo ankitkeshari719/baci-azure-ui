@@ -52,17 +52,6 @@ type AppProps = {
 function MainContent() {
   const { instance } = useMsal();
   return (
-    // <Box sx={{ display: 'flex', minHeight: '100%', maxHeight: '100%' }}>
-    //   <CssBaseline />
-    //   <Box sx={{ flex: 1, display: 'flex', flexDirection: 'column' }}>
-    //     <Box
-    //       component="main"
-    //       sx={{ display: 'flex', flex: 1, py: 0, px: 0 }}
-    //     >
-    //       <Outlet />
-    //     </Box>
-    //   </Box>
-    // </Box>
     <Grid container spacing={0}>
       <Outlet />
     </Grid>
@@ -98,8 +87,10 @@ export default function App({ instance }: AppProps) {
                           path="/offboarding"
                           element={<Offboarding></Offboarding>}
                         />
-                        <Route path="*" 
-                        element={<PageNotFound></PageNotFound>} />
+                        <Route
+                          path="*"
+                          element={<PageNotFound></PageNotFound>}
+                        />
                         <Route path="/board" element={<MainContent />}>
                           <Route
                             path=":id/waiting"

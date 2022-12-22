@@ -358,169 +358,7 @@ export const Report = React.forwardRef((props, ref) => {
   }, [lastStateUpdate]);
 
   return (
-    // <Box
-    //   ref={ref}
-    //   sx={{
-    //     maxWidth: '1000px',
-    //     display: 'flex',
-    //     width: '100%',
-    //     flexDirection: 'column',
-    //   }}
-    // >
-    //   <Typography sx={{ margin: '20px 0  0 10px', fontSize: '16px' }}>
-    //     Retro name :<span style={{ fontWeight: 'bold' }}>{retroName}</span>
-    //   </Typography>
-    //   <Typography sx={{ margin: '0 0 0 10px', fontSize: '16px' }}>
-    //     Date :{' '}
-    //     <span style={{ fontWeight: 'bold' }}>
-    //       {startedDate?.toLocaleDateString()}
-    //     </span>
-    //   </Typography>
-
-    //   {words.length !== 0 ? (
-    //     <>
-    //       <Typography
-    //         variant="h5"
-    //         sx={{ margin: '10px', fontSize: '18px', marginTop: '30px' }}
-    //       >
-    //         Celebrate what went well
-    //       </Typography>
-    //       <Box
-    //         sx={{
-    //           border: '2px solid gray',
-    //           margin: '20px',
-    //           display: 'flex',
-    //           justifyContent: 'center',
-    //           alignItems: 'center',
-    //         }}
-    //       >
-    //         <WordCloud data={words}></WordCloud>
-    //       </Box>{' '}
-    //     </>
-    //   ) : null}
-
-    //   {actions.length !== 0 ? (
-    //     <>
-    //       <Typography
-    //         variant="h5"
-    //         sx={{ margin: '10px', fontSize: '18px', marginTop: '30px' }}
-    //       >
-    //         Actions
-    //       </Typography>
-    //       <RetroColumn
-    //         leftHeaderComponent={undefined}
-    //         rightHeaderComponent={undefined}
-    //         noHeightLimit
-    //         noHeader
-    //         expandAllGroups
-    //         column={columns[ACTIONS_COLUMN]}
-    //         columnId={columns[ACTIONS_COLUMN].id}
-    //         showEditBox={false}
-    //         setIslanded={setIsLanded}
-    //         setShowEditBox={() => {}}
-    //         cardGroups={columns[ACTIONS_COLUMN].groups}
-    //       />
-    //     </>
-    //   ) : null}
-
-    // <>
-    //   <Typography
-    //     variant="h5"
-    //     sx={{ margin: '10px', fontSize: '18px', marginTop: '30px' }}
-    //   >
-    //     Pulse Check
-    //   </Typography>
-    //    <Box
-    //      sx={{
-    //       border: '2px solid gray',
-    //       margin: '20px',
-    //       display: 'flex',
-    //       justifyContent: 'center',
-    //       alignItems: 'center',
-    //     }}
-    //   >
-    //     {questions.length !== 0 ? (
-    //       <StackedBarChart questions={questions}></StackedBarChart>
-    //     ) : (
-    //       <span style={{ fontSize: '16px' }}>
-    //         No responses have been submitted
-    //       </span>
-    //     )}
-    //   </Box>{' '}
-    // </>
-
-    //   {/* {feedback ? ( */}
-    //   <>
-    //     <Typography
-    //       variant="h5"
-    //       sx={{ margin: '10px', fontSize: '18px', marginTop: '30px' }}
-    //     >
-    //       Feedback for facilitator
-    //     </Typography>
-    //     <Box
-    //       sx={{
-    //         border: '2px solid gray',
-    //         margin: '20px',
-    //         display: 'flex',
-    //         justifyContent: 'center',
-    //         alignItems: 'center',
-    //         marginBottom:"50px"
-    //       }}
-    //     >
-    //       {feedback ? (
-    //         <Grid container sx={{ justifyContent: 'center' }}>
-    //           {FEEDBACK_QUESTIONS.map((v, index) => (
-    //             <Grid
-    //               item
-    //               xs={12 / FEEDBACK_QUESTIONS.length}
-    //               sx={{ display: 'flex', justifyContent: 'center' }}
-    //             >
-    //               <Card variant="outlined" sx={{ margin: '10px' }}>
-    //                 <CardContent>
-    //                   <Typography
-    //                     variant="h5"
-    //                     sx={{
-    //                       justifyContent: 'center',
-    //                       display: 'flex',
-    //                       gap: '5px',
-    //                       alignItems: 'center',
-    //                     }}
-    //                   >
-    //                     {(feedback[0][index] / feedback[1][index]).toFixed(1)}
-    //                     <StarIcon
-    //                       sx={{
-    //                         fontSize: 40,
-    //                         color: FEEDBACK_QUESTIONS_COLORS[index],
-    //                       }}
-    //                     />
-    //                   </Typography>
-    //                   <Typography
-    //                     sx={{
-    //                       fontWeight: 'bold',
-    //                       justifyContent: 'center',
-    //                       display: 'flex',
-    //                       gap: '5px',
-    //                       alignItems: 'center',
-    //                     }}
-    //                   >
-    //                     {feedback[1][index]} response
-    //                     {feedback[1][index] === 1 ? '' : 's'}
-    //                   </Typography>
-    //                   <Typography>{FEEDBACK_QUESTIONS[index]}</Typography>
-    //                 </CardContent>
-    //               </Card>
-    //             </Grid>
-    //           ))}
-    //         </Grid>
-    //       ) : (
-    //         <span style={{ fontSize: '16px' }}>
-    //           No responses have been submitted
-    //         </span>
-    //       )}
-    //     </Box>{' '}
-    //   </>
-    //   {/* ) : null} */}
-    // </Box>
+    
     <Box
       style={{
         height: '985px',
@@ -550,16 +388,7 @@ export const Report = React.forwardRef((props, ref) => {
               </Typography>
             </Grid>
             <Grid item display="flex" justifyContent="flex-end">
-              {/* <Icons.Share
-                size={20}
-                color="#4E4E4E"
-                style={{ marginRight: '46px' }}
-              ></Icons.Share>
-              <Icons.Download
-                size={20}
-                color="#4E4E4E"
-                style={{ marginRight: '46px' }}
-              ></Icons.Download> */}
+             
               <ReactToPrint
                 trigger={() => (
                   <Icons.Printer
@@ -722,26 +551,8 @@ export const Report = React.forwardRef((props, ref) => {
                     alignItems: 'center',
                   }}
                 >
-                  {/* <StackedBarChart questions={questions}></StackedBarChart> */}
                   {QUICK_PULSE_CHECK_QUESTIONS.length !== 0 ? (
-                    // <Grid container >
-                    //   <Grid item xs={12} flexDirection='row' justifyContent='center'>
-                    //     { questions.map((que, i)=>(
-                    //       <Box sx={{ alignItems: "baseline",
-                    //       display: "flex",
-                    //       flexDirection: "row",
-                    //       justifyContent: "center"}}>
-                    //       <Typography>{que.question}</Typography>
-                    //       <BorderLinearProgress variant="determinate" sx={{"& .MuiLinearProgress-barColorPrimary": {
-                    //         backgroundColor: getBarColor(80)
-                    //       }}} value={50} />
-                    //       </Box>
-                    //   ))
-
-                    //   }
-                    //     {/* <StackedBarChart questions={questions}></StackedBarChart> */}
-                    //   </Grid>
-                    // </Grid>
+                    
                     <>
                       <Box
                         sx={{

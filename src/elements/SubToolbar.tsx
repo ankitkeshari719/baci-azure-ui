@@ -170,20 +170,7 @@ const SubToolbar = (props: any) => {
               )
           )}
         </>
-        {/* <Button
-          style={{ marginLeft: '15px' }}
-          onClick={(event: any) => {
-            setShowSelect(!showSelect)
-          }}
-      
-        >
-          {' '}
-          {global.user.id === global.currentRetro?.creatorId ? (
-            <img src="/svgs/Subtract.svg"></img>
-          ) : (
-            <img src="/svgs/Down.svg"></img>
-          )}
-             </Button> */}
+       
         <Select
           sx={{
             fieldset: {
@@ -191,8 +178,7 @@ const SubToolbar = (props: any) => {
               div: { padding: 0 },
               opacity: 1,
             },
-            // padding: '1px!important',
-            // width: '20px',
+           
           }}
           inputProps={{ style: { width: '20px', padding: 0 } }}
           // open={showSelect}
@@ -218,23 +204,7 @@ const SubToolbar = (props: any) => {
           }
           renderValue={(selected: any) => {
             return (
-              // <>
-              //   {' '}
-              //   {userNameIdArray &&
-              //     userNameIdArray?.length > 0 &&
-              //     userNameIdArray.map(user => (
-              //       <Avatar
-              //         key={user?.userId}
-              //         avatar={user?.avatar}
-              //         css={{
-              //           width: '40px',
-              //           marginLeft: '0',
-              //           marginRight: '-8px',
-              //           border: 'none',
-              //         }}
-              //       />
-              //     ))}
-              // </>
+          
               <>
                 {global.user.userType == 2 ? (
                   <img src="/svgs/Subtract.svg"></img>
@@ -242,7 +212,6 @@ const SubToolbar = (props: any) => {
                   <img src="/svgs/Down.svg"></img>
                 )}
               </>
-              // <img src="/svgs/Subtract.svg"></img>
             );
           }}
           MenuProps={MenuProps}
@@ -251,19 +220,14 @@ const SubToolbar = (props: any) => {
             <MenuItem
               value="all"
 
-              // classes={{
-              //   root: isAllSelected ? classes.selectedAll : '',
-              // }}
+            
             >
-              {/* <ListItemIcon> */}
               <Checkbox
-                // classes={{ indeterminate: classes.indeterminateColor }}
                 checked={isAllSelected}
                 indeterminate={
                   userSelected.length > 0 && userSelected.length < users.length
                 }
               />
-              {/* </ListItemIcon> */}
               <ListItemText
                 // classes={{ primary: classes.selectAllText }}
                 primary="Select All"
@@ -283,8 +247,7 @@ const SubToolbar = (props: any) => {
 
           {users.map((user, index) => (
             <MenuItem
-              // disabled={global.user.userType != 2}
-              // style={{ hover: 'none!important', cursor: 'text' }}
+           
               sx={{
                 hover: global.user.userType != 2 ? 'none!important' : '',
                 cursor: global.user.userType != 2 ? 'text' : '',

@@ -132,48 +132,7 @@ export function Onboarding() {
 
     setUserName(e);
   }
-  // const joinRetro = async (): Promise<RetroType | undefined> => {
-  //   if(humanId === ''){
-  //     setCodeError('Please enter access code');
-  //   } else {
-  //     let foundRetro = await retro.getByHumanId(humanId);
-  //     // if (!foundRetro) {
-  //     //   foundRetro = await retro.getById(humanId);
-  //     // }
-  //     if (foundRetro) {
-  //       setJoining(true);
-  //       setCaptureName(true);
-  //       setCodeError('');
-  //       dispatch({
-  //         type: ActionType.SET_CURRENT_RETRO,
-  //         payload: { retro: foundRetro },
-  //       });
-  //       return foundRetro;
-  //     } else {
-  //       setCodeError('Sorry, wrong code. Please try again');
-  //     }
-  //   }
-
-  //   // let foundRetro = await retro.getByHumanId(humanId);
-  //   // if (humanId === '') {
-  //   //   setCodeError('Please enter access code');
-  //   // } 
-  //   // if (!foundRetro) {
-  //   //   foundRetro = await retro.getById(humanId);
-  //   // }
-  //   dispatch({
-  //     type: ActionType.SET_CURRENT_RETRO,
-  //     payload: { retro: foundRetro },
-  //   });
-  //   if (foundRetro) {
-  //     setJoining(true);
-  //     setCaptureName(true);
-  //     return foundRetro;
-  //   } else {
-  //     setCodeError('Sorry, wrong code. Please try again');
-  //   }
-  // };
-
+  
 
   const joinRetro = async (): Promise<RetroType | undefined> => {
     let foundRetro = await retro.getByHumanId(humanId);
@@ -381,7 +340,6 @@ export function Onboarding() {
             >
               or Create new retro
             </Button>
-            {/* <Button variant='outlined' sx={{ background: '#159ADD', color: '#fff' }} onClick={() => setJoining(true)}>To join a Retro click here</Button> */}
           </Box>
         </Box>
       </Slide>
@@ -652,19 +610,7 @@ export function Onboarding() {
                     </Button>
                   </CopyToClipboard>
                 </div>
-{/* 
-                <div style={{ flexGrow: 2 }}>
-                  <TextField
-                    variant="outlined"
-                    sx={{
-                      input: { background: '#CDCDD4', borderRadius: '7px' },
-                      minWidth: '300px',
-                      margin: '10px',
-                      color: '#4D555A',
-                    }}
-                    value={global.currentRetro?.joinUrl}
-                  />
-                </div> */}
+
               </Box>
                 
             
@@ -674,11 +620,7 @@ export function Onboarding() {
                 direction="row"
                 justifyContent="center"
               >
-                {/* <Typography
-                  sx={{ paddingBottom: '10px', paddingRight: '5px', color: '#4D555A', fontSize: '15px' }}
-                >
-                  Send via
-                </Typography> */}
+              
                 <EmailShareButton
                   url={global.currentRetro.joinUrl}
                   style={{ padding: '5px' }}

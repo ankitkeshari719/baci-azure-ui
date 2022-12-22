@@ -250,59 +250,7 @@ export function Offboarding() {
             </Box>
           </Box>
         </Box>
-        {/* <Box
-          sx={{
-            display: done ? 'flex' : 'none',
-            height: 'var(--app-height)',
-            width: '100vw',
-            overflowY: 'scroll',
-            flexDirection: 'column',
-            justifyContent: 'center',
-            alignItems: 'center',
-          }}
-        >
-          <Toolbar/>
-          <Typography variant="h4">Thank you!</Typography>
-          <Typography
-            sx={{
-              textAlign: 'center',
-              margin: '10px 0',
-              fontWeight: 'normal',
-              fontSize: '20px',
-            }}
-          >
-            We hope to see you again soon
-          </Typography>
-          <Box
-            sx={{ display: 'flex', justifyContent: 'center', margin: '30px 0' }}
-          >
-            <Button
-              sx={{
-                maxWidth: '60px',
-                backgroundColor: '#5BA8DD',
-                ':hover': { background: '#5BA8DD' },
-              }}
-              onClick={endOffboarding}
-            >
-              <img src="/images/happy-button.png" width="70%" />
-            </Button>
-          </Box>
-          <Box
-            sx={{
-              display: 'flex',
-              justifyContent: 'flex-end',
-              flexDirection: 'column',
-              minHeight: '10vh',
-            }}
-          >
-            <Link
-              sx={{ textAlign: 'center', cursor: 'pointer' }}
-              onClick={endOffboarding}
-            >
-              To return to the main page click here
-            </Link>
-          </Box>
-        </Box> */}
+      
       </Slide>
     </>
   );

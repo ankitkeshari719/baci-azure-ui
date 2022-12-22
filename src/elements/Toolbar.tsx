@@ -435,11 +435,7 @@ const Toolbar = (props: any) => {
           aria-labelledby="alert-dialog-title"
           aria-describedby="alert-dialog-description"
         >
-          {/* <DialogTitle
-          id="alert-dialog-title"
-          align="center"
-          sx={{ background: '/svgs/Finish.svg' }}
-        > */}
+    
           <div
             style={{
               display: 'flex',
@@ -471,11 +467,7 @@ const Toolbar = (props: any) => {
           </div>
 
           <DialogContent>
-            {/* <DialogContentText
-            id="alert-dialog-description"
-            color="#343434"
-            size="20px"
-          > */}
+
             <span
               style={{
                 color: '#343434',

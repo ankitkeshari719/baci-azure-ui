@@ -206,13 +206,7 @@ export function RetroCardGroup({
                   value={nameSet ? name : 'Name grouping'}
                   multiline
                   onChange={event => {
-                    //
-                    //   event.target.value.replace(
-                    //     ' ( ' + group.cards.length + ' ) ',
-                    //     ''
-                    //   ),
-                    //   'value'
-                    // );
+                   
                     if (admin) {
                       setName(
                         event.target.value.replace(
@@ -293,13 +287,7 @@ export function RetroCardGroup({
                       alignItems: 'center',
                     }}
                     disabled={ended || global.leaveRetro}
-                    // onTouchStart={() =>
-                    //   !ended
-                    //     ? userReacted
-                    //       ? addReactToGroup(group.id, '')
-                    //       : addReactToGroup(group.id, '👍')
-                    //     : null
-                    // }
+                  
                     onClick={() =>
                       !ended
                         ? userReacted
@@ -395,12 +383,9 @@ export function RetroCardGroup({
                   onClick={event => {
                     onCollapse(event);
                   }}
-                  // onTouchStart={onCollapse}
-                  // sx={{ position: 'initial' }}
+             
                 >
-                  {/* <CloseFullscreenIcon
-                    style={{ color: '#727D84', width: '20px' }}
-                  /> */}
+                
                   <img src="/svgs/Down.svg" />
                 </Button>
               </Grid>
@@ -423,9 +408,7 @@ export function RetroCardGroup({
                     // onTouchStart={onCollapse}
                     sx={{ position: 'initial' }}
                   >
-                    {/* <OpenInFullIcon
-                      style={{ color: '#727D84', width: '20px' }}
-                    /> */}
+                
                     <img src="/svgs/Up.svg" />
                   </Button>
                 )}

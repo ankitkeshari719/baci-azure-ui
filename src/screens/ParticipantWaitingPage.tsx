@@ -34,22 +34,6 @@ export function ParticipantWaitingPage() {
   const isXsUp = useMediaQuery(theme.breakpoints.between('xs', 'sm'));
   useLoadRetro();
   React.useEffect(() => {
-    // setTimeout(() => {
-    //     setAnimateFirst(false);
-    //     setAnimatesecond(true);
-    //     setAnimateThird(false);
-    //     setTimeout(() => {
-    //         setAnimateFirst(false);
-    //         setAnimatesecond(false);
-    //         setAnimateThird(true);
-    //         setTimeout(() => {
-    //             setAnimateFirst(true);
-    //             setAnimatesecond(false);
-    //             setAnimateThird(false);
-    //         }, 8000);
-    //     }, 8000);
-    //   }, 8000);
-
     let interval1 = setInterval(() => {
       setAnimateFirst(false);
       setAnimatesecond(true);
@@ -84,7 +68,7 @@ export function ParticipantWaitingPage() {
         }}
       >
         <Typography
-          variant={isXsUp ? 'h4': 'h2'}
+          variant={isXsUp ? 'h4' : 'h2'}
           color={commonStyles.primaryDark}
           className="alignCenter"
           mb="8px"
@@ -94,7 +78,7 @@ export function ParticipantWaitingPage() {
         <Typography
           color={commonStyles.primaryDark}
           className="alignCenter"
-          variant={isXsUp ? 'h6': 'h4'}
+          variant={isXsUp ? 'h6' : 'h4'}
           mb="52px"
         >
           Let’s go over last 2 weeks
@@ -102,7 +86,7 @@ export function ParticipantWaitingPage() {
         <Typography
           color={commonStyles.secondaryMain}
           className="alignCenter"
-          variant={isXsUp ? 'h6': 'h4'}
+          variant={isXsUp ? 'h6' : 'h4'}
           mb="32px"
         >
           Relax while facilitator starts the retro...
@@ -110,7 +94,7 @@ export function ParticipantWaitingPage() {
         <Box sx={{ display: 'flex', justifyContent: 'center' }}>
           <img width={isXsUp ? '280px' : '500px'} src={gif}></img>
         </Box>
-        {animateFirst && !isXsUp  &&(
+        {animateFirst && !isXsUp && (
           <Box
             mt="16px"
             style={{
@@ -138,7 +122,7 @@ export function ParticipantWaitingPage() {
             </h4>
           </Box>
         )}
-        {animatesecond && !isXsUp  &&(
+        {animatesecond && !isXsUp && (
           <Box
             mt="16px"
             style={{
@@ -166,7 +150,7 @@ export function ParticipantWaitingPage() {
             </h4>
           </Box>
         )}
-        {animateThird && !isXsUp  &&(
+        {animateThird && !isXsUp && (
           <Box
             mt="16px"
             style={{

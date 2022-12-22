@@ -159,54 +159,7 @@ export default function RetroBoard() {
   const [showSharePanel, setShowSharePanel] = React.useState(false);
 
   useLoadRetro();
-  // React.useEffect(() => {
-  //   console.log(columns, '');
-  // });
-  // const getProcessedColumns = () =>
-  //    columns
-  //     ? columns.map(column => {
-  //         const groups = [...column.groups].sort(
-  //           (a, b) =>
-  //             (!b.reactions ? 0 : b.reactions.length) -
-  //             (!a.reactions ? 0 : a.reactions.length)
-  //         );
-  //         if(islanded){
-  //           for (const column of columns) {
-  //             for (const group of column.groups) {
-  //               if(group.cards.length !==0){
-  //                 group.cards =[];
-  //               }
-  //             }
-  //            }
-  //            setIsLanded(true);
-  //            return{
-  //             ...column,
-  //             groups: []
-
-  //            }
-  //         } else{
-  //         return {
-  //           ...column,
-  //           groups: groups
-  //             .map(group => {
-  //               const cards = group.cards.filter(
-  //                 card => !justMyCards || card.createdBy === global.user.id
-  //               );
-  //               return {
-  //                 ...group,
-  //                 cards,
-  //               };
-  //             })
-  //             .filter(
-  //               group =>
-  //                 !justMyCards ||
-  //                 group.name === UNGROUPED ||
-  //                 group.cards.length !== 0
-  //             ),
-  //         };
-  //       }
-  //       })
-  //     : [];
+  
 
   const isMatch = (element: any, index: number, array: any): boolean => {
     // console.log(element, index, array);
@@ -222,28 +175,12 @@ export default function RetroBoard() {
                 (!b.reactions ? 0 : b.reactions.length) -
                 (!a.reactions ? 0 : a.reactions.length)
             );
-            // if(islanded){
-            //   for (const column of columns) {
-            //     for (const group of column.groups) {
-            //       if(group.cards.length !==0){
-            //         group.cards =[];
-            //       }
-            //     }
-            //    }
-            //    setIsLanded(true);
-            //    return{
-            //     ...column,
-            //     groups: []
-
-            //    }
-            // } else{
-            // console.log('column', column);
+           
             return {
               ...column,
               groups: groups
                 .map(group => {
                   const cards = group.cards.filter(
-                    // card => !justMyCards || card.createdBy === global.user.id
 
                     card =>
                       global.user?.id !== global.currentRetro?.creatorId
@@ -263,13 +200,6 @@ export default function RetroBoard() {
                     group.name === UNGROUPED ||
                     group.cards.length !== 0
 
-                  // global.usersSelected?.some((user, index) => {
-                  //   return (
-                  //     // user?.userId === group?.createdBy ||
-                  //     // group?.name === UNGROUPED
-                  //     true
-                  //   );
-                  // })
                 ),
             };
           }
@@ -331,21 +261,10 @@ export default function RetroBoard() {
   };
 
   const finishRetro = () => {
-    // console.log(
-    //   creatorId === global.user.id,
-    //   ' ',
-    //   creatorId,
-    //   '  ',
-    //   global.user.id
-    // );
+ 
     if (global.user.userType == 2) {
-      // console.log('end retro');
       sessionStorage.removeItem('retoname');
-      // setConfirmAction({
-      //   action: 'Finish Retro',
-      //   title: 'Finish Retro',
-      //   text: 'This action will take All Participants to the Feedback screen.',
-      //   onConfirm: () => {
+
       dispatch({
         type: ActionType.SET_LOADING,
         payload: { loadingFlag: true },
@@ -383,18 +302,9 @@ export default function RetroBoard() {
         }
       );
 
-      // },
-      // });
-    } else {
-      //navigate(`/board/${global?.currentRetro?.id}/feedback`);
-      // setConfirmAction({
-      //   action: 'Leave Retro',
-      //   title: 'Leave Retro',
-      //   text: 'Do you really want to leave the retro ?',
-      //   onConfirm: () => {
 
-      //   },
-      // });
+    } else {
+    
       dispatch({
         type: ActionType.SET_LEAVE_RETRO,
         payload: { leaveRetro: true },
@@ -416,23 +326,19 @@ export default function RetroBoard() {
   };
 
   React.useEffect(() => {
-    // console.log(needsToShow);
-    // console.log('ended', ended, retroStatus);
+   
     if (ended || global.leaveRetro) {
       if (global.user.userType !== 2) {
         const currentUser = users?.filter(
           card => card.userId === global?.user.id
         );
         if (currentUser?.length == 1 && currentUser[0].feedback.length == 0) {
-          // console.log('ended', true, ' ', currentUser[0].pulseCheckQuestions);
           setshowFeedback(true);
         }
       } else {
-        // console.log('ended', false);
 
         setshowFeedback(false);
       }
-      // navigate(`/board/${global?.currentRetro?.id}/feedback`);
     }
   }, [ended]);
 
@@ -526,9 +432,7 @@ export default function RetroBoard() {
                   sx={{ fontSize: '16px' }}
                 />
                 ;
-                {/* {getColumns().map((column, index) => {
-                  <Tab key={index} label="vishal" {...a11yProps(index)} />;
-                })} */}
+               
               </StyledTabs>
             </Box>
           ) : (
@@ -567,24 +471,7 @@ export default function RetroBoard() {
                               setIslanded={setIsLanded}
                               cardGroups={column.groups}
                             />
-                            {/* {!showEditBox ? (
-                          <>
-                            <Fab
-                              aria-label="add"
-                              style={{
-                                position: 'fixed',
-                                bottom: '20px',
-                                right: '20px',
-                                background: 'black',
-                                color: 'white',
-                                zIndex: 100,
-                              }}
-                              onClick={() => setShowEditBox(true)}
-                            >
-                              <AddIcon />
-                            </Fab>
-                          </>
-                        ) : null} */}
+                        
                           </>
                         ) : (
                           <FeedbackColumn

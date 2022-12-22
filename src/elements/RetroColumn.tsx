@@ -748,12 +748,7 @@ export function RetroColumn({
                           payload: { expandColumn: +column.id },
                         });
                       }}
-                      // onTouchStart={() => {
-                      //   dispatch({
-                      //     type: ActionType.EXPAND_COLUMN,
-                      //     payload: { expandColumn: +column.id },
-                      //   });
-                      // }}
+                     
                       src="/svgs/Expand.svg"
                       style={{
                         width: '20px',
@@ -763,12 +758,7 @@ export function RetroColumn({
                     />
                   ) : (
                     <img
-                      // onTouchStart={() => {
-                      //   dispatch({
-                      //     type: ActionType.EXPAND_COLUMN,
-                      //     payload: { expandColumn: -1 },
-                      //   });
-                      // }}
+                     
                       onClick={() => {
                         dispatch({
                           type: ActionType.EXPAND_COLUMN,
@@ -1042,7 +1032,6 @@ export function RetroColumn({
           )}
           {
             !ended && !global.leaveRetro && (
-              // ((!isXsUp && mouseOver) || (isXsUp && showEditBox)) ? (
               <Box
                 style={{
                   background: 'white',
