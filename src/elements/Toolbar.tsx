@@ -95,10 +95,9 @@ const Toolbar = (props: any) => {
   React.useEffect(() => {
     console.log('flaggg', loadingFlag);
 
-      if (!loadingFlag && ended) {
-        setShowSummaryButton(true);
-      }
-  
+    if (!loadingFlag && ended) {
+      setShowSummaryButton(true);
+    }
   });
   React.useEffect(() => {
     // if (user.userType != 2 && showFinishRetroButton && !leaveRetro) {
@@ -403,15 +402,23 @@ const Toolbar = (props: any) => {
         )}
         {showSummaryButton && !location.pathname.includes('report') && (
           <Button
-            variant="outlined"
-            className="secondaryButton"
+            // variant="outlined"
+            // className="secondaryButton"
             style={{
               marginRight: '40px',
+            }}
+            variant="contained"
+            sx={{
+              borderRadius: '24px',
+              padding: '10px 20px',
+              width: '162px',
+              marginRight: '15px',
+              fontWeight: 500,
             }}
             onClick={() => navigate('/report/' + currentRetro?.id)}
             // onTouchStart={() => joinRetro()}
           >
-            <span className="secondaryButtonText">View Summary</span>
+            VIEW SUMMARY
           </Button>
         )}
         <LeaveRetroDialog
@@ -532,6 +539,7 @@ const Toolbar = (props: any) => {
                 padding: '10px 20px',
                 width: '162px',
                 marginRight: '15px',
+                fontWeight: 500,
               }}
               onClick={() => {
                 navigate('/board/' + currentRetro?.id);
