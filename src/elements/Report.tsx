@@ -178,8 +178,8 @@ export const Report = React.forwardRef((props, ref) => {
   const [islanded, setIsLanded] = React.useState(true);
   const [global, dispatch] = React.useContext(GlobalContext);
   const [retroDate, setRetroDate] = React.useState('');
-
-  const componentRef = React.createRef<HTMLDivElement>();
+  let componentRef = React.useRef(null);
+ // const componentRef = React.createRef<HTMLDivElement>();
   function getBarColor(val: number) {
     if (val > 50) {
       return '#34A853';
@@ -197,7 +197,7 @@ export const Report = React.forwardRef((props, ref) => {
     }).format(new Date());
     setRetroDate(longEnUSFormatter);
   });
-
+  React.useEffect(() => {console.log(componentRef)});
   React.useEffect(() => {
     const wentWell_cardValues = [] as string[];
     const didntWentWell_cardValues = [] as string[];
@@ -335,13 +335,13 @@ export const Report = React.forwardRef((props, ref) => {
     const newArr = newQuestions.map(({ question, ...rest }) => {
       return rest;
     });
-    newArr.forEach(data => {
+    newArr.map(data => {
       data[1] = Math.round((data[1] / totalPulseCheckCount) * 100);
       data[2] = Math.round((data[2] / totalPulseCheckCount) * 100);
       data[3] = Math.round((data[3] / totalPulseCheckCount) * 100);
     });
     let sampleArray: any = [];
-    newArr.forEach(data => {
+    newArr.map(data => {
       return sampleArray.push(Object.values(data));
     });
     // console.log('sample', sampleArray);
@@ -561,14 +561,14 @@ export const Report = React.forwardRef((props, ref) => {
                 style={{ marginRight: '46px' }}
               ></Icons.Download> */}
               <ReactToPrint
-                pageStyle="@page { size: A4; scale: 0.90 }"
                 trigger={() => (
                   <Icons.Printer
                     size={20}
                     color="#4E4E4E"
-                    style={{ cursor: 'pointer' }}
+                    style={{ cursor: 'pointer', padding: '20px' }}
                   ></Icons.Printer>
-                )}
+                )
+              }
                 content={() =>componentRef.current}
               />
             </Grid>
@@ -581,15 +581,17 @@ export const Report = React.forwardRef((props, ref) => {
           justifyContent="center"
         >
           <Grid
-            ref={componentRef}
+          
             display="flex"
             lg={8}
+            md={12}
             xs={12}
-            direction="column"
+            flexDirection="column"
             item
           >
-            <Grid item sx={{ flexDirection: 'row' }}>
+            <Grid item sx={{ flexDirection: 'row' }}  ref={componentRef}>
               <Box
+
                 style={{
                   display: 'flex',
                   flexDirection: 'row',
@@ -670,7 +672,7 @@ export const Report = React.forwardRef((props, ref) => {
                   </>
                 ) : null}
               </Box>
-              <Box mt="48px" sx={styles.actionBox}>
+              <Box mt="48px" sx={styles.actionBox} className='page-break '>
                 <Typography
                   ml="24px"
                   mt="24px"

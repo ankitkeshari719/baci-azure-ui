@@ -33,7 +33,7 @@ import { CountdownTimer } from './CountdownTimer';
 // import { ReactComponent as InfoSvg } from '../../public/svgs/Info.svg';
 const Toolbar = (props: any) => {
   const isXsUp = useMediaQuery(theme.breakpoints.only('xs'));
-  const [{ avatar, currentRetro, user, leaveRetro }] =
+  const [{ avatar, currentRetro, user, leaveRetro, loadingFlag }] =
     React.useContext(GlobalContext);
   const navigate = useNavigate();
   const location = useLocation();
@@ -88,11 +88,17 @@ const Toolbar = (props: any) => {
 
   const open = Boolean(anchorEl);
   const id = open ? 'simple-popover' : undefined;
-
+  const [showSummaryButton, setShowSummaryButton] = React.useState(false);
   React.useEffect(() => {
     if (retroName && retroName !== '') setLocalRetroName(retroName);
   }, [retroName]);
+  React.useEffect(() => {
+    console.log('flaggg', loadingFlag);
 
+    if (!loadingFlag && ended) {
+      setShowSummaryButton(true);
+    }
+  });
   React.useEffect(() => {
     // if (user.userType != 2 && showFinishRetroButton && !leaveRetro) {
     if (showFinishRetroButton && !leaveRetro) {
@@ -143,14 +149,29 @@ const Toolbar = (props: any) => {
           boxShadow: '0px 0px 2px rgba(0, 0, 0, 0.25)!important',
         }}
       >
-        <img
-          src={BACILogo}
-          alt="Logo"
-          style={{
-            width: isXsUp ? '53px' : '82px',
-            height: isXsUp ? '18px' : '28px',
-          }}
-        />
+        {location.pathname.includes('report') ? (
+          <>
+            <Button onClick={() => navigate('/')}>
+              <img
+                src={BACILogo}
+                alt="Logo"
+                style={{
+                  width: isXsUp ? '53px' : '82px',
+                  height: isXsUp ? '18px' : '28px',
+                }}
+              />
+            </Button>
+          </>
+        ) : (
+          <img
+            src={BACILogo}
+            alt="Logo"
+            style={{
+              width: isXsUp ? '53px' : '82px',
+              height: isXsUp ? '18px' : '28px',
+            }}
+          />
+        )}
 
         {currentRetro?.name &&
           !location.pathname.includes('startRetro') &&
@@ -379,6 +400,27 @@ const Toolbar = (props: any) => {
             )}
           </>
         )}
+        {showSummaryButton && !location.pathname.includes('report') && (
+          <Button
+            // variant="outlined"
+            // className="secondaryButton"
+            style={{
+              marginRight: '40px',
+            }}
+            variant="contained"
+            sx={{
+              borderRadius: '24px',
+              padding: '10px 20px',
+              width: '162px',
+              marginRight: '15px',
+              fontWeight: 500,
+            }}
+            onClick={() => navigate('/report/' + currentRetro?.id)}
+            // onTouchStart={() => joinRetro()}
+          >
+            VIEW SUMMARY
+          </Button>
+        )}
         <LeaveRetroDialog
           open={leaveDiaOpen}
           onClose={(value: any) => {
@@ -497,8 +539,11 @@ const Toolbar = (props: any) => {
                 padding: '10px 20px',
                 width: '162px',
                 marginRight: '15px',
+                fontWeight: 500,
               }}
-              onClick={() => navigate('/board/' + currentRetro?.id)}
+              onClick={() => {
+                navigate('/board/' + currentRetro?.id);
+              }}
             >
               REVIEW BOARD
             </Button>
@@ -591,6 +636,7 @@ const Toolbar = (props: any) => {
                   width: '56px',
                   height: '56px',
                   borderRadius: '50%',
+                  border: 'none',
                 }}
               ></Avatar>
             )}
@@ -601,7 +647,7 @@ const Toolbar = (props: any) => {
         sx={{
           display: isXsUp ? 'flex' : 'none',
           flexDirection: 'row-reverse!important',
-          justifyContent:"space-between",
+          justifyContent: 'space-between',
           width: '100%!important',
           marginTop: '10px',
           marginBottom: isXsUp ? '10px' : 0,

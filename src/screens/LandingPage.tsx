@@ -74,6 +74,7 @@ export function LandingPage() {
 
   const [humanId, setHumanId] = React.useState(id || '');
   const [codeError, setCodeError] = React.useState('');
+  const [height, setHeight] = React.useState(0);
   const [global, dispatch] = React.useContext(GlobalContext);
   const isXsUp = useMediaQuery(theme.breakpoints.between('xs', 'sm'));
   const isSmUp = useMediaQuery(theme.breakpoints.only('sm'));
@@ -112,26 +113,36 @@ export function LandingPage() {
   }
 
   React.useEffect(() => {
+    setHeight(window.innerHeight);
     dispatch({
       type: ActionType.CLOSE_CURRENT_RETRO,
     });
   }, []);
   React.useEffect(() => {
-   sessionStorage.removeItem('BoardContext');
-   sessionStorage.removeItem('GlobalContext');
-   sessionStorage.removeItem('retroname');
-   sessionStorage.removeItem('showManual');
+    sessionStorage.removeItem('BoardContext');
+    sessionStorage.removeItem('GlobalContext');
+    sessionStorage.removeItem('retroname');
+    sessionStorage.removeItem('showManual');
   });
   return (
     <>
       {isXsUp ? (
-        <Box height={window.innerHeight} sx={{overflowY: 'auto'}}>
+        <Box height={height} sx={{ overflowY: 'auto' }}>
           <LandingLayout></LandingLayout>
-          <Box sx={{display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', height: '48vh', overflowY: 'auto'}}>
+          <Box
+            sx={{
+              display: 'flex',
+              flexDirection: 'column',
+              alignItems: 'center',
+              justifyContent: 'center',
+              height: height / 2 + 'px',
+              overflowY: 'auto',
+            }}
+          >
             <Typography
               variant="h3"
               color={commonStyles.primaryDark}
-              sx={{  textAlign: 'center' }}
+              sx={{ textAlign: 'center' }}
             >
               What BACI retro are you joining today?
             </Typography>
@@ -141,7 +152,11 @@ export function LandingPage() {
               variant="standard"
               label="Retro access code"
               error={!!codeError}
-              sx={{...styles.accessCodeTextField, minWidth: '90%', marginTop: '48px'}}
+              sx={{
+                ...styles.accessCodeTextField,
+                minWidth: '90%',
+                marginTop: '48px',
+              }}
               onKeyDown={e => {
                 if (e.keyCode === 13) {
                   joinRetro();
@@ -158,11 +173,11 @@ export function LandingPage() {
                 {codeError}
               </FormHelperText>
             )}
-            <Box style={{width: '90%'}} pt='48px'>
+            <Box style={{ width: '90%' }} pt="48px">
               <Button
                 variant="outlined"
                 className="secondaryButton"
-                style={{width: '100%'}}
+                style={{ width: '100%' }}
                 onClick={() => joinRetro()}
                 //onTouchStart={() => joinRetro()}
               >

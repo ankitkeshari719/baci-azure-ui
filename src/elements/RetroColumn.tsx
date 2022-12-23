@@ -7,6 +7,7 @@ import {
   Typography,
   useMediaQuery,
   Link,
+  Tooltip,
 } from '@mui/material';
 import React, { ReactElement, useEffect, useMemo } from 'react';
 import Draggable, { DraggableData, DraggableEvent } from 'react-draggable';
@@ -82,6 +83,7 @@ export function RetroColumn({
   const [groupCollapsed, setGroupCollapsed] = React.useState<boolean[]>(
     cardGroups.map(() => true)
   );
+
   const {
     state: { columns, ended },
     commitAction,
@@ -610,66 +612,87 @@ export function RetroColumn({
                 lg={12}
               >
                 <Grid item lg={8} md={6} xs={6}>
-                  <div>
-                    {!noHeader && (
-                      <Typography
-                        align="center"
-                        sx={{
-                          userSelect: 'none',
-                          display: 'flex',
-                          // fontSize: '0.9rem',
-                          color: groupFontColour + '!important',
-                          fontSize: '16px',
-                          padding: '10px',
-                        }}
-                      >
-                        {true ? (
-                          <>{columnName}</>
-                        ) : (
-                          <>
-                            {' '}
-                            {leftHeaderComponent}
-                            <TextField
-                              maxRows={2}
-                              disabled={true}
-                              sx={{
-                                fieldset: { border: 'none' },
-                                flex: 10,
-                                // padding: '10px',
-                                div: { padding: 0, position: 'initial' },
-                                textarea: {
-                                  // textAlign: 'center',
-                                  color: groupFontColour + '!important',
-                                  fontSize: '16px',
-                                  fontWeight: 600,
-                                },
+                  <Tooltip title={columnName}>
+                    <div>
+                      {!noHeader && (
+                        <Typography
+                          align="center"
+                          sx={{
+                            userSelect: 'none',
+                            display: 'flex',
+                            // fontSize: '0.9rem',
+                            color: groupFontColour + '!important',
+                            fontSize: '16px',
+                            padding: '10px',
+                          }}
+                        >
+                          {global.user.userType == 2 &&
+                          (!ended || !global.leaveRetro) ? (
+                            <>
+                              {' '}
+                              {leftHeaderComponent}
+                              <TextField
+                                maxRows={2}
+                                sx={{
+                                  fieldset: { border: 'none' },
+                                  flex: 10,
+                                  // padding: '10px',
+                                  div: { padding: 0, position: 'initial' },
+                                  textarea: {
+                                    // textAlign: 'center',
+                                    color: groupFontColour + '!important',
+                                    fontSize: '16px',
+                                    fontWeight: 600,
+                                  },
 
-                                position: 'initial',
-                                display: 'flex',
-                                // alignItems: 'center',
-                                // justifyContent: 'left',
-                              }}
-                              multiline
-                              fullWidth
-                              value={columnName}
-                              onKeyDown={e => {
-                                if (e.keyCode === 13) {
-                                  submitColumnName(columnName);
-                                  (e.target as HTMLInputElement).blur();
+                                  position: 'initial',
+                                  display: 'flex',
+                                  // alignItems: 'center',
+                                  // justifyContent: 'left',
+                                }}
+                                inputProps={{ maxLength: 150 }}
+                                multiline
+                                fullWidth
+                                value={columnName}
+                                onKeyDown={e => {
+                                  if (e.keyCode === 13 && value.length !== 0) {
+                                    submitColumnName(columnName);
+                                    (e.target as HTMLInputElement).blur();
+                                  }
+                                }}
+                                onChange={e =>
+                                  setColumnName(e.currentTarget.value)
                                 }
+                                onBlur={() => submitColumnName(columnName)}
+                                onSubmit={() => submitColumnName(columnName)}
+                              ></TextField>
+                              {rightHeaderComponent}
+                            </>
+                          ) : (
+                            <Typography
+                              noWrap
+                              sx={{
+                                // minWidth: isXsUp ? '150px' : '350px',
+                                // maxWidth: isXsUp ? '150px' : '350px',
+                                width: '100%',
+                                overflow: 'hidden',
+                                textOverflow: 'ellipsis',
+                                display: 'inline-block',
+                                // height:'56px'
+                                // overflow: 'hidden !important',
+                                // textOverflow: 'ellipsis',
                               }}
-                              onChange={e =>
-                                setColumnName(e.currentTarget.value)
-                              }
-                              onBlur={() => submitColumnName(columnName)}
-                              onSubmit={() => submitColumnName(columnName)}
-                            ></TextField>
-                            {rightHeaderComponent}
-                          </>
-                        )}
-                      </Typography>
-                    )}
-                  </div>
+                              // onClick={() => {
+                              //   setEditing(true);
+                              // }}
+                            >
+                              {columnName}
+                            </Typography>
+                          )}
+                        </Typography>
+                      )}
+                    </div>
+                  </Tooltip>
                 </Grid>
 
                 <Grid
@@ -781,7 +804,7 @@ export function RetroColumn({
                     ref={containerRef}
                     style={{
                       // overflowY: noHeightLimit ? 'auto' : 'auto',
-                      overflowY:  'auto',
+                      overflowY: 'auto',
                       userSelect: 'none',
                       flexGrow: 2,
                     }}
@@ -791,7 +814,11 @@ export function RetroColumn({
                       // rowSpacing={1}
                       columnSpacing={'20px'}
                       direction="row"
-                      justifyContent="space-between"
+                      justifyContent={
+                        global?.expandColumn === -1
+                          ? 'space-between'
+                          : 'flex-start'
+                      }
                     >
                       {cardGroups.map((group, i) => (
                         <>
@@ -873,7 +900,7 @@ export function RetroColumn({
                           >
                             {group.name === UNGROUPED ||
                             !groupCollapsed[i] ||
-                            group.cards.length < 2 ||
+                            group.cards.length < 1 ||
                             expandAllGroups ? (
                               <div
                                 style={{
@@ -1066,7 +1093,8 @@ export function RetroColumn({
                     }}
                     value={valueSet ? value : 'Add your thoughts...'}
                     onChange={event => {
-                      setValue(event.target.value);
+                      if (event.target.value !== ' ')
+                        setValue(event.target.value);
                     }}
                     onFocus={event => {
                       setValueSet(true);
@@ -1077,7 +1105,15 @@ export function RetroColumn({
                       }
                     }}
                     onKeyDown={e => {
-                      if (e.keyCode === 13) {
+                      const tempValue = value;
+                      const removedEnter = tempValue.replace(/[\r\n]/gm, '');
+                      setValue(removedEnter);
+                      const removedSpaces = removedEnter.replace(/ /g, '');
+                      if (
+                        e.keyCode === 13 &&
+                        removedSpaces &&
+                        removedSpaces.length !== 0
+                      ) {
                         submit(value);
                         (e.target as HTMLInputElement).blur();
                       }
@@ -1105,7 +1141,13 @@ export function RetroColumn({
                 >
                   <Button
                     style={{ position: 'initial' }}
-                    disabled={!value || value.length === 0}
+                    disabled={
+                      // !value ||value.replace(/ /g, '').length === 0||
+                      value.length === 0 ||
+                      !value ||
+                      value.replace(/[\r\n]/gm, '').replace(/ /g, '').length ===
+                        0
+                    }
                     onClick={() => submit(value)}
                     // onTouchStart={() => submit(value)}
                   >
@@ -1239,7 +1281,7 @@ export function RetroColumn({
                             columnId={column.id}
                             showCollapse={
                               group.name !== UNGROUPED &&
-                              group.cards.length > 1 &&
+                              group.cards.length > 0 &&
                               !groupCollapsed[i]
                             }
                             onCollapse={value => {
@@ -1249,7 +1291,7 @@ export function RetroColumn({
                           >
                             {group.name === UNGROUPED ||
                             !groupCollapsed[i] ||
-                            group.cards.length < 2 ||
+                            group.cards.length < 1 ||
                             expandAllGroups ? (
                               <div
                                 style={{
@@ -1278,7 +1320,7 @@ export function RetroColumn({
                                         {group.name === UNGROUPED ||
                                         j <
                                           (groupCollapsed[i]
-                                            ? 2
+                                            ? 1
                                             : group.cards.length) ? (
                                           <>
                                             <Grid

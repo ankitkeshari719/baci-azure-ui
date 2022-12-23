@@ -31,9 +31,6 @@ import theme from '../theme/theme';
 import { display } from '@mui/system';
 const AVATAR_CHARACTER_LIMIT = 30;
 const styles = {
-  heading: {
-    marginTop: '254px',
-  },
   avatarfield: {
     '& .MuiFormLabel-root': {
       color: 'rgba(0, 0, 0, 0.6) !important',
@@ -63,6 +60,8 @@ const styles = {
   avatarSvgXs: {
     width: '50px',
     height: '50px',
+    marginBottom: '15px',
+    // marginRight: '15px',
     borderRadius: '50%',
   },
 };
@@ -103,9 +102,10 @@ export function AvatarNamePage() {
   const [captureName, setCaptureName] = React.useState(id ? true : false);
   const isXsUp = useMediaQuery(theme.breakpoints.between('xs', 'sm'));
   const [openAvatarDialog, setOpenAvatarDialog] = React.useState(false);
-
+  const [height, setHeight] = React.useState(0);
   React.useEffect(() => {
     setAvatarList(avatarName.sort(() => Math.random() - 0.5));
+    setHeight(window.innerHeight);
   }, []);
   useAzureAuth();
   const joinRetro = async (
@@ -188,7 +188,10 @@ export function AvatarNamePage() {
       }
     } else {
       if (userName === '') setCodeError('Please enter avatar name');
-      else setAvatarSelectionError('Please select avatar');
+      else {
+        setAvatarSelectionError('Please select avatar');
+        console.log(avatarSelectionError);
+      }
     }
   };
   const handleUsername = (e: string) => {
@@ -294,7 +297,7 @@ export function AvatarNamePage() {
     }
   };
   return (
-    <Grid container spacing={0} style={{ overflowY: 'auto' }} height={window.innerHeight} >
+    <Grid container spacing={0} style={{ overflowY: 'auto' }}>
       <Grid item xs={isXsUp ? 12 : 6}>
         <LandingLayout></LandingLayout>
       </Grid>
@@ -310,14 +313,21 @@ export function AvatarNamePage() {
           container
           marginRight={isXsUp ? '0px' : commonStyles.m_80}
           marginLeft={isXsUp ? '0px' : commonStyles.m_80}
-          flexDirection="column"
-          justifyContent="center"
+          flexDirection="row"
           sx={{
-            height: !isXsUp ? '100vh' : '50vh',
+            height: !isXsUp ? height : (height - 100) / 2,
+
             width: isXsUp ? '90%' : '100%',
           }}
         >
-          <Box>
+          <Box
+            sx={{
+              display: 'flex',
+              justifyContent: 'end',
+              flexDirection: 'column',
+              width: '100%',
+            }}
+          >
             {!global.currentRetro?.creatorId ? (
               <>
                 <Typography variant="h1" color={commonStyles.primaryDark}>
@@ -426,7 +436,7 @@ export function AvatarNamePage() {
             </Box>
           ) : (
             <>
-              <Box mt="42px">
+              <Box mt="5%">
                 <Box display="flex">
                   {selectedAvatar && (
                     <Avatar
@@ -442,7 +452,11 @@ export function AvatarNamePage() {
                     <span className="primaryButtonText">Select Avatar</span>
                   </Button>
                 </Box>
-
+                {avatarSelectionError !== '' && (
+                  <FormHelperText sx={{ color: 'red', marginLeft: '10px' }}>
+                    {avatarSelectionError}
+                  </FormHelperText>
+                )}
                 <Button
                   variant="outlined"
                   className="secondaryButton"
@@ -452,7 +466,7 @@ export function AvatarNamePage() {
                   <span className="secondaryButtonText">Go on..</span>
                 </Button>
               </Box>
-              <Dialog open={openAvatarDialog} sx={{ height: '90vh' ,'&& .MuiDialog-paper': {overflowX: 'hidden'}}}>
+              <Dialog open={openAvatarDialog} sx={{ height: height - 100 }}>
                 <DialogTitle>
                   <Typography>Select Avatar</Typography>
                 </DialogTitle>
@@ -460,12 +474,11 @@ export function AvatarNamePage() {
                   sx={{
                     width: '90%',
                     padding: '16px',
-                    height: '60%',
-                    overflowY: 'auto',
+                    height: height / 2,
                     display: 'flex',
-                    flexDirection: 'row',
                     flexWrap: 'wrap',
-                    justifyContent: 'space-evenly',
+                    justifyContent: 'space-between',
+                    overflowY: 'scroll',
                   }}
                 >
                   {avatarList.map((avatar: any, index) => (
@@ -484,6 +497,7 @@ export function AvatarNamePage() {
                     className="secondaryButton"
                     onClick={() => setOpenAvatarDialog(false)}
                     sx={{ width: '90%' }}
+                    disabled={selectedAvatar == ''}
                   >
                     <span className="secondaryButtonText">Select</span>
                   </Button>

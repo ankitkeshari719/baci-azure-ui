@@ -7,6 +7,7 @@ $PrimaryMain : #159ADD;
 $m-80 :80px;
 $height16: 16.5px;
 $grey30:#E3E3E3;
+$grey60:#676767;
 $font16: 16px;
 $m-209 :209px;
 $mr-46 :46px;
@@ -21,5 +22,6 @@ $mr-46 :46px;
     PrimaryMain:$PrimaryMain;
     height_16: $height16;
     grey30: $grey30;
-    font16: $font16
+    font16: $font16;
+    grey60: $grey60;
   }

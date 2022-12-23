@@ -77,14 +77,18 @@ const styles = {
 
 export function LandingLayout() {
   const isXsUp = useMediaQuery(theme.breakpoints.between('xs', 'sm'));
+  const [height, setHeight] = React.useState('');
+  React.useEffect(() => {
+    setHeight('48vh');
+  });
   return (
     <>
       <>
         {isXsUp ? (
-          <Box>
+          <Box sx={{ position: 'relative' }}>
             <img
               src={LandingMobileImage}
-              style={{ width: '100%', height: '48vh'}}
+              style={{ width: '100%', height: height }}
             ></img>
             <Box
               sx={{
@@ -93,14 +97,14 @@ export function LandingLayout() {
                 alignItems: 'center',
                 justifyContent: 'center',
                 position: 'absolute',
-                height:  '48vh',
+                height: '48vh',
                 width: '100%',
                 top: '0px',
               }}
             >
               <Box>
                 <LazyLoadImage
-                  style={styles.logoImage}
+                  style={styles.logoImageXs}
                   alt="logo"
                   // height={image.height}
                   src={BACILogo} // use normal <img> attributes as props
@@ -110,29 +114,24 @@ export function LandingLayout() {
               </Box>
               <Box display="flex" mt="32px">
                 <Typography variant="h5" color={commomStyles.grey} mr="6px">
-                  Pause
+                  Reflect
                 </Typography>
-                <Typography color={commomStyles.secondaryMain} mr="6px">
-                  .
+                <Typography color={commomStyles.secondaryMain} mr="6px" ml='6px'>
+                {'\u002E'}
                 </Typography>
-                <Typography variant="h5" color={commomStyles.grey} mr="6px">
-                  Think
+                <Typography variant="h5" color={commomStyles.grey} mr="6px" >
+                  Gratitude
                 </Typography>
-                <Typography color={commomStyles.secondaryMain} mr="6px">
-                  .
+                <Typography color={commomStyles.secondaryMain} mr="6px" ml='6px'>
+                {'\u002E'}
                 </Typography>
-                <Typography variant="h5" color={commomStyles.grey} mr="6px">
-                  Act
-                </Typography>
-                <Typography color={commomStyles.secondaryMain} mr="6px">
-                  .
-                </Typography>
+
                 <Typography
                   variant="h5"
                   color={commomStyles.secondaryMain}
                   mr="6px"
                 >
-                  Grow
+                  Action
                 </Typography>
               </Box>
             </Box>
@@ -149,41 +148,34 @@ export function LandingLayout() {
               </Box>
               <Box display="flex" mt="93px" ml="58px">
                 <Typography variant="h1" color={commomStyles.grey} mr="6px">
-                  Pause
+                  Reflect
                 </Typography>
                 <Typography
                   color={commomStyles.secondaryMain}
                   mr="6px"
+                  ml='6px'
                   fontSize="32px"
                 >
-                  .
+                   {'\u002E'}
                 </Typography>
                 <Typography variant="h1" color={commomStyles.grey} mr="6px">
-                  Think
+                  Gratitude
                 </Typography>
                 <Typography
                   color={commomStyles.secondaryMain}
                   mr="6px"
+                  ml='6px'
                   fontSize="32px"
                 >
-                  .
+                  {'\u002E'}
                 </Typography>
-                <Typography variant="h1" color={commomStyles.grey} mr="6px">
-                  Act
-                </Typography>
-                <Typography
-                  color={commomStyles.secondaryMain}
-                  mr="6px"
-                  fontSize="32px"
-                >
-                  .
-                </Typography>
+
                 <Typography
                   variant="h1"
                   color={commomStyles.secondaryMain}
                   mr="6px"
                 >
-                  Grow
+                  Action
                 </Typography>
               </Box>
             </Box>

@@ -21,6 +21,7 @@ import email from '../assets/img/emailbox.png';
 import copy from '../assets/img/Vectorcopy.png';
 import send from '../assets/img/Vectorsend.png';
 import download from '../assets/img/download.png';
+import { BoardContext } from '../contexts/BoardContext';
 import { Email, EmailOutlined } from '@mui/icons-material';
 import { GlobalContext } from '../contexts/GlobalContext';
 import { CopyToClipboard } from 'react-copy-to-clipboard';
@@ -145,13 +146,16 @@ const styles = {
   },
   copyURL: {
     height: '16.5px',
-    cursor:'pointer'
+    cursor: 'pointer',
   },
-
 };
 export function RetroDetails(props: any) {
   const [global, dispatch] = React.useContext(GlobalContext);
   const [iscopied, setIsCopied] = React.useState(false);
+  const {
+    state: { retroName },
+  } = React.useContext(BoardContext);
+
   const navigate = useNavigate();
   const shareData = {
     title: 'Retro',
@@ -179,14 +183,13 @@ export function RetroDetails(props: any) {
       downloadLink.click();
     }
   };
-  const handleTooltipClose=() => {
-    setTimeout(()=>{
+  const handleTooltipClose = () => {
+    setTimeout(() => {
       setIsCopied(false);
-    }, 1500)
-    
-  }
+    }, 1500);
+  };
   return (
-    <Grid container spacing={0} >
+    <Grid container spacing={0}>
       {!props?.popover && (
         <Grid item lg={6}>
           <LandingLayout></LandingLayout>
@@ -194,7 +197,7 @@ export function RetroDetails(props: any) {
       )}
       <Grid item lg={!props?.popover ? 6 : 12}>
         <Grid
-        item
+          item
           xs={12}
           marginRight={commonStyles.m_80}
           marginLeft={commonStyles.m_80}
@@ -212,7 +215,7 @@ export function RetroDetails(props: any) {
                 color={commonStyles.primaryDark}
                 className="alignCenter"
               >
-                ‘{global.currentRetro?.name}’ retro is created successfully!
+                ‘{retroName}’ retro is created successfully!
               </Typography>
             ) : (
               <Typography
@@ -220,7 +223,7 @@ export function RetroDetails(props: any) {
                 color={commonStyles.primaryDark}
                 className="alignCenter"
               >
-                Name : ‘{global.currentRetro?.name}’
+                Name : ‘{retroName}’
               </Typography>
             )}
             <Box style={styles.group100}>
@@ -263,10 +266,13 @@ export function RetroDetails(props: any) {
               <Grid container spacing={2} mt="48px">
                 <Grid item xs={4}>
                   <Box sx={styles.group96}>
-                    <Box mt="80px" style={{
-                          maxWidth: '154px',
-                          overflowX: 'hidden'
-                        }}>
+                    <Box
+                      mt="80px"
+                      style={{
+                        maxWidth: '154px',
+                        overflowX: 'hidden',
+                      }}
+                    >
                       <a
                         style={{
                           overflowWrap: 'break-word',
@@ -281,19 +287,21 @@ export function RetroDetails(props: any) {
                       <CopyToClipboard
                         text={global?.currentRetro?.joinUrl}
                         onCopy={() => setIsCopied(true)}
-                    
                       >
                         <Tooltip
-                        onClose={handleTooltipClose}
+                          onClose={handleTooltipClose}
                           open={iscopied}
-                         style={{width: '20px', fontSize: '10px'}}
+                          style={{ width: '20px', fontSize: '10px' }}
                           enterNextDelay={1500}
                           placement="top"
-                           title="Link Copied!"
+                          title="Link Copied!"
                         >
                           <img
                             src={copy}
-                            style={(styles.copyURL, { marginTop: '0',cursor:'pointer' })}
+                            style={
+                              (styles.copyURL,
+                              { marginTop: '0', cursor: 'pointer' })
+                            }
                           ></img>
                         </Tooltip>
                       </CopyToClipboard>
