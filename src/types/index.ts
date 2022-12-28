@@ -111,6 +111,8 @@ export class BoardState {
     feedback: FeedbackEntry[];
     pulseCheckQuestions: PulseCheckEntry[];
     checked: boolean;
+    isFacilitator: boolean;
+    isMobile: boolean;
   }[] = [];
   countdownFrom: number = -1;
   countdownDuration: number = 5 * 60 * 1000;

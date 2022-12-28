@@ -12,6 +12,7 @@ export const useAzureAuth = () => {
       name: '',
       avatar: '',
       userType: 0,
+     
     };
   };
 

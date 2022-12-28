@@ -30,6 +30,7 @@ import SessionEndingMessage from '../atoms/SessionEndingMessage';
 import LeaveRetroDialog from '../atoms/LeaveRetroDialog';
 import theme from '../theme/theme';
 import { CountdownTimer } from './CountdownTimer';
+import FacilitatorDropDown from './FacilitatorDropDown';
 // import { ReactComponent as InfoSvg } from '../../public/svgs/Info.svg';
 const Toolbar = (props: any) => {
   const isXsUp = useMediaQuery(theme.breakpoints.only('xs'));
@@ -326,6 +327,8 @@ const Toolbar = (props: any) => {
                       close={handleClose}
                     ></RetroDetails>
                   </Popover>
+
+                  {!ended ? <FacilitatorDropDown /> : null}
                 </>
               )}
             </Box>
@@ -435,7 +438,6 @@ const Toolbar = (props: any) => {
           aria-labelledby="alert-dialog-title"
           aria-describedby="alert-dialog-description"
         >
-    
           <div
             style={{
               display: 'flex',
@@ -467,7 +469,6 @@ const Toolbar = (props: any) => {
           </div>
 
           <DialogContent>
-
             <span
               style={{
                 color: '#343434',

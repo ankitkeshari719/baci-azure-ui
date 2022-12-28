@@ -37,6 +37,7 @@ export class ReducerPayload {
   userType?: number;
   leaveRetro?: boolean;
   feedbackSubmit?: boolean;
+  isMobile?: boolean;
 }
 
 type ContextType = [

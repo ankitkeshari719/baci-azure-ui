@@ -36,7 +36,7 @@ import RetroPropsPanel from '../elements/RetroPropsPanel';
 import SharePanel from '../elements/SharePanel';
 import useLoadRetro from '../hooks/useLoadRetro';
 import theme from '../theme/theme';
-import FeedbackPopup from '../atoms/feedbackPopup';
+import FeedbackPopup from '../atoms/FeedbackPopup';
 import Toolbar from '../elements/Toolbar';
 import SubToolbar from '../elements/SubToolbar';
 import FirstTimeExperience from '../elements/FirstTimeExperience';

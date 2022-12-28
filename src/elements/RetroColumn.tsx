@@ -81,7 +81,7 @@ export function RetroColumn({
   const surroundDiv = React.useRef<HTMLDivElement>(null);
   const containerRef = React.useRef<HTMLDivElement>(null);
   const [groupCollapsed, setGroupCollapsed] = React.useState<boolean[]>(
-    cardGroups.map(() => true)
+    cardGroups.map(() => false)
   );
 
   const {
@@ -748,7 +748,6 @@ export function RetroColumn({
                           payload: { expandColumn: +column.id },
                         });
                       }}
-                     
                       src="/svgs/Expand.svg"
                       style={{
                         width: '20px',
@@ -758,7 +757,6 @@ export function RetroColumn({
                     />
                   ) : (
                     <img
-                     
                       onClick={() => {
                         dispatch({
                           type: ActionType.EXPAND_COLUMN,
@@ -880,7 +878,7 @@ export function RetroColumn({
                             columnId={column.id}
                             showCollapse={
                               group.name !== UNGROUPED &&
-                              group.cards.length > 1 &&
+                              // group.cards.length > 1 &&
                               !groupCollapsed[i]
                             }
                             onCollapse={value => {
@@ -890,7 +888,7 @@ export function RetroColumn({
                           >
                             {group.name === UNGROUPED ||
                             !groupCollapsed[i] ||
-                            group.cards.length < 1 ||
+                            // group.cards.length < 1 ||
                             expandAllGroups ? (
                               <div
                                 style={{

@@ -19,7 +19,7 @@ import { FeedbackColumn } from '../elements/FeedbackColumn';
 import useLoadRetro from '../hooks/useLoadRetro';
 import { BoardActionType } from '../statemachine/BoardStateMachine';
 import theme from '../theme/theme';
-import FeedbackPopup from '../atoms/feedbackPopup';
+import FeedbackPopup from '../atoms/FeedbackPopup';
 
 export default function Feedback() {
   const navigate = useNavigate();
