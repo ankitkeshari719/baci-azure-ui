@@ -159,7 +159,6 @@ export default function RetroBoard() {
   const [showSharePanel, setShowSharePanel] = React.useState(false);
 
   useLoadRetro();
-  
 
   const isMatch = (element: any, index: number, array: any): boolean => {
     // console.log(element, index, array);
@@ -175,19 +174,17 @@ export default function RetroBoard() {
                 (!b.reactions ? 0 : b.reactions.length) -
                 (!a.reactions ? 0 : a.reactions.length)
             );
-           
+
             return {
               ...column,
               groups: groups
                 .map(group => {
-                  const cards = group.cards.filter(
-
-                    card =>
-                      global.user?.id !== global.currentRetro?.creatorId
-                        ? card
-                        : global.usersSelected?.some((user, index) => {
-                            return user?.userId === card?.createdBy;
-                          })
+                  const cards = group.cards.filter(card =>
+                    global.user?.id !== global.currentRetro?.creatorId
+                      ? card
+                      : global.usersSelected?.some((user, index) => {
+                          return user?.userId === card?.createdBy;
+                        })
                   );
                   return {
                     ...group,
@@ -199,7 +196,6 @@ export default function RetroBoard() {
                     !justMyCards ||
                     group.name === UNGROUPED ||
                     group.cards.length !== 0
-
                 ),
             };
           }
@@ -261,7 +257,6 @@ export default function RetroBoard() {
   };
 
   const finishRetro = () => {
- 
     if (global.user.userType == 2) {
       sessionStorage.removeItem('retoname');
 
@@ -301,10 +296,7 @@ export default function RetroBoard() {
           });
         }
       );
-
-
     } else {
-    
       dispatch({
         type: ActionType.SET_LEAVE_RETRO,
         payload: { leaveRetro: true },
@@ -326,7 +318,6 @@ export default function RetroBoard() {
   };
 
   React.useEffect(() => {
-   
     if (ended || global.leaveRetro) {
       if (global.user.userType !== 2) {
         const currentUser = users?.filter(
@@ -336,7 +327,6 @@ export default function RetroBoard() {
           setshowFeedback(true);
         }
       } else {
-
         setshowFeedback(false);
       }
     }
@@ -358,6 +348,11 @@ export default function RetroBoard() {
     console.log(newValue, 'value');
     setValue(newValue);
   };
+
+  const [emojiPickerid, setEmojiPickerId] = React.useState('');
+  useEffect(() => {
+    console.log('emojiPickerid', emojiPickerid);
+  }, [emojiPickerid]);
 
   return (
     <Box
@@ -432,7 +427,6 @@ export default function RetroBoard() {
                   sx={{ fontSize: '16px' }}
                 />
                 ;
-               
               </StyledTabs>
             </Box>
           ) : (
@@ -470,8 +464,12 @@ export default function RetroBoard() {
                               setShowEditBox={setShowEditBox}
                               setIslanded={setIsLanded}
                               cardGroups={column.groups}
+                              setEmojiPicker={v => {
+                                console.log(v);
+                                setEmojiPickerId(v);
+                              }}
+                              emojiPickerid={emojiPickerid}
                             />
-                        
                           </>
                         ) : (
                           <FeedbackColumn
@@ -498,6 +496,7 @@ export default function RetroBoard() {
                 showEditBox,
                 global.expandColumn,
                 global.usersSelected,
+                emojiPickerid,
               ]
             )}
           </div>

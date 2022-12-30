@@ -179,7 +179,7 @@ export const Report = React.forwardRef((props, ref) => {
   const [global, dispatch] = React.useContext(GlobalContext);
   const [retroDate, setRetroDate] = React.useState('');
   let componentRef = React.useRef(null);
- // const componentRef = React.createRef<HTMLDivElement>();
+  // const componentRef = React.createRef<HTMLDivElement>();
   function getBarColor(val: number) {
     if (val > 50) {
       return '#34A853';
@@ -197,7 +197,9 @@ export const Report = React.forwardRef((props, ref) => {
     }).format(new Date());
     setRetroDate(longEnUSFormatter);
   });
-  React.useEffect(() => {console.log(componentRef)});
+  React.useEffect(() => {
+    console.log(componentRef);
+  });
   React.useEffect(() => {
     const wentWell_cardValues = [] as string[];
     const didntWentWell_cardValues = [] as string[];
@@ -358,7 +360,6 @@ export const Report = React.forwardRef((props, ref) => {
   }, [lastStateUpdate]);
 
   return (
-    
     <Box
       style={{
         height: '985px',
@@ -388,7 +389,6 @@ export const Report = React.forwardRef((props, ref) => {
               </Typography>
             </Grid>
             <Grid item display="flex" justifyContent="flex-end">
-             
               <ReactToPrint
                 trigger={() => (
                   <Icons.Printer
@@ -396,9 +396,8 @@ export const Report = React.forwardRef((props, ref) => {
                     color="#4E4E4E"
                     style={{ cursor: 'pointer', padding: '20px' }}
                   ></Icons.Printer>
-                )
-              }
-                content={() =>componentRef.current}
+                )}
+                content={() => componentRef.current}
               />
             </Grid>
           </Grid>
@@ -410,7 +409,6 @@ export const Report = React.forwardRef((props, ref) => {
           justifyContent="center"
         >
           <Grid
-          
             display="flex"
             lg={8}
             md={12}
@@ -418,9 +416,8 @@ export const Report = React.forwardRef((props, ref) => {
             flexDirection="column"
             item
           >
-            <Grid item sx={{ flexDirection: 'row' }}  ref={componentRef}>
+            <Grid item sx={{ flexDirection: 'row' }} ref={componentRef}>
               <Box
-
                 style={{
                   display: 'flex',
                   flexDirection: 'row',
@@ -501,7 +498,7 @@ export const Report = React.forwardRef((props, ref) => {
                   </>
                 ) : null}
               </Box>
-              <Box mt="48px" sx={styles.actionBox} className='page-break '>
+              <Box mt="48px" sx={styles.actionBox} className="page-break ">
                 <Typography
                   ml="24px"
                   mt="24px"
@@ -526,6 +523,8 @@ export const Report = React.forwardRef((props, ref) => {
                         setIslanded={setIsLanded}
                         setShowEditBox={() => {}}
                         cardGroups={columns[ACTIONS_COLUMN].groups}
+                        setEmojiPicker={() => {}}
+                        emojiPickerid={''}
                       />
                     </>
                   ) : null}
@@ -552,7 +551,6 @@ export const Report = React.forwardRef((props, ref) => {
                   }}
                 >
                   {QUICK_PULSE_CHECK_QUESTIONS.length !== 0 ? (
-                    
                     <>
                       <Box
                         sx={{

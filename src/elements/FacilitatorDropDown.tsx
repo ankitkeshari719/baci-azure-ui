@@ -72,15 +72,17 @@ const FacilitatorDropDown = () => {
     );
   };
   useEffect(() => {
-    let valueToBeDisplayed: any[] = [];
+    let valueToBeDisplayed: any[] = [global.currentRetro?.creatorId];
+
     users.forEach(user => {
       if (user.isFacilitator) {
         valueToBeDisplayed.push(user.userId);
       }
       if (
         user.isFacilitator &&
-        user.userId == global.user.id &&
-        user.userId != global.currentRetro?.creatorId
+        user.userId == global.user.id
+        //  &&
+        // user.userId != global.currentRetro?.creatorId
       ) {
         dispatch({
           type: ActionType.SET_USER,
@@ -120,69 +122,104 @@ const FacilitatorDropDown = () => {
   return (
     <>
       {global.user.id == global.currentRetro?.creatorId ? (
-        <FormControl sx={{ m: 1, width: 300 }}>
-          <InputLabel id="demo-multiple-checkbox-label">Facilitator</InputLabel>
-          <Select
-            sx={{
-              fieldset: {
-                border: 'none',
-                div: { padding: 0 },
-                opacity: 1,
-              },
+        <span
+          style={{
+            display: 'flex',
+            flexDirection: 'row',
+            width: '450px',
+            minWidth: '300px',
+            alignItems: 'center',
+            fontFamily: 'Poppins',
+            fontStyle: 'normal',
+            fontWeight: 500,
+            fontSize: '14px',
+          }}
+        >
+          <img src="/svgs/Line 13.svg"></img>
+          <span
+            style={{
+              lineHeight: '20px',
+              letterSpacing: '0.4px',
+              textTransform: 'uppercase',
+              color: '#808080',
+              marginLeft:'10px'
             }}
-            labelId="demo-multiple-checkbox-label"
-            id="demo-multiple-checkbox"
-            multiple
-            value={personName}
-            //   onChange={handleChange}
-            //   input={<OutlinedInput label="Tag" />}
-            renderValue={selected => {
-              var valueToBeDisplayed = '';
-              console.log(selected, 'selected');
-              // selected.forEach((id, index) => {
-              users.forEach(element => {
-                if (element.userId == global.user.id && element.isFacilitator) {
-                  if (valueToBeDisplayed == '') {
-                    valueToBeDisplayed = 'You';
-                  } else {
-                    valueToBeDisplayed = valueToBeDisplayed + ', ' + 'You';
-                  }
-                } else if (element.isFacilitator) {
-                  if (valueToBeDisplayed == '') {
-                    valueToBeDisplayed = element.userNickname;
-                  } else {
-                    valueToBeDisplayed =
-                      valueToBeDisplayed + ', ' + element.userNickname;
-                  }
-                }
-              });
-              // });
-
-              return valueToBeDisplayed;
-              // selected.join(', ');
-            }}
-            MenuProps={MenuProps}
           >
-            {users.map(name => (
-              <MenuItem
-                key={name.userId}
-                value={name.userId}
-                onClick={event => onClickOfUser(event, name.userId)}
-                disabled={
-                  name.isMobile == true ||
-                  name.userId == global.currentRetro?.creatorId
-                }
-              >
-                <Checkbox checked={name.isFacilitator} />
-                <ListItemText
-                  primary={
-                    name.userId === global.user.id ? 'You' : name.userNickname
+            Facilitator
+          </span>
+          <FormControl sx={{ m: 1, width: '200px' }}>
+            {/* <InputLabel id="demo-multiple-checkbox-label">Facilitator</InputLabel> */}
+            <Select
+              sx={{
+                fieldset: {
+                  border: 'none',
+                  div: { padding: 0 },
+                  opacity: 1,
+                  color: '#4E4E4E',
+                },
+              }}
+              labelId="demo-multiple-checkbox-label"
+              id="demo-multiple-checkbox"
+              multiple
+              value={personName}
+              IconComponent={() => <img src="/svgs/Down.svg"></img>}
+              //   onChange={handleChange}
+              //   input={<OutlinedInput label="Tag" />}
+              renderValue={selected => {
+                var valueToBeDisplayed = '';
+                console.log(selected, 'selected');
+                // selected.forEach((id, index) => {
+                users.forEach(element => {
+                  if (element.userId == global.user.id) {
+                    if (valueToBeDisplayed == '') {
+                      valueToBeDisplayed = 'You';
+                    } else {
+                      valueToBeDisplayed = valueToBeDisplayed + ', ' + 'You';
+                    }
+                  } else if (element.isFacilitator) {
+                    if (valueToBeDisplayed == '') {
+                      valueToBeDisplayed = element.userNickname;
+                    } else {
+                      valueToBeDisplayed =
+                        valueToBeDisplayed +
+                        ', ' +
+                        element.userNickname.split(' ')[0];
+                    }
                   }
-                />
-              </MenuItem>
-            ))}
-          </Select>
-        </FormControl>
+                });
+                // });
+
+                return valueToBeDisplayed;
+                // selected.join(', ');
+              }}
+              MenuProps={MenuProps}
+            >
+              {users.map(name => (
+                <MenuItem
+                  key={name.userId}
+                  value={name.userId}
+                  onClick={event => onClickOfUser(event, name.userId)}
+                  disabled={
+                    name.isMobile == true ||
+                    name.userId == global.currentRetro?.creatorId
+                  }
+                >
+                  <Checkbox
+                    checked={
+                      name.isFacilitator ||
+                      name.userId == global.currentRetro?.creatorId
+                    }
+                  />
+                  <ListItemText
+                    primary={
+                      name.userId === global.user.id ? 'You' : name.userNickname
+                    }
+                  />
+                </MenuItem>
+              ))}
+            </Select>
+          </FormControl>
+        </span>
       ) : null}
     </>
   );

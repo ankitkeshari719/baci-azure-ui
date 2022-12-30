@@ -285,7 +285,7 @@ export function RetroCard({
       {
         // (
         //   card.createdBy === global.user.id ||
-        //   global.currentRetro?.creatorId === global.user.id || column.publish) &&
+        //   global.user.userType == 2 || column.publish) &&
         <Card
           variant="outlined"
           sx={{
@@ -593,7 +593,7 @@ export function RetroCard({
                 !ended &&
                 !global.leaveRetro &&
                 (card.createdBy === global.user.id ||
-                  global.currentRetro?.creatorId === global.user.id) ? (
+                  global.user.userType == 2) ? (
                   // <Button
                   //   id="basic-button"
                   //   aria-controls={open ? 'basic-menu' : undefined}
@@ -622,7 +622,7 @@ export function RetroCard({
                   >
                     <NestedDropdown
                       menuItemsData={
-                        global.currentRetro?.creatorId === global.user.id
+                        global.user.userType == 2
                           ? menuItemsData
                           : {
                               label: menuItemsData.label,
@@ -670,7 +670,7 @@ export function RetroCard({
                     <ListItemText>Delete card</ListItemText>
                   </MenuItem>
                 ) : null}
-                {global.currentRetro?.creatorId === global.user.id && (
+                {global.user.userType == 2 && (
                   <MenuItem>
                     <ListItemIcon>
                       <MoveDownIcon fontSize="small" />
