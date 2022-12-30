@@ -44,6 +44,7 @@ export class Global {
   usersSelected?: any[] = [];
   leaveRetro?: boolean = false;
   feedbackSubmit?: boolean = false;
+  emojiId?: string = '';
 }
 
 export interface Card {

@@ -61,8 +61,6 @@ export function RetroColumn({
   setIslanded,
   leftHeaderComponent,
   rightHeaderComponent,
-  setEmojiPicker,
-  emojiPickerid,
 }: {
   column: Column;
   columnId: string;
@@ -75,8 +73,6 @@ export function RetroColumn({
   rightHeaderComponent: any;
   setIslanded: (islanded: boolean) => void;
   setShowEditBox: (showEditBox: boolean) => void;
-  setEmojiPicker: (columnId: string) => void;
-  emojiPickerid: any;
 }): ReactElement {
   const selectedCard = React.useRef<number[] | null>(null);
   const dragStartTime = React.useRef<number | null>(null);
@@ -567,9 +563,12 @@ export function RetroColumn({
     }
   };
 
-  useEffect(() => {
-    console.log('emojiPickerid column', emojiPickerid);
-  }, [emojiPickerid]);
+  const setEmojiId = (columnId: string) => {
+    dispatch({
+      type: ActionType.SET_EMOJI_ID,
+      payload: { emojiId: columnId },
+    });
+  };
 
   if (!location.pathname.includes('report')) {
     return (
@@ -1052,7 +1051,7 @@ export function RetroColumn({
                 zIndex: 2,
                 position: 'absolute',
                 bottom: '65px',
-                display: columnId == emojiPickerid ? 'flex' : 'none',
+                display: columnId == global.emojiId ? 'flex' : 'none',
               }}
             >
               {true && (
@@ -1068,7 +1067,8 @@ export function RetroColumn({
                     console.log(emojiObject, "emoji's selected");
                     setValueSet(true);
                     setValue(value + emojiObject.emoji);
-                    setEmojiPicker('');
+                    // setEmojiPicker('');
+                    setEmojiId('');
                     // setShowEmojisOfColumn('');
                     // setEmo
                   }}
@@ -1104,14 +1104,16 @@ export function RetroColumn({
                 >
                   <img
                     src="/images/Emoji.png"
-                    style={{ height: '25px', width: '25px' }}
+                    style={{ height: '25px', width: '25px', cursor: 'pointer' }}
                     onClick={() => {
-                      if (showEmojisOfColumn != '') {
-                        setEmojiPicker('');
-                        setShowEmojisOfColumn('');
+                      if (global.emojiId == '' || global.emojiId != columnId) {
+                        // setEmojiPicker(columnId);
+                        // setShowEmojisOfColumn(columnId);
+                        setEmojiId(columnId);
                       } else {
-                        setEmojiPicker(columnId);
-                        setShowEmojisOfColumn(columnId);
+                        // setEmojiPicker('');
+                        // setShowEmojisOfColumn('');
+                        setEmojiId('');
                       }
                     }}
                   ></img>
@@ -1144,9 +1146,6 @@ export function RetroColumn({
                           color: valueSet ? '#000' : '#8D858A',
                         },
                       }}
-                      onClick={() => {
-                        if (showEmojisOfColumn != '') setEmojiPicker('');
-                      }}
                       value={valueSet ? value : 'Add your thoughts...'}
                       onChange={event => {
                         if (event.target.value !== ' ')
@@ -1154,6 +1153,7 @@ export function RetroColumn({
                       }}
                       onFocus={event => {
                         setValueSet(true);
+                        if (global.emojiId != '') setEmojiId('');
                       }}
                       onBlur={() => {
                         if (!value) {

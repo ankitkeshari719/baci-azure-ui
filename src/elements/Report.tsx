@@ -523,8 +523,8 @@ export const Report = React.forwardRef((props, ref) => {
                         setIslanded={setIsLanded}
                         setShowEditBox={() => {}}
                         cardGroups={columns[ACTIONS_COLUMN].groups}
-                        setEmojiPicker={() => {}}
-                        emojiPickerid={''}
+                        // setEmojiPicker={() => {}}
+                        // emojiPickerid={''}
                       />
                     </>
                   ) : null}

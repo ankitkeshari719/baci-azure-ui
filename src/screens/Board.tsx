@@ -349,11 +349,6 @@ export default function RetroBoard() {
     setValue(newValue);
   };
 
-  const [emojiPickerid, setEmojiPickerId] = React.useState('');
-  useEffect(() => {
-    console.log('emojiPickerid', emojiPickerid);
-  }, [emojiPickerid]);
-
   return (
     <Box
       style={{
@@ -464,11 +459,6 @@ export default function RetroBoard() {
                               setShowEditBox={setShowEditBox}
                               setIslanded={setIsLanded}
                               cardGroups={column.groups}
-                              setEmojiPicker={v => {
-                                console.log(v);
-                                setEmojiPickerId(v);
-                              }}
-                              emojiPickerid={emojiPickerid}
                             />
                           </>
                         ) : (
@@ -496,7 +486,7 @@ export default function RetroBoard() {
                 showEditBox,
                 global.expandColumn,
                 global.usersSelected,
-                emojiPickerid,
+                // emojiPickerid,
               ]
             )}
           </div>

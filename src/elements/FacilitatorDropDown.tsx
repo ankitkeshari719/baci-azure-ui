@@ -142,7 +142,7 @@ const FacilitatorDropDown = () => {
               letterSpacing: '0.4px',
               textTransform: 'uppercase',
               color: '#808080',
-              marginLeft:'10px'
+              marginLeft: '10px',
             }}
           >
             Facilitator
@@ -153,21 +153,22 @@ const FacilitatorDropDown = () => {
               sx={{
                 fieldset: {
                   border: 'none',
-                  div: { padding: 0 },
+                  //   div: { padding: 0 },
                   opacity: 1,
                   color: '#4E4E4E',
                 },
               }}
-              labelId="demo-multiple-checkbox-label"
-              id="demo-multiple-checkbox"
+              //   labelId="demo-multiple-checkbox-label"
+              //   id="demo-multiple-checkbox"
               multiple
               value={personName}
               IconComponent={() => <img src="/svgs/Down.svg"></img>}
               //   onChange={handleChange}
               //   input={<OutlinedInput label="Tag" />}
               renderValue={selected => {
+                // console.log("selected",selected)
                 var valueToBeDisplayed = '';
-                console.log(selected, 'selected');
+
                 // selected.forEach((id, index) => {
                 users.forEach(element => {
                   if (element.userId == global.user.id) {
