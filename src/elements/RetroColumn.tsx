@@ -1054,29 +1054,27 @@ export function RetroColumn({
                 display: columnId == global.emojiId ? 'flex' : 'none',
               }}
             >
-              {true && (
-                <EmojiPicker
-                  // previewConfig={{
-                  //   defaultEmoji: '',
-                  //   defaultCaption: '',
-                  //   showPreview: false,
-                  // }}
-                  // lazyLoadEmojis={true}
+              <EmojiPicker
+                // previewConfig={{
+                //   defaultEmoji: '',
+                //   defaultCaption: '',
+                //   showPreview: false,
+                // }}
+                // lazyLoadEmojis={true}
 
-                  onEmojiClick={(event, emojiObject) => {
-                    console.log(emojiObject, "emoji's selected");
-                    setValueSet(true);
-                    setValue(value + emojiObject.emoji);
-                    // setEmojiPicker('');
-                    setEmojiId('');
-                    // setShowEmojisOfColumn('');
-                    // setEmo
-                  }}
-                  // height={400}
-                  // width={'100%'}
-                  pickerStyle={{ width: '100%' }}
-                />
-              )}
+                onEmojiClick={(event, emojiObject) => {
+                  console.log(emojiObject, "emoji's selected");
+                  setValueSet(true);
+                  setValue(value + emojiObject.emoji);
+                  // setEmojiPicker('');
+                  setEmojiId('');
+                  // setShowEmojisOfColumn('');
+                  // setEmo
+                }}
+                // height={400}
+                // width={'100%'}
+                pickerStyle={{ width: '100%' }}
+              />
             </Grid>
             {
               !ended && !global.leaveRetro && (

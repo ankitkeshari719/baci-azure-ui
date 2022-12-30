@@ -94,12 +94,10 @@ const Toolbar = (props: any) => {
     if (retroName && retroName !== '') setLocalRetroName(retroName);
   }, [retroName]);
   React.useEffect(() => {
-    console.log('flaggg', loadingFlag);
-
     if (!loadingFlag && ended) {
       setShowSummaryButton(true);
     }
-  });
+  }, [loadingFlag, ended]);
   React.useEffect(() => {
     // if (user.userType != 2 && showFinishRetroButton && !leaveRetro) {
     if (showFinishRetroButton && !leaveRetro) {
@@ -294,7 +292,7 @@ const Toolbar = (props: any) => {
 
               {!isXsUp && (
                 <>
-                  <span style={{width:'220px',display:'flex'}}>
+                  <span style={{ width: '220px', display: 'flex' }}>
                     <Typography
                       sx={{
                         fontSize: '20px',
@@ -307,7 +305,7 @@ const Toolbar = (props: any) => {
                     </Typography>
                     <Button
                       aria-describedby={id}
-                      sx={{ borderRadius: '25%'}}
+                      sx={{ borderRadius: '25%' }}
                       onClick={handleClick}
                     >
                       <img src="/svgs/Info.svg" />
@@ -332,7 +330,7 @@ const Toolbar = (props: any) => {
                       ></RetroDetails>
                     </Popover>
                   </span>
-                 
+
                   {!ended ? <FacilitatorDropDown /> : null}
                 </>
               )}
