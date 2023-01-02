@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { Box, Grid, useMediaQuery } from '@mui/material';
+import { Box, Grid} from '@mui/material';
 import '../../global.scss';
 import './styles.scss';
 import { useNavigate, useParams } from 'react-router-dom';
@@ -7,7 +7,6 @@ import { useRetro } from '../../helpers';
 import { useAzureAuth } from '../../msal/azureauth';
 import { GlobalContext } from '../../contexts/GlobalContext';
 import { ActionType } from '../../contexts/GlobalContext';
-import theme from '../../theme/theme';
 import { BaciDetails } from './BaciDetails';
 import { RetroTemplate } from './RetroTemplate';
 import { PulseCheck } from './PulseCheck';
@@ -163,7 +162,7 @@ export function CreateRetroWithTemplatePage() {
   return (
     <Box sx={{ flexGrow: 1 }}>
       <TopBar />
-      <Box component="main" className='createRetroContainer'>
+      <Box component="main" className='retroContainer'>
         <Grid container spacing={0}>
           <Grid item xs={12}>
             <Box
