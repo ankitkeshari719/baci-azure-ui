@@ -30,6 +30,7 @@ import SessionEndingMessage from '../atoms/SessionEndingMessage';
 import LeaveRetroDialog from '../atoms/LeaveRetroDialog';
 import theme from '../theme/theme';
 import { CountdownTimer } from './CountdownTimer';
+import FacilitatorDropDown from './FacilitatorDropDown';
 // import { ReactComponent as InfoSvg } from '../../public/svgs/Info.svg';
 const Toolbar = (props: any) => {
   const isXsUp = useMediaQuery(theme.breakpoints.only('xs'));
@@ -93,12 +94,10 @@ const Toolbar = (props: any) => {
     if (retroName && retroName !== '') setLocalRetroName(retroName);
   }, [retroName]);
   React.useEffect(() => {
-    console.log('flaggg', loadingFlag);
-
     if (!loadingFlag && ended) {
       setShowSummaryButton(true);
     }
-  });
+  }, [loadingFlag, ended]);
   React.useEffect(() => {
     // if (user.userType != 2 && showFinishRetroButton && !leaveRetro) {
     if (showFinishRetroButton && !leaveRetro) {
@@ -183,6 +182,7 @@ const Toolbar = (props: any) => {
                 display: 'flex',
                 flexDirection: 'row',
                 alignItems: 'center',
+                width: 'calc(100% - 512px)',
               }}
             >
               {user.userType == 2 && !ended ? (
@@ -200,7 +200,8 @@ const Toolbar = (props: any) => {
                       fieldset: { border: 'none' },
                       color: '#2C69A1',
                       // minWidth: '200px',
-                      minWidth: isXsUp ? '150px' : '200px',
+                      width: isXsUp ? '150px' : '270px',
+                      minWidth: isXsUp ? '150px' : '270px',
                       marginLeft: isXsUp ? '10px' : '34px',
                       overflow: 'hidden !important',
                       textOverflow: 'ellipsis',
@@ -215,6 +216,7 @@ const Toolbar = (props: any) => {
                         fontSize: isXsUp ? '16px' : 24,
                         color: '#2C69A1',
                         // borderBottom: 'none!important',
+                        width: '250px',
                         borderBottom: '0px solid!important',
                         overflow: 'hidden !important',
                         textOverflow: 'ellipsis',
@@ -271,8 +273,8 @@ const Toolbar = (props: any) => {
                     marginLeft: isXsUp ? '10px' : '34px',
                     fontSize: isXsUp ? '16px!important' : '24px!important',
 
-                    minWidth: isXsUp ? '150px' : '350px',
-                    maxWidth: isXsUp ? '150px' : '350px',
+                    minWidth: isXsUp ? '150px' : '250px',
+                    maxWidth: isXsUp ? '150px' : '250px',
                     overflow: 'hidden',
                     textOverflow: 'ellipsis',
                     display: 'inline-block',
@@ -290,42 +292,46 @@ const Toolbar = (props: any) => {
 
               {!isXsUp && (
                 <>
-                  <Typography
-                    sx={{
-                      fontSize: '20px',
-                      color: '#2C69A1',
-                      // marginLeft: '66px',
-                      width: user.userType == 2 ? '270px' : '150px',
-                    }}
-                  >
-                    Code : {currentRetro?.humanId}
-                  </Typography>
-                  <Button
-                    aria-describedby={id}
-                    sx={{ borderRadius: '25%', marginLeft: '15px' }}
-                    onClick={handleClick}
-                  >
-                    <img src="/svgs/Info.svg" />
-                  </Button>
-                  <Popover
-                    id={id}
-                    open={open}
-                    anchorEl={anchorEl}
-                    onClose={handleClose}
-                    anchorOrigin={{
-                      vertical: 'bottom',
-                      horizontal: 'center',
-                    }}
-                    transformOrigin={{
-                      vertical: 'top',
-                      horizontal: 'center',
-                    }}
-                  >
-                    <RetroDetails
-                      popover={true}
-                      close={handleClose}
-                    ></RetroDetails>
-                  </Popover>
+                  <span style={{ width: '220px', display: 'flex' }}>
+                    <Typography
+                      sx={{
+                        fontSize: '20px',
+                        color: '#2C69A1',
+                        // marginLeft: '66px',
+                        width: user.userType == 2 ? '150px' : '150px',
+                      }}
+                    >
+                      Code : {currentRetro?.humanId}
+                    </Typography>
+                    <Button
+                      aria-describedby={id}
+                      sx={{ borderRadius: '25%' }}
+                      onClick={handleClick}
+                    >
+                      <img src="/svgs/Info.svg" />
+                    </Button>
+                    <Popover
+                      id={id}
+                      open={open}
+                      anchorEl={anchorEl}
+                      onClose={handleClose}
+                      anchorOrigin={{
+                        vertical: 'bottom',
+                        horizontal: 'center',
+                      }}
+                      transformOrigin={{
+                        vertical: 'top',
+                        horizontal: 'center',
+                      }}
+                    >
+                      <RetroDetails
+                        popover={true}
+                        close={handleClose}
+                      ></RetroDetails>
+                    </Popover>
+                  </span>
+
+                  {!ended ? <FacilitatorDropDown /> : null}
                 </>
               )}
             </Box>
@@ -435,11 +441,6 @@ const Toolbar = (props: any) => {
           aria-labelledby="alert-dialog-title"
           aria-describedby="alert-dialog-description"
         >
-          {/* <DialogTitle
-          id="alert-dialog-title"
-          align="center"
-          sx={{ background: '/svgs/Finish.svg' }}
-        > */}
           <div
             style={{
               display: 'flex',
@@ -471,11 +472,6 @@ const Toolbar = (props: any) => {
           </div>
 
           <DialogContent>
-            {/* <DialogContentText
-            id="alert-dialog-description"
-            color="#343434"
-            size="20px"
-          > */}
             <span
               style={{
                 color: '#343434',

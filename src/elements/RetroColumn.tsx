@@ -23,6 +23,7 @@ import { ActionType, GlobalContext } from '../contexts/GlobalContext';
 import { RetroCard } from './retroCard/RetroCard';
 import theme from '../theme/theme';
 import { RetroCardGroup } from './RetroCardGroup';
+import EmojiPicker from 'emoji-picker-react';
 
 const ColumnComponent = styled('div')({
   height: 'calc(var(--app-height) - 160px)',
@@ -81,9 +82,10 @@ export function RetroColumn({
   const surroundDiv = React.useRef<HTMLDivElement>(null);
   const containerRef = React.useRef<HTMLDivElement>(null);
   const [groupCollapsed, setGroupCollapsed] = React.useState<boolean[]>(
-    cardGroups.map(() => true)
+    cardGroups.map(() => false)
   );
-
+  const [showEmojisOfColumn, setShowEmojisOfColumn] =
+    React.useState<string>('');
   const {
     state: { columns, ended },
     commitAction,
@@ -560,6 +562,14 @@ export function RetroColumn({
       autoFocusCardId.current = undefined;
     }
   };
+
+  const setEmojiId = (columnId: string) => {
+    dispatch({
+      type: ActionType.SET_EMOJI_ID,
+      payload: { emojiId: columnId },
+    });
+  };
+
   if (!location.pathname.includes('report')) {
     return (
       <ColumnComponent
@@ -571,6 +581,7 @@ export function RetroColumn({
             : 'calc(var(--app-height) - 160px)',
           borderRadius: '8px',
           border: isXsUp ? 'none' : '1px solid #0B6623',
+          borderColor: groupFontColour,
           padding: isXsUp ? '10px' : '0px',
           paddingBottom: 0,
         }}
@@ -748,12 +759,6 @@ export function RetroColumn({
                           payload: { expandColumn: +column.id },
                         });
                       }}
-                      // onTouchStart={() => {
-                      //   dispatch({
-                      //     type: ActionType.EXPAND_COLUMN,
-                      //     payload: { expandColumn: +column.id },
-                      //   });
-                      // }}
                       src="/svgs/Expand.svg"
                       style={{
                         width: '20px',
@@ -763,12 +768,6 @@ export function RetroColumn({
                     />
                   ) : (
                     <img
-                      // onTouchStart={() => {
-                      //   dispatch({
-                      //     type: ActionType.EXPAND_COLUMN,
-                      //     payload: { expandColumn: -1 },
-                      //   });
-                      // }}
                       onClick={() => {
                         dispatch({
                           type: ActionType.EXPAND_COLUMN,
@@ -890,7 +889,7 @@ export function RetroColumn({
                             columnId={column.id}
                             showCollapse={
                               group.name !== UNGROUPED &&
-                              group.cards.length > 1 &&
+                              // group.cards.length > 1 &&
                               !groupCollapsed[i]
                             }
                             onCollapse={value => {
@@ -900,7 +899,7 @@ export function RetroColumn({
                           >
                             {group.name === UNGROUPED ||
                             !groupCollapsed[i] ||
-                            group.cards.length < 1 ||
+                            // group.cards.length < 1 ||
                             expandAllGroups ? (
                               <div
                                 style={{
@@ -1040,124 +1039,180 @@ export function RetroColumn({
             ),
             [column.groups, groupCollapsed]
           )}
-          {
-            !ended && !global.leaveRetro && (
-              // ((!isXsUp && mouseOver) || (isXsUp && showEditBox)) ? (
-              <Box
-                style={{
-                  background: 'white',
-                  borderRadius: '0px 0px 8px 8px',
-                  // margin: '3px',
-                  borderTop: '1px solid #F0F0F0',
-                  bottom: '0px',
-                  padding: '10px',
-                  display: 'flex',
-                  ...(false
-                    ? { position: 'fixed', width: '100vw', height: '8rem' }
-                    : {}),
+          <>
+            <Grid
+              style={{
+                // display: 'flex',
+                width:
+                  document.getElementById(columnId) != null
+                    ? document.getElementById(columnId)?.getBoundingClientRect()
+                        .width + 'px'
+                    : '33px',
+                zIndex: 2,
+                position: 'absolute',
+                bottom: '65px',
+                display: columnId == global.emojiId ? 'flex' : 'none',
+              }}
+            >
+              <EmojiPicker
+                // previewConfig={{
+                //   defaultEmoji: '',
+                //   defaultCaption: '',
+                //   showPreview: false,
+                // }}
+                // lazyLoadEmojis={true}
+
+                onEmojiClick={(event, emojiObject) => {
+                  console.log(emojiObject, "emoji's selected");
+                  setValueSet(true);
+                  setValue(value + emojiObject.emoji);
+                  // setEmojiPicker('');
+                  setEmojiId('');
+                  // setShowEmojisOfColumn('');
+                  // setEmo
                 }}
-                onMouseOver={() => {
-                  setMouseOver(true);
-                }}
-                onMouseOut={() => {
-                  setMouseOver(true);
-                }}
-              >
-                <TextFieldNoBorderWrapper
-                  sx={{
-                    color: '#8E8E8E',
-                    flexGrow: 10,
-                    maxWidth: 'unset',
-                    flexDirection: 'column',
-                  }}
-                >
-                  <TextField
-                    fullWidth
-                    multiline
-                    inputProps={{
-                      maxLength: MAX_CARD_TEXT_LENGTH,
-                      style: {
-                        padding: 0,
-                      },
-                    }}
-                    autoFocus
-                    sx={{
-                      padding: 0,
-                      input: { padding: 0 },
-                      div: { padding: 0, position: 'initial' },
-                      position: 'initial',
-                      textarea: {
-                        fontStyle: valueSet ? 'normal' : 'italic',
-                        color: valueSet ? '#000' : '#8D858A',
-                      },
-                    }}
-                    value={valueSet ? value : 'Add your thoughts...'}
-                    onChange={event => {
-                      if (event.target.value !== ' ')
-                        setValue(event.target.value);
-                    }}
-                    onFocus={event => {
-                      setValueSet(true);
-                    }}
-                    onBlur={() => {
-                      if (!value) {
-                        setValueSet(false);
-                      }
-                    }}
-                    onKeyDown={e => {
-                      const tempValue = value;
-                      const removedEnter = tempValue.replace(/[\r\n]/gm, '');
-                      setValue(removedEnter);
-                      const removedSpaces = removedEnter.replace(/ /g, '');
-                      if (
-                        e.keyCode === 13 &&
-                        removedSpaces &&
-                        removedSpaces.length !== 0
-                      ) {
-                        submit(value);
-                        (e.target as HTMLInputElement).blur();
-                      }
-                    }}
-                  ></TextField>
-                  {value && value.length >= MAX_CARD_TEXT_LENGTH - 20 ? (
-                    <Typography
-                      style={{
-                        fontSize: '0.75rem',
-                        textAlign: 'right',
-                        whiteSpace: 'nowrap',
-                      }}
-                    >
-                      Characters remaining:{' '}
-                      {MAX_CARD_TEXT_LENGTH - value.length}
-                    </Typography>
-                  ) : null}
-                </TextFieldNoBorderWrapper>
-                <div
+                // height={400}
+                // width={'100%'}
+                pickerStyle={{ width: '100%' }}
+              />
+            </Grid>
+            {
+              !ended && !global.leaveRetro && (
+                <Box
+                  id={columnId}
                   style={{
+                    background: 'white',
+                    borderRadius: '0px 0px 8px 8px',
+                    // margin: '3px',
+                    borderTop: '1px solid #F0F0F0',
+                    bottom: '0px',
+                    padding: '10px',
                     display: 'flex',
-                    justifyContent: 'flex-end',
-                    flexDirection: 'column',
+                    alignItems: 'center',
+                    ...(false
+                      ? { position: 'fixed', width: '100vw', height: '8rem' }
+                      : {}),
+                  }}
+                  onMouseOver={() => {
+                    setMouseOver(true);
+                  }}
+                  onMouseOut={() => {
+                    setMouseOver(true);
                   }}
                 >
-                  <Button
-                    style={{ position: 'initial' }}
-                    disabled={
-                      // !value ||value.replace(/ /g, '').length === 0||
-                      value.length === 0 ||
-                      !value ||
-                      value.replace(/[\r\n]/gm, '').replace(/ /g, '').length ===
-                        0
-                    }
-                    onClick={() => submit(value)}
-                    // onTouchStart={() => submit(value)}
+                  <img
+                    src="/images/Emoji.png"
+                    style={{ height: '25px', width: '25px', cursor: 'pointer' }}
+                    onClick={() => {
+                      if (global.emojiId == '' || global.emojiId != columnId) {
+                        // setEmojiPicker(columnId);
+                        // setShowEmojisOfColumn(columnId);
+                        setEmojiId(columnId);
+                      } else {
+                        // setEmojiPicker('');
+                        // setShowEmojisOfColumn('');
+                        setEmojiId('');
+                      }
+                    }}
+                  ></img>
+                  {/* <img src="https://cdn.jsdelivr.net/npm/emoji-datasource-apple/img/apple/64/1f627.png" /> */}
+                  <TextFieldNoBorderWrapper
+                    sx={{
+                      color: '#8E8E8E',
+                      flexGrow: 10,
+                      maxWidth: 'unset',
+                      flexDirection: 'column',
+                    }}
                   >
-                    <SendIcon></SendIcon>
-                  </Button>
-                </div>
-              </Box>
-            )
-            // ) : null
-          }
+                    <TextField
+                      fullWidth
+                      multiline
+                      inputProps={{
+                        maxLength: MAX_CARD_TEXT_LENGTH,
+                        style: {
+                          padding: 0,
+                        },
+                      }}
+                      autoFocus
+                      sx={{
+                        padding: 0,
+                        input: { padding: 0 },
+                        div: { padding: 0, position: 'initial' },
+                        position: 'initial',
+                        textarea: {
+                          fontStyle: valueSet ? 'normal' : 'italic',
+                          color: valueSet ? '#000' : '#8D858A',
+                        },
+                      }}
+                      value={valueSet ? value : 'Add your thoughts...'}
+                      onChange={event => {
+                        if (event.target.value !== ' ')
+                          setValue(event.target.value);
+                      }}
+                      onFocus={event => {
+                        setValueSet(true);
+                        if (global.emojiId != '') setEmojiId('');
+                      }}
+                      onBlur={() => {
+                        if (!value) {
+                          setValueSet(false);
+                        }
+                      }}
+                      onKeyDown={e => {
+                        const tempValue = value;
+                        const removedEnter = tempValue.replace(/[\r\n]/gm, '');
+                        setValue(removedEnter);
+                        const removedSpaces = removedEnter.replace(/ /g, '');
+                        if (
+                          e.keyCode === 13 &&
+                          removedSpaces &&
+                          removedSpaces.length !== 0
+                        ) {
+                          submit(value);
+                          (e.target as HTMLInputElement).blur();
+                        }
+                      }}
+                    ></TextField>
+                    {value && value.length >= MAX_CARD_TEXT_LENGTH - 20 ? (
+                      <Typography
+                        style={{
+                          fontSize: '0.75rem',
+                          textAlign: 'right',
+                          whiteSpace: 'nowrap',
+                        }}
+                      >
+                        Characters remaining:{' '}
+                        {MAX_CARD_TEXT_LENGTH - value.length}
+                      </Typography>
+                    ) : null}
+                  </TextFieldNoBorderWrapper>
+                  <div
+                    style={{
+                      display: 'flex',
+                      justifyContent: 'flex-end',
+                      flexDirection: 'column',
+                    }}
+                  >
+                    <Button
+                      style={{ position: 'initial' }}
+                      disabled={
+                        // !value ||value.replace(/ /g, '').length === 0||
+                        value.length === 0 ||
+                        !value ||
+                        value.replace(/[\r\n]/gm, '').replace(/ /g, '')
+                          .length === 0
+                      }
+                      onClick={() => submit(value)}
+                      // onTouchStart={() => submit(value)}
+                    >
+                      <SendIcon></SendIcon>
+                    </Button>
+                  </div>
+                </Box>
+              )
+              // ) : null
+            }
+          </>
         </div>
       </ColumnComponent>
     );

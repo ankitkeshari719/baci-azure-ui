@@ -45,6 +45,7 @@ export enum BoardActionType {
   START_RETRO = 'startRetro',
   PUBLISH_COLUMN = 'publishColumn',
   LOCK_COLUMN = 'lockColumn',
+  SET_FACILITATOR = 'setFacilitator',
 }
 
 export const BOARD_STATE_MACHINE_VERSION = 1;
@@ -549,6 +550,8 @@ export const validateAction = (
       return canSubmitFeedback(parameters.feedback, userId);
     case BoardActionType.END_RETRO:
       return canEndRetro(parameters.undo, userId);
+    case BoardActionType.SET_FACILITATOR:
+      return true;
     // case BoardActionType.SET_LOADING:
     //   return true;
     default:
@@ -916,7 +919,8 @@ export const processAction = (
     userNickname: string,
     date: Date | undefined,
     avatar: string,
-    userId: string
+    userId: string,
+    isMobile: boolean
   ) => {
     const user = findUser(userId);
     // console.log(users, 'flag');
@@ -924,7 +928,7 @@ export const processAction = (
       if (date && !state.startedDate) {
         state.startedDate = new Date(date);
       }
-      // console.log(state.users);
+      console.log(isMobile,"isMobile");
       state.users.push({
         userId,
         userNickname,
@@ -932,6 +936,8 @@ export const processAction = (
         feedback: [],
         pulseCheckQuestions: [],
         checked: true,
+        isFacilitator: false,
+        isMobile: isMobile,
       });
     } else if (user?.userNickname !== userNickname) {
       user.userNickname = userNickname;
@@ -1048,15 +1054,22 @@ export const processAction = (
     if (userId === creator) {
       state.retroDuration = retroDuration;
       state.retroStarted = true;
-      state.startedTimeStamp=Date.now();
+      state.startedTimeStamp = Date.now();
     }
   };
   const publishRetro = (columnId: string, value: boolean, userId: string) => {
     const column = findColumn(columnId);
     if (column) {
       column.publish = value;
-      
     }
+  };
+  const setFacilitator = (userId: string) => {
+    state.users.forEach(user => {
+      if (user.userId == userId) {
+        user.isFacilitator = !user.isFacilitator;
+      }
+    });
+    // state.users
   };
   let noMatch = false;
   switch (actionName) {
@@ -1129,7 +1142,13 @@ export const processAction = (
       deleteGroup(parameters.groupId, userId);
       break;
     case BoardActionType.JOIN_RETRO:
-      joinRetro(parameters.userNickname, date, parameters.avatar, userId);
+      joinRetro(
+        parameters.userNickname,
+        date,
+        parameters.avatar,
+        userId,
+        parameters.isMobile
+      );
       break;
     case BoardActionType.START_TIMER:
       startTimer(parameters.startTime, parameters.duration, userId);
@@ -1173,13 +1192,15 @@ export const processAction = (
     case BoardActionType.START_RETRO:
       startRetro(parameters.retroDuration, userId, parameters.creatorId);
       break;
-
-      // case BoardActionType.SET_LOADING:
-      //   {
-      //     console.log(parameters,"set loading")
-      //     setLoading(parameters.flag);
-      //   }
-      // break;
+    case BoardActionType.SET_FACILITATOR:
+      setFacilitator(parameters.userIdFac);
+      break;
+    // case BoardActionType.SET_LOADING:
+    //   {
+    //     console.log(parameters,"set loading")
+    //     setLoading(parameters.flag);
+    //   }
+    // break;
     default:
       noMatch = true;
       break;

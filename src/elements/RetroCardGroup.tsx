@@ -206,13 +206,6 @@ export function RetroCardGroup({
                   value={nameSet ? name : 'Name grouping'}
                   multiline
                   onChange={event => {
-                    //
-                    //   event.target.value.replace(
-                    //     ' ( ' + group.cards.length + ' ) ',
-                    //     ''
-                    //   ),
-                    //   'value'
-                    // );
                     if (admin) {
                       setName(
                         event.target.value.replace(
@@ -293,13 +286,6 @@ export function RetroCardGroup({
                       alignItems: 'center',
                     }}
                     disabled={ended || global.leaveRetro}
-                    // onTouchStart={() =>
-                    //   !ended
-                    //     ? userReacted
-                    //       ? addReactToGroup(group.id, '')
-                    //       : addReactToGroup(group.id, '👍')
-                    //     : null
-                    // }
                     onClick={() =>
                       !ended
                         ? userReacted
@@ -381,7 +367,7 @@ export function RetroCardGroup({
               )}
             </Grid>
             {/* <Box component="span">{' ( ' + group.cards.length + ' ) '}</Box> */}
-            {group.cards.length > 0 && showCollapse ? (
+            {showCollapse ? (
               <Grid
                 item
                 xs={2}
@@ -395,12 +381,7 @@ export function RetroCardGroup({
                   onClick={event => {
                     onCollapse(event);
                   }}
-                  // onTouchStart={onCollapse}
-                  // sx={{ position: 'initial' }}
                 >
-                  {/* <CloseFullscreenIcon
-                    style={{ color: '#727D84', width: '20px' }}
-                  /> */}
                   <img src="/svgs/Down.svg" />
                 </Button>
               </Grid>
@@ -415,26 +396,23 @@ export function RetroCardGroup({
                 }}
               >
                 {' '}
-                {group.cards.length > 0 && (
-                  <Button
-                    onClick={event => {
-                      onCollapse(event);
-                    }}
-                    // onTouchStart={onCollapse}
-                    sx={{ position: 'initial' }}
-                  >
-                    {/* <OpenInFullIcon
-                      style={{ color: '#727D84', width: '20px' }}
-                    /> */}
-                    <img src="/svgs/Up.svg" />
-                  </Button>
-                )}
+                <Button
+                  onClick={event => {
+                    onCollapse(event);
+                  }}
+                  // onTouchStart={onCollapse}
+                  sx={{ position: 'initial' }}
+                >
+                  <img src="/svgs/Up.svg" />
+                </Button>
               </Grid>
             )}
           </Grid>
         ) : null}
 
-        {group.cards.length === 0 && group.name !== UNGROUPED ? (
+        {showCollapse &&
+        group.cards.length === 0 &&
+        group.name !== UNGROUPED ? (
           <Grid container direction="row" justifyContent="center">
             <Grid
               item
