@@ -9,12 +9,15 @@ import { FEATURE_FLAGS } from '../constants';
 import { ErrorContext } from '../contexts/ErrorContext';
 //import { getRetro } from '../firebase/firestore';
 import { getRetro } from '../msal/services';
+import { useMediaQuery } from '@mui/material';
+import theme from '../theme/theme';
 
 export default function useLoadRetro() {
   const { id } = useParams();
 
   const { error, setError } = React.useContext(ErrorContext);
   const [global, dispatch] = React.useContext(GlobalContext);
+  const isXsUp = useMediaQuery(theme.breakpoints.only('xs'));
   const {
     state: { retroId, users, ended, loading, retroStarted },
     commitAction,
@@ -71,9 +74,11 @@ export default function useLoadRetro() {
       const userJoined = users.find(u => u.userId === global.user.id);
       if (!userJoined) {
         // console.log('Join Retro called');
+
         saveAndProcessAction(BoardActionType.JOIN_RETRO, {
           userNickname: global.user.name,
           avatar: global.avatar,
+          isMobile: window.innerWidth < 700,
         }).then(() => {
           // console.log(
           //   global.currentRetro && global.currentRetro.retroStatus,
