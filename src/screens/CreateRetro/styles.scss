@@ -154,7 +154,17 @@
   order: 0 !important;
   flex-grow: 0 !important;
 }
+
 // User Details CSS
+.acatarDialog {
+  width: 90% !important;
+  padding: 16px !important;
+  background: #ffffff !important;
+  display: flex !important;
+  flex-wrap: wrap !important;
+  justify-content: space-between !important;
+  overflow-y: scroll !important;
+}
 .chooseAvatarText {
   font-family: 'Poppins' !important;
   font-style: normal !important;
@@ -170,8 +180,16 @@
   margin-bottom: 15px !important;
   border-radius: 50% !important;
 }
-.proceedButton {
-  margin-top: 53px !important;
+.selectAvatarText {
+  font-family: 'Poppins' !important;
+  font-style: normal !important;
+  font-weight: 400 !important;
+  font-size: 14px !important;
+  line-height: 18px !important;
+  display: flex !important;
+  align-items: center !important;
+  letter-spacing: 0.4px !important;
+  color: rgba(0, 0, 0, 0.6) !important;;
 }
 
 // Learn More CSS
