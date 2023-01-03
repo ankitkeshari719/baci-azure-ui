@@ -1040,42 +1040,45 @@ export function RetroColumn({
             [column.groups, groupCollapsed]
           )}
           <>
-            <Grid
-              style={{
-                // display: 'flex',
-                width:
-                  document.getElementById(columnId) != null
-                    ? document.getElementById(columnId)?.getBoundingClientRect()
-                        .width + 'px'
-                    : '33px',
-                zIndex: 2,
-                position: 'absolute',
-                bottom: '65px',
-                display: columnId == global.emojiId ? 'flex' : 'none',
-              }}
-            >
-              <EmojiPicker
-                // previewConfig={{
-                //   defaultEmoji: '',
-                //   defaultCaption: '',
-                //   showPreview: false,
-                // }}
-                // lazyLoadEmojis={true}
-
-                onEmojiClick={(event, emojiObject) => {
-                  console.log(emojiObject, "emoji's selected");
-                  setValueSet(true);
-                  setValue(value + emojiObject.emoji);
-                  // setEmojiPicker('');
-                  setEmojiId('');
-                  // setShowEmojisOfColumn('');
-                  // setEmo
+            {isXsUp && (
+              <Grid
+                style={{
+                  // display: 'flex',
+                  width:
+                    document.getElementById(columnId) != null
+                      ? document
+                          .getElementById(columnId)
+                          ?.getBoundingClientRect().width + 'px'
+                      : '33px',
+                  zIndex: 2,
+                  position: 'absolute',
+                  bottom: '65px',
+                  display: columnId == global.emojiId ? 'flex' : 'none',
                 }}
-                // height={400}
-                // width={'100%'}
-                pickerStyle={{ width: '100%' }}
-              />
-            </Grid>
+              >
+                <EmojiPicker
+                  // previewConfig={{
+                  //   defaultEmoji: '',
+                  //   defaultCaption: '',
+                  //   showPreview: false,
+                  // }}
+                  // lazyLoadEmojis={true}
+
+                  onEmojiClick={(event, emojiObject) => {
+                    console.log(emojiObject, "emoji's selected");
+                    setValueSet(true);
+                    setValue(value + emojiObject.emoji);
+                    // setEmojiPicker('');
+                    setEmojiId('');
+                    // setShowEmojisOfColumn('');
+                    // setEmo
+                  }}
+                  // height={400}
+                  // width={'100%'}
+                  pickerStyle={{ width: '100%' }}
+                />
+              </Grid>
+            )}
             {
               !ended && !global.leaveRetro && (
                 <Box
@@ -1100,21 +1103,30 @@ export function RetroColumn({
                     setMouseOver(true);
                   }}
                 >
-                  <img
-                    src="/images/Emoji.png"
-                    style={{ height: '25px', width: '25px', cursor: 'pointer' }}
-                    onClick={() => {
-                      if (global.emojiId == '' || global.emojiId != columnId) {
-                        // setEmojiPicker(columnId);
-                        // setShowEmojisOfColumn(columnId);
-                        setEmojiId(columnId);
-                      } else {
-                        // setEmojiPicker('');
-                        // setShowEmojisOfColumn('');
-                        setEmojiId('');
-                      }
-                    }}
-                  ></img>
+                  {!isXsUp && (
+                    <img
+                      src="/images/Emoji.png"
+                      style={{
+                        height: '25px',
+                        width: '25px',
+                        cursor: 'pointer',
+                      }}
+                      onClick={() => {
+                        if (
+                          global.emojiId == '' ||
+                          global.emojiId != columnId
+                        ) {
+                          // setEmojiPicker(columnId);
+                          // setShowEmojisOfColumn(columnId);
+                          setEmojiId(columnId);
+                        } else {
+                          // setEmojiPicker('');
+                          // setShowEmojisOfColumn('');
+                          setEmojiId('');
+                        }
+                      }}
+                    ></img>
+                  )}
                   {/* <img src="https://cdn.jsdelivr.net/npm/emoji-datasource-apple/img/apple/64/1f627.png" /> */}
                   <TextFieldNoBorderWrapper
                     sx={{
@@ -1133,7 +1145,7 @@ export function RetroColumn({
                           padding: 0,
                         },
                       }}
-                      autoFocus
+                      autoFocus={!isXsUp}
                       sx={{
                         padding: 0,
                         input: { padding: 0 },
