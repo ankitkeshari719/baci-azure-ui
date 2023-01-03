@@ -19,8 +19,6 @@ import Carousel from 'react-multi-carousel';
 import 'react-multi-carousel/lib/styles.css';
 import { responsive } from './const';
 import { LearnMore } from './LearnMore';
-import Slide from '@mui/material/Slide';
-import { TransitionProps } from '@mui/material/transitions';
 
 type Props = {
   expandedPanel: string;
@@ -30,15 +28,6 @@ type Props = {
   onClickBack: (previousPanel: string) => void;
 };
 
-const Transition = React.forwardRef(function Transition(
-  props: TransitionProps & {
-    children: React.ReactElement;
-  },
-  ref: React.Ref<unknown>
-) {
-  return <Slide direction="up" ref={ref} {...props} />;
-});
-
 export function RetroTemplate({
   expandedPanel,
   allPanels,
@@ -47,6 +36,14 @@ export function RetroTemplate({
   onClickBack,
 }: Props) {
   const [openLearnMoreDialog, setOpenLearnMoreDialog] = React.useState(false);
+
+  const handleClickOpen = () => {
+    setOpenLearnMoreDialog(true);
+  };
+
+  const handleClose = () => {
+    setOpenLearnMoreDialog(false);
+  };
 
   return (
     <>
@@ -85,10 +82,7 @@ export function RetroTemplate({
                   <Grid container>
                     <Grid item sm={6}>
                       <Box display="flex" justifyContent="flex-start">
-                        <Button
-                          size="small"
-                          onClick={() => setOpenLearnMoreDialog(true)}
-                        >
+                        <Button size="small" onClick={handleClickOpen}>
                           <Typography className="textLink">
                             Learn More
                           </Typography>
@@ -130,10 +124,7 @@ export function RetroTemplate({
                   <Grid container>
                     <Grid item sm={6}>
                       <Box display="flex" justifyContent="flex-start">
-                        <Button
-                          size="small"
-                          onClick={() => setOpenLearnMoreDialog(true)}
-                        >
+                        <Button size="small" onClick={handleClickOpen}>
                           <Typography className="textLink">
                             Learn More
                           </Typography>
@@ -178,7 +169,7 @@ export function RetroTemplate({
                         <Button size="small">
                           <Typography
                             className="textLink"
-                            onClick={() => setOpenLearnMoreDialog(true)}
+                            onClick={handleClickOpen}
                           >
                             Learn More
                           </Typography>
@@ -223,7 +214,7 @@ export function RetroTemplate({
                         <Button size="small">
                           <Typography
                             className="textLink"
-                            onClick={() => setOpenLearnMoreDialog(true)}
+                            onClick={handleClickOpen}
                           >
                             Learn More
                           </Typography>
@@ -268,7 +259,7 @@ export function RetroTemplate({
                         <Button size="small">
                           <Typography
                             className="textLink"
-                            onClick={() => setOpenLearnMoreDialog(true)}
+                            onClick={handleClickOpen}
                           >
                             Learn More
                           </Typography>
@@ -317,12 +308,8 @@ export function RetroTemplate({
           </>
         </AccordionDetails>
       </Accordion>
-      <Dialog
-        fullScreen
-        open={openLearnMoreDialog}
-        TransitionComponent={Transition}
-      >
-        <LearnMore />
+      <Dialog fullScreen open={openLearnMoreDialog} onClose={handleClose}>
+        <LearnMore handleClose={handleClose} />
       </Dialog>
     </>
   );
