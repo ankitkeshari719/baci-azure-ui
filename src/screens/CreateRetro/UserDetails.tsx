@@ -12,6 +12,7 @@ import {
   Dialog,
   DialogTitle,
   Grid,
+  IconButton,
 } from '@mui/material';
 import '../../global.scss';
 import './styles.scss';
@@ -19,6 +20,7 @@ import { AVATAR_CHARACTER_LIMIT } from './const';
 import Avatar from '../../elements/Avatar';
 import { avatarName } from '../../constants/AvatarName';
 import { LazyLoadImage } from 'react-lazy-load-image-component';
+import CloseIcon from '@mui/icons-material/Close';
 
 const styles = {
   avatarfield: {
@@ -26,7 +28,7 @@ const styles = {
       color: 'rgba(0, 0, 0, 0.6) !important',
       fontSize: '14px',
     },
-  }
+  },
 };
 
 type Props = {
@@ -160,11 +162,7 @@ export function UserDetails({
         </FormControl>
         <Grid container spacing={0}>
           <Grid item sm={1}>
-            <Button
-              variant="outlined"
-              onClick={create}
-              className="nextButton"
-            >
+            <Button variant="outlined" onClick={create} className="nextButton">
               <span className="secondaryButtonText">Finish</span>
             </Button>
           </Grid>
@@ -178,19 +176,39 @@ export function UserDetails({
             </Button>
           </Grid>
         </Grid>
-        <Dialog open={openAvatarDialog} sx={{ height: height - 100 }}>
+        <Dialog
+          open={openAvatarDialog}
+          sx={{
+            height: height - 100,
+          }}
+        >
           <DialogTitle>
-            <Typography>Select Avatar</Typography>
+            <Grid container sx={{ display: 'flex', alignItems: 'center' }}>
+              <Grid item sm={6}>
+                <Box display="flex" justifyContent="flex-start">
+                  <Typography component="span" className="selectAvatarText">
+                    Select Avatar
+                  </Typography>
+                </Box>
+              </Grid>
+              <Grid item sm={6}>
+                <Box display="flex" justifyContent="flex-end">
+                  <IconButton
+                    edge="start"
+                    color="inherit"
+                    onClick={() => setOpenAvatarDialog(false)}
+                    aria-label="close"
+                  >
+                    <CloseIcon />
+                  </IconButton>
+                </Box>
+              </Grid>
+            </Grid>
           </DialogTitle>
           <Box
+            className="acatarDialog"
             sx={{
-              width: '90%',
-              padding: '16px',
               height: height / 2,
-              display: 'flex',
-              flexWrap: 'wrap',
-              justifyContent: 'space-between',
-              overflowY: 'scroll',
             }}
           >
             {avatarList.map((avatar: any, index) => (
@@ -203,17 +221,34 @@ export function UserDetails({
               ></Avatar>
             ))}
           </Box>
-          <Box display="flex" justifyContent="center" mb="10px">
-            <Button
-              variant="outlined"
-              className="secondaryButton"
-              onClick={() => setOpenAvatarDialog(false)}
-              sx={{ width: '90%' }}
-              disabled={selectedAvatar == ''}
-            >
-              <span className="secondaryButtonText">Select</span>
-            </Button>
-          </Box>
+          <Grid
+            container
+            sx={{ my: 2, px: 3, display: 'flex', alignItems: 'center' }}
+          >
+            <Grid item sm={6}>
+              <Box display="flex" justifyContent="flex-start">
+                <Button
+                  className="primaryMainButton"
+                  variant="outlined"
+                  onClick={() => setOpenAvatarDialog(false)}
+                >
+                  <span className='primaryMainButtonText'>Cancel</span>
+                </Button>
+              </Box>
+            </Grid>
+            <Grid item sm={6}>
+              <Box display="flex" justifyContent="flex-end">
+                <Button
+                  className="secondaryButton"
+                  variant="outlined"
+                  onClick={() => setOpenAvatarDialog(false)}
+                  disabled={selectedAvatar == ''}
+                >
+                  <span className='secondaryButtonText'>Select</span>
+                </Button>
+              </Box>
+            </Grid>
+          </Grid>
         </Dialog>
       </AccordionDetails>
     </Accordion>
