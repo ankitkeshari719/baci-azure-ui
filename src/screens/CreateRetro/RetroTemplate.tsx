@@ -61,6 +61,9 @@ export function RetroTemplate({
       {/* Template Panel */}
       <Accordion
         expanded={expandedPanel === 'templatePanel'}
+        sx={{
+          borderRadius: '0px',
+        }}
       >
         <AccordionSummary>
           <Typography className="accordionSummary">Retro Template</Typography>

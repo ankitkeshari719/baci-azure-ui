@@ -70,6 +70,9 @@ export function UserDetails({
   return (
     <Accordion
       expanded={expandedPanel === 'userDetailPanel'}
+      sx={{
+        borderRadius: '0px',
+      }}
     >
       <AccordionSummary>
         <Typography className="accordionSummary">User Details</Typography>

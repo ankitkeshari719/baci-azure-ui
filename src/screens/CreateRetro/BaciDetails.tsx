@@ -72,6 +72,9 @@ export function BaciDetails({
       {/* BACI Details Panel */}
       <Accordion
         expanded={expandedPanel === 'detailsPanel'}
+        sx={{
+          borderRadius: '0px',
+        }}
       >
         <AccordionSummary>
           {allPanels.includes('detailsPanel') &&
