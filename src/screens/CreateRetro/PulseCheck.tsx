@@ -6,18 +6,15 @@ import {
   AccordionDetails,
   Button,
   Card,
-  CardActions,
   CardContent,
-  CardMedia,
   Grid,
   Box,
 } from '@mui/material';
 import '../../global.scss';
 import './styles.scss';
-import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
 import Carousel from 'react-multi-carousel';
 import 'react-multi-carousel/lib/styles.css';
-import { responsive } from './const';
+import { pulseCheckData, pulseCheckInterface, responsive } from './const';
 
 const styles = {
   card: {
@@ -35,185 +32,101 @@ const styles = {
 type Props = {
   expandedPanel: string;
   allPanels: string[];
-  onClickChange: (currentPanel: string) => void;
   onClickNext: (currentPanel: string, nextPanel: string) => void;
   onClickBack: (previousPanel: string) => void;
+  selectedPulseCheck: pulseCheckInterface | null;
+  handlePulseCheck: (selectedPulseCheck: pulseCheckInterface) => void;
 };
 
 export function PulseCheck({
   expandedPanel,
   allPanels,
-  onClickChange,
   onClickNext,
   onClickBack,
+  selectedPulseCheck,
+  handlePulseCheck,
 }: Props) {
   return (
     <>
       {/* Template Panel */}
       <Accordion
         expanded={expandedPanel === 'pulseCheckPanel'}
-        sx={{ boxShadow: 'none' }}
+        sx={{
+          borderRadius: '0px',
+        }}
       >
         <AccordionSummary>
-          <Typography className="accordionSummary">
-            Pulse Check Layout
-          </Typography>
-          {allPanels.includes('pulseCheckPanel') && (
-            <Typography
-              className="changeText"
-              onClick={() => onClickChange('pulseCheckPanel')}
-            >
-              Change
+          {allPanels.includes('pulseCheckPanel') &&
+          selectedPulseCheck != null ? (
+            <Typography className="accordionSummary">
+              {selectedPulseCheck.name}
+            </Typography>
+          ) : (
+            <Typography className="accordionSummary">
+              Pulse Check Layout
             </Typography>
           )}
         </AccordionSummary>
         <AccordionDetails>
           <>
             <Carousel responsive={responsive}>
-              <Card sx={styles.card}>
-                <CardContent>
-                  <Box
-                    component="img"
-                    sx={{
-                      width: '348px',
-                      height: '180px',
-                      objectFit: 'cover',
-                    }}
-                    alt="Logo"
-                    src="https://media.istockphoto.com/id/1406155599/photo/we-want-your-feedback.webp?s=612x612&w=is&k=20&c=SJY9YoM9glSQj7b0vyyCESaq17t9bs1R6Ah5P5Javk0="
-                  />
-                  <Typography
-                    className="templateName"
-                    component="div"
-                    sx={{ mt: 1 }}
+              {pulseCheckData.map(pulseCheck => {
+                return (
+                  <Card
+                    sx={styles.card}
+                    onClick={() => handlePulseCheck(pulseCheck)}
                   >
-                    Pulse Check Not Required{' '}
-                  </Typography>
-                  <Typography
-                    className="templateDescription"
-                    component="div"
-                    sx={{ mt: 1 }}
-                  >
-                    An oldie but a goodie, also known as the PPT Framework
-                    created in the 60s, it has long been the benchmark to
-                    understanding workforce management.{' '}
-                  </Typography>
-                  <Grid
-                    container
-                    sx={{ width: '88%', position: 'absolute', bottom: '16px' }}
-                  >
-                    <Grid item sm={12}>
-                      <Box display="flex" justifyContent="flex-start">
-                        <Button
-                          size="small"
-                          // onClick={handleClickOpen}
-                          sx={{ padding: '0px' }}
-                        >
-                          <Typography className="textLink">
-                            Learn More
-                          </Typography>
-                        </Button>
-                      </Box>
-                    </Grid>
-                  </Grid>
-                </CardContent>
-              </Card>
-              <Card sx={styles.card}>
-                <CardContent>
-                  <Box
-                    component="img"
-                    sx={{
-                      width: '348px',
-                      height: '180px',
-                      objectFit: 'cover',
-                    }}
-                    alt="Logo"
-                    src="https://media.istockphoto.com/id/1406155599/photo/we-want-your-feedback.webp?s=612x612&w=is&k=20&c=SJY9YoM9glSQj7b0vyyCESaq17t9bs1R6Ah5P5Javk0="
-                  />
-                  <Typography
-                    className="templateName"
-                    component="div"
-                    sx={{ mt: 1 }}
-                  >
-                    Simple (3 Questions){' '}
-                  </Typography>
-                  <Typography
-                    className="templateDescription"
-                    component="div"
-                    sx={{ mt: 1 }}
-                  >
-                    An oldie but a goodie, also known as the PPT Framework
-                    created in the 60s, it has long been the benchmark to
-                    understanding workforce management.
-                  </Typography>
-                  <Grid
-                    container
-                    sx={{ width: '88%', position: 'absolute', bottom: '16px' }}
-                  >
-                    <Grid item sm={12}>
-                      <Box display="flex" justifyContent="flex-start">
-                        <Button
-                          size="small"
-                          // onClick={handleClickOpen}
-                          sx={{ padding: '0px' }}
-                        >
-                          <Typography className="textLink">
-                            Learn More
-                          </Typography>
-                        </Button>
-                      </Box>
-                    </Grid>
-                  </Grid>
-                </CardContent>
-              </Card>
-              <Card sx={styles.card}>
-                <CardContent>
-                  <Box
-                    component="img"
-                    sx={{
-                      width: '348px',
-                      height: '180px',
-                      objectFit: 'cover',
-                    }}
-                    alt="Logo"
-                    src="https://media.istockphoto.com/id/1406155599/photo/we-want-your-feedback.webp?s=612x612&w=is&k=20&c=SJY9YoM9glSQj7b0vyyCESaq17t9bs1R6Ah5P5Javk0="
-                  />
-                  <Typography
-                    className="templateName"
-                    component="div"
-                    sx={{ mt: 1 }}
-                  >
-                    Business Agility (7 Questions){' '}
-                  </Typography>
-                  <Typography
-                    className="templateDescription"
-                    component="div"
-                    sx={{ mt: 1 }}
-                  >
-                    An oldie but a goodie, also known as the PPT Framework
-                    created in the 60s, it has long been the benchmark to
-                    understanding workforce management. picture.{' '}
-                  </Typography>
-                  <Grid
-                    container
-                    sx={{ width: '88%', position: 'absolute', bottom: '16px' }}
-                  >
-                    <Grid item sm={12}>
-                      <Box display="flex" justifyContent="flex-start">
-                        <Button
-                          size="small"
-                          // onClick={handleClickOpen}
-                          sx={{ padding: '0px' }}
-                        >
-                          <Typography className="textLink">
-                            Learn More
-                          </Typography>
-                        </Button>
-                      </Box>
-                    </Grid>
-                  </Grid>
-                </CardContent>
-              </Card>
+                    <CardContent>
+                      <Box
+                        component="img"
+                        sx={{
+                          width: '348px',
+                          height: '180px',
+                          objectFit: 'cover',
+                        }}
+                        alt="Logo"
+                        src={pulseCheck.image}
+                      />
+                      <Typography
+                        className="templateName"
+                        component="div"
+                        sx={{ mt: 1 }}
+                      >
+                        {pulseCheck.name}
+                      </Typography>
+                      <Typography
+                        className="templateDescription"
+                        component="div"
+                        sx={{ mt: 1 }}
+                      >
+                        {pulseCheck.description}
+                      </Typography>
+                      <Grid
+                        container
+                        sx={{
+                          width: '88%',
+                          position: 'absolute',
+                          bottom: '16px',
+                        }}
+                      >
+                        <Grid item sm={12}>
+                          <Box display="flex" justifyContent="flex-start">
+                            <Button
+                              size="small"
+                              // onClick={handleClickOpen}
+                              sx={{ padding: '0px' }}
+                            >
+                              <Typography className="textLink">
+                                Learn More
+                              </Typography>
+                            </Button>
+                          </Box>
+                        </Grid>
+                      </Grid>
+                    </CardContent>
+                  </Card>
+                );
+              })}
             </Carousel>
             <Grid container spacing={0}>
               <Grid item sm={1}>

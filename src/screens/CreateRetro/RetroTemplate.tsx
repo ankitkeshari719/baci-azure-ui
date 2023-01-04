@@ -36,7 +36,6 @@ const styles = {
 type Props = {
   expandedPanel: string;
   allPanels: string[];
-  onClickChange: (currentPanel: string) => void;
   onClickNext: (currentPanel: string, nextPanel: string) => void;
   onClickBack: (previousPanel: string) => void;
 };
@@ -44,7 +43,6 @@ type Props = {
 export function RetroTemplate({
   expandedPanel,
   allPanels,
-  onClickChange,
   onClickNext,
   onClickBack,
 }: Props) {
@@ -63,18 +61,12 @@ export function RetroTemplate({
       {/* Template Panel */}
       <Accordion
         expanded={expandedPanel === 'templatePanel'}
-        sx={{ boxShadow: 'none' }}
+        sx={{
+          borderRadius: '0px',
+        }}
       >
         <AccordionSummary>
           <Typography className="accordionSummary">Retro Template</Typography>
-          {allPanels.includes('templatePanel') && (
-            <Typography
-              className="changeText"
-              onClick={() => onClickChange('templatePanel')}
-            >
-              Change
-            </Typography>
-          )}
         </AccordionSummary>
         <AccordionDetails>
           <>

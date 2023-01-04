@@ -114,7 +114,7 @@ const FacilitatorDropDown = () => {
       <span
         style={{
           display:
-            global.user.id == global.currentRetro?.creatorId &&
+            global.user.userType==2 &&
             !window.location.pathname.includes('pulsecheck')&&!window.location.pathname.includes('feedback') 
               ? 'flex'
               : 'none',
@@ -195,6 +195,7 @@ const FacilitatorDropDown = () => {
                 onClick={event => onClickOfUser(event, name.userId)}
                 disabled={
                   name.isMobile == true ||
+                  name.userId==global.user.id||
                   name.userId == global.currentRetro?.creatorId
                 }
               >

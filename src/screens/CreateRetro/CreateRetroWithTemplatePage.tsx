@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { Box, Grid} from '@mui/material';
+import { Box, Grid } from '@mui/material';
 import '../../global.scss';
 import './styles.scss';
 import { useNavigate, useParams } from 'react-router-dom';
@@ -12,6 +12,7 @@ import { RetroTemplate } from './RetroTemplate';
 import { PulseCheck } from './PulseCheck';
 import { UserDetails } from './UserDetails';
 import { TopBar } from './TopBar';
+import { pulseCheckInterface } from './const';
 
 export function CreateRetroWithTemplatePage() {
   const { id } = useParams();
@@ -36,6 +37,8 @@ export function CreateRetroWithTemplatePage() {
   const [expandedPanel, setExpandedPanel] =
     React.useState<string>('detailsPanel');
   const [allPanels, setAllPanels] = React.useState<string[]>([]);
+  const [selectedPulseCheck, setSelectedPulseCheck] =
+    React.useState<pulseCheckInterface | null>(null);
 
   React.useEffect(() => {
     dispatch({
@@ -70,6 +73,11 @@ export function CreateRetroWithTemplatePage() {
   function handleTimeFrame(e: React.SetStateAction<string>) {
     setRetroTimeframe(e);
     setisTimeFrameSet(false);
+  }
+
+  // Function to handle Time Frame on change
+  function handlePulseCheck(e: pulseCheckInterface | null) {
+    setSelectedPulseCheck(e);
   }
 
   // Function to handle User Name on change
@@ -113,16 +121,8 @@ export function CreateRetroWithTemplatePage() {
     setExpandedPanel(previousPanel);
     let index = allPanels.indexOf(previousPanel);
     if (index !== -1) {
-      allPanels.splice(index, 1);
-    }
-  };
-
-  // Function to handle next button on click
-  const onClickChange = (currentPanel: string) => {
-    setExpandedPanel(currentPanel);
-    let index = allPanels.indexOf(currentPanel);
-    if (index !== -1) {
-      allPanels.splice(index, 1);
+      const newPanels = allPanels.splice(index, 1);
+      setAllPanels(newPanels);
     }
   };
 
@@ -162,7 +162,7 @@ export function CreateRetroWithTemplatePage() {
   return (
     <Box sx={{ flexGrow: 1 }}>
       <TopBar />
-      <Box component="main" className='retroContainer'>
+      <Box component="main" className="retroContainer">
         <Grid container spacing={0}>
           <Grid item xs={12}>
             <Box
@@ -185,7 +185,6 @@ export function CreateRetroWithTemplatePage() {
                 retroNameWarning={retroNameWarning}
                 timeframeRef={timeframeRef}
                 isTimeFrameSet={isTimeFrameSet}
-                onClickChange={onClickChange}
                 handleRetronameChange={handleRetronameChange}
                 handleTimeFrame={handleTimeFrame}
                 onClickNext={onClickNext}
@@ -194,7 +193,6 @@ export function CreateRetroWithTemplatePage() {
               <RetroTemplate
                 expandedPanel={expandedPanel}
                 allPanels={allPanels}
-                onClickChange={onClickChange}
                 onClickNext={onClickNext}
                 onClickBack={onClickBack}
               />
@@ -202,15 +200,15 @@ export function CreateRetroWithTemplatePage() {
               <PulseCheck
                 expandedPanel={expandedPanel}
                 allPanels={allPanels}
-                onClickChange={onClickChange}
                 onClickNext={onClickNext}
                 onClickBack={onClickBack}
+                selectedPulseCheck={selectedPulseCheck}
+                handlePulseCheck={handlePulseCheck}
               />
               {/* User Details Panel */}
               <UserDetails
                 expandedPanel={expandedPanel}
                 allPanels={allPanels}
-                onClickChange={onClickChange}
                 onClickBack={onClickBack}
                 create={create}
                 handleUsername={handleUsername}
