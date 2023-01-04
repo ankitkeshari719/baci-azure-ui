@@ -95,39 +95,49 @@ export function UserDetails({
                 </Box>
                 <Box
                   sx={{
-                    ml: 4,
+                    ml: 3,
                     display: 'flex',
-                    alignItems: 'center',
+                    flexDirection: 'column',
                   }}
                 >
-                  {selectedAvatar ? (
-                    <Avatar
-                      avatar={selectedAvatar}
-                      css={{
-                        width: '50px',
-                        height: '50px',
-                        borderRadius: '50%',
-                      }}
-                    ></Avatar>
-                  ) : (
-                    <LazyLoadImage
-                      className="avatar"
-                      style={{
-                        width: '50px',
-                        height: '50px',
-                        borderRadius: '50%',
-                      }}
-                      src="../svgs/Empty-Animals.svg"
-                    ></LazyLoadImage>
-                  )}
-                  <Button onClick={() => setOpenAvatarDialog(true)}>
-                    <span className="primaryButtonText">Select Avatar</span>
-                  </Button>
-                  {avatarSelectionError !== '' && (
-                    <FormHelperText sx={{ color: 'red', marginLeft: '10px' }}>
-                      {avatarSelectionError}
-                    </FormHelperText>
-                  )}
+                  <Box
+                    sx={{
+                      display: 'flex',
+                      flexDirection: 'row',
+                      alignItems: 'center',
+                    }}
+                  >
+                    {selectedAvatar ? (
+                      <Avatar
+                        avatar={selectedAvatar}
+                        css={{
+                          width: '50px',
+                          height: '50px',
+                          borderRadius: '50%',
+                        }}
+                      />
+                    ) : (
+                      <LazyLoadImage
+                        className="avatar"
+                        style={{
+                          width: '50px',
+                          height: '50px',
+                          borderRadius: '50%',
+                        }}
+                        src="../svgs/Empty-Animals.svg"
+                      ></LazyLoadImage>
+                    )}
+                    <Button onClick={() => setOpenAvatarDialog(true)}>
+                      <span className="primaryButtonText">Select Avatar</span>
+                    </Button>
+                  </Box>
+                  <Box>
+                    {avatarSelectionError !== '' && (
+                      <FormHelperText sx={{ color: '#d32f2f', marginLeft: '10px' }}>
+                        {avatarSelectionError}
+                      </FormHelperText>
+                    )}
+                  </Box>
                 </Box>
               </Box>
             </Grid>
@@ -147,7 +157,7 @@ export function UserDetails({
                   helperText={userNameError}
                 />
                 {userNameWarning !== ' ' && (
-                  <FormHelperText sx={{ color: 'orange' }}>
+                  <FormHelperText sx={{ color: '#d32f2f' }}>
                     {userNameWarning}
                   </FormHelperText>
                 )}
@@ -201,7 +211,7 @@ export function UserDetails({
             </Grid>
           </DialogTitle>
           <Box
-            className="acatarDialog"
+            className="avatarDialog"
             sx={{
               height: height / 2,
             }}

@@ -6,9 +6,7 @@ import {
   AccordionDetails,
   Button,
   Card,
-  CardActions,
   CardContent,
-  CardMedia,
   Box,
   Grid,
   Dialog,
@@ -17,7 +15,7 @@ import '../../global.scss';
 import './styles.scss';
 import Carousel from 'react-multi-carousel';
 import 'react-multi-carousel/lib/styles.css';
-import { responsive } from './const';
+import { responsive, templatesData } from './const';
 import { LearnMore } from './LearnMore';
 
 const styles = {
@@ -38,6 +36,8 @@ type Props = {
   allPanels: string[];
   onClickNext: (currentPanel: string, nextPanel: string) => void;
   onClickBack: (previousPanel: string) => void;
+  selectedTemplate: any;
+  handleTemplate: (selectedPulseCheck: any) => void;
 };
 
 export function RetroTemplate({
@@ -45,6 +45,7 @@ export function RetroTemplate({
   allPanels,
   onClickNext,
   onClickBack,
+  handleTemplate
 }: Props) {
   const [openLearnMoreDialog, setOpenLearnMoreDialog] = React.useState(false);
 
@@ -71,245 +72,73 @@ export function RetroTemplate({
         <AccordionDetails>
           <>
             <Carousel responsive={responsive}>
-              <Card sx={styles.card}>
-                <CardContent>
-                  <Box
-                    component="img"
-                    sx={{
-                      width: '348px',
-                      height: '180px',
-                      objectFit: 'cover',
-                    }}
-                    alt="Logo"
-                    src="https://media.istockphoto.com/id/1406155599/photo/we-want-your-feedback.webp?s=612x612&w=is&k=20&c=SJY9YoM9glSQj7b0vyyCESaq17t9bs1R6Ah5P5Javk0="
-                  />
-                  <Typography
-                    className="templateName"
-                    component="div"
-                    sx={{ mt: 1 }}
-                  >
-                    Simple 1
-                  </Typography>
-                  <Typography
-                    className="templateDescription"
-                    component="div"
-                    sx={{ mt: 1 }}
-                  >
-                    A classic template for retros.
-                  </Typography>
-                  <Grid
-                    container
-                    sx={{ width: '88%', position: 'absolute', bottom: '16px' }}
-                  >
-                    <Grid item sm={6}>
-                      <Box display="flex" justifyContent="flex-start">
-                        <Button
-                          size="small"
-                          onClick={handleClickOpen}
-                          sx={{ padding: '0px' }}
-                        >
-                          <Typography className="textLink">
-                            Learn More
-                          </Typography>
-                        </Button>
-                      </Box>
-                    </Grid>
-                    <Grid item sm={6}>
-                      <Box display="flex" justifyContent="flex-end">
-                        <Button
-                          variant="outlined"
-                          size="small"
-                          className="customButton"
-                        >
-                          <Typography className="customText">
-                            Customize
-                          </Typography>
-                        </Button>
-                      </Box>
-                    </Grid>
-                  </Grid>
-                </CardContent>
-              </Card>
-              <Card sx={styles.card}>
-                <CardContent>
-                  <Box
-                    component="img"
-                    sx={{
-                      width: '348px',
-                      height: '180px',
-                      objectFit: 'cover',
-                    }}
-                    alt="Logo"
-                    src="https://media.istockphoto.com/id/1406155599/photo/we-want-your-feedback.webp?s=612x612&w=is&k=20&c=SJY9YoM9glSQj7b0vyyCESaq17t9bs1R6Ah5P5Javk0="
-                  />
-                  <Typography
-                    className="templateName"
-                    component="div"
-                    sx={{ mt: 1 }}
-                  >
-                    4L Retrospective
-                  </Typography>
-                  <Typography
-                    className="templateDescription"
-                    component="div"
-                    sx={{ mt: 1 }}
-                  >
-                    For the team to share how they feel in a structured manner
-                    and capture key learnings and ideas to progress.
-                  </Typography>
-                  <Grid
-                    container
-                    sx={{ width: '88%', position: 'absolute', bottom: '16px' }}
-                  >
-                    <Grid item sm={6}>
-                      <Box display="flex" justifyContent="flex-start">
-                        <Button
-                          size="small"
-                          onClick={handleClickOpen}
-                          sx={{ padding: '0px' }}
-                        >
-                          <Typography className="textLink">
-                            Learn More
-                          </Typography>
-                        </Button>
-                      </Box>
-                    </Grid>
-                    <Grid item sm={6}>
-                      <Box display="flex" justifyContent="flex-end">
-                        <Button
-                          variant="outlined"
-                          size="small"
-                          className="customButton"
-                        >
-                          <Typography className="customText">
-                            Customize
-                          </Typography>
-                        </Button>
-                      </Box>
-                    </Grid>
-                  </Grid>
-                </CardContent>
-              </Card>
-              <Card sx={styles.card}>
-                <CardContent>
-                  <Box
-                    component="img"
-                    sx={{
-                      width: '348px',
-                      height: '180px',
-                      objectFit: 'cover',
-                    }}
-                    alt="Logo"
-                    src="https://media.istockphoto.com/id/1406155599/photo/we-want-your-feedback.webp?s=612x612&w=is&k=20&c=SJY9YoM9glSQj7b0vyyCESaq17t9bs1R6Ah5P5Javk0="
-                  />
-                  <Typography
-                    className="templateName"
-                    component="div"
-                    sx={{ mt: 1 }}
-                  >
-                    Sailboat
-                  </Typography>
-                  <Typography
-                    className="templateDescription"
-                    component="div"
-                    sx={{ mt: 1 }}
-                  >
-                    A fun way to think differently and reflect on the bigger
-                    picture.{' '}
-                  </Typography>
-                  <Grid
-                    container
-                    sx={{ width: '88%', position: 'absolute', bottom: '16px' }}
-                  >
-                    <Grid item sm={6}>
-                      <Box display="flex" justifyContent="flex-start">
-                        <Button
-                          size="small"
-                          onClick={handleClickOpen}
-                          sx={{ padding: '0px' }}
-                        >
-                          <Typography className="textLink">
-                            Learn More
-                          </Typography>
-                        </Button>
-                      </Box>
-                    </Grid>
-                    <Grid item sm={6}>
-                      <Box display="flex" justifyContent="flex-end">
-                        <Button
-                          variant="outlined"
-                          size="small"
-                          className="customButton"
-                        >
-                          <Typography className="customText">
-                            Customize
-                          </Typography>
-                        </Button>
-                      </Box>
-                    </Grid>
-                  </Grid>
-                </CardContent>
-              </Card>
-              <Card sx={styles.card}>
-                <CardContent>
-                  <Box
-                    component="img"
-                    sx={{
-                      width: '348px',
-                      height: '180px',
-                      objectFit: 'cover',
-                    }}
-                    alt="Logo"
-                    src="https://media.istockphoto.com/id/1406155599/photo/we-want-your-feedback.webp?s=612x612&w=is&k=20&c=SJY9YoM9glSQj7b0vyyCESaq17t9bs1R6Ah5P5Javk0="
-                  />
-                  <Typography
-                    className="templateName"
-                    component="div"
-                    sx={{ mt: 1 }}
-                  >
-                    Start, Stop , Continue{' '}
-                  </Typography>
-                  <Typography
-                    className="templateDescription"
-                    component="div"
-                    sx={{ mt: 1 }}
-                  >
-                    The traffic light retro gives everyone in the team an
-                    opportunity to talk and quickly identify bottlenecks.{' '}
-                  </Typography>
-                  <Grid
-                    container
-                    sx={{ width: '88%', position: 'absolute', bottom: '16px' }}
-                  >
-                    <Grid item sm={6}>
-                      <Box display="flex" justifyContent="flex-start">
-                        <Button
-                          size="small"
-                          onClick={handleClickOpen}
-                          sx={{ padding: '0px' }}
-                        >
-                          <Typography className="textLink">
-                            Learn More
-                          </Typography>
-                        </Button>
-                      </Box>
-                    </Grid>
-                    <Grid item sm={6}>
-                      <Box display="flex" justifyContent="flex-end">
-                        <Button
-                          variant="outlined"
-                          size="small"
-                          className="customButton"
-                        >
-                          <Typography className="customText">
-                            Customize
-                          </Typography>
-                        </Button>
-                      </Box>
-                    </Grid>
-                  </Grid>
-                </CardContent>
-              </Card>
+              {templatesData.map(template => {
+                return (
+                  <Card sx={styles.card} onClick={() => handleTemplate(template)}>
+                    <CardContent>
+                      <Box
+                        component="img"
+                        sx={{
+                          width: '348px',
+                          height: '180px',
+                          objectFit: 'cover',
+                        }}
+                        alt="Logo"
+                        src={template.templateImage}
+                      />
+                      <Typography
+                        className="templateName"
+                        component="div"
+                        sx={{ mt: 1 }}
+                      >
+                        {template.templateName}
+                      </Typography>
+                      <Typography
+                        className="templateDescription"
+                        component="div"
+                        sx={{ mt: 1 }}
+                      >
+                        {template.templateDescription}
+                      </Typography>
+                      <Grid
+                        container
+                        sx={{
+                          width: '88%',
+                          position: 'absolute',
+                          bottom: '16px',
+                        }}
+                      >
+                        <Grid item sm={6}>
+                          <Box display="flex" justifyContent="flex-start">
+                            <Button
+                              size="small"
+                              onClick={handleClickOpen}
+                              sx={{ padding: '0px' }}
+                            >
+                              <Typography className="textLink">
+                                Learn More
+                              </Typography>
+                            </Button>
+                          </Box>
+                        </Grid>
+                        <Grid item sm={6}>
+                          <Box display="flex" justifyContent="flex-end">
+                            <Button
+                              variant="outlined"
+                              size="small"
+                              className="customButton"
+                            >
+                              <Typography className="customText">
+                                Customize
+                              </Typography>
+                            </Button>
+                          </Box>
+                        </Grid>
+                      </Grid>
+                    </CardContent>
+                  </Card>
+                );
+              })}
             </Carousel>
             <Grid container spacing={0}>
               <Grid item sm={1}>

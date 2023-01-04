@@ -9,7 +9,7 @@ export function TopBar() {
   return (
     <AppBar
       position="static"
-      className='logoContantainer'
+      className='logoContainer'
     >
       <Toolbar variant="dense">
         <Link href="/">
