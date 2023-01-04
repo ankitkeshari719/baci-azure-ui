@@ -174,7 +174,7 @@ export function CreateRetroWithTemplatePage() {
             </Box>
           </Grid>
           <Grid item xs={12}>
-            <Box sx={{ marginTop: '40px' }}>
+            <Box sx={{ marginTop: '16px' }}>
               {/* BACI Details Panel */}
               <BaciDetails
                 expandedPanel={expandedPanel}

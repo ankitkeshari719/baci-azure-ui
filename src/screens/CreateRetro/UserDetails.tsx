@@ -70,7 +70,10 @@ export function UserDetails({
   }, []);
 
   return (
-    <Accordion expanded={expandedPanel === 'userDetailPanel'}>
+    <Accordion
+      expanded={expandedPanel === 'userDetailPanel'}
+      sx={{ boxShadow: 'none' }}
+    >
       <AccordionSummary>
         <Typography className="accordionSummary">User Details</Typography>
         {allPanels.includes('userDetailPanel') && (
@@ -232,7 +235,7 @@ export function UserDetails({
                   variant="outlined"
                   onClick={() => setOpenAvatarDialog(false)}
                 >
-                  <span className='primaryMainButtonText'>Cancel</span>
+                  <span className="primaryMainButtonText">Cancel</span>
                 </Button>
               </Box>
             </Grid>
@@ -244,7 +247,7 @@ export function UserDetails({
                   onClick={() => setOpenAvatarDialog(false)}
                   disabled={selectedAvatar == ''}
                 >
-                  <span className='secondaryButtonText'>Select</span>
+                  <span className="secondaryButtonText">Select</span>
                 </Button>
               </Box>
             </Grid>
