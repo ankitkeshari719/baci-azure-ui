@@ -440,7 +440,13 @@ export const validateAction = (
   };
 
   const canEndRetro = (undo: boolean, userId: string) => {
-    return userId === state.creatorId && state.ended !== !undo;
+    const user = findUser(userId);
+
+    return user?.isFacilitator
+      ? state.ended !== !undo
+      : userId === state.creatorId && state.ended !== !undo;
+    //   (userId === state.creatorId || user?.isFacilitator) &&
+    // state.ended !== !undo;
   };
 
   switch (actionName) {
@@ -928,7 +934,7 @@ export const processAction = (
       if (date && !state.startedDate) {
         state.startedDate = new Date(date);
       }
-      console.log(isMobile,"isMobile");
+      console.log(isMobile, 'isMobile');
       state.users.push({
         userId,
         userNickname,
@@ -1034,14 +1040,13 @@ export const processAction = (
 
   const endRetro = (undo: boolean, date: Date | undefined, userId: string) => {
     // console.log('endRetro', userId, state.creatorId, state.ended, undo);
-    if (userId === state.creatorId && state.ended !== !undo) {
-      state.ended = !undo;
-      if (state.ended && date && state.endedDate === undefined) {
-        state.endedDate = date;
-      }
-      if (!state.ended && state.endedDate !== undefined) {
-        state.endedDate = undefined;
-      }
+
+    state.ended = !undo;
+    if (state.ended && date && state.endedDate === undefined) {
+      state.endedDate = date;
+    }
+    if (!state.ended && state.endedDate !== undefined) {
+      state.endedDate = undefined;
     }
   };
 

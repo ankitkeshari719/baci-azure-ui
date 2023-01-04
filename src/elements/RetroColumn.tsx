@@ -1040,7 +1040,7 @@ export function RetroColumn({
             [column.groups, groupCollapsed]
           )}
           <>
-            {isXsUp && (
+            {!isXsUp && (
               <Grid
                 style={{
                   // display: 'flex',
@@ -1145,7 +1145,7 @@ export function RetroColumn({
                           padding: 0,
                         },
                       }}
-                      autoFocus={!isXsUp}
+                      autoFocus={!isXsUp || column.groups.length!=0 }
                       sx={{
                         padding: 0,
                         input: { padding: 0 },
