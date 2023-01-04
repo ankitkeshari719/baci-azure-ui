@@ -50,7 +50,10 @@ export function PulseCheck({
   return (
     <>
       {/* Template Panel */}
-      <Accordion expanded={expandedPanel === 'pulseCheckPanel'}>
+      <Accordion
+        expanded={expandedPanel === 'pulseCheckPanel'}
+        sx={{ boxShadow: 'none' }}
+      >
         <AccordionSummary>
           <Typography className="accordionSummary">
             Pulse Check Layout

@@ -61,7 +61,10 @@ export function RetroTemplate({
   return (
     <>
       {/* Template Panel */}
-      <Accordion expanded={expandedPanel === 'templatePanel'}>
+      <Accordion
+        expanded={expandedPanel === 'templatePanel'}
+        sx={{ boxShadow: 'none' }}
+      >
         <AccordionSummary>
           <Typography className="accordionSummary">Retro Template</Typography>
           {allPanels.includes('templatePanel') && (
