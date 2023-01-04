@@ -101,7 +101,7 @@ export function CountdownTimer({
   const timedelta = React.useRef(0);
   const previousExpired = React.useRef(false);
   const isXsUp = useMediaQuery(theme.breakpoints.only('xs'));
-  // const audio = new Audio('../sounds/ding.mp3');
+
 
   //
   const [anchorEl, setAnchorEl] = React.useState<HTMLButtonElement | null>(
@@ -206,7 +206,8 @@ export function CountdownTimer({
       countdownExpired &&
       global.user.userType == 2
     ) {
-      // audio.play();
+      const audio = new Audio('../sounds/ding.mp3');
+      audio.play();
     }
     previousExpired.current = countdownExpired;
   }, [countdownExpired]);
