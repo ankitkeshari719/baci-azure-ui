@@ -61,10 +61,6 @@ const FacilitatorDropDown = () => {
     );
   };
   useEffect(() => {
-    console.log(
-      global.user.id == global.currentRetro?.creatorId,
-      'flag for facilitator'
-    );
     let valueToBeDisplayed: any[] = [global.currentRetro?.creatorId];
 
     users.forEach(user => {
@@ -118,7 +114,10 @@ const FacilitatorDropDown = () => {
       <span
         style={{
           display:
-            global.user.id == global.currentRetro?.creatorId ? 'flex' : 'none',
+            global.user.id == global.currentRetro?.creatorId &&
+            !window.location.pathname.includes('pulsecheck')&&!window.location.pathname.includes('feedback') 
+              ? 'flex'
+              : 'none',
           flexDirection: 'row',
           width: '450px',
           minWidth: '300px',
@@ -160,7 +159,7 @@ const FacilitatorDropDown = () => {
             //   onChange={handleChange}
             //   input={<OutlinedInput label="Tag" />}
             renderValue={selected => {
-            //   console.log('selected', selected);
+              //   console.log('selected', selected);
               var valueToBeDisplayed = '';
 
               // selected.forEach((id, index) => {
