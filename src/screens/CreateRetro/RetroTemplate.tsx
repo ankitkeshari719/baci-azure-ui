@@ -20,6 +20,19 @@ import 'react-multi-carousel/lib/styles.css';
 import { responsive } from './const';
 import { LearnMore } from './LearnMore';
 
+const styles = {
+  card: {
+    maxWidth: '420px',
+    height: '400px',
+    background: '#ffffff',
+    borderRadius: '2px',
+    margin: '8px',
+    '&:hover': {
+      backgroundColor: 'rgba(206, 239, 255, 0.4)',
+    },
+  },
+};
+
 type Props = {
   expandedPanel: string;
   allPanels: string[];
@@ -48,7 +61,10 @@ export function RetroTemplate({
   return (
     <>
       {/* Template Panel */}
-      <Accordion expanded={expandedPanel === 'templatePanel'}>
+      <Accordion
+        expanded={expandedPanel === 'templatePanel'}
+        sx={{ boxShadow: 'none' }}
+      >
         <AccordionSummary>
           <Typography className="accordionSummary">Retro Template</Typography>
           {allPanels.includes('templatePanel') && (
@@ -63,26 +79,43 @@ export function RetroTemplate({
         <AccordionDetails>
           <>
             <Carousel responsive={responsive}>
-              <Card className="card">
-                <CardMedia
-                  component="img"
-                  alt="green iguana"
-                  height="180"
-                  image="https://media.istockphoto.com/id/1406155599/photo/we-want-your-feedback.webp?s=612x612&w=is&k=20&c=SJY9YoM9glSQj7b0vyyCESaq17t9bs1R6Ah5P5Javk0="
-                />
+              <Card sx={styles.card}>
                 <CardContent>
-                  <Typography className="templateName" component="div">
+                  <Box
+                    component="img"
+                    sx={{
+                      width: '348px',
+                      height: '180px',
+                      objectFit: 'cover',
+                    }}
+                    alt="Logo"
+                    src="https://media.istockphoto.com/id/1406155599/photo/we-want-your-feedback.webp?s=612x612&w=is&k=20&c=SJY9YoM9glSQj7b0vyyCESaq17t9bs1R6Ah5P5Javk0="
+                  />
+                  <Typography
+                    className="templateName"
+                    component="div"
+                    sx={{ mt: 1 }}
+                  >
                     Simple 1
                   </Typography>
-                  <Typography variant="body2" className="templateDescription">
+                  <Typography
+                    className="templateDescription"
+                    component="div"
+                    sx={{ mt: 1 }}
+                  >
                     A classic template for retros.
                   </Typography>
-                </CardContent>
-                <CardActions>
-                  <Grid container>
+                  <Grid
+                    container
+                    sx={{ width: '88%', position: 'absolute', bottom: '16px' }}
+                  >
                     <Grid item sm={6}>
                       <Box display="flex" justifyContent="flex-start">
-                        <Button size="small" onClick={handleClickOpen}>
+                        <Button
+                          size="small"
+                          onClick={handleClickOpen}
+                          sx={{ padding: '0px' }}
+                        >
                           <Typography className="textLink">
                             Learn More
                           </Typography>
@@ -103,28 +136,46 @@ export function RetroTemplate({
                       </Box>
                     </Grid>
                   </Grid>
-                </CardActions>
-              </Card>
-              <Card className="card">
-                <CardMedia
-                  component="img"
-                  alt="green iguana"
-                  height="180"
-                  image="https://media.istockphoto.com/id/1406155599/photo/we-want-your-feedback.webp?s=612x612&w=is&k=20&c=SJY9YoM9glSQj7b0vyyCESaq17t9bs1R6Ah5P5Javk0="
-                />
-                <CardContent>
-                  <Typography className="templateName" component="div">
-                    Simple 2
-                  </Typography>
-                  <Typography variant="body2" className="templateDescription">
-                    A classic template for retros.
-                  </Typography>
                 </CardContent>
-                <CardActions>
-                  <Grid container>
+              </Card>
+              <Card sx={styles.card}>
+                <CardContent>
+                  <Box
+                    component="img"
+                    sx={{
+                      width: '348px',
+                      height: '180px',
+                      objectFit: 'cover',
+                    }}
+                    alt="Logo"
+                    src="https://media.istockphoto.com/id/1406155599/photo/we-want-your-feedback.webp?s=612x612&w=is&k=20&c=SJY9YoM9glSQj7b0vyyCESaq17t9bs1R6Ah5P5Javk0="
+                  />
+                  <Typography
+                    className="templateName"
+                    component="div"
+                    sx={{ mt: 1 }}
+                  >
+                    4L Retrospective
+                  </Typography>
+                  <Typography
+                    className="templateDescription"
+                    component="div"
+                    sx={{ mt: 1 }}
+                  >
+                    For the team to share how they feel in a structured manner
+                    and capture key learnings and ideas to progress.
+                  </Typography>
+                  <Grid
+                    container
+                    sx={{ width: '88%', position: 'absolute', bottom: '16px' }}
+                  >
                     <Grid item sm={6}>
                       <Box display="flex" justifyContent="flex-start">
-                        <Button size="small" onClick={handleClickOpen}>
+                        <Button
+                          size="small"
+                          onClick={handleClickOpen}
+                          sx={{ padding: '0px' }}
+                        >
                           <Typography className="textLink">
                             Learn More
                           </Typography>
@@ -145,32 +196,47 @@ export function RetroTemplate({
                       </Box>
                     </Grid>
                   </Grid>
-                </CardActions>
-              </Card>
-              <Card className="card">
-                <CardMedia
-                  component="img"
-                  alt="green iguana"
-                  height="180"
-                  image="https://media.istockphoto.com/id/1406155599/photo/we-want-your-feedback.webp?s=612x612&w=is&k=20&c=SJY9YoM9glSQj7b0vyyCESaq17t9bs1R6Ah5P5Javk0="
-                />
-                <CardContent>
-                  <Typography className="templateName" component="div">
-                    Simple 3
-                  </Typography>
-                  <Typography variant="body2" className="templateDescription">
-                    A classic template for retros.
-                  </Typography>
                 </CardContent>
-                <CardActions>
-                  <Grid container>
+              </Card>
+              <Card sx={styles.card}>
+                <CardContent>
+                  <Box
+                    component="img"
+                    sx={{
+                      width: '348px',
+                      height: '180px',
+                      objectFit: 'cover',
+                    }}
+                    alt="Logo"
+                    src="https://media.istockphoto.com/id/1406155599/photo/we-want-your-feedback.webp?s=612x612&w=is&k=20&c=SJY9YoM9glSQj7b0vyyCESaq17t9bs1R6Ah5P5Javk0="
+                  />
+                  <Typography
+                    className="templateName"
+                    component="div"
+                    sx={{ mt: 1 }}
+                  >
+                    Sailboat
+                  </Typography>
+                  <Typography
+                    className="templateDescription"
+                    component="div"
+                    sx={{ mt: 1 }}
+                  >
+                    A fun way to think differently and reflect on the bigger
+                    picture.{' '}
+                  </Typography>
+                  <Grid
+                    container
+                    sx={{ width: '88%', position: 'absolute', bottom: '16px' }}
+                  >
                     <Grid item sm={6}>
                       <Box display="flex" justifyContent="flex-start">
-                        <Button size="small">
-                          <Typography
-                            className="textLink"
-                            onClick={handleClickOpen}
-                          >
+                        <Button
+                          size="small"
+                          onClick={handleClickOpen}
+                          sx={{ padding: '0px' }}
+                        >
+                          <Typography className="textLink">
                             Learn More
                           </Typography>
                         </Button>
@@ -190,32 +256,47 @@ export function RetroTemplate({
                       </Box>
                     </Grid>
                   </Grid>
-                </CardActions>
-              </Card>
-              <Card className="card">
-                <CardMedia
-                  component="img"
-                  alt="green iguana"
-                  height="180"
-                  image="https://media.istockphoto.com/id/1406155599/photo/we-want-your-feedback.webp?s=612x612&w=is&k=20&c=SJY9YoM9glSQj7b0vyyCESaq17t9bs1R6Ah5P5Javk0="
-                />
-                <CardContent>
-                  <Typography className="templateName" component="div">
-                    Simple4
-                  </Typography>
-                  <Typography variant="body2" className="templateDescription">
-                    A classic template for retros.
-                  </Typography>
                 </CardContent>
-                <CardActions>
-                  <Grid container>
+              </Card>
+              <Card sx={styles.card}>
+                <CardContent>
+                  <Box
+                    component="img"
+                    sx={{
+                      width: '348px',
+                      height: '180px',
+                      objectFit: 'cover',
+                    }}
+                    alt="Logo"
+                    src="https://media.istockphoto.com/id/1406155599/photo/we-want-your-feedback.webp?s=612x612&w=is&k=20&c=SJY9YoM9glSQj7b0vyyCESaq17t9bs1R6Ah5P5Javk0="
+                  />
+                  <Typography
+                    className="templateName"
+                    component="div"
+                    sx={{ mt: 1 }}
+                  >
+                    Start, Stop , Continue{' '}
+                  </Typography>
+                  <Typography
+                    className="templateDescription"
+                    component="div"
+                    sx={{ mt: 1 }}
+                  >
+                    The traffic light retro gives everyone in the team an
+                    opportunity to talk and quickly identify bottlenecks.{' '}
+                  </Typography>
+                  <Grid
+                    container
+                    sx={{ width: '88%', position: 'absolute', bottom: '16px' }}
+                  >
                     <Grid item sm={6}>
                       <Box display="flex" justifyContent="flex-start">
-                        <Button size="small">
-                          <Typography
-                            className="textLink"
-                            onClick={handleClickOpen}
-                          >
+                        <Button
+                          size="small"
+                          onClick={handleClickOpen}
+                          sx={{ padding: '0px' }}
+                        >
+                          <Typography className="textLink">
                             Learn More
                           </Typography>
                         </Button>
@@ -235,52 +316,7 @@ export function RetroTemplate({
                       </Box>
                     </Grid>
                   </Grid>
-                </CardActions>
-              </Card>
-              <Card className="card">
-                <CardMedia
-                  component="img"
-                  alt="green iguana"
-                  height="180"
-                  image="https://media.istockphoto.com/id/1406155599/photo/we-want-your-feedback.webp?s=612x612&w=is&k=20&c=SJY9YoM9glSQj7b0vyyCESaq17t9bs1R6Ah5P5Javk0="
-                />
-                <CardContent>
-                  <Typography className="templateName" component="div">
-                    Simple 5
-                  </Typography>
-                  <Typography variant="body2" className="templateDescription">
-                    A classic template for retros.
-                  </Typography>
                 </CardContent>
-                <CardActions>
-                  <Grid container>
-                    <Grid item sm={6}>
-                      <Box display="flex" justifyContent="flex-start">
-                        <Button size="small">
-                          <Typography
-                            className="textLink"
-                            onClick={handleClickOpen}
-                          >
-                            Learn More
-                          </Typography>
-                        </Button>
-                      </Box>
-                    </Grid>
-                    <Grid item sm={6}>
-                      <Box display="flex" justifyContent="flex-end">
-                        <Button
-                          variant="outlined"
-                          size="small"
-                          className="customButton"
-                        >
-                          <Typography className="customText">
-                            Customize
-                          </Typography>
-                        </Button>
-                      </Box>
-                    </Grid>
-                  </Grid>
-                </CardActions>
               </Card>
             </Carousel>
             <Grid container spacing={0}>
