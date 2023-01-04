@@ -99,7 +99,7 @@ export function CreateNewRetro() {
     });
   }, []);
 
-  function handleRetronameChange(e: React.SetStateAction<string>) {
+  function handleRetroNameChange(e: React.SetStateAction<string>) {
     if (e == '') {
       setCodeWarning('');
     } else {
@@ -200,7 +200,7 @@ export function CreateNewRetro() {
               error={!!codeError}
               helperText={codeError}
               sx={styles.retroNameTextField}
-              onChange={e => handleRetronameChange(e.currentTarget.value)}
+              onChange={e => handleRetroNameChange(e.currentTarget.value)}
               multiline
               onKeyDown={e => {
                 if (e.keyCode === 13) {

@@ -14,7 +14,7 @@ import '../../global.scss';
 import './styles.scss';
 import Carousel from 'react-multi-carousel';
 import 'react-multi-carousel/lib/styles.css';
-import { pulseCheckData, pulseCheckInterface, responsive } from './const';
+import { pulseChecksData, pulseCheckInterface, responsive } from './const';
 
 const styles = {
   card: {
@@ -70,7 +70,7 @@ export function PulseCheck({
         <AccordionDetails>
           <>
             <Carousel responsive={responsive}>
-              {pulseCheckData.map(pulseCheck => {
+              {pulseChecksData.map(pulseCheck => {
                 return (
                   <Card
                     sx={styles.card}

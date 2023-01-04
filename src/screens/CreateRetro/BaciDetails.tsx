@@ -49,7 +49,7 @@ type Props = {
   retroNameWarning: string;
   timeframeRef: any;
   isTimeFrameSet: boolean;
-  handleRetronameChange: (e: React.SetStateAction<string>) => void;
+  handleRetroNameChange: (e: React.SetStateAction<string>) => void;
   handleTimeFrame: (e: React.SetStateAction<string>) => void;
   onClickNext: (currentPanel: string, nextPanel: string) => void;
 };
@@ -63,7 +63,7 @@ export function BaciDetails({
   retroNameWarning,
   timeframeRef,
   isTimeFrameSet,
-  handleRetronameChange,
+  handleRetroNameChange,
   handleTimeFrame,
   onClickNext,
 }: Props) {
@@ -106,7 +106,7 @@ export function BaciDetails({
                     error={!!retroNameError}
                     helperText={retroNameError}
                     sx={styles.retroNameTextField}
-                    onChange={e => handleRetronameChange(e.currentTarget.value)}
+                    onChange={e => handleRetroNameChange(e.currentTarget.value)}
                     multiline
                     onKeyDown={e => {
                       if (e.keyCode === 13) {

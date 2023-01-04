@@ -27,7 +27,7 @@ export function LearnMore({ handleClose }: Props) {
             </Box>
           </Grid>
           <Grid item xs={12} sx={{ mt: 1 }}>
-            <AppBar position="static" className="logoContantainer">
+            <AppBar position="static" className="logoContainer">
               <Toolbar variant="dense">
                 <IconButton
                   edge="start"

@@ -54,7 +54,7 @@ export const useRetro = () => {
           retroTimeframe,
           retroGoal,
           creatorId: state.currentRetro?.creatorId,
-          userId:state.user.id
+          userId: state.user.id,
         },
         userId: state.user.id,
         timestamp: 0,
@@ -66,6 +66,64 @@ export const useRetro = () => {
 
       await addRetroAction(id, action);
 
+      return retrievedRetro;
+    },
+    createTemplate: async (
+      retro: Partial<Omit<Retro, 'id'>>,
+      retroTimeframe: string,
+      retroGoal: string,
+      userName: string,
+      selectedAvatar: string,
+      userType: number
+    ): Promise<Retro> => {
+      const humanId = (
+        '' +
+        (Math.random() * 1000000000 + 1000000000)
+      ).substring(0, 6);
+
+      const currentRetro = {
+        name: 'Retro',
+        ...(retro ? retro : {}),
+        humanId,
+        joinUrl: `${window.location.protocol}//${window.location.hostname}${
+          window.location.port ? ':' + window.location.port : ''
+        }/join/${humanId}`,
+      } as Retro;
+
+      console.log('currentRetro:: ', currentRetro);
+
+      const id = await createRetro(currentRetro, state.user);
+      const retrievedRetro = await getRetro(id);
+
+      dispatch({
+        type: ActionType.SET_CURRENT_RETRO,
+        payload: { retro: retrievedRetro },
+      });
+
+      const action: Action = {
+        id: shortid.generate(),
+        actionName: BoardActionType.UPDATE_RETRO_DETAILS,
+        parameters: {
+          retroName: retro?.name,
+          retroTimeframe,
+          retroGoal,
+          joinUrl: `${window.location.protocol}//${window.location.hostname}${
+            window.location.port ? ':' + window.location.port : ''
+          }/join/${humanId}`,
+          creatorId: state.currentRetro?.creatorId,
+          userId: state.user.id,
+          humanId: humanId,
+          preferredNickname: userName,
+          avatar: selectedAvatar,
+          userType: userType,
+        },
+        userId: state.user.id,
+        timestamp: 0,
+        sourceActionId: '',
+        sourceActionTimestamp: 0,
+        version: BOARD_STATE_MACHINE_VERSION,
+      };
+      await addRetroAction(id, action);
       return retrievedRetro;
     },
     getById: async (id: string): Promise<Retro | undefined> => {

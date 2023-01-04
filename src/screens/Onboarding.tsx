@@ -94,7 +94,7 @@ export function Onboarding() {
     setCaptureName(false);
     // console.log(started, joining, global.currentRetro);
   };
-  function handleRetronameChange(e: React.SetStateAction<string>) {
+  function handleRetroNameChange(e: React.SetStateAction<string>) {
     if(e == "") {
       setCodeWarning('');
     } else {
@@ -460,7 +460,7 @@ export function Onboarding() {
               value={retroName}
               error={!!codeError}
               helperText={codeError}
-              onChange={e => handleRetronameChange(e.currentTarget.value)}
+              onChange={e => handleRetroNameChange(e.currentTarget.value)}
               multiline
               onKeyDown={e => {
                 if (e.keyCode === 13) {

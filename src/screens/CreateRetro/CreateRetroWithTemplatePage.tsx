@@ -13,6 +13,7 @@ import { PulseCheck } from './PulseCheck';
 import { UserDetails } from './UserDetails';
 import { TopBar } from './TopBar';
 import { pulseCheckInterface } from './const';
+import { UserTypeArray } from '../../constants';
 
 export function CreateRetroWithTemplatePage() {
   const { id } = useParams();
@@ -20,7 +21,7 @@ export function CreateRetroWithTemplatePage() {
   const navigate = useNavigate();
   const [global, dispatch] = React.useContext(GlobalContext);
   const timeframeRef = React.useRef<HTMLSelectElement | null>(null);
-  const [localRetroName, setlocalRetroName] = React.useState(
+  const [localRetroName, setLocalRetroName] = React.useState(
     sessionStorage.getItem('retroname') || ''
   );
 
@@ -37,6 +38,7 @@ export function CreateRetroWithTemplatePage() {
   const [expandedPanel, setExpandedPanel] =
     React.useState<string>('detailsPanel');
   const [allPanels, setAllPanels] = React.useState<string[]>([]);
+  const [selectedTemplate, setSelectedTemplate] = React.useState(null);
   const [selectedPulseCheck, setSelectedPulseCheck] =
     React.useState<pulseCheckInterface | null>(null);
 
@@ -49,7 +51,7 @@ export function CreateRetroWithTemplatePage() {
   useAzureAuth();
 
   // Function to handle Retro Name on change
-  function handleRetronameChange(e: React.SetStateAction<string>) {
+  function handleRetroNameChange(e: React.SetStateAction<string>) {
     if (e == '') {
       setRetoWarning('');
     } else {
@@ -78,6 +80,9 @@ export function CreateRetroWithTemplatePage() {
   // Function to handle Time Frame on change
   function handlePulseCheck(e: pulseCheckInterface | null) {
     setSelectedPulseCheck(e);
+  }
+  function handleTemplate(e: any) {
+    setSelectedTemplate(e);
   }
 
   // Function to handle User Name on change
@@ -129,32 +134,53 @@ export function CreateRetroWithTemplatePage() {
   // Function to create a New Retro
   const create = async () => {
     sessionStorage.setItem('retroname', retroName);
-    setlocalRetroName(retroName);
+    setLocalRetroName(retroName);
+    const userType: number =
+      global?.user?.id == global.currentRetro?.creatorId
+        ? UserTypeArray[1].id
+        : UserTypeArray[0].id;
 
-    if (retroName !== '' && retroTimeframe !== '') {
+    if (userName === '') setUserNameError('Please enter avatar name');
+    if (selectedAvatar === '') setAvatarSelectionError('Please select avatar');
+
+    if (
+      retroName !== '' &&
+      retroTimeframe !== '' &&
+      userName !== '' &&
+      selectedAvatar !== ''
+    ) {
       dispatch({
         type: ActionType.SET_LOADING,
         payload: { loadingFlag: true },
       });
       setRetroNameError('');
       setisTimeFrameSet(false);
-      await retro.create({ name: retroName }, retroTimeframe, '').then(
-        res => {
-          dispatch({ type: ActionType.CREATE_RETRO, payload: {} });
-          dispatch({
-            type: ActionType.SET_LOADING,
-            payload: { loadingFlag: false },
-          });
-          navigate('/join/' + res.humanId);
-        },
-        err => {
-          console.log('err', err);
-          dispatch({
-            type: ActionType.SET_LOADING,
-            payload: { loadingFlag: false },
-          });
-        }
-      );
+      await retro
+        .createTemplate(
+          { name: retroName },
+          retroTimeframe,
+          '',
+          userName,
+          selectedAvatar,
+          userType
+        )
+        .then(
+          res => {
+            dispatch({ type: ActionType.CREATE_RETRO, payload: {} });
+            dispatch({
+              type: ActionType.SET_LOADING,
+              payload: { loadingFlag: false },
+            });
+            navigate('/join/' + res.humanId);
+          },
+          err => {
+            console.log('err', err);
+            dispatch({
+              type: ActionType.SET_LOADING,
+              payload: { loadingFlag: false },
+            });
+          }
+        );
     }
     sessionStorage.setItem('retroname', retroName);
   };
@@ -185,7 +211,7 @@ export function CreateRetroWithTemplatePage() {
                 retroNameWarning={retroNameWarning}
                 timeframeRef={timeframeRef}
                 isTimeFrameSet={isTimeFrameSet}
-                handleRetronameChange={handleRetronameChange}
+                handleRetroNameChange={handleRetroNameChange}
                 handleTimeFrame={handleTimeFrame}
                 onClickNext={onClickNext}
               />
@@ -195,6 +221,8 @@ export function CreateRetroWithTemplatePage() {
                 allPanels={allPanels}
                 onClickNext={onClickNext}
                 onClickBack={onClickBack}
+                selectedTemplate={selectedTemplate}
+                handleTemplate={handleTemplate}
               />
               {/* Pulse Check Panel */}
               <PulseCheck
