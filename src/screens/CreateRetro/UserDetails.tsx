@@ -34,7 +34,6 @@ const styles = {
 type Props = {
   expandedPanel: string;
   allPanels: string[];
-  onClickChange: (currentPanel: string) => void;
   create: () => void;
   userName: string;
   userNameError: string;
@@ -49,7 +48,6 @@ type Props = {
 export function UserDetails({
   expandedPanel,
   allPanels,
-  onClickChange,
   userName,
   userNameError,
   userNameWarning,
@@ -72,18 +70,9 @@ export function UserDetails({
   return (
     <Accordion
       expanded={expandedPanel === 'userDetailPanel'}
-      sx={{ boxShadow: 'none' }}
     >
       <AccordionSummary>
         <Typography className="accordionSummary">User Details</Typography>
-        {allPanels.includes('userDetailPanel') && (
-          <Typography
-            className="changeText"
-            onClick={() => onClickChange('userDetailPanel')}
-          >
-            Change
-          </Typography>
-        )}
       </AccordionSummary>
       <AccordionDetails>
         <FormControl fullWidth>

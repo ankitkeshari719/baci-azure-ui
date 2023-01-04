@@ -117,15 +117,6 @@ export function CreateRetroWithTemplatePage() {
     }
   };
 
-  // Function to handle next button on click
-  const onClickChange = (currentPanel: string) => {
-    setExpandedPanel(currentPanel);
-    let index = allPanels.indexOf(currentPanel);
-    if (index !== -1) {
-      allPanels.splice(index, 1);
-    }
-  };
-
   // Function to create a New Retro
   const create = async () => {
     sessionStorage.setItem('retroname', retroName);
@@ -185,7 +176,6 @@ export function CreateRetroWithTemplatePage() {
                 retroNameWarning={retroNameWarning}
                 timeframeRef={timeframeRef}
                 isTimeFrameSet={isTimeFrameSet}
-                onClickChange={onClickChange}
                 handleRetronameChange={handleRetronameChange}
                 handleTimeFrame={handleTimeFrame}
                 onClickNext={onClickNext}
@@ -194,7 +184,6 @@ export function CreateRetroWithTemplatePage() {
               <RetroTemplate
                 expandedPanel={expandedPanel}
                 allPanels={allPanels}
-                onClickChange={onClickChange}
                 onClickNext={onClickNext}
                 onClickBack={onClickBack}
               />
@@ -202,7 +191,6 @@ export function CreateRetroWithTemplatePage() {
               <PulseCheck
                 expandedPanel={expandedPanel}
                 allPanels={allPanels}
-                onClickChange={onClickChange}
                 onClickNext={onClickNext}
                 onClickBack={onClickBack}
               />
@@ -210,7 +198,6 @@ export function CreateRetroWithTemplatePage() {
               <UserDetails
                 expandedPanel={expandedPanel}
                 allPanels={allPanels}
-                onClickChange={onClickChange}
                 onClickBack={onClickBack}
                 create={create}
                 handleUsername={handleUsername}

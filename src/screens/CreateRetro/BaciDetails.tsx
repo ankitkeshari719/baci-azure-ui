@@ -49,7 +49,6 @@ type Props = {
   retroNameWarning: string;
   timeframeRef: any;
   isTimeFrameSet: boolean;
-  onClickChange: (currentPanel: string) => void;
   handleRetronameChange: (e: React.SetStateAction<string>) => void;
   handleTimeFrame: (e: React.SetStateAction<string>) => void;
   onClickNext: (currentPanel: string, nextPanel: string) => void;
@@ -64,7 +63,6 @@ export function BaciDetails({
   retroNameWarning,
   timeframeRef,
   isTimeFrameSet,
-  onClickChange,
   handleRetronameChange,
   handleTimeFrame,
   onClickNext,
@@ -74,7 +72,6 @@ export function BaciDetails({
       {/* BACI Details Panel */}
       <Accordion
         expanded={expandedPanel === 'detailsPanel'}
-        sx={{ boxShadow: 'none' }}
       >
         <AccordionSummary>
           {allPanels.includes('detailsPanel') &&
@@ -89,16 +86,6 @@ export function BaciDetails({
           ) : (
             <Typography className="accordionSummary">BACI Details</Typography>
           )}
-          {allPanels.includes('detailsPanel') &&
-            retroName != '' &&
-            retroTimeframe != '' && (
-              <Typography
-                className="changeText"
-                onClick={() => onClickChange('detailsPanel')}
-              >
-                Change
-              </Typography>
-            )}
         </AccordionSummary>
         <AccordionDetails>
           <FormControl fullWidth>

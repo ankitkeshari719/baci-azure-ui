@@ -35,7 +35,6 @@ const styles = {
 type Props = {
   expandedPanel: string;
   allPanels: string[];
-  onClickChange: (currentPanel: string) => void;
   onClickNext: (currentPanel: string, nextPanel: string) => void;
   onClickBack: (previousPanel: string) => void;
 };
@@ -43,7 +42,6 @@ type Props = {
 export function PulseCheck({
   expandedPanel,
   allPanels,
-  onClickChange,
   onClickNext,
   onClickBack,
 }: Props) {
@@ -52,20 +50,11 @@ export function PulseCheck({
       {/* Template Panel */}
       <Accordion
         expanded={expandedPanel === 'pulseCheckPanel'}
-        sx={{ boxShadow: 'none' }}
       >
         <AccordionSummary>
           <Typography className="accordionSummary">
             Pulse Check Layout
           </Typography>
-          {allPanels.includes('pulseCheckPanel') && (
-            <Typography
-              className="changeText"
-              onClick={() => onClickChange('pulseCheckPanel')}
-            >
-              Change
-            </Typography>
-          )}
         </AccordionSummary>
         <AccordionDetails>
           <>
