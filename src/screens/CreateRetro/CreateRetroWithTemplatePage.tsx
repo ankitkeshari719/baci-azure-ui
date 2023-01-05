@@ -220,8 +220,8 @@ export function CreateRetroWithTemplatePage() {
   return (
     <Box sx={{ flexGrow: 1 }}>
       <TopBar />
-      <Box component="main" className="retroContainer">
-        <Grid container spacing={0}>
+      <Box component="main" className="mainContainer">
+        <Grid container spacing={0} className="retroContainer">
           <Grid item xs={12}>
             <Box
               component="div"
@@ -232,7 +232,7 @@ export function CreateRetroWithTemplatePage() {
             </Box>
           </Grid>
           <Grid item xs={12}>
-            <Box sx={{ marginTop: '16px' }}>
+            <Box>
               {/* BACI Details Panel */}
               <BaciDetails
                 expandedPanel={expandedPanel}
