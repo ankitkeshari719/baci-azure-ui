@@ -14,6 +14,7 @@ import {
   BoardActionType,
   BOARD_STATE_MACHINE_VERSION,
 } from '../statemachine/BoardStateMachine';
+import { pulseCheckInterface } from '../screens/CreateRetro/const';
 
 export const useRetro = () => {
   const [state, dispatch] = React.useContext(GlobalContext);
@@ -37,7 +38,7 @@ export const useRetro = () => {
           window.location.port ? ':' + window.location.port : ''
         }/join/${humanId}`,
       } as Retro;
-      // console.log(state.user, 'state', state);
+
       const id = await createRetro(currentRetro, state.user);
       const retrievedRetro = await getRetro(id);
 
@@ -62,19 +63,20 @@ export const useRetro = () => {
         sourceActionTimestamp: 0,
         version: BOARD_STATE_MACHINE_VERSION,
       };
-      // console.log("action",action)
 
       await addRetroAction(id, action);
 
       return retrievedRetro;
     },
+
     createTemplate: async (
       retro: Partial<Omit<Retro, 'id'>>,
       retroTimeframe: string,
       retroGoal: string,
       userName: string,
       selectedAvatar: string,
-      userType: number
+      userType: number,
+      selectedPulseCheck: pulseCheckInterface | null
     ): Promise<Retro> => {
       const humanId = (
         '' +
@@ -89,8 +91,6 @@ export const useRetro = () => {
           window.location.port ? ':' + window.location.port : ''
         }/join/${humanId}`,
       } as Retro;
-
-      console.log('currentRetro:: ', currentRetro);
 
       const id = await createRetro(currentRetro, state.user);
       const retrievedRetro = await getRetro(id);
@@ -116,6 +116,7 @@ export const useRetro = () => {
           preferredNickname: userName,
           avatar: selectedAvatar,
           userType: userType,
+          pulseCheck: selectedPulseCheck
         },
         userId: state.user.id,
         timestamp: 0,

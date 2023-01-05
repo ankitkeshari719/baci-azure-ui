@@ -10,6 +10,8 @@ export interface pulseCheckInterface {
   name: string;
   description: string;
   image: string;
+  value: Array<string>;
+  valueDescription: Array<string>;
 }
 
 export const RETRONAME_CHARACTER_LIMIT = 80;
@@ -43,8 +45,7 @@ export const templatesData = [
     templateId: 'simple',
     templateName: 'Simple',
     templateDescription: 'A classic template for retros.',
-    templateImage:
-      'https://media.istockphoto.com/id/1406155599/photo/we-want-your-feedback.webp?s=612x612&w=is&k=20&c=SJY9YoM9glSQj7b0vyyCESaq17t9bs1R6Ah5P5Javk0=',
+    templateImage: '/images/defaultRetroTemplate.png',
     columns: [
       {
         id: '0',
@@ -116,8 +117,7 @@ export const templatesData = [
     templateName: '4L Retrospective',
     templateDescription:
       'For the team to share how they feel in a structured manner and capture key learnings and ideas to progress.',
-    templateImage:
-      'https://media.istockphoto.com/id/1406155599/photo/we-want-your-feedback.webp?s=612x612&w=is&k=20&c=SJY9YoM9glSQj7b0vyyCESaq17t9bs1R6Ah5P5Javk0=',
+    templateImage: '/images/comingSoon.png',
     columns: [
       {
         id: '0',
@@ -189,8 +189,7 @@ export const templatesData = [
     templateName: 'Sailboat',
     templateDescription:
       'A fun way to think differently and reflect on the bigger picture.',
-    templateImage:
-      'https://media.istockphoto.com/id/1406155599/photo/we-want-your-feedback.webp?s=612x612&w=is&k=20&c=SJY9YoM9glSQj7b0vyyCESaq17t9bs1R6Ah5P5Javk0=',
+    templateImage: '/images/comingSoon.png',
     columns: [
       {
         id: '0',
@@ -262,8 +261,7 @@ export const templatesData = [
     templateName: 'Start, Stop , Continue',
     templateDescription:
       'The traffic light retro gives everyone in the team an opportunity to talk and quickly identify bottlenecks.',
-    templateImage:
-      'https://media.istockphoto.com/id/1406155599/photo/we-want-your-feedback.webp?s=612x612&w=is&k=20&c=SJY9YoM9glSQj7b0vyyCESaq17t9bs1R6Ah5P5Javk0=',
+    templateImage: '/images/comingSoon.png',
     columns: [
       {
         id: '0',
@@ -335,26 +333,53 @@ export const templatesData = [
 export const pulseChecksData: pulseCheckInterface[] = [
   {
     id: 1,
+    value: [],
+    valueDescription: [],
     name: 'Pulse Check Not Required',
     description:
       'An oldie but a goodie, also known as the PPT Framework created in the 60s, it has long been the benchmark to understanding workforce management.',
-    image:
-      'https://media.istockphoto.com/id/1406155599/photo/we-want-your-feedback.webp?s=612x612&w=is&k=20&c=SJY9YoM9glSQj7b0vyyCESaq17t9bs1R6Ah5P5Javk0=',
+    image: '/images/comingSoon.png',
   },
   {
     id: 2,
+    value: [
+      '1. People & Resources ',
+      '2. Work Processes ',
+      '3. Technical Tools ',
+    ],
+    valueDescription: [
+      'Your team maintains clear roles & decision making, adequate funding, efficient team structure, adequate skills & capabilities, great career opportunities, and active knowledge share',
+      'Your team maintains clear goal setting, frequent planning and prioritisation, regular feedback loops, quick test and learn, and consistent cadence & transparency of work',
+      'Your team has the necessary tools to collaborate and work efficiently, and a modular architecture that minimise dependency and maximise delivery',
+    ],
     name: 'Simple (3 Questions)',
     description:
       'An oldie but a goodie, also known as the PPT Framework created in the 60s, it has long been the benchmark to understanding workforce management.',
-    image:
-      'https://media.istockphoto.com/id/1406155599/photo/we-want-your-feedback.webp?s=612x612&w=is&k=20&c=SJY9YoM9glSQj7b0vyyCESaq17t9bs1R6Ah5P5Javk0=',
+    image: '/images/comingSoon.png',
   },
   {
     id: 3,
+    value: [
+      '1. Individual and Team Goals',
+      '2. People and Resources',
+      '3. Team Structure and Capabilities',
+      '4. Decision Making (Individual and Team)',
+      '5. Openness to Feedback & Test and Learn',
+      '6. Work Prioritisation',
+      '7. Work Technology and Tools',
+    ],
+    valueDescription: [
+      'You have a clear understanding of your personal & team short-term goals, and they are all aligned to our ultimate mission',
+      'Your team have adequate number of people & funding to deliver on your goals',
+      'You have a simple team structure that allows you to work autonomously & with the right set of capabilities and skills to deliver',
+      'Your team have people with clear roles empowered to make decisions & you are supported with the right career opportunities',
+      'You are free to give each other feedback, open to test & learn, and not afraid to make a mistake or fail',
+      'Your team has a regular cadence to plan & prioritise work, and to change quickly if the workload is not sustainable',
+      'You have the necessary technological tools and modular architecture to foster minimum dependencies and maximum collaboration & delivery',
+    ],
     name: 'Business Agility  (7 Questions)',
     description:
       'An oldie but a goodie, also known as the PPT Framework created in the 60s, it has long been the benchmark to understanding workforce management.',
-    image:
-      'https://media.istockphoto.com/id/1406155599/photo/we-want-your-feedback.webp?s=612x612&w=is&k=20&c=SJY9YoM9glSQj7b0vyyCESaq17t9bs1R6Ah5P5Javk0=',
+    image: '/images/comingSoon.png',
   },
 ];

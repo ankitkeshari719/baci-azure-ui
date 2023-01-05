@@ -79,9 +79,11 @@ export function CreateRetroWithTemplatePage() {
 
   // Function to handle Time Frame on change
   function handlePulseCheck(e: pulseCheckInterface | null) {
+    console.log('Data :: ', e);
     setSelectedPulseCheck(e);
   }
   function handleTemplate(e: any) {
+    console.log('Data :: ', e);
     setSelectedTemplate(e);
   }
 
@@ -162,11 +164,20 @@ export function CreateRetroWithTemplatePage() {
           '',
           userName,
           selectedAvatar,
-          userType
+          userType,
+          selectedPulseCheck
         )
         .then(
           res => {
             dispatch({ type: ActionType.CREATE_RETRO, payload: {} });
+            dispatch({
+              type: ActionType.SET_PREFERRED_NICKNAME,
+              payload: {
+                preferredNickname: userName,
+                avatar: selectedAvatar,
+                userType,
+              },
+            });
             dispatch({
               type: ActionType.SET_LOADING,
               payload: { loadingFlag: false },
