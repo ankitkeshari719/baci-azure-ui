@@ -77,16 +77,27 @@ export function PulseCheck({
                     onClick={() => handlePulseCheck(pulseCheck)}
                   >
                     <CardContent>
-                      <Box
-                        component="img"
-                        sx={{
-                          width: '348px',
-                          height: '180px',
-                          objectFit: 'cover',
-                        }}
-                        alt="Logo"
-                        src={pulseCheck.image}
-                      />
+                      {!pulseCheck.checked ? (
+                        <Box
+                          component="img"
+                          sx={{
+                            width: '348px',
+                            height: '180px',
+                          }}
+                          alt="Logo"
+                          src={pulseCheck.templateImageNotChecked}
+                        />
+                      ) : (
+                        <Box
+                          component="img"
+                          sx={{
+                            width: '348px',
+                            height: '180px',
+                          }}
+                          alt="Logo"
+                          src={pulseCheck.templateImageChecked}
+                        />
+                      )}
                       <Typography
                         className="templateName"
                         component="div"

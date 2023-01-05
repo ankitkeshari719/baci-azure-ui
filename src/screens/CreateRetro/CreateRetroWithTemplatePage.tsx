@@ -12,7 +12,7 @@ import { RetroTemplate } from './RetroTemplate';
 import { PulseCheck } from './PulseCheck';
 import { UserDetails } from './UserDetails';
 import { TopBar } from './TopBar';
-import { pulseCheckInterface } from './const';
+import { pulseCheckInterface, pulseChecksData, templatesData } from './const';
 import { UserTypeArray } from '../../constants';
 
 export function CreateRetroWithTemplatePage() {
@@ -38,7 +38,10 @@ export function CreateRetroWithTemplatePage() {
   const [expandedPanel, setExpandedPanel] =
     React.useState<string>('detailsPanel');
   const [allPanels, setAllPanels] = React.useState<string[]>([]);
+  const [templates, setTemplates] = React.useState(templatesData);
   const [selectedTemplate, setSelectedTemplate] = React.useState(null);
+  const [pulseChecks, setPulseChecks] =
+    React.useState<Array<pulseCheckInterface> | null>(pulseChecksData);
   const [selectedPulseCheck, setSelectedPulseCheck] =
     React.useState<pulseCheckInterface | null>(null);
 
@@ -77,14 +80,32 @@ export function CreateRetroWithTemplatePage() {
     setisTimeFrameSet(false);
   }
 
-  // Function to handle Time Frame on change
-  function handlePulseCheck(e: pulseCheckInterface | null) {
-    console.log('Data :: ', e);
-    setSelectedPulseCheck(e);
-  }
+  // Function to template selection
   function handleTemplate(e: any) {
-    console.log('Data :: ', e);
+    let data: any = templates?.map(template => {
+      if (e && template.templateId === e.templateId) {
+        template.checked = true;
+      } else {
+        template.checked = false;
+      }
+      return template;
+    });
+    setTemplates(data);
     setSelectedTemplate(e);
+  }
+
+  // Function to handle pulse check selection
+  function handlePulseCheck(e: pulseCheckInterface | null) {
+    let data: any = pulseChecks?.map(pulseCheck => {
+      if (e && pulseCheck.id === e.id) {
+        pulseCheck.checked = true;
+      } else {
+        pulseCheck.checked = false;
+      }
+      return pulseCheck;
+    });
+    setPulseChecks(data);
+    setSelectedPulseCheck(e);
   }
 
   // Function to handle User Name on change

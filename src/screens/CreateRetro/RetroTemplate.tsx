@@ -45,7 +45,8 @@ export function RetroTemplate({
   allPanels,
   onClickNext,
   onClickBack,
-  handleTemplate
+  handleTemplate,
+  selectedTemplate,
 }: Props) {
   const [openLearnMoreDialog, setOpenLearnMoreDialog] = React.useState(false);
 
@@ -74,18 +75,32 @@ export function RetroTemplate({
             <Carousel responsive={responsive}>
               {templatesData.map(template => {
                 return (
-                  <Card sx={styles.card} onClick={() => handleTemplate(template)}>
+                  <Card
+                    sx={styles.card}
+                    onClick={() => handleTemplate(template)}
+                  >
                     <CardContent>
-                      <Box
-                        component="img"
-                        sx={{
-                          width: '348px',
-                          height: '180px',
-                          objectFit: 'cover',
-                        }}
-                        alt="Logo"
-                        src={template.templateImage}
-                      />
+                      {!template.checked ? (
+                        <Box
+                          component="img"
+                          sx={{
+                            width: '348px',
+                            height: '180px',
+                          }}
+                          alt="Logo"
+                          src={template.templateImageNotChecked}
+                        />
+                      ) : (
+                        <Box
+                          component="img"
+                          sx={{
+                            width: '348px',
+                            height: '180px',
+                          }}
+                          alt="Logo"
+                          src={template.templateImageChecked}
+                        />
+                      )}
                       <Typography
                         className="templateName"
                         component="div"
