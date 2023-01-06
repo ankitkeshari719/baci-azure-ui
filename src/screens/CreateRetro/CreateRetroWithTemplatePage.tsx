@@ -1,5 +1,12 @@
 import * as React from 'react';
-import { Box, Grid } from '@mui/material';
+import {
+  Box,
+  Button,
+  FormHelperText,
+  Grid,
+  TextField,
+  Typography,
+} from '@mui/material';
 import '../../global.scss';
 import './styles.scss';
 import { useNavigate, useParams } from 'react-router-dom';
@@ -14,6 +21,8 @@ import { UserDetails } from './UserDetails';
 import { TopBar } from './TopBar';
 import { pulseCheckInterface, pulseChecksData, templatesData } from './const';
 import { UserTypeArray } from '../../constants';
+import { CreateNewRetro } from '../CreateRetroPage';
+import { LandingLayout } from '../LandingLayout';
 
 export function CreateRetroWithTemplatePage() {
   const { id } = useParams();
@@ -44,6 +53,8 @@ export function CreateRetroWithTemplatePage() {
     React.useState<Array<pulseCheckInterface> | null>(pulseChecksData);
   const [selectedPulseCheck, setSelectedPulseCheck] =
     React.useState<pulseCheckInterface | null>(null);
+
+  const [activePanel, setActivePanel] = React.useState('detailsPanel');
 
   React.useEffect(() => {
     dispatch({
@@ -130,6 +141,7 @@ export function CreateRetroWithTemplatePage() {
 
   // Function to handle next button on click
   const onClickNext = (currentPanel: string, nextPanel: string) => {
+    setActivePanel(nextPanel);
     if (currentPanel === 'detailsPanel' && retroName === '') {
       setRetroNameError('Please enter retro name');
       return;
@@ -146,6 +158,7 @@ export function CreateRetroWithTemplatePage() {
 
   // Function to handle next button on click
   const onClickBack = (previousPanel: string) => {
+    setActivePanel(previousPanel);
     setExpandedPanel(previousPanel);
     let index = allPanels.indexOf(previousPanel);
     if (index !== -1) {
@@ -218,71 +231,66 @@ export function CreateRetroWithTemplatePage() {
   };
 
   return (
-    <Box sx={{ flexGrow: 1 }}>
-      <TopBar />
-      <Box component="main" className="mainContainer">
-        <Grid container spacing={0} className="retroContainer">
-          <Grid item xs={12}>
-            <Box
-              component="div"
-              whiteSpace="normal"
-              className="createRetroText"
-            >
-              Create new BACI retro
-            </Box>
-          </Grid>
-          <Grid item xs={12}>
-            <Box>
-              {/* BACI Details Panel */}
-              <BaciDetails
-                expandedPanel={expandedPanel}
-                allPanels={allPanels}
-                retroName={retroName}
-                retroTimeframe={retroTimeframe}
-                retroNameError={retroNameError}
-                retroNameWarning={retroNameWarning}
-                timeframeRef={timeframeRef}
-                isTimeFrameSet={isTimeFrameSet}
-                handleRetroNameChange={handleRetroNameChange}
-                handleTimeFrame={handleTimeFrame}
-                onClickNext={onClickNext}
-              />
-              {/* Template Panel */}
-              <RetroTemplate
-                expandedPanel={expandedPanel}
-                allPanels={allPanels}
-                onClickNext={onClickNext}
-                onClickBack={onClickBack}
-                selectedTemplate={selectedTemplate}
-                handleTemplate={handleTemplate}
-              />
-              {/* Pulse Check Panel */}
-              <PulseCheck
-                expandedPanel={expandedPanel}
-                allPanels={allPanels}
-                onClickNext={onClickNext}
-                onClickBack={onClickBack}
-                selectedPulseCheck={selectedPulseCheck}
-                handlePulseCheck={handlePulseCheck}
-              />
-              {/* User Details Panel */}
-              <UserDetails
-                expandedPanel={expandedPanel}
-                allPanels={allPanels}
-                onClickBack={onClickBack}
-                create={create}
-                handleUsername={handleUsername}
-                userName={userName}
-                userNameError={userNameError}
-                userNameWarning={userNameWarning}
-                selectedAvatar={selectedAvatar}
-                avatarSelectionError={avatarSelectionError}
-                onClickAvatar={onClickAvatar}
-              />
-            </Box>
-          </Grid>
-        </Grid>
-      </Box>
-    </Box>
+    <Grid
+      container
+      spacing={0}
+      direction="column"
+      alignItems="start"
+      justifyContent="center"
+      className="retroContainer"
+    >
+      <Grid item xs={12}>
+        <Box component="div" whiteSpace="normal" className="createRetroText">
+          Create new BACI retro
+        </Box>
+      </Grid>
+      <Grid item xs={12} style={{ minWidth: '100%' }} sx={{ mt: 5 }}>
+        <BaciDetails
+          activePanel={activePanel}
+          expandedPanel={expandedPanel}
+          allPanels={allPanels}
+          retroName={retroName}
+          retroTimeframe={retroTimeframe}
+          retroNameError={retroNameError}
+          retroNameWarning={retroNameWarning}
+          timeframeRef={timeframeRef}
+          isTimeFrameSet={isTimeFrameSet}
+          handleRetroNameChange={handleRetroNameChange}
+          handleTimeFrame={handleTimeFrame}
+          onClickNext={onClickNext}
+        />
+        <RetroTemplate
+          activePanel={activePanel}
+          expandedPanel={expandedPanel}
+          allPanels={allPanels}
+          onClickNext={onClickNext}
+          onClickBack={onClickBack}
+          selectedTemplate={selectedTemplate}
+          handleTemplate={handleTemplate}
+        />
+        {/*
+        <PulseCheck
+          expandedPanel={expandedPanel}
+          allPanels={allPanels}
+          onClickNext={onClickNext}
+          onClickBack={onClickBack}
+          selectedPulseCheck={selectedPulseCheck}
+          handlePulseCheck={handlePulseCheck}
+        />
+        <UserDetails
+          expandedPanel={expandedPanel}
+          allPanels={allPanels}
+          onClickBack={onClickBack}
+          create={create}
+          handleUsername={handleUsername}
+          userName={userName}
+          userNameError={userNameError}
+          userNameWarning={userNameWarning}
+          selectedAvatar={selectedAvatar}
+          avatarSelectionError={avatarSelectionError}
+          onClickAvatar={onClickAvatar}
+        /> */}
+      </Grid>
+    </Grid>
   );
 }

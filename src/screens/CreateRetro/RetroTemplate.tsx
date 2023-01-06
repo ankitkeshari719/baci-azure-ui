@@ -32,6 +32,7 @@ const styles = {
 };
 
 type Props = {
+  activePanel: string;
   expandedPanel: string;
   allPanels: string[];
   onClickNext: (currentPanel: string, nextPanel: string) => void;
@@ -41,6 +42,7 @@ type Props = {
 };
 
 export function RetroTemplate({
+  activePanel,
   expandedPanel,
   allPanels,
   onClickNext,
@@ -49,6 +51,11 @@ export function RetroTemplate({
   selectedTemplate,
 }: Props) {
   const [openLearnMoreDialog, setOpenLearnMoreDialog] = React.useState(false);
+  const [height, setHeight] = React.useState(0);
+
+  React.useEffect(() => {
+    setHeight(window.innerHeight);
+  }, []);
 
   const handleClickOpen = () => {
     setOpenLearnMoreDialog(true);
@@ -61,42 +68,63 @@ export function RetroTemplate({
   return (
     <>
       {/* Template Panel */}
-      <Accordion
-        expanded={expandedPanel === 'templatePanel'}
-        sx={{
-          borderRadius: '0px',
-        }}
-      >
-        <AccordionSummary>
-          <Typography className="accordionSummary">Retro Template</Typography>
-        </AccordionSummary>
-        <AccordionDetails>
-          <>
-            <Carousel responsive={responsive}>
+      <Box sx={{ borderBottom: 1, borderColor: '#CCCCCC', py: 4 }}>
+        <Box
+          sx={{
+            display: 'flex',
+            flexDirection: 'row',
+            alignItems: 'center',
+            cursor: 'pointer',
+          }}
+        >
+          {activePanel != 'templatePanel' && selectedTemplate != null ? (
+            <>
+              <Box
+                className="accordionSummary"
+                sx={{
+                  color:
+                    activePanel != 'templatePanel' &&
+                    selectedTemplate?.templateName != ''
+                      ? '#4E4E4E'
+                      : '#2c69a1',
+                }}
+              >
+                {selectedTemplate?.templateName}
+              </Box>
+              <Box className="timeframeSummary">Customized</Box>
+            </>
+          ) : (
+            <Typography className="accordionSummary">Retro Template</Typography>
+          )}
+        </Box>
+        {activePanel === 'templatePanel' && (
+          <Box sx={{ mt: 4 }}>
+            <>
               {templatesData.map(template => {
                 return (
                   <Card
-                    sx={styles.card}
+                    sx={{
+                      maxWidth: '420px',
+                      height: height / 2 - 100 + 'px',
+                      background: '#ffffff',
+                      borderRadius: '2px',
+                      margin: '8px',
+                      '&:hover': {
+                        backgroundColor: 'rgba(206, 239, 255, 0.4)',
+                      },
+                    }}
                     onClick={() => handleTemplate(template)}
                   >
                     <CardContent>
                       {!template.checked ? (
                         <Box
                           component="img"
-                          sx={{
-                            width: '348px',
-                            height: '180px',
-                          }}
                           alt="Logo"
                           src={template.templateImageNotChecked}
                         />
                       ) : (
                         <Box
                           component="img"
-                          sx={{
-                            width: '348px',
-                            height: '180px',
-                          }}
                           alt="Logo"
                           src={template.templateImageChecked}
                         />
@@ -104,59 +132,58 @@ export function RetroTemplate({
                       <Typography
                         className="templateName"
                         component="div"
-                        sx={{ mt: 1 }}
+                        sx={{ mt: 2 }}
                       >
                         {template.templateName}
                       </Typography>
                       <Typography
                         className="templateDescription"
                         component="div"
-                        sx={{ mt: 1 }}
+                        sx={{ mt: 2 }}
                       >
                         {template.templateDescription}
                       </Typography>
-                      <Grid
-                        container
+                      <Box
                         sx={{
-                          width: '88%',
-                          position: 'absolute',
-                          bottom: '16px',
+                          display: 'flex',
+                          flex: '1 0 auto',
+                          alignItems: 'flex-end',
+                          justifyContent: 'space-between',
+                          mt: 5,
                         }}
                       >
-                        <Grid item sm={6}>
-                          <Box display="flex" justifyContent="flex-start">
-                            <Button
-                              size="small"
-                              onClick={handleClickOpen}
-                              sx={{ padding: '0px' }}
-                            >
-                              <Typography className="textLink">
-                                Learn More
-                              </Typography>
-                            </Button>
-                          </Box>
-                        </Grid>
-                        <Grid item sm={6}>
-                          <Box display="flex" justifyContent="flex-end">
-                            <Button
-                              variant="outlined"
-                              size="small"
-                              className="customButton"
-                            >
-                              <Typography className="customText">
-                                Customize
-                              </Typography>
-                            </Button>
-                          </Box>
-                        </Grid>
-                      </Grid>
+                        <Button
+                          size="small"
+                          onClick={handleClickOpen}
+                          sx={{ padding: '0px' }}
+                        >
+                          <Typography className="textLink">
+                            Learn More
+                          </Typography>
+                        </Button>
+                        <Button
+                          variant="outlined"
+                          size="small"
+                          className="customButton"
+                        >
+                          <Typography className="customText">
+                            Customize
+                          </Typography>
+                        </Button>
+                      </Box>
                     </CardContent>
                   </Card>
                 );
               })}
-            </Carousel>
-            <Grid container spacing={0}>
-              <Grid item sm={1}>
+              <Box
+                sx={{
+                  width: '10%',
+                  display: 'flex',
+                  flex: '1 0 auto',
+                  alignItems: 'flex-end',
+                  justifyContent: 'space-between',
+                }}
+              >
                 <Button
                   variant="contained"
                   className="nextButton"
@@ -166,8 +193,6 @@ export function RetroTemplate({
                 >
                   Next
                 </Button>
-              </Grid>
-              <Grid item sm={1}>
                 <Button
                   variant="outlined"
                   className="backButton"
@@ -175,11 +200,11 @@ export function RetroTemplate({
                 >
                   Back
                 </Button>
-              </Grid>
-            </Grid>
-          </>
-        </AccordionDetails>
-      </Accordion>
+              </Box>
+            </>
+          </Box>
+        )}
+      </Box>
       <Dialog fullScreen open={openLearnMoreDialog} onClose={handleClose}>
         <LearnMore handleClose={handleClose} />
       </Dialog>

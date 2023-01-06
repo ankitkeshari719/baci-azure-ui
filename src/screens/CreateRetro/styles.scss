@@ -1,42 +1,38 @@
+// App Bar
 .logoContainer {
   width: 100% !important;
+  height: 64px;
+  display: flex !important;
+  justify-content: center !important;
   background: #ffffff !important;
   box-shadow: 0px 0px 2px rgba(0, 0, 0, 0.25) !important;
 }
-.mainContainer {
-  display: flex !important;
-  align-items: center !important;
-  justify-content: center !important;
-  height: 484px !important;
-  padding: 24px !important;
-  overflow-y: auto !important;
-}
+
+// Retro Main Container
 .retroContainer {
-  height: 100% !important;
-  display: flex !important;
-  align-items: center !important;
-  justify-content: center !important;
+  min-height: 100vh;
+  min-width: 100%;
+  padding: 56px;
+  overflow-y: auto;
 }
 .createRetroText {
-  height: 38px !important;
-  left: 1040px !important;
   font-family: 'Poppins' !important;
   font-style: normal !important;
   font-weight: 500 !important;
-  font-size: 28px !important;
-  line-height: 36px !important;
+  font-size: 36px !important;
+  line-height: 48px !important;
   letter-spacing: 0.5px !important;
   color: #2c69a1 !important;
 }
 // BACI Details CSS
 .accordionSummary {
-  font-family: 'Poppins' !important;
-  font-style: normal !important;
-  font-weight: 500 !important;
-  font-size: 16px !important;
-  line-height: 24px !important;
-  letter-spacing: 0.5px !important;
-  color: #4e4e4e !important;
+  font-family: 'Poppins';
+  font-style: normal;
+  font-weight: 500;
+  font-size: 24px;
+  line-height: 32px;
+  letter-spacing: 0.5px;
+  color: #2c69a1;
 }
 .timeframeSummary {
   font-family: 'Poppins' !important;

@@ -41,6 +41,7 @@ const styles = {
 };
 
 type Props = {
+  activePanel: string;
   expandedPanel: string;
   allPanels: string[];
   retroName: string;
@@ -55,6 +56,7 @@ type Props = {
 };
 
 export function BaciDetails({
+  activePanel,
   expandedPanel,
   allPanels,
   retroName,
@@ -69,92 +71,117 @@ export function BaciDetails({
 }: Props) {
   return (
     <>
-      {/* BACI Details Panel */}
-      <Accordion
-        expanded={expandedPanel === 'detailsPanel'}
-        sx={{
-          borderRadius: '0px',
-        }}
-      >
-        <AccordionSummary>
-          {allPanels.includes('detailsPanel') &&
+      {/* Template Panel */}
+      <Box sx={{ borderBottom: 1, borderColor: '#CCCCCC' }}>
+        <Box
+          sx={{
+            display: 'flex',
+            flexDirection: 'row',
+            alignItems: 'center',
+            cursor: 'pointer',
+            py: activePanel != 'detailsPanel' ? 4 : 0,
+          }}
+        >
+          {activePanel != 'detailsPanel' &&
           retroName != '' &&
           retroTimeframe != '' ? (
             <>
-              <Typography className="accordionSummary">{retroName}</Typography>
-              <Typography className="timeframeSummary">
+              <Box
+                className="accordionSummary"
+                sx={{
+                  color:
+                    activePanel != 'detailsPanel' && retroName != ''
+                      ? '#4E4E4E'
+                      : '#2c69a1',
+                }}
+              >
+                {retroName}
+              </Box>
+              <Box
+                className="timeframeSummary"
+                sx={{
+                  color:
+                    activePanel != 'detailsPanel' && retroTimeframe != ''
+                      ? '#4E4E4E'
+                      : '#2c69a1',
+                }}
+              >
                 {retroTimeframe}
-              </Typography>
+              </Box>
             </>
           ) : (
             <Typography className="accordionSummary">BACI Details</Typography>
           )}
-        </AccordionSummary>
-        <AccordionDetails>
-          <FormControl fullWidth>
-            <Grid container spacing={2}>
-              <Grid item xs={12} md={4}>
-                <Box>
-                  <TextField
-                    autoFocus
-                    variant="standard"
-                    label="Retro Name"
-                    inputProps={{
-                      maxLength: RETRONAME_CHARACTER_LIMIT,
-                    }}
-                    value={retroName}
-                    error={!!retroNameError}
-                    helperText={retroNameError}
-                    sx={styles.retroNameTextField}
-                    onChange={e => handleRetroNameChange(e.currentTarget.value)}
-                    multiline
-                    onKeyDown={e => {
-                      if (e.keyCode === 13) {
-                        e.preventDefault();
-                        timeframeRef.current?.focus();
-                      }
-                    }}
-                  />
-                  {retroNameWarning !== ' ' && (
-                    <FormHelperText sx={{ color: 'orange' }}>
-                      {retroNameWarning}
-                    </FormHelperText>
-                  )}
-                </Box>
-              </Grid>
-              <Grid item xs={12} md={4}>
-                <Box>
-                  <TextField
-                    inputRef={timeframeRef}
-                    variant="standard"
-                    label="Period to retrospect on"
-                    sx={styles.timeFramefield}
-                    value={retroTimeframe}
-                    select
-                    onChange={e => handleTimeFrame(e?.target?.value)}
-                  >
-                    <MenuItem disableRipple value={'1 day'}>
-                      1 day
-                    </MenuItem>
-                    <MenuItem value={'1 week'}>1 week</MenuItem>
-                    <MenuItem value={'2 weeks'}>2 weeks</MenuItem>
-                    <MenuItem value={'3 weeks'}>3 weeks</MenuItem>
-                    <MenuItem value={'4 weeks'}>4 weeks</MenuItem>
-                    <MenuItem value={'N/A'}>N/A</MenuItem>
-                  </TextField>
-                  {isTimeFrameSet && (
-                    <FormHelperText
-                      style={{ color: '#d32f2f', marginLeft: '5px' }}
-                    >
-                      Please enter time frame
-                    </FormHelperText>
-                  )}
-                </Box>
-              </Grid>
-            </Grid>
-          </FormControl>
-          <Grid container spacing={0}>
-            <Grid item sm={1}>
+        </Box>
+        {activePanel === 'detailsPanel' && (
+          <Box>
+            <Box sx={{ mt: 4 }}>
+              <FormControl fullWidth>
+                <Grid container spacing={2}>
+                  <Grid item xs={12} md={4}>
+                    <Box>
+                      <TextField
+                        autoFocus
+                        variant="standard"
+                        label="Retro Name"
+                        inputProps={{
+                          maxLength: RETRONAME_CHARACTER_LIMIT,
+                        }}
+                        value={retroName}
+                        error={!!retroNameError}
+                        helperText={retroNameError}
+                        sx={styles.retroNameTextField}
+                        onChange={e =>
+                          handleRetroNameChange(e.currentTarget.value)
+                        }
+                        multiline
+                        onKeyDown={e => {
+                          if (e.keyCode === 13) {
+                            e.preventDefault();
+                            timeframeRef.current?.focus();
+                          }
+                        }}
+                      />
+                      {retroNameWarning !== ' ' && (
+                        <FormHelperText sx={{ color: 'orange' }}>
+                          {retroNameWarning}
+                        </FormHelperText>
+                      )}
+                    </Box>
+                  </Grid>
+                  <Grid item xs={12} md={4}>
+                    <Box>
+                      <TextField
+                        inputRef={timeframeRef}
+                        variant="standard"
+                        label="Period to retrospect on"
+                        sx={styles.timeFramefield}
+                        value={retroTimeframe}
+                        select
+                        onChange={e => handleTimeFrame(e?.target?.value)}
+                      >
+                        <MenuItem disableRipple value={'1 day'}>
+                          1 day
+                        </MenuItem>
+                        <MenuItem value={'1 week'}>1 week</MenuItem>
+                        <MenuItem value={'2 weeks'}>2 weeks</MenuItem>
+                        <MenuItem value={'3 weeks'}>3 weeks</MenuItem>
+                        <MenuItem value={'4 weeks'}>4 weeks</MenuItem>
+                        <MenuItem value={'N/A'}>N/A</MenuItem>
+                      </TextField>
+                      {isTimeFrameSet && (
+                        <FormHelperText
+                          style={{ color: '#d32f2f', marginLeft: '5px' }}
+                        >
+                          Please enter time frame
+                        </FormHelperText>
+                      )}
+                    </Box>
+                  </Grid>
+                </Grid>
+              </FormControl>
+            </Box>
+            <Box sx={{ my: 4 }}>
               <Button
                 variant="contained"
                 className="nextButton"
@@ -162,10 +189,10 @@ export function BaciDetails({
               >
                 Next
               </Button>
-            </Grid>
-          </Grid>
-        </AccordionDetails>
-      </Accordion>
+            </Box>
+          </Box>
+        )}
+      </Box>
     </>
   );
 }

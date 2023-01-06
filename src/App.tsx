@@ -15,7 +15,7 @@ import { Onboarding } from './screens/Onboarding';
 import { ParticipantWaitingPage } from './screens/ParticipantWaitingPage';
 import { CreateNewRetro } from './screens/CreateRetroPage';
 import { AvatarNamePage } from './screens/AvatarNamePage';
-import { CreateRetroWithTemplatePage } from './screens/CreateRetro/CreateRetroWithTemplatePage';
+import { CreateRetroMain } from './screens/CreateRetro/CreateRetroMain';
 import PulseCheck from './screens/PulseCheck';
 import ReportScreen from './screens/ReportScreen';
 import { SnackMessage } from './elements/SnackMessage';
@@ -77,7 +77,7 @@ export default function App({ instance }: AppProps) {
                         />
                         <Route
                           path="/createretrowithtemplate"
-                          element={<CreateRetroWithTemplatePage></CreateRetroWithTemplatePage>}
+                          element={<CreateRetroMain></CreateRetroMain>}
                         />
                         <Route
                           path="/join/:id"

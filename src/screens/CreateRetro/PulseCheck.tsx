@@ -69,76 +69,74 @@ export function PulseCheck({
         </AccordionSummary>
         <AccordionDetails>
           <>
-            <Carousel responsive={responsive}>
-              {pulseChecksData.map(pulseCheck => {
-                return (
-                  <Card
-                    sx={styles.card}
-                    onClick={() => handlePulseCheck(pulseCheck)}
-                  >
-                    <CardContent>
-                      {!pulseCheck.checked ? (
-                        <Box
-                          component="img"
-                          sx={{
-                            width: '348px',
-                            height: '180px',
-                          }}
-                          alt="Logo"
-                          src={pulseCheck.templateImageNotChecked}
-                        />
-                      ) : (
-                        <Box
-                          component="img"
-                          sx={{
-                            width: '348px',
-                            height: '180px',
-                          }}
-                          alt="Logo"
-                          src={pulseCheck.templateImageChecked}
-                        />
-                      )}
-                      <Typography
-                        className="templateName"
-                        component="div"
-                        sx={{ mt: 1 }}
-                      >
-                        {pulseCheck.name}
-                      </Typography>
-                      <Typography
-                        className="templateDescription"
-                        component="div"
-                        sx={{ mt: 1 }}
-                      >
-                        {pulseCheck.description}
-                      </Typography>
-                      <Grid
-                        container
+            {pulseChecksData.map(pulseCheck => {
+              return (
+                <Card
+                  sx={styles.card}
+                  onClick={() => handlePulseCheck(pulseCheck)}
+                >
+                  <CardContent>
+                    {!pulseCheck.checked ? (
+                      <Box
+                        component="img"
                         sx={{
-                          width: '88%',
-                          position: 'absolute',
-                          bottom: '16px',
+                          width: '348px',
+                          height: '180px',
                         }}
-                      >
-                        <Grid item sm={12}>
-                          <Box display="flex" justifyContent="flex-start">
-                            <Button
-                              size="small"
-                              // onClick={handleClickOpen}
-                              sx={{ padding: '0px' }}
-                            >
-                              <Typography className="textLink">
-                                Learn More
-                              </Typography>
-                            </Button>
-                          </Box>
-                        </Grid>
+                        alt="Logo"
+                        src={pulseCheck.templateImageNotChecked}
+                      />
+                    ) : (
+                      <Box
+                        component="img"
+                        sx={{
+                          width: '348px',
+                          height: '180px',
+                        }}
+                        alt="Logo"
+                        src={pulseCheck.templateImageChecked}
+                      />
+                    )}
+                    <Typography
+                      className="templateName"
+                      component="div"
+                      sx={{ mt: 1 }}
+                    >
+                      {pulseCheck.name}
+                    </Typography>
+                    <Typography
+                      className="templateDescription"
+                      component="div"
+                      sx={{ mt: 1 }}
+                    >
+                      {pulseCheck.description}
+                    </Typography>
+                    <Grid
+                      container
+                      sx={{
+                        width: '88%',
+                        position: 'absolute',
+                        bottom: '16px',
+                      }}
+                    >
+                      <Grid item sm={12}>
+                        <Box display="flex" justifyContent="flex-start">
+                          <Button
+                            size="small"
+                            // onClick={handleClickOpen}
+                            sx={{ padding: '0px' }}
+                          >
+                            <Typography className="textLink">
+                              Learn More
+                            </Typography>
+                          </Button>
+                        </Box>
                       </Grid>
-                    </CardContent>
-                  </Card>
-                );
-              })}
-            </Carousel>
+                    </Grid>
+                  </CardContent>
+                </Card>
+              );
+            })}
             <Grid container spacing={0}>
               <Grid item sm={1}>
                 <Button
