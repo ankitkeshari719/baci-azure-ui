@@ -154,7 +154,7 @@ export function RetroTemplate({
                       >
                         <Button
                           size="small"
-                          onClick={handleClickOpen}
+                          // onClick={handleClickOpen}
                           sx={{ padding: '0px' }}
                         >
                           <Typography className="textLink">
