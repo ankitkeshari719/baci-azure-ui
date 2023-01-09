@@ -66,7 +66,18 @@ export function UserDetails({
   return (
     <>
       {/* User Details Panel */}
-      <Box sx={{ borderBottom: 1, borderColor: '#CCCCCC', py: 4 }}>
+      <Box
+        sx={{
+          borderBottom: 1,
+          borderColor: '#CCCCCC',
+          py:
+            activePanel != 'userDetailPanel' &&
+            userName != '' &&
+            selectedAvatar != ''
+              ? 2.5
+              : 4,
+        }}
+      >
         <Box
           sx={{
             display: 'flex',
@@ -74,8 +85,20 @@ export function UserDetails({
             alignItems: 'center',
           }}
         >
-          {activePanel != 'userDetailPanel' && userName != '' ? (
+          {activePanel != 'userDetailPanel' &&
+          userName != '' &&
+          selectedAvatar != '' ? (
             <>
+              <Box>
+                <Avatar
+                  avatar={selectedAvatar}
+                  css={{
+                    width: '50px',
+                    height: '50px',
+                    borderRadius: '50%',
+                  }}
+                />
+              </Box>
               <Box
                 className="tabSummary"
                 sx={{
@@ -203,9 +226,7 @@ export function UserDetails({
             >
               <ContainedButton
                 name="Finish"
-                onClick={() =>
-                  onClickNext('userDetailPanel', '')
-                }
+                onClick={() => onClickNext('userDetailPanel', '')}
                 style={{
                   mt: 5,
                   minWidth: '75px !important',
