@@ -13,7 +13,6 @@
   background: #ffffff !important;
   box-shadow: 0px 0px 2px rgba(0, 0, 0, 0.25) !important;
 }
-
 // Retro Main Container
 .retroContainer {
   height: 90vh;
@@ -21,8 +20,8 @@
   display: flex !important;
   justify-content: center !important;
   align-items: start !important;
-  flex-direction: column  !important;
-  overflow-y: auto  !important;
+  flex-direction: column !important;
+  overflow-y: auto !important;
 }
 .createRetroText {
   font-family: 'Poppins' !important;
@@ -31,17 +30,17 @@
   font-size: 36px !important;
   line-height: 48px !important;
   letter-spacing: 0.5px !important;
-  color: #159ADD;
+  color: #159add;
 }
 // BACI Details CSS
 .tabSummary {
-  font-family: 'Poppins';
-  font-style: normal;
-  font-weight: 500;
-  font-size: 24px;
-  line-height: 32px;
-  letter-spacing: 0.5px;
-  color: #2c69a1;
+  font-family: 'Poppins' !important;
+  font-style: normal !important;
+  font-weight: 500 !important;
+  font-size: 24px !important;
+  line-height: 32px !important;
+  letter-spacing: 0.5px !important;
+  color: #2c69a1 !important;
 }
 .timeFrameSummary {
   font-family: 'Poppins' !important;
@@ -53,49 +52,7 @@
   color: #000000 !important;
   display: flex !important;
   align-items: center !important;
-}
-.changeText {
-  font-family: 'Poppins' !important;
-  font-style: normal !important;
-  font-weight: 400 !important;
-  font-size: 12px !important;
-  line-height: 16px !important;
-  letter-spacing: 0.4px !important;
-  color: #159add !important;
-  position: absolute !important;
-  right: 0 !important;
-  padding-right: 60px !important;
-  text-decoration-line: underline !important;
-}
-.nextButton {
-  min-width: 75px !important;
-  height: 36px !important;
-  display: flex !important;
-  flex-direction: row !important;
-  justify-content: center !important;
-  align-items: center !important;
-  padding: 6px 6px !important;
-  gap: 8px !important;
-  margin-top: 40px !important;
-  background: #159add !important;
-  box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.25) !important;
-  border-radius: 24px !important;
-  text-transform: uppercase !important;
-}
-.backButton {
-  min-width: 75px !important;
-  height: 36px !important;
-  display: flex !important;
-  flex-direction: row !important;
-  justify-content: center !important;
-  align-items: center !important;
-  padding: 6px 16px !important;
-  gap: 8px !important;
-  margin-top: 40px !important;
-  background: #ffffff !important;
-  box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.25) !important;
-  border-radius: 24px !important;
-  text-transform: uppercase !important;
+  color: rgba(0, 0, 0, 0.87) !important;
 }
 
 // Retro Template CSS

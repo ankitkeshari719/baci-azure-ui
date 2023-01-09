@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { Box, Grid } from '@mui/material';
+import { Box } from '@mui/material';
 import '../../global.scss';
 import './styles.scss';
 import { useNavigate, useParams } from 'react-router-dom';
@@ -142,6 +142,7 @@ export function CreateRetroWithTemplatePage() {
     setUserName(e);
   };
 
+  // Function to handle Avatar change
   const onClickAvatar = (avatarName: string) => {
     setAvatar(avatarName);
     setAvatarSelectionError('');
@@ -290,29 +291,26 @@ export function CreateRetroWithTemplatePage() {
           onClickAvatar={onClickAvatar}
         />
       </Box>
-      <Box
-        sx={{
-          mt: 2,
-          minWidth: '100%',
-          alignItems: 'start',
-          justifyContent: 'center',
-        }}
-      >
-        <ContainedButton
-          name="Start Retro"
-          onClick={create}
-          style={{
-            mt: 5,
-            minWidth: '140px !important',
-            height: '36px !important',
-            backgroundColor: isStartRetro
-              ? '#159add !important'
-              : '#cccccc !important',
-            color: isStartRetro ? '#ffffff !important' : '#666666 !important',
+      {isStartRetro && (
+        <Box
+          sx={{
+            mt: 2,
+            minWidth: '100%',
+            alignItems: 'start',
+            justifyContent: 'center',
           }}
-          disabled={!isStartRetro}
-        />
-      </Box>
+        >
+          <ContainedButton
+            name="Start Retro"
+            onClick={create}
+            style={{
+              mt: 5,
+              minWidth: '140px !important',
+              height: '36px !important',
+            }}
+          />
+        </Box>
+      )}
     </Box>
   );
 }

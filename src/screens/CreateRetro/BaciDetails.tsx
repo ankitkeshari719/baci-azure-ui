@@ -18,19 +18,21 @@ const styles = {
     minWidth: '300px',
     '& .MuiFormLabel-root': {
       color: 'rgba(0, 0, 0, 0.6) !important',
-      fontSize: '14px',
+      fontSize: '16px',
     },
     '& .MuiFormLabel-root-MuiInputLabel-root.Mui-focused': {
       color: 'rgba(0, 0, 0, 0.6) !important',
+      fontSize: '16px',
     },
   },
   timeFramefield: {
     minWidth: '300px',
     '& label': {
       color: 'rgba(0, 0, 0, 0.6) !important',
-      fontSize: '14px',
+      fontSize: '16px',
       '&.Mui-focused': {
         color: 'rgba(0, 0, 0, 0.6) !important',
+        fontSize: '16px',
       },
     },
   },
@@ -80,7 +82,7 @@ export function BaciDetails({
               <Box
                 className="tabSummary"
                 sx={{
-                  color: '#4E4E4E',
+                  color: '#4E4E4E !important',
                 }}
               >
                 {retroName}
@@ -88,7 +90,6 @@ export function BaciDetails({
               <Box
                 className="timeFrameSummary"
                 sx={{
-                  color: '#4E4E4E',
                   ml: 5,
                 }}
               >
@@ -96,7 +97,14 @@ export function BaciDetails({
               </Box>
             </>
           ) : (
-            <Typography className="tabSummary">BACI Details</Typography>
+            <Typography
+              className="tabSummary"
+              sx={{
+                color: '#2c69a1 !important',
+              }}
+            >
+              BACI Details
+            </Typography>
           )}
         </Box>
         {activePanel === 'detailsPanel' && (
