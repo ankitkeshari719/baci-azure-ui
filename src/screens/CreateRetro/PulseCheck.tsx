@@ -149,7 +149,7 @@ export function PulseCheck({
                 );
               })}
               {pulseCheckError !== ' ' && (
-                <FormHelperText sx={{ color: 'orange', mt: 2 }}>
+                <FormHelperText sx={{ color: '#d32f2f', mt: 2 }}>
                   {pulseCheckError}
                 </FormHelperText>
               )}

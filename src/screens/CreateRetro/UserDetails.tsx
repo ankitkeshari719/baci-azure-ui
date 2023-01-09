@@ -27,6 +27,13 @@ const styles = {
       color: 'rgba(0, 0, 0, 0.6) !important',
       fontSize: '14px',
     },
+    '& .MuiFormLabel-root-MuiInputLabel-root.Mui-focused': {
+      color: 'rgba(0, 0, 0, 0.6) !important',
+      fontSize: '14px',
+    },
+    '& .css-ov41s0-MuiInputBase-root-MuiInput-root': {
+      borderBottom: '1px solid rgba(0, 0, 0, 0.42) !important',
+    },
   },
 };
 
@@ -110,8 +117,8 @@ export function UserDetails({
                 <Avatar
                   avatar={selectedAvatar}
                   css={{
-                    width: '50px',
-                    height: '50px',
+                    width: '60px',
+                    height: '60px',
                     borderRadius: '50%',
                   }}
                 />
@@ -131,7 +138,9 @@ export function UserDetails({
               className="tabSummary"
               sx={{
                 color:
-                  activePanel === 'userDetailPanel' ? '#2c69a1 !important' : '#4E4E4E !important',
+                  activePanel === 'userDetailPanel'
+                    ? '#2c69a1 !important'
+                    : '#4E4E4E !important',
               }}
             >
               User Details
@@ -174,8 +183,8 @@ export function UserDetails({
                             <Avatar
                               avatar={selectedAvatar}
                               css={{
-                                width: '50px',
-                                height: '50px',
+                                width: '60px',
+                                height: '60px',
                                 borderRadius: '50%',
                               }}
                             />
@@ -191,7 +200,7 @@ export function UserDetails({
                             ></LazyLoadImage>
                           )}
                           <Button onClick={() => setOpenAvatarDialog(true)}>
-                            <span className="primaryButtonText">
+                            <span className="selectAvatarButtonText">
                               Select Avatar
                             </span>
                           </Button>
@@ -305,12 +314,18 @@ export function UserDetails({
                 className="avatarSvgXs"
                 onClickAvatar={onSelectAvatar}
                 selectedAvatar={selectedAvatar}
+                css={{
+                  width: '60px',
+                  height: '60px',
+                  borderRadius: '50%',
+                  margin: '16px',
+                }}
               ></Avatar>
             ))}
           </Box>
           <Box sx={{ mx: 3, mt: 2 }}>
             {avatarError !== '' && (
-              <FormHelperText sx={{ color: 'orange', mt: 2 }}>
+              <FormHelperText sx={{ color: '#d32f2f', mt: 2 }}>
                 {avatarError}
               </FormHelperText>
             )}

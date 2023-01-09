@@ -201,7 +201,7 @@ export function RetroTemplate({
                 );
               })}
               {templateError !== '' && (
-                <FormHelperText sx={{ color: 'orange', mt: 2 }}>
+                <FormHelperText sx={{ color: '#d32f2f', mt: 2 }}>
                   {templateError}
                 </FormHelperText>
               )}

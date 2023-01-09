@@ -18,22 +18,29 @@ const styles = {
     minWidth: '300px',
     '& .MuiFormLabel-root': {
       color: 'rgba(0, 0, 0, 0.6) !important',
-      fontSize: '16px',
+      fontSize: '14px',
     },
     '& .MuiFormLabel-root-MuiInputLabel-root.Mui-focused': {
       color: 'rgba(0, 0, 0, 0.6) !important',
-      fontSize: '16px',
+      fontSize: '14px',
     },
+    '& .css-ov41s0-MuiInputBase-root-MuiInput-root': {
+      borderBottom: '1px solid rgba(0, 0, 0, 0.42) !important',
+    },
+   
   },
   timeFramefield: {
     minWidth: '300px',
     '& label': {
       color: 'rgba(0, 0, 0, 0.6) !important',
-      fontSize: '16px',
+      fontSize: '14px',
       '&.Mui-focused': {
         color: 'rgba(0, 0, 0, 0.6) !important',
-        fontSize: '16px',
+        fontSize: '14px',
       },
+    },
+    '& .css-1sop3d1-MuiInputBase-root-MuiInput-root': {
+      borderBottom: '1px solid rgba(0, 0, 0, 0.42) !important',
     },
   },
 };
@@ -137,7 +144,7 @@ export function BaciDetails({
                         }}
                       />
                       {retroNameWarning !== ' ' && (
-                        <FormHelperText sx={{ color: 'orange' }}>
+                        <FormHelperText sx={{ color: '#d32f2f' }}>
                           {retroNameWarning}
                         </FormHelperText>
                       )}
