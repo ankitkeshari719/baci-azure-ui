@@ -76,7 +76,8 @@ export const useRetro = () => {
       userName: string,
       selectedAvatar: string,
       userType: number,
-      selectedPulseCheck: pulseCheckInterface | null
+      selectedPulseCheck: pulseCheckInterface | null,
+      selectedTemplate: any,
     ): Promise<Retro> => {
       const humanId = (
         '' +
@@ -116,7 +117,8 @@ export const useRetro = () => {
           preferredNickname: userName,
           avatar: selectedAvatar,
           userType: userType,
-          pulseCheck: selectedPulseCheck
+          pulseCheck: selectedPulseCheck,
+          template: selectedTemplate,
         },
         userId: state.user.id,
         timestamp: 0,

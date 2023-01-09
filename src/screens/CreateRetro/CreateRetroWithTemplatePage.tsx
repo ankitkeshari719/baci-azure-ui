@@ -202,7 +202,8 @@ export function CreateRetroWithTemplatePage() {
           userName,
           selectedAvatar,
           userType,
-          selectedPulseCheck
+          selectedPulseCheck,
+          selectedTemplate
         )
         .then(
           res => {
