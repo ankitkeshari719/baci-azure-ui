@@ -119,7 +119,7 @@ export function UserDetails({
               <Box
                 className="tabSummary"
                 sx={{
-                  color: '#4E4E4E',
+                  color: '#4E4E4E !important',
                   ml: 5,
                 }}
               >
@@ -131,7 +131,7 @@ export function UserDetails({
               className="tabSummary"
               sx={{
                 color:
-                  activePanel === 'userDetailPanel' ? '#2c69a1' : '#4E4E4E',
+                  activePanel === 'userDetailPanel' ? '#2c69a1 !important' : '#4E4E4E !important',
               }}
             >
               User Details

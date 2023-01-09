@@ -95,7 +95,7 @@ export function RetroTemplate({
               <Box
                 className="tabSummary"
                 sx={{
-                  color: '#4E4E4E',
+                  color: '#4E4E4E !important',
                 }}
               >
                 {selectedTemplate?.templateName}
@@ -103,7 +103,7 @@ export function RetroTemplate({
               <Box
                 className="timeFrameSummary"
                 sx={{
-                  color: '#4E4E4E',
+                  color: '#4E4E4E !important',
                   ml: 5,
                 }}
               >
@@ -114,7 +114,7 @@ export function RetroTemplate({
             <Typography
               className="tabSummary"
               sx={{
-                color: activePanel === 'templatePanel' ? '#2c69a1' : '#4E4E4E',
+                color: activePanel === 'templatePanel' ? '#2c69a1 !important' : '#4E4E4E !important',
               }}
             >
               Retro Template

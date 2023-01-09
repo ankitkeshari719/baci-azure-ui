@@ -64,7 +64,7 @@ export function PulseCheck({
               <Box
                 className="tabSummary"
                 sx={{
-                  color: '#4E4E4E',
+                  color: '#4E4E4E !important',
                 }}
               >
                 {selectedPulseCheck?.name}
@@ -75,7 +75,7 @@ export function PulseCheck({
               className="tabSummary"
               sx={{
                 color:
-                  activePanel === 'pulseCheckPanel' ? '#2c69a1' : '#4E4E4E',
+                  activePanel === 'pulseCheckPanel' ? '#2c69a1 !important' : '#4E4E4E !important',
               }}
             >
               Pulse Check Layout
