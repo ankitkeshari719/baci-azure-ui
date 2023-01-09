@@ -103,6 +103,7 @@ export function UserDetails({
                 className="tabSummary"
                 sx={{
                   color: '#4E4E4E',
+                  ml: 5
                 }}
               >
                 {userName}
