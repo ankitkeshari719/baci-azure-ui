@@ -9,8 +9,6 @@ import {
 } from '@mui/material';
 import '../../global.scss';
 import './styles.scss';
-import Carousel from 'react-multi-carousel';
-import 'react-multi-carousel/lib/styles.css';
 import { pulseChecksData, pulseCheckInterface } from './const';
 import { ContainedButton, OutlinedButton } from '../../components';
 

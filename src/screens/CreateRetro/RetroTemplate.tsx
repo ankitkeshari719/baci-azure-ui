@@ -10,8 +10,6 @@ import {
 } from '@mui/material';
 import '../../global.scss';
 import './styles.scss';
-import Carousel from 'react-multi-carousel';
-import 'react-multi-carousel/lib/styles.css';
 import { templatesData } from './const';
 import { LearnMore } from './LearnMore';
 import { ContainedButton } from '../../components/ContainedButton';
