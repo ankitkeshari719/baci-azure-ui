@@ -46,7 +46,7 @@
   },
   "scripts": {
     "start": "react-scripts start",
-    "build": " CI=false && GENERATE_SOURCEMAP=false react-scripts build", 
+    "build": "GENERATE_SOURCEMAP=false react-scripts build", 
     "test": "react-scripts test",
     "eject": "react-scripts eject",
     "emulator:auth": "firebase emulators:start --only auth",
