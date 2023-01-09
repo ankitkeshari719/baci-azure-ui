@@ -1,21 +1,17 @@
 import * as React from 'react';
 import {
-  Accordion,
-  AccordionSummary,
-  Typography,
-  AccordionDetails,
   FormControl,
-  Grid,
   TextField,
   FormHelperText,
   MenuItem,
-  Button,
   Box,
+  Typography,
+  Grid,
 } from '@mui/material';
 import '../../global.scss';
 import './styles.scss';
-import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
 import { RETRONAME_CHARACTER_LIMIT } from './const';
+import { ContainedButton } from '../../components/ContainedButton';
 
 const styles = {
   retroNameTextField: {
@@ -42,13 +38,11 @@ const styles = {
 
 type Props = {
   activePanel: string;
-  expandedPanel: string;
-  allPanels: string[];
   retroName: string;
-  retroTimeframe: string;
+  retroTimeFrame: string;
   retroNameError: string;
   retroNameWarning: string;
-  timeframeRef: any;
+  timeFrameRef: any;
   isTimeFrameSet: boolean;
   handleRetroNameChange: (e: React.SetStateAction<string>) => void;
   handleTimeFrame: (e: React.SetStateAction<string>) => void;
@@ -57,13 +51,11 @@ type Props = {
 
 export function BaciDetails({
   activePanel,
-  expandedPanel,
-  allPanels,
   retroName,
-  retroTimeframe,
+  retroTimeFrame,
   retroNameError,
   retroNameWarning,
-  timeframeRef,
+  timeFrameRef,
   isTimeFrameSet,
   handleRetroNameChange,
   handleTimeFrame,
@@ -71,46 +63,40 @@ export function BaciDetails({
 }: Props) {
   return (
     <>
-      {/* Template Panel */}
+      {/* BACI Details Panel */}
       <Box sx={{ borderBottom: 1, borderColor: '#CCCCCC' }}>
         <Box
           sx={{
             display: 'flex',
             flexDirection: 'row',
             alignItems: 'center',
-            cursor: 'pointer',
-            py: activePanel != 'detailsPanel' ? 4 : 0,
+            py: activePanel === 'detailsPanel' ? 0 : 4,
           }}
         >
           {activePanel != 'detailsPanel' &&
           retroName != '' &&
-          retroTimeframe != '' ? (
+          retroTimeFrame != '' ? (
             <>
               <Box
-                className="accordionSummary"
+                className="tabSummary"
                 sx={{
-                  color:
-                    activePanel != 'detailsPanel' && retroName != ''
-                      ? '#4E4E4E'
-                      : '#2c69a1',
+                  color: '#4E4E4E',
                 }}
               >
                 {retroName}
               </Box>
               <Box
-                className="timeframeSummary"
+                className="timeFrameSummary"
                 sx={{
-                  color:
-                    activePanel != 'detailsPanel' && retroTimeframe != ''
-                      ? '#4E4E4E'
-                      : '#2c69a1',
+                  color: '#4E4E4E',
+                  ml: 5,
                 }}
               >
-                {retroTimeframe}
+                {retroTimeFrame}
               </Box>
             </>
           ) : (
-            <Typography className="accordionSummary">BACI Details</Typography>
+            <Typography className="tabSummary">BACI Details</Typography>
           )}
         </Box>
         {activePanel === 'detailsPanel' && (
@@ -138,7 +124,7 @@ export function BaciDetails({
                         onKeyDown={e => {
                           if (e.keyCode === 13) {
                             e.preventDefault();
-                            timeframeRef.current?.focus();
+                            timeFrameRef.current?.focus();
                           }
                         }}
                       />
@@ -152,11 +138,11 @@ export function BaciDetails({
                   <Grid item xs={12} md={4}>
                     <Box>
                       <TextField
-                        inputRef={timeframeRef}
+                        inputRef={timeFrameRef}
                         variant="standard"
                         label="Period to retrospect on"
                         sx={styles.timeFramefield}
-                        value={retroTimeframe}
+                        value={retroTimeFrame}
                         select
                         onChange={e => handleTimeFrame(e?.target?.value)}
                       >
@@ -181,14 +167,16 @@ export function BaciDetails({
                 </Grid>
               </FormControl>
             </Box>
-            <Box sx={{ my: 4 }}>
-              <Button
-                variant="contained"
-                className="nextButton"
+            <Box sx={{ mt: 4, mb: 4 }}>
+              <ContainedButton
+                name="Next"
                 onClick={() => onClickNext('detailsPanel', 'templatePanel')}
-              >
-                Next
-              </Button>
+                style={{
+                  mt: 5,
+                  minWidth: '75px !important',
+                  height: '36px !important',
+                }}
+              />
             </Box>
           </Box>
         )}

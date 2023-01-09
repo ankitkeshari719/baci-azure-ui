@@ -16,8 +16,8 @@ export function TopBar() {
           <Box
             component="img"
             sx={{
-              width: isXsUp ? '56px' : '82px',
-              height: isXsUp ? '16px' : '28px',
+              width: isXsUp ? '60px' : '82px',
+              height: isXsUp ? '24px' : '28px',
             }}
             alt="Logo"
             src={BACILogo}

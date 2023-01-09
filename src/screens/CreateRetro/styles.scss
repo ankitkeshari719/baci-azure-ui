@@ -1,7 +1,13 @@
+// Main Container
+.mainContainer {
+  width: 100%;
+  height: 100vh;
+  padding: 0;
+  margin: 0;
+}
 // App Bar
 .logoContainer {
-  width: 100% !important;
-  height: 64px;
+  height: 4rem;
   display: flex !important;
   justify-content: center !important;
   background: #ffffff !important;
@@ -10,10 +16,13 @@
 
 // Retro Main Container
 .retroContainer {
-  min-height: 100vh;
-  min-width: 100%;
+  height: 90vh;
   padding: 56px;
-  overflow-y: auto;
+  display: flex !important;
+  justify-content: center !important;
+  align-items: start !important;
+  flex-direction: column  !important;
+  overflow-y: auto  !important;
 }
 .createRetroText {
   font-family: 'Poppins' !important;
@@ -22,10 +31,10 @@
   font-size: 36px !important;
   line-height: 48px !important;
   letter-spacing: 0.5px !important;
-  color: #2c69a1 !important;
+  color: #159ADD;
 }
 // BACI Details CSS
-.accordionSummary {
+.tabSummary {
   font-family: 'Poppins';
   font-style: normal;
   font-weight: 500;
@@ -34,17 +43,16 @@
   letter-spacing: 0.5px;
   color: #2c69a1;
 }
-.timeframeSummary {
+.timeFrameSummary {
   font-family: 'Poppins' !important;
   font-style: normal !important;
   font-weight: 400 !important;
-  font-size: 10px !important;
-  line-height: 16px !important;
+  font-size: 16px !important;
+  line-height: 20px !important;
   letter-spacing: 0.6px;
   color: #000000 !important;
   display: flex !important;
   align-items: center !important;
-  margin-left: 40px !important;
 }
 .changeText {
   font-family: 'Poppins' !important;

@@ -1,22 +1,21 @@
 import * as React from 'react';
 import {
-  Accordion,
-  AccordionSummary,
   Typography,
-  AccordionDetails,
   Button,
   Card,
   CardContent,
   Box,
-  Grid,
   Dialog,
+  FormHelperText,
 } from '@mui/material';
 import '../../global.scss';
 import './styles.scss';
 import Carousel from 'react-multi-carousel';
 import 'react-multi-carousel/lib/styles.css';
-import { responsive, templatesData } from './const';
+import { templatesData } from './const';
 import { LearnMore } from './LearnMore';
+import { ContainedButton } from '../../components/ContainedButton';
+import { OutlinedButton } from '../../components/OutlinedButton';
 
 const styles = {
   card: {
@@ -31,24 +30,41 @@ const styles = {
   },
 };
 
+const responsive = {
+  superLargeDesktop: {
+    breakpoint: { max: 4000, min: 3000 },
+    items: 5,
+  },
+  desktop: {
+    breakpoint: { max: 3000, min: 1024 },
+    items: 3,
+  },
+  tablet: {
+    breakpoint: { max: 1024, min: 464 },
+    items: 2,
+  },
+  mobile: {
+    breakpoint: { max: 464, min: 0 },
+    items: 1,
+  },
+};
+
 type Props = {
   activePanel: string;
-  expandedPanel: string;
-  allPanels: string[];
+  selectedTemplate: any;
+  templateError: string;
+  handleTemplate: (selectedPulseCheck: any) => void;
   onClickNext: (currentPanel: string, nextPanel: string) => void;
   onClickBack: (previousPanel: string) => void;
-  selectedTemplate: any;
-  handleTemplate: (selectedPulseCheck: any) => void;
 };
 
 export function RetroTemplate({
   activePanel,
-  expandedPanel,
-  allPanels,
+  templateError,
+  selectedTemplate,
+  handleTemplate,
   onClickNext,
   onClickBack,
-  handleTemplate,
-  selectedTemplate,
 }: Props) {
   const [openLearnMoreDialog, setOpenLearnMoreDialog] = React.useState(false);
   const [height, setHeight] = React.useState(0);
@@ -74,27 +90,37 @@ export function RetroTemplate({
             display: 'flex',
             flexDirection: 'row',
             alignItems: 'center',
-            cursor: 'pointer',
           }}
         >
           {activePanel != 'templatePanel' && selectedTemplate != null ? (
             <>
               <Box
-                className="accordionSummary"
+                className="tabSummary"
                 sx={{
-                  color:
-                    activePanel != 'templatePanel' &&
-                    selectedTemplate?.templateName != ''
-                      ? '#4E4E4E'
-                      : '#2c69a1',
+                  color: '#4E4E4E',
                 }}
               >
                 {selectedTemplate?.templateName}
               </Box>
-              <Box className="timeframeSummary">Customized</Box>
+              <Box
+                className="timeFrameSummary"
+                sx={{
+                  color: '#4E4E4E',
+                  ml: 5,
+                }}
+              >
+                Customized
+              </Box>
             </>
           ) : (
-            <Typography className="accordionSummary">Retro Template</Typography>
+            <Typography
+              className="tabSummary"
+              sx={{
+                color: activePanel === 'templatePanel' ? '#2c69a1' : '#4E4E4E',
+              }}
+            >
+              Retro Template
+            </Typography>
           )}
         </Box>
         {activePanel === 'templatePanel' && (
@@ -103,6 +129,7 @@ export function RetroTemplate({
               {templatesData.map(template => {
                 return (
                   <Card
+                    key={template.templateId}
                     sx={{
                       maxWidth: '420px',
                       height: height / 2 - 100 + 'px',
@@ -175,6 +202,11 @@ export function RetroTemplate({
                   </Card>
                 );
               })}
+              {templateError !== '' && (
+                <FormHelperText sx={{ color: 'orange', mt: 2 }}>
+                  {templateError}
+                </FormHelperText>
+              )}
               <Box
                 sx={{
                   width: '10%',
@@ -184,22 +216,26 @@ export function RetroTemplate({
                   justifyContent: 'space-between',
                 }}
               >
-                <Button
-                  variant="contained"
-                  className="nextButton"
+                <ContainedButton
+                  name="Next"
                   onClick={() =>
                     onClickNext('templatePanel', 'pulseCheckPanel')
                   }
-                >
-                  Next
-                </Button>
-                <Button
-                  variant="outlined"
-                  className="backButton"
+                  style={{
+                    mt: 5,
+                    minWidth: '75px !important',
+                    height: '36px !important',
+                  }}
+                />
+                <OutlinedButton
+                  name="Back"
                   onClick={() => onClickBack('detailsPanel')}
-                >
-                  Back
-                </Button>
+                  style={{
+                    minWidth: '75px !important',
+                    height: '36px !important',
+                    mt: 5,
+                  }}
+                />
               </Box>
             </>
           </Box>
