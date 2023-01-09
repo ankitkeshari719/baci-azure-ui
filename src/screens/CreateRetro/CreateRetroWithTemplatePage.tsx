@@ -13,6 +13,7 @@ import { PulseCheck } from './PulseCheck';
 import { UserDetails } from './UserDetails';
 import { pulseCheckInterface, pulseChecksData, templatesData } from './const';
 import { UserTypeArray } from '../../constants';
+import { ContainedButton } from '../../components';
 
 export function CreateRetroWithTemplatePage() {
   const { id } = useParams();
@@ -23,7 +24,8 @@ export function CreateRetroWithTemplatePage() {
   const [localRetroName, setLocalRetroName] = React.useState(
     sessionStorage.getItem('retroname') || ''
   );
-
+  const [activePanel, setActivePanel] = React.useState('detailsPanel');
+  const [isStartRetro, setIsStartRetro] = React.useState(false);
   {
     /* BACI Details Panel Constant */
   }
@@ -32,14 +34,7 @@ export function CreateRetroWithTemplatePage() {
   const [retroNameError, setRetroNameError] = React.useState('');
   const [retroNameWarning, setRetroWarning] = React.useState('');
   const [isTimeFrameSet, setIsTimeFrameSet] = React.useState(id ? true : false);
-  {
-    /* User Details Panel Constant */
-  }
-  const [userName, setUserName] = React.useState('');
-  const [userNameError, setUserNameError] = React.useState('');
-  const [userNameWarning, setUserNameWarning] = React.useState('');
-  const [selectedAvatar, setAvatar] = React.useState('');
-  const [avatarSelectionError, setAvatarSelectionError] = React.useState('');
+
   {
     /* Template Panel Constant */
   }
@@ -55,7 +50,14 @@ export function CreateRetroWithTemplatePage() {
     React.useState<pulseCheckInterface | null>(null);
   const [pulseCheckError, setPulseCheckError] = React.useState('');
 
-  const [activePanel, setActivePanel] = React.useState('detailsPanel');
+  {
+    /* User Details Panel Constant */
+  }
+  const [userName, setUserName] = React.useState('');
+  const [userNameError, setUserNameError] = React.useState('');
+  const [userNameWarning, setUserNameWarning] = React.useState('');
+  const [selectedAvatar, setAvatar] = React.useState('');
+  const [avatarSelectionError, setAvatarSelectionError] = React.useState('');
 
   React.useEffect(() => {
     dispatch({
@@ -155,12 +157,19 @@ export function CreateRetroWithTemplatePage() {
       return;
     }
     if (currentPanel === 'templatePanel' && selectedTemplate === null) {
-        setTemplateError('Please select the template.');
+      setTemplateError('Please select the template.');
       return;
     }
     if (currentPanel === 'pulseCheckPanel' && selectedPulseCheck === null) {
-        setPulseCheckError('Please select the pulse check.')
+      setPulseCheckError('Please select the pulse check.');
       return;
+    }
+    if (
+      currentPanel === 'userDetailPanel' &&
+      userName != '' &&
+      selectedAvatar != ''
+    ) {
+      setIsStartRetro(true);
     }
     setActivePanel(nextPanel);
   };
@@ -271,7 +280,7 @@ export function CreateRetroWithTemplatePage() {
         <UserDetails
           activePanel={activePanel}
           onClickBack={onClickBack}
-          create={create}
+          onClickNext={onClickNext}
           handleUsername={handleUsername}
           userName={userName}
           userNameError={userNameError}
@@ -279,6 +288,29 @@ export function CreateRetroWithTemplatePage() {
           selectedAvatar={selectedAvatar}
           avatarSelectionError={avatarSelectionError}
           onClickAvatar={onClickAvatar}
+        />
+      </Box>
+      <Box
+        sx={{
+          mt: 2,
+          minWidth: '100%',
+          alignItems: 'start',
+          justifyContent: 'center',
+        }}
+      >
+        <ContainedButton
+          name="Start Retro"
+          onClick={create}
+          style={{
+            mt: 5,
+            minWidth: '140px !important',
+            height: '36px !important',
+            backgroundColor: isStartRetro
+              ? '#159add !important'
+              : '#cccccc !important',
+            color: isStartRetro ? '#ffffff !important' : '#666666 !important',
+          }}
+          disabled={!isStartRetro}
         />
       </Box>
     </Box>

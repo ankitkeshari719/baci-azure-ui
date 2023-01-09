@@ -31,7 +31,6 @@ const styles = {
 
 type Props = {
   activePanel: string;
-  create: () => void;
   userName: string;
   userNameError: string;
   userNameWarning: string;
@@ -39,6 +38,7 @@ type Props = {
   selectedAvatar: string;
   avatarSelectionError: string;
   onClickAvatar: (avatarName: string) => void;
+  onClickNext: (currentPanel: string, nextPanel: string) => void;
   onClickBack: (previousPanel: string) => void;
 };
 
@@ -47,11 +47,11 @@ export function UserDetails({
   userName,
   userNameError,
   userNameWarning,
-  create,
   handleUsername,
   selectedAvatar,
   avatarSelectionError,
   onClickAvatar,
+  onClickNext,
   onClickBack,
 }: Props) {
   const [openAvatarDialog, setOpenAvatarDialog] = React.useState(false);
@@ -203,7 +203,9 @@ export function UserDetails({
             >
               <ContainedButton
                 name="Finish"
-                onClick={create}
+                onClick={() =>
+                  onClickNext('userDetailPanel', '')
+                }
                 style={{
                   mt: 5,
                   minWidth: '75px !important',
