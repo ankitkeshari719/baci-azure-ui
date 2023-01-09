@@ -22,6 +22,7 @@ import CloseIcon from '@mui/icons-material/Close';
 
 const styles = {
   avatarfield: {
+    width: '100%',
     '& .MuiFormLabel-root': {
       color: 'rgba(0, 0, 0, 0.6) !important',
       fontSize: '14px',
@@ -103,7 +104,7 @@ export function UserDetails({
                 className="tabSummary"
                 sx={{
                   color: '#4E4E4E',
-                  ml: 5
+                  ml: 5,
                 }}
               >
                 {userName}
@@ -126,7 +127,7 @@ export function UserDetails({
             <Box sx={{ mt: 4 }}>
               <FormControl fullWidth>
                 <Grid container spacing={2}>
-                  <Grid item xs={12} md={5}>
+                  <Grid item xs={12} md={4}>
                     <Box
                       sx={{
                         display: 'flex',
@@ -191,10 +192,10 @@ export function UserDetails({
                       </Box>
                     </Box>
                   </Grid>
-                  <Grid item xs={12} md={4}>
+                  <Grid item xs={12} md={2}>
                     <Box>
                       <TextField
-                        id="standard-helperText"
+                        id="choose retro name"
                         label="Choose your name for this retro"
                         variant="standard"
                         sx={styles.avatarfield}
