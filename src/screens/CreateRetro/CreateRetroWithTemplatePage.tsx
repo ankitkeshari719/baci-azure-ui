@@ -142,7 +142,7 @@ export function CreateRetroWithTemplatePage() {
     setUserName(e);
   };
 
-  const onClickAvatar = (avatarName: any) => {
+  const onClickAvatar = (avatarName: string) => {
     setAvatar(avatarName);
     setAvatarSelectionError('');
   };

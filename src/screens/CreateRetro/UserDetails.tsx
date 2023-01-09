@@ -58,11 +58,27 @@ export function UserDetails({
   const [openAvatarDialog, setOpenAvatarDialog] = React.useState(false);
   const [avatarList, setAvatarList] = React.useState<string[]>([]);
   const [height, setHeight] = React.useState(0);
+  const [tempAvatar, setTempAvatar] = React.useState('');
+  const [avatarError, setAvatarError] = React.useState('');
 
   React.useEffect(() => {
     setAvatarList(avatarName.sort(() => Math.random() - 0.5));
     setHeight(window.innerHeight);
   }, []);
+
+  const onSelectAvatar = (avatarName: string) => {
+    setAvatarError('');
+    setTempAvatar(avatarName);
+  };
+
+  const onClickSubmit = () => {
+    if (tempAvatar === '') {
+      setAvatarError('Please select an avatar.');
+      return;
+    }
+    onClickAvatar(tempAvatar);
+    setOpenAvatarDialog(false);
+  };
 
   return (
     <>
@@ -287,10 +303,17 @@ export function UserDetails({
                 key={index}
                 avatar={avatar}
                 className="avatarSvgXs"
-                onClickAvatar={onClickAvatar}
+                onClickAvatar={onSelectAvatar}
                 selectedAvatar={selectedAvatar}
               ></Avatar>
             ))}
+          </Box>
+          <Box sx={{ mx: 3, mt: 2 }}>
+            {avatarError !== '' && (
+              <FormHelperText sx={{ color: 'orange', mt: 2 }}>
+                {avatarError}
+              </FormHelperText>
+            )}
           </Box>
           <Box sx={{ mx: 3 }}>
             <Box
@@ -313,8 +336,7 @@ export function UserDetails({
               />
               <ContainedButton
                 name="Select"
-                onClick={() => setOpenAvatarDialog(false)}
-                // disabled={selectedAvatar === ''}
+                onClick={onClickSubmit}
                 style={{
                   minWidth: '75px !important',
                   height: '36px !important',
