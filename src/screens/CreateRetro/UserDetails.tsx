@@ -9,7 +9,6 @@ import {
   Grid,
   Dialog,
   DialogTitle,
-  IconButton,
 } from '@mui/material';
 import '../../global.scss';
 import './styles.scss';
@@ -18,7 +17,6 @@ import Avatar from '../../elements/Avatar';
 import { avatarName } from '../../constants/AvatarName';
 import { LazyLoadImage } from 'react-lazy-load-image-component';
 import { ContainedButton, OutlinedButton } from '../../components';
-import CloseIcon from '@mui/icons-material/Close';
 
 const styles = {
   avatarfield: {
@@ -116,7 +114,7 @@ export function UserDetails({
               <Box>
                 <Avatar
                   avatar={selectedAvatar}
-                  onClickAvatar={()=>{}}
+                  onClickAvatar={() => {}}
                   css={{
                     width: '60px',
                     height: '60px',
@@ -290,14 +288,12 @@ export function UserDetails({
               </Grid>
               <Grid item sm={6}>
                 <Box display="flex" justifyContent="flex-end">
-                  <IconButton
-                    edge="start"
-                    color="inherit"
+                  <img
+                    width="45px"
+                    height="45px"
                     onClick={() => setOpenAvatarDialog(false)}
-                    aria-label="close"
-                  >
-                    <CloseIcon />
-                  </IconButton>
+                    src="/svgs/CloseDialog.svg"
+                  />
                 </Box>
               </Grid>
             </Grid>

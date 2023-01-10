@@ -13,8 +13,8 @@ import { PulseCheck } from './PulseCheck';
 import { UserDetails } from './UserDetails';
 import { pulseCheckInterface, pulseChecksData, templatesData } from './const';
 import { UserTypeArray } from '../../constants';
-import { ContainedButton } from '../../components';
 import { getRetro } from '../../msal/services';
+import { StartRetroWithTemplate } from './StartRetroWithTemplate';
 
 type Props = {
   handleStartRetro: () => void;
@@ -157,8 +157,6 @@ export function CreateRetroWithTemplatePage({
     setAvatarSelectionError('');
   };
 
-
-
   // Function to handle next button on click
   const onClickBack = (previousPanel: string) => {
     setActivePanel(previousPanel);
@@ -172,9 +170,6 @@ export function CreateRetroWithTemplatePage({
       global?.user?.id == global.currentRetro?.creatorId
         ? UserTypeArray[1].id
         : UserTypeArray[0].id;
-
-    if (userName === '') setUserNameError('Please enter avatar name');
-    if (selectedAvatar === '') setAvatarSelectionError('Please select avatar');
 
     if (
       retroName !== '' &&
@@ -216,7 +211,6 @@ export function CreateRetroWithTemplatePage({
               type: ActionType.SET_LOADING,
               payload: { loadingFlag: false },
             });
-            handleStartRetro();
             getRetro(res.id as string)
               .then(retro => {
                 if (retro && retro.id) {
@@ -227,8 +221,10 @@ export function CreateRetroWithTemplatePage({
                 }
               })
               .catch(e => {
-                console.log("error", e)
+                console.log('error', e);
               });
+            setIsStartRetro(true);
+            handleStartRetro();
           },
           err => {
             console.log('err', err);
@@ -241,11 +237,6 @@ export function CreateRetroWithTemplatePage({
     }
     sessionStorage.setItem('retroname', retroName);
   };
-
-  // Start Retro 
-  const startRetro = () => {
-    console.log('Start retro!!');
-  }
 
   // Function to handle next button on click
   const onClickNext = (currentPanel: string, nextPanel: string) => {
@@ -264,15 +255,24 @@ export function CreateRetroWithTemplatePage({
       setPulseCheckError('Please select the pulse check.');
       return;
     }
+    if (currentPanel === 'userDetailPanel' && userName === '')
+      setUserNameError('Please enter avatar name');
+    if (currentPanel === 'userDetailPanel' && selectedAvatar === '') {
+      setAvatarSelectionError('Please select avatar');
+      return;
+    }
+    setActivePanel(nextPanel);
     if (
       currentPanel === 'userDetailPanel' &&
+      retroName != '' &&
+      retroTimeFrame != '' &&
+      selectedTemplate != null &&
+      selectedPulseCheck != null &&
       userName != '' &&
       selectedAvatar != ''
     ) {
-      setIsStartRetro(true);
       create();
     }
-    setActivePanel(nextPanel);
   };
 
   return (
@@ -338,15 +338,7 @@ export function CreateRetroWithTemplatePage({
             justifyContent: 'center',
           }}
         >
-          <ContainedButton
-            name="Start Retro"
-            onClick={startRetro}
-            style={{
-              mt: 5,
-              minWidth: '140px !important',
-              height: '36px !important',
-            }}
-          />
+          <StartRetroWithTemplate />
         </Box>
       )}
     </Box>
