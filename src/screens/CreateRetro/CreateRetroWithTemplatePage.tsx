@@ -156,32 +156,7 @@ export function CreateRetroWithTemplatePage({
     setAvatarSelectionError('');
   };
 
-  // Function to handle next button on click
-  const onClickNext = (currentPanel: string, nextPanel: string) => {
-    if (currentPanel === 'detailsPanel' && retroName === '') {
-      setRetroNameError('Please enter retro name.');
-    }
-    if (currentPanel === 'detailsPanel' && retroTimeFrame === '') {
-      setIsTimeFrameSet(true);
-      return;
-    }
-    if (currentPanel === 'templatePanel' && selectedTemplate === null) {
-      setTemplateError('Please select the template.');
-      return;
-    }
-    if (currentPanel === 'pulseCheckPanel' && selectedPulseCheck === null) {
-      setPulseCheckError('Please select the pulse check.');
-      return;
-    }
-    if (
-      currentPanel === 'userDetailPanel' &&
-      userName != '' &&
-      selectedAvatar != ''
-    ) {
-      setIsStartRetro(true);
-    }
-    setActivePanel(nextPanel);
-  };
+ 
 
   // Function to handle next button on click
   const onClickBack = (previousPanel: string) => {
@@ -214,7 +189,6 @@ export function CreateRetroWithTemplatePage({
       });
       setRetroNameError('');
       setIsTimeFrameSet(false);
-      handleStartRetro();
       await retro
         .createTemplate(
           { name: retroName },
@@ -241,6 +215,7 @@ export function CreateRetroWithTemplatePage({
               type: ActionType.SET_LOADING,
               payload: { loadingFlag: false },
             });
+            handleStartRetro();
           },
           err => {
             console.log('err', err);
@@ -252,6 +227,39 @@ export function CreateRetroWithTemplatePage({
         );
     }
     sessionStorage.setItem('retroname', retroName);
+  };
+
+  // Start Retro 
+  const startRetro = () => {
+    console.log('Start retro!!');
+  }
+
+   // Function to handle next button on click
+   const onClickNext = (currentPanel: string, nextPanel: string) => {
+    if (currentPanel === 'detailsPanel' && retroName === '') {
+      setRetroNameError('Please enter retro name.');
+    }
+    if (currentPanel === 'detailsPanel' && retroTimeFrame === '') {
+      setIsTimeFrameSet(true);
+      return;
+    }
+    if (currentPanel === 'templatePanel' && selectedTemplate === null) {
+      setTemplateError('Please select the template.');
+      return;
+    }
+    if (currentPanel === 'pulseCheckPanel' && selectedPulseCheck === null) {
+      setPulseCheckError('Please select the pulse check.');
+      return;
+    }
+    if (
+      currentPanel === 'userDetailPanel' &&
+      userName != '' &&
+      selectedAvatar != ''
+    ) {
+      setIsStartRetro(true);
+      create();
+    }
+    setActivePanel(nextPanel);
   };
 
   return (
@@ -319,7 +327,7 @@ export function CreateRetroWithTemplatePage({
         >
           <ContainedButton
             name="Start Retro"
-            onClick={create}
+            onClick={startRetro}
             style={{
               mt: 5,
               minWidth: '140px !important',
