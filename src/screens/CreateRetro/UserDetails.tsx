@@ -310,7 +310,7 @@ export function UserDetails({
                 avatar={avatar}
                 className="avatarSvgXs"
                 onClickAvatar={onSelectAvatar}
-                selectedAvatar={selectedAvatar}
+                selectedAvatar={tempAvatar}
                 css={{
                   width: '60px',
                   height: '60px',
