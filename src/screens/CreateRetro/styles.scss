@@ -15,7 +15,7 @@
 }
 // Retro Main Container
 .retroContainer {
-  height: 100vh !important;
+  height: 93vh !important;
   padding: 56px !important;
   display: flex !important;
   justify-content: center !important;
@@ -176,53 +176,6 @@
   color: rgba(0, 0, 0, 0.6) !important;
 }
 
-// Learn More CSS
-.selectedTemplate {
-  font-family: 'Poppins';
-  font-style: normal;
-  font-weight: 500;
-  font-size: 24px;
-  line-height: 32px;
-  letter-spacing: 0.5px;
-  color: #2c69a1;
-}
-.text_one {
-  font-family: 'Poppins';
-  font-style: normal;
-  font-weight: 600;
-  font-size: 18px;
-  line-height: 24px;
-  letter-spacing: 0.5px;
-  color: rgba(0, 0, 0, 0.8);
-}
-.text_two {
-  font-family: 'Poppins';
-  font-style: normal;
-  font-weight: 500;
-  font-size: 24px;
-  line-height: 32px;
-  letter-spacing: 0.5px;
-  color: #2c69a1;
-}
-.aboutTemplate {
-  font-family: 'Poppins';
-  font-style: normal;
-  font-weight: 600;
-  font-size: 16px;
-  line-height: 20px;
-  letter-spacing: 0.6px;
-  color: #ee7538;
-}
-.templateDescription {
-  font-family: 'Poppins';
-  font-style: normal;
-  font-weight: 400;
-  font-size: 16px;
-  line-height: 20px;
-  letter-spacing: 0.6px;
-  color: #4e4e4e;
-}
-
 // Share Participants
 .participantContainer {
   display: flex !important;
@@ -312,4 +265,60 @@
   flex: none;
   order: 0;
   flex-grow: 0;
+}
+
+// Learn More CSS
+.learnMoreContainer {
+  height: 93vh !important;
+  padding: 56px !important;
+  display: flex !important;
+  justify-content: start !important;
+  align-items: flex-start !important;
+  flex-direction: column !important;
+  overflow-y: auto !important;
+}
+.selectedTemplate {
+  font-family: 'Poppins';
+  font-style: normal;
+  font-weight: 500;
+  font-size: 24px;
+  line-height: 32px;
+  letter-spacing: 0.5px;
+  color: #2c69a1;
+}
+.text_one {
+  font-family: 'Poppins';
+  font-style: normal;
+  font-weight: 600;
+  font-size: 18px;
+  line-height: 24px;
+  letter-spacing: 0.5px;
+  color: rgba(0, 0, 0, 0.8);
+}
+.text_two {
+  font-family: 'Poppins';
+  font-style: normal;
+  font-weight: 500;
+  font-size: 24px;
+  line-height: 32px;
+  letter-spacing: 0.5px;
+  color: #2c69a1;
+}
+.aboutTemplate {
+  font-family: 'Poppins';
+  font-style: normal;
+  font-weight: 600;
+  font-size: 16px;
+  line-height: 20px;
+  letter-spacing: 0.6px;
+  color: #ee7538;
+}
+.templateDescription {
+  font-family: 'Poppins';
+  font-style: normal;
+  font-weight: 400;
+  font-size: 16px;
+  line-height: 20px;
+  letter-spacing: 0.6px;
+  color: #4e4e4e;
 }

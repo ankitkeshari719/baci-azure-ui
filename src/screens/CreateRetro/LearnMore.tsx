@@ -13,9 +13,9 @@ type Props = {
 
 export function LearnMore({ handleClose }: Props) {
   return (
-    <Box sx={{ flexGrow: 1 }}>
+    <Box>
       <TopBar />
-      <Box component="main" className="retroContainer">
+      <Box component="main" className="learnMoreContainer">
         <Grid container spacing={0}>
           <Grid item xs={12}>
             <Box
@@ -26,7 +26,7 @@ export function LearnMore({ handleClose }: Props) {
               About Template
             </Box>
           </Grid>
-          <Grid item xs={12} sx={{ mt: 1 }}>
+          <Grid item xs={12} sx={{ mt: 4 }}>
             <AppBar position="static" className="logoContainer">
               <Toolbar variant="dense">
                 <IconButton
@@ -58,7 +58,7 @@ export function LearnMore({ handleClose }: Props) {
               </Toolbar>
             </AppBar>
           </Grid>
-          <Grid item xs={12}>
+          <Grid item xs={12} sx={{ mt: 4 }}>
             <Box
               component="div"
               whiteSpace="normal"
@@ -66,7 +66,6 @@ export function LearnMore({ handleClose }: Props) {
                 display: 'flex',
                 justifyContent: 'center',
                 alignItems: 'center',
-                mt: 2,
               }}
             >
               <span className="text_one">This is a for </span>
@@ -74,7 +73,7 @@ export function LearnMore({ handleClose }: Props) {
               <span className="text_one">&nbsp;retros</span>.
             </Box>
           </Grid>
-          <Grid item xs={12}>
+          <Grid item xs={12} sx={{ mt: 4 }}>
             <Box
               component="div"
               whiteSpace="normal"
@@ -82,7 +81,6 @@ export function LearnMore({ handleClose }: Props) {
                 display: 'flex',
                 justifyContent: 'center',
                 alignItems: 'center',
-                mt: 1,
               }}
             >
               <span className="text_one">It’s straight to the point to</span>
@@ -107,14 +105,21 @@ export function LearnMore({ handleClose }: Props) {
               sx={{
                 display: 'flex',
                 justifyContent: 'center',
-                alignItems: 'center',
-                mt: 2,
+                alignItems: 'flex-start',
+                flexDirection: 'column',
+                mt: 4,
               }}
             >
               <Typography className="aboutTemplate" component="div">
                 About Simple (Default)
               </Typography>
-              <Typography className="templateDescription" component="div">
+              <Typography
+                className="templateDescription"
+                component="div"
+                sx={{
+                  mt: 2,
+                }}
+              >
                 The simplest template to do your retro. So easy that we have
                 made this our default template.
               </Typography>
