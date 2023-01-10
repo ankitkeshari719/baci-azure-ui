@@ -6,12 +6,17 @@ import { TopBar } from './TopBar';
 import IconButton from '@mui/material/IconButton';
 import Typography from '@mui/material/Typography';
 import ArrowBackOutlinedIcon from '@mui/icons-material/ArrowBackOutlined';
+import { ContainedButton, OutlinedButton } from '../../components';
 
 type Props = {
   handleClose: () => void;
 };
 
 export function LearnMore({ handleClose }: Props) {
+  const onClickCustomize = () => {
+    console.log();
+  };
+
   return (
     <Box>
       <TopBar />
@@ -44,14 +49,18 @@ export function LearnMore({ handleClose }: Props) {
                 >
                   Sailboat
                 </Typography>
-                <Button autoFocus variant="outlined" size="small">
+                <Button
+                  autoFocus
+                  variant="outlined"
+                  className="customizeButton"
+                >
                   Customize
                 </Button>
                 <Button
                   autoFocus
                   variant="contained"
-                  size="small"
-                  sx={{ ml: 1 }}
+                  className="saveButton"
+                  sx={{ ml: 2 }}
                 >
                   Save
                 </Button>

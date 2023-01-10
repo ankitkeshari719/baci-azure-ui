@@ -211,6 +211,8 @@ export function CreateRetroWithTemplatePage({
               type: ActionType.SET_LOADING,
               payload: { loadingFlag: false },
             });
+            // Call Join Retro
+            // Get Retro
             getRetro(res.id as string)
               .then(retro => {
                 if (retro && retro.id) {
