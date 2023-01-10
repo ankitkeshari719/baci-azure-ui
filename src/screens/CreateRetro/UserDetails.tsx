@@ -29,8 +29,8 @@ const styles = {
       color: 'rgba(0, 0, 0, 0.6) !important',
       fontSize: '14px',
     },
-    '& .css-ov41s0-MuiInputBase-root-MuiInput-root': {
-      borderBottom: '1px solid rgba(0, 0, 0, 0.42) !important',
+    '& .css-1sop3d1-MuiInputBase-root-MuiInput-root': {
+      borderBottom: '0px solid rgba(0, 0, 0, 0.42) !important',
     },
   },
 };

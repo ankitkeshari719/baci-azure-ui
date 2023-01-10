@@ -244,6 +244,7 @@ export function CreateRetroWithTemplatePage({
   const onClickNext = (currentPanel: string, nextPanel: string) => {
     if (currentPanel === 'detailsPanel' && retroName === '') {
       setRetroNameError('Please enter retro name.');
+      return;
     }
     if (currentPanel === 'detailsPanel' && retroTimeFrame === '') {
       setIsTimeFrameSet(true);
@@ -257,8 +258,10 @@ export function CreateRetroWithTemplatePage({
       setPulseCheckError('Please select the pulse check.');
       return;
     }
-    if (currentPanel === 'userDetailPanel' && userName === '')
+    if (currentPanel === 'userDetailPanel' && userName === '') {
       setUserNameError('Please enter avatar name');
+      return;
+    }
     if (currentPanel === 'userDetailPanel' && selectedAvatar === '') {
       setAvatarSelectionError('Please select avatar');
       return;
