@@ -116,6 +116,7 @@ export function UserDetails({
               <Box>
                 <Avatar
                   avatar={selectedAvatar}
+                  onClickAvatar={()=>{}}
                   css={{
                     width: '60px',
                     height: '60px',
