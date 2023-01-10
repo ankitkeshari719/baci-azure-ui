@@ -219,18 +219,12 @@ export function CreateRetroWithTemplatePage({
             handleStartRetro();
             getRetro(res.id as string)
               .then(retro => {
-                console.log("retro id",retro)
                 if (retro && retro.id) {
-
                   dispatch({
                     type: ActionType.SET_CURRENT_RETRO,
                     payload: { retro },
                   });
                 }
-                //  else {
-                //   navigate('/');
-                //   return;
-                // }
               })
               .catch(e => {
                 console.log("error", e)

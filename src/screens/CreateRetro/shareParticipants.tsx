@@ -1,9 +1,12 @@
 import * as React from 'react';
-import { Box, Button, Grid, Typography } from '@mui/material';
-import { CreateRetroWithTemplatePage } from './CreateRetroWithTemplatePage';
-import MailOutlineIcon from '@mui/icons-material/MailOutline';
+import { Box, Link, Typography } from '@mui/material';
+import { GlobalContext } from '../../contexts/GlobalContext';
+import { EmailShareButton } from 'react-share';
+import * as Icons from 'heroicons-react';
 
 export function ShareParticipants() {
+  const [global, dispatch] = React.useContext(GlobalContext);
+  
   return (
     <Box className="participantContainer">
       <Box component="div" whiteSpace="normal" className="createRetroText">
@@ -39,7 +42,7 @@ export function ShareParticipants() {
         whiteSpace="normal"
         className="codeId"
       >
-        173222
+        {global?.currentRetro?.humanId}
       </Box>
       <Box
         sx={{ mt: 4 }}
@@ -53,19 +56,34 @@ export function ShareParticipants() {
         whiteSpace="normal"
         className="productUrl"
       >
-        https://product-retro-dev.web.app/join/173222
+        <Link href="global?.currentRetro?.joinUrl" color="#676767;">
+          {global?.currentRetro?.joinUrl}
+        </Link>
       </Box>
       <Box sx={{ mt: 4 }}>
-        <Button
-          variant="outlined"
-          className="inviteButton"
-          size="medium"
-          startIcon={<MailOutlineIcon />}
+        <EmailShareButton
+          url={global.currentRetro?.joinUrl + ''}
+          style={{
+            background: '#ffffff',
+            color: '#159ADD',
+            fontSize: '16px',
+            fontWeight: '500',
+            borderRadius: '24px',
+            letterSpacing: '0.4',
+            border: '1px solid rgba(21, 154, 221, 0.5)',
+            height: '36px',
+            paddingLeft: '15px',
+            paddingRight: '15px',
+            display: 'flex',
+            flexDirection: 'row',
+            alignItems: 'center',
+          }}
         >
           <Typography component="span" className="inviteText">
-            invite via email
+            <Icons.Link size={20} style={{ marginRight: '8px' }} /> invite via
+            email
           </Typography>
-        </Button>
+        </EmailShareButton>
       </Box>
     </Box>
   );
