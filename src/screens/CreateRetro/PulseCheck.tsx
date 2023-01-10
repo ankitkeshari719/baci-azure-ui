@@ -91,7 +91,7 @@ export function PulseCheck({
                     key={pulseCheck.id}
                     sx={{
                       maxWidth: '420px',
-                      height: height / 2 - 100 + 'px',
+                      height: height / 2 - 50 + 'px',
                       background: '#ffffff',
                       borderRadius: '2px',
                       margin: '8px',

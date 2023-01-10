@@ -15,7 +15,15 @@ import { pulseCheckInterface, pulseChecksData, templatesData } from './const';
 import { UserTypeArray } from '../../constants';
 import { ContainedButton } from '../../components';
 
-export function CreateRetroWithTemplatePage() {
+type Props = {
+  handleStartRetro: () => void;
+  isRetroStart: boolean;
+};
+
+export function CreateRetroWithTemplatePage({
+  handleStartRetro,
+  isRetroStart,
+}: Props) {
   const { id } = useParams();
   const retro = useRetro();
   const navigate = useNavigate();
@@ -196,7 +204,9 @@ export function CreateRetroWithTemplatePage() {
       retroName !== '' &&
       retroTimeFrame !== '' &&
       userName !== '' &&
-      selectedAvatar !== ''
+      selectedAvatar !== '' &&
+      selectedPulseCheck != null &&
+      selectedTemplate != null
     ) {
       dispatch({
         type: ActionType.SET_LOADING,
@@ -204,6 +214,7 @@ export function CreateRetroWithTemplatePage() {
       });
       setRetroNameError('');
       setIsTimeFrameSet(false);
+      handleStartRetro();
       await retro
         .createTemplate(
           { name: retroName },
@@ -230,7 +241,6 @@ export function CreateRetroWithTemplatePage() {
               type: ActionType.SET_LOADING,
               payload: { loadingFlag: false },
             });
-            navigate('/join/' + res.humanId);
           },
           err => {
             console.log('err', err);
@@ -246,9 +256,16 @@ export function CreateRetroWithTemplatePage() {
 
   return (
     <Box className="retroContainer">
-      <Box component="div" whiteSpace="normal" className="createRetroText">
-        Create new BACI retro
-      </Box>
+      {!isRetroStart ? (
+        <Box component="div" whiteSpace="normal" className="createRetroText">
+          Create new BACI retro
+        </Box>
+      ) : (
+        <Box component="div" whiteSpace="normal" className="createRetroText">
+          First Design Sprint is ready to start
+        </Box>
+      )}
+
       <Box sx={{ mt: 4, minWidth: '100%' }}>
         <BaciDetails
           activePanel={activePanel}
