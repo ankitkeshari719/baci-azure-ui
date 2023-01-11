@@ -351,7 +351,7 @@ export function CreateRetroWithTemplatePage({
           sx={{
             mt: 2,
             minWidth: '100%',
-            alignItems: 'start',
+            alignItems: 'flex-start',
             justifyContent: 'center',
           }}
         >
