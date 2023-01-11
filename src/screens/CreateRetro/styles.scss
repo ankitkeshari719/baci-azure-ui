@@ -15,12 +15,11 @@
 }
 // Retro Main Containeralign 
 .retroContainer {
-  height: 93vh !important;
+  height: calc(100vh - 64px) !important;
   padding: 56px !important;
   display: flex !important;
   justify-content: center !important;
-  align-items: flex-start !important;
-  flex-direction: column !important;
+  align-items: center !important;
   overflow-y: auto !important;
 }
 .createRetroText {
@@ -178,12 +177,12 @@
 
 // Share Participants
 .participantContainer {
+  height: 100%;
   display: flex !important;
   justify-content: center !important;
   align-items: center !important;
   flex-direction: column !important;
   background: #fafafa;
-  height: calc(100vh - 64px);
 }
 .firstDesignSprint {
   font-family: 'Poppins';

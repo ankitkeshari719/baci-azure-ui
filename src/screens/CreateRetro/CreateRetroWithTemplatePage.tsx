@@ -293,7 +293,7 @@ export function CreateRetroWithTemplatePage({
   };
 
   return (
-    <Box className="retroContainer">
+    <Box sx={{ width: '100%' }}>
       {!isRetroStart ? (
         <Box component="div" whiteSpace="normal" className="createRetroText">
           Create new BACI retro
