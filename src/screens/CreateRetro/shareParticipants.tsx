@@ -6,7 +6,7 @@ import * as Icons from 'heroicons-react';
 
 export function ShareParticipants() {
   const [global, dispatch] = React.useContext(GlobalContext);
-  
+
   return (
     <Box className="participantContainer">
       <Box component="div" whiteSpace="normal" className="createRetroText">
@@ -51,37 +51,56 @@ export function ShareParticipants() {
         src="/images/barcode.png"
       />
       <Box
-        sx={{ mt: 4 }}
+        sx={{
+          mt: 4,
+          display: 'flex',
+          flexDirection: 'row',
+          alignItems: 'center',
+          justifyContent: 'center',
+        }}
         component="div"
         whiteSpace="normal"
         className="productUrl"
       >
         <Link href="global?.currentRetro?.joinUrl" color="#676767;">
-          {global?.currentRetro?.joinUrl}
+          {global?.currentRetro?.joinUrl}{' '}
         </Link>
+        <Icons.DocumentDuplicateOutline
+          size={20}
+          style={{
+            marginLeft: '8px',
+            cursor: 'pointer'
+          }}
+          onClick={() =>
+            navigator.clipboard.writeText(global?.currentRetro?.joinUrl!)
+          }
+        />
       </Box>
       <Box sx={{ mt: 4 }}>
         <EmailShareButton
           url={global.currentRetro?.joinUrl + ''}
           style={{
-            background: '#ffffff',
-            color: '#159ADD',
-            fontSize: '16px',
-            fontWeight: '500',
-            borderRadius: '24px',
-            letterSpacing: '0.4',
-            border: '1px solid rgba(21, 154, 221, 0.5)',
+            width: '200px',
             height: '36px',
-            paddingLeft: '15px',
-            paddingRight: '15px',
             display: 'flex',
             flexDirection: 'row',
             alignItems: 'center',
+            justifyContent: 'center',
+            gap: '8px',
+            border: '1px solid #159ADD',
+            filter: 'drop-shadow(0px 2px 4px rgba(0, 0, 0, 0.25))',
+            borderRadius: '24px',
+            background: '#ffffff',
           }}
         >
           <Typography component="span" className="inviteText">
-            <Icons.Link size={20} style={{ marginRight: '8px' }} /> invite via
-            email
+            <Icons.Mail
+              size={20}
+              style={{
+                marginRight: '8px',
+              }}
+            />
+            invite via email
           </Typography>
         </EmailShareButton>
       </Box>

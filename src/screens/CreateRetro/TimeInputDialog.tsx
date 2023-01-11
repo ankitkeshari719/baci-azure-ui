@@ -119,7 +119,7 @@ export function TimeInputDialog({
           <FormControl
             variant="standard"
             error={currentEpoch > endEpochTime}
-            sx={{ width: '100px !important' }}
+            sx={{ width: '255px !important' }}
           >
             <InputLabel htmlFor="standard-adornment-amount">
               Select End Time
