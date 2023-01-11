@@ -242,30 +242,42 @@ export function CreateRetroWithTemplatePage({
 
   // Function to handle next button on click
   const onClickNext = (currentPanel: string, nextPanel: string) => {
-    if (currentPanel === 'detailsPanel' && retroName === '') {
-      setRetroNameError('Please enter retro name.');
+    if (
+      currentPanel === 'detailsPanel' &&
+      (retroName === '' || retroTimeFrame === '')
+    ) {
+      if (retroName === '') {
+        setRetroNameError('Please enter retro name.');
+      }
+      if (retroTimeFrame === '') {
+        setIsTimeFrameSet(true);
+      }
       return;
     }
-    if (currentPanel === 'detailsPanel' && retroTimeFrame === '') {
-      setIsTimeFrameSet(true);
-      return;
-    }
+
     if (currentPanel === 'templatePanel' && selectedTemplate === null) {
       setTemplateError('Please select the template.');
       return;
     }
+
     if (currentPanel === 'pulseCheckPanel' && selectedPulseCheck === null) {
       setPulseCheckError('Please select the pulse check.');
       return;
     }
-    if (currentPanel === 'userDetailPanel' && userName === '') {
-      setUserNameError('Please enter avatar name');
+
+    if (
+      currentPanel === 'userDetailPanel' &&
+      (userName === '' || selectedAvatar === '')
+    ) {
+      if (selectedAvatar === '') {
+        setAvatarSelectionError('Please select avatar');
+      }
+      if (userName === '') {
+        setUserNameError('Please enter avatar name');
+      }
       return;
     }
-    if (currentPanel === 'userDetailPanel' && selectedAvatar === '') {
-      setAvatarSelectionError('Please select avatar');
-      return;
-    }
+
     setActivePanel(nextPanel);
     if (
       currentPanel === 'userDetailPanel' &&
