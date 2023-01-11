@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { Box, Grid } from '@mui/material';
+import { Box } from '@mui/material';
 import '../../global.scss';
 import './styles.scss';
 import { useNavigate, useParams } from 'react-router-dom';
@@ -11,39 +11,62 @@ import { BaciDetails } from './BaciDetails';
 import { RetroTemplate } from './RetroTemplate';
 import { PulseCheck } from './PulseCheck';
 import { UserDetails } from './UserDetails';
-import { TopBar } from './TopBar';
 import { pulseCheckInterface, pulseChecksData, templatesData } from './const';
 import { UserTypeArray } from '../../constants';
+import { getRetro } from '../../msal/services';
+import { StartRetroWithTemplate } from './StartRetroWithTemplate';
 
-export function CreateRetroWithTemplatePage() {
+type Props = {
+  handleStartRetro: () => void;
+  isRetroStart: boolean;
+};
+
+export function CreateRetroWithTemplatePage({
+  handleStartRetro,
+  isRetroStart,
+}: Props) {
   const { id } = useParams();
   const retro = useRetro();
   const navigate = useNavigate();
   const [global, dispatch] = React.useContext(GlobalContext);
-  const timeframeRef = React.useRef<HTMLSelectElement | null>(null);
+  const timeFrameRef = React.useRef<HTMLSelectElement | null>(null);
   const [localRetroName, setLocalRetroName] = React.useState(
     sessionStorage.getItem('retroname') || ''
   );
-
+  const [activePanel, setActivePanel] = React.useState('detailsPanel');
+  const [isStartRetro, setIsStartRetro] = React.useState(false);
+  {
+    /* BACI Details Panel Constant */
+  }
   const [retroName, setRetroName] = React.useState('');
-  const [retroTimeframe, setRetroTimeframe] = React.useState('');
+  const [retroTimeFrame, setRetroTimeFrame] = React.useState('');
   const [retroNameError, setRetroNameError] = React.useState('');
-  const [retroNameWarning, setRetoWarning] = React.useState('');
-  const [isTimeFrameSet, setisTimeFrameSet] = React.useState(id ? true : false);
+  const [retroNameWarning, setRetroWarning] = React.useState('');
+  const [isTimeFrameSet, setIsTimeFrameSet] = React.useState(id ? true : false);
+
+  {
+    /* Template Panel Constant */
+  }
+  const [templates, setTemplates] = React.useState(templatesData);
+  const [selectedTemplate, setSelectedTemplate] = React.useState(null);
+  const [templateError, setTemplateError] = React.useState('');
+  {
+    /* Pulse Check Panel Constant */
+  }
+  const [pulseChecks, setPulseChecks] =
+    React.useState<Array<pulseCheckInterface> | null>(pulseChecksData);
+  const [selectedPulseCheck, setSelectedPulseCheck] =
+    React.useState<pulseCheckInterface | null>(null);
+  const [pulseCheckError, setPulseCheckError] = React.useState('');
+
+  {
+    /* User Details Panel Constant */
+  }
   const [userName, setUserName] = React.useState('');
   const [userNameError, setUserNameError] = React.useState('');
   const [userNameWarning, setUserNameWarning] = React.useState('');
   const [selectedAvatar, setAvatar] = React.useState('');
   const [avatarSelectionError, setAvatarSelectionError] = React.useState('');
-  const [expandedPanel, setExpandedPanel] =
-    React.useState<string>('detailsPanel');
-  const [allPanels, setAllPanels] = React.useState<string[]>([]);
-  const [templates, setTemplates] = React.useState(templatesData);
-  const [selectedTemplate, setSelectedTemplate] = React.useState(null);
-  const [pulseChecks, setPulseChecks] =
-    React.useState<Array<pulseCheckInterface> | null>(pulseChecksData);
-  const [selectedPulseCheck, setSelectedPulseCheck] =
-    React.useState<pulseCheckInterface | null>(null);
 
   React.useEffect(() => {
     dispatch({
@@ -56,7 +79,7 @@ export function CreateRetroWithTemplatePage() {
   // Function to handle Retro Name on change
   function handleRetroNameChange(e: React.SetStateAction<string>) {
     if (e == '') {
-      setRetoWarning('');
+      setRetroWarning('');
     } else {
       setRetroNameError('');
     }
@@ -64,26 +87,29 @@ export function CreateRetroWithTemplatePage() {
       let count = 80 - e.length;
 
       if (count === 0) {
-        setRetoWarning('No more charachter remaining');
+        setRetroWarning('No more character remaining');
       } else {
-        setRetoWarning('Character remaining -' + `${count}`);
+        setRetroWarning('Character remaining -' + `${count}`);
       }
     } else {
-      setRetoWarning('');
+      setRetroWarning('');
     }
     setRetroName(e);
   }
 
   // Function to handle Time Frame on change
   function handleTimeFrame(e: React.SetStateAction<string>) {
-    setRetroTimeframe(e);
-    setisTimeFrameSet(false);
+    setRetroTimeFrame(e);
+    setIsTimeFrameSet(false);
   }
 
   // Function to template selection
-  function handleTemplate(e: any) {
+  function handleTemplate(selectedTemplate_l: any) {
     let data: any = templates?.map(template => {
-      if (e && template.templateId === e.templateId) {
+      if (
+        selectedTemplate_l &&
+        template.templateId === selectedTemplate_l.templateId
+      ) {
         template.checked = true;
       } else {
         template.checked = false;
@@ -91,13 +117,14 @@ export function CreateRetroWithTemplatePage() {
       return template;
     });
     setTemplates(data);
-    setSelectedTemplate(e);
+    setSelectedTemplate(selectedTemplate_l);
+    setTemplateError('');
   }
 
   // Function to handle pulse check selection
-  function handlePulseCheck(e: pulseCheckInterface | null) {
+  function handlePulseCheck(selectedPulseCheck_l: pulseCheckInterface | null) {
     let data: any = pulseChecks?.map(pulseCheck => {
-      if (e && pulseCheck.id === e.id) {
+      if (selectedPulseCheck_l && pulseCheck.id === selectedPulseCheck_l.id) {
         pulseCheck.checked = true;
       } else {
         pulseCheck.checked = false;
@@ -105,7 +132,8 @@ export function CreateRetroWithTemplatePage() {
       return pulseCheck;
     });
     setPulseChecks(data);
-    setSelectedPulseCheck(e);
+    setSelectedPulseCheck(selectedPulseCheck_l);
+    setPulseCheckError('');
   }
 
   // Function to handle User Name on change
@@ -123,35 +151,15 @@ export function CreateRetroWithTemplatePage() {
     setUserName(e);
   };
 
-  const onClickAvatar = (avatarName: any) => {
+  // Function to handle Avatar change
+  const onClickAvatar = (avatarName: string) => {
     setAvatar(avatarName);
     setAvatarSelectionError('');
   };
 
   // Function to handle next button on click
-  const onClickNext = (currentPanel: string, nextPanel: string) => {
-    if (currentPanel === 'detailsPanel' && retroName === '') {
-      setRetroNameError('Please enter retro name');
-      return;
-    }
-    if (currentPanel === 'detailsPanel' && retroTimeframe === '') {
-      setisTimeFrameSet(true);
-      return;
-    }
-    if (!allPanels.includes(currentPanel)) {
-      allPanels.push(currentPanel);
-    }
-    setExpandedPanel(nextPanel);
-  };
-
-  // Function to handle next button on click
   const onClickBack = (previousPanel: string) => {
-    setExpandedPanel(previousPanel);
-    let index = allPanels.indexOf(previousPanel);
-    if (index !== -1) {
-      const newPanels = allPanels.splice(index, 1);
-      setAllPanels(newPanels);
-    }
+    setActivePanel(previousPanel);
   };
 
   // Function to create a New Retro
@@ -163,30 +171,30 @@ export function CreateRetroWithTemplatePage() {
         ? UserTypeArray[1].id
         : UserTypeArray[0].id;
 
-    if (userName === '') setUserNameError('Please enter avatar name');
-    if (selectedAvatar === '') setAvatarSelectionError('Please select avatar');
-
     if (
       retroName !== '' &&
-      retroTimeframe !== '' &&
+      retroTimeFrame !== '' &&
       userName !== '' &&
-      selectedAvatar !== ''
+      selectedAvatar !== '' &&
+      selectedPulseCheck != null &&
+      selectedTemplate != null
     ) {
       dispatch({
         type: ActionType.SET_LOADING,
         payload: { loadingFlag: true },
       });
       setRetroNameError('');
-      setisTimeFrameSet(false);
+      setIsTimeFrameSet(false);
       await retro
         .createTemplate(
           { name: retroName },
-          retroTimeframe,
+          retroTimeFrame,
           '',
           userName,
           selectedAvatar,
           userType,
-          selectedPulseCheck
+          selectedPulseCheck,
+          selectedTemplate
         )
         .then(
           res => {
@@ -203,7 +211,22 @@ export function CreateRetroWithTemplatePage() {
               type: ActionType.SET_LOADING,
               payload: { loadingFlag: false },
             });
-            navigate('/join/' + res.humanId);
+            // Call Join Retro
+            // Get Retro
+            getRetro(res.id as string)
+              .then(retro => {
+                if (retro && retro.id) {
+                  dispatch({
+                    type: ActionType.SET_CURRENT_RETRO,
+                    payload: { retro },
+                  });
+                }
+              })
+              .catch(e => {
+                console.log('error', e);
+              });
+            setIsStartRetro(true);
+            handleStartRetro();
           },
           err => {
             console.log('err', err);
@@ -217,72 +240,112 @@ export function CreateRetroWithTemplatePage() {
     sessionStorage.setItem('retroname', retroName);
   };
 
+  // Function to handle next button on click
+  const onClickNext = (currentPanel: string, nextPanel: string) => {
+    if (currentPanel === 'detailsPanel' && retroName === '') {
+      setRetroNameError('Please enter retro name.');
+      return;
+    }
+    if (currentPanel === 'detailsPanel' && retroTimeFrame === '') {
+      setIsTimeFrameSet(true);
+      return;
+    }
+    if (currentPanel === 'templatePanel' && selectedTemplate === null) {
+      setTemplateError('Please select the template.');
+      return;
+    }
+    if (currentPanel === 'pulseCheckPanel' && selectedPulseCheck === null) {
+      setPulseCheckError('Please select the pulse check.');
+      return;
+    }
+    if (currentPanel === 'userDetailPanel' && userName === '') {
+      setUserNameError('Please enter avatar name');
+      return;
+    }
+    if (currentPanel === 'userDetailPanel' && selectedAvatar === '') {
+      setAvatarSelectionError('Please select avatar');
+      return;
+    }
+    setActivePanel(nextPanel);
+    if (
+      currentPanel === 'userDetailPanel' &&
+      retroName != '' &&
+      retroTimeFrame != '' &&
+      selectedTemplate != null &&
+      selectedPulseCheck != null &&
+      userName != '' &&
+      selectedAvatar != ''
+    ) {
+      create();
+    }
+  };
+
   return (
-    <Box sx={{ flexGrow: 1 }}>
-      <TopBar />
-      <Box component="main" className="mainContainer">
-        <Grid container spacing={0} className="retroContainer">
-          <Grid item xs={12}>
-            <Box
-              component="div"
-              whiteSpace="normal"
-              className="createRetroText"
-            >
-              Create new BACI retro
-            </Box>
-          </Grid>
-          <Grid item xs={12}>
-            <Box>
-              {/* BACI Details Panel */}
-              <BaciDetails
-                expandedPanel={expandedPanel}
-                allPanels={allPanels}
-                retroName={retroName}
-                retroTimeframe={retroTimeframe}
-                retroNameError={retroNameError}
-                retroNameWarning={retroNameWarning}
-                timeframeRef={timeframeRef}
-                isTimeFrameSet={isTimeFrameSet}
-                handleRetroNameChange={handleRetroNameChange}
-                handleTimeFrame={handleTimeFrame}
-                onClickNext={onClickNext}
-              />
-              {/* Template Panel */}
-              <RetroTemplate
-                expandedPanel={expandedPanel}
-                allPanels={allPanels}
-                onClickNext={onClickNext}
-                onClickBack={onClickBack}
-                selectedTemplate={selectedTemplate}
-                handleTemplate={handleTemplate}
-              />
-              {/* Pulse Check Panel */}
-              <PulseCheck
-                expandedPanel={expandedPanel}
-                allPanels={allPanels}
-                onClickNext={onClickNext}
-                onClickBack={onClickBack}
-                selectedPulseCheck={selectedPulseCheck}
-                handlePulseCheck={handlePulseCheck}
-              />
-              {/* User Details Panel */}
-              <UserDetails
-                expandedPanel={expandedPanel}
-                allPanels={allPanels}
-                onClickBack={onClickBack}
-                create={create}
-                handleUsername={handleUsername}
-                userName={userName}
-                userNameError={userNameError}
-                userNameWarning={userNameWarning}
-                selectedAvatar={selectedAvatar}
-                avatarSelectionError={avatarSelectionError}
-                onClickAvatar={onClickAvatar}
-              />
-            </Box>
-          </Grid>
-        </Grid>
+    <Box className="retroContainer">
+      {!isRetroStart ? (
+        <Box component="div" whiteSpace="normal" className="createRetroText">
+          Create new BACI retro
+        </Box>
+      ) : (
+        <Box component="div" whiteSpace="normal" className="createRetroText">
+          First Design Sprint is ready to start
+        </Box>
+      )}
+
+      <Box sx={{ mt: 4, minWidth: '100%' }}>
+        <BaciDetails
+          activePanel={activePanel}
+          retroName={retroName}
+          retroTimeFrame={retroTimeFrame}
+          retroNameError={retroNameError}
+          retroNameWarning={retroNameWarning}
+          timeFrameRef={timeFrameRef}
+          isTimeFrameSet={isTimeFrameSet}
+          handleRetroNameChange={handleRetroNameChange}
+          handleTimeFrame={handleTimeFrame}
+          onClickNext={onClickNext}
+        />
+        <RetroTemplate
+          activePanel={activePanel}
+          onClickNext={onClickNext}
+          onClickBack={onClickBack}
+          selectedTemplate={selectedTemplate}
+          handleTemplate={handleTemplate}
+          templateError={templateError}
+        />
+        <PulseCheck
+          activePanel={activePanel}
+          onClickNext={onClickNext}
+          onClickBack={onClickBack}
+          selectedPulseCheck={selectedPulseCheck}
+          handlePulseCheck={handlePulseCheck}
+          pulseCheckError={pulseCheckError}
+        />
+        <UserDetails
+          activePanel={activePanel}
+          onClickBack={onClickBack}
+          onClickNext={onClickNext}
+          handleUsername={handleUsername}
+          userName={userName}
+          userNameError={userNameError}
+          userNameWarning={userNameWarning}
+          selectedAvatar={selectedAvatar}
+          avatarSelectionError={avatarSelectionError}
+          onClickAvatar={onClickAvatar}
+        />
       </Box>
+      {isStartRetro && (
+        <Box
+          sx={{
+            mt: 2,
+            minWidth: '100%',
+            alignItems: 'start',
+            justifyContent: 'center',
+          }}
+        >
+          <StartRetroWithTemplate />
+        </Box>
+      )}
     </Box>
   );
 }

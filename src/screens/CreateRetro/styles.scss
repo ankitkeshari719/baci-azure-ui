@@ -1,97 +1,58 @@
-.logoContainer {
+// Main Container
+.mainContainer {
   width: 100% !important;
+  height: 100vh !important;
+  padding: 0 !important;
+  margin: 0 !important;
+}
+// App Bar
+.logoContainer {
+  height: 4rem;
+  display: flex !important;
+  justify-content: center !important;
   background: #ffffff !important;
   box-shadow: 0px 0px 2px rgba(0, 0, 0, 0.25) !important;
 }
-.mainContainer {
+// Retro Main Containeralign 
+.retroContainer {
+  height: 93vh !important;
+  padding: 56px !important;
   display: flex !important;
-  align-items: center !important;
   justify-content: center !important;
-  height: 484px !important;
-  padding: 24px !important;
+  align-items: flex-start !important;
+  flex-direction: column !important;
   overflow-y: auto !important;
 }
-.retroContainer {
-  height: 100% !important;
-  display: flex !important;
-  align-items: center !important;
-  justify-content: center !important;
-}
 .createRetroText {
-  height: 38px !important;
-  left: 1040px !important;
   font-family: 'Poppins' !important;
   font-style: normal !important;
   font-weight: 500 !important;
-  font-size: 28px !important;
-  line-height: 36px !important;
+  font-size: 36px !important;
+  line-height: 48px !important;
+  letter-spacing: 0.5px !important;
+  color: #159add !important;
+}
+// BACI Details CSS
+.tabSummary {
+  font-family: 'Poppins' !important;
+  font-style: normal !important;
+  font-weight: 500 !important;
+  font-size: 24px !important;
+  line-height: 32px !important;
   letter-spacing: 0.5px !important;
   color: #2c69a1 !important;
 }
-// BACI Details CSS
-.accordionSummary {
-  font-family: 'Poppins' !important;
-  font-style: normal !important;
-  font-weight: 500 !important;
-  font-size: 16px !important;
-  line-height: 24px !important;
-  letter-spacing: 0.5px !important;
-  color: #4e4e4e !important;
-}
-.timeframeSummary {
+.timeFrameSummary {
   font-family: 'Poppins' !important;
   font-style: normal !important;
   font-weight: 400 !important;
-  font-size: 10px !important;
-  line-height: 16px !important;
+  font-size: 16px !important;
+  line-height: 20px !important;
   letter-spacing: 0.6px;
   color: #000000 !important;
   display: flex !important;
   align-items: center !important;
-  margin-left: 40px !important;
-}
-.changeText {
-  font-family: 'Poppins' !important;
-  font-style: normal !important;
-  font-weight: 400 !important;
-  font-size: 12px !important;
-  line-height: 16px !important;
-  letter-spacing: 0.4px !important;
-  color: #159add !important;
-  position: absolute !important;
-  right: 0 !important;
-  padding-right: 60px !important;
-  text-decoration-line: underline !important;
-}
-.nextButton {
-  min-width: 75px !important;
-  height: 36px !important;
-  display: flex !important;
-  flex-direction: row !important;
-  justify-content: center !important;
-  align-items: center !important;
-  padding: 6px 6px !important;
-  gap: 8px !important;
-  margin-top: 40px !important;
-  background: #159add !important;
-  box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.25) !important;
-  border-radius: 24px !important;
-  text-transform: uppercase !important;
-}
-.backButton {
-  min-width: 75px !important;
-  height: 36px !important;
-  display: flex !important;
-  flex-direction: row !important;
-  justify-content: center !important;
-  align-items: center !important;
-  padding: 6px 16px !important;
-  gap: 8px !important;
-  margin-top: 40px !important;
-  background: #ffffff !important;
-  box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.25) !important;
-  border-radius: 24px !important;
-  text-transform: uppercase !important;
+  color: rgba(0, 0, 0, 0.87) !important;
 }
 
 // Retro Template CSS
@@ -164,6 +125,30 @@
 }
 
 // User Details CSS
+.chooseAvatarText {
+  font-family: 'Poppins' !important;
+  font-style: normal !important;
+  font-weight: 400 !important;
+  font-size: 14px !important;
+  line-height: 18px !important;
+  display: flex !important;
+  align-items: center !important;
+  letter-spacing: 0.4px !important;
+  color: rgba(0, 0, 0, 0.6) !important;
+}
+.selectAvatarButtonText {
+  font-family: 'Poppins' !important;
+  font-style: normal !important;
+  font-weight: 500 !important;
+  font-size: 14px !important;
+  line-height: 20px !important;
+  display: flex !important;
+  align-items: center !important;
+  text-align: center !important;
+  letter-spacing: 0.4px !important;
+  text-transform: uppercase !important;
+  color: #159add !important;
+}
 .avatarDialog {
   width: 90% !important;
   padding: 16px !important;
@@ -172,15 +157,6 @@
   flex-wrap: wrap !important;
   justify-content: space-between !important;
   overflow-y: scroll !important;
-}
-.chooseAvatarText {
-  font-family: 'Poppins' !important;
-  font-style: normal !important;
-  font-weight: 400 !important;
-  font-size: 16px !important;
-  line-height: 18px !important;
-  letter-spacing: 0.4px !important;
-  color: rgba(0, 0, 0, 0.6) !important;
 }
 .avatarSvgXs {
   width: 50px !important;
@@ -200,7 +176,129 @@
   color: rgba(0, 0, 0, 0.6) !important;
 }
 
+// Share Participants
+.participantContainer {
+  display: flex !important;
+  justify-content: center !important;
+  align-items: center !important;
+  flex-direction: column !important;
+  background: #fafafa;
+  height: calc(100vh - 64px);
+}
+.firstDesignSprint {
+  font-family: 'Poppins';
+  font-style: normal;
+  font-weight: 500;
+  font-size: 24px;
+  line-height: 32px;
+  letter-spacing: 0.5px;
+  color: #4e4e4e;
+}
+.joinUrl {
+  font-family: 'Poppins';
+  font-style: normal;
+  font-weight: 400;
+  font-size: 16px;
+  line-height: 20px;
+  letter-spacing: 0.4px;
+  text-decoration-line: underline;
+  color: #159add;
+}
+.withCode {
+  font-family: 'Poppins';
+  font-style: normal;
+  font-weight: 500;
+  font-size: 14px;
+  line-height: 20px;
+  letter-spacing: 0.4px;
+  text-transform: uppercase;
+  color: #2c69a1;
+}
+.codeId {
+  font-family: 'Poppins';
+  font-style: normal;
+  font-weight: 500;
+  font-size: 36px;
+  line-height: 48px;
+  letter-spacing: 0.5px;
+  color: #2c69a1;
+}
+.productUrl {
+  font-family: 'Poppins';
+  font-style: normal;
+  font-weight: 400;
+  font-size: 16px;
+  line-height: 20px;
+  display: flex;
+  align-items: center;
+  letter-spacing: 0.4px;
+  text-decoration-line: underline;
+  color: #676767;
+}
+.inviteButton {
+  box-sizing: border-box !important;
+  display: flex !important;
+  flex-direction: row !important;
+  justify-content: center !important;
+  align-items: center !important;
+  padding: 6px 16px !important;
+  gap: 8px !important;
+  width: 199px !important;
+  height: 36px !important;
+  border: 1px solid #159add !important;
+  filter: drop-shadow(0px 2px 4px rgba(0, 0, 0, 0.25)) !important;
+  border-radius: 24px !important;
+  background-color: #ffffff !important;
+}
+.inviteText {
+  font-family: 'Poppins';
+  font-style: normal;
+  font-weight: 400;
+  font-size: 16px;
+  line-height: 20px;
+  display: flex;
+  align-items: center;
+  text-align: center;
+  letter-spacing: 0.4px;
+  text-transform: uppercase;
+  color: #159add;
+  flex: none;
+  order: 0;
+  flex-grow: 0;
+}
+
 // Learn More CSS
+.learnMoreContainer {
+  height: 93vh !important;
+  padding: 56px !important;
+  display: flex !important;
+  justify-content: flex-start !important;
+  align-items: flex-start !important;
+  flex-direction: column !important;
+  overflow-y: auto !important;
+}
+.customizeButton {
+  display: flex !important;
+  flex-direction: row !important;
+  justify-content: center !important;
+  align-items: center !important;
+  padding: 6px 16px !important;
+  gap: 8px !important;
+  border: 1px solid #159add !important;
+  filter: drop-shadow(0px 2px 4px rgba(0, 0, 0, 0.25)) !important;
+  border-radius: 24px !important;
+}
+.saveButton {
+  display: flex !important;
+  flex-direction: row !important;
+  justify-content: center !important;
+  align-items: center !important;
+  padding: 6px 16px !important;
+  gap: 8px !important;
+  background: #159add !important;
+  box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.25) !important;
+  border-radius: 24px !important;
+}
 .selectedTemplate {
   font-family: 'Poppins';
   font-style: normal;
@@ -245,4 +343,28 @@
   line-height: 20px;
   letter-spacing: 0.6px;
   color: #4e4e4e;
+}
+
+// Time Input Dialog
+.time_text_one {
+  font-family: 'Poppins';
+  font-style: normal;
+  font-weight: 500;
+  font-size: 24px;
+  line-height: 32px;
+  text-align: center;
+  letter-spacing: 0.5px;
+  color: #ee7538;
+}
+.time_text_two {
+  font-family: 'Poppins';
+  font-style: normal;
+  font-weight: 400;
+  font-size: 14px;
+  line-height: 18px;
+  text-align: center;
+  letter-spacing: 0.4px;
+  color: #ee7538;
+
+  opacity: 0.8;
 }

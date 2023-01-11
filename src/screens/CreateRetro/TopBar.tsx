@@ -11,13 +11,13 @@ export function TopBar() {
       position="static"
       className='logoContainer'
     >
-      <Toolbar variant="dense">
+      <Toolbar variant="dense" sx={{paddingLeft: '56px !important'}}>
         <Link href="/">
           <Box
             component="img"
             sx={{
-              width: isXsUp ? '53px' : '82px',
-              height: isXsUp ? '18px' : '28px',
+              width: isXsUp ? '60px' : '82px',
+              height: isXsUp ? '24px' : '28px',
             }}
             alt="Logo"
             src={BACILogo}

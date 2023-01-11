@@ -192,7 +192,6 @@ export function StartRetro() {
     setIsCopied(false);
   };
   return (
-    
     <Grid container spacing={0}>
       <Grid xs={12} item>
         <Toolbar></Toolbar>
@@ -337,7 +336,6 @@ export function StartRetro() {
                 >
                   <img src={email} alt="email" style={styles.emailImg} />
                 </Box>
-
                 <div style={styles.div98}>
                   <EmailShareButton
                     url={global.currentRetro?.joinUrl + ''}
@@ -351,12 +349,12 @@ export function StartRetro() {
                       height: '36px',
                       paddingLeft: '15px',
                       paddingRight: '15px',
-                      display:'flex',
-                      flexDirection:'row',
-                      alignItems:'center'
+                      display: 'flex',
+                      flexDirection: 'row',
+                      alignItems: 'center',
                     }}
                   >
-                    <Icons.Link size={20} style={{marginRight:'8px'}} />
+                    <Icons.Link size={20} style={{ marginRight: '8px' }} />
                     INVITE VIA EMAIL
                   </EmailShareButton>
                 </div>

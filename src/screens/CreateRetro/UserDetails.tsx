@@ -1,18 +1,14 @@
 import * as React from 'react';
 import {
-  Accordion,
-  AccordionSummary,
   Typography,
-  AccordionDetails,
   Box,
   Button,
   FormControl,
   TextField,
   FormHelperText,
+  Grid,
   Dialog,
   DialogTitle,
-  Grid,
-  IconButton,
 } from '@mui/material';
 import '../../global.scss';
 import './styles.scss';
@@ -20,21 +16,27 @@ import { AVATAR_CHARACTER_LIMIT } from './const';
 import Avatar from '../../elements/Avatar';
 import { avatarName } from '../../constants/AvatarName';
 import { LazyLoadImage } from 'react-lazy-load-image-component';
-import CloseIcon from '@mui/icons-material/Close';
+import { ContainedButton, OutlinedButton } from '../../components';
 
 const styles = {
   avatarfield: {
+    width: '100%',
     '& .MuiFormLabel-root': {
       color: 'rgba(0, 0, 0, 0.6) !important',
       fontSize: '14px',
+    },
+    '& .MuiFormLabel-root-MuiInputLabel-root.Mui-focused': {
+      color: 'rgba(0, 0, 0, 0.6) !important',
+      fontSize: '14px',
+    },
+    '& .css-1sop3d1-MuiInputBase-root-MuiInput-root': {
+      borderBottom: '0px solid rgba(0, 0, 0, 0.42) !important',
     },
   },
 };
 
 type Props = {
-  expandedPanel: string;
-  allPanels: string[];
-  create: () => void;
+  activePanel: string;
   userName: string;
   userNameError: string;
   userNameWarning: string;
@@ -42,145 +44,233 @@ type Props = {
   selectedAvatar: string;
   avatarSelectionError: string;
   onClickAvatar: (avatarName: string) => void;
+  onClickNext: (currentPanel: string, nextPanel: string) => void;
   onClickBack: (previousPanel: string) => void;
 };
 
 export function UserDetails({
-  expandedPanel,
-  allPanels,
+  activePanel,
   userName,
   userNameError,
   userNameWarning,
-  create,
   handleUsername,
   selectedAvatar,
   avatarSelectionError,
   onClickAvatar,
+  onClickNext,
   onClickBack,
 }: Props) {
   const [openAvatarDialog, setOpenAvatarDialog] = React.useState(false);
   const [avatarList, setAvatarList] = React.useState<string[]>([]);
   const [height, setHeight] = React.useState(0);
+  const [tempAvatar, setTempAvatar] = React.useState('');
+  const [avatarError, setAvatarError] = React.useState('');
 
   React.useEffect(() => {
     setAvatarList(avatarName.sort(() => Math.random() - 0.5));
     setHeight(window.innerHeight);
   }, []);
 
+  const onSelectAvatar = (avatarName: string) => {
+    setAvatarError('');
+    setTempAvatar(avatarName);
+  };
+
+  const onClickSubmit = () => {
+    if (tempAvatar === '') {
+      setAvatarError('Please select an avatar.');
+      return;
+    }
+    onClickAvatar(tempAvatar);
+    setOpenAvatarDialog(false);
+  };
+
   return (
-    <Accordion
-      expanded={expandedPanel === 'userDetailPanel'}
-      sx={{
-        borderRadius: '0px',
-      }}
-    >
-      <AccordionSummary>
-        <Typography className="accordionSummary">User Details</Typography>
-      </AccordionSummary>
-      <AccordionDetails>
-        <FormControl fullWidth>
-          <Grid container spacing={2}>
-            <Grid item xs={12} md={5}>
+    <>
+      {/* User Details Panel */}
+      <Box
+        sx={{
+          borderBottom: 1,
+          borderColor: '#CCCCCC',
+          py:
+            activePanel != 'userDetailPanel' &&
+            userName != '' &&
+            selectedAvatar != ''
+              ? 2.5
+              : 4,
+        }}
+      >
+        <Box
+          sx={{
+            display: 'flex',
+            flexDirection: 'row',
+            alignItems: 'center',
+          }}
+        >
+          {activePanel != 'userDetailPanel' &&
+          userName != '' &&
+          selectedAvatar != '' ? (
+            <>
+              <Box>
+                <Avatar
+                  avatar={selectedAvatar}
+                  onClickAvatar={() => {}}
+                  css={{
+                    width: '60px',
+                    height: '60px',
+                    borderRadius: '50%',
+                  }}
+                />
+              </Box>
               <Box
+                className="tabSummary"
                 sx={{
-                  display: 'flex',
-                  flexDirection: 'row',
-                  alignItems: 'center',
+                  color: '#4E4E4E !important',
+                  ml: 5,
                 }}
               >
-                <Box>
-                  <Typography className="chooseAvatarText">
-                    Choose your avatar
-                  </Typography>
-                </Box>
-                <Box
-                  sx={{
-                    ml: 3,
-                    display: 'flex',
-                    flexDirection: 'column',
-                  }}
-                >
-                  <Box
-                    sx={{
-                      display: 'flex',
-                      flexDirection: 'row',
-                      alignItems: 'center',
-                    }}
-                  >
-                    {selectedAvatar ? (
-                      <Avatar
-                        avatar={selectedAvatar}
-                        css={{
-                          width: '50px',
-                          height: '50px',
-                          borderRadius: '50%',
-                        }}
-                      />
-                    ) : (
-                      <LazyLoadImage
-                        className="avatar"
-                        style={{
-                          width: '50px',
-                          height: '50px',
-                          borderRadius: '50%',
-                        }}
-                        src="../svgs/Empty-Animals.svg"
-                      ></LazyLoadImage>
-                    )}
-                    <Button onClick={() => setOpenAvatarDialog(true)}>
-                      <span className="primaryButtonText">Select Avatar</span>
-                    </Button>
-                  </Box>
-                  <Box>
-                    {avatarSelectionError !== '' && (
-                      <FormHelperText sx={{ color: '#d32f2f', marginLeft: '10px' }}>
-                        {avatarSelectionError}
-                      </FormHelperText>
-                    )}
-                  </Box>
-                </Box>
+                {userName}
               </Box>
-            </Grid>
-            <Grid item xs={12} md={4}>
-              <Box>
-                <TextField
-                  id="standard-helperText"
-                  label="Choose your name for this retro"
-                  variant="standard"
-                  sx={styles.avatarfield}
-                  value={userName}
-                  onChange={e => handleUsername(e.currentTarget.value)}
-                  inputProps={{
-                    maxLength: AVATAR_CHARACTER_LIMIT,
-                  }}
-                  error={!!userNameError}
-                  helperText={userNameError}
-                />
-                {userNameWarning !== ' ' && (
-                  <FormHelperText sx={{ color: '#d32f2f' }}>
-                    {userNameWarning}
-                  </FormHelperText>
-                )}
-              </Box>
-            </Grid>
-          </Grid>
-        </FormControl>
-        <Grid container spacing={0}>
-          <Grid item sm={1}>
-            <Button variant="outlined" onClick={create} className="nextButton">
-              <span className="secondaryButtonText">Finish</span>
-            </Button>
-          </Grid>
-          <Grid item sm={1}>
-            <Button
-              variant="outlined"
-              className="backButton"
-              onClick={() => onClickBack('pulseCheckPanel')}
+            </>
+          ) : (
+            <Typography
+              className="tabSummary"
+              sx={{
+                color:
+                  activePanel === 'userDetailPanel'
+                    ? '#2c69a1 !important'
+                    : '#4E4E4E !important',
+              }}
             >
-              Back
-            </Button>
-          </Grid>
-        </Grid>
+              User Details
+            </Typography>
+          )}
+        </Box>
+        {activePanel === 'userDetailPanel' && (
+          <Box>
+            <Box sx={{ mt: 4 }}>
+              <FormControl fullWidth>
+                <Grid container spacing={2}>
+                  <Grid item xs={12} md={4}>
+                    <Box
+                      sx={{
+                        display: 'flex',
+                        flexDirection: 'row',
+                        alignItems: 'center',
+                      }}
+                    >
+                      <Box>
+                        <Typography className="chooseAvatarText">
+                          Choose your avatar
+                        </Typography>
+                      </Box>
+                      <Box
+                        sx={{
+                          ml: 3,
+                          display: 'flex',
+                          flexDirection: 'column',
+                        }}
+                      >
+                        <Box
+                          sx={{
+                            display: 'flex',
+                            flexDirection: 'row',
+                            alignItems: 'center',
+                          }}
+                        >
+                          {selectedAvatar ? (
+                            <Avatar
+                              avatar={selectedAvatar}
+                              css={{
+                                width: '60px',
+                                height: '60px',
+                                borderRadius: '50%',
+                              }}
+                            />
+                          ) : (
+                            <LazyLoadImage
+                              className="avatar"
+                              style={{
+                                width: '50px',
+                                height: '50px',
+                                borderRadius: '50%',
+                              }}
+                              src="../svgs/Empty-Animals.svg"
+                            ></LazyLoadImage>
+                          )}
+                          <Button onClick={() => setOpenAvatarDialog(true)}>
+                            <span className="selectAvatarButtonText">
+                              Select Avatar
+                            </span>
+                          </Button>
+                        </Box>
+                        <Box>
+                          {avatarSelectionError !== '' && (
+                            <FormHelperText
+                              sx={{ color: '#d32f2f', marginLeft: '10px' }}
+                            >
+                              {avatarSelectionError}
+                            </FormHelperText>
+                          )}
+                        </Box>
+                      </Box>
+                    </Box>
+                  </Grid>
+                  <Grid item xs={12} md={2}>
+                    <Box>
+                      <TextField
+                        id="choose retro name"
+                        label="Choose your name for this retro"
+                        variant="standard"
+                        sx={styles.avatarfield}
+                        value={userName}
+                        onChange={e => handleUsername(e.currentTarget.value)}
+                        inputProps={{
+                          maxLength: AVATAR_CHARACTER_LIMIT,
+                        }}
+                        error={!!userNameError}
+                        helperText={userNameError}
+                      />
+                      {userNameWarning !== ' ' && (
+                        <FormHelperText sx={{ color: '#d32f2f' }}>
+                          {userNameWarning}
+                        </FormHelperText>
+                      )}
+                    </Box>
+                  </Grid>
+                </Grid>
+              </FormControl>
+            </Box>
+            <Box
+              sx={{
+                width: '10%',
+                display: 'flex',
+                flex: '1 0 auto',
+                alignItems: 'flex-end',
+                justifyContent: 'space-between',
+              }}
+            >
+              <ContainedButton
+                name="Finish"
+                onClick={() => onClickNext('userDetailPanel', '')}
+                style={{
+                  mt: 5,
+                  minWidth: '75px !important',
+                  height: '36px !important',
+                }}
+              />
+              <OutlinedButton
+                name="Back"
+                onClick={() => onClickBack('pulseCheckPanel')}
+                style={{
+                  minWidth: '75px !important',
+                  height: '36px !important',
+                  mt: 5,
+                }}
+              />
+            </Box>
+          </Box>
+        )}
         <Dialog
           open={openAvatarDialog}
           sx={{
@@ -198,14 +288,12 @@ export function UserDetails({
               </Grid>
               <Grid item sm={6}>
                 <Box display="flex" justifyContent="flex-end">
-                  <IconButton
-                    edge="start"
-                    color="inherit"
+                  <img
+                    width="45px"
+                    height="45px"
                     onClick={() => setOpenAvatarDialog(false)}
-                    aria-label="close"
-                  >
-                    <CloseIcon />
-                  </IconButton>
+                    src="/svgs/CloseDialog.svg"
+                  />
                 </Box>
               </Grid>
             </Grid>
@@ -221,41 +309,55 @@ export function UserDetails({
                 key={index}
                 avatar={avatar}
                 className="avatarSvgXs"
-                onClickAvatar={onClickAvatar}
-                selectedAvatar={selectedAvatar}
+                onClickAvatar={onSelectAvatar}
+                selectedAvatar={tempAvatar}
+                css={{
+                  width: '60px',
+                  height: '60px',
+                  borderRadius: '50%',
+                  margin: '16px',
+                }}
               ></Avatar>
             ))}
           </Box>
-          <Grid
-            container
-            sx={{ my: 2, px: 3, display: 'flex', alignItems: 'center' }}
-          >
-            <Grid item sm={6}>
-              <Box display="flex" justifyContent="flex-start">
-                <Button
-                  className="primaryMainButton"
-                  variant="outlined"
-                  onClick={() => setOpenAvatarDialog(false)}
-                >
-                  <span className="primaryMainButtonText">Cancel</span>
-                </Button>
-              </Box>
-            </Grid>
-            <Grid item sm={6}>
-              <Box display="flex" justifyContent="flex-end">
-                <Button
-                  className="secondaryButton"
-                  variant="outlined"
-                  onClick={() => setOpenAvatarDialog(false)}
-                  disabled={selectedAvatar == ''}
-                >
-                  <span className="secondaryButtonText">Select</span>
-                </Button>
-              </Box>
-            </Grid>
-          </Grid>
+          <Box sx={{ mx: 3, mt: 2 }}>
+            {avatarError !== '' && (
+              <FormHelperText sx={{ color: '#d32f2f', mt: 2 }}>
+                {avatarError}
+              </FormHelperText>
+            )}
+          </Box>
+          <Box sx={{ mx: 3 }}>
+            <Box
+              sx={{
+                width: '100%',
+                display: 'flex',
+                flex: '1 0 auto',
+                alignItems: 'flex-end',
+                justifyContent: 'space-between',
+                my: 2,
+              }}
+            >
+              <OutlinedButton
+                name="Cancel"
+                onClick={() => setOpenAvatarDialog(false)}
+                style={{
+                  minWidth: '75px !important',
+                  height: '36px !important',
+                }}
+              />
+              <ContainedButton
+                name="Select"
+                onClick={onClickSubmit}
+                style={{
+                  minWidth: '75px !important',
+                  height: '36px !important',
+                }}
+              />
+            </Box>
+          </Box>
         </Dialog>
-      </AccordionDetails>
-    </Accordion>
+      </Box>
+    </>
   );
 }

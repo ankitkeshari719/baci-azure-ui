@@ -1,20 +1,16 @@
 import * as React from 'react';
 import {
-  Accordion,
-  AccordionSummary,
   Typography,
-  AccordionDetails,
   Button,
   Card,
   CardContent,
-  Grid,
   Box,
+  FormHelperText,
 } from '@mui/material';
 import '../../global.scss';
 import './styles.scss';
-import Carousel from 'react-multi-carousel';
-import 'react-multi-carousel/lib/styles.css';
-import { pulseChecksData, pulseCheckInterface, responsive } from './const';
+import { pulseChecksData, pulseCheckInterface } from './const';
+import { ContainedButton, OutlinedButton } from '../../components';
 
 const styles = {
   card: {
@@ -30,70 +26,91 @@ const styles = {
 };
 
 type Props = {
-  expandedPanel: string;
-  allPanels: string[];
-  onClickNext: (currentPanel: string, nextPanel: string) => void;
-  onClickBack: (previousPanel: string) => void;
+  activePanel: string;
+  pulseCheckError: string;
   selectedPulseCheck: pulseCheckInterface | null;
+  onClickBack: (previousPanel: string) => void;
+  onClickNext: (currentPanel: string, nextPanel: string) => void;
   handlePulseCheck: (selectedPulseCheck: pulseCheckInterface) => void;
 };
 
 export function PulseCheck({
-  expandedPanel,
-  allPanels,
+  activePanel,
+  pulseCheckError,
+  selectedPulseCheck,
   onClickNext,
   onClickBack,
-  selectedPulseCheck,
   handlePulseCheck,
 }: Props) {
+  const [height, setHeight] = React.useState(0);
+
+  React.useEffect(() => {
+    setHeight(window.innerHeight);
+  }, []);
+
   return (
     <>
       {/* Template Panel */}
-      <Accordion
-        expanded={expandedPanel === 'pulseCheckPanel'}
-        sx={{
-          borderRadius: '0px',
-        }}
-      >
-        <AccordionSummary>
-          {allPanels.includes('pulseCheckPanel') &&
-          selectedPulseCheck != null ? (
-            <Typography className="accordionSummary">
-              {selectedPulseCheck.name}
-            </Typography>
+      <Box sx={{ borderBottom: 1, borderColor: '#CCCCCC', py: 4 }}>
+        <Box
+          sx={{
+            display: 'flex',
+            flexDirection: 'row',
+            alignItems: 'center',
+          }}
+        >
+          {activePanel != 'pulseCheckPanel' && selectedPulseCheck != null ? (
+            <>
+              <Box
+                className="tabSummary"
+                sx={{
+                  color: '#4E4E4E !important',
+                }}
+              >
+                {selectedPulseCheck?.name}
+              </Box>
+            </>
           ) : (
-            <Typography className="accordionSummary">
+            <Typography
+              className="tabSummary"
+              sx={{
+                color:
+                  activePanel === 'pulseCheckPanel' ? '#2c69a1 !important' : '#4E4E4E !important',
+              }}
+            >
               Pulse Check Layout
             </Typography>
           )}
-        </AccordionSummary>
-        <AccordionDetails>
-          <>
-            <Carousel responsive={responsive}>
+        </Box>
+        {activePanel === 'pulseCheckPanel' && (
+          <Box sx={{ mt: 4 }}>
+            <>
               {pulseChecksData.map(pulseCheck => {
                 return (
                   <Card
-                    sx={styles.card}
+                    key={pulseCheck.id}
+                    sx={{
+                      maxWidth: '420px',
+                      height: height / 2 - 50 + 'px',
+                      background: '#ffffff',
+                      borderRadius: '2px',
+                      margin: '8px',
+                      '&:hover': {
+                        backgroundColor: 'rgba(206, 239, 255, 0.4)',
+                      },
+                    }}
                     onClick={() => handlePulseCheck(pulseCheck)}
                   >
                     <CardContent>
                       {!pulseCheck.checked ? (
                         <Box
                           component="img"
-                          sx={{
-                            width: '348px',
-                            height: '180px',
-                          }}
                           alt="Logo"
                           src={pulseCheck.templateImageNotChecked}
                         />
                       ) : (
                         <Box
                           component="img"
-                          sx={{
-                            width: '348px',
-                            height: '180px',
-                          }}
                           alt="Logo"
                           src={pulseCheck.templateImageChecked}
                         />
@@ -101,69 +118,75 @@ export function PulseCheck({
                       <Typography
                         className="templateName"
                         component="div"
-                        sx={{ mt: 1 }}
+                        sx={{ mt: 2 }}
                       >
                         {pulseCheck.name}
                       </Typography>
                       <Typography
                         className="templateDescription"
                         component="div"
-                        sx={{ mt: 1 }}
+                        sx={{ mt: 2 }}
                       >
                         {pulseCheck.description}
                       </Typography>
-                      <Grid
-                        container
+                      <Box
                         sx={{
-                          width: '88%',
-                          position: 'absolute',
-                          bottom: '16px',
+                          display: 'flex',
+                          flex: '1 0 auto',
+                          alignItems: 'flex-end',
+                          justifyContent: 'space-between',
+                          mt: 5,
                         }}
                       >
-                        <Grid item sm={12}>
-                          <Box display="flex" justifyContent="flex-start">
-                            <Button
-                              size="small"
-                              // onClick={handleClickOpen}
-                              sx={{ padding: '0px' }}
-                            >
-                              <Typography className="textLink">
-                                Learn More
-                              </Typography>
-                            </Button>
-                          </Box>
-                        </Grid>
-                      </Grid>
+                        <Button size="small" sx={{ padding: '0px' }}>
+                          <Typography className="textLink">
+                            Learn More
+                          </Typography>
+                        </Button>
+                      </Box>
                     </CardContent>
                   </Card>
                 );
               })}
-            </Carousel>
-            <Grid container spacing={0}>
-              <Grid item sm={1}>
-                <Button
-                  variant="contained"
-                  className="nextButton"
+              {pulseCheckError !== ' ' && (
+                <FormHelperText sx={{ color: '#d32f2f', mt: 2 }}>
+                  {pulseCheckError}
+                </FormHelperText>
+              )}
+              <Box
+                sx={{
+                  width: '10%',
+                  display: 'flex',
+                  flex: '1 0 auto',
+                  alignItems: 'flex-end',
+                  justifyContent: 'space-between',
+                }}
+              >
+                <ContainedButton
+                  name="Next"
                   onClick={() =>
                     onClickNext('pulseCheckPanel', 'userDetailPanel')
                   }
-                >
-                  Next
-                </Button>
-              </Grid>
-              <Grid item sm={1}>
-                <Button
-                  variant="outlined"
-                  className="backButton"
+                  style={{
+                    mt: 5,
+                    minWidth: '75px !important',
+                    height: '36px !important',
+                  }}
+                />
+                <OutlinedButton
+                  name="Back"
                   onClick={() => onClickBack('templatePanel')}
-                >
-                  Back
-                </Button>
-              </Grid>
-            </Grid>
-          </>
-        </AccordionDetails>
-      </Accordion>
+                  style={{
+                    minWidth: '75px !important',
+                    height: '36px !important',
+                    mt: 5,
+                  }}
+                />
+              </Box>
+            </>
+          </Box>
+        )}
+      </Box>
     </>
   );
 }
