@@ -13,13 +13,21 @@ import Slider from 'react-slick';
 
 import { pulseChecksData, pulseCheckInterface } from './const';
 import { ContainedButton, OutlinedButton } from '../../components';
+import * as Icons from 'heroicons-react';
 
 function SampleNextArrow(props: any) {
   const { className, style, onClick } = props;
   return (
-    <div
+    <Icons.ChevronRight
+      size={32}
       className={className}
-      style={{ ...style, display: 'block', background: 'red', right: '0px' }}
+      style={{
+        ...style,
+        display: 'block',
+        right: '0px',
+        color: '#0F172A',
+        fontSize: '14px',
+      }}
       onClick={onClick}
     />
   );
@@ -28,16 +36,23 @@ function SampleNextArrow(props: any) {
 function SamplePrevArrow(props: any) {
   const { className, style, onClick } = props;
   return (
-    <div
+    <Icons.ChevronLeft
+      size={32}
       className={className}
-      style={{ ...style, display: 'block', background: 'green', left: '0px' }}
+      style={{
+        ...style,
+        display: 'block',
+        left: '0px',
+        color: '#0F172A',
+        fontSize: '14px',
+      }}
       onClick={onClick}
     />
   );
 }
 
 const settings = {
-  infinite: true,
+  infinite: false,
   speed: 500,
   slidesToShow: 3,
   slidesToScroll: 3,
