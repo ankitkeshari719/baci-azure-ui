@@ -27,6 +27,7 @@ function SampleNextArrow(props: any) {
         right: '0px',
         color: '#0F172A',
         fontSize: '14px',
+        cursor: 'pointer'
       }}
       onClick={onClick}
     />
@@ -45,6 +46,7 @@ function SamplePrevArrow(props: any) {
         left: '0px',
         color: '#0F172A',
         fontSize: '14px',
+        cursor: 'pointer'
       }}
       onClick={onClick}
     />
