@@ -7,13 +7,13 @@
 }
 // App Bar
 .logoContainer {
-  height: 4rem;
+  height: 4rem !important;
   display: flex !important;
   justify-content: center !important;
   background: #ffffff !important;
   box-shadow: 0px 0px 2px rgba(0, 0, 0, 0.25) !important;
 }
-// Retro Main Containeralign 
+// Retro Main Container align
 .retroContainer {
   height: calc(100vh - 64px) !important;
   padding: 56px !important;
@@ -267,16 +267,15 @@
 }
 
 // Learn More CSS
-.learnMoreContainer {
-  height: 93vh !important;
-  padding: 56px !important;
+.learnMoreAppBar {
+  height: 4rem !important;
   display: flex !important;
-  justify-content: flex-start !important;
-  align-items: flex-start !important;
-  flex-direction: column !important;
-  overflow-y: auto !important;
+  justify-content: center !important;
+  background: #ffffff !important;
+  box-shadow: 0px 1px 0px rgba(0, 0, 0, 0.25) !important;
 }
 .customizeButton {
+  height: 36px !important;
   display: flex !important;
   flex-direction: row !important;
   justify-content: center !important;
@@ -287,7 +286,24 @@
   filter: drop-shadow(0px 2px 4px rgba(0, 0, 0, 0.25)) !important;
   border-radius: 24px !important;
 }
+.customizeButtonText {
+  font-family: 'Poppins' !important;
+  font-style: normal !important;
+  font-weight: 500 !important;
+  font-size: 16px !important;
+  line-height: 20px !important;
+  display: flex !important;
+  align-items: center !important;
+  text-align: center !important;
+  letter-spacing: 0.4px !important;
+  text-transform: uppercase !important;
+  color: #159add !important;
+  flex: none !important;
+  order: 0 !important;
+  flex-grow: 0 !important;
+}
 .saveButton {
+  height: 36px !important;
   display: flex !important;
   flex-direction: row !important;
   justify-content: center !important;
@@ -297,6 +313,22 @@
   background: #159add !important;
   box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.25) !important;
   border-radius: 24px !important;
+}
+.saveButtonText {
+  font-family: 'Poppins' !important;
+  font-style: normal !important;
+  font-weight: 500 !important;
+  font-size: 16px !important;
+  line-height: 20px !important;
+  display: flex !important;
+  align-items: center !important;
+  text-align: center !important;
+  letter-spacing: 0.4px !important;
+  text-transform: uppercase !important;
+  color: #fafafa !important;
+  flex: none !important;
+  order: 0 !important;
+  flex-grow: 0 !important;
 }
 .selectedTemplate {
   font-family: 'Poppins';
