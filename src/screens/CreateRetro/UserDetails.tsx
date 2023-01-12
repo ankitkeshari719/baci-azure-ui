@@ -32,6 +32,10 @@ const styles = {
     '& .css-1sop3d1-MuiInputBase-root-MuiInput-root': {
       borderBottom: '0px solid rgba(0, 0, 0, 0.42) !important',
     },
+    '& .css-1d1r5q-MuiFormHelperText-root': {
+      color: '#d32f2f',
+      marginTop: '24px !important',
+    },
   },
 };
 
@@ -84,6 +88,8 @@ export function UserDetails({
     onClickAvatar(tempAvatar);
     setOpenAvatarDialog(false);
   };
+
+  const imaSrc = '/avatars/animals/' + selectedAvatar + '.svg';
 
   return (
     <>
@@ -179,21 +185,23 @@ export function UserDetails({
                           }}
                         >
                           {selectedAvatar ? (
-                            <Avatar
-                              avatar={selectedAvatar}
-                              css={{
-                                width: '60px',
-                                height: '60px',
-                                borderRadius: '50%',
-                              }}
-                            />
-                          ) : (
                             <LazyLoadImage
                               className="avatar"
                               style={{
-                                width: '50px',
-                                height: '50px',
+                                width: '60px',
+                                height: '60px',
                                 borderRadius: '50%',
+                                border: '5px solid #f9fbf8',
+                              }}
+                              src={imaSrc}
+                            ></LazyLoadImage>
+                          ) : (
+                            <LazyLoadImage
+                              style={{
+                                width: '60px',
+                                height: '60px',
+                                borderRadius: '50%',
+                                border: '5px solid #f9fbf8',
                               }}
                               src="../svgs/Empty-Animals.svg"
                             ></LazyLoadImage>
@@ -231,11 +239,6 @@ export function UserDetails({
                         error={!!userNameError}
                         helperText={userNameError}
                       />
-                      {userNameWarning !== ' ' && (
-                        <FormHelperText sx={{ color: '#d32f2f' }}>
-                          {userNameWarning}
-                        </FormHelperText>
-                      )}
                     </Box>
                   </Grid>
                 </Grid>
