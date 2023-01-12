@@ -14,18 +14,40 @@ import { templatesData } from './const';
 import { LearnMore } from './LearnMore';
 import { ContainedButton } from '../../components/ContainedButton';
 import { OutlinedButton } from '../../components/OutlinedButton';
+import Slider from 'react-slick';
 
-const styles = {
-  card: {
-    maxWidth: '420px',
-    height: '400px',
-    background: '#ffffff',
-    borderRadius: '2px',
-    margin: '8px',
-    '&:hover': {
-      backgroundColor: 'rgba(206, 239, 255, 0.4)',
-    },
-  },
+function SampleNextArrow(props: any) {
+  const { className, style, onClick } = props;
+  return (
+    <div
+      className={className}
+      style={{ ...style, display: 'block', background: 'red', right: '0px' }}
+      onClick={onClick}
+    />
+  );
+}
+
+function SamplePrevArrow(props: any) {
+  const { className, style, onClick } = props;
+  return (
+    <div
+      className={className}
+      style={{ ...style, display: 'block', background: 'green', left: '0px' }}
+      onClick={onClick}
+    />
+  );
+}
+
+const settings = {
+  infinite: true,
+  speed: 500,
+  slidesToShow: 3,
+  slidesToScroll: 3,
+  className: 'center',
+  centerMode: true,
+  swipeToSlide: true,
+  nextArrow: <SampleNextArrow />,
+  prevArrow: <SamplePrevArrow />,
 };
 
 const responsive = {
@@ -114,7 +136,10 @@ export function RetroTemplate({
             <Typography
               className="tabSummary"
               sx={{
-                color: activePanel === 'templatePanel' ? '#2c69a1 !important' : '#4E4E4E !important',
+                color:
+                  activePanel === 'templatePanel'
+                    ? '#2c69a1 !important'
+                    : '#4E4E4E !important',
               }}
             >
               Retro Template
@@ -124,82 +149,85 @@ export function RetroTemplate({
         {activePanel === 'templatePanel' && (
           <Box sx={{ mt: 4 }}>
             <>
-              {templatesData.map(template => {
-                return (
-                  <Card
-                    key={template.templateId}
-                    sx={{
-                      maxWidth: '420px',
-                      height: height / 2 - 100 + 'px',
-                      background: '#ffffff',
-                      borderRadius: '2px',
-                      margin: '8px',
-                      '&:hover': {
-                        backgroundColor: 'rgba(206, 239, 255, 0.4)',
-                      },
-                    }}
-                    onClick={() => handleTemplate(template)}
-                  >
-                    <CardContent>
-                      {!template.checked ? (
-                        <Box
-                          component="img"
-                          alt="Logo"
-                          src={template.templateImageNotChecked}
-                        />
-                      ) : (
-                        <Box
-                          component="img"
-                          alt="Logo"
-                          src={template.templateImageChecked}
-                        />
-                      )}
-                      <Typography
-                        className="templateName"
-                        component="div"
-                        sx={{ mt: 2 }}
-                      >
-                        {template.templateName}
-                      </Typography>
-                      <Typography
-                        className="templateDescription"
-                        component="div"
-                        sx={{ mt: 2 }}
-                      >
-                        {template.templateDescription}
-                      </Typography>
-                      <Box
-                        sx={{
-                          display: 'flex',
-                          flex: '1 0 auto',
-                          alignItems: 'flex-end',
-                          justifyContent: 'space-between',
-                          mt: 5,
-                        }}
-                      >
-                        <Button
-                          size="small"
-                          onClick={handleClickOpen}
-                          sx={{ padding: '0px' }}
+              <Slider {...settings}>
+                {templatesData.map(template => {
+                  return (
+                    <Card
+                      key={template.templateId}
+                      sx={{
+                        maxWidth: '420px',
+                        height: height / 2,
+                        background: '#ffffff',
+                        borderRadius: '2px',
+                        margin: '8px',
+                        '&:hover': {
+                          backgroundColor: 'rgba(206, 239, 255, 0.4)',
+                        },
+                      }}
+                      onClick={() => handleTemplate(template)}
+                    >
+                      <CardContent>
+                        {!template.checked ? (
+                          <Box
+                            component="img"
+                            alt="Logo"
+                            src={template.templateImageNotChecked}
+                          />
+                        ) : (
+                          <Box
+                            component="img"
+                            alt="Logo"
+                            src={template.templateImageChecked}
+                          />
+                        )}
+                        <Typography
+                          className="templateName"
+                          component="div"
+                          sx={{ mt: 2 }}
                         >
-                          <Typography className="textLink">
-                            Learn More
-                          </Typography>
-                        </Button>
-                        <Button
-                          variant="outlined"
-                          size="small"
-                          className="customButton"
+                          {template.templateName}
+                        </Typography>
+                        <Typography
+                          className="templateDescription"
+                          component="div"
+                          sx={{ mt: 2 }}
                         >
-                          <Typography className="customText">
-                            Customize
-                          </Typography>
-                        </Button>
-                      </Box>
-                    </CardContent>
-                  </Card>
-                );
-              })}
+                          {template.templateDescription}
+                        </Typography>
+                        <Box
+                          sx={{
+                            display: 'flex',
+                            flex: '1 0 auto',
+                            alignItems: 'flex-end',
+                            justifyContent: 'space-between',
+                            mt: 5,
+                          }}
+                        >
+                          <Button
+                            size="small"
+                            onClick={handleClickOpen}
+                            sx={{ padding: '0px' }}
+                          >
+                            <Typography className="textLink">
+                              Learn More
+                            </Typography>
+                          </Button>
+                          <Button
+                            variant="outlined"
+                            size="small"
+                            className="customButton"
+                          >
+                            <Typography className="customText">
+                              Customize
+                            </Typography>
+                          </Button>
+                        </Box>
+                      </CardContent>
+                    </Card>
+                  );
+                })}
+              </Slider>
+
               {templateError !== '' && (
                 <FormHelperText sx={{ color: '#d32f2f', mt: 2 }}>
                   {templateError}
