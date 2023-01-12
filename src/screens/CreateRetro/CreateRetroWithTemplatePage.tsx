@@ -273,7 +273,7 @@ export function CreateRetroWithTemplatePage({
         setAvatarSelectionError('Please select avatar');
       }
       if (userName === '') {
-        setUserNameError('Please enter avatar name');
+        setUserNameError('Please enter your name');
       }
       return;
     }
