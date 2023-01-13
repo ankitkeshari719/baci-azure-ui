@@ -21,6 +21,7 @@ export enum BoardActionType {
   DELETE_CARD = 'deleteCard',
   MOVE_CARD = 'moveCard',
   MERGE_CARDS = 'mergeCards',
+  REORDER_CARD = "reorderCard",
   ADD_REACT_TO_CARD = 'addReactToCard',
   ADD_REACT_TO_GROUP = 'addReactToGroup',
   REMOVE_REACT_FROM_CARD = 'removeReactFromCard',
@@ -46,6 +47,7 @@ export enum BoardActionType {
   PUBLISH_COLUMN = 'publishColumn',
   LOCK_COLUMN = 'lockColumn',
   SET_FACILITATOR = 'setFacilitator',
+
 }
 
 export const BOARD_STATE_MACHINE_VERSION = 1;
@@ -492,6 +494,8 @@ export const validateAction = (
         parameters.cardId2,
         userId
       );
+    case BoardActionType.REORDER_CARD:
+      return true;
     case BoardActionType.ADD_REACT_TO_CARD:
       return isAddReactToCardValid(parameters.cardId, parameters.react, userId);
     case BoardActionType.REMOVE_REACT_FROM_CARD:
@@ -729,6 +733,7 @@ export const processAction = (
     toIndex: number,
     userId: string
   ) => {
+   
     const { card, group, index } = findCard(cardId);
     if (
       card &&
@@ -742,9 +747,9 @@ export const processAction = (
         group.cards.splice(index as number, 1);
         cardsList.splice(
           toIndex -
-            (group.id === targetGroup.id && (index as number) < toIndex
-              ? 1
-              : 0),
+          (group.id === targetGroup.id && (index as number) < toIndex
+            ? 1
+            : 0),
           0,
           card
         );
@@ -752,6 +757,24 @@ export const processAction = (
       }
     }
   };
+
+  const reorderCards = ( cardId: string, targetCard: string, order: number, userId: string) => {
+    const { column, card, group, index: index1 } = findCard(cardId);
+    const { index: index2 } = findCard(targetCard)
+    if (column && card && group&&index1!=undefined&&index2!=undefined ) {
+      if(index1<index2){
+        group.cards.splice(index1,1);
+        group.cards.splice(index2-1,0,card)
+      }
+      else{
+        group.cards.splice(index1,1);
+        group.cards.splice(index2,0,card)
+      }
+      
+    
+    }
+
+  }
 
   const mergeCards = (
     groupId: string,
@@ -848,6 +871,7 @@ export const processAction = (
       group.cards.splice(index as number, 1);
     }
   };
+
 
   const removeReactFromCard = (
     cardId: string,
@@ -1119,6 +1143,14 @@ export const processAction = (
         parameters.order,
         parameters.cardId1,
         parameters.cardId2,
+        userId
+      );
+      break;
+    case BoardActionType.REORDER_CARD:
+      reorderCards(
+        parameters.cardId,
+        parameters.targetCard,
+        parameters.index,
         userId
       );
       break;
