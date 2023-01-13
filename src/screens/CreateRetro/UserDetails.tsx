@@ -36,6 +36,9 @@ const styles = {
       color: '#d32f2f',
       marginTop: '24px !important',
     },
+    '& .css-j7o63n.Mui-error': {
+      marginTop: '24px !important',
+    },
   },
 };
 
