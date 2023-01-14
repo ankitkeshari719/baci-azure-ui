@@ -9,7 +9,6 @@ import {
   Grid,
   Dialog,
   DialogTitle,
-  IconButton,
 } from '@mui/material';
 import '../../global.scss';
 import './styles.scss';
@@ -18,7 +17,6 @@ import Avatar from '../../elements/Avatar';
 import { avatarName } from '../../constants/AvatarName';
 import { LazyLoadImage } from 'react-lazy-load-image-component';
 import { ContainedButton, OutlinedButton } from '../../components';
-import CloseIcon from '@mui/icons-material/Close';
 
 const styles = {
   avatarfield: {
@@ -31,8 +29,15 @@ const styles = {
       color: 'rgba(0, 0, 0, 0.6) !important',
       fontSize: '14px',
     },
-    '& .css-ov41s0-MuiInputBase-root-MuiInput-root': {
-      borderBottom: '1px solid rgba(0, 0, 0, 0.42) !important',
+    '& .css-1sop3d1-MuiInputBase-root-MuiInput-root': {
+      borderBottom: '0px solid rgba(0, 0, 0, 0.42) !important',
+    },
+    '& .css-1d1r5q-MuiFormHelperText-root': {
+      color: '#d32f2f',
+      marginTop: '24px !important',
+    },
+    '& .css-j7o63n.Mui-error': {
+      marginTop: '24px !important',
     },
   },
 };
@@ -87,6 +92,8 @@ export function UserDetails({
     setOpenAvatarDialog(false);
   };
 
+  const imaSrc = '/avatars/animals/' + selectedAvatar + '.svg';
+
   return (
     <>
       {/* User Details Panel */}
@@ -116,7 +123,7 @@ export function UserDetails({
               <Box>
                 <Avatar
                   avatar={selectedAvatar}
-                  onClickAvatar={()=>{}}
+                  onClickAvatar={() => {}}
                   css={{
                     width: '60px',
                     height: '60px',
@@ -181,21 +188,23 @@ export function UserDetails({
                           }}
                         >
                           {selectedAvatar ? (
-                            <Avatar
-                              avatar={selectedAvatar}
-                              css={{
-                                width: '60px',
-                                height: '60px',
-                                borderRadius: '50%',
-                              }}
-                            />
-                          ) : (
                             <LazyLoadImage
                               className="avatar"
                               style={{
-                                width: '50px',
-                                height: '50px',
+                                width: '60px',
+                                height: '60px',
                                 borderRadius: '50%',
+                                border: '5px solid #f9fbf8',
+                              }}
+                              src={imaSrc}
+                            ></LazyLoadImage>
+                          ) : (
+                            <LazyLoadImage
+                              style={{
+                                width: '60px',
+                                height: '60px',
+                                borderRadius: '50%',
+                                border: '5px solid #f9fbf8',
                               }}
                               src="../svgs/Empty-Animals.svg"
                             ></LazyLoadImage>
@@ -233,11 +242,6 @@ export function UserDetails({
                         error={!!userNameError}
                         helperText={userNameError}
                       />
-                      {userNameWarning !== ' ' && (
-                        <FormHelperText sx={{ color: '#d32f2f' }}>
-                          {userNameWarning}
-                        </FormHelperText>
-                      )}
                     </Box>
                   </Grid>
                 </Grid>
@@ -290,14 +294,12 @@ export function UserDetails({
               </Grid>
               <Grid item sm={6}>
                 <Box display="flex" justifyContent="flex-end">
-                  <IconButton
-                    edge="start"
-                    color="inherit"
+                  <img
+                    width="45px"
+                    height="45px"
                     onClick={() => setOpenAvatarDialog(false)}
-                    aria-label="close"
-                  >
-                    <CloseIcon />
-                  </IconButton>
+                    src="/svgs/CloseDialog.svg"
+                  />
                 </Box>
               </Grid>
             </Grid>
@@ -314,7 +316,7 @@ export function UserDetails({
                 avatar={avatar}
                 className="avatarSvgXs"
                 onClickAvatar={onSelectAvatar}
-                selectedAvatar={selectedAvatar}
+                selectedAvatar={tempAvatar}
                 css={{
                   width: '60px',
                   height: '60px',

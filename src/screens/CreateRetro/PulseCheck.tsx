@@ -9,20 +9,60 @@ import {
 } from '@mui/material';
 import '../../global.scss';
 import './styles.scss';
+import Slider from 'react-slick';
+
 import { pulseChecksData, pulseCheckInterface } from './const';
 import { ContainedButton, OutlinedButton } from '../../components';
+import * as Icons from 'heroicons-react';
 
-const styles = {
-  card: {
-    maxWidth: '420px',
-    height: '400px',
-    background: '#ffffff',
-    borderRadius: '2px',
-    margin: '8px',
-    '&:hover': {
-      backgroundColor: 'rgba(206, 239, 255, 0.4)',
-    },
-  },
+function SampleNextArrow(props: any) {
+  const { className, style, onClick } = props;
+  return (
+    <Icons.ChevronRight
+      size={32}
+      className={className}
+      style={{
+        ...style,
+        display: 'block',
+        right: '0px',
+        color: '#0F172A',
+        fontSize: '14px',
+        cursor: 'pointer'
+      }}
+      onClick={onClick}
+    />
+  );
+}
+
+function SamplePrevArrow(props: any) {
+  const { className, style, onClick } = props;
+  return (
+    <Icons.ChevronLeft
+      size={32}
+      className={className}
+      style={{
+        ...style,
+        display: 'block',
+        left: '0px',
+        color: '#0F172A',
+        fontSize: '14px',
+        cursor: 'pointer'
+      }}
+      onClick={onClick}
+    />
+  );
+}
+
+const settings = {
+  infinite: false,
+  speed: 500,
+  slidesToShow: 3,
+  slidesToScroll: 3,
+  className: 'center',
+  centerMode: true,
+  swipeToSlide: true,
+  nextArrow: <SampleNextArrow />,
+  prevArrow: <SamplePrevArrow />,
 };
 
 type Props = {
@@ -75,79 +115,85 @@ export function PulseCheck({
               className="tabSummary"
               sx={{
                 color:
-                  activePanel === 'pulseCheckPanel' ? '#2c69a1 !important' : '#4E4E4E !important',
+                  activePanel === 'pulseCheckPanel'
+                    ? '#2c69a1 !important'
+                    : '#4E4E4E !important',
               }}
             >
               Pulse Check Layout
             </Typography>
           )}
         </Box>
+
         {activePanel === 'pulseCheckPanel' && (
           <Box sx={{ mt: 4 }}>
             <>
-              {pulseChecksData.map(pulseCheck => {
-                return (
-                  <Card
-                    key={pulseCheck.id}
-                    sx={{
-                      maxWidth: '420px',
-                      height: height / 2 - 50 + 'px',
-                      background: '#ffffff',
-                      borderRadius: '2px',
-                      margin: '8px',
-                      '&:hover': {
-                        backgroundColor: 'rgba(206, 239, 255, 0.4)',
-                      },
-                    }}
-                    onClick={() => handlePulseCheck(pulseCheck)}
-                  >
-                    <CardContent>
-                      {!pulseCheck.checked ? (
+              <Slider {...settings}>
+                {pulseChecksData.map(pulseCheck => {
+                  return (
+                    <Card
+                      key={pulseCheck.id}
+                      sx={{
+                        maxWidth: '420px',
+                        height: height / 2,
+                        background: '#ffffff',
+                        borderRadius: '2px',
+                        margin: '8px',
+                        '&:hover': {
+                          backgroundColor: 'rgba(206, 239, 255, 0.4)',
+                        },
+                      }}
+                      onClick={() => handlePulseCheck(pulseCheck)}
+                    >
+                      <CardContent>
+                        {!pulseCheck.checked ? (
+                          <Box
+                            component="img"
+                            alt="Logo"
+                            src={pulseCheck.templateImageNotChecked}
+                          />
+                        ) : (
+                          <Box
+                            component="img"
+                            alt="Logo"
+                            src={pulseCheck.templateImageChecked}
+                          />
+                        )}
+                        <Typography
+                          className="templateName"
+                          component="div"
+                          sx={{ mt: 2 }}
+                        >
+                          {pulseCheck.name}
+                        </Typography>
+                        <Typography
+                          className="templateDescription"
+                          component="div"
+                          sx={{ mt: 2 }}
+                        >
+                          {pulseCheck.description}
+                        </Typography>
                         <Box
-                          component="img"
-                          alt="Logo"
-                          src={pulseCheck.templateImageNotChecked}
-                        />
-                      ) : (
-                        <Box
-                          component="img"
-                          alt="Logo"
-                          src={pulseCheck.templateImageChecked}
-                        />
-                      )}
-                      <Typography
-                        className="templateName"
-                        component="div"
-                        sx={{ mt: 2 }}
-                      >
-                        {pulseCheck.name}
-                      </Typography>
-                      <Typography
-                        className="templateDescription"
-                        component="div"
-                        sx={{ mt: 2 }}
-                      >
-                        {pulseCheck.description}
-                      </Typography>
-                      <Box
-                        sx={{
-                          display: 'flex',
-                          flex: '1 0 auto',
-                          alignItems: 'flex-end',
-                          justifyContent: 'space-between',
-                          mt: 5,
-                        }}
-                      >
-                        <Button size="small" sx={{ padding: '0px' }}>
-                          <Typography className="textLink">
-                            Learn More
-                          </Typography>
-                        </Button>
-                      </Box>
-                    </CardContent>
-                  </Card>
-                );
-              })}
+                          sx={{
+                            display: 'flex',
+                            flex: '1 0 auto',
+                            alignItems: 'flex-end',
+                            justifyContent: 'space-between',
+                            mt: 5,
+                          }}
+                        >
+                          <Button size="small" sx={{ padding: '0px' }}>
+                            <Typography className="textLink">
+                              Learn More
+                            </Typography>
+                          </Button>
+                        </Box>
+                      </CardContent>
+                    </Card>
+                  );
+                })}
+              </Slider>
+
               {pulseCheckError !== ' ' && (
                 <FormHelperText sx={{ color: '#d32f2f', mt: 2 }}>
                   {pulseCheckError}

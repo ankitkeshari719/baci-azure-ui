@@ -13,8 +13,8 @@ import { PulseCheck } from './PulseCheck';
 import { UserDetails } from './UserDetails';
 import { pulseCheckInterface, pulseChecksData, templatesData } from './const';
 import { UserTypeArray } from '../../constants';
-import { ContainedButton } from '../../components';
 import { getRetro } from '../../msal/services';
+import { StartRetroWithTemplate } from './StartRetroWithTemplate';
 
 type Props = {
   handleStartRetro: () => void;
@@ -157,8 +157,6 @@ export function CreateRetroWithTemplatePage({
     setAvatarSelectionError('');
   };
 
-
-
   // Function to handle next button on click
   const onClickBack = (previousPanel: string) => {
     setActivePanel(previousPanel);
@@ -172,9 +170,6 @@ export function CreateRetroWithTemplatePage({
       global?.user?.id == global.currentRetro?.creatorId
         ? UserTypeArray[1].id
         : UserTypeArray[0].id;
-
-    if (userName === '') setUserNameError('Please enter avatar name');
-    if (selectedAvatar === '') setAvatarSelectionError('Please select avatar');
 
     if (
       retroName !== '' &&
@@ -216,25 +211,22 @@ export function CreateRetroWithTemplatePage({
               type: ActionType.SET_LOADING,
               payload: { loadingFlag: false },
             });
-            handleStartRetro();
+            // Call Join Retro
+            // Get Retro
             getRetro(res.id as string)
               .then(retro => {
-                console.log("retro id",retro)
                 if (retro && retro.id) {
-
                   dispatch({
                     type: ActionType.SET_CURRENT_RETRO,
                     payload: { retro },
                   });
                 }
-                //  else {
-                //   navigate('/');
-                //   return;
-                // }
               })
               .catch(e => {
-                console.log("error", e)
+                console.log('error', e);
               });
+            setIsStartRetro(true);
+            handleStartRetro();
           },
           err => {
             console.log('err', err);
@@ -248,41 +240,60 @@ export function CreateRetroWithTemplatePage({
     sessionStorage.setItem('retroname', retroName);
   };
 
-  // Start Retro 
-  const startRetro = () => {
-    console.log('Start retro!!');
-  }
-
   // Function to handle next button on click
   const onClickNext = (currentPanel: string, nextPanel: string) => {
-    if (currentPanel === 'detailsPanel' && retroName === '') {
-      setRetroNameError('Please enter retro name.');
-    }
-    if (currentPanel === 'detailsPanel' && retroTimeFrame === '') {
-      setIsTimeFrameSet(true);
+    if (
+      currentPanel === 'detailsPanel' &&
+      (retroName === '' || retroTimeFrame === '')
+    ) {
+      if (retroName === '') {
+        setRetroNameError('Please enter retro name.');
+      }
+      if (retroTimeFrame === '') {
+        setIsTimeFrameSet(true);
+      }
       return;
     }
+
     if (currentPanel === 'templatePanel' && selectedTemplate === null) {
       setTemplateError('Please select the template.');
       return;
     }
+
     if (currentPanel === 'pulseCheckPanel' && selectedPulseCheck === null) {
       setPulseCheckError('Please select the pulse check.');
       return;
     }
+
     if (
       currentPanel === 'userDetailPanel' &&
+      (userName === '' || selectedAvatar === '')
+    ) {
+      if (selectedAvatar === '') {
+        setAvatarSelectionError('Please select avatar');
+      }
+      if (userName === '') {
+        setUserNameError('Please enter your name');
+      }
+      return;
+    }
+
+    setActivePanel(nextPanel);
+    if (
+      currentPanel === 'userDetailPanel' &&
+      retroName != '' &&
+      retroTimeFrame != '' &&
+      selectedTemplate != null &&
+      selectedPulseCheck != null &&
       userName != '' &&
       selectedAvatar != ''
     ) {
-      setIsStartRetro(true);
       create();
     }
-    setActivePanel(nextPanel);
   };
 
   return (
-    <Box className="retroContainer">
+    <Box sx={{ width: '100%' }}>
       {!isRetroStart ? (
         <Box component="div" whiteSpace="normal" className="createRetroText">
           Create new BACI retro
@@ -340,19 +351,11 @@ export function CreateRetroWithTemplatePage({
           sx={{
             mt: 2,
             minWidth: '100%',
-            alignItems: 'start',
+            alignItems: 'flex-start',
             justifyContent: 'center',
           }}
         >
-          <ContainedButton
-            name="Start Retro"
-            onClick={startRetro}
-            style={{
-              mt: 5,
-              minWidth: '140px !important',
-              height: '36px !important',
-            }}
-          />
+          <StartRetroWithTemplate />
         </Box>
       )}
     </Box>

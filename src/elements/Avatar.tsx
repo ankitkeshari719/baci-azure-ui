@@ -19,7 +19,8 @@ const Avatar = (props: any) => {
   return (
     <LazyLoadImage
       className={`${
-        window.location.pathname.includes('join') &&
+        (window.location.pathname.includes('join') ||
+          window.location.pathname.includes('createretrowithtemplate')) &&
         props.avatar == props.selectedAvatar
           ? 'selectedAvatar'
           : 'avatar'

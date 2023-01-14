@@ -15,19 +15,41 @@ export function CreateRetroMain() {
     <>
       <Box className="mainContainer">
         <TopBar />
-        <Grid container spacing={0}>
-          <Grid item xs={12} md={isRetroStart ? 7 : 12}>
-            <CreateRetroWithTemplatePage
-              handleStartRetro={handleStartRetro}
-              isRetroStart={isRetroStart}
-            />
-          </Grid>
-          {isRetroStart && (
-            <Grid item xs={12} md={5}>
+        {isRetroStart ? (
+          <Grid
+            container
+            spacing={0}
+            sx={{ height: 'calc(100vh - 64px) !important' }}
+          >
+            <Grid
+              item
+              xs={7}
+              sx={{
+                padding: '56px',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'flex-start',
+              }}
+            >
+              <CreateRetroWithTemplatePage
+                handleStartRetro={handleStartRetro}
+                isRetroStart={isRetroStart}
+              />
+            </Grid>
+            <Grid item xs={5}>
               <ShareParticipants />
             </Grid>
-          )}
-        </Grid>
+          </Grid>
+        ) : (
+          <Grid container spacing={0} className="retroContainer">
+            <Grid item xs={12}>
+              <CreateRetroWithTemplatePage
+                handleStartRetro={handleStartRetro}
+                isRetroStart={isRetroStart}
+              />
+            </Grid>
+          </Grid>
+        )}
       </Box>
     </>
   );

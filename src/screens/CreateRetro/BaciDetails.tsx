@@ -25,7 +25,7 @@ const styles = {
       fontSize: '14px',
     },
     '& .css-ov41s0-MuiInputBase-root-MuiInput-root': {
-      borderBottom: '1px solid rgba(0, 0, 0, 0.42) !important',
+      borderBottom: '0px solid rgba(0, 0, 0, 0.42) !important',
     },
    
   },
@@ -40,7 +40,7 @@ const styles = {
       },
     },
     '& .css-1sop3d1-MuiInputBase-root-MuiInput-root': {
-      borderBottom: '1px solid rgba(0, 0, 0, 0.42) !important',
+      borderBottom: '0px solid rgba(0, 0, 0, 0.42) !important',
     },
   },
 };
