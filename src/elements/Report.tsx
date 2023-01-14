@@ -508,7 +508,8 @@ export const Report = React.forwardRef((props, ref) => {
                 >
                   Actions
                 </Typography>
-                <Box>
+                <Grid container spacing={2} justifyContent="center" mt={1}>
+                <Grid item lg={10} >
                   {actions.length !== 0 ? (
                     <>
                       <RetroColumn
@@ -528,7 +529,8 @@ export const Report = React.forwardRef((props, ref) => {
                       />
                     </>
                   ) : null}
-                </Box>
+                </Grid>
+                </Grid>
               </Box>
               <Grid item mt="48px" sx={styles.pulseCheckBox}>
                 <Grid item>
