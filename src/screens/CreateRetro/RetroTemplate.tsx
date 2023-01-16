@@ -16,6 +16,7 @@ import { ContainedButton } from '../../components/ContainedButton';
 import { OutlinedButton } from '../../components/OutlinedButton';
 import Slider from 'react-slick';
 import * as Icons from 'heroicons-react';
+import { CustomizeTemplate } from './CustomizeTemplate';
 
 function SampleNextArrow(props: any) {
   const { className, style, onClick } = props;
@@ -103,18 +104,27 @@ export function RetroTemplate({
   onClickBack,
 }: Props) {
   const [openLearnMoreDialog, setOpenLearnMoreDialog] = React.useState(false);
+  const [openCustomTemplateDialog, setOpenCustomTemplateDialog] = React.useState(false);
   const [height, setHeight] = React.useState(0);
 
   React.useEffect(() => {
     setHeight(window.innerHeight);
   }, []);
 
-  const handleClickOpen = () => {
+  const handleLearnMoreDialog = () => {
     setOpenLearnMoreDialog(true);
   };
 
-  const handleClose = () => {
+  const closeLearnMoreDialog = () => {
     setOpenLearnMoreDialog(false);
+  };
+
+  const handleCustomTemplateDialog = () => {
+    setOpenCustomTemplateDialog(true);
+  };
+
+  const closeCustomTemplateDialog = () => {
+    setOpenCustomTemplateDialog(false);
   };
 
   return (
@@ -221,7 +231,7 @@ export function RetroTemplate({
                         >
                           <Button
                             size="small"
-                            onClick={handleClickOpen}
+                            onClick={handleLearnMoreDialog}
                             sx={{ padding: '0px' }}
                           >
                             <Typography className="textLink">
@@ -232,6 +242,7 @@ export function RetroTemplate({
                             variant="outlined"
                             size="small"
                             className="customButton"
+                            onClick={handleCustomTemplateDialog}
                           >
                             <Typography className="customText">
                               Customize
@@ -243,7 +254,6 @@ export function RetroTemplate({
                   );
                 })}
               </Slider>
-
               {templateError !== '' && (
                 <FormHelperText sx={{ color: '#d32f2f', mt: 2 }}>
                   {templateError}
@@ -283,8 +293,11 @@ export function RetroTemplate({
           </Box>
         )}
       </Box>
-      <Dialog fullScreen open={openLearnMoreDialog} onClose={handleClose}>
-        <LearnMore handleClose={handleClose} />
+      <Dialog fullScreen open={openLearnMoreDialog} onClose={closeLearnMoreDialog}>
+        <LearnMore closeLearnMoreDialog={closeLearnMoreDialog} />
+      </Dialog>
+      <Dialog fullScreen open={openCustomTemplateDialog} onClose={closeCustomTemplateDialog}>
+        <CustomizeTemplate closeCustomTemplateDialog={closeCustomTemplateDialog} />
       </Dialog>
     </>
   );
