@@ -67,30 +67,12 @@ const settings = {
   prevArrow: <SamplePrevArrow />,
 };
 
-const responsive = {
-  superLargeDesktop: {
-    breakpoint: { max: 4000, min: 3000 },
-    items: 5,
-  },
-  desktop: {
-    breakpoint: { max: 3000, min: 1024 },
-    items: 3,
-  },
-  tablet: {
-    breakpoint: { max: 1024, min: 464 },
-    items: 2,
-  },
-  mobile: {
-    breakpoint: { max: 464, min: 0 },
-    items: 1,
-  },
-};
-
 type Props = {
   activePanel: string;
   selectedTemplate: any;
   templateError: string;
-  handleTemplate: (selectedPulseCheck: any) => void;
+  templates: any;
+  handleCheckedTemplate: (selectedPulseCheck: any) => void;
   onClickNext: (currentPanel: string, nextPanel: string) => void;
   onClickBack: (previousPanel: string) => void;
 };
@@ -99,7 +81,7 @@ export function RetroTemplate({
   activePanel,
   templateError,
   selectedTemplate,
-  handleTemplate,
+  handleCheckedTemplate,
   onClickNext,
   onClickBack,
 }: Props) {
@@ -190,7 +172,7 @@ export function RetroTemplate({
                           backgroundColor: 'rgba(206, 239, 255, 0.4)',
                         },
                       }}
-                      onClick={() => handleTemplate(template)}
+                      onClick={() => handleCheckedTemplate(template)}
                     >
                       <CardContent>
                         {!template.checked ? (

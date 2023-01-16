@@ -75,6 +75,7 @@ export function CustomizeTemplate({ closeCustomTemplateDialog }: Props) {
             </Toolbar>
           </AppBar>
         </Grid>
+        {/* Columns */}
         <Grid item xs={12} sx={{ mt: 4 }}>
           <Box
             component="div"
