@@ -1,9 +1,34 @@
-import {
-  CARD_COLOURS,
-  CARD_HOVER_COLOURS,
-  GROUP_COLOURS,
-  GROUP_FONT_COLOURS,
-} from '../../constants';
+export const CARD_COLORS = [
+  '#FFFFFF',
+  '#FFFFFF',
+  '#FFFFFF',
+  '#FFFFFF',
+  '#FFFFFF',
+];
+
+export const CARD_HOVER_COLORS = [
+  '#a7e4fc',
+  '#695f9b',
+  '#fcb34c',
+  '#abd261',
+  '#f3715b',
+];
+
+export const GROUP_FONT_COLORS = [
+  '#0B6623',
+  '#F79722',
+  '#8A38F5',
+  '#abd261',
+  '#f3715b',
+];
+
+export const GROUP_COLORS = [
+  '#E2EBE5',
+  '#fcf2e6',
+  '#F5F1FB',
+  '#abd261',
+  '#f3715b',
+];
 
 export interface pulseCheckInterface {
   id: number;
@@ -22,26 +47,6 @@ export const AVATAR_CHARACTER_LIMIT = 30;
 
 export const UNGROUPED = 'Ungrouped';
 
-export const responsive = {
-  superLargeDesktop: {
-    // the naming can be any, depends on you.
-    breakpoint: { max: 4000, min: 3000 },
-    items: 5,
-  },
-  desktop: {
-    breakpoint: { max: 3000, min: 1024 },
-    items: 3,
-  },
-  tablet: {
-    breakpoint: { max: 1024, min: 464 },
-    items: 2,
-  },
-  mobile: {
-    breakpoint: { max: 464, min: 0 },
-    items: 1,
-  },
-};
-
 export const templatesData = [
   {
     templateId: 'simple',
@@ -55,10 +60,10 @@ export const templatesData = [
         id: '0',
         name: 'What went well',
         order: 0,
-        cardColour: CARD_COLOURS[0],
-        cardColourHover: CARD_HOVER_COLOURS[0],
-        groupColour: GROUP_COLOURS[0],
-        groupFontColour: GROUP_FONT_COLOURS[0],
+        cardColor: CARD_COLORS[0],
+        cardColorHover: CARD_HOVER_COLORS[0],
+        groupColor: GROUP_COLORS[0],
+        groupFontColor: GROUP_FONT_COLORS[0],
         groups: [
           {
             id: UNGROUPED + 1,
@@ -76,10 +81,10 @@ export const templatesData = [
         id: '1',
         name: `What didn't go well`,
         order: 1,
-        cardColour: CARD_COLOURS[1],
-        cardColourHover: CARD_HOVER_COLOURS[1],
-        groupColour: GROUP_COLOURS[1],
-        groupFontColour: GROUP_FONT_COLOURS[1],
+        cardColor: CARD_COLORS[1],
+        cardColorHover: CARD_HOVER_COLORS[1],
+        groupColor: GROUP_COLORS[1],
+        groupFontColor: GROUP_FONT_COLORS[1],
         groups: [
           {
             id: UNGROUPED + 2,
@@ -97,10 +102,10 @@ export const templatesData = [
         id: '2',
         name: 'Develop Actions',
         order: 2,
-        cardColour: CARD_COLOURS[2],
-        cardColourHover: CARD_HOVER_COLOURS[2],
-        groupColour: GROUP_COLOURS[2],
-        groupFontColour: GROUP_FONT_COLOURS[2],
+        cardColor: CARD_COLORS[2],
+        cardColorHover: CARD_HOVER_COLORS[2],
+        groupColor: GROUP_COLORS[2],
+        groupFontColor: GROUP_FONT_COLORS[2],
         groups: [
           {
             id: UNGROUPED + 3,
@@ -129,10 +134,10 @@ export const templatesData = [
         id: '0',
         name: 'What went well',
         order: 0,
-        cardColour: CARD_COLOURS[0],
-        cardColourHover: CARD_HOVER_COLOURS[0],
-        groupColour: GROUP_COLOURS[0],
-        groupFontColour: GROUP_FONT_COLOURS[0],
+        cardColor: CARD_COLORS[0],
+        cardColorHover: CARD_HOVER_COLORS[0],
+        groupColor: GROUP_COLORS[0],
+        groupFontColor: GROUP_FONT_COLORS[0],
         groups: [
           {
             id: UNGROUPED + 1,
@@ -150,10 +155,10 @@ export const templatesData = [
         id: '1',
         name: `What didn't go well`,
         order: 1,
-        cardColour: CARD_COLOURS[1],
-        cardColourHover: CARD_HOVER_COLOURS[1],
-        groupColour: GROUP_COLOURS[1],
-        groupFontColour: GROUP_FONT_COLOURS[1],
+        cardColor: CARD_COLORS[1],
+        cardColorHover: CARD_HOVER_COLORS[1],
+        groupColor: GROUP_COLORS[1],
+        groupFontColor: GROUP_FONT_COLORS[1],
         groups: [
           {
             id: UNGROUPED + 2,
@@ -171,10 +176,10 @@ export const templatesData = [
         id: '2',
         name: 'Develop Actions',
         order: 2,
-        cardColour: CARD_COLOURS[2],
-        cardColourHover: CARD_HOVER_COLOURS[2],
-        groupColour: GROUP_COLOURS[2],
-        groupFontColour: GROUP_FONT_COLOURS[2],
+        cardColor: CARD_COLORS[2],
+        cardColorHover: CARD_HOVER_COLORS[2],
+        groupColor: GROUP_COLORS[2],
+        groupFontColor: GROUP_FONT_COLORS[2],
         groups: [
           {
             id: UNGROUPED + 3,
@@ -203,10 +208,10 @@ export const templatesData = [
         id: '0',
         name: 'What went well',
         order: 0,
-        cardColour: CARD_COLOURS[0],
-        cardColourHover: CARD_HOVER_COLOURS[0],
-        groupColour: GROUP_COLOURS[0],
-        groupFontColour: GROUP_FONT_COLOURS[0],
+        cardColor: CARD_COLORS[0],
+        cardColorHover: CARD_HOVER_COLORS[0],
+        groupColor: GROUP_COLORS[0],
+        groupFontColor: GROUP_FONT_COLORS[0],
         groups: [
           {
             id: UNGROUPED + 1,
@@ -224,10 +229,10 @@ export const templatesData = [
         id: '1',
         name: `What didn't go well`,
         order: 1,
-        cardColour: CARD_COLOURS[1],
-        cardColourHover: CARD_HOVER_COLOURS[1],
-        groupColour: GROUP_COLOURS[1],
-        groupFontColour: GROUP_FONT_COLOURS[1],
+        cardColor: CARD_COLORS[1],
+        cardColorHover: CARD_HOVER_COLORS[1],
+        groupColor: GROUP_COLORS[1],
+        groupFontColor: GROUP_FONT_COLORS[1],
         groups: [
           {
             id: UNGROUPED + 2,
@@ -245,10 +250,10 @@ export const templatesData = [
         id: '2',
         name: 'Develop Actions',
         order: 2,
-        cardColour: CARD_COLOURS[2],
-        cardColourHover: CARD_HOVER_COLOURS[2],
-        groupColour: GROUP_COLOURS[2],
-        groupFontColour: GROUP_FONT_COLOURS[2],
+        cardColor: CARD_COLORS[2],
+        cardColorHover: CARD_HOVER_COLORS[2],
+        groupColor: GROUP_COLORS[2],
+        groupFontColor: GROUP_FONT_COLORS[2],
         groups: [
           {
             id: UNGROUPED + 3,
@@ -277,10 +282,10 @@ export const templatesData = [
         id: '0',
         name: 'What went well',
         order: 0,
-        cardColour: CARD_COLOURS[0],
-        cardColourHover: CARD_HOVER_COLOURS[0],
-        groupColour: GROUP_COLOURS[0],
-        groupFontColour: GROUP_FONT_COLOURS[0],
+        cardColor: CARD_COLORS[0],
+        cardColorHover: CARD_HOVER_COLORS[0],
+        groupColor: GROUP_COLORS[0],
+        groupFontColor: GROUP_FONT_COLORS[0],
         groups: [
           {
             id: UNGROUPED + 1,
@@ -298,10 +303,10 @@ export const templatesData = [
         id: '1',
         name: `What didn't go well`,
         order: 1,
-        cardColour: CARD_COLOURS[1],
-        cardColourHover: CARD_HOVER_COLOURS[1],
-        groupColour: GROUP_COLOURS[1],
-        groupFontColour: GROUP_FONT_COLOURS[1],
+        cardColor: CARD_COLORS[1],
+        cardColorHover: CARD_HOVER_COLORS[1],
+        groupColor: GROUP_COLORS[1],
+        groupFontColor: GROUP_FONT_COLORS[1],
         groups: [
           {
             id: UNGROUPED + 2,
@@ -319,10 +324,10 @@ export const templatesData = [
         id: '2',
         name: 'Develop Actions',
         order: 2,
-        cardColour: CARD_COLOURS[2],
-        cardColourHover: CARD_HOVER_COLOURS[2],
-        groupColour: GROUP_COLOURS[2],
-        groupFontColour: GROUP_FONT_COLOURS[2],
+        cardColor: CARD_COLORS[2],
+        cardColorHover: CARD_HOVER_COLORS[2],
+        groupColor: GROUP_COLORS[2],
+        groupFontColor: GROUP_FONT_COLORS[2],
         groups: [
           {
             id: UNGROUPED + 3,
