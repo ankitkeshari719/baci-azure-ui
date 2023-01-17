@@ -758,13 +758,24 @@ export const processAction = (
     }
   };
 
-  const reorderCards = ( cardId: string, targetCard: string, order: number, userId: string) => {
+  const reorderCards = ( cardId: string, targetCard: string, order: number,moveToLast:boolean, userId: string) => {
     const { column, card, group, index: index1 } = findCard(cardId);
     const { index: index2 } = findCard(targetCard)
     if (column && card && group&&index1!=undefined&&index2!=undefined ) {
+      console.log()
       if(index1<index2){
         group.cards.splice(index1,1);
-        group.cards.splice(index2-1,0,card)
+        if(moveToLast)
+        {
+          console.log("move to last");
+          group.cards.splice(index2,0,card)}
+        else
+        {
+          console.log("move before");
+          
+          group.cards.splice(index2-1,0,card)}
+
+      
       }
       else{
         group.cards.splice(index1,1);
@@ -1151,6 +1162,7 @@ export const processAction = (
         parameters.cardId,
         parameters.targetCard,
         parameters.index,
+        parameters.moveToLast,
         userId
       );
       break;
