@@ -104,11 +104,11 @@ export function CreateRetroWithTemplatePage({
   }
 
   // Function to template selection
-  function handleCheckedTemplate(selectedTemplate_l: any) {
+  function handleCheckedTemplate(selectedTemplateData: any) {
     let data: any = templates?.map(template => {
       if (
-        selectedTemplate_l &&
-        template.templateId === selectedTemplate_l.templateId
+        selectedTemplateData &&
+        template.templateId === selectedTemplateData.templateId
       ) {
         template.checked = true;
       } else {
@@ -117,7 +117,7 @@ export function CreateRetroWithTemplatePage({
       return template;
     });
     setTemplates(data);
-    setSelectedTemplate(selectedTemplate_l);
+    setSelectedTemplate(selectedTemplateData);
     setTemplateError('');
   }
 

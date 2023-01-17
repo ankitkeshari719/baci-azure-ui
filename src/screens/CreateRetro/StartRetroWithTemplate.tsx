@@ -11,7 +11,7 @@ export function StartRetroWithTemplate() {
   const navigate = useNavigate();
   const [global, dispatch] = React.useContext(GlobalContext);
   const {
-    state: { retroId, retroStarted, retroDuration },
+    state: { retroId, retroStarted },
     commitAction,
   } = React.useContext(BoardContext);
   const [isTimeInputDialog, setIsTimeInputDialog] = React.useState(false);

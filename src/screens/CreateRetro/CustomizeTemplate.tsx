@@ -3,22 +3,46 @@ import {
   AppBar,
   Box,
   Button,
-  Divider,
   Grid,
   TextField,
   Toolbar,
+  Typography,
 } from '@mui/material';
 import '../../global.scss';
 import './styles.scss';
 import { TopBar } from './TopBar';
-import Typography from '@mui/material/Typography';
+import Slider from 'react-slick';
+import { settings } from './SliderConst';
 import * as Icons from 'heroicons-react';
 
 type Props = {
   closeCustomTemplateDialog: () => void;
+  selectedTemplate: any;
 };
 
-export function CustomizeTemplate({ closeCustomTemplateDialog }: Props) {
+export function CustomizeTemplate({
+  closeCustomTemplateDialog,
+  selectedTemplate,
+}: Props) {
+  const [tempSelectedTemplate, setTempSelectedTemplate] = React.useState<any>();
+
+  React.useEffect(() => {
+    setTempSelectedTemplate(selectedTemplate);
+  }, []);
+
+  const handleColumnNameChange = (
+    value: React.SetStateAction<string>,
+    columnId: string
+  ) => {
+    let data: any = tempSelectedTemplate.columns?.map((column: any) => {
+      if (column.id === columnId) {
+        column.name = value;
+      }
+      return column;
+    });
+    setTempSelectedTemplate({ ...tempSelectedTemplate, columns: [...data] });
+  };
+
   return (
     <Box className="mainContainer">
       <TopBar />
@@ -37,6 +61,7 @@ export function CustomizeTemplate({ closeCustomTemplateDialog }: Props) {
               sx={{
                 display: 'flex',
                 alignItems: 'center',
+                paddingLeft: '0px !important',
               }}
             >
               <Icons.ArrowCircleLeftOutline
@@ -55,7 +80,7 @@ export function CustomizeTemplate({ closeCustomTemplateDialog }: Props) {
                 component="div"
                 className="selectedTemplate"
               >
-                Sailboat
+                {tempSelectedTemplate && tempSelectedTemplate.templateName}
               </Typography>
               <Button autoFocus variant="outlined" className="customizeButton">
                 <Typography className="customizeButtonText" component="span">
@@ -77,195 +102,68 @@ export function CustomizeTemplate({ closeCustomTemplateDialog }: Props) {
         </Grid>
         {/* Columns */}
         <Grid item xs={12} sx={{ mt: 4 }}>
-          <Box
-            component="div"
-            whiteSpace="normal"
-            sx={{
-              display: 'flex',
-              justifyContent: 'center',
-              alignItems: 'center',
-              flexDirection: 'row',
-            }}
-          >
-            <Box
-              component="div"
-              whiteSpace="normal"
-              sx={{
-                width: '376px',
-                height: '500px',
-                display: 'flex',
-                justifyContent: 'center',
-                alignItems: 'flex-start',
-                background: '#FAFAFA',
-                border: '1px solid #0B6623',
-                borderRadius: '8px',
-              }}
-            >
-              <Box
-                component="div"
-                whiteSpace="normal"
-                sx={{
-                  width: '100%',
-                  height: '48px',
-                  display: 'flex',
-                  justifyContent: 'center',
-                  alignItems: 'center',
-                  borderRadius: '9px 9px 0px 0px',
-                  background: '#E2EBE5',
-                }}
-              >
-                <TextField
-                  maxRows={2}
-                  inputProps={{ maxLength: 150 }}
-                  multiline
-                  fullWidth
-                  value="What Went Well?"
-                  sx={{
-                    fieldset: { border: 'none' },
-                    textarea: {
-                      color: '#0B6623' + '!important',
-                      fontSize: '16px',
-                      fontWeight: 600,
-                      fontFamily: 'Poppins',
-                      fontStyle: 'normal',
-                      lineHeight: '20px',
-                      display: 'flex',
-                      alignItems: 'center',
-                      letterSpacing: '0.6px',
-                    },
-                  }}
-                  //   onKeyDown={e => {
-                  //     if (e.keyCode === 13 && value.length !== 0) {
-                  //       submitColumnName(columnName);
-                  //       (e.target as HTMLInputElement).blur();
-                  //     }
-                  //   }}
-                  //   onChange={e => setColumnName(e.currentTarget.value)}
-                  //   onBlur={() => submitColumnName(columnName)}
-                  //   onSubmit={() => submitColumnName(columnName)}
-                />
-              </Box>
-            </Box>
-            <Box
-              component="div"
-              whiteSpace="normal"
-              sx={{
-                width: '376px',
-                height: '500px',
-                display: 'flex',
-                justifyContent: 'center',
-                alignItems: 'flex-start',
-                background: '#FAFAFA',
-                border: '1px solid #F79722',
-                borderRadius: '8px',
-                marginLeft: '96px',
-                marginRight: '96px',
-              }}
-            >
-              <Box
-                component="div"
-                whiteSpace="normal"
-                sx={{
-                  width: '100%',
-                  height: '48px',
-                  display: 'flex',
-                  justifyContent: 'center',
-                  alignItems: 'center',
-                  borderRadius: '9px 9px 0px 0px',
-                  background: '#fcf2e6',
-                }}
-              >
-                <TextField
-                  maxRows={2}
-                  inputProps={{ maxLength: 150 }}
-                  multiline
-                  fullWidth
-                  value="What Didn’t Go Well?"
-                  sx={{
-                    fieldset: { border: 'none' },
-                    textarea: {
-                      color: '#F79722' + '!important',
-                      fontSize: '16px',
-                      fontWeight: 600,
-                      fontFamily: 'Poppins',
-                      fontStyle: 'normal',
-                      lineHeight: '20px',
-                      display: 'flex',
-                      alignItems: 'center',
-                      letterSpacing: '0.6px',
-                    },
-                  }}
-                  //   onKeyDown={e => {
-                  //     if (e.keyCode === 13 && value.length !== 0) {
-                  //       submitColumnName(columnName);
-                  //       (e.target as HTMLInputElement).blur();
-                  //     }
-                  //   }}
-                  //   onChange={e => setColumnName(e.currentTarget.value)}
-                  //   onBlur={() => submitColumnName(columnName)}
-                  //   onSubmit={() => submitColumnName(columnName)}
-                />
-              </Box>
-            </Box>
-            <Box
-              component="div"
-              whiteSpace="normal"
-              sx={{
-                width: '376px',
-                height: '500px',
-                display: 'flex',
-                justifyContent: 'center',
-                alignItems: 'flex-start',
-                background: '#FAFAFA',
-                border: '1px solid #8A38F5',
-                borderRadius: '8px',
-              }}
-            >
-              <Box
-                component="div"
-                whiteSpace="normal"
-                sx={{
-                  width: '100%',
-                  height: '48px',
-                  display: 'flex',
-                  justifyContent: 'center',
-                  alignItems: 'center',
-                  borderRadius: '9px 9px 0px 0px',
-                  background: '#F5F1FB',
-                }}
-              >
-                <TextField
-                  maxRows={2}
-                  inputProps={{ maxLength: 150 }}
-                  multiline
-                  fullWidth
-                  value="Develop Actions"
-                  sx={{
-                    fieldset: { border: 'none' },
-                    textarea: {
-                      color: '#8A38F5' + '!important',
-                      fontSize: '16px',
-                      fontWeight: 600,
-                      fontFamily: 'Poppins',
-                      fontStyle: 'normal',
-                      lineHeight: '20px',
-                      display: 'flex',
-                      alignItems: 'center',
-                      letterSpacing: '0.6px',
-                    },
-                  }}
-                  //   onKeyDown={e => {
-                  //     if (e.keyCode === 13 && value.length !== 0) {
-                  //       submitColumnName(columnName);
-                  //       (e.target as HTMLInputElement).blur();
-                  //     }
-                  //   }}
-                  //   onChange={e => setColumnName(e.currentTarget.value)}
-                  //   onBlur={() => submitColumnName(columnName)}
-                  //   onSubmit={() => submitColumnName(columnName)}
-                />
-              </Box>
-            </Box>
+          <Box component="div" whiteSpace="normal">
+            <Slider {...settings}>
+              {tempSelectedTemplate &&
+                tempSelectedTemplate.columns.map((column: any) => {
+                  return (
+                    <Box
+                      key={column.id}
+                      component="div"
+                      whiteSpace="normal"
+                      sx={{
+                        width: '376px !important',
+                        height: '500px',
+                        display: 'flex',
+                        justifyContent: 'center',
+                        alignItems: 'flex-start',
+                        background: column.cardColor,
+                        border: '1px solid ' + column.groupFontColor,
+                        borderRadius: '8px',
+                      }}
+                    >
+                      <Box
+                        component="div"
+                        whiteSpace="normal"
+                        sx={{
+                          width: '100%',
+                          height: '48px',
+                          display: 'flex',
+                          justifyContent: 'center',
+                          alignItems: 'center',
+                          borderRadius: '9px 9px 0px 0px',
+                          background: column.groupColor,
+                        }}
+                      >
+                        <TextField
+                          maxRows={2}
+                          inputProps={{ maxLength: 150 }}
+                          multiline
+                          fullWidth
+                          value={column.name}
+                          sx={{
+                            fieldset: { border: 'none' },
+                            textarea: {
+                              color: column.groupFontColor + '!important',
+                              fontSize: '16px',
+                              fontWeight: 600,
+                              fontFamily: 'Poppins',
+                              fontStyle: 'normal',
+                              lineHeight: '20px',
+                              display: 'flex',
+                              alignItems: 'center',
+                              letterSpacing: '0.6px',
+                            },
+                          }}
+                          onChange={e =>
+                            handleColumnNameChange(e.currentTarget.value, column.id)
+                          }
+                        />
+                      </Box>
+                    </Box>
+                  );
+                })}
+            </Slider>
           </Box>
         </Grid>
       </Grid>

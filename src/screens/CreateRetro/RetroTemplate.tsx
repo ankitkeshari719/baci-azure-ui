@@ -10,62 +10,13 @@ import {
 } from '@mui/material';
 import '../../global.scss';
 import './styles.scss';
+import Slider from 'react-slick';
 import { templatesData } from './const';
+import { settings } from './SliderConst';
 import { LearnMore } from './LearnMore';
 import { ContainedButton } from '../../components/ContainedButton';
 import { OutlinedButton } from '../../components/OutlinedButton';
-import Slider from 'react-slick';
-import * as Icons from 'heroicons-react';
 import { CustomizeTemplate } from './CustomizeTemplate';
-
-function SampleNextArrow(props: any) {
-  const { className, style, onClick } = props;
-  return (
-    <Icons.ChevronRight
-      size={32}
-      className={className}
-      style={{
-        ...style,
-        display: 'block',
-        right: '0px',
-        color: '#0F172A',
-        fontSize: '14px',
-        cursor: 'pointer'
-      }}
-      onClick={onClick}
-    />
-  );
-}
-
-function SamplePrevArrow(props: any) {
-  const { className, style, onClick } = props;
-  return (
-    <Icons.ChevronLeft
-      size={32}
-      className={className}
-      style={{
-        ...style,
-        display: 'block',
-        left: '0px',
-        color: '#0F172A',
-        fontSize: '14px',
-        cursor: 'pointer'
-      }}
-      onClick={onClick}
-    />
-  );
-}
-
-const settings = {
-  infinite: true,
-  speed: 500,
-  slidesToShow: 3,
-  slidesToScroll: 3,
-  className: 'center',
-  centerMode: true,
-  nextArrow: <SampleNextArrow />,
-  prevArrow: <SamplePrevArrow />,
-};
 
 type Props = {
   activePanel: string;
@@ -84,15 +35,18 @@ export function RetroTemplate({
   handleCheckedTemplate,
   onClickNext,
   onClickBack,
+  templates,
 }: Props) {
   const [openLearnMoreDialog, setOpenLearnMoreDialog] = React.useState(false);
-  const [openCustomTemplateDialog, setOpenCustomTemplateDialog] = React.useState(false);
+  const [openCustomTemplateDialog, setOpenCustomTemplateDialog] =
+    React.useState(false);
   const [height, setHeight] = React.useState(0);
 
   React.useEffect(() => {
     setHeight(window.innerHeight);
   }, []);
 
+  // Learn More Dialog Open / Close
   const handleLearnMoreDialog = () => {
     setOpenLearnMoreDialog(true);
   };
@@ -101,6 +55,7 @@ export function RetroTemplate({
     setOpenLearnMoreDialog(false);
   };
 
+  // Custom Template Dialog Open / Close
   const handleCustomTemplateDialog = () => {
     setOpenCustomTemplateDialog(true);
   };
@@ -275,11 +230,22 @@ export function RetroTemplate({
           </Box>
         )}
       </Box>
-      <Dialog fullScreen open={openLearnMoreDialog} onClose={closeLearnMoreDialog}>
+      <Dialog
+        fullScreen
+        open={openLearnMoreDialog}
+        onClose={closeLearnMoreDialog}
+      >
         <LearnMore closeLearnMoreDialog={closeLearnMoreDialog} />
       </Dialog>
-      <Dialog fullScreen open={openCustomTemplateDialog} onClose={closeCustomTemplateDialog}>
-        <CustomizeTemplate closeCustomTemplateDialog={closeCustomTemplateDialog} />
+      <Dialog
+        fullScreen
+        open={openCustomTemplateDialog}
+        onClose={closeCustomTemplateDialog}
+      >
+        <CustomizeTemplate
+          closeCustomTemplateDialog={closeCustomTemplateDialog}
+          selectedTemplate={selectedTemplate}
+        />
       </Dialog>
     </>
   );
