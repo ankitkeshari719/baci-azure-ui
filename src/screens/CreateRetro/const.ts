@@ -34,8 +34,7 @@ export interface pulseCheckInterface {
   id: number;
   name: string;
   description: string;
-  templateImageChecked: string;
-  templateImageNotChecked: string;
+  pulseCheckImage: string;
   value: Array<string>;
   valueDescription: Array<string>;
   checked: boolean;
@@ -351,8 +350,7 @@ export const pulseChecksData: pulseCheckInterface[] = [
     name: 'Pulse Check Not Required',
     description:
       'An oldie but a goodie, also known as the PPT Framework created in the 60s, it has long been the benchmark to understanding workforce management.',
-    templateImageChecked: '/images/coming_soon_checked.svg',
-    templateImageNotChecked: '/images/coming_soon_not_check.png',
+    pulseCheckImage: '/images/coming_soon.png',
     checked: false,
     value: [],
     valueDescription: [],
@@ -362,8 +360,7 @@ export const pulseChecksData: pulseCheckInterface[] = [
     name: 'Simple (3 Questions)',
     description:
       'An oldie but a goodie, also known as the PPT Framework created in the 60s, it has long been the benchmark to understanding workforce management.',
-    templateImageChecked: '/images/coming_soon_checked.svg',
-    templateImageNotChecked: '/images/coming_soon_not_check.png',
+    pulseCheckImage: '/images/coming_soon.png',
     checked: false,
     value: [
       '1. People & Resources ',
@@ -381,8 +378,7 @@ export const pulseChecksData: pulseCheckInterface[] = [
     name: 'Business Agility  (7 Questions)',
     description:
       'An oldie but a goodie, also known as the PPT Framework created in the 60s, it has long been the benchmark to understanding workforce management.',
-    templateImageChecked: '/images/coming_soon_checked.svg',
-    templateImageNotChecked: '/images/coming_soon_not_check.png',
+    pulseCheckImage: '/images/coming_soon.png',
     checked: false,
     value: [
       '1. Individual and Team Goals',

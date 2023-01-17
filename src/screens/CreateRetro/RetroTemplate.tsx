@@ -171,7 +171,7 @@ export function RetroTemplate({
                             onClick={handleLearnMoreDialog}
                             sx={{ padding: '0px' }}
                           >
-                            <Typography className="textLink">
+                            <Typography className="templateLink">
                               Learn More
                             </Typography>
                           </Button>
