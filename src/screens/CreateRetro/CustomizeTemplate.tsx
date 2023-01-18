@@ -82,17 +82,7 @@ export function CustomizeTemplate({
               >
                 {tempSelectedTemplate && tempSelectedTemplate.templateName}
               </Typography>
-              <Button autoFocus variant="outlined" className="customizeButton">
-                <Typography className="customizeButtonText" component="span">
-                  Customize
-                </Typography>
-              </Button>
-              <Button
-                autoFocus
-                variant="contained"
-                className="saveButton"
-                sx={{ ml: 2 }}
-              >
+              <Button autoFocus variant="contained" className="saveButton">
                 <Typography className="saveButtonText" component="span">
                   Select
                 </Typography>
@@ -156,7 +146,10 @@ export function CustomizeTemplate({
                             },
                           }}
                           onChange={e =>
-                            handleColumnNameChange(e.currentTarget.value, column.id)
+                            handleColumnNameChange(
+                              e.currentTarget.value,
+                              column.id
+                            )
                           }
                         />
                       </Box>
