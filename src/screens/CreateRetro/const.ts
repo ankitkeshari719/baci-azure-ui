@@ -48,10 +48,11 @@ export const UNGROUPED = 'Ungrouped';
 
 export const templatesData = [
   {
-    templateId: 'simple',
-    templateName: 'Simple',
-    templateDescription: 'A classic template for retros.',
-    templateImage: '/images/defaultRetroTemplate.png',
+    templateId: 'start_stop_continue',
+    templateName: 'Start, Stop , Continue',
+    templateDescription:
+      'The traffic light retro gives everyone in the team an opportunity to talk and quickly identify bottlenecks.',
+    templateImage: '/images/coming_soon.png',
     checked: false,
     columns: [
       {
@@ -266,11 +267,10 @@ export const templatesData = [
     ],
   },
   {
-    templateId: 'start_stop_continue',
-    templateName: 'Start, Stop , Continue',
-    templateDescription:
-      'The traffic light retro gives everyone in the team an opportunity to talk and quickly identify bottlenecks.',
-    templateImage: '/images/coming_soon.png',
+    templateId: 'simple',
+    templateName: 'Simple',
+    templateDescription: 'A classic template for retros.',
+    templateImage: '/images/defaultRetroTemplate.png',
     checked: false,
     columns: [
       {

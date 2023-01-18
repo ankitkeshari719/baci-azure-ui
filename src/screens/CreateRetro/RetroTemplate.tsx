@@ -7,6 +7,7 @@ import {
   Box,
   Dialog,
   FormHelperText,
+  CardActions,
 } from '@mui/material';
 import '../../global.scss';
 import './styles.scss';
@@ -120,8 +121,10 @@ export function RetroTemplate({
                       key={template.templateId}
                       sx={{
                         maxWidth: '420px',
-                        height: height / 2,
+                        height: '400px',
                         background: '#ffffff',
+                        border: '1px solid #E3E3E3',
+                        boxShadow: 'none',
                         borderRadius: '2px',
                         margin: '8px',
                         '&:hover': {
@@ -181,6 +184,15 @@ export function RetroTemplate({
                         >
                           {template.templateDescription}
                         </Typography>
+                      </CardContent>
+                      <CardActions
+                        sx={{
+                          position: 'absolute',
+                          bottom: '20px',
+                          width: '388px',
+                          padding: '16px'
+                        }}
+                      >
                         <Box
                           sx={{
                             display: 'flex',
@@ -210,7 +222,7 @@ export function RetroTemplate({
                             </Typography>
                           </Button>
                         </Box>
-                      </CardContent>
+                      </CardActions>
                     </Card>
                   );
                 })}
