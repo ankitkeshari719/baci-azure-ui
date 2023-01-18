@@ -8,9 +8,16 @@ import * as Icons from 'heroicons-react';
 
 type Props = {
   closeLearnMoreDialog: () => void;
+  handleCustomTemplateDialog: () => void;
 };
 
-export function LearnMore({ closeLearnMoreDialog }: Props) {
+export function LearnMore({ closeLearnMoreDialog, handleCustomTemplateDialog }: Props) {
+
+  const onClickCustomButton = () => {
+    closeLearnMoreDialog();
+    handleCustomTemplateDialog();
+  }
+
   return (
     <Box className="mainContainer">
       <TopBar />
@@ -52,7 +59,7 @@ export function LearnMore({ closeLearnMoreDialog }: Props) {
               >
                 Sailboat
               </Typography>
-              <Button autoFocus variant="outlined" className="customizeButton">
+              <Button autoFocus variant="outlined" className="customizeButton" onClick={onClickCustomButton}>
                 <Typography className="customizeButtonText" component="span">
                   Customize
                 </Typography>

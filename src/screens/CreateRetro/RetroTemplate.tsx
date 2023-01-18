@@ -190,7 +190,7 @@ export function RetroTemplate({
                           position: 'absolute',
                           bottom: '20px',
                           width: '388px',
-                          padding: '16px'
+                          padding: '16px',
                         }}
                       >
                         <Box
@@ -271,7 +271,10 @@ export function RetroTemplate({
         open={openLearnMoreDialog}
         onClose={closeLearnMoreDialog}
       >
-        <LearnMore closeLearnMoreDialog={closeLearnMoreDialog} />
+        <LearnMore
+          closeLearnMoreDialog={closeLearnMoreDialog}
+          handleCustomTemplateDialog={handleCustomTemplateDialog}
+        />
       </Dialog>
       <Dialog
         fullScreen
