@@ -291,6 +291,9 @@ function BoardProvider(props: ComponentProps<any>) {
         socket.on(
           'newMessage',
           (snapshot: { retroId: string; action: any }[]) => {
+            socket.on('disconnect',()=>{
+              console.log("socket disconnected")
+            })
             const results = [] as any[];
             snapshot.forEach((change: { retroId: string; action: any }) => {
               // console.log("change",change)
@@ -337,9 +340,12 @@ function BoardProvider(props: ComponentProps<any>) {
       });
     } else {
       clearState();
-    }
-  }, [currentRetro?.id]);
 
+    
+    }
+  }, [currentRetro?.id,currentRetro?.id&&socket]);
+
+  
   return (
     <BoardContext.Provider value={{ state, commitAction }}>
       {!currentRetro && !state.loading ? (

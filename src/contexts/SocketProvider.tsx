@@ -1,4 +1,4 @@
-import { useEffect,useState,createContext,ReactChild } from "react";
+import { createContext,ReactChild } from "react";
 import socketIOClient from "socket.io-client";
 import { API_URL } from '../constants/FeatureFlags';
 
@@ -14,5 +14,6 @@ interface ISocketProvider {
 }
 
 export const SocketProvider = (props:ISocketProvider) => (
+   
     <SocketContext.Provider value={ws}>{props.children}</SocketContext.Provider>
 );
