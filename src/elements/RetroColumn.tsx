@@ -550,6 +550,7 @@ export function RetroColumn({
     (surroundDiv.current as HTMLDivElement).style.display = 'inline';
     (surroundDiv.current as HTMLDivElement).style.position = 'absolute';
     if (((dragTargetTime.current && new Date().getTime() - dragTargetTime.current < 1500) || !flag) && showReorder) {
+
       (surroundDiv.current as HTMLDivElement).style.borderLeft =
         '3px dotted gray';
       (surroundDiv.current as HTMLDivElement).style.borderRadius =
@@ -558,6 +559,17 @@ export function RetroColumn({
       if (!flag) {
         clearInterval(timeoutForBorder);
       }
+      (surroundDiv.current as HTMLDivElement).style.top = t + "px";
+      // `${Math.min(
+      //   t,
+      //   y
+      // )}px`;
+      (surroundDiv.current as HTMLDivElement).style.left = l + "px";
+
+      // `${Math.min(
+      //   l,
+      //   x
+      // )}px`;
 
     } else {
       if (flag) {
@@ -568,15 +580,10 @@ export function RetroColumn({
         actionRef.current = "merge"
         clearInterval(timeoutForBorder);
       }
+      (surroundDiv.current as HTMLDivElement).style.top = `${Math.min(t, y)}px`;
+      (surroundDiv.current as HTMLDivElement).style.left = `${Math.min(l, x)}px`;
     }
-    (surroundDiv.current as HTMLDivElement).style.top = `${Math.min(
-      t,
-      y
-    )}px`;
-    (surroundDiv.current as HTMLDivElement).style.left = `${Math.min(
-      l,
-      x
-    )}px`;
+
     (surroundDiv.current as HTMLDivElement).style.height = `${Math.abs(t - y) + h
       }px`;
     (surroundDiv.current as HTMLDivElement).style.width = `${Math.abs(l - x) + w
@@ -761,7 +768,12 @@ export function RetroColumn({
       payload: { emojiId: columnId },
     });
   };
-
+  const focusTextBox = () => {
+    const inputText = document.getElementById("textField" + columnId);
+    if (inputText != null) {
+      inputText.focus();
+    }
+  }
   // if (!location.pathname.includes('report')) {
   return (
     <ColumnComponent
@@ -985,184 +997,256 @@ export function RetroColumn({
 
 
             <>
-              <div
-                ref={containerRef}
-                style={{
-                  overflowY: 'auto',
-                  userSelect: 'none',
-                  flexGrow: 2,
-                }}
-              >
-                {cardGroups.map((group, i) => (
+              {!column.publish && global.user.userType !== 2 ? (
+                <Box
+                  sx={{
+                    display: 'flex',
+                    width: 'calc(100%-20px)',
+                    paddingLeft: '10px',
+                    paddingRight: '10px',
+
+                    flexDirection: 'column',
+                  }}
+                  ref={containerRef}
+                  style={{
+                    // overflowY: noHeightLimit ? 'auto' : 'auto',
+                    overflowY: 'auto',
+                    userSelect: 'none',
+                    flexGrow: 2,
+                  }}
+                >
                   <Grid
                     container
-                    lg={12}
-                    item
-                    key={group.id}
-                    ref={e => (groupRefs[i] = e)}
-                    style={{
-                      marginBottom: '10px',
-                      padding: '3px',
-                      borderRadius: 0,
-                      background:
-                        group.name !== UNGROUPED ? groupColour : 'none',
-                    }}
+                    // rowSpacing={1}
+                    columnSpacing={'20px'}
+                    direction="row"
+                    justifyContent={
+                      global?.expandColumn === -1
+                        ? 'space-between'
+                        : 'flex-start'
+                    }
                   >
-                    <RetroCardGroup
-                      admin={global.user.userType == 2}
-                      group={group}
-                      column={column}
-                      columnId={column.id}
+                    {cardGroups.map((group, i) => (
+                      <React.Fragment key={i}>
+                        {group.cards.map((card: RetroCardType, j: number) => (
+                          <React.Fragment key={j}>
+                            {card.createdBy === global.user.id && (
+                              <Grid
+                                item
+                                lg={global?.expandColumn !== -1 ? 2 : 6}
+                                md={global?.expandColumn !== -1 ? 2 : 4}
+                                xs={12}
+                                sx={{ marginBottom: '20px' }}
+                                key={j + '0'}
+                              >
+                                {/* <Box sx={{width:"100%"}}> */}
+                                <RetroCard
+                                  moveCard={moveCard}
+                                  card={card}
+                                  groups={cardGroups}
+                                  currentGroupId={group.id}
+                                  columnId={column.id}
+                                  hideButtons={false}
+                                  animate={true}
+                                />
+                                {/* </Box> */}
+                              </Grid>
+                            )}
+                          </React.Fragment>
+                        ))}
+                      </React.Fragment>
+                    ))}
+                  </Grid>
+                  <span
+                    ref={surroundDiv}
+                    style={{
+                      display: 'none',
+                    }}
+                  ></span>
+                </Box>
+              ) : (
+                <div
+                  ref={containerRef}
+                  style={{
+                    overflowY: 'auto',
+                    userSelect: 'none',
+                    flexGrow: 2,
+                  }}
+                >
+                  {cardGroups.map((group, i) => (
+                    <React.Fragment key={i}>
+                      <Grid
+                        container
+                        lg={12}
+                        item
+                        key={group.id}
+                        ref={e => (groupRefs[i] = e)}
+                        style={{
+                          marginBottom: '10px',
+                          padding: '3px',
+                          borderRadius: 0,
+                          background:
+                            group.name !== UNGROUPED ? groupColour : 'none',
+                        }}
+                      >
+                        <RetroCardGroup
+                          admin={global.user.userType == 2}
+                          group={group}
+                          column={column}
+                          columnId={column.id}
 
-                      showCollapse={
-                        group.name !== UNGROUPED &&
-                        // group.cards.length > 1 &&
-                        !groupCollapsed[i]
-                      }
-                      onCollapse={value => {
-                        groupCollapsed[i] = !groupCollapsed[i];
-                        setGroupCollapsed([...groupCollapsed]);
-                      }}
-                    >
-                      {group.name === UNGROUPED ||
-                        !groupCollapsed[i] ||
-                        // group.cards.length < 1 ||
-                        expandAllGroups ? (
-                        <div
-                          style={{
-                            display: 'flex',
-                            flexWrap: 'wrap',
-                            justifyContent: 'flex-start',
-                            minHeight: '100px',
+                          showCollapse={
+                            group.name !== UNGROUPED &&
+                            // group.cards.length > 1 &&
+                            !groupCollapsed[i]
+                          }
+                          onCollapse={value => {
+                            groupCollapsed[i] = !groupCollapsed[i];
+                            setGroupCollapsed([...groupCollapsed]);
                           }}
                         >
-                          <span
-                            ref={e => {
-                              landingZones[i][0] = e as HTMLDivElement;
-                            }}
-                            style={{
-                              maxHeight: '0',
-                              margin: '0',
-                              padding: '0',
-                            }}
-                          ></span>
-                          {group.cards.map(
-                            (card: RetroCardType, j: number) =>
-                              (card.createdBy === global.user.id ||
-                                global.user.userType == 2 ||
-                                column.publish) && (
-                                <React.Fragment key={card.id}>
-                                  {group.name === UNGROUPED ||
-                                    j <
-                                    (groupCollapsed[i]
-                                      ? 2
-                                      : group.cards.length) ? (
-                                    <>
-                                      <Grid
-                                        item
-                                        lg={
-                                          global?.expandColumn !== -1
-                                            ? 2
-                                            : !location.pathname.includes('report') ? 6 : 4
-                                        }
-                                        md={
-                                          global?.expandColumn !== -1
-                                            ? 2
-                                            : !location.pathname.includes('report') ? 6 : 4
-                                        }
-                                        xs={12}
-                                        ref={e =>
-                                          cardRefCollector(
-                                            e as HTMLDivElement,
-                                            i,
-                                            j,
-                                            card
-                                          )
-                                        }
-                                        style={{
-                                          padding: '10px',
-                                        }}
-                                      >
-                                        <Draggable
-
-                                          ref={ref => {
-                                            draggableRefs[i][j] = ref;
-                                          }}
-                                          disabled={
-                                            ended ||
-                                            global.leaveRetro ||
-                                            (card.locked &&
-                                              card.lockedBy !==
-                                              global.user.id)
-                                          }
-                                          onStart={(event, data) =>
-                                            handleStart(i, j, event, data)
-                                          }
-                                          onStop={(event, data) => {
-                                            handleStop(i, j, event, data);
-                                          }}
-                                          onDrag={(event, data) =>
-                                            handleDrag(i, j, event, data)
-                                          }
-                                          enableUserSelectHack={true}
-                                          cancel={'.can'}
-                                          handle=".handle"
-                                        >
-                                          <span
-                                            className={
-                                              global.user.userType == 2
-                                                ? 'handle'
-                                                : ''
+                          {group.name === UNGROUPED ||
+                            !groupCollapsed[i] ||
+                            // group.cards.length < 1 ||
+                            expandAllGroups ? (
+                            <div
+                              style={{
+                                display: 'flex',
+                                flexWrap: 'wrap',
+                                justifyContent: 'flex-start',
+                                minHeight: '100px',
+                              }}
+                            >
+                              <span
+                                ref={e => {
+                                  landingZones[i][0] = e as HTMLDivElement;
+                                }}
+                                style={{
+                                  maxHeight: '0',
+                                  margin: '0',
+                                  padding: '0',
+                                }}
+                              ></span>
+                              {group.cards.map(
+                                (card: RetroCardType, j: number) =>
+                                  (card.createdBy === global.user.id ||
+                                    global.user.userType == 2 ||
+                                    column.publish) && (
+                                    <React.Fragment key={card.id}>
+                                      {group.name === UNGROUPED ||
+                                        j <
+                                        (groupCollapsed[i]
+                                          ? 2
+                                          : group.cards.length) ? (
+                                        <>
+                                          <Grid
+                                            item
+                                            lg={
+                                              global?.expandColumn !== -1
+                                                ? 2
+                                                : !location.pathname.includes('report') ? 6 : 4
                                             }
-                                            id={i + ""}
+                                            md={
+                                              global?.expandColumn !== -1
+                                                ? 2
+                                                : !location.pathname.includes('report') ? 6 : 4
+                                            }
+                                            xs={12}
+                                            ref={e =>
+                                              cardRefCollector(
+                                                e as HTMLDivElement,
+                                                i,
+                                                j,
+                                                card
+                                              )
+                                            }
+                                            style={{
+                                              padding: '10px',
+                                            }}
                                           >
-                                            <RetroCard
-                                              moveCard={moveCard}
-                                              card={card}
-                                              groups={cardGroups}
-                                              currentGroupId={group.id}
-                                              columnId={column.id}
-                                              hideButtons={false}
-                                              animate={true}
-                                            />
-                                          </span>
+                                            <Draggable
 
-                                        </Draggable>
-                                        {/* <div
+                                              ref={ref => {
+                                                draggableRefs[i][j] = ref;
+                                              }}
+                                              disabled={
+                                                ended ||
+                                                global.leaveRetro ||
+                                                (card.locked &&
+                                                  card.lockedBy !==
+                                                  global.user.id)
+                                              }
+                                              onStart={(event, data) =>
+                                                handleStart(i, j, event, data)
+                                              }
+                                              onStop={(event, data) => {
+                                                handleStop(i, j, event, data);
+                                              }}
+                                              onDrag={(event, data) =>
+                                                handleDrag(i, j, event, data)
+                                              }
+                                              enableUserSelectHack={true}
+                                              cancel={'.can'}
+                                              handle=".handle"
+                                            >
+                                              <span
+                                                className={
+                                                  global.user.userType == 2
+                                                    ? 'handle'
+                                                    : ''
+                                                }
+                                                id={i + ""}
+                                              >
+                                                <RetroCard
+                                                  moveCard={moveCard}
+                                                  card={card}
+                                                  groups={cardGroups}
+                                                  currentGroupId={group.id}
+                                                  columnId={column.id}
+                                                  hideButtons={false}
+                                                  animate={true}
+                                                />
+                                              </span>
+
+                                            </Draggable>
+                                            {/* <div
                                                 ref={ref =>
                                                   (placeholderRefs[i][j] = ref)
                                                 }
                                               ></div> */}
-                                      </Grid>
-                                      <span
-                                        ref={e => {
-                                          landingZones[i][j + 1] =
-                                            e as HTMLDivElement;
-                                        }}
-                                        style={{
-                                          maxHeight: '0',
-                                          margin: '0',
-                                          padding: '0',
-                                        }}
-                                      ></span>
-                                    </>
-                                  ) : null}
-                                </React.Fragment>
-                              )
+                                          </Grid>
+                                          <span
+                                            ref={e => {
+                                              landingZones[i][j + 1] =
+                                                e as HTMLDivElement;
+                                            }}
+                                            style={{
+                                              maxHeight: '0',
+                                              margin: '0',
+                                              padding: '0',
+                                            }}
+                                          ></span>
+                                        </>
+                                      ) : null}
+                                    </React.Fragment>
+                                  )
+                              )}
+                            </div>
+                          ) : (
+                            <></>
                           )}
-                        </div>
-                      ) : (
-                        <></>
-                      )}
-                    </RetroCardGroup>
-                  </Grid>
-                ))}
+                        </RetroCardGroup>
+                      </Grid>
 
-                <span
-                  ref={surroundDiv}
-                  style={{ display: 'none' }}
-                ></span>
-              </div>
+
+                    </React.Fragment>
+                  ))}
+
+                  <span
+                    ref={surroundDiv}
+                    style={{ display: 'none' }}
+                  ></span>
+                </div>)}
             </>
 
 
@@ -1175,9 +1259,9 @@ export function RetroColumn({
               style={{
                 // display: 'flex',
                 width:
-                  document.getElementById(columnId) != null
+                  document.getElementById(columnId + "0") != null
                     ? document
-                      .getElementById(columnId)
+                      .getElementById(columnId + "0")
                       ?.getBoundingClientRect().width + 'px'
                     : '33px',
                 zIndex: 2,
@@ -1187,24 +1271,15 @@ export function RetroColumn({
               }}
             >
               <EmojiPicker
-                // previewConfig={{
-                //   defaultEmoji: '',
-                //   defaultCaption: '',
-                //   showPreview: false,
-                // }}
-                // lazyLoadEmojis={true}
-
                 onEmojiClick={(event, emojiObject) => {
                   console.log(emojiObject, "emoji's selected");
                   setValueSet(true);
                   setValue(value + emojiObject.emoji);
-                  // setEmojiPicker('');
                   setEmojiId('');
-                  // setShowEmojisOfColumn('');
-                  // setEmo
+                  focusTextBox()
+
                 }}
-                // height={400}
-                // width={'100%'}
+
                 pickerStyle={{ width: '100%' }}
               />
             </Grid>
@@ -1212,7 +1287,7 @@ export function RetroColumn({
           {
             !ended && !global.leaveRetro && (
               <Box
-                id={columnId}
+                id={columnId + "0"}
                 style={{
                   background: 'white',
                   borderRadius: '0px 0px 8px 8px',
@@ -1246,13 +1321,18 @@ export function RetroColumn({
                         global.emojiId == '' ||
                         global.emojiId != columnId
                       ) {
+                        console.log("columnId", columnId)
                         // setEmojiPicker(columnId);
                         // setShowEmojisOfColumn(columnId);
+
+                        setEmojiId("");
                         setEmojiId(columnId);
+                        focusTextBox()
                       } else {
                         // setEmojiPicker('');
                         // setShowEmojisOfColumn('');
                         setEmojiId('');
+                        focusTextBox()
                       }
                     }}
                   ></img>
@@ -1267,6 +1347,7 @@ export function RetroColumn({
                   }}
                 >
                   <TextField
+                    id={"textField" + columnId}
                     fullWidth
                     multiline
                     inputProps={{

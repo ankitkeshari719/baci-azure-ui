@@ -250,7 +250,7 @@ export function RetroCardGroup({
                   {nameSet ? name : 'Name grouping'}
                 </Typography>
               )}</Grid>
-            <Grid lg={global?.expandColumn !== -1 ? 1 : 3} md={global?.expandColumn !== -1 ? 1.5 : 4} xs={4} container flexDirection="row" alignItems="center" justifyContent="space-between">
+            <Grid item lg={global?.expandColumn !== -1 ? 1 : 3} md={global?.expandColumn !== -1 ? 1.5 : 4} xs={4} container flexDirection="row" alignItems="center" justifyContent="space-between">
               <Grid
                 style={{
                   fontWeight: '600',
