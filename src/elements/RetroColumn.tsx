@@ -75,12 +75,19 @@ export function RetroColumn({
   setShowEditBox: (showEditBox: boolean) => void;
 }): ReactElement {
   const selectedCard = React.useRef<number[] | null>(null);
+  const selectedCardCopy = React.useRef<number[] | null>(null);
   const dragStartTime = React.useRef<number | null>(null);
+  const dragTargetTime = React.useRef<number | null>(null);
   const targetLanding = React.useRef<number[] | null>(null);
   const targetGroup = React.useRef<number | null>(null);
   const targetMergeCard = React.useRef<number[] | null>(null);
+  const targetForReorderToLastCard = React.useRef<number[] | null>(null);
+  const targetMergeCardCopy = React.useRef<number[] | null>(null);
+  const targetSelectedMergeCard = React.useRef<string | null>(null);
+  const actionRef = React.useRef<string>("");
   const surroundDiv = React.useRef<HTMLDivElement>(null);
   const containerRef = React.useRef<HTMLDivElement>(null);
+
   const [groupCollapsed, setGroupCollapsed] = React.useState<boolean[]>(
     cardGroups.map(() => false)
   );
@@ -106,6 +113,7 @@ export function RetroColumn({
   const groupRefs = cardGroups.map(
     cardGroup => null
   ) as (HTMLDivElement | null)[];
+
   const cardRefs = cardGroups.map(cardGroup =>
     cardGroup.cards.map(() => null)
   ) as (HTMLDivElement | null)[][];
@@ -167,21 +175,69 @@ export function RetroColumn({
   };
 
   const moveCard = async (cardId: string, toGroup: string, toIndex: number) => {
+    dispatch({
+      type: ActionType.SET_LOADING,
+      payload: { loadingFlag: true },
+    });
     await saveAndProcessAction(BoardActionType.MOVE_CARD, {
       cardId,
       groupId: toGroup,
       index: toIndex,
-    });
+    }).then(res => {
+      dispatch({
+        type: ActionType.SET_LOADING,
+        payload: { loadingFlag: false },
+      });
+    }, err => {
+      dispatch({
+        type: ActionType.SET_LOADING,
+        payload: { loadingFlag: false },
+      });
+    })
     autoFocusCardId.current = cardId;
   };
 
   const createGroup = async (groupId: string) => {
+    dispatch({
+      type: ActionType.SET_LOADING,
+      payload: { loadingFlag: true },
+    });
     await saveAndProcessAction(BoardActionType.CREATE_GROUP, {
       groupId,
       columnId,
       order: 0,
-    });
+    }).then(res => {
+      dispatch({
+        type: ActionType.SET_LOADING,
+        payload: { loadingFlag: false },
+      })
+    }, err => {
+      dispatch({
+        type: ActionType.SET_LOADING,
+        payload: { loadingFlag: false },
+      });
+    })
   };
+  const reorderCards = async (cardId: string, targetCard: string, index: number, moveToLast: boolean) => {
+    dispatch({
+      type: ActionType.SET_LOADING,
+      payload: { loadingFlag: true },
+    });
+    await saveAndProcessAction(BoardActionType.REORDER_CARD, {
+      cardId, targetCard, index, moveToLast
+    }).then(() => {
+      dispatch({
+        type: ActionType.SET_LOADING,
+        payload: { loadingFlag: false },
+      });
+    }, error => {
+      dispatch({
+        type: ActionType.SET_LOADING,
+        payload: { loadingFlag: false },
+      });
+    })
+
+  }
   const mergeCards = async (cardId1: string, cardId2: string) => {
     const groupId = shortid.generate();
     dispatch({
@@ -236,8 +292,6 @@ export function RetroColumn({
 
   const submit = async (text: string) => {
     setIslanded(false);
-
-    // console.log(cardGroups);
     dispatch({
       type: ActionType.SET_LOADING,
       payload: { loadingFlag: true },
@@ -293,17 +347,21 @@ export function RetroColumn({
       if (j !== 0) {
         (landingZones[i][j] as HTMLDivElement).style.display = 'none';
       }
-      //handleDrag(i, j, data);
+      // handleDrag(i, j, data);
       dragStartTime.current = new Date().getTime();
     }
   };
 
+
+  var timeoutForBorder: any;
   const handleDrag = (
     i: number,
     j: number,
     event: DraggableEvent,
     data: DraggableData
   ): void | false => {
+
+
     if (cardRefs) {
       const { top, left, height, width } = (
         (cardRefs[i][j] as HTMLDivElement).firstChild as any
@@ -312,6 +370,8 @@ export function RetroColumn({
       const y = top + window.pageYOffset;
       targetLanding.current = null;
       targetMergeCard.current = null;
+      targetForReorderToLastCard.current = null;
+
       targetGroup.current = null;
 
       // Scrolling while driving
@@ -320,6 +380,7 @@ export function RetroColumn({
         bottom: b,
         height: h,
       } = (containerRef.current as HTMLDivElement).getBoundingClientRect();
+
       t += +window.pageYOffset;
       if (y < t) {
         containerRef.current?.scrollBy(0, -(t - y));
@@ -329,7 +390,9 @@ export function RetroColumn({
 
       let ii = 0;
       for (const groupRef of groupRefs) {
+
         if (groupRef !== null && ii !== i) {
+          // console.log(ii,"ii")
           let {
             top: t,
             left: l,
@@ -340,27 +403,37 @@ export function RetroColumn({
           } = (groupRef as HTMLDivElement).getBoundingClientRect();
           l += +window.pageXOffset;
           t += +window.pageYOffset;
-
+          // if moving card from ungroup to grouped cards. or viceversa
           if (t < y && y < t + h && l < x && x < l + w) {
             (groupRef as HTMLDivElement).style.border = '3px dotted gray';
             (groupRef as HTMLDivElement).style.borderRadius = '8px';
             (groupRef as HTMLDivElement).style.padding = '0px';
             targetGroup.current = ii;
-          } else {
+          }
+          else {
             (groupRef as HTMLDivElement).style.border = 'none';
-            (groupRef as HTMLDivElement).style.borderRadius = '0';
-            (groupRef as HTMLDivElement).style.padding = '3px';
+            (groupRef as HTMLDivElement).style.padding = '0px';
+
           }
         }
         ii++;
       }
 
+
       ii = 0;
       for (const group of cardRefs) {
+
+
         let jj = 0;
         // Only group within same group
-        if (ii === i && cardGroups[ii].name === UNGROUPED) {
+        // if (ii === i && cardGroups[ii].name === UNGROUPED) 
+
+        if (ii === i) {
+          const isUngroup: boolean = cardGroups[ii].name === UNGROUPED;
+          clearInterval(timeoutForBorder)
+          let v: number = 0;
           for (const cardRef of group) {
+            v++
             if (cardRef === null) continue;
             let {
               top: t,
@@ -370,8 +443,45 @@ export function RetroColumn({
               width: w,
               height: h,
             } = (cardRef as HTMLDivElement).getBoundingClientRect();
-            l += +window.pageXOffset;
-            t += +window.pageYOffset;
+            // l += +window.pageXOffset;
+            // t += +window.pageYOffset;
+
+            var length: number = group.length == 0 ? 0 : group.length - 1;
+
+            let {
+              top: T,
+              left: L,
+              bottom: B,
+              right: R,
+              width: W,
+              height: H,
+            } = ((group[length]) as HTMLDivElement).getBoundingClientRect();
+
+            if (
+              (j !== jj || i !== ii) && v == length + 1 && (l + (w / 1.8) < x && x < (l + (w + (w / 5))) && T <= (y + height / 6) && y < (T + height)
+                ||
+                T + height <= (y) && y < (T + height + (height / 2))
+              )) {
+
+              (group[length] as HTMLDivElement).style.borderRight =
+                '3px dotted gray';
+              (group[length] as HTMLDivElement).style.borderRadius =
+                '0px';
+
+              actionRef.current = "moveToLast"
+              // targetMergeCard.current = [ii, jj];
+              //  if(l)
+              targetForReorderToLastCard.current = [ii, jj];
+            }
+            else {
+              (group[length] as HTMLDivElement).style.borderRight =
+                'none';
+              actionRef.current = "";
+              // targetMergeCard.current=[0,0]
+              targetForReorderToLastCard.current = null;
+
+            }
+
 
             if (
               !targetGroup.current &&
@@ -382,35 +492,46 @@ export function RetroColumn({
               x < l + width / 2 &&
               !cardGroups[ii].cards[jj].locked
             ) {
-              //                            ((cardRef as HTMLDivElement).firstChild as any).style.background = '#9EA6AC';
+              selectedCardCopy.current = [i, j];
+              targetMergeCardCopy.current = [ii, jj];
+              if (
+                selectedCardCopy.current !== null &&
+                targetMergeCardCopy.current !== null
+              ) {
+                const showReorder = jj - j != 1;
+                if (targetSelectedMergeCard.current == null || targetSelectedMergeCard.current != cardGroups[targetMergeCardCopy.current[0]].cards[
+                  targetMergeCardCopy.current[1]
+                ].id) {
+                  targetSelectedMergeCard.current = cardGroups[targetMergeCardCopy.current[0]].cards[
+                    targetMergeCardCopy.current[1]].id;
 
-              (surroundDiv.current as HTMLDivElement).style.display = 'inline';
-              (surroundDiv.current as HTMLDivElement).style.position =
-                'absolute';
-              (surroundDiv.current as HTMLDivElement).style.border =
-                '3px dotted gray';
-              (surroundDiv.current as HTMLDivElement).style.borderRadius =
-                '8px';
-              (surroundDiv.current as HTMLDivElement).style.top = `${Math.min(
-                t,
-                y
-              )}px`;
-              (surroundDiv.current as HTMLDivElement).style.left = `${Math.min(
-                l,
-                x
-              )}px`;
-              (surroundDiv.current as HTMLDivElement).style.height = `${
-                Math.abs(t - y) + h
-              }px`;
-              (surroundDiv.current as HTMLDivElement).style.width = `${
-                Math.abs(l - x) + w
-              }px`;
-              (surroundDiv.current as HTMLDivElement).style.zIndex = `1000`;
+                  // setChangeCardTime(new Date().getTime());
 
+                  dragTargetTime.current = new Date().getTime()
+
+                  cardLineChangeFunction(i, j, ii, jj, t, y, l, x, h, w, isUngroup, showReorder)
+                  clearInterval(timeoutForBorder)
+                  timeoutForBorder = setInterval(() => cardLineChangeFunction(i, j, ii, jj, t, y, l, x, h, w, isUngroup, showReorder)
+                    , 100)
+                }
+                else if (targetSelectedMergeCard.current === cardGroups[targetMergeCardCopy.current[0]].cards[
+                  targetMergeCardCopy.current[1]
+                ].id) {
+                  clearInterval(timeoutForBorder)
+
+                  timeoutForBorder = setInterval(() => cardLineChangeFunction(i, j, ii, jj, t, y, l, x, h, w, isUngroup, showReorder)
+                    , 100)
+
+
+                }
+
+              }
               targetMergeCard.current = [ii, jj];
             } else {
+              // (surroundDiv.current as HTMLDivElement).style.display="none";
               // ((cardRef as HTMLDivElement).firstChild as any).style.background = 'none';
             }
+
             jj++;
           }
         }
@@ -420,10 +541,52 @@ export function RetroColumn({
       if (!targetMergeCard.current) {
         (surroundDiv.current as HTMLDivElement).style.display = 'none';
       }
-
       selectedCard.current = [i, j];
     }
   };
+
+  const cardLineChangeFunction = (i: number, j: number, ii: any, jj: any, t: number, y: number, l: number, x: number, h: number, w: number, flag: boolean, showReorder: boolean) => {
+    (surroundDiv.current as HTMLDivElement).style.border = 'none';
+    (surroundDiv.current as HTMLDivElement).style.display = 'inline';
+    (surroundDiv.current as HTMLDivElement).style.position = 'absolute';
+    if (((dragTargetTime.current && new Date().getTime() - dragTargetTime.current < 1500) || !flag) && showReorder) {
+      (surroundDiv.current as HTMLDivElement).style.borderLeft =
+        '3px dotted gray';
+      (surroundDiv.current as HTMLDivElement).style.borderRadius =
+        '0px';
+      actionRef.current = "reorder";
+      if (!flag) {
+        clearInterval(timeoutForBorder);
+      }
+
+    } else {
+      if (flag) {
+        (surroundDiv.current as HTMLDivElement).style.border =
+          '3px dotted gray';
+        (surroundDiv.current as HTMLDivElement).style.borderRadius =
+          '8px';
+        actionRef.current = "merge"
+        clearInterval(timeoutForBorder);
+      }
+    }
+    (surroundDiv.current as HTMLDivElement).style.top = `${Math.min(
+      t,
+      y
+    )}px`;
+    (surroundDiv.current as HTMLDivElement).style.left = `${Math.min(
+      l,
+      x
+    )}px`;
+    (surroundDiv.current as HTMLDivElement).style.height = `${Math.abs(t - y) + h
+      }px`;
+    (surroundDiv.current as HTMLDivElement).style.width = `${Math.abs(l - x) + w
+      }px`;
+    (surroundDiv.current as HTMLDivElement).style.zIndex = `1000`;
+  }
+
+
+
+
 
   const handleStop = (
     i: number,
@@ -433,6 +596,7 @@ export function RetroColumn({
   ): void | false => {
     selectedCard.current = [i, j];
     if (cardRefs !== undefined) {
+      clearInterval(timeoutForBorder)
       if (selectedCard.current !== null) {
         // for (const group of cardRefs) {
         //     for (const cardRef of group) {
@@ -464,29 +628,29 @@ export function RetroColumn({
         if (selectedCard.current[1] !== 0) {
           (
             landingZones[selectedCard.current[0]][
-              selectedCard.current[1]
+            selectedCard.current[1]
             ] as HTMLDivElement
           ).style.display = 'inline';
         }
         if (targetLanding.current !== null) {
           (
             landingZones[targetLanding.current[0]][
-              targetLanding.current[1]
+            targetLanding.current[1]
             ] as HTMLDivElement
           ).style.background = 'none';
           (
             landingZones[targetLanding.current[0]][
-              targetLanding.current[1]
+            targetLanding.current[1]
             ] as HTMLDivElement
           ).style.backgroundColor = 'transparent';
           (
             landingZones[targetLanding.current[0]][
-              targetLanding.current[1]
+            targetLanding.current[1]
             ] as HTMLDivElement
           ).style.padding = '0';
           (
             landingZones[targetLanding.current[0]][
-              targetLanding.current[1]
+            targetLanding.current[1]
             ] as HTMLDivElement
           ).style.border = 'none';
         }
@@ -505,10 +669,13 @@ export function RetroColumn({
             new Date().getTime() - dragStartTime.current > 500
           ) {
             dragStartTime.current = null;
+
+            //Not in use
             if (
               selectedCard.current !== null &&
               targetLanding.current !== null
             ) {
+              console.log("move 2");
               moveCard(
                 cardGroups[selectedCard.current[0]].cards[
                   selectedCard.current[1]
@@ -517,6 +684,8 @@ export function RetroColumn({
                 targetLanding.current[1]
               );
             }
+
+            //moving of card from one group to another group
             if (targetGroup.current !== null) {
               moveCard(
                 cardGroups[selectedCard.current[0]].cards[
@@ -526,27 +695,50 @@ export function RetroColumn({
                 cardGroups[targetGroup.current].cards.length
               );
             }
-            if (
-              selectedCard.current !== null &&
-              targetMergeCard.current !== null
-            ) {
-              mergeCards(
-                cardGroups[selectedCard.current[0]].cards[
+
+            // Reorder the card to last location
+            else if (actionRef.current == "moveToLast" && targetForReorderToLastCard.current != null) {
+              reorderCards(cardGroups[selectedCard.current[0]].cards[
+                selectedCard.current[1]
+              ].id,
+                cardGroups[targetForReorderToLastCard.current[0]].cards[
+                  targetForReorderToLastCard.current[1]
+                ].id, targetForReorderToLastCard.current[1], true);
+              actionRef.current = "";
+              (cardRefs[targetForReorderToLastCard.current[0]][targetForReorderToLastCard.current[1]] as HTMLDivElement).style.border = "none";
+
+            }
+            //Merge the cards
+            else if (actionRef.current === "merge" && selectedCard.current !== null &&
+              targetMergeCard.current !== null) {
+              mergeCards(cardGroups[selectedCard.current[0]].cards[selectedCard.current[1]].id,
+                cardGroups[targetMergeCard.current[0]].cards[targetMergeCard.current[1]].id);
+            }
+            //Reorder the cards except to last location
+            else {
+              if (targetMergeCard.current != null && (targetMergeCard.current[1] - 1) != selectedCard.current[1]) {
+                reorderCards(cardGroups[selectedCard.current[0]].cards[
                   selectedCard.current[1]
                 ].id,
-                cardGroups[targetMergeCard.current[0]].cards[
-                  targetMergeCard.current[1]
-                ].id
-              );
+                  cardGroups[targetMergeCard.current[0]].cards[
+                    targetMergeCard.current[1]
+                  ].id, targetMergeCard.current[1], false)
+              }
+
             }
           }
         } finally {
+          (surroundDiv.current as HTMLDivElement).style.display = 'none';
           selectedCard.current = null;
           targetLanding.current = null;
           targetMergeCard.current = null;
         }
       }
     }
+    dragStartTime.current = null;
+
+    targetSelectedMergeCard.current = null;
+    dragTargetTime.current = null;
   };
 
   const cardRefCollector = (
@@ -570,928 +762,602 @@ export function RetroColumn({
     });
   };
 
-  if (!location.pathname.includes('report')) {
-    return (
-      <ColumnComponent
-        sx={{
-          height: noHeightLimit
-            ? 'auto'
-            : isXsUp
+  // if (!location.pathname.includes('report')) {
+  return (
+    <ColumnComponent
+      sx={{
+        height: noHeightLimit
+          ? 'auto'
+          : isXsUp
             ? 'calc(var(--app-height) - 115px)'
             : 'calc(var(--app-height) - 160px)',
-          borderRadius: '8px',
-          border: isXsUp ? 'none' : '1px solid #0B6623',
-          borderColor: groupFontColour,
-          padding: isXsUp ? '10px' : '0px',
-          paddingBottom: 0,
-        }}
-        onMouseOver={() => {
-          setMouseOver(true);
-        }}
-        onMouseOut={() => {
-          setMouseOver(true);
+        borderRadius: '8px',
+        border: isXsUp || location.pathname.includes('report') ? 'none' : '1px solid #0B6623',
+        borderColor: groupFontColour,
+        padding: isXsUp ? '10px' : '0px',
+        paddingBottom: 0,
+      }}
+      onMouseOver={() => {
+        setMouseOver(true);
+      }}
+      onMouseOut={() => {
+        setMouseOver(true);
+      }}
+    >
+      <div
+        style={{
+          display: 'flex',
+          flexDirection: 'column',
+          flexGrow: 1,
+          width: '100px',
         }}
       >
-        <div
-          style={{
-            display: 'flex',
-            flexDirection: 'column',
-            flexGrow: 1,
-            width: '100px',
-          }}
-        >
-          {!isXsUp && (
-            <div
-              style={{
-                display: 'flex',
-                flexDirection: 'row',
-                justifyContent: 'space-between',
-                alignItems: 'center',
-                paddingRight: '15px',
-                marginBottom: '25px',
-                background: groupColour,
-                borderRadius: '8px',
-              }}
+        {!isXsUp && !location.pathname.includes('report') && (
+          <div
+            style={{
+              display: 'flex',
+              flexDirection: 'row',
+              justifyContent: 'space-between',
+              alignItems: 'center',
+              paddingRight: '15px',
+              marginBottom: '25px',
+              background: groupColour,
+              borderRadius: '8px',
+            }}
+          >
+            <Grid
+              container
+              alignItems="center"
+              justifyContent="space-between"
+              item
+              xs={12}
+              md={12}
+              lg={12}
             >
+              <Grid item lg={8} md={6} xs={6}>
+                <Tooltip title={columnName}>
+                  <div>
+                    {!noHeader && (
+                      <Typography
+                        align="center"
+                        sx={{
+                          userSelect: 'none',
+                          display: 'flex',
+                          // fontSize: '0.9rem',
+                          color: groupFontColour + '!important',
+                          fontSize: '16px',
+                          padding: '10px',
+                        }}
+                      >
+                        {global.user.userType == 2 &&
+                          (!ended || !global.leaveRetro) ? (
+                          <>
+                            {' '}
+                            {leftHeaderComponent}
+                            <TextField
+                              maxRows={2}
+                              sx={{
+                                fieldset: { border: 'none' },
+                                flex: 10,
+                                // padding: '10px',
+                                div: { padding: 0, position: 'initial' },
+                                textarea: {
+                                  // textAlign: 'center',
+                                  color: groupFontColour + '!important',
+                                  fontSize: '16px',
+                                  fontWeight: 600,
+                                },
+
+                                position: 'initial',
+                                display: 'flex',
+                                // alignItems: 'center',
+                                // justifyContent: 'left',
+                              }}
+                              inputProps={{ maxLength: 150 }}
+                              multiline
+                              fullWidth
+                              value={columnName}
+                              onKeyDown={e => {
+                                if (e.keyCode === 13 && value.length !== 0) {
+                                  submitColumnName(columnName);
+                                  (e.target as HTMLInputElement).blur();
+                                }
+                              }}
+                              onChange={e =>
+                                setColumnName(e.currentTarget.value)
+                              }
+                              onBlur={() => submitColumnName(columnName)}
+                              onSubmit={() => submitColumnName(columnName)}
+                            ></TextField>
+                            {rightHeaderComponent}
+                          </>
+                        ) : (
+                          <Typography
+                            noWrap
+                            sx={{
+                              // minWidth: isXsUp ? '150px' : '350px',
+                              // maxWidth: isXsUp ? '150px' : '350px',
+                              width: '100%',
+                              overflow: 'hidden',
+                              textOverflow: 'ellipsis',
+                              display: 'flex',
+                              // height:'56px'
+                              // overflow: 'hidden !important',
+                              // textOverflow: 'ellipsis',
+                            }}
+                          // onClick={() => {
+                          //   setEditing(true);
+                          // }}
+                          >
+                            {columnName}
+                          </Typography>
+                        )}
+                      </Typography>
+                    )}
+                  </div>
+                </Tooltip>
+              </Grid>
+
               <Grid
                 container
-                alignItems="center"
-                justifyContent="space-between"
+                justifyContent="flex-end"
+                direction="row"
                 item
-                xs={12}
-                md={12}
-                lg={12}
+                lg={4}
+                md={5}
+                xs={5}
               >
-                <Grid item lg={8} md={6} xs={6}>
-                  <Tooltip title={columnName}>
-                    <div>
-                      {!noHeader && (
-                        <Typography
-                          align="center"
-                          sx={{
-                            userSelect: 'none',
-                            display: 'flex',
-                            // fontSize: '0.9rem',
-                            color: groupFontColour + '!important',
-                            fontSize: '16px',
-                            padding: '10px',
-                          }}
-                        >
-                          {global.user.userType == 2 &&
-                          (!ended || !global.leaveRetro) ? (
-                            <>
-                              {' '}
-                              {leftHeaderComponent}
-                              <TextField
-                                maxRows={2}
-                                sx={{
-                                  fieldset: { border: 'none' },
-                                  flex: 10,
-                                  // padding: '10px',
-                                  div: { padding: 0, position: 'initial' },
-                                  textarea: {
-                                    // textAlign: 'center',
-                                    color: groupFontColour + '!important',
-                                    fontSize: '16px',
-                                    fontWeight: 600,
-                                  },
-
-                                  position: 'initial',
-                                  display: 'flex',
-                                  // alignItems: 'center',
-                                  // justifyContent: 'left',
-                                }}
-                                inputProps={{ maxLength: 150 }}
-                                multiline
-                                fullWidth
-                                value={columnName}
-                                onKeyDown={e => {
-                                  if (e.keyCode === 13 && value.length !== 0) {
-                                    submitColumnName(columnName);
-                                    (e.target as HTMLInputElement).blur();
-                                  }
-                                }}
-                                onChange={e =>
-                                  setColumnName(e.currentTarget.value)
-                                }
-                                onBlur={() => submitColumnName(columnName)}
-                                onSubmit={() => submitColumnName(columnName)}
-                              ></TextField>
-                              {rightHeaderComponent}
-                            </>
-                          ) : (
-                            <Typography
-                              noWrap
-                              sx={{
-                                // minWidth: isXsUp ? '150px' : '350px',
-                                // maxWidth: isXsUp ? '150px' : '350px',
-                                width: '100%',
-                                overflow: 'hidden',
-                                textOverflow: 'ellipsis',
-                                display: 'inline-block',
-                                // height:'56px'
-                                // overflow: 'hidden !important',
-                                // textOverflow: 'ellipsis',
-                              }}
-                              // onClick={() => {
-                              //   setEditing(true);
-                              // }}
-                            >
-                              {columnName}
-                            </Typography>
-                          )}
-                        </Typography>
-                      )}
-                    </div>
-                  </Tooltip>
-                </Grid>
-
-                <Grid
-                  container
-                  justifyContent="flex-end"
-                  direction="row"
-                  item
-                  lg={4}
-                  md={5}
-                  xs={5}
-                >
-                  {global.user.userType == 2 && (!ended || !global.leaveRetro) && (
-                    <>
-                      {column.publish ? (
-                        <Typography style={{ color: '#808080' }}>
-                          Published
-                        </Typography>
-                      ) : (
-                        <Typography
-                          id={'publish' + columnId}
-                          onClick={() => {
-                            if (!ended) {
-                              publishColumn(true);
-                            }
-                          }}
-                          // onTouchStart={() => {
-                          //   if (!ended) {
-                          //     publishColumn(true);
-                          //   }
-                          // }}
-                          sx={{
-                            color: '#159ADD',
-                            textDecorationLline: 'underline',
-                            cursor: !ended ? 'pointer' : 'auto',
-                          }}
-                        >
-                          Publish
-                        </Typography>
-                      )}
-                    </>
-                  )}
-                  {/* {global.currentRetro?.creatorId === global.user.id && (
+                {global.user.userType == 2 && (!ended || !global.leaveRetro) && (
+                  <>
+                    {column.publish ? (
+                      <Typography style={{ color: '#808080' }}>
+                        Published
+                      </Typography>
+                    ) : (
+                      <Typography
+                        id={'publish' + columnId}
+                        onClick={() => {
+                          if (!ended) {
+                            publishColumn(true);
+                          }
+                        }}
+                        // onTouchStart={() => {
+                        //   if (!ended) {
+                        //     publishColumn(true);
+                        //   }
+                        // }}
+                        sx={{
+                          color: '#159ADD',
+                          textDecorationLline: 'underline',
+                          cursor: !ended ? 'pointer' : 'auto',
+                          display: !ended ? 'flex' : "none"
+                        }}
+                      >
+                        Publish
+                      </Typography>
+                    )}
+                  </>
+                )}
+                {/* {global.currentRetro?.creatorId === global.user.id && (
                  <img
                    src="/svgs/Unlock.svg"
                    style={{ width: '20px', marginLeft: '15px' }}
                  />
                )} */}
-                  {global.expandColumn === -1 ? (
-                    <img
-                      onClick={() => {
-                        dispatch({
-                          type: ActionType.EXPAND_COLUMN,
-                          payload: { expandColumn: +column.id },
-                        });
-                      }}
-                      src="/svgs/Expand.svg"
-                      style={{
-                        width: '20px',
-                        marginLeft: '15px',
-                        cursor: 'pointer',
-                      }}
-                    />
-                  ) : (
-                    <img
-                      onClick={() => {
-                        dispatch({
-                          type: ActionType.EXPAND_COLUMN,
-                          payload: { expandColumn: -1 },
-                        });
-                      }}
-                      src="/svgs/Shrink.svg"
-                      style={{
-                        width: '20px',
-                        marginLeft: '15px',
-                        cursor: 'pointer',
-                      }}
-                    />
-                  )}
-                </Grid>
-              </Grid>
-            </div>
-          )}
-          {/* </Box> */}
-          {useMemo(
-            () => (
-              <>
-                {!column.publish && global.user.userType !== 2 ? (
-                  <Box
-                    sx={{
-                      display: 'flex',
-                      width: 'calc(100%-20px)',
-                      paddingLeft: '10px',
-                      paddingRight: '10px',
-
-                      flexDirection: 'column',
+                {global.expandColumn === -1 ? (
+                  <img
+                    onClick={() => {
+                      dispatch({
+                        type: ActionType.EXPAND_COLUMN,
+                        payload: { expandColumn: +column.id },
+                      });
                     }}
-                    ref={containerRef}
+                    src="/svgs/Expand.svg"
                     style={{
-                      // overflowY: noHeightLimit ? 'auto' : 'auto',
-                      overflowY: 'auto',
-                      userSelect: 'none',
-                      flexGrow: 2,
+                      width: '20px',
+                      marginLeft: '15px',
+                      cursor: 'pointer',
                     }}
-                  >
-                    <Grid
-                      container
-                      // rowSpacing={1}
-                      columnSpacing={'20px'}
-                      direction="row"
-                      justifyContent={
-                        global?.expandColumn === -1
-                          ? 'space-between'
-                          : 'flex-start'
-                      }
-                    >
-                      {cardGroups.map((group, i) => (
-                        <>
-                          {group.cards.map((card: RetroCardType, j: number) => (
-                            <>
-                              {card.createdBy === global.user.id && (
-                                <Grid
-                                  item
-                                  lg={global?.expandColumn !== -1 ? 2 : 6}
-                                  md={global?.expandColumn !== -1 ? 2 : 4}
-                                  xs={12}
-                                  sx={{ marginBottom: '20px' }}
-                                  key={j + '0'}
-                                >
-                                  {/* <Box sx={{width:"100%"}}> */}
-                                  <RetroCard
-                                    moveCard={moveCard}
-                                    card={card}
-                                    groups={cardGroups}
-                                    currentGroupId={group.id}
-                                    columnId={column.id}
-                                    hideButtons={false}
-                                    animate={true}
-                                  />
-                                  {/* </Box> */}
-                                </Grid>
-                              )}
-                            </>
-                          ))}
-                        </>
-                      ))}
-                    </Grid>
-                    <span
-                      ref={surroundDiv}
-                      style={{
-                        display: 'none',
-                      }}
-                    ></span>
-                  </Box>
+                  />
                 ) : (
-                  <>
-                    <div
-                      ref={containerRef}
-                      style={{
-                        overflowY: 'auto',
-                        userSelect: 'none',
-                        flexGrow: 2,
-                      }}
-                    >
-                      {cardGroups.map((group, i) => (
-                        <Grid
-                          container
-                          lg={12}
-                          item
-                          key={group.id}
-                          ref={e => (groupRefs[i] = e)}
-                          style={{
-                            marginBottom: '10px',
-                            padding: '3px',
-                            borderRadius: 0,
-                            background:
-                              group.name !== UNGROUPED ? groupColour : 'none',
-                          }}
-                        >
-                          <RetroCardGroup
-                            admin={global.user.userType == 2}
-                            group={group}
-                            column={column}
-                            columnId={column.id}
-                            showCollapse={
-                              group.name !== UNGROUPED &&
-                              // group.cards.length > 1 &&
-                              !groupCollapsed[i]
-                            }
-                            onCollapse={value => {
-                              groupCollapsed[i] = !groupCollapsed[i];
-                              setGroupCollapsed([...groupCollapsed]);
-                            }}
-                          >
-                            {group.name === UNGROUPED ||
-                            !groupCollapsed[i] ||
-                            // group.cards.length < 1 ||
-                            expandAllGroups ? (
-                              <div
-                                style={{
-                                  display: 'flex',
-                                  flexWrap: 'wrap',
-                                  justifyContent: 'flex-start',
-                                  minHeight: '100px',
-                                }}
-                              >
-                                <span
-                                  ref={e => {
-                                    landingZones[i][0] = e as HTMLDivElement;
-                                  }}
-                                  style={{
-                                    maxHeight: '0',
-                                    margin: '0',
-                                    padding: '0',
-                                  }}
-                                ></span>
-                                {group.cards.map(
-                                  (card: RetroCardType, j: number) =>
-                                    (card.createdBy === global.user.id ||
-                                      global.user.userType == 2 ||
-                                      column.publish) && (
-                                      <React.Fragment key={card.id}>
-                                        {group.name === UNGROUPED ||
-                                        j <
-                                          (groupCollapsed[i]
-                                            ? 2
-                                            : group.cards.length) ? (
-                                          <>
-                                            <Grid
-                                              item
-                                              lg={
-                                                global?.expandColumn !== -1
-                                                  ? 2
-                                                  : 6
-                                              }
-                                              md={
-                                                global?.expandColumn !== -1
-                                                  ? 2
-                                                  : 4
-                                              }
-                                              xs={12}
-                                              ref={e =>
-                                                cardRefCollector(
-                                                  e as HTMLDivElement,
-                                                  i,
-                                                  j,
-                                                  card
-                                                )
-                                              }
-                                              style={{
-                                                padding: '10px',
-                                              }}
-                                            >
-                                              <Draggable
-                                                ref={ref => {
-                                                  draggableRefs[i][j] = ref;
-                                                }}
-                                                disabled={
-                                                  ended ||
-                                                  global.leaveRetro ||
-                                                  (card.locked &&
-                                                    card.lockedBy !==
-                                                      global.user.id)
-                                                }
-                                                onStart={(event, data) =>
-                                                  handleStart(i, j, event, data)
-                                                }
-                                                onStop={(event, data) => {
-                                                  handleStop(i, j, event, data);
-                                                }}
-                                                onDrag={(event, data) =>
-                                                  handleDrag(i, j, event, data)
-                                                }
-                                                enableUserSelectHack={true}
-                                                cancel={'.can'}
-                                                handle=".handle"
-                                              >
-                                                <span
-                                                  className={
-                                                    global.user.userType == 2
-                                                      ? 'handle'
-                                                      : ''
-                                                  }
-                                                >
-                                                  <RetroCard
-                                                    moveCard={moveCard}
-                                                    card={card}
-                                                    groups={cardGroups}
-                                                    currentGroupId={group.id}
-                                                    columnId={column.id}
-                                                    hideButtons={false}
-                                                    animate={true}
-                                                  />
-                                                </span>
-                                              </Draggable>
-                                              <div
-                                                ref={ref =>
-                                                  (placeholderRefs[i][j] = ref)
-                                                }
-                                              ></div>
-                                            </Grid>
-                                            <span
-                                              ref={e => {
-                                                landingZones[i][j + 1] =
-                                                  e as HTMLDivElement;
-                                              }}
-                                              style={{
-                                                maxHeight: '0',
-                                                margin: '0',
-                                                padding: '0',
-                                              }}
-                                            ></span>
-                                          </>
-                                        ) : null}
-                                      </React.Fragment>
-                                    )
-                                )}
-                              </div>
-                            ) : (
-                              <></>
-                            )}
-                          </RetroCardGroup>
-                        </Grid>
-                      ))}
-
-                      <span
-                        ref={surroundDiv}
-                        style={{ display: 'none' }}
-                      ></span>
-                    </div>
-                  </>
+                  <img
+                    onClick={() => {
+                      dispatch({
+                        type: ActionType.EXPAND_COLUMN,
+                        payload: { expandColumn: -1 },
+                      });
+                    }}
+                    src="/svgs/Shrink.svg"
+                    style={{
+                      width: '20px',
+                      marginLeft: '15px',
+                      cursor: 'pointer',
+                    }}
+                  />
                 )}
-              </>
-            ),
-            [column.groups, groupCollapsed]
-          )}
-          <>
-            {!isXsUp && (
-              <Grid
+              </Grid>
+            </Grid>
+          </div>
+        )}
+        {/* </Box> */}
+        {useMemo(
+          () => (
+
+
+            <>
+              <div
+                ref={containerRef}
                 style={{
-                  // display: 'flex',
-                  width:
-                    document.getElementById(columnId) != null
-                      ? document
-                          .getElementById(columnId)
-                          ?.getBoundingClientRect().width + 'px'
-                      : '33px',
-                  zIndex: 2,
-                  position: 'absolute',
-                  bottom: '65px',
-                  display: columnId == global.emojiId ? 'flex' : 'none',
+                  overflowY: 'auto',
+                  userSelect: 'none',
+                  flexGrow: 2,
                 }}
               >
-                <EmojiPicker
-                  // previewConfig={{
-                  //   defaultEmoji: '',
-                  //   defaultCaption: '',
-                  //   showPreview: false,
-                  // }}
-                  // lazyLoadEmojis={true}
-
-                  onEmojiClick={(event, emojiObject) => {
-                    console.log(emojiObject, "emoji's selected");
-                    setValueSet(true);
-                    setValue(value + emojiObject.emoji);
-                    // setEmojiPicker('');
-                    setEmojiId('');
-                    // setShowEmojisOfColumn('');
-                    // setEmo
-                  }}
-                  // height={400}
-                  // width={'100%'}
-                  pickerStyle={{ width: '100%' }}
-                />
-              </Grid>
-            )}
-            {
-              !ended && !global.leaveRetro && (
-                <Box
-                  id={columnId}
-                  style={{
-                    background: 'white',
-                    borderRadius: '0px 0px 8px 8px',
-                    // margin: '3px',
-                    borderTop: '1px solid #F0F0F0',
-                    bottom: '0px',
-                    padding: '10px',
-                    display: 'flex',
-                    alignItems: 'center',
-                    ...(false
-                      ? { position: 'fixed', width: '100vw', height: '8rem' }
-                      : {}),
-                  }}
-                  onMouseOver={() => {
-                    setMouseOver(true);
-                  }}
-                  onMouseOut={() => {
-                    setMouseOver(true);
-                  }}
-                >
-                  {!isXsUp && (
-                    <img
-                      src="/images/Emoji.png"
-                      style={{
-                        height: '25px',
-                        width: '25px',
-                        cursor: 'pointer',
-                      }}
-                      onClick={() => {
-                        if (
-                          global.emojiId == '' ||
-                          global.emojiId != columnId
-                        ) {
-                          // setEmojiPicker(columnId);
-                          // setShowEmojisOfColumn(columnId);
-                          setEmojiId(columnId);
-                        } else {
-                          // setEmojiPicker('');
-                          // setShowEmojisOfColumn('');
-                          setEmojiId('');
-                        }
-                      }}
-                    ></img>
-                  )}
-                  {/* <img src="https://cdn.jsdelivr.net/npm/emoji-datasource-apple/img/apple/64/1f627.png" /> */}
-                  <TextFieldNoBorderWrapper
-                    sx={{
-                      color: '#8E8E8E',
-                      flexGrow: 10,
-                      maxWidth: 'unset',
-                      flexDirection: 'column',
-                    }}
-                  >
-                    <TextField
-                      fullWidth
-                      multiline
-                      inputProps={{
-                        maxLength: MAX_CARD_TEXT_LENGTH,
-                        style: {
-                          padding: 0,
-                        },
-                      }}
-                      autoFocus={!isXsUp || column.groups.length!=0 }
-                      sx={{
-                        padding: 0,
-                        input: { padding: 0 },
-                        div: { padding: 0, position: 'initial' },
-                        position: 'initial',
-                        textarea: {
-                          fontStyle: valueSet ? 'normal' : 'italic',
-                          color: valueSet ? '#000' : '#8D858A',
-                        },
-                      }}
-                      value={valueSet ? value : 'Add your thoughts...'}
-                      onChange={event => {
-                        if (event.target.value !== ' ')
-                          setValue(event.target.value);
-                      }}
-                      onFocus={event => {
-                        setValueSet(true);
-                        if (global.emojiId != '') setEmojiId('');
-                      }}
-                      onBlur={() => {
-                        if (!value) {
-                          setValueSet(false);
-                        }
-                      }}
-                      onKeyDown={e => {
-                        const tempValue = value;
-                        const removedEnter = tempValue.replace(/[\r\n]/gm, '');
-                        setValue(removedEnter);
-                        const removedSpaces = removedEnter.replace(/ /g, '');
-                        if (
-                          e.keyCode === 13 &&
-                          removedSpaces &&
-                          removedSpaces.length !== 0
-                        ) {
-                          submit(value);
-                          (e.target as HTMLInputElement).blur();
-                        }
-                      }}
-                    ></TextField>
-                    {value && value.length >= MAX_CARD_TEXT_LENGTH - 20 ? (
-                      <Typography
-                        style={{
-                          fontSize: '0.75rem',
-                          textAlign: 'right',
-                          whiteSpace: 'nowrap',
-                        }}
-                      >
-                        Characters remaining:{' '}
-                        {MAX_CARD_TEXT_LENGTH - value.length}
-                      </Typography>
-                    ) : null}
-                  </TextFieldNoBorderWrapper>
-                  <div
+                {cardGroups.map((group, i) => (
+                  <Grid
+                    container
+                    lg={12}
+                    item
+                    key={group.id}
+                    ref={e => (groupRefs[i] = e)}
                     style={{
-                      display: 'flex',
-                      justifyContent: 'flex-end',
-                      flexDirection: 'column',
+                      marginBottom: '10px',
+                      padding: '3px',
+                      borderRadius: 0,
+                      background:
+                        group.name !== UNGROUPED ? groupColour : 'none',
                     }}
                   >
-                    <Button
-                      style={{ position: 'initial' }}
-                      disabled={
-                        // !value ||value.replace(/ /g, '').length === 0||
-                        value.length === 0 ||
-                        !value ||
-                        value.replace(/[\r\n]/gm, '').replace(/ /g, '')
-                          .length === 0
+                    <RetroCardGroup
+                      admin={global.user.userType == 2}
+                      group={group}
+                      column={column}
+                      columnId={column.id}
+
+                      showCollapse={
+                        group.name !== UNGROUPED &&
+                        // group.cards.length > 1 &&
+                        !groupCollapsed[i]
                       }
-                      onClick={() => submit(value)}
-                      // onTouchStart={() => submit(value)}
-                    >
-                      <SendIcon></SendIcon>
-                    </Button>
-                  </div>
-                </Box>
-              )
-              // ) : null
-            }
-          </>
-        </div>
-      </ColumnComponent>
-    );
-  } else {
-    return (
-      <ColumnComponent
-        sx={{
-          height: noHeightLimit
-            ? 'auto'
-            : isXsUp
-            ? 'calc(var(--app-height) - 165px)'
-            : 'calc(var(--app-height) - 150px)',
-        }}
-        onMouseOver={() => {
-          setMouseOver(true);
-        }}
-        onMouseOut={() => {
-          setMouseOver(true);
-        }}
-      >
-        <Box
-          style={{ display: 'flex', flexDirection: 'column', flexGrow: 1 }}
-          mr="192px"
-          ml="192px"
-        >
-          {useMemo(
-            () => (
-              <>
-                {!column.publish && global.user.userType !== 2 ? (
-                  <Box
-                    sx={{
-                      display: 'flex',
-                      width: 'calc(100%-20px)',
-                      paddingLeft: '10px',
-                      paddingRight: '10px',
-
-                      flexDirection: 'column',
-                    }}
-                    ref={containerRef}
-                    style={{
-                      // overflowY: noHeightLimit ? 'auto' : 'auto',
-                      overflowY: 'auto',
-                      userSelect: 'none',
-                      flexGrow: 2,
-                    }}
-                  >
-                    <Grid
-                      container
-                      // rowSpacing={1}
-                      columnSpacing={'20px'}
-                      direction="row"
-                      justifyContent="space-between"
-                    >
-                      {cardGroups.map((group, i) => (
-                        <>
-                          {group.cards.map((card: RetroCardType, j: number) => (
-                            <>
-                              {card.createdBy === global.user.id && (
-                                <Grid
-                                  item
-                                  lg={3}
-                                  md={3}
-                                  xs={6}
-                                  sx={{ marginBottom: '20px' }}
-                                  key={j + '0'}
-                                >
-                                  {/* <Box sx={{width:"100%"}}> */}
-                                  <RetroCard
-                                    moveCard={moveCard}
-                                    card={card}
-                                    groups={cardGroups}
-                                    currentGroupId={group.id}
-                                    columnId={column.id}
-                                    hideButtons={false}
-                                    animate={true}
-                                  />
-                                  {/* </Box> */}
-                                </Grid>
-                              )}
-                            </>
-                          ))}
-                        </>
-                      ))}
-                    </Grid>
-                    <span
-                      ref={surroundDiv}
-                      style={{
-                        display: 'none',
-                      }}
-                    ></span>
-                  </Box>
-                ) : (
-                  <>
-                    <div
-                      ref={containerRef}
-                      style={{
-                        overflowY: 'auto',
-                        userSelect: 'none',
-                        flexGrow: 2,
+                      onCollapse={value => {
+                        groupCollapsed[i] = !groupCollapsed[i];
+                        setGroupCollapsed([...groupCollapsed]);
                       }}
                     >
-                      {cardGroups.map((group, i) => (
-                        <Grid
-                          container
-                          item
-                          lg={12}
-                          key={group.id}
-                          ref={e => (groupRefs[i] = e)}
+                      {group.name === UNGROUPED ||
+                        !groupCollapsed[i] ||
+                        // group.cards.length < 1 ||
+                        expandAllGroups ? (
+                        <div
                           style={{
-                            marginBottom: '10px',
-                            padding: '3px',
-                            borderRadius: 0,
-                            background:
-                              group.name !== UNGROUPED ? groupColour : 'none',
+                            display: 'flex',
+                            flexWrap: 'wrap',
+                            justifyContent: 'flex-start',
+                            minHeight: '100px',
                           }}
                         >
-                          <RetroCardGroup
-                            admin={global.user.userType == 2}
-                            group={group}
-                            column={column}
-                            columnId={column.id}
-                            showCollapse={
-                              group.name !== UNGROUPED &&
-                              group.cards.length > 0 &&
-                              !groupCollapsed[i]
-                            }
-                            onCollapse={value => {
-                              groupCollapsed[i] = !groupCollapsed[i];
-                              setGroupCollapsed([...groupCollapsed]);
+                          <span
+                            ref={e => {
+                              landingZones[i][0] = e as HTMLDivElement;
                             }}
-                          >
-                            {group.name === UNGROUPED ||
-                            !groupCollapsed[i] ||
-                            group.cards.length < 1 ||
-                            expandAllGroups ? (
-                              <div
-                                style={{
-                                  display: 'flex',
-                                  flexWrap: 'wrap',
-                                  justifyContent: 'flex-start',
-                                  minHeight: '100px',
-                                }}
-                              >
-                                <span
-                                  ref={e => {
-                                    landingZones[i][0] = e as HTMLDivElement;
-                                  }}
-                                  style={{
-                                    maxHeight: '0',
-                                    margin: '0',
-                                    padding: '0',
-                                  }}
-                                ></span>
-                                {group.cards.map(
-                                  (card: RetroCardType, j: number) =>
-                                    (card.createdBy === global.user.id ||
-                                      global.user.userType == 2 ||
-                                      column.publish) && (
-                                      <React.Fragment key={card.id}>
-                                        {group.name === UNGROUPED ||
-                                        j <
-                                          (groupCollapsed[i]
-                                            ? 1
-                                            : group.cards.length) ? (
-                                          <>
-                                            <Grid
-                                              item
-                                              lg={4}
-                                              md={4}
-                                              xs={6}
-                                              ref={e =>
-                                                cardRefCollector(
-                                                  e as HTMLDivElement,
-                                                  i,
-                                                  j,
-                                                  card
-                                                )
-                                              }
-                                              style={{
-                                                padding: '10px',
-                                              }}
-                                            >
-                                              <Draggable
-                                                ref={ref => {
-                                                  draggableRefs[i][j] = ref;
-                                                }}
-                                                disabled={
-                                                  ended ||
-                                                  global.leaveRetro ||
-                                                  (card.locked &&
-                                                    card.lockedBy !==
-                                                      global.user.id)
-                                                }
-                                                onStart={(event, data) =>
-                                                  handleStart(i, j, event, data)
-                                                }
-                                                onStop={(event, data) => {
-                                                  handleStop(i, j, event, data);
-                                                }}
-                                                onDrag={(event, data) =>
-                                                  handleDrag(i, j, event, data)
-                                                }
-                                                enableUserSelectHack={true}
-                                                cancel={'.can'}
-                                                handle=".handle"
-                                              >
-                                                <span
-                                                  className={
-                                                    global.user.userType == 2
-                                                      ? 'handle'
-                                                      : ''
-                                                  }
-                                                >
-                                                  <RetroCard
-                                                    moveCard={moveCard}
-                                                    card={card}
-                                                    groups={cardGroups}
-                                                    currentGroupId={group.id}
-                                                    columnId={column.id}
-                                                    hideButtons={false}
-                                                    animate={true}
-                                                  />
-                                                </span>
-                                              </Draggable>
-                                              <div
+                            style={{
+                              maxHeight: '0',
+                              margin: '0',
+                              padding: '0',
+                            }}
+                          ></span>
+                          {group.cards.map(
+                            (card: RetroCardType, j: number) =>
+                              (card.createdBy === global.user.id ||
+                                global.user.userType == 2 ||
+                                column.publish) && (
+                                <React.Fragment key={card.id}>
+                                  {group.name === UNGROUPED ||
+                                    j <
+                                    (groupCollapsed[i]
+                                      ? 2
+                                      : group.cards.length) ? (
+                                    <>
+                                      <Grid
+                                        item
+                                        lg={
+                                          global?.expandColumn !== -1
+                                            ? 2
+                                            : !location.pathname.includes('report') ? 6 : 4
+                                        }
+                                        md={
+                                          global?.expandColumn !== -1
+                                            ? 2
+                                            : !location.pathname.includes('report') ? 6 : 4
+                                        }
+                                        xs={12}
+                                        ref={e =>
+                                          cardRefCollector(
+                                            e as HTMLDivElement,
+                                            i,
+                                            j,
+                                            card
+                                          )
+                                        }
+                                        style={{
+                                          padding: '10px',
+                                        }}
+                                      >
+                                        <Draggable
+
+                                          ref={ref => {
+                                            draggableRefs[i][j] = ref;
+                                          }}
+                                          disabled={
+                                            ended ||
+                                            global.leaveRetro ||
+                                            (card.locked &&
+                                              card.lockedBy !==
+                                              global.user.id)
+                                          }
+                                          onStart={(event, data) =>
+                                            handleStart(i, j, event, data)
+                                          }
+                                          onStop={(event, data) => {
+                                            handleStop(i, j, event, data);
+                                          }}
+                                          onDrag={(event, data) =>
+                                            handleDrag(i, j, event, data)
+                                          }
+                                          enableUserSelectHack={true}
+                                          cancel={'.can'}
+                                          handle=".handle"
+                                        >
+                                          <span
+                                            className={
+                                              global.user.userType == 2
+                                                ? 'handle'
+                                                : ''
+                                            }
+                                            id={i + ""}
+                                          >
+                                            <RetroCard
+                                              moveCard={moveCard}
+                                              card={card}
+                                              groups={cardGroups}
+                                              currentGroupId={group.id}
+                                              columnId={column.id}
+                                              hideButtons={false}
+                                              animate={true}
+                                            />
+                                          </span>
+
+                                        </Draggable>
+                                        {/* <div
                                                 ref={ref =>
                                                   (placeholderRefs[i][j] = ref)
                                                 }
-                                              ></div>
-                                            </Grid>
-                                            <span
-                                              ref={e => {
-                                                landingZones[i][j + 1] =
-                                                  e as HTMLDivElement;
-                                              }}
-                                              style={{
-                                                maxHeight: '0',
-                                                margin: '0',
-                                                padding: '0',
-                                              }}
-                                            ></span>
-                                          </>
-                                        ) : null}
-                                      </React.Fragment>
-                                    )
-                                )}
-                              </div>
-                            ) : (
-                              <></>
-                            )}
-                          </RetroCardGroup>
-                        </Grid>
-                      ))}
+                                              ></div> */}
+                                      </Grid>
+                                      <span
+                                        ref={e => {
+                                          landingZones[i][j + 1] =
+                                            e as HTMLDivElement;
+                                        }}
+                                        style={{
+                                          maxHeight: '0',
+                                          margin: '0',
+                                          padding: '0',
+                                        }}
+                                      ></span>
+                                    </>
+                                  ) : null}
+                                </React.Fragment>
+                              )
+                          )}
+                        </div>
+                      ) : (
+                        <></>
+                      )}
+                    </RetroCardGroup>
+                  </Grid>
+                ))}
 
-                      <span
-                        ref={surroundDiv}
-                        style={{ display: 'none' }}
-                      ></span>
-                    </div>
-                  </>
-                )}
-              </>
-            ),
-            [column.groups, groupCollapsed]
+                <span
+                  ref={surroundDiv}
+                  style={{ display: 'none' }}
+                ></span>
+              </div>
+            </>
+
+
+          ),
+          [column.groups, groupCollapsed]
+        )}
+        <>
+          {!isXsUp && (
+            <Grid
+              style={{
+                // display: 'flex',
+                width:
+                  document.getElementById(columnId) != null
+                    ? document
+                      .getElementById(columnId)
+                      ?.getBoundingClientRect().width + 'px'
+                    : '33px',
+                zIndex: 2,
+                position: 'absolute',
+                bottom: '65px',
+                display: columnId == global.emojiId ? 'flex' : 'none',
+              }}
+            >
+              <EmojiPicker
+                // previewConfig={{
+                //   defaultEmoji: '',
+                //   defaultCaption: '',
+                //   showPreview: false,
+                // }}
+                // lazyLoadEmojis={true}
+
+                onEmojiClick={(event, emojiObject) => {
+                  console.log(emojiObject, "emoji's selected");
+                  setValueSet(true);
+                  setValue(value + emojiObject.emoji);
+                  // setEmojiPicker('');
+                  setEmojiId('');
+                  // setShowEmojisOfColumn('');
+                  // setEmo
+                }}
+                // height={400}
+                // width={'100%'}
+                pickerStyle={{ width: '100%' }}
+              />
+            </Grid>
           )}
-        </Box>
-      </ColumnComponent>
-    );
-  }
+          {
+            !ended && !global.leaveRetro && (
+              <Box
+                id={columnId}
+                style={{
+                  background: 'white',
+                  borderRadius: '0px 0px 8px 8px',
+                  // margin: '3px',
+                  borderTop: '1px solid #F0F0F0',
+                  bottom: '0px',
+                  padding: '10px',
+                  display: 'flex',
+                  alignItems: 'center',
+                  ...(false
+                    ? { position: 'fixed', width: '100vw', height: '8rem' }
+                    : {}),
+                }}
+                onMouseOver={() => {
+                  setMouseOver(true);
+                }}
+                onMouseOut={() => {
+                  setMouseOver(true);
+                }}
+              >
+                {!isXsUp && (
+                  <img
+                    src="/images/Emoji.png"
+                    style={{
+                      height: '25px',
+                      width: '25px',
+                      cursor: 'pointer',
+                    }}
+                    onClick={() => {
+                      if (
+                        global.emojiId == '' ||
+                        global.emojiId != columnId
+                      ) {
+                        // setEmojiPicker(columnId);
+                        // setShowEmojisOfColumn(columnId);
+                        setEmojiId(columnId);
+                      } else {
+                        // setEmojiPicker('');
+                        // setShowEmojisOfColumn('');
+                        setEmojiId('');
+                      }
+                    }}
+                  ></img>
+                )}
+                {/* <img src="https://cdn.jsdelivr.net/npm/emoji-datasource-apple/img/apple/64/1f627.png" /> */}
+                <TextFieldNoBorderWrapper
+                  sx={{
+                    color: '#8E8E8E',
+                    flexGrow: 10,
+                    maxWidth: 'unset',
+                    flexDirection: 'column',
+                  }}
+                >
+                  <TextField
+                    fullWidth
+                    multiline
+                    inputProps={{
+                      maxLength: MAX_CARD_TEXT_LENGTH,
+                      style: {
+                        padding: 0,
+                      },
+                    }}
+                    autoFocus={!isXsUp || column.groups.length != 0}
+                    sx={{
+                      padding: 0,
+                      input: { padding: 0 },
+                      div: { padding: 0, position: 'initial' },
+                      position: 'initial',
+                      textarea: {
+                        fontStyle: valueSet ? 'normal' : 'italic',
+                        color: valueSet ? '#000' : '#8D858A',
+                      },
+                    }}
+                    value={valueSet ? value : 'Add your thoughts...'}
+                    onChange={event => {
+                      if (event.target.value !== ' ')
+                        setValue(event.target.value);
+                    }}
+                    onFocus={event => {
+                      setValueSet(true);
+                      if (global.emojiId != '') setEmojiId('');
+                    }}
+                    onBlur={() => {
+                      if (!value) {
+                        setValueSet(false);
+                      }
+                    }}
+                    onKeyDown={e => {
+                      const tempValue = value;
+                      const removedEnter = tempValue.replace(/[\r\n]/gm, '');
+                      setValue(removedEnter);
+                      const removedSpaces = removedEnter.replace(/ /g, '');
+                      if (
+                        e.keyCode === 13 &&
+                        removedSpaces &&
+                        removedSpaces.length !== 0
+                      ) {
+                        submit(value);
+                        (e.target as HTMLInputElement).blur();
+                      }
+                    }}
+                  ></TextField>
+                  {value && value.length >= MAX_CARD_TEXT_LENGTH - 20 ? (
+                    <Typography
+                      style={{
+                        fontSize: '0.75rem',
+                        textAlign: 'right',
+                        whiteSpace: 'nowrap',
+                      }}
+                    >
+                      Characters remaining:{' '}
+                      {MAX_CARD_TEXT_LENGTH - value.length}
+                    </Typography>
+                  ) : null}
+                </TextFieldNoBorderWrapper>
+                <div
+                  style={{
+                    display: 'flex',
+                    justifyContent: 'flex-end',
+                    flexDirection: 'column',
+                  }}
+                >
+                  <Button
+                    style={{ position: 'initial' }}
+                    disabled={
+                      // !value ||value.replace(/ /g, '').length === 0||
+                      value.length === 0 ||
+                      !value ||
+                      value.replace(/[\r\n]/gm, '').replace(/ /g, '')
+                        .length === 0
+                    }
+                    onClick={() => submit(value)}
+                  // onTouchStart={() => submit(value)}
+                  >
+                    <SendIcon></SendIcon>
+                  </Button>
+                </div>
+              </Box>
+            )
+            // ) : null
+          }
+        </>
+      </div>
+    </ColumnComponent>
+  );
+  // }
 }
+

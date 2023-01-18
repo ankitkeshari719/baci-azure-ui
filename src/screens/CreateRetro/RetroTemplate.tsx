@@ -10,86 +10,20 @@ import {
 } from '@mui/material';
 import '../../global.scss';
 import './styles.scss';
+import Slider from 'react-slick';
 import { templatesData } from './const';
+import { settings } from './SliderConst';
 import { LearnMore } from './LearnMore';
 import { ContainedButton } from '../../components/ContainedButton';
 import { OutlinedButton } from '../../components/OutlinedButton';
-import Slider from 'react-slick';
-import * as Icons from 'heroicons-react';
-
-function SampleNextArrow(props: any) {
-  const { className, style, onClick } = props;
-  return (
-    <Icons.ChevronRight
-      size={32}
-      className={className}
-      style={{
-        ...style,
-        display: 'block',
-        right: '0px',
-        color: '#0F172A',
-        fontSize: '14px',
-        cursor: 'pointer'
-      }}
-      onClick={onClick}
-    />
-  );
-}
-
-function SamplePrevArrow(props: any) {
-  const { className, style, onClick } = props;
-  return (
-    <Icons.ChevronLeft
-      size={32}
-      className={className}
-      style={{
-        ...style,
-        display: 'block',
-        left: '0px',
-        color: '#0F172A',
-        fontSize: '14px',
-        cursor: 'pointer'
-      }}
-      onClick={onClick}
-    />
-  );
-}
-
-const settings = {
-  infinite: true,
-  speed: 500,
-  slidesToShow: 3,
-  slidesToScroll: 3,
-  className: 'center',
-  centerMode: true,
-  nextArrow: <SampleNextArrow />,
-  prevArrow: <SamplePrevArrow />,
-};
-
-const responsive = {
-  superLargeDesktop: {
-    breakpoint: { max: 4000, min: 3000 },
-    items: 5,
-  },
-  desktop: {
-    breakpoint: { max: 3000, min: 1024 },
-    items: 3,
-  },
-  tablet: {
-    breakpoint: { max: 1024, min: 464 },
-    items: 2,
-  },
-  mobile: {
-    breakpoint: { max: 464, min: 0 },
-    items: 1,
-  },
-};
+import { CustomizeTemplate } from './CustomizeTemplate';
 
 type Props = {
   activePanel: string;
   selectedTemplate: any;
   templateError: string;
-  handleTemplate: (selectedPulseCheck: any) => void;
+  templates: any;
+  handleCheckedTemplate: (selectedPulseCheck: any) => void;
   onClickNext: (currentPanel: string, nextPanel: string) => void;
   onClickBack: (previousPanel: string) => void;
 };
@@ -98,23 +32,36 @@ export function RetroTemplate({
   activePanel,
   templateError,
   selectedTemplate,
-  handleTemplate,
+  handleCheckedTemplate,
   onClickNext,
   onClickBack,
+  templates,
 }: Props) {
   const [openLearnMoreDialog, setOpenLearnMoreDialog] = React.useState(false);
+  const [openCustomTemplateDialog, setOpenCustomTemplateDialog] =
+    React.useState(false);
   const [height, setHeight] = React.useState(0);
 
   React.useEffect(() => {
     setHeight(window.innerHeight);
   }, []);
 
-  const handleClickOpen = () => {
+  // Learn More Dialog Open / Close
+  const handleLearnMoreDialog = () => {
     setOpenLearnMoreDialog(true);
   };
 
-  const handleClose = () => {
+  const closeLearnMoreDialog = () => {
     setOpenLearnMoreDialog(false);
+  };
+
+  // Custom Template Dialog Open / Close
+  const handleCustomTemplateDialog = () => {
+    setOpenCustomTemplateDialog(true);
+  };
+
+  const closeCustomTemplateDialog = () => {
+    setOpenCustomTemplateDialog(false);
   };
 
   return (
@@ -180,7 +127,7 @@ export function RetroTemplate({
                           backgroundColor: 'rgba(206, 239, 255, 0.4)',
                         },
                       }}
-                      onClick={() => handleTemplate(template)}
+                      onClick={() => handleCheckedTemplate(template)}
                     >
                       <CardContent>
                         {!template.checked ? (
@@ -221,10 +168,10 @@ export function RetroTemplate({
                         >
                           <Button
                             size="small"
-                            onClick={handleClickOpen}
+                            onClick={handleLearnMoreDialog}
                             sx={{ padding: '0px' }}
                           >
-                            <Typography className="textLink">
+                            <Typography className="templateLink">
                               Learn More
                             </Typography>
                           </Button>
@@ -232,6 +179,7 @@ export function RetroTemplate({
                             variant="outlined"
                             size="small"
                             className="customButton"
+                            onClick={handleCustomTemplateDialog}
                           >
                             <Typography className="customText">
                               Customize
@@ -243,7 +191,6 @@ export function RetroTemplate({
                   );
                 })}
               </Slider>
-
               {templateError !== '' && (
                 <FormHelperText sx={{ color: '#d32f2f', mt: 2 }}>
                   {templateError}
@@ -283,8 +230,22 @@ export function RetroTemplate({
           </Box>
         )}
       </Box>
-      <Dialog fullScreen open={openLearnMoreDialog} onClose={handleClose}>
-        <LearnMore handleClose={handleClose} />
+      <Dialog
+        fullScreen
+        open={openLearnMoreDialog}
+        onClose={closeLearnMoreDialog}
+      >
+        <LearnMore closeLearnMoreDialog={closeLearnMoreDialog} />
+      </Dialog>
+      <Dialog
+        fullScreen
+        open={openCustomTemplateDialog}
+        onClose={closeCustomTemplateDialog}
+      >
+        <CustomizeTemplate
+          closeCustomTemplateDialog={closeCustomTemplateDialog}
+          selectedTemplate={selectedTemplate}
+        />
       </Dialog>
     </>
   );

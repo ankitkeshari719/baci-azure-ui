@@ -168,10 +168,12 @@ export function RetroCardGroup({
         }}
       >
         {group.name !== UNGROUPED ? (
-          <Grid container>
+          <Grid container justifyContent="space-between" paddingLeft={1.5} paddingRight={1.5}>
             <Grid
               item
-              xs={10}
+              xs={6}
+              lg={global?.expandColumn !== -1 ? 8 : 6}
+              md={global?.expandColumn !== -1 ? 6 : 4}
               sx={{
                 // height: '30px',
                 display: 'flex',
@@ -195,8 +197,8 @@ export function RetroCardGroup({
                     py: 2,
                     paddingBottom: 0,
                     padding: 0,
-                    paddingLeft: '12px!important',
-                    width: '80%',
+                    // paddingLeft: '12px!important',
+                    width: '100%',
                     // width: (nameSet ? name.length : 14) + 3 + 'ch',
                     div: { padding: 0, position: 'initial', width: '100%' },
                     position: 'initial',
@@ -239,180 +241,87 @@ export function RetroCardGroup({
                 <Typography
                   sx={{
                     color: nameSet ? groupFontColour : '#8D858A',
-                    paddingLeft: '12px!important',
                     whiteSpace: 'nowrap',
-                    width: '70%',
+                    width: '100%',
                     overflow: 'hidden',
                     textOverflow: 'ellipsis',
                   }}
                 >
                   {nameSet ? name : 'Name grouping'}
                 </Typography>
-              )}
-
-              <span
+              )}</Grid>
+            <Grid lg={global?.expandColumn !== -1 ? 1 : 3} md={global?.expandColumn !== -1 ? 1.5 : 4} xs={4} container flexDirection="row" alignItems="center" justifyContent="space-between">
+              <Grid
                 style={{
                   fontWeight: '600',
                   padding: 0,
                   color: nameSet ? groupFontColour : '#8D858A',
-                  // paddingTop: '18px',
-                  width: '60px',
-                }}
-              >
-                {' '}
-                {'( ' + group.cards.length + ' )'}
-              </span>
-              {group.name !== UNGROUPED && (
-                <span
-                  style={{
-                    display: 'flex',
-                    flexDirection: 'row',
-                    alignItems: 'center',
-                    height: '100%',
-                    // width: '55px',
-                    // marginTop:'10px'
-                  }}
-                >
-                  <Button
-                    // sx={{ paddingTop: '10px' }}
-                    sx={{
-                      display: 'flex',
-                      height: '26px',
-                      padding: 0,
-                      paddingTop: '3px',
 
-                      paddingBottom: '3px',
-                      width: '26px!important',
-                      alignItems: 'center',
+                }}
+              >
+                {'( ' + group.cards.length + ' )'}
+              </Grid>
+              {group.name !== UNGROUPED && (
+
+                <Grid
+
+                  item
+                  display="flex"
+                  flexDirection="row"
+                  alignSelf="center"
+                  style={{ cursor: (!ended && !global.leaveRetro) ? "pointer" : "auto" }}
+
+                  onClick={() =>
+                    !ended && !global.leaveRetro
+                      ? userReacted
+                        ? addReactToGroup(group.id, '')
+                        : addReactToGroup(group.id, '👍')
+                      : null
+                  }
+                >
+                  {userReacted ? (
+                    <img src="/svgs/StarGold.svg" />
+
+                  ) : (
+                    <>
+                      {ended || global.leaveRetro ? (
+                        <img src="/svgs/StarDisabled.svg" />
+                      ) : (
+                        <img src="/svgs/StarEnabled.svg" />
+                      )}
+                    </>
+                  )}
+                  <Typography
+                    color="#FBBC05"
+                    style={{
+                      fontSize: '1rem',
+                      marginLeft: '6px',
+                      marginTop: '1px',
                     }}
-                    disabled={ended || global.leaveRetro}
-                    onClick={() =>
-                      !ended
-                        ? userReacted
-                          ? addReactToGroup(group.id, '')
-                          : addReactToGroup(group.id, '👍')
-                        : null
-                    }
                   >
-                    {userReacted ? (
-                      <svg
-                        width="20"
-                        height="20"
-                        viewBox="0 0 20 20"
-                        fill="none"
-                        xmlns="http://www.w3.org/2000/svg"
-                      >
-                        <path
-                          d="M9.48073 1.4987C9.67288 1.03673 10.3273 1.03673 10.5195 1.4987L12.6454 6.61016C12.7264 6.80492 12.9096 6.93799 13.1199 6.95484L18.6381 7.39724C19.1369 7.43722 19.3391 8.05964 18.9591 8.38514L14.7548 11.9866C14.5946 12.1238 14.5246 12.3391 14.5736 12.5443L15.858 17.9292C15.9741 18.4159 15.4447 18.8005 15.0177 18.5397L10.2933 15.6541C10.1133 15.5441 9.8869 15.5441 9.7069 15.6541L4.98251 18.5397C4.55551 18.8005 4.02606 18.4159 4.14215 17.9292L5.42664 12.5443C5.47558 12.3391 5.40562 12.1238 5.24543 11.9866L1.04111 8.38514C0.661119 8.05964 0.863352 7.43722 1.36209 7.39724L6.88034 6.95484C7.0906 6.93799 7.27375 6.80492 7.35476 6.61016L9.48073 1.4987Z"
-                          fill="#FBBC05"
-                          stroke="#FBBC05"
-                          strokeWidth="1.5"
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                        />
-                      </svg>
-                    ) : (
-                      <>
-                        {ended || global.leaveRetro ? (
-                          // <img src="/svgs/Star.svg" />
-                          <svg
-                            width="20"
-                            height="20"
-                            viewBox="0 0 20 20"
-                            fill="none"
-                            xmlns="http://www.w3.org/2000/svg"
-                          >
-                            <path
-                              d="M9.48073 1.4987C9.67288 1.03673 10.3273 1.03673 10.5195 1.4987L12.6454 6.61016C12.7264 6.80492 12.9096 6.93799 13.1199 6.95484L18.6381 7.39724C19.1369 7.43722 19.3391 8.05964 18.9591 8.38514L14.7548 11.9866C14.5946 12.1238 14.5246 12.3391 14.5736 12.5443L15.858 17.9292C15.9741 18.4159 15.4447 18.8005 15.0177 18.5397L10.2933 15.6541C10.1133 15.5441 9.8869 15.5441 9.7069 15.6541L4.98251 18.5397C4.55551 18.8005 4.02606 18.4159 4.14215 17.9292L5.42664 12.5443C5.47558 12.3391 5.40562 12.1238 5.24543 11.9866L1.04111 8.38514C0.661119 8.05964 0.863352 7.43722 1.36209 7.39724L6.88034 6.95484C7.0906 6.93799 7.27375 6.80492 7.35476 6.61016L9.48073 1.4987Z"
-                              fill="#FBBC05"
-                              stroke="#FBBC05"
-                              strokeWidth="1.5"
-                              strokeLinecap="round"
-                              strokeLinejoin="round"
-                            />
-                          </svg>
-                        ) : (
-                          // <img src="/svgs/GrayStar.svg" />
-                          <svg
-                            width="20"
-                            height="20"
-                            viewBox="0 0 20 20"
-                            fill="none"
-                            xmlns="http://www.w3.org/2000/svg"
-                          >
-                            <path
-                              d="M9.48073 1.4987C9.67288 1.03673 10.3273 1.03673 10.5195 1.4987L12.6454 6.61016C12.7264 6.80492 12.9096 6.93799 13.1199 6.95484L18.6381 7.39724C19.1369 7.43722 19.3391 8.05964 18.9591 8.38514L14.7548 11.9866C14.5946 12.1238 14.5246 12.3391 14.5736 12.5443L15.858 17.9292C15.9741 18.4159 15.4447 18.8005 15.0177 18.5397L10.2933 15.6541C10.1133 15.5441 9.8869 15.5441 9.7069 15.6541L4.98251 18.5397C4.55551 18.8005 4.02606 18.4159 4.14215 17.9292L5.42664 12.5443C5.47558 12.3391 5.40562 12.1238 5.24543 11.9866L1.04111 8.38514C0.661119 8.05964 0.863352 7.43722 1.36209 7.39724L6.88034 6.95484C7.0906 6.93799 7.27375 6.80492 7.35476 6.61016L9.48073 1.4987Z"
-                              fill="white"
-                              stroke="#FBBC05"
-                              strokeWidth="1.5"
-                              strokeLinecap="round"
-                              strokeLinejoin="round"
-                            />
-                          </svg>
-                        )}
-                      </>
-                    )}
-                    <Typography
-                      color="#FBBC05"
-                      style={{
-                        fontSize: '1rem',
-                        marginLeft: '6px',
-                        marginTop: '1px',
-                      }}
-                    >
-                      {group.reactions?.length ? group.reactions?.length : ''}
-                    </Typography>
-                  </Button>
-                </span>
+                    {group.reactions?.length ? group.reactions?.length : ''}
+                  </Typography>
+                </Grid>
+
               )}
+              <Grid
+                item
+                sx={{
+                  cursor: 'pointer'
+                }}
+                onClick={event => {
+                  onCollapse(event)
+                }}
+              >
+                {showCollapse ? <img src="/svgs/Down.svg" /> : <img src="/svgs/Up.svg" />}
+              </Grid>
             </Grid>
-            {/* <Box component="span">{' ( ' + group.cards.length + ' ) '}</Box> */}
-            {showCollapse ? (
-              <Grid
-                item
-                xs={2}
-                sx={{
-                  display: 'flex',
-                  flexDirection: 'row',
-                  justifyContent: 'flex-end',
-                }}
-              >
-                <Button
-                  onClick={event => {
-                    onCollapse(event);
-                  }}
-                >
-                  <img src="/svgs/Down.svg" />
-                </Button>
-              </Grid>
-            ) : (
-              <Grid
-                item
-                xs={2}
-                sx={{
-                  display: 'flex',
-                  flexDirection: 'row',
-                  justifyContent: 'flex-end',
-                }}
-              >
-                {' '}
-                <Button
-                  onClick={event => {
-                    onCollapse(event);
-                  }}
-                  // onTouchStart={onCollapse}
-                  sx={{ position: 'initial' }}
-                >
-                  <img src="/svgs/Up.svg" />
-                </Button>
-              </Grid>
-            )}
           </Grid>
         ) : null}
 
         {showCollapse &&
-        group.cards.length === 0 &&
-        group.name !== UNGROUPED ? (
+          group.cards.length === 0 &&
+          group.name !== UNGROUPED ? (
           <Grid container direction="row" justifyContent="center">
             <Grid
               item
@@ -427,7 +336,6 @@ export function RetroCardGroup({
                 <Button
                   sx={{ position: 'initial', color: '#727D84' }}
                   onClick={() => deleteGroup(group.id)}
-                  // onTouchStart={() => deleteGroup(group.id)}
                 >
                   <DeleteIcon />
                 </Button>

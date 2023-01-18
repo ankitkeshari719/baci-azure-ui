@@ -3,16 +3,14 @@ import { AppBar, Box, Button, Divider, Grid, Toolbar } from '@mui/material';
 import '../../global.scss';
 import './styles.scss';
 import { TopBar } from './TopBar';
-import IconButton from '@mui/material/IconButton';
 import Typography from '@mui/material/Typography';
-import ArrowBackOutlinedIcon from '@mui/icons-material/ArrowBackOutlined';
 import * as Icons from 'heroicons-react';
 
 type Props = {
-  handleClose: () => void;
+  closeLearnMoreDialog: () => void;
 };
 
-export function LearnMore({ handleClose }: Props) {
+export function LearnMore({ closeLearnMoreDialog }: Props) {
   return (
     <Box className="mainContainer">
       <TopBar />
@@ -42,7 +40,7 @@ export function LearnMore({ handleClose }: Props) {
                   fontSize: '14px',
                   cursor: 'pointer',
                 }}
-                onClick={handleClose}
+                onClick={closeLearnMoreDialog}
               />
               <Typography
                 sx={{ ml: 1, flex: 1 }}
