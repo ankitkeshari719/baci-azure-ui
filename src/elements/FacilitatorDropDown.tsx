@@ -70,8 +70,6 @@ const FacilitatorDropDown = () => {
       if (
         user.isFacilitator &&
         user.userId == global.user.id
-        //  &&
-        // user.userId != global.currentRetro?.creatorId
       ) {
         dispatch({
           type: ActionType.SET_USER,
@@ -105,12 +103,10 @@ const FacilitatorDropDown = () => {
     setPersonName(valueToBeDisplayed);
   }, [users]);
   const onClickOfUser = (val: any, user: any) => {
-    console.log(val, user);
     assignFacilitatorsRights(user);
   };
   return (
     <>
-      {/* {global.user.id == global.currentRetro?.creatorId ? ( */}
       <span
         style={{
           display:
@@ -141,28 +137,19 @@ const FacilitatorDropDown = () => {
           Facilitator
         </span>
         <FormControl sx={{ m: 1, width: '200px' }}>
-          {/* <InputLabel id="demo-multiple-checkbox-label">Facilitator</InputLabel> */}
           <Select
             sx={{
               fieldset: {
                 border: 'none',
-                //   div: { padding: 0 },
                 opacity: 1,
                 color: '#4E4E4E',
               },
             }}
-            //   labelId="demo-multiple-checkbox-label"
-            //   id="demo-multiple-checkbox"
             multiple
             value={personName}
             IconComponent={() => <img src="/svgs/Down.svg"></img>}
-            //   onChange={handleChange}
-            //   input={<OutlinedInput label="Tag" />}
             renderValue={selected => {
-              //   console.log('selected', selected);
               var valueToBeDisplayed = '';
-
-              // selected.forEach((id, index) => {
               users.forEach(element => {
                 if (element.userId == global.user.id) {
                   if (valueToBeDisplayed == '') {
@@ -184,7 +171,6 @@ const FacilitatorDropDown = () => {
               // });
 
               return valueToBeDisplayed;
-              // selected.join(', ');
             }}
             MenuProps={MenuProps}
           >
@@ -215,7 +201,6 @@ const FacilitatorDropDown = () => {
           </Select>
         </FormControl>
       </span>
-      {/* ) : null} */}
     </>
   );
 };

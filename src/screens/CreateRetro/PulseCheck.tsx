@@ -6,6 +6,7 @@ import {
   CardContent,
   Box,
   FormHelperText,
+  CardActions,
 } from '@mui/material';
 import '../../global.scss';
 import './styles.scss';
@@ -27,7 +28,7 @@ function SampleNextArrow(props: any) {
         right: '0px',
         color: '#0F172A',
         fontSize: '14px',
-        cursor: 'pointer'
+        cursor: 'pointer',
       }}
       onClick={onClick}
     />
@@ -46,7 +47,7 @@ function SamplePrevArrow(props: any) {
         left: '0px',
         color: '#0F172A',
         fontSize: '14px',
-        cursor: 'pointer'
+        cursor: 'pointer',
       }}
       onClick={onClick}
     />
@@ -135,8 +136,10 @@ export function PulseCheck({
                       key={pulseCheck.id}
                       sx={{
                         maxWidth: '420px',
-                        height: height / 2,
+                        height: '400px',
                         background: '#ffffff',
+                        border: '1px solid #E3E3E3',
+                        boxShadow: 'none',
                         borderRadius: '2px',
                         margin: '8px',
                         '&:hover': {
@@ -146,18 +149,41 @@ export function PulseCheck({
                       onClick={() => handlePulseCheck(pulseCheck)}
                     >
                       <CardContent>
-                        {!pulseCheck.checked ? (
-                          <Box
-                            component="img"
-                            alt="Logo"
-                            src={pulseCheck.templateImageNotChecked}
-                          />
+                        {pulseCheck.checked ? (
+                          <Box component="div" className="imageContainer">
+                            <Box
+                              component="img"
+                              alt="Logo"
+                              src={pulseCheck.pulseCheckImage}
+                              className="imageMain"
+                            />
+                            <Icons.CheckCircle
+                              size={20}
+                              color="#159ADD"
+                              style={{
+                                width: '24px',
+                                height: '24px',
+                              }}
+                              className="imageChild_1"
+                            />
+                          </Box>
                         ) : (
-                          <Box
-                            component="img"
-                            alt="Logo"
-                            src={pulseCheck.templateImageChecked}
-                          />
+                          <Box component="div" className="imageContainer">
+                            <Box
+                              component="img"
+                              alt="Logo"
+                              src={pulseCheck.pulseCheckImage}
+                              className="imageMain"
+                            />
+                            <Box
+                              component="img"
+                              width="18px"
+                              height="18px"
+                              alt="Logo"
+                              src="/images/empty_circle.png"
+                              className="imageChild_2"
+                            />
+                          </Box>
                         )}
                         <Typography
                           className="templateName"
@@ -173,22 +199,14 @@ export function PulseCheck({
                         >
                           {pulseCheck.description}
                         </Typography>
-                        <Box
-                          sx={{
-                            display: 'flex',
-                            flex: '1 0 auto',
-                            alignItems: 'flex-end',
-                            justifyContent: 'space-between',
-                            mt: 5,
-                          }}
-                        >
-                          <Button size="small" sx={{ padding: '0px' }}>
-                            <Typography className="textLink">
-                              Learn More
-                            </Typography>
-                          </Button>
-                        </Box>
                       </CardContent>
+                      <CardActions sx={{ padding: '16px' }}>
+                        <Button size="small" sx={{ padding: '0px' }}>
+                          <Typography className="templateLink">
+                            Learn More
+                          </Typography>
+                        </Button>
+                      </CardActions>
                     </Card>
                   );
                 })}

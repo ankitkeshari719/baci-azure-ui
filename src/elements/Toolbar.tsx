@@ -99,13 +99,11 @@ const Toolbar = (props: any) => {
     }
   }, [loadingFlag, ended]);
   React.useEffect(() => {
-    // if (user.userType != 2 && showFinishRetroButton && !leaveRetro) {
     if (showFinishRetroButton && !leaveRetro) {
       const timer = setInterval(() => {
         const endTime = retroDuration - 5 * 60 * 1000;
         const currentEpoch = Date.now();
 
-        // console.log(endTime, 'epoch', retroDuration, 'current', currentEpoch);
         if (
           endTime <= currentEpoch &&
           !location.pathname.includes('startRetro') &&

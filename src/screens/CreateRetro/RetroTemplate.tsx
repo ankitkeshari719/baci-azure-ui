@@ -7,6 +7,7 @@ import {
   Box,
   Dialog,
   FormHelperText,
+  CardActions,
 } from '@mui/material';
 import '../../global.scss';
 import './styles.scss';
@@ -17,6 +18,7 @@ import { LearnMore } from './LearnMore';
 import { ContainedButton } from '../../components/ContainedButton';
 import { OutlinedButton } from '../../components/OutlinedButton';
 import { CustomizeTemplate } from './CustomizeTemplate';
+import * as Icons from 'heroicons-react';
 
 type Props = {
   activePanel: string;
@@ -26,6 +28,7 @@ type Props = {
   handleCheckedTemplate: (selectedPulseCheck: any) => void;
   onClickNext: (currentPanel: string, nextPanel: string) => void;
   onClickBack: (previousPanel: string) => void;
+  handleSelectClick: (selectedTemplateId: string) => void;
 };
 
 export function RetroTemplate({
@@ -35,6 +38,7 @@ export function RetroTemplate({
   handleCheckedTemplate,
   onClickNext,
   onClickBack,
+  handleSelectClick,
   templates,
 }: Props) {
   const [openLearnMoreDialog, setOpenLearnMoreDialog] = React.useState(false);
@@ -119,8 +123,10 @@ export function RetroTemplate({
                       key={template.templateId}
                       sx={{
                         maxWidth: '420px',
-                        height: height / 2,
+                        height: '400px',
                         background: '#ffffff',
+                        border: '1px solid #E3E3E3',
+                        boxShadow: 'none',
                         borderRadius: '2px',
                         margin: '8px',
                         '&:hover': {
@@ -130,18 +136,41 @@ export function RetroTemplate({
                       onClick={() => handleCheckedTemplate(template)}
                     >
                       <CardContent>
-                        {!template.checked ? (
-                          <Box
-                            component="img"
-                            alt="Logo"
-                            src={template.templateImageNotChecked}
-                          />
+                        {template.checked ? (
+                          <Box component="div" className="imageContainer">
+                            <Box
+                              component="img"
+                              alt="Logo"
+                              src={template.templateImage}
+                              className="imageMain"
+                            />
+                            <Icons.CheckCircle
+                              size={20}
+                              color="#159ADD"
+                              style={{
+                                width: '24px',
+                                height: '24px',
+                              }}
+                              className="imageChild_1"
+                            />
+                          </Box>
                         ) : (
-                          <Box
-                            component="img"
-                            alt="Logo"
-                            src={template.templateImageChecked}
-                          />
+                          <Box component="div" className="imageContainer">
+                            <Box
+                              component="img"
+                              alt="Logo"
+                              src={template.templateImage}
+                              className="imageMain"
+                            />
+                            <Box
+                              component="img"
+                              width="18px"
+                              height="18px"
+                              alt="Logo"
+                              src="/images/empty_circle.png"
+                              className="imageChild_2"
+                            />
+                          </Box>
                         )}
                         <Typography
                           className="templateName"
@@ -157,6 +186,15 @@ export function RetroTemplate({
                         >
                           {template.templateDescription}
                         </Typography>
+                      </CardContent>
+                      <CardActions
+                        sx={{
+                          position: 'absolute',
+                          bottom: '20px',
+                          width: '388px',
+                          padding: '16px',
+                        }}
+                      >
                         <Box
                           sx={{
                             display: 'flex',
@@ -171,7 +209,7 @@ export function RetroTemplate({
                             onClick={handleLearnMoreDialog}
                             sx={{ padding: '0px' }}
                           >
-                            <Typography className="textLink">
+                            <Typography className="templateLink">
                               Learn More
                             </Typography>
                           </Button>
@@ -186,7 +224,7 @@ export function RetroTemplate({
                             </Typography>
                           </Button>
                         </Box>
-                      </CardContent>
+                      </CardActions>
                     </Card>
                   );
                 })}
@@ -235,7 +273,12 @@ export function RetroTemplate({
         open={openLearnMoreDialog}
         onClose={closeLearnMoreDialog}
       >
-        <LearnMore closeLearnMoreDialog={closeLearnMoreDialog} />
+        <LearnMore
+          selectedTemplate={selectedTemplate}
+          closeLearnMoreDialog={closeLearnMoreDialog}
+          handleCustomTemplateDialog={handleCustomTemplateDialog}
+          handleSelectClick={handleSelectClick}
+        />
       </Dialog>
       <Dialog
         fullScreen
@@ -245,6 +288,7 @@ export function RetroTemplate({
         <CustomizeTemplate
           closeCustomTemplateDialog={closeCustomTemplateDialog}
           selectedTemplate={selectedTemplate}
+          handleSelectClick={handleSelectClick}
         />
       </Dialog>
     </>

@@ -65,6 +65,22 @@
   margin-top: 10px !important;
   margin-bottom: 10px !important;
 }
+.imageContainer {
+  position: relative;
+}
+.imageMain {
+  display: block;
+}
+.imageChild_1 {
+  position: absolute;
+  top: 7px;
+  right: 7px;
+}
+.imageChild_2 {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+}
 .templateName {
   font-family: 'Poppins' !important;
   font-style: normal !important;
@@ -83,7 +99,7 @@
   letter-spacing: 0.6px !important;
   color: #4e4e4e !important;
 }
-.textLink {
+.templateLink {
   font-family: 'Poppins' !important;
   font-style: normal !important;
   font-weight: 400 !important;
