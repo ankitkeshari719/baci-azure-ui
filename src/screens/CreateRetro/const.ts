@@ -51,8 +51,7 @@ export const templatesData = [
     templateId: 'simple',
     templateName: 'Simple',
     templateDescription: 'A classic template for retros.',
-    templateImageChecked: '/images/default_checked.svg',
-    templateImageNotChecked: '/images/default_not_check.png',
+    templateImage: '/images/defaultRetroTemplate.png',
     checked: false,
     columns: [
       {
@@ -125,8 +124,7 @@ export const templatesData = [
     templateName: '4L Retrospective',
     templateDescription:
       'For the team to share how they feel in a structured manner and capture key learnings and ideas to progress.',
-    templateImageChecked: '/images/coming_soon_checked.svg',
-    templateImageNotChecked: '/images/coming_soon_not_check.png',
+    templateImage: '/images/coming_soon.png',
     checked: false,
     columns: [
       {
@@ -199,8 +197,7 @@ export const templatesData = [
     templateName: 'Sailboat',
     templateDescription:
       'A fun way to think differently and reflect on the bigger picture.',
-    templateImageChecked: '/images/coming_soon_checked.svg',
-    templateImageNotChecked: '/images/coming_soon_not_check.png',
+    templateImage: '/images/coming_soon.png',
     checked: false,
     columns: [
       {
@@ -273,8 +270,7 @@ export const templatesData = [
     templateName: 'Start, Stop , Continue',
     templateDescription:
       'The traffic light retro gives everyone in the team an opportunity to talk and quickly identify bottlenecks.',
-    templateImageChecked: '/images/coming_soon_checked.svg',
-    templateImageNotChecked: '/images/coming_soon_not_check.png',
+    templateImage: '/images/coming_soon.png',
     checked: false,
     columns: [
       {

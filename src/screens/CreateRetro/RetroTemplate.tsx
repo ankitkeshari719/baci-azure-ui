@@ -17,6 +17,7 @@ import { LearnMore } from './LearnMore';
 import { ContainedButton } from '../../components/ContainedButton';
 import { OutlinedButton } from '../../components/OutlinedButton';
 import { CustomizeTemplate } from './CustomizeTemplate';
+import * as Icons from 'heroicons-react';
 
 type Props = {
   activePanel: string;
@@ -130,18 +131,41 @@ export function RetroTemplate({
                       onClick={() => handleCheckedTemplate(template)}
                     >
                       <CardContent>
-                        {!template.checked ? (
-                          <Box
-                            component="img"
-                            alt="Logo"
-                            src={template.templateImageNotChecked}
-                          />
+                        {template.checked ? (
+                          <Box component="div" className="imageContainer">
+                            <Box
+                              component="img"
+                              alt="Logo"
+                              src={template.templateImage}
+                              className="imageMain"
+                            />
+                            <Icons.CheckCircle
+                              size={20}
+                              color="#159ADD"
+                              style={{
+                                width: '24px',
+                                height: '24px',
+                              }}
+                              className="imageChild_1"
+                            />
+                          </Box>
                         ) : (
-                          <Box
-                            component="img"
-                            alt="Logo"
-                            src={template.templateImageChecked}
-                          />
+                          <Box component="div" className="imageContainer">
+                            <Box
+                              component="img"
+                              alt="Logo"
+                              src={template.templateImage}
+                              className="imageMain"
+                            />
+                            <Box
+                              component="img"
+                              width="18px"
+                              height="18px"
+                              alt="Logo"
+                              src="/images/empty_circle.png"
+                              className="imageChild_2"
+                            />
+                          </Box>
                         )}
                         <Typography
                           className="templateName"
