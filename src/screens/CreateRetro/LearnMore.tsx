@@ -29,11 +29,14 @@ export function LearnMore({ closeLearnMoreDialog }: Props) {
               sx={{
                 display: 'flex',
                 alignItems: 'center',
+                paddingLeft: '0px !important',
               }}
             >
               <Icons.ArrowCircleLeftOutline
                 size={20}
                 style={{
+                  width: '24px',
+                  height: '24px',
                   display: 'block',
                   right: '0px',
                   color: '#159ADD',

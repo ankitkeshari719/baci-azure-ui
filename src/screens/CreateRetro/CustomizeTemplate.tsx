@@ -67,6 +67,8 @@ export function CustomizeTemplate({
               <Icons.ArrowCircleLeftOutline
                 size={20}
                 style={{
+                  width: '24px',
+                  height: '24px',
                   display: 'block',
                   right: '0px',
                   color: '#159ADD',
