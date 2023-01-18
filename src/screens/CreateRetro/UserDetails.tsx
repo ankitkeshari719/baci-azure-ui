@@ -20,14 +20,36 @@ import { ContainedButton, OutlinedButton } from '../../components';
 
 const styles = {
   avatarfield: {
-    width: '100%',
+    minWidth: '300px',
     '& .MuiFormLabel-root': {
-      color: 'rgba(0, 0, 0, 0.6) !important',
-      fontSize: '14px',
+      fontFamily: 'Poppins',
+      fontStyle: 'normal',
+      fontWeight: 400,
+      fontSize: '16px',
+      lineHeight: '20px',
+      letterSpacing: '0.6px',
+      color: 'rgba(0, 0, 0, 0.87) !important',
     },
     '& .MuiFormLabel-root-MuiInputLabel-root.Mui-focused': {
-      color: 'rgba(0, 0, 0, 0.6) !important',
-      fontSize: '14px',
+      fontFamily: 'Poppins',
+      fontStyle: 'normal',
+      fontWeight: 400,
+      fontSize: '16px',
+      lineHeight: '20px',
+      letterSpacing: '0.6px',
+      color: 'rgba(0, 0, 0, 0.87) !important',
+    },
+    '& .css-ov41s0-MuiInputBase-root-MuiInput-root': {
+      borderBottom: '0px solid rgba(0, 0, 0, 0.42) !important',
+    },
+    textarea: {
+      fontFamily: 'Poppins',
+      fontStyle: 'normal',
+      fontWeight: 400,
+      fontSize: '16px',
+      lineHeight: '20px',
+      letterSpacing: '0.6px',
+      color: 'rgba(0, 0, 0, 0.87) !important',
     },
     '& .css-1sop3d1-MuiInputBase-root-MuiInput-root': {
       borderBottom: '0px solid rgba(0, 0, 0, 0.42) !important',
