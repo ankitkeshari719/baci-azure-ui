@@ -21,7 +21,7 @@ export enum BoardActionType {
   DELETE_CARD = 'deleteCard',
   MOVE_CARD = 'moveCard',
   MERGE_CARDS = 'mergeCards',
-  REORDER_CARD = "reorderCard",
+  REORDER_CARD = 'reorderCard',
   ADD_REACT_TO_CARD = 'addReactToCard',
   ADD_REACT_TO_GROUP = 'addReactToGroup',
   REMOVE_REACT_FROM_CARD = 'removeReactFromCard',
@@ -47,7 +47,6 @@ export enum BoardActionType {
   PUBLISH_COLUMN = 'publishColumn',
   LOCK_COLUMN = 'lockColumn',
   SET_FACILITATOR = 'setFacilitator',
-
 }
 
 export const BOARD_STATE_MACHINE_VERSION = 1;
@@ -733,7 +732,6 @@ export const processAction = (
     toIndex: number,
     userId: string
   ) => {
-   
     const { card, group, index } = findCard(cardId);
     if (
       card &&
@@ -747,9 +745,9 @@ export const processAction = (
         group.cards.splice(index as number, 1);
         cardsList.splice(
           toIndex -
-          (group.id === targetGroup.id && (index as number) < toIndex
-            ? 1
-            : 0),
+            (group.id === targetGroup.id && (index as number) < toIndex
+              ? 1
+              : 0),
           0,
           card
         );
@@ -758,34 +756,29 @@ export const processAction = (
     }
   };
 
-  const reorderCards = ( cardId: string, targetCard: string, order: number,moveToLast:boolean, userId: string) => {
+  const reorderCards = (
+    cardId: string,
+    targetCard: string,
+    order: number,
+    moveToLast: boolean,
+    userId: string
+  ) => {
     const { column, card, group, index: index1 } = findCard(cardId);
-    const { index: index2 } = findCard(targetCard)
-    if (column && card && group&&index1!=undefined&&index2!=undefined ) {
-      console.log()
-      if(index1<index2){
-        group.cards.splice(index1,1);
-        if(moveToLast)
-        {
-          console.log("move to last");
-          group.cards.splice(index2,0,card)}
-        else
-        {
-          console.log("move before");
-          
-          group.cards.splice(index2-1,0,card)}
-
-      
+    const { index: index2 } = findCard(targetCard);
+    if (column && card && group && index1 != undefined && index2 != undefined) {
+      if (index1 < index2) {
+        group.cards.splice(index1, 1);
+        if (moveToLast) {
+          group.cards.splice(index2, 0, card);
+        } else {
+          group.cards.splice(index2 - 1, 0, card);
+        }
+      } else {
+        group.cards.splice(index1, 1);
+        group.cards.splice(index2, 0, card);
       }
-      else{
-        group.cards.splice(index1,1);
-        group.cards.splice(index2,0,card)
-      }
-      
-    
     }
-
-  }
+  };
 
   const mergeCards = (
     groupId: string,
@@ -883,7 +876,6 @@ export const processAction = (
     }
   };
 
-
   const removeReactFromCard = (
     cardId: string,
     react: string,
@@ -964,7 +956,6 @@ export const processAction = (
     isMobile: boolean
   ) => {
     const user = findUser(userId);
-    // console.log(users, 'flag');
     if (!user) {
       if (date && !state.startedDate) {
         state.startedDate = new Date(date);
@@ -1074,8 +1065,6 @@ export const processAction = (
   };
 
   const endRetro = (undo: boolean, date: Date | undefined, userId: string) => {
-    // console.log('endRetro', userId, state.creatorId, state.ended, undo);
-
     state.ended = !undo;
     if (state.ended && date && state.endedDate === undefined) {
       state.endedDate = date;
@@ -1090,7 +1079,6 @@ export const processAction = (
     userId: string,
     creator: string
   ) => {
-    // console.log('userId', creator, ',', userId);
     if (userId === creator) {
       state.retroDuration = retroDuration;
       state.retroStarted = true;
@@ -1244,12 +1232,6 @@ export const processAction = (
     case BoardActionType.SET_FACILITATOR:
       setFacilitator(parameters.userIdFac);
       break;
-    // case BoardActionType.SET_LOADING:
-    //   {
-    //     console.log(parameters,"set loading")
-    //     setLoading(parameters.flag);
-    //   }
-    // break;
     default:
       noMatch = true;
       break;

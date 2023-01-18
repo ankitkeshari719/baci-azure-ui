@@ -28,11 +28,10 @@ import { useState } from 'react';
 import { CopyToClipboard } from 'react-copy-to-clipboard';
 import { useRetro } from '../helpers';
 import { Retro as RetroType } from '../types';
-//import { useAuth } from '../firebase/auth';
 import { useAzureAuth } from '../msal/azureauth';
-import { loginRequest, b2cPolicies } from "../authConfig";
-import ButtonGroup from "@material-ui/core/ButtonGroup";
-import { Link as RouterLink } from "react-router-dom";
+import { loginRequest, b2cPolicies } from '../authConfig';
+import ButtonGroup from '@material-ui/core/ButtonGroup';
+import { Link as RouterLink } from 'react-router-dom';
 import { BoardActionType } from '../statemachine/BoardStateMachine';
 import { BoardContext } from '../contexts/BoardContext';
 
@@ -63,7 +62,6 @@ export function Onboarding() {
   const AVATAR_CHARACTER_LIMIT = 30;
   const RETRONAME_CHARACTER_LIMIT = 80;
   React.useEffect(() => {
-  //  console.log("loging")
     if (window.location.pathname.includes('join')) {
       setStarted(false);
       if (sessionStorage.getItem('BoardContext') !== null) {
@@ -92,18 +90,17 @@ export function Onboarding() {
     }
     sessionStorage.setItem('retroname', '"' + retroName + '"');
     setCaptureName(false);
-    // console.log(started, joining, global.currentRetro);
   };
   function handleRetroNameChange(e: React.SetStateAction<string>) {
-    if(e == "") {
+    if (e == '') {
       setCodeWarning('');
     } else {
       setCodeError('');
     }
     if (e.length >= 60) {
       let count = 80 - e.length;
-      
-     if (count === 0) {
+
+      if (count === 0) {
         setCodeWarning('No more charachter remaining');
       } else {
         setCodeWarning('Character remaining -' + `${count}`);
@@ -112,7 +109,6 @@ export function Onboarding() {
       setCodeWarning('');
     }
     setRetroName(e);
-    
   }
   function handleTimeFrame(e: React.SetStateAction<string>) {
     setRetroTimeframe(e);
@@ -132,7 +128,6 @@ export function Onboarding() {
 
     setUserName(e);
   }
-  
 
   const joinRetro = async (): Promise<RetroType | undefined> => {
     let foundRetro = await retro.getByHumanId(humanId);
@@ -156,7 +151,6 @@ export function Onboarding() {
       setCodeError('Sorry, wrong code. Please try again');
     }
   };
-
 
   const setName = () => {
     sessionStorage.removeItem('pulseCheckState');
@@ -216,14 +210,14 @@ export function Onboarding() {
   return (
     <>
       <CssBaseline />
-        <Box>
+      <Box>
         <img
           src="/images/BACI.png"
           alt="Logo"
           style={{ width: '145px', height: '90px' }}
         />
       </Box>
-      
+
       <Slide
         direction="up"
         in={!global.currentRetro && !started && !joining && !id}
@@ -239,12 +233,12 @@ export function Onboarding() {
             flexDirection: 'column',
             justifyContent: 'center',
             alignItems: 'center',
-            fontSize:'24px'
+            fontSize: '24px',
           }}
         >
           <div style={{ marginBottom: '45px', marginTop: '-70px' }}>
             <Typography variant="h4" sx={{ textAlign: 'center' }}>
-                 What BACI retro are you joining today?
+              What BACI retro are you joining today?
             </Typography>
           </div>
           <Divider sx={{ margin: '20px' }}></Divider>
@@ -316,7 +310,7 @@ export function Onboarding() {
               justifyContent: 'flex-end',
               flexDirection: 'column',
               minHeight: '10vh',
-              marginTop: '45px'
+              marginTop: '45px',
             }}
           >
             <Button
@@ -439,7 +433,9 @@ export function Onboarding() {
             marginTop: '-55px',
           }}
         >
-          <Typography style={{fontSize: '24px'}}>Create new BACI retro</Typography>
+          <Typography style={{ fontSize: '24px' }}>
+            Create new BACI retro
+          </Typography>
           <Divider sx={{ margin: '20px' }}></Divider>
           <FormControl>
             <TextField
@@ -469,7 +465,7 @@ export function Onboarding() {
                 }
               }}
             />
-            {codeWarning !== ' ' &&  (
+            {codeWarning !== ' ' && (
               <FormHelperText sx={{ color: 'orange' }}>
                 {codeWarning}
               </FormHelperText>
@@ -478,7 +474,7 @@ export function Onboarding() {
               inputRef={timeframeRef}
               variant="outlined"
               label="Time Frame"
-            //renderValue={(value: any) => (value !== '' ? value : 'Time frame')}
+              //renderValue={(value: any) => (value !== '' ? value : 'Time frame')}
               sx={{
                 color: '#727D84',
                 minWidth: '320px',
@@ -552,14 +548,20 @@ export function Onboarding() {
           {global.currentRetro?.creatorId === global.user.id ? (
             <>
               <Typography
-                sx={{ my: 1, mx: 2, color:'black' , fontSize: '24px'}}
+                sx={{ my: 1, mx: 2, color: 'black', fontSize: '24px' }}
                 color="text.primary"
                 align="center"
               >
-               Your retro has been created!
+                Your retro has been created!
               </Typography>
               <Typography
-                sx={{ my: 0, mx: 2, color:'#4d555a',fontSize: '15px', marginBottom: '28px'}}
+                sx={{
+                  my: 0,
+                  mx: 2,
+                  color: '#4d555a',
+                  fontSize: '15px',
+                  marginBottom: '28px',
+                }}
                 color="text.primary"
                 align="center"
               >
@@ -568,21 +570,24 @@ export function Onboarding() {
                   : `Retro Name:${global.currentRetro.name}`}
               </Typography>
               <Typography
-                sx={{ my: 1, mx: 2, color:'black' , fontSize: '18px'}}
+                sx={{ my: 1, mx: 2, color: 'black', fontSize: '18px' }}
                 color="text.primary"
                 align="center"
               >
-               Retro participation information:
+                Retro participation information:
               </Typography>
               <div
-                  style={{
-                    justifyContent: 'center',
-                    display: 'flex',
-                  }}
-                >
-                  <QRCode value={global.currentRetro?.joinUrl || ''} style={{width:'80px',height: '80px'}}/>
-                </div>
-                <Box
+                style={{
+                  justifyContent: 'center',
+                  display: 'flex',
+                }}
+              >
+                <QRCode
+                  value={global.currentRetro?.joinUrl || ''}
+                  style={{ width: '80px', height: '80px' }}
+                />
+              </div>
+              <Box
                 sx={{
                   display: 'flex',
                   minWidth: '400px',
@@ -593,7 +598,7 @@ export function Onboarding() {
                   style={{
                     display: 'flex',
                     alignItems: 'center',
-                    margin: '20px'
+                    margin: '20px',
                   }}
                 >
                   <CopyToClipboard text={global.currentRetro?.joinUrl}>
@@ -602,38 +607,41 @@ export function Onboarding() {
                         ':hover': { background: '#CDCDD4' },
                         background: '#CDCDD4',
                         color: 'black',
-                        fontWeight: 'bold'
+                        fontWeight: 'bold',
                       }}
-                      
                     >
                       Copy link
                     </Button>
                   </CopyToClipboard>
                 </div>
-
               </Box>
-                
-            
+
               <Grid
                 container
                 alignItems="center"
                 direction="row"
                 justifyContent="center"
               >
-              
                 <EmailShareButton
                   url={global.currentRetro.joinUrl}
                   style={{ padding: '5px' }}
-                >Send via
-                  <EmailIcon sx={{ color: '#4D555A' , width: '18px', height: '18px', marginBottom: '-4px', marginLeft: '3px'}} />
+                >
+                  Send via
+                  <EmailIcon
+                    sx={{
+                      color: '#4D555A',
+                      width: '18px',
+                      height: '18px',
+                      marginBottom: '-4px',
+                      marginLeft: '3px',
+                    }}
+                  />
                 </EmailShareButton>
                 {canShare ? (
                   <Link
                     style={{ padding: '5px', cursor: 'pointer' }}
                     onClick={share}
-                  >
-                   
-                  </Link>
+                  ></Link>
                 ) : null}
               </Grid>
             </>
@@ -692,7 +700,7 @@ export function Onboarding() {
               justifyContent: 'flex-end',
               flexDirection: 'column',
               minHeight: '10vh',
-              marginTop: '32px'
+              marginTop: '32px',
             }}
           >
             <Link
@@ -703,7 +711,6 @@ export function Onboarding() {
               To return to the main page click here
             </Link>
           </Box>
-
         </Box>
       </Slide>
     </>

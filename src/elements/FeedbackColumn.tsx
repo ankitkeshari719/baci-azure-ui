@@ -1,26 +1,11 @@
-import {
-  Box,
-  Button,
-  Grid,
-  Link,
-  styled,
-  Typography,
-  useMediaQuery,
-} from '@mui/material';
+import { styled, useMediaQuery } from '@mui/material';
 import React, { ReactElement } from 'react';
-import {
-  FEATURE_FLAGS,
-  FEEDBACK_QUESTIONS,
-  FEEDBACK_QUESTIONS_COLORS,
-  FEEDBACK_QUESTIONS_FILLED,
-  FEEDBACK_QUESTIONS_OUTLINE,
-} from '../constants';
+import { FEATURE_FLAGS, FEEDBACK_QUESTIONS } from '../constants';
 import { BoardContext } from '../contexts/BoardContext';
 import { BoardActionType } from '../statemachine/BoardStateMachine';
 import { ConfirmContext } from '../contexts/ConfirmContext';
 import { ActionType, GlobalContext } from '../contexts/GlobalContext';
 
-import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
 import { useNavigate } from 'react-router';
 import theme from '../theme/theme';
 import { FeedbackEntry } from '../types';
@@ -138,27 +123,10 @@ export function FeedbackColumn({
           FEATURE_FLAGS.report &&
           global.currentRetro?.creatorId === global.user.id
         ) {
-          // console.log(
-          //   FEATURE_FLAGS.report,
-          //   global.currentRetro?.creatorId === global.user.id,
-          //   'data'
-          // );
           navigate('/report/' + global.currentRetro.id);
         } else {
           navigate(`/offboarding`);
         }
-
-        // setConfirmAction(undefined);
-        // console.log( FEATURE_FLAGS.report ,
-        //   global.currentRetro?.creatorId === global.user.id,  "data")
-        // if (
-        //   FEATURE_FLAGS.report &&
-        //   global.currentRetro?.creatorId === global.user.id
-        // ) {
-        //   navigate('/report/' + global.currentRetro.id);
-        // } else {
-        //   navigate(`/offboarding`);
-        // }
       },
     });
   };
@@ -175,7 +143,7 @@ export function FeedbackColumn({
   };
 
   return (
-<h1></h1>
+    <h1></h1>
     // <ColumnComponent
     //   sx={{
     //     height: isXsUp
@@ -221,7 +189,7 @@ export function FeedbackColumn({
     //       ref={scrollableContainer}
     //       onScroll={onScroll}
     //     >
-        
+
     //       <Grid container sx={{ justifyContent: 'center' }}>
     //         {FEEDBACK_QUESTIONS.map((question, index) => (
     //           <Grid
