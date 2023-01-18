@@ -160,7 +160,11 @@ export function PulseCheck({
                             <Icons.CheckCircle
                               size={20}
                               color="#159ADD"
-                              className="imageChild"
+                              style={{
+                                width: '24px',
+                                height: '24px',
+                              }}
+                              className="imageChild_1"
                             />
                           </Box>
                         ) : (
@@ -173,11 +177,11 @@ export function PulseCheck({
                             />
                             <Box
                               component="img"
-                              width='18px'
-                              height='18px'
+                              width="18px"
+                              height="18px"
                               alt="Logo"
-                              src='/images/empty_circle.png'
-                              className="imageChild"
+                              src="/images/empty_circle.png"
+                              className="imageChild_2"
                             />
                           </Box>
                         )}
