@@ -7,16 +7,23 @@ import Typography from '@mui/material/Typography';
 import * as Icons from 'heroicons-react';
 
 type Props = {
+  selectedTemplate: any;
   closeLearnMoreDialog: () => void;
   handleCustomTemplateDialog: () => void;
+  handleSelectClick: (selectedTemplateId: string) => void;
 };
 
-export function LearnMore({ closeLearnMoreDialog, handleCustomTemplateDialog }: Props) {
-
+export function LearnMore({
+  selectedTemplate,
+  closeLearnMoreDialog,
+  handleCustomTemplateDialog,
+  handleSelectClick,
+}: Props) {
+  // Function to handle the custom button click
   const onClickCustomButton = () => {
     closeLearnMoreDialog();
     handleCustomTemplateDialog();
-  }
+  };
 
   return (
     <Box className="mainContainer">
@@ -59,7 +66,12 @@ export function LearnMore({ closeLearnMoreDialog, handleCustomTemplateDialog }: 
               >
                 Sailboat
               </Typography>
-              <Button autoFocus variant="outlined" className="customizeButton" onClick={onClickCustomButton}>
+              <Button
+                autoFocus
+                variant="outlined"
+                className="customizeButton"
+                onClick={onClickCustomButton}
+              >
                 <Typography className="customizeButtonText" component="span">
                   Customize
                 </Typography>
@@ -69,6 +81,7 @@ export function LearnMore({ closeLearnMoreDialog, handleCustomTemplateDialog }: 
                 variant="contained"
                 className="saveButton"
                 sx={{ ml: 2 }}
+                onClick={() => handleSelectClick(selectedTemplate.templateId)}
               >
                 <Typography className="saveButtonText" component="span">
                   Select

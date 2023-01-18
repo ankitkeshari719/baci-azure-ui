@@ -28,6 +28,7 @@ type Props = {
   handleCheckedTemplate: (selectedPulseCheck: any) => void;
   onClickNext: (currentPanel: string, nextPanel: string) => void;
   onClickBack: (previousPanel: string) => void;
+  handleSelectClick: (selectedTemplateId: string) => void;
 };
 
 export function RetroTemplate({
@@ -37,6 +38,7 @@ export function RetroTemplate({
   handleCheckedTemplate,
   onClickNext,
   onClickBack,
+  handleSelectClick,
   templates,
 }: Props) {
   const [openLearnMoreDialog, setOpenLearnMoreDialog] = React.useState(false);
@@ -272,8 +274,10 @@ export function RetroTemplate({
         onClose={closeLearnMoreDialog}
       >
         <LearnMore
+          selectedTemplate={selectedTemplate}
           closeLearnMoreDialog={closeLearnMoreDialog}
           handleCustomTemplateDialog={handleCustomTemplateDialog}
+          handleSelectClick={handleSelectClick}
         />
       </Dialog>
       <Dialog
@@ -284,6 +288,7 @@ export function RetroTemplate({
         <CustomizeTemplate
           closeCustomTemplateDialog={closeCustomTemplateDialog}
           selectedTemplate={selectedTemplate}
+          handleSelectClick={handleSelectClick}
         />
       </Dialog>
     </>

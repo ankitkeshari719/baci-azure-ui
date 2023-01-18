@@ -121,6 +121,18 @@ export function CreateRetroWithTemplatePage({
     setTemplateError('');
   }
 
+  function handleSelectClick(selectedTemplateId: string) {
+    let data: any = templates?.map(template => {
+      if (template.templateId === selectedTemplateId) {
+        template.checked = true;
+      } else {
+        template.checked = false;
+      }
+      return template;
+    });
+    setTemplates(data);
+  }
+
   // Function to handle pulse check selection
   function handlePulseCheck(selectedPulseCheck_l: pulseCheckInterface | null) {
     let data: any = pulseChecks?.map(pulseCheck => {
@@ -323,6 +335,7 @@ export function CreateRetroWithTemplatePage({
           onClickBack={onClickBack}
           selectedTemplate={selectedTemplate}
           handleCheckedTemplate={handleCheckedTemplate}
+          handleSelectClick={handleSelectClick}
           templateError={templateError}
           templates={templates}
         />

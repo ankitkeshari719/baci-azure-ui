@@ -18,11 +18,13 @@ import * as Icons from 'heroicons-react';
 type Props = {
   closeCustomTemplateDialog: () => void;
   selectedTemplate: any;
+  handleSelectClick: (selectedTemplateId: string) => void;
 };
 
 export function CustomizeTemplate({
   closeCustomTemplateDialog,
   selectedTemplate,
+  handleSelectClick,
 }: Props) {
   const [tempSelectedTemplate, setTempSelectedTemplate] = React.useState<any>();
 
@@ -84,7 +86,12 @@ export function CustomizeTemplate({
               >
                 {tempSelectedTemplate && tempSelectedTemplate.templateName}
               </Typography>
-              <Button autoFocus variant="contained" className="saveButton">
+              <Button
+                autoFocus
+                variant="contained"
+                className="saveButton"
+                onClick={() => handleSelectClick(selectedTemplate.templateId)}
+              >
                 <Typography className="saveButtonText" component="span">
                   Select
                 </Typography>
