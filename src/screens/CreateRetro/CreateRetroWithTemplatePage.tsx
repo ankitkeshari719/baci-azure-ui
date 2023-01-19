@@ -7,10 +7,10 @@ import { useRetro } from '../../helpers';
 import { useAzureAuth } from '../../msal/azureauth';
 import { GlobalContext } from '../../contexts/GlobalContext';
 import { ActionType } from '../../contexts/GlobalContext';
-import { BaciDetails } from './BaciDetails';
-import { RetroTemplate } from './RetroTemplate';
-import { PulseCheck } from './PulseCheck';
-import { UserDetails } from './UserDetails';
+import { BaciDetailsTab } from './BaciDetailsTab';
+import { RetroTemplateTab } from './RetroTemplateTab';
+import { PulseCheckTab } from './PulseCheckTab';
+import { UserDetailsTab } from './UserDetailsTab';
 import { pulseCheckInterface, pulseChecksData, templatesData } from './const';
 import { UserTypeArray } from '../../constants';
 import { getRetro } from '../../msal/services';
@@ -309,7 +309,7 @@ export function CreateRetroWithTemplatePage({
         </Box>
       )}
       <Box sx={{ mt: 4, minWidth: '100%' }}>
-        <BaciDetails
+        <BaciDetailsTab
           activePanel={activePanel}
           retroName={retroName}
           retroTimeFrame={retroTimeFrame}
@@ -321,7 +321,7 @@ export function CreateRetroWithTemplatePage({
           handleTimeFrame={handleTimeFrame}
           onClickNext={onClickNext}
         />
-        <RetroTemplate
+        <RetroTemplateTab
           activePanel={activePanel}
           onClickNext={onClickNext}
           onClickBack={onClickBack}
@@ -330,14 +330,14 @@ export function CreateRetroWithTemplatePage({
           handleSelectClick={handleSelectClick}
           templates={templates}
         />
-        <PulseCheck
+        <PulseCheckTab
           activePanel={activePanel}
           onClickNext={onClickNext}
           onClickBack={onClickBack}
           selectedPulseCheck={selectedPulseCheck}
           handlePulseCheck={handlePulseCheck}
         />
-        <UserDetails
+        <UserDetailsTab
           activePanel={activePanel}
           onClickBack={onClickBack}
           onClickNext={onClickNext}

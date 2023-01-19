@@ -30,7 +30,7 @@ type Props = {
   handleSelectClick: (selectedTemplateId: string) => void;
 };
 
-export function RetroTemplate({
+export function RetroTemplateTab({
   activePanel,
   selectedTemplate,
   handleCheckedTemplate,
