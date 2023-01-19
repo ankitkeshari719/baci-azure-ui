@@ -49,7 +49,6 @@ export function CreateRetroWithTemplatePage({
   }
   const [templates, setTemplates] = React.useState(templatesData);
   const [selectedTemplate, setSelectedTemplate] = React.useState(null);
-  const [templateError, setTemplateError] = React.useState('');
   {
     /* Pulse Check Panel Constant */
   }
@@ -57,7 +56,6 @@ export function CreateRetroWithTemplatePage({
     React.useState<Array<pulseCheckInterface> | null>(pulseChecksData);
   const [selectedPulseCheck, setSelectedPulseCheck] =
     React.useState<pulseCheckInterface | null>(null);
-  const [pulseCheckError, setPulseCheckError] = React.useState('');
 
   {
     /* User Details Panel Constant */
@@ -72,6 +70,13 @@ export function CreateRetroWithTemplatePage({
     dispatch({
       type: ActionType.CLOSE_CURRENT_RETRO,
     });
+  }, []);
+
+  React.useEffect(() => {
+    const initialPulseCheck = pulseChecksData.filter(e => e.checked == true);
+    const initialTemplate: any = templatesData.filter(e => e.checked == true);
+    setSelectedTemplate(initialTemplate && initialTemplate[0]);
+    setSelectedPulseCheck(initialPulseCheck && initialPulseCheck[0]);
   }, []);
 
   useAzureAuth();
@@ -118,7 +123,6 @@ export function CreateRetroWithTemplatePage({
     });
     setTemplates(data);
     setSelectedTemplate(selectedTemplateData);
-    setTemplateError('');
   }
 
   function handleSelectClick(selectedTemplateId: string) {
@@ -145,7 +149,6 @@ export function CreateRetroWithTemplatePage({
     });
     setPulseChecks(data);
     setSelectedPulseCheck(selectedPulseCheck_l);
-    setPulseCheckError('');
   }
 
   // Function to handle User Name on change
@@ -267,16 +270,6 @@ export function CreateRetroWithTemplatePage({
       return;
     }
 
-    if (currentPanel === 'templatePanel' && selectedTemplate === null) {
-      setTemplateError('Please select the template.');
-      return;
-    }
-
-    if (currentPanel === 'pulseCheckPanel' && selectedPulseCheck === null) {
-      setPulseCheckError('Please select the pulse check.');
-      return;
-    }
-
     if (
       currentPanel === 'userDetailPanel' &&
       (userName === '' || selectedAvatar === '')
@@ -315,7 +308,6 @@ export function CreateRetroWithTemplatePage({
           First Design Sprint is ready to start
         </Box>
       )}
-
       <Box sx={{ mt: 4, minWidth: '100%' }}>
         <BaciDetails
           activePanel={activePanel}
@@ -336,7 +328,6 @@ export function CreateRetroWithTemplatePage({
           selectedTemplate={selectedTemplate}
           handleCheckedTemplate={handleCheckedTemplate}
           handleSelectClick={handleSelectClick}
-          templateError={templateError}
           templates={templates}
         />
         <PulseCheck
@@ -345,7 +336,6 @@ export function CreateRetroWithTemplatePage({
           onClickBack={onClickBack}
           selectedPulseCheck={selectedPulseCheck}
           handlePulseCheck={handlePulseCheck}
-          pulseCheckError={pulseCheckError}
         />
         <UserDetails
           activePanel={activePanel}

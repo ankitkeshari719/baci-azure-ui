@@ -23,7 +23,6 @@ import * as Icons from 'heroicons-react';
 type Props = {
   activePanel: string;
   selectedTemplate: any;
-  templateError: string;
   templates: any;
   handleCheckedTemplate: (selectedPulseCheck: any) => void;
   onClickNext: (currentPanel: string, nextPanel: string) => void;
@@ -33,7 +32,6 @@ type Props = {
 
 export function RetroTemplate({
   activePanel,
-  templateError,
   selectedTemplate,
   handleCheckedTemplate,
   onClickNext,
@@ -229,11 +227,6 @@ export function RetroTemplate({
                   );
                 })}
               </Slider>
-              {templateError !== '' && (
-                <FormHelperText sx={{ color: '#d32f2f', mt: 2 }}>
-                  {templateError}
-                </FormHelperText>
-              )}
               <Box
                 sx={{
                   width: '10%',

@@ -653,7 +653,9 @@ export const processAction = (
     creatorId?: string,
     userId?: string,
     avatar?: string,
-    retroStatus?: string
+    retroStatus?: string,
+    pulseCheck?: any,
+    template?: any
   ) => {
     if (retroName !== undefined && retroName !== '') {
       state.retroName = retroName;
@@ -675,6 +677,12 @@ export const processAction = (
     }
     if (retroStatus != undefined) {
       state.retroStatus = retroStatus;
+    }
+    if (pulseCheck != undefined) {
+      state.pulseCheck = pulseCheck;
+    }
+    if (template != undefined) {
+      state.template = template;
     }
     state.lastUpdatedBy = userId;
   };
@@ -1110,7 +1118,10 @@ export const processAction = (
         parameters.creatorId,
         userId,
         avatar,
-        parameters.retroStatus
+        parameters.retroStatus,
+        parameters.pulseCheck,
+        parameters.template,
+
       );
       break;
     case BoardActionType.CREATE_GROUP:
