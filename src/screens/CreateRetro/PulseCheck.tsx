@@ -123,7 +123,6 @@ export function PulseCheck({
             </Typography>
           )}
         </Box>
-
         {activePanel === 'pulseCheckPanel' && (
           <Box sx={{ mt: 4 }}>
             <>
