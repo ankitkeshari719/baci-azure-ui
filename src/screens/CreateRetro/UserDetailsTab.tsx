@@ -77,7 +77,7 @@ type Props = {
   onClickBack: (previousPanel: string) => void;
 };
 
-export function UserDetails({
+export function UserDetailsTab({
   activePanel,
   userName,
   userNameError,

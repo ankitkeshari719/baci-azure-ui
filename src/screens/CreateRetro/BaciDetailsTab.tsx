@@ -104,7 +104,7 @@ type Props = {
   onClickNext: (currentPanel: string, nextPanel: string) => void;
 };
 
-export function BaciDetails({
+export function BaciDetailsTab({
   activePanel,
   retroName,
   retroTimeFrame,

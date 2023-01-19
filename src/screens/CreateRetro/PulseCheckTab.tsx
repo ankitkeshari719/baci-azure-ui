@@ -5,7 +5,6 @@ import {
   Card,
   CardContent,
   Box,
-  FormHelperText,
   CardActions,
 } from '@mui/material';
 import '../../global.scss';
@@ -74,7 +73,7 @@ type Props = {
   handlePulseCheck: (selectedPulseCheck: pulseCheckInterface) => void;
 };
 
-export function PulseCheck({
+export function PulseCheckTab({
   activePanel,
   selectedPulseCheck,
   onClickNext,

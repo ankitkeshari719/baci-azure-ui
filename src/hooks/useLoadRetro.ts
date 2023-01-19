@@ -2,12 +2,10 @@ import { useNavigate, useParams } from 'react-router-dom';
 import { BoardContext } from '../contexts/BoardContext';
 import { BoardActionType } from '../statemachine/BoardStateMachine';
 import { ActionType, GlobalContext } from '../contexts/GlobalContext';
-
 import log from 'loglevel';
 import React from 'react';
 import { FEATURE_FLAGS } from '../constants';
 import { ErrorContext } from '../contexts/ErrorContext';
-//import { getRetro } from '../firebase/firestore';
 import { getRetro } from '../msal/services';
 import { useMediaQuery } from '@mui/material';
 import theme from '../theme/theme';
@@ -73,17 +71,11 @@ export default function useLoadRetro() {
     if (!!retroId) {
       const userJoined = users.find(u => u.userId === global.user.id);
       if (!userJoined) {
-        // console.log('Join Retro called');
-
         saveAndProcessAction(BoardActionType.JOIN_RETRO, {
           userNickname: global.user.name,
           avatar: global.avatar,
           isMobile: window.innerWidth < 700,
         }).then(() => {
-          // console.log(
-          //   global.currentRetro && global.currentRetro.retroStatus,
-          //   'status'
-          // );
           if (global.currentRetro && retroStarted) {
             if (FEATURE_FLAGS.pulseCheck) {
               navigate(
@@ -102,20 +94,6 @@ export default function useLoadRetro() {
         });
         return;
       }
-      // if (ended) {
-      //   if (userJoined?.feedback.length !== 0) {
-      //     if (
-      //       FEATURE_FLAGS.report &&
-      //       global.currentRetro?.creatorId === global.user.id
-      //     ) {
-      //       navigate('/report/' + global.currentRetro.id);
-      //     } else {
-      //       navigate(`/offboarding`);
-      //     }
-      //   } else {
-      //     navigate(`/board/${retroId}/feedback`);
-      //   }
-      // }
     }
   }, [retroId, loading]);
 }
