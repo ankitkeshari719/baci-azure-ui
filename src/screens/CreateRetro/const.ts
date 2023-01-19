@@ -31,7 +31,7 @@ export const GROUP_COLORS = [
 ];
 
 export interface pulseCheckInterface {
-  id: number;
+  id: string;
   name: string;
   description: string;
   pulseCheckImage: string;
@@ -48,10 +48,10 @@ export const UNGROUPED = 'Ungrouped';
 
 export const templatesData = [
   {
-    templateId: 'start_stop_continue',
-    templateName: 'Start, Stop , Continue',
+    templateId: '4l_retrospective',
+    templateName: '4L Retrospective',
     templateDescription:
-      'The traffic light retro gives everyone in the team an opportunity to talk and quickly identify bottlenecks.',
+      'For the team to share how they feel in a structured manner and capture key learnings and ideas to progress.',
     templateImage: '/images/coming_soon.png',
     checked: false,
     columns: [
@@ -121,10 +121,10 @@ export const templatesData = [
     ],
   },
   {
-    templateId: '4l_retrospective',
-    templateName: '4L Retrospective',
+    templateId: 'start_stop_continue',
+    templateName: 'Start, Stop , Continue',
     templateDescription:
-      'For the team to share how they feel in a structured manner and capture key learnings and ideas to progress.',
+      'The traffic light retro gives everyone in the team an opportunity to talk and quickly identify bottlenecks.',
     templateImage: '/images/coming_soon.png',
     checked: false,
     columns: [
@@ -271,7 +271,7 @@ export const templatesData = [
     templateName: 'Simple',
     templateDescription: 'A classic template for retros.',
     templateImage: '/images/defaultRetroTemplate.png',
-    checked: false,
+    checked: true,
     columns: [
       {
         id: '0',
@@ -342,22 +342,12 @@ export const templatesData = [
 
 export const pulseChecksData: pulseCheckInterface[] = [
   {
-    id: 1,
-    name: 'Pulse Check Not Required',
-    description:
-      'An oldie but a goodie, also known as the PPT Framework created in the 60s, it has long been the benchmark to understanding workforce management.',
-    pulseCheckImage: '/images/coming_soon.png',
-    checked: false,
-    value: [],
-    valueDescription: [],
-  },
-  {
-    id: 2,
+    id: 'simple',
     name: 'Simple (3 Questions)',
     description:
       'An oldie but a goodie, also known as the PPT Framework created in the 60s, it has long been the benchmark to understanding workforce management.',
     pulseCheckImage: '/images/coming_soon.png',
-    checked: false,
+    checked: true,
     value: [
       '1. People & Resources ',
       '2. Work Processes ',
@@ -370,7 +360,7 @@ export const pulseChecksData: pulseCheckInterface[] = [
     ],
   },
   {
-    id: 3,
+    id: 'business_agility',
     name: 'Business Agility  (7 Questions)',
     description:
       'An oldie but a goodie, also known as the PPT Framework created in the 60s, it has long been the benchmark to understanding workforce management.',
@@ -394,5 +384,15 @@ export const pulseChecksData: pulseCheckInterface[] = [
       'Your team has a regular cadence to plan & prioritise work, and to change quickly if the workload is not sustainable',
       'You have the necessary technological tools and modular architecture to foster minimum dependencies and maximum collaboration & delivery',
     ],
+  },
+  {
+    id: 'pulse_check_not_req',
+    name: 'Pulse Check Not Required',
+    description:
+      'An oldie but a goodie, also known as the PPT Framework created in the 60s, it has long been the benchmark to understanding workforce management.',
+    pulseCheckImage: '/images/coming_soon.png',
+    checked: false,
+    value: [],
+    valueDescription: [],
   },
 ];

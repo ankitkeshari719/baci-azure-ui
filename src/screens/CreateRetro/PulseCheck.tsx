@@ -68,7 +68,6 @@ const settings = {
 
 type Props = {
   activePanel: string;
-  pulseCheckError: string;
   selectedPulseCheck: pulseCheckInterface | null;
   onClickBack: (previousPanel: string) => void;
   onClickNext: (currentPanel: string, nextPanel: string) => void;
@@ -77,7 +76,6 @@ type Props = {
 
 export function PulseCheck({
   activePanel,
-  pulseCheckError,
   selectedPulseCheck,
   onClickNext,
   onClickBack,
@@ -211,12 +209,6 @@ export function PulseCheck({
                   );
                 })}
               </Slider>
-
-              {pulseCheckError !== ' ' && (
-                <FormHelperText sx={{ color: '#d32f2f', mt: 2 }}>
-                  {pulseCheckError}
-                </FormHelperText>
-              )}
               <Box
                 sx={{
                   width: '10%',
