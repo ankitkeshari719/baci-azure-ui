@@ -87,7 +87,7 @@ export function RetroTemplate({
               >
                 {selectedTemplate?.templateName}
               </Box>
-              <Box
+              {/* <Box
                 className="timeFrameSummary"
                 sx={{
                   color: '#4E4E4E !important',
@@ -95,7 +95,7 @@ export function RetroTemplate({
                 }}
               >
                 Customized
-              </Box>
+              </Box> */}
             </>
           ) : (
             <Typography
