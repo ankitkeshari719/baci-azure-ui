@@ -1,9 +1,7 @@
 import { BrowserRouter, Outlet, Route, Routes } from 'react-router-dom';
 import Board from './screens/Board';
 import { BoardProvider } from './contexts/BoardContext';
-import Box from '@mui/material/Box';
 import { ConfirmProvider } from './contexts/ConfirmContext';
-import CssBaseline from '@mui/material/CssBaseline';
 import { ErrorBoundary } from './contexts/ErrorBoundary';
 import { ErrorProvider } from './contexts/ErrorContext';
 import Feedback from './screens/Feedback';
@@ -11,7 +9,6 @@ import { GlobalProvider } from './contexts/GlobalContext';
 import { Offboarding } from './screens/Offboarding';
 import { LandingPage } from './screens/LandingPage';
 import { RetroDetails } from './screens/RetroDetails';
-import { Onboarding } from './screens/Onboarding';
 import { ParticipantWaitingPage } from './screens/ParticipantWaitingPage';
 import { CreateNewRetro } from './screens/CreateRetroPage';
 import { AvatarNamePage } from './screens/AvatarNamePage';
@@ -21,25 +18,14 @@ import ReportScreen from './screens/ReportScreen';
 import { SnackMessage } from './elements/SnackMessage';
 import { ThemeProvider } from '@mui/material/styles';
 import theme from './theme/theme';
-// import './index.scss';
-//import { useFirebase } from './firebase';
-//import { useAuth } from './firebase/auth';
-import { useAzureAuth } from './msal/azureauth';
+
 import {
   MsalProvider,
   useMsal,
-  AuthenticatedTemplate,
-  UnauthenticatedTemplate,
 } from '@azure/msal-react';
 import {
-  EventType,
-  InteractionType,
   IPublicClientApplication,
 } from '@azure/msal-browser';
-import { loginRequest, b2cPolicies } from './authConfig';
-import ButtonGroup from '@material-ui/core/ButtonGroup';
-import { Link as RouterLink } from 'react-router-dom';
-import Button from '@material-ui/core/Button';
 import { SocketProvider } from './contexts/SocketProvider';
 import { StartRetro } from './screens/StartRetro';
 import { Grid } from '@mui/material';

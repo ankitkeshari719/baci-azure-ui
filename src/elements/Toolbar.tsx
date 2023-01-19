@@ -4,9 +4,6 @@ import {
   Dialog,
   DialogActions,
   DialogContent,
-  DialogContentText,
-  DialogTitle,
-  InputAdornment,
   Menu,
   MenuItem,
   Popover,
@@ -22,8 +19,6 @@ import BACILogo from '../assets/img/bacilogo.png';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { BoardContext } from '../contexts/BoardContext';
 import { BoardActionType } from '../statemachine/BoardStateMachine';
-import { StartRetro } from '../screens/StartRetro';
-import PulseCheck from '../screens/PulseCheck';
 import { RetroDetails } from '../screens/RetroDetails';
 import commonStyles from './../style.module.scss';
 import SessionEndingMessage from '../atoms/SessionEndingMessage';

@@ -979,7 +979,6 @@ export const processAction = (
       if (date && !state.startedDate) {
         state.startedDate = new Date(date);
       }
-      console.log(isMobile, 'isMobile');
       state.users.push({
         userId,
         userNickname,
