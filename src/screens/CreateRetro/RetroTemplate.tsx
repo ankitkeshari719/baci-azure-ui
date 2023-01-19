@@ -85,7 +85,7 @@ export function RetroTemplate({
                   color: '#4E4E4E !important',
                 }}
               >
-                {selectedTemplate?.templateName}
+                {selectedTemplate?.templateName + ' Retro Template'}
               </Box>
               {/* <Box
                 className="timeFrameSummary"

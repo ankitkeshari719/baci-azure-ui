@@ -106,7 +106,7 @@ export function PulseCheck({
                   color: '#4E4E4E !important',
                 }}
               >
-                {selectedPulseCheck?.name}
+                {selectedPulseCheck?.name + ' Pulse Check'}
               </Box>
             </>
           ) : (
