@@ -5,89 +5,66 @@ import {
   Card,
   CardContent,
   Box,
+  Dialog,
   FormHelperText,
   CardActions,
 } from '@mui/material';
 import '../../global.scss';
 import './styles.scss';
 import Slider from 'react-slick';
-
-import { pulseChecksData, pulseCheckInterface } from './const';
-import { ContainedButton, OutlinedButton } from '../../components';
+import { templatesData } from './const';
+import { settings } from './SliderConst';
+import { LearnMore } from './LearnMore';
+import { ContainedButton } from '../../components/ContainedButton';
+import { OutlinedButton } from '../../components/OutlinedButton';
+import { CustomizeTemplate } from './CustomizeTemplate';
 import * as Icons from 'heroicons-react';
-
-function SampleNextArrow(props: any) {
-  const { className, style, onClick } = props;
-  return (
-    <Icons.ChevronRight
-      size={32}
-      className={className}
-      style={{
-        ...style,
-        display: 'block',
-        right: '0px',
-        color: '#0F172A',
-        fontSize: '14px',
-        cursor: 'pointer',
-      }}
-      onClick={onClick}
-    />
-  );
-}
-
-function SamplePrevArrow(props: any) {
-  const { className, style, onClick } = props;
-  return (
-    <Icons.ChevronLeft
-      size={32}
-      className={className}
-      style={{
-        ...style,
-        display: 'block',
-        left: '0px',
-        color: '#0F172A',
-        fontSize: '14px',
-        cursor: 'pointer',
-      }}
-      onClick={onClick}
-    />
-  );
-}
-
-const settings = {
-  infinite: false,
-  speed: 500,
-  slidesToShow: 3,
-  slidesToScroll: 3,
-  className: 'center',
-  centerMode: true,
-  swipeToSlide: true,
-  nextArrow: <SampleNextArrow />,
-  prevArrow: <SamplePrevArrow />,
-};
 
 type Props = {
   activePanel: string;
-  pulseCheckError: string;
-  selectedPulseCheck: pulseCheckInterface | null;
-  onClickBack: (previousPanel: string) => void;
+  selectedTemplate: any;
+  templates: any;
+  handleCheckedTemplate: (selectedPulseCheck: any) => void;
   onClickNext: (currentPanel: string, nextPanel: string) => void;
-  handlePulseCheck: (selectedPulseCheck: pulseCheckInterface) => void;
+  onClickBack: (previousPanel: string) => void;
+  handleSelectClick: (selectedTemplateId: string) => void;
 };
 
-export function PulseCheck({
+export function RetroTemplateTab({
   activePanel,
-  pulseCheckError,
-  selectedPulseCheck,
+  selectedTemplate,
+  handleCheckedTemplate,
   onClickNext,
   onClickBack,
-  handlePulseCheck,
+  handleSelectClick,
+  templates,
 }: Props) {
+  const [openLearnMoreDialog, setOpenLearnMoreDialog] = React.useState(false);
+  const [openCustomTemplateDialog, setOpenCustomTemplateDialog] =
+    React.useState(false);
   const [height, setHeight] = React.useState(0);
 
   React.useEffect(() => {
     setHeight(window.innerHeight);
   }, []);
+
+  // Learn More Dialog Open / Close
+  const handleLearnMoreDialog = () => {
+    setOpenLearnMoreDialog(true);
+  };
+
+  const closeLearnMoreDialog = () => {
+    setOpenLearnMoreDialog(false);
+  };
+
+  // Custom Template Dialog Open / Close
+  const handleCustomTemplateDialog = () => {
+    setOpenCustomTemplateDialog(true);
+  };
+
+  const closeCustomTemplateDialog = () => {
+    setOpenCustomTemplateDialog(false);
+  };
 
   return (
     <>
@@ -100,7 +77,7 @@ export function PulseCheck({
             alignItems: 'center',
           }}
         >
-          {activePanel != 'pulseCheckPanel' && selectedPulseCheck != null ? (
+          {activePanel != 'templatePanel' && selectedTemplate != null ? (
             <>
               <Box
                 className="tabSummary"
@@ -108,32 +85,40 @@ export function PulseCheck({
                   color: '#4E4E4E !important',
                 }}
               >
-                {selectedPulseCheck?.name}
+                {selectedTemplate?.templateName + ' Retro Template'}
               </Box>
+              {/* <Box
+                className="timeFrameSummary"
+                sx={{
+                  color: '#4E4E4E !important',
+                  ml: 5,
+                }}
+              >
+                Customized
+              </Box> */}
             </>
           ) : (
             <Typography
               className="tabSummary"
               sx={{
                 color:
-                  activePanel === 'pulseCheckPanel'
+                  activePanel === 'templatePanel'
                     ? '#2c69a1 !important'
                     : '#4E4E4E !important',
               }}
             >
-              Pulse Check Layout
+              Retro Template
             </Typography>
           )}
         </Box>
-
-        {activePanel === 'pulseCheckPanel' && (
+        {activePanel === 'templatePanel' && (
           <Box sx={{ mt: 4 }}>
             <>
               <Slider {...settings}>
-                {pulseChecksData.map(pulseCheck => {
+                {templatesData.map(template => {
                   return (
                     <Card
-                      key={pulseCheck.id}
+                      key={template.templateId}
                       sx={{
                         maxWidth: '420px',
                         height: '400px',
@@ -146,15 +131,15 @@ export function PulseCheck({
                           backgroundColor: 'rgba(206, 239, 255, 0.4)',
                         },
                       }}
-                      onClick={() => handlePulseCheck(pulseCheck)}
+                      onClick={() => handleCheckedTemplate(template)}
                     >
                       <CardContent>
-                        {pulseCheck.checked ? (
+                        {template.checked ? (
                           <Box component="div" className="imageContainer">
                             <Box
                               component="img"
                               alt="Logo"
-                              src={pulseCheck.pulseCheckImage}
+                              src={template.templateImage}
                               className="imageMain"
                             />
                             <Icons.CheckCircle
@@ -172,7 +157,7 @@ export function PulseCheck({
                             <Box
                               component="img"
                               alt="Logo"
-                              src={pulseCheck.pulseCheckImage}
+                              src={template.templateImage}
                               className="imageMain"
                             />
                             <Box
@@ -190,33 +175,58 @@ export function PulseCheck({
                           component="div"
                           sx={{ mt: 2 }}
                         >
-                          {pulseCheck.name}
+                          {template.templateName}
                         </Typography>
                         <Typography
                           className="templateDescription"
                           component="div"
                           sx={{ mt: 2 }}
                         >
-                          {pulseCheck.description}
+                          {template.templateDescription}
                         </Typography>
                       </CardContent>
-                      <CardActions sx={{ padding: '16px' }}>
-                        <Button size="small" sx={{ padding: '0px' }}>
-                          <Typography className="templateLink">
-                            Learn More
-                          </Typography>
-                        </Button>
+                      <CardActions
+                        sx={{
+                          position: 'absolute',
+                          bottom: '20px',
+                          width: '388px',
+                          padding: '16px',
+                        }}
+                      >
+                        <Box
+                          sx={{
+                            display: 'flex',
+                            flex: '1 0 auto',
+                            alignItems: 'flex-end',
+                            justifyContent: 'space-between',
+                            mt: 5,
+                          }}
+                        >
+                          <Button
+                            size="small"
+                            onClick={handleLearnMoreDialog}
+                            sx={{ padding: '0px' }}
+                          >
+                            <Typography className="templateLink">
+                              Learn More
+                            </Typography>
+                          </Button>
+                          <Button
+                            variant="outlined"
+                            size="small"
+                            className="customButton"
+                            onClick={handleCustomTemplateDialog}
+                          >
+                            <Typography className="customText">
+                              Customize
+                            </Typography>
+                          </Button>
+                        </Box>
                       </CardActions>
                     </Card>
                   );
                 })}
               </Slider>
-
-              {pulseCheckError !== ' ' && (
-                <FormHelperText sx={{ color: '#d32f2f', mt: 2 }}>
-                  {pulseCheckError}
-                </FormHelperText>
-              )}
               <Box
                 sx={{
                   width: '10%',
@@ -229,7 +239,7 @@ export function PulseCheck({
                 <ContainedButton
                   name="Next"
                   onClick={() =>
-                    onClickNext('pulseCheckPanel', 'userDetailPanel')
+                    onClickNext('templatePanel', 'pulseCheckPanel')
                   }
                   style={{
                     mt: 5,
@@ -239,7 +249,7 @@ export function PulseCheck({
                 />
                 <OutlinedButton
                   name="Back"
-                  onClick={() => onClickBack('templatePanel')}
+                  onClick={() => onClickBack('detailsPanel')}
                   style={{
                     minWidth: '75px !important',
                     height: '36px !important',
@@ -251,6 +261,29 @@ export function PulseCheck({
           </Box>
         )}
       </Box>
+      <Dialog
+        fullScreen
+        open={openLearnMoreDialog}
+        onClose={closeLearnMoreDialog}
+      >
+        <LearnMore
+          selectedTemplate={selectedTemplate}
+          closeLearnMoreDialog={closeLearnMoreDialog}
+          handleCustomTemplateDialog={handleCustomTemplateDialog}
+          handleSelectClick={handleSelectClick}
+        />
+      </Dialog>
+      <Dialog
+        fullScreen
+        open={openCustomTemplateDialog}
+        onClose={closeCustomTemplateDialog}
+      >
+        <CustomizeTemplate
+          closeCustomTemplateDialog={closeCustomTemplateDialog}
+          selectedTemplate={selectedTemplate}
+          handleSelectClick={handleSelectClick}
+        />
+      </Dialog>
     </>
   );
 }

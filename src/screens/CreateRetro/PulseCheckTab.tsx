@@ -5,68 +5,86 @@ import {
   Card,
   CardContent,
   Box,
-  Dialog,
-  FormHelperText,
   CardActions,
 } from '@mui/material';
 import '../../global.scss';
 import './styles.scss';
 import Slider from 'react-slick';
-import { templatesData } from './const';
-import { settings } from './SliderConst';
-import { LearnMore } from './LearnMore';
-import { ContainedButton } from '../../components/ContainedButton';
-import { OutlinedButton } from '../../components/OutlinedButton';
-import { CustomizeTemplate } from './CustomizeTemplate';
+
+import { pulseChecksData, pulseCheckInterface } from './const';
+import { ContainedButton, OutlinedButton } from '../../components';
 import * as Icons from 'heroicons-react';
+
+function SampleNextArrow(props: any) {
+  const { className, style, onClick } = props;
+  return (
+    <Icons.ChevronRight
+      size={32}
+      className={className}
+      style={{
+        ...style,
+        display: 'block',
+        right: '0px',
+        color: '#0F172A',
+        fontSize: '14px',
+        cursor: 'pointer',
+      }}
+      onClick={onClick}
+    />
+  );
+}
+
+function SamplePrevArrow(props: any) {
+  const { className, style, onClick } = props;
+  return (
+    <Icons.ChevronLeft
+      size={32}
+      className={className}
+      style={{
+        ...style,
+        display: 'block',
+        left: '0px',
+        color: '#0F172A',
+        fontSize: '14px',
+        cursor: 'pointer',
+      }}
+      onClick={onClick}
+    />
+  );
+}
+
+const settings = {
+  infinite: false,
+  speed: 500,
+  slidesToShow: 3,
+  slidesToScroll: 3,
+  className: 'center',
+  centerMode: true,
+  swipeToSlide: true,
+  nextArrow: <SampleNextArrow />,
+  prevArrow: <SamplePrevArrow />,
+};
 
 type Props = {
   activePanel: string;
-  selectedTemplate: any;
-  templateError: string;
-  templates: any;
-  handleCheckedTemplate: (selectedPulseCheck: any) => void;
-  onClickNext: (currentPanel: string, nextPanel: string) => void;
+  selectedPulseCheck: pulseCheckInterface | null;
   onClickBack: (previousPanel: string) => void;
-  handleSelectClick: (selectedTemplateId: string) => void;
+  onClickNext: (currentPanel: string, nextPanel: string) => void;
+  handlePulseCheck: (selectedPulseCheck: pulseCheckInterface) => void;
 };
 
-export function RetroTemplate({
+export function PulseCheckTab({
   activePanel,
-  templateError,
-  selectedTemplate,
-  handleCheckedTemplate,
+  selectedPulseCheck,
   onClickNext,
   onClickBack,
-  handleSelectClick,
-  templates,
+  handlePulseCheck,
 }: Props) {
-  const [openLearnMoreDialog, setOpenLearnMoreDialog] = React.useState(false);
-  const [openCustomTemplateDialog, setOpenCustomTemplateDialog] =
-    React.useState(false);
   const [height, setHeight] = React.useState(0);
 
   React.useEffect(() => {
     setHeight(window.innerHeight);
   }, []);
-
-  // Learn More Dialog Open / Close
-  const handleLearnMoreDialog = () => {
-    setOpenLearnMoreDialog(true);
-  };
-
-  const closeLearnMoreDialog = () => {
-    setOpenLearnMoreDialog(false);
-  };
-
-  // Custom Template Dialog Open / Close
-  const handleCustomTemplateDialog = () => {
-    setOpenCustomTemplateDialog(true);
-  };
-
-  const closeCustomTemplateDialog = () => {
-    setOpenCustomTemplateDialog(false);
-  };
 
   return (
     <>
@@ -79,7 +97,7 @@ export function RetroTemplate({
             alignItems: 'center',
           }}
         >
-          {activePanel != 'templatePanel' && selectedTemplate != null ? (
+          {activePanel != 'pulseCheckPanel' && selectedPulseCheck != null ? (
             <>
               <Box
                 className="tabSummary"
@@ -87,16 +105,7 @@ export function RetroTemplate({
                   color: '#4E4E4E !important',
                 }}
               >
-                {selectedTemplate?.templateName}
-              </Box>
-              <Box
-                className="timeFrameSummary"
-                sx={{
-                  color: '#4E4E4E !important',
-                  ml: 5,
-                }}
-              >
-                Customized
+                {selectedPulseCheck?.name + ' Pulse Check'}
               </Box>
             </>
           ) : (
@@ -104,23 +113,23 @@ export function RetroTemplate({
               className="tabSummary"
               sx={{
                 color:
-                  activePanel === 'templatePanel'
+                  activePanel === 'pulseCheckPanel'
                     ? '#2c69a1 !important'
                     : '#4E4E4E !important',
               }}
             >
-              Retro Template
+              Pulse Check Layout
             </Typography>
           )}
         </Box>
-        {activePanel === 'templatePanel' && (
+        {activePanel === 'pulseCheckPanel' && (
           <Box sx={{ mt: 4 }}>
             <>
               <Slider {...settings}>
-                {templatesData.map(template => {
+                {pulseChecksData.map(pulseCheck => {
                   return (
                     <Card
-                      key={template.templateId}
+                      key={pulseCheck.id}
                       sx={{
                         maxWidth: '420px',
                         height: '400px',
@@ -133,15 +142,15 @@ export function RetroTemplate({
                           backgroundColor: 'rgba(206, 239, 255, 0.4)',
                         },
                       }}
-                      onClick={() => handleCheckedTemplate(template)}
+                      onClick={() => handlePulseCheck(pulseCheck)}
                     >
                       <CardContent>
-                        {template.checked ? (
+                        {pulseCheck.checked ? (
                           <Box component="div" className="imageContainer">
                             <Box
                               component="img"
                               alt="Logo"
-                              src={template.templateImage}
+                              src={pulseCheck.pulseCheckImage}
                               className="imageMain"
                             />
                             <Icons.CheckCircle
@@ -159,7 +168,7 @@ export function RetroTemplate({
                             <Box
                               component="img"
                               alt="Logo"
-                              src={template.templateImage}
+                              src={pulseCheck.pulseCheckImage}
                               className="imageMain"
                             />
                             <Box
@@ -177,63 +186,27 @@ export function RetroTemplate({
                           component="div"
                           sx={{ mt: 2 }}
                         >
-                          {template.templateName}
+                          {pulseCheck.name}
                         </Typography>
                         <Typography
                           className="templateDescription"
                           component="div"
                           sx={{ mt: 2 }}
                         >
-                          {template.templateDescription}
+                          {pulseCheck.description}
                         </Typography>
                       </CardContent>
-                      <CardActions
-                        sx={{
-                          position: 'absolute',
-                          bottom: '20px',
-                          width: '388px',
-                          padding: '16px',
-                        }}
-                      >
-                        <Box
-                          sx={{
-                            display: 'flex',
-                            flex: '1 0 auto',
-                            alignItems: 'flex-end',
-                            justifyContent: 'space-between',
-                            mt: 5,
-                          }}
-                        >
-                          <Button
-                            size="small"
-                            onClick={handleLearnMoreDialog}
-                            sx={{ padding: '0px' }}
-                          >
-                            <Typography className="templateLink">
-                              Learn More
-                            </Typography>
-                          </Button>
-                          <Button
-                            variant="outlined"
-                            size="small"
-                            className="customButton"
-                            onClick={handleCustomTemplateDialog}
-                          >
-                            <Typography className="customText">
-                              Customize
-                            </Typography>
-                          </Button>
-                        </Box>
+                      <CardActions sx={{ padding: '16px' }}>
+                        <Button size="small" sx={{ padding: '0px' }}>
+                          <Typography className="templateLink">
+                            Learn More
+                          </Typography>
+                        </Button>
                       </CardActions>
                     </Card>
                   );
                 })}
               </Slider>
-              {templateError !== '' && (
-                <FormHelperText sx={{ color: '#d32f2f', mt: 2 }}>
-                  {templateError}
-                </FormHelperText>
-              )}
               <Box
                 sx={{
                   width: '10%',
@@ -246,7 +219,7 @@ export function RetroTemplate({
                 <ContainedButton
                   name="Next"
                   onClick={() =>
-                    onClickNext('templatePanel', 'pulseCheckPanel')
+                    onClickNext('pulseCheckPanel', 'userDetailPanel')
                   }
                   style={{
                     mt: 5,
@@ -256,7 +229,7 @@ export function RetroTemplate({
                 />
                 <OutlinedButton
                   name="Back"
-                  onClick={() => onClickBack('detailsPanel')}
+                  onClick={() => onClickBack('templatePanel')}
                   style={{
                     minWidth: '75px !important',
                     height: '36px !important',
@@ -268,29 +241,6 @@ export function RetroTemplate({
           </Box>
         )}
       </Box>
-      <Dialog
-        fullScreen
-        open={openLearnMoreDialog}
-        onClose={closeLearnMoreDialog}
-      >
-        <LearnMore
-          selectedTemplate={selectedTemplate}
-          closeLearnMoreDialog={closeLearnMoreDialog}
-          handleCustomTemplateDialog={handleCustomTemplateDialog}
-          handleSelectClick={handleSelectClick}
-        />
-      </Dialog>
-      <Dialog
-        fullScreen
-        open={openCustomTemplateDialog}
-        onClose={closeCustomTemplateDialog}
-      >
-        <CustomizeTemplate
-          closeCustomTemplateDialog={closeCustomTemplateDialog}
-          selectedTemplate={selectedTemplate}
-          handleSelectClick={handleSelectClick}
-        />
-      </Dialog>
     </>
   );
 }

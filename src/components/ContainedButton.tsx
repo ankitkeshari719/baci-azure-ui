@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { Button } from '@mui/material';
+import { Button, Typography } from '@mui/material';
 import './styles.scss';
 
 type Props = {
@@ -18,7 +18,9 @@ export function ContainedButton({ name, onClick, style, disabled }: Props) {
       sx={{ ...style }}
       disabled={disabled}
     >
-      {name}
+      <Typography className="saveButtonText" component="span">
+        {name}
+      </Typography>
     </Button>
   );
 }

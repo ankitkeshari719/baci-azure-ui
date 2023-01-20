@@ -135,6 +135,8 @@ export class BoardState {
   endedDate: Date | undefined;
   lastStateUpdate: Date | undefined;
   avatar: string | undefined;
+  pulseCheck?: any;
+  template?: any
 
   constructor(retroId: string, columns: Column[]) {
     this.retroId = retroId;

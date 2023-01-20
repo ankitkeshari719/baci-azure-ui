@@ -9,18 +9,14 @@ import {
   Grid,
   Link,
   MenuItem,
-  Select,
   Slide,
   TextField,
   Typography,
 } from '@mui/material';
 import { useNavigate, useParams } from 'react-router-dom';
-import { EmailShareButton, WhatsappShareButton } from 'react-share';
+import { EmailShareButton } from 'react-share';
 import { ActionType, GlobalContext } from '../contexts/GlobalContext';
-import { createTheme as any } from '@mui/material/styles';
 import EmailIcon from '@mui/icons-material/Email';
-import PhoneAndroidIcon from '@mui/icons-material/PhoneAndroid';
-import WhatsAppIcon from '@mui/icons-material/WhatsApp';
 import Box from '@mui/material/Box';
 import CssBaseline from '@mui/material/CssBaseline';
 import QRCode from 'qrcode.react';
@@ -29,10 +25,6 @@ import { CopyToClipboard } from 'react-copy-to-clipboard';
 import { useRetro } from '../helpers';
 import { Retro as RetroType } from '../types';
 import { useAzureAuth } from '../msal/azureauth';
-import { loginRequest, b2cPolicies } from '../authConfig';
-import ButtonGroup from '@material-ui/core/ButtonGroup';
-import { Link as RouterLink } from 'react-router-dom';
-import { BoardActionType } from '../statemachine/BoardStateMachine';
 import { BoardContext } from '../contexts/BoardContext';
 
 export function Onboarding() {
@@ -205,7 +197,6 @@ export function Onboarding() {
   const canShare = navigator.canShare && navigator.canShare(shareData);
 
   useAzureAuth();
-  // useAzureAuth();
 
   return (
     <>
@@ -299,7 +290,6 @@ export function Onboarding() {
                 minWidth: '300px',
               }}
               onClick={() => joinRetro()}
-              // onTouchStart={()=>joinRetro()}
             >
               Go on...
             </Button>
@@ -323,7 +313,6 @@ export function Onboarding() {
                 cursor: 'pointer',
               }}
               onClick={() => {
-                //handleLogin();
                 dispatch({
                   type: ActionType.SET_RETRO_CREATE,
                   payload: { retroCreateState: true },
@@ -474,7 +463,6 @@ export function Onboarding() {
               inputRef={timeframeRef}
               variant="outlined"
               label="Time Frame"
-              //renderValue={(value: any) => (value !== '' ? value : 'Time frame')}
               sx={{
                 color: '#727D84',
                 minWidth: '320px',
@@ -674,8 +662,6 @@ export function Onboarding() {
               }}
               onClick={() => {
                 const humanId = global.currentRetro?.humanId;
-                //dispatch({ type: ActionType.CLOSE_CURRENT_RETRO });
-
                 dispatch({
                   type: ActionType.SET_RETRO_CREATE,
                   payload: { retroCreateState: false },
@@ -706,7 +692,6 @@ export function Onboarding() {
             <Link
               sx={{ textAlign: 'center', cursor: 'pointer' }}
               onClick={reset}
-              // onTouchStart={reset}
             >
               To return to the main page click here
             </Link>

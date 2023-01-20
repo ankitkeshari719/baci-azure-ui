@@ -102,6 +102,7 @@ export const validateAction = (
     }
     return {};
   };
+
   const findGroup = (
     id: string
   ): {
@@ -123,18 +124,25 @@ export const validateAction = (
     }
     return {};
   };
+
   const isFacilitator = (id: string): boolean => {
     if (state.creatorId === id) {
       return true;
     }
     return false;
   };
+
   const isUpdateRetroDetailsValid = (
-    retroName: string,
-    retroGoal: string,
-    retroTimeframe: string,
-    creatorId: string,
-    userId: string
+    retroName?: string,
+    retroGoal?: string,
+    retroTimeframe?: string,
+    fullPulseCheck?: boolean,
+    creatorId?: string,
+    userId?: string,
+    avatar?: string,
+    retroStatus?: string,
+    pulseCheck?: any,
+    template?: any
   ) => {
     // if (
     //   creatorId != '' &&
@@ -456,8 +464,12 @@ export const validateAction = (
         parameters.retroName,
         parameters.retroGoal,
         parameters.retroTimeframe,
-        parameters.creatorId,
-        userId
+        parameters.fullPulseCheck,
+        userId,
+        parameters.avatar,
+        parameters.retroStatus,
+        parameters.pulseCheck,
+        parameters.template
       );
     case BoardActionType.CREATE_GROUP:
       return isCreateGroupValid(
@@ -622,7 +634,6 @@ export const processAction = (
     }
     return {};
   };
-  // const [global, dispatch] = React.useContext(GlobalContext);
   const findGroup = (
     id: string
   ): {
@@ -653,7 +664,9 @@ export const processAction = (
     creatorId?: string,
     userId?: string,
     avatar?: string,
-    retroStatus?: string
+    retroStatus?: string,
+    pulseCheck?: any,
+    template?: any
   ) => {
     if (retroName !== undefined && retroName !== '') {
       state.retroName = retroName;
@@ -675,6 +688,12 @@ export const processAction = (
     }
     if (retroStatus != undefined) {
       state.retroStatus = retroStatus;
+    }
+    if (pulseCheck != undefined && pulseCheck != null) {
+      state.pulseCheck = pulseCheck;
+    }
+    if (template != undefined && pulseCheck != null) {
+      state.template = template;
     }
     state.lastUpdatedBy = userId;
   };
@@ -960,7 +979,6 @@ export const processAction = (
       if (date && !state.startedDate) {
         state.startedDate = new Date(date);
       }
-      console.log(isMobile, 'isMobile');
       state.users.push({
         userId,
         userNickname,
@@ -1085,12 +1103,14 @@ export const processAction = (
       state.startedTimeStamp = Date.now();
     }
   };
+
   const publishRetro = (columnId: string, value: boolean, userId: string) => {
     const column = findColumn(columnId);
     if (column) {
       column.publish = value;
     }
   };
+
   const setFacilitator = (userId: string) => {
     state.users.forEach(user => {
       if (user.userId == userId) {
@@ -1099,7 +1119,9 @@ export const processAction = (
     });
     // state.users
   };
+
   let noMatch = false;
+
   switch (actionName) {
     case BoardActionType.UPDATE_RETRO_DETAILS:
       updateRetroDetails(
@@ -1110,7 +1132,9 @@ export const processAction = (
         parameters.creatorId,
         userId,
         avatar,
-        parameters.retroStatus
+        parameters.retroStatus,
+        parameters.pulseCheck,
+        parameters.template
       );
       break;
     case BoardActionType.CREATE_GROUP:
@@ -1236,6 +1260,7 @@ export const processAction = (
       noMatch = true;
       break;
   }
+
   if (!noMatch) {
     state.lastStateUpdate = new Date();
   }

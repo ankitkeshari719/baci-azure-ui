@@ -17,30 +17,76 @@ const styles = {
   retroNameTextField: {
     minWidth: '300px',
     '& .MuiFormLabel-root': {
-      color: 'rgba(0, 0, 0, 0.6) !important',
-      fontSize: '14px',
+      fontFamily: 'Poppins',
+      fontStyle: 'normal',
+      fontWeight: 400,
+      fontSize: '16px',
+      lineHeight: '20px',
+      letterSpacing: '0.6px',
+      color: 'rgba(0, 0, 0, 0.87) !important',
     },
     '& .MuiFormLabel-root-MuiInputLabel-root.Mui-focused': {
-      color: 'rgba(0, 0, 0, 0.6) !important',
-      fontSize: '14px',
+      fontFamily: 'Poppins',
+      fontStyle: 'normal',
+      fontWeight: 400,
+      fontSize: '16px',
+      lineHeight: '20px',
+      letterSpacing: '0.6px',
+      color: 'rgba(0, 0, 0, 0.87) !important',
     },
     '& .css-ov41s0-MuiInputBase-root-MuiInput-root': {
       borderBottom: '0px solid rgba(0, 0, 0, 0.42) !important',
     },
-   
+    textarea: {
+      fontFamily: 'Poppins',
+      fontStyle: 'normal',
+      fontWeight: 400,
+      fontSize: '16px',
+      lineHeight: '20px',
+      letterSpacing: '0.6px',
+      color: 'rgba(0, 0, 0, 0.87) !important',
+    },
   },
   timeFramefield: {
     minWidth: '300px',
     '& label': {
-      color: 'rgba(0, 0, 0, 0.6) !important',
-      fontSize: '14px',
+      color: 'rgba(0, 0, 0, 0.87) !important',
+      fontFamily: 'Poppins',
+      fontStyle: 'normal',
+      fontWeight: 400,
+      fontSize: '16px',
+      lineHeight: '20px',
+      letterSpacing: '0.6px',
       '&.Mui-focused': {
-        color: 'rgba(0, 0, 0, 0.6) !important',
-        fontSize: '14px',
+        color: 'rgba(0, 0, 0, 0.87) !important',
+        fontFamily: 'Poppins',
+        fontStyle: 'normal',
+        fontWeight: 400,
+        fontSize: '16px',
+        lineHeight: '20px',
+        letterSpacing: '0.6px',
       },
+    },
+    '& .css-148deet-MuiFormControl-root-MuiTextField-root label': {
+      color: 'rgba(0, 0, 0, 0.87) !important',
+      fontFamily: 'Poppins',
+      fontStyle: 'normal',
+      fontWeight: 400,
+      fontSize: '16px',
+      lineHeight: '20px',
+      letterSpacing: '0.6px',
     },
     '& .css-1sop3d1-MuiInputBase-root-MuiInput-root': {
       borderBottom: '0px solid rgba(0, 0, 0, 0.42) !important',
+    },
+    textarea: {
+      fontFamily: 'Poppins',
+      fontStyle: 'normal',
+      fontWeight: 400,
+      fontSize: '16px',
+      lineHeight: '20px',
+      letterSpacing: '0.6px',
+      color: 'rgba(0, 0, 0, 0.87) !important',
     },
   },
 };
@@ -58,7 +104,7 @@ type Props = {
   onClickNext: (currentPanel: string, nextPanel: string) => void;
 };
 
-export function BaciDetails({
+export function BaciDetailsTab({
   activePanel,
   retroName,
   retroTimeFrame,
