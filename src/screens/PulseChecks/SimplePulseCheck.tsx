@@ -28,10 +28,6 @@ import neutral from '../../assets/img/neutral.png';
 import happyMask from '../../assets/img/Happy_Mask.png';
 import sadMask from '../../assets/img/sad_mask.png';
 import neutralMask from '../../assets/img/Neutral_Mask.png';
-import {
-  QUICK_PULSE_CHECK_QUESTIONS,
-  QUICK_PULSE_CHECK_QUESTIONS_INFO,
-} from '../../constants';
 import { BoardContext } from '../../contexts/BoardContext';
 import { useNavigate } from 'react-router-dom';
 import { ConfirmContext } from '../../contexts/ConfirmContext';
@@ -54,7 +50,11 @@ const BootstrapTooltip = styled(({ className, ...props }: TooltipProps) => (
   },
 }));
 
-export default function SimplePulseCheck() {
+type Props = {
+  pulseCheck: any;
+};
+
+export default function SimplePulseCheck({ pulseCheck }: Props) {
   const navigate = useNavigate();
   const isXsUp = useMediaQuery(theme.breakpoints.between('xs', 'sm'));
   const [{ user, currentRetro }, dispatch] = React.useContext(GlobalContext);
@@ -65,9 +65,7 @@ export default function SimplePulseCheck() {
   } = React.useContext(BoardContext);
 
   const [showBlankErrors, setShowBlankErrors] = React.useState(false);
-  const qs = QUICK_PULSE_CHECK_QUESTIONS.map(q => React.useState(-1));
-  const [qsTooltipOpen, setQsTooltipOpen] = React.useState(-1);
-  const [introScreen, setIntroScreen] = React.useState<boolean>(true);
+  const qs = pulseCheck && pulseCheck.value.map((q: string) => React.useState(-1));
   const [scrollDownButton, setScrollDownButton] = React.useState(true);
   const [showSharePanel, setShowSharePanel] = React.useState(false);
   const [pulse1, setPulse1] = React.useState(false);
@@ -87,7 +85,6 @@ export default function SimplePulseCheck() {
       user.id != ''
     ) {
       const currentUser: any = users.find(user1 => user1.userId === user.id);
-      // console.log("current user",currentUser.pulseCheckQuestions.length>0)
       if (currentUser?.pulseCheckQuestions.length > 0) {
         navigate('/board/' + currentRetro?.id);
         dispatch({
@@ -130,7 +127,7 @@ export default function SimplePulseCheck() {
   }, [users, user?.id && user?.id != '']);
 
   React.useEffect(() => {
-    qs.forEach(s => {
+    qs.forEach((s: ((arg0: number) => void)[]) => {
       s[1](-1);
     });
   }, [fullPulseCheck]);
@@ -150,7 +147,6 @@ export default function SimplePulseCheck() {
   };
 
   function setPulseBar(value: any) {
-    // console.log(qs, value);
     if ((value === 0 && pulse1 == false) || qs[value][0] !== -1) {
       setPulse1(true);
     } else if ((value = (1 && pulse2 == false) || qs[value][0] !== -1)) {
@@ -174,18 +170,18 @@ export default function SimplePulseCheck() {
   };
 
   function setPopupData(index: any) {
-    setPopupTitle(QUICK_PULSE_CHECK_QUESTIONS[index]);
-    setPopupContent(QUICK_PULSE_CHECK_QUESTIONS_INFO[index]);
+    setPopupTitle(pulseCheck && pulseCheck.value[index]);
+    setPopupContent(pulseCheck.valueDescription[index]);
   }
 
   const submitPulseCheck = () => {
     const someBlank =
-      qs.findIndex(q => q[0] === -1) !== -1 &&
-      qs.findIndex(q => q[0] === -1) < QUICK_PULSE_CHECK_QUESTIONS.length;
+      qs.findIndex((q: number[]) => q[0] === -1) !== -1 &&
+      qs.findIndex((q: number[]) => q[0] === -1) < pulseCheck && pulseCheck.value.length;
     const submitter = async () => {
       // Submit
       await saveAndProcessAction(BoardActionType.SUBMIT_PULSE_CHECK, {
-        questions: qs.map((q, i) => ({ id: String(i), entry: q[0] })),
+        questions: qs.map((q: any[], i: any) => ({ id: String(i), entry: q[0] })),
       });
       setConfirmAction(undefined);
       dispatch({
@@ -319,7 +315,7 @@ export default function SimplePulseCheck() {
               marginTop: isXsUp ? '24px' : '48px',
             }}
           >
-            {QUICK_PULSE_CHECK_QUESTIONS.map((question, index) => (
+            {pulseCheck && pulseCheck.value.map((question: any, index:any) => (
               <Grid
                 item
                 xs={12}
@@ -352,7 +348,7 @@ export default function SimplePulseCheck() {
                     ) : (
                       <Tooltip
                         placement="top"
-                        title={QUICK_PULSE_CHECK_QUESTIONS_INFO[index]}
+                        title={pulseCheck.valueDescription[index]}
                       >
                         <Icons.QuestionMarkCircleOutline
                           size={20}

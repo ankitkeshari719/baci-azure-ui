@@ -23,9 +23,9 @@ export default function PulseCheckMain() {
   return (
     <Box className="mainContainer">
       <Toolbar />
-      {pulseCheck && pulseCheck.id === 'simple' && <SimplePulseCheck />}
+      {pulseCheck && pulseCheck.id === 'simple' && <SimplePulseCheck pulseCheck={pulseCheck}/>}
       {pulseCheck && pulseCheck.id === 'business_agility' && (
-        <BusinessAgility />
+        <BusinessAgility pulseCheck={pulseCheck}/>
       )}
     </Box>
   );
