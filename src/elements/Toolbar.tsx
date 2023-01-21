@@ -4,6 +4,7 @@ import {
   Dialog,
   DialogActions,
   DialogContent,
+  Link,
   Menu,
   MenuItem,
   Popover,
@@ -155,14 +156,16 @@ const Toolbar = (props: any) => {
             </Button>
           </>
         ) : (
-          <img
-            src={BACILogo}
-            alt="Logo"
-            style={{
-              width: isXsUp ? '53px' : '82px',
-              height: isXsUp ? '18px' : '28px',
-            }}
-          />
+          <Link href="/">
+            <img
+              src={BACILogo}
+              alt="Logo"
+              style={{
+                width: isXsUp ? '53px' : '82px',
+                height: isXsUp ? '18px' : '28px',
+              }}
+            />
+          </Link>
         )}
 
         {currentRetro?.name &&
