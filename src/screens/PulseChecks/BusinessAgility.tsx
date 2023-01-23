@@ -14,6 +14,7 @@ import {
   styled,
   tooltipClasses,
   TooltipProps,
+  Divider,
 } from '@mui/material';
 import commonStyles from './../../style.module.scss';
 import './styles.scss';
@@ -74,7 +75,7 @@ export default function BusinessAgility({ pulseCheck }: Props) {
   const [popupContent, setPopupContent] = React.useState('');
   useLoadRetro();
 
-  const qs =
+  const selectedQuestions =
     pulseCheck && pulseCheck.value.map((q: string) => React.useState(-1));
   const [pulse1, setPulse1] = React.useState(false);
   const [pulse2, setPulse2] = React.useState(false);
@@ -85,10 +86,11 @@ export default function BusinessAgility({ pulseCheck }: Props) {
   const [pulse7, setPulse7] = React.useState(false);
 
   React.useEffect(() => {
-    qs.forEach((s: ((arg0: number) => void)[]) => {
+    selectedQuestions.forEach((s: ((arg0: number) => void)[]) => {
       s[1](-1);
     });
   }, [fullPulseCheck]);
+  console.log('selectedQuestions:: ', selectedQuestions);
 
   React.useEffect(() => {
     if (
@@ -152,19 +154,40 @@ export default function BusinessAgility({ pulseCheck }: Props) {
   };
 
   function setPulseBar(value: any) {
-    if ((value === 0 && pulse1 == false) || qs[value][0] !== -1) {
+    if (
+      (value === 0 && pulse1 == false) ||
+      selectedQuestions[value][0] !== -1
+    ) {
       setPulse1(true);
-    } else if ((value === 1 && pulse2 == false) || qs[value][0] !== -1) {
+    } else if (
+      (value === 1 && pulse2 == false) ||
+      selectedQuestions[value][0] !== -1
+    ) {
       setPulse2(true);
-    } else if ((value === 2 && pulse3 == false) || qs[value][0] !== -1) {
+    } else if (
+      (value === 2 && pulse3 == false) ||
+      selectedQuestions[value][0] !== -1
+    ) {
       setPulse3(true);
-    } else if ((value === 3 && pulse4 == false) || qs[value][0] !== -1) {
+    } else if (
+      (value === 3 && pulse4 == false) ||
+      selectedQuestions[value][0] !== -1
+    ) {
       setPulse4(true);
-    } else if ((value === 4 && pulse5 == false) || qs[value][0] !== -1) {
+    } else if (
+      (value === 4 && pulse5 == false) ||
+      selectedQuestions[value][0] !== -1
+    ) {
       setPulse5(true);
-    } else if ((value === 5 && pulse6 == false) || qs[value][0] !== -1) {
+    } else if (
+      (value === 5 && pulse6 == false) ||
+      selectedQuestions[value][0] !== -1
+    ) {
       setPulse6(true);
-    } else if ((value === 6 && pulse7 == false) || qs[value][0] !== -1) {
+    } else if (
+      (value === 6 && pulse7 == false) ||
+      selectedQuestions[value][0] !== -1
+    ) {
       setPulse7(true);
     }
   }
@@ -189,16 +212,22 @@ export default function BusinessAgility({ pulseCheck }: Props) {
 
   const submitPulseCheck = () => {
     const someBlank =
-      qs.findIndex((q: number[]) => q[0] === -1) !== -1 &&
-      qs.findIndex((q: number[]) => q[0] === -1) < pulseCheck &&
-      pulseCheck.value.length;
-    return;
+      selectedQuestions.findIndex((q: number[]) => q[0] === -1) !== -1;
     const submitter = async () => {
+      dispatch({
+        type: ActionType.SET_LOADING,
+        payload: { loadingFlag: true },
+      });
       await saveAndProcessAction(BoardActionType.SUBMIT_PULSE_CHECK, {
-        questions: qs.map((q: any[], i: any) => ({
+        questions: selectedQuestions.map((q: any[], i: any) => ({
           id: String(i),
           entry: q[0],
         })),
+      }).then(() => {
+        dispatch({
+          type: ActionType.SET_LOADING,
+          payload: { loadingFlag: false },
+        });
       });
       setConfirmAction(undefined);
       dispatch({
@@ -258,7 +287,7 @@ export default function BusinessAgility({ pulseCheck }: Props) {
           justifyContent: 'center',
           padding: isXsUp ? '8px' : '56px',
           overflowY: isXsUp ? 'scroll' : 'auto',
-          height: isXsUp ? 'calc(100vh - 120px)' : 'calc(100vh - 32px)',
+          height: isXsUp ? 'calc(100vh - 120px)' : 'calc(100vh - 24px)',
         }}
       >
         {/* Text one */}
@@ -339,11 +368,21 @@ export default function BusinessAgility({ pulseCheck }: Props) {
           )}
         </Grid>
         {/* QUICK PULSE CHECK QUESTIONS Section */}
-        <Grid item xs={12}>
+        <Grid
+          item
+          xs={12}
+          sx={{
+            display: 'flex',
+            justifyContent: 'center',
+            alignItems: 'center',
+          }}
+        >
           <Box
             sx={{
-              display: 'flex',
-              alignItems: 'center',
+              width: '100%',
+              display: 'grid',
+              gap: 5,
+              gridTemplateColumns: isXsUp ? 'repeat(1, 2fr)' : 'repeat(3, 1fr)',
               flexDirection: isXsUp ? 'column' : 'row',
               marginTop: isXsUp ? '24px' : '48px',
             }}
@@ -353,7 +392,6 @@ export default function BusinessAgility({ pulseCheck }: Props) {
                 <Grid
                   item
                   xs={12}
-                  lg={4}
                   sx={{
                     display: 'flex',
                     justifyContent: 'center',
@@ -387,7 +425,10 @@ export default function BusinessAgility({ pulseCheck }: Props) {
                           <Icons.QuestionMarkCircleOutline
                             size={20}
                             color={commonStyles.secondaryMain}
-                            style={{ marginBottom: '-5px', marginLeft: '5px' }}
+                            style={{
+                              marginBottom: '-5px',
+                              marginLeft: '5px',
+                            }}
                           />
                         </Tooltip>
                       )}
@@ -414,7 +455,7 @@ export default function BusinessAgility({ pulseCheck }: Props) {
                             height: '40px',
                           }}
                           onClick={() => {
-                            qs[index][1](1);
+                            selectedQuestions[index][1](1);
                             setPulseBar(index);
                           }}
                         ></Box>
@@ -425,7 +466,10 @@ export default function BusinessAgility({ pulseCheck }: Props) {
                             marginTop: !isXsUp ? '-50px' : '-45px',
                             width: !isXsUp ? '64px' : '52px',
                             height: !isXsUp ? '64px' : '52px',
-                            display: qs[index][0] === 1 ? 'block' : 'none',
+                            display:
+                              selectedQuestions[index][0] === 1
+                                ? 'block'
+                                : 'none',
                           }}
                         />
                       </Box>
@@ -444,7 +488,7 @@ export default function BusinessAgility({ pulseCheck }: Props) {
                             marginRight: '32px',
                           }}
                           onClick={() => {
-                            qs[index][1](2);
+                            selectedQuestions[index][1](2);
                             setPulseBar(index);
                           }}
                         ></Box>
@@ -455,7 +499,10 @@ export default function BusinessAgility({ pulseCheck }: Props) {
                             marginTop: !isXsUp ? '-50px' : '-45px',
                             width: !isXsUp ? '64px' : '52px',
                             height: !isXsUp ? '64px' : '52px',
-                            display: qs[index][0] === 2 ? 'block' : 'none',
+                            display:
+                              selectedQuestions[index][0] === 2
+                                ? 'block'
+                                : 'none',
                           }}
                         ></img>
                       </Box>
@@ -473,7 +520,7 @@ export default function BusinessAgility({ pulseCheck }: Props) {
                             height: '40px',
                           }}
                           onClick={() => {
-                            qs[index][1](3);
+                            selectedQuestions[index][1](3);
                             setPulseBar(index);
                           }}
                         ></Box>
@@ -484,7 +531,10 @@ export default function BusinessAgility({ pulseCheck }: Props) {
                             marginTop: !isXsUp ? '-50px' : '-45px',
                             width: isXsUp ? '52px' : '64px',
                             height: isXsUp ? '52px' : '64px',
-                            display: qs[index][0] === 3 ? 'block' : 'none',
+                            display:
+                              selectedQuestions[index][0] === 3
+                                ? 'block'
+                                : 'none',
                           }}
                         ></img>
                       </Box>
@@ -500,7 +550,7 @@ export default function BusinessAgility({ pulseCheck }: Props) {
             sx={{
               display: 'flex',
               justifyContent: 'center',
-              marginTop: isXsUp ? '24px' : '48px',
+              marginTop: isXsUp ? '24px' : '24px',
             }}
           >
             <ContainedButton
@@ -520,7 +570,7 @@ export default function BusinessAgility({ pulseCheck }: Props) {
               display: 'flex',
               justifyContent: 'center',
               cursor: 'pointer',
-              marginTop: isXsUp ? '24px' : '0px',
+              marginTop: isXsUp ? '24px' : '24px',
             }}
           >
             <Link className="infoLink" onClick={skipPulseCheck}>
