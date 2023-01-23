@@ -315,7 +315,7 @@ export default function BusinessAgility({ pulseCheck }: Props) {
               justifyContent: 'center',
               userSelect: 'none',
               background: 'white',
-              marginTop: isXsUp ? '24px' : '24px',
+              marginTop: isXsUp ? '24px' : '48px',
             }}
           >
             <Typography className="textTwo">
@@ -375,6 +375,7 @@ export default function BusinessAgility({ pulseCheck }: Props) {
             display: 'flex',
             justifyContent: 'center',
             alignItems: 'center',
+            marginTop: isXsUp ? '24px' : '48px',
           }}
         >
           <Box
@@ -384,7 +385,6 @@ export default function BusinessAgility({ pulseCheck }: Props) {
               gap: 5,
               gridTemplateColumns: isXsUp ? 'repeat(1, 2fr)' : 'repeat(3, 1fr)',
               flexDirection: isXsUp ? 'column' : 'row',
-              marginTop: isXsUp ? '24px' : '48px',
             }}
           >
             {pulseCheck &&

@@ -64,7 +64,7 @@ const useStyles = createUseStyles({
     '& .slick-list': {
       marginLeft: '100px !important',
       marginRight: '100px  !important',
-      padding: '0px  !important'
+      padding: '0px  !important',
     },
   },
 });
@@ -97,7 +97,6 @@ export function PulseCheckTab({
     slidesToScroll: 3,
     nextArrow: <SampleNextArrow />,
     prevArrow: <SamplePrevArrow />,
-    centerPadding: '10px',
     className: classes.sliderContainer,
     responsive: [
       {

@@ -269,7 +269,7 @@ export default function SimplePulseCheck({ pulseCheck }: Props) {
               justifyContent: 'center',
               userSelect: 'none',
               background: 'white',
-              marginTop: isXsUp ? '24px' : '24px',
+              marginTop: isXsUp ? '24px' : '48px',
             }}
           >
             <Typography className="textTwo">
