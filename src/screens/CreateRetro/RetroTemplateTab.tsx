@@ -120,8 +120,8 @@ export function RetroTemplateTab({
                     <Card
                       key={template.templateId}
                       sx={{
-                        maxWidth: '420px',
-                        height: '400px',
+                        maxWidth: '26rem',
+                        height: '25rem',
                         background: '#ffffff',
                         border: '1px solid #E3E3E3',
                         boxShadow: 'none',
@@ -189,7 +189,7 @@ export function RetroTemplateTab({
                         sx={{
                           position: 'absolute',
                           bottom: '20px',
-                          width: '388px',
+                          width: '24rem',
                           padding: '16px',
                         }}
                       >

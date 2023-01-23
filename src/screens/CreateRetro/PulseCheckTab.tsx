@@ -131,8 +131,8 @@ export function PulseCheckTab({
                     <Card
                       key={pulseCheck.id}
                       sx={{
-                        maxWidth: '420px',
-                        height: '400px',
+                        maxWidth: '26rem',
+                        height: '25rem',
                         background: '#ffffff',
                         border: '1px solid #E3E3E3',
                         boxShadow: 'none',
