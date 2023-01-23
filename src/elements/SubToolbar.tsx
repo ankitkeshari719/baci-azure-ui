@@ -245,6 +245,7 @@ const SubToolbar = (props: any) => {
                   height: '40px',
                   marginLeft: '20px',
                   marginRight: '8px',
+                  border:'none'
                 }}
               />
               <Tooltip title={user.userNickname}>
