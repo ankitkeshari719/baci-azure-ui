@@ -15,7 +15,59 @@ import Slider from 'react-slick';
 import { pulseChecksData, pulseCheckInterface } from './const';
 import { ContainedButton, OutlinedButton } from '../../components';
 import * as Icons from 'heroicons-react';
-import { settings } from './SliderConst';
+import { createUseStyles } from 'react-jss';
+
+function SampleNextArrow(props: any) {
+  const { className, style, onClick } = props;
+  return (
+    <Icons.ChevronRight
+      size={32}
+      className={className}
+      style={{
+        ...style,
+        width: '42px',
+        height: '42px',
+        display: 'block',
+        right: '0px',
+        color: '#0F172A',
+        fontSize: '14px',
+        cursor: 'pointer',
+      }}
+      onClick={onClick}
+    />
+  );
+}
+
+function SamplePrevArrow(props: any) {
+  const { className, style, onClick } = props;
+  return (
+    <Icons.ChevronLeft
+      size={32}
+      className={className}
+      style={{
+        ...style,
+        width: '42px',
+        height: '42px',
+        display: 'block',
+        left: '0px',
+        color: '#0F172A',
+        fontSize: '14px',
+        cursor: 'pointer',
+      }}
+      onClick={onClick}
+    />
+  );
+}
+
+const useStyles = createUseStyles({
+  sliderContainer: {
+    '& .slick-list': {
+      marginLeft: '100px !important',
+      marginRight: '100px  !important',
+      padding: '0px  !important'
+    },
+  },
+});
 
 type Props = {
   activePanel: string;
@@ -33,10 +85,40 @@ export function PulseCheckTab({
   handlePulseCheck,
 }: Props) {
   const [height, setHeight] = React.useState(0);
+  const classes = useStyles();
 
   React.useEffect(() => {
     setHeight(window.innerHeight);
   }, []);
+
+  const settings = {
+    speed: 500,
+    slidesToShow: 3,
+    slidesToScroll: 3,
+    nextArrow: <SampleNextArrow />,
+    prevArrow: <SamplePrevArrow />,
+    centerPadding: '10px',
+    className: classes.sliderContainer,
+    responsive: [
+      {
+        breakpoint: 1700,
+        settings: {
+          slidesToShow: 2,
+          slidesToScroll: 2,
+          infinite: true,
+          speed: 500,
+        },
+      },
+      {
+        breakpoint: 1260,
+        settings: {
+          slidesToShow: 1,
+          slidesToScroll: 1,
+          speed: 500,
+        },
+      },
+    ],
+  };
 
   return (
     <>

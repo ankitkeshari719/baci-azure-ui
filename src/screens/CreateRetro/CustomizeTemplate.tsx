@@ -12,7 +12,6 @@ import '../../global.scss';
 import './styles.scss';
 import { TopBar } from './TopBar';
 import Slider from 'react-slick';
-import { settings } from './SliderConst';
 import * as Icons from 'heroicons-react';
 
 type Props = {
@@ -102,70 +101,68 @@ export function CustomizeTemplate({
         {/* Columns */}
         <Grid item xs={12} sx={{ mt: 4 }}>
           <Box component="div" whiteSpace="normal">
-            <Slider {...settings}>
-              {tempSelectedTemplate &&
-                tempSelectedTemplate.columns.map((column: any) => {
-                  return (
+            {tempSelectedTemplate &&
+              tempSelectedTemplate.columns.map((column: any) => {
+                return (
+                  <Box
+                    key={column.id}
+                    component="div"
+                    whiteSpace="normal"
+                    sx={{
+                      width: '376px !important',
+                      height: '500px',
+                      display: 'flex',
+                      justifyContent: 'center',
+                      alignItems: 'flex-start',
+                      background: column.cardColor,
+                      border: '1px solid ' + column.groupFontColor,
+                      borderRadius: '8px',
+                    }}
+                  >
                     <Box
-                      key={column.id}
                       component="div"
                       whiteSpace="normal"
                       sx={{
-                        width: '376px !important',
-                        height: '500px',
+                        width: '100%',
+                        height: '48px',
                         display: 'flex',
                         justifyContent: 'center',
-                        alignItems: 'flex-start',
-                        background: column.cardColor,
-                        border: '1px solid ' + column.groupFontColor,
-                        borderRadius: '8px',
+                        alignItems: 'center',
+                        borderRadius: '9px 9px 0px 0px',
+                        background: column.groupColor,
                       }}
                     >
-                      <Box
-                        component="div"
-                        whiteSpace="normal"
+                      <TextField
+                        maxRows={2}
+                        inputProps={{ maxLength: 150 }}
+                        multiline
+                        fullWidth
+                        value={column.name}
                         sx={{
-                          width: '100%',
-                          height: '48px',
-                          display: 'flex',
-                          justifyContent: 'center',
-                          alignItems: 'center',
-                          borderRadius: '9px 9px 0px 0px',
-                          background: column.groupColor,
+                          fieldset: { border: 'none' },
+                          textarea: {
+                            color: column.groupFontColor + '!important',
+                            fontSize: '16px',
+                            fontWeight: 600,
+                            fontFamily: 'Poppins',
+                            fontStyle: 'normal',
+                            lineHeight: '20px',
+                            display: 'flex',
+                            alignItems: 'center',
+                            letterSpacing: '0.6px',
+                          },
                         }}
-                      >
-                        <TextField
-                          maxRows={2}
-                          inputProps={{ maxLength: 150 }}
-                          multiline
-                          fullWidth
-                          value={column.name}
-                          sx={{
-                            fieldset: { border: 'none' },
-                            textarea: {
-                              color: column.groupFontColor + '!important',
-                              fontSize: '16px',
-                              fontWeight: 600,
-                              fontFamily: 'Poppins',
-                              fontStyle: 'normal',
-                              lineHeight: '20px',
-                              display: 'flex',
-                              alignItems: 'center',
-                              letterSpacing: '0.6px',
-                            },
-                          }}
-                          onChange={e =>
-                            handleColumnNameChange(
-                              e.currentTarget.value,
-                              column.id
-                            )
-                          }
-                        />
-                      </Box>
+                        onChange={e =>
+                          handleColumnNameChange(
+                            e.currentTarget.value,
+                            column.id
+                          )
+                        }
+                      />
                     </Box>
-                  );
-                })}
-            </Slider>
+                  </Box>
+                );
+              })}
           </Box>
         </Grid>
       </Grid>
