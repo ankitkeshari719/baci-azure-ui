@@ -6,6 +6,7 @@ import {
   CardContent,
   Box,
   CardActions,
+  Grid,
 } from '@mui/material';
 import '../../global.scss';
 import './styles.scss';
@@ -14,56 +15,7 @@ import Slider from 'react-slick';
 import { pulseChecksData, pulseCheckInterface } from './const';
 import { ContainedButton, OutlinedButton } from '../../components';
 import * as Icons from 'heroicons-react';
-
-function SampleNextArrow(props: any) {
-  const { className, style, onClick } = props;
-  return (
-    <Icons.ChevronRight
-      size={32}
-      className={className}
-      style={{
-        ...style,
-        display: 'block',
-        right: '0px',
-        color: '#0F172A',
-        fontSize: '14px',
-        cursor: 'pointer',
-      }}
-      onClick={onClick}
-    />
-  );
-}
-
-function SamplePrevArrow(props: any) {
-  const { className, style, onClick } = props;
-  return (
-    <Icons.ChevronLeft
-      size={32}
-      className={className}
-      style={{
-        ...style,
-        display: 'block',
-        left: '0px',
-        color: '#0F172A',
-        fontSize: '14px',
-        cursor: 'pointer',
-      }}
-      onClick={onClick}
-    />
-  );
-}
-
-const settings = {
-  infinite: false,
-  speed: 500,
-  slidesToShow: 3,
-  slidesToScroll: 3,
-  className: 'center',
-  centerMode: true,
-  swipeToSlide: true,
-  nextArrow: <SampleNextArrow />,
-  prevArrow: <SamplePrevArrow />,
-};
+import { settings } from './SliderConst';
 
 type Props = {
   activePanel: string;
@@ -123,8 +75,8 @@ export function PulseCheckTab({
           )}
         </Box>
         {activePanel === 'pulseCheckPanel' && (
-          <Box sx={{ mt: 4 }}>
-            <>
+          <>
+            <Box sx={{ mt: 4 }}>
               <Slider {...settings}>
                 {pulseChecksData.map(pulseCheck => {
                   return (
@@ -132,6 +84,7 @@ export function PulseCheckTab({
                       key={pulseCheck.id}
                       sx={{
                         maxWidth: '26rem',
+                        width: '26rem',
                         height: '25rem',
                         background: '#ffffff',
                         border: '1px solid #E3E3E3',
@@ -181,6 +134,7 @@ export function PulseCheckTab({
                             />
                           </Box>
                         )}
+                        {/* Template Name */}
                         <Typography
                           className="templateName"
                           component="div"
@@ -188,6 +142,7 @@ export function PulseCheckTab({
                         >
                           {pulseCheck.name}
                         </Typography>
+                        {/* Template Description */}
                         <Typography
                           className="templateDescription"
                           component="div"
@@ -207,13 +162,12 @@ export function PulseCheckTab({
                   );
                 })}
               </Slider>
+            </Box>
+            <Grid item xs={2}>
               <Box
                 sx={{
-                  width: '10%',
+                  width: '100%',
                   display: 'flex',
-                  flex: '1 0 auto',
-                  alignItems: 'flex-end',
-                  justifyContent: 'space-between',
                 }}
               >
                 <ContainedButton
@@ -234,11 +188,12 @@ export function PulseCheckTab({
                     minWidth: '75px !important',
                     height: '36px !important',
                     mt: 5,
+                    ml: 6,
                   }}
                 />
               </Box>
-            </>
-          </Box>
+            </Grid>
+          </>
         )}
       </Box>
     </>

@@ -48,6 +48,78 @@ export const UNGROUPED = 'Ungrouped';
 
 export const templatesData = [
   {
+    templateId: 'simple',
+    templateName: 'Simple',
+    templateDescription: 'A classic template for retros.',
+    templateImage: '/images/defaultRetroTemplate.png',
+    checked: true,
+    columns: [
+      {
+        id: '0',
+        name: 'What went well',
+        order: 0,
+        cardColor: CARD_COLORS[0],
+        cardColorHover: CARD_HOVER_COLORS[0],
+        groupColor: GROUP_COLORS[0],
+        groupFontColor: GROUP_FONT_COLORS[0],
+        groups: [
+          {
+            id: UNGROUPED + 1,
+            name: UNGROUPED,
+            order: 1000000,
+            cards: [],
+            createdBy: 'default',
+            locked: false,
+            lockedBy: undefined,
+          },
+        ],
+        publish: false,
+      },
+      {
+        id: '1',
+        name: `What didn't go well`,
+        order: 1,
+        cardColor: CARD_COLORS[1],
+        cardColorHover: CARD_HOVER_COLORS[1],
+        groupColor: GROUP_COLORS[1],
+        groupFontColor: GROUP_FONT_COLORS[1],
+        groups: [
+          {
+            id: UNGROUPED + 2,
+            name: UNGROUPED,
+            order: 1000000,
+            cards: [],
+            createdBy: 'default',
+            locked: false,
+            lockedBy: undefined,
+          },
+        ],
+        publish: false,
+      },
+      {
+        id: '2',
+        name: 'Develop Actions',
+        order: 2,
+        cardColor: CARD_COLORS[2],
+        cardColorHover: CARD_HOVER_COLORS[2],
+        groupColor: GROUP_COLORS[2],
+        groupFontColor: GROUP_FONT_COLORS[2],
+        groups: [
+          {
+            id: UNGROUPED + 3,
+            name: UNGROUPED,
+            order: 1000000,
+            cards: [],
+            createdBy: 'default',
+            locked: false,
+            lockedBy: undefined,
+          },
+        ],
+        publish: false,
+      },
+    ],
+  },
+  {
     templateId: '4l_retrospective',
     templateName: '4L Retrospective',
     templateDescription:
@@ -266,78 +338,7 @@ export const templatesData = [
       },
     ],
   },
-  {
-    templateId: 'simple',
-    templateName: 'Simple',
-    templateDescription: 'A classic template for retros.',
-    templateImage: '/images/defaultRetroTemplate.png',
-    checked: true,
-    columns: [
-      {
-        id: '0',
-        name: 'What went well',
-        order: 0,
-        cardColor: CARD_COLORS[0],
-        cardColorHover: CARD_HOVER_COLORS[0],
-        groupColor: GROUP_COLORS[0],
-        groupFontColor: GROUP_FONT_COLORS[0],
-        groups: [
-          {
-            id: UNGROUPED + 1,
-            name: UNGROUPED,
-            order: 1000000,
-            cards: [],
-            createdBy: 'default',
-            locked: false,
-            lockedBy: undefined,
-          },
-        ],
-        publish: false,
-      },
-      {
-        id: '1',
-        name: `What didn't go well`,
-        order: 1,
-        cardColor: CARD_COLORS[1],
-        cardColorHover: CARD_HOVER_COLORS[1],
-        groupColor: GROUP_COLORS[1],
-        groupFontColor: GROUP_FONT_COLORS[1],
-        groups: [
-          {
-            id: UNGROUPED + 2,
-            name: UNGROUPED,
-            order: 1000000,
-            cards: [],
-            createdBy: 'default',
-            locked: false,
-            lockedBy: undefined,
-          },
-        ],
-        publish: false,
-      },
-      {
-        id: '2',
-        name: 'Develop Actions',
-        order: 2,
-        cardColor: CARD_COLORS[2],
-        cardColorHover: CARD_HOVER_COLORS[2],
-        groupColor: GROUP_COLORS[2],
-        groupFontColor: GROUP_FONT_COLORS[2],
-        groups: [
-          {
-            id: UNGROUPED + 3,
-            name: UNGROUPED,
-            order: 1000000,
-            cards: [],
-            createdBy: 'default',
-            locked: false,
-            lockedBy: undefined,
-          },
-        ],
-        publish: false,
-      },
-    ],
-  },
+ 
 ];
 
 export const pulseChecksData: pulseCheckInterface[] = [

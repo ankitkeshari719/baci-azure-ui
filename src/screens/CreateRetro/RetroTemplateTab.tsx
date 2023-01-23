@@ -8,6 +8,7 @@ import {
   Dialog,
   FormHelperText,
   CardActions,
+  Grid,
 } from '@mui/material';
 import '../../global.scss';
 import './styles.scss';
@@ -112,8 +113,8 @@ export function RetroTemplateTab({
           )}
         </Box>
         {activePanel === 'templatePanel' && (
-          <Box sx={{ mt: 4 }}>
-            <>
+          <>
+            <Box sx={{ mt: 4 }}>
               <Slider {...settings}>
                 {templatesData.map(template => {
                   return (
@@ -227,13 +228,12 @@ export function RetroTemplateTab({
                   );
                 })}
               </Slider>
+            </Box>
+            <Grid item xs={2}>
               <Box
                 sx={{
-                  width: '10%',
+                  width: '100%',
                   display: 'flex',
-                  flex: '1 0 auto',
-                  alignItems: 'flex-end',
-                  justifyContent: 'space-between',
                 }}
               >
                 <ContainedButton
@@ -254,11 +254,12 @@ export function RetroTemplateTab({
                     minWidth: '75px !important',
                     height: '36px !important',
                     mt: 5,
+                    ml: 6,
                   }}
                 />
               </Box>
-            </>
-          </Box>
+            </Grid>
+          </>
         )}
       </Box>
       <Dialog

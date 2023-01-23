@@ -47,8 +47,26 @@ export const settings = {
   speed: 500,
   slidesToShow: 3,
   slidesToScroll: 3,
-  className: 'center',
-  centerMode: true,
   nextArrow: <SampleNextArrow />,
   prevArrow: <SamplePrevArrow />,
+  centerPadding: '10px',
+  responsive: [
+    {
+      breakpoint: 1480,
+      settings: {
+        slidesToShow: 2,
+        slidesToScroll: 2,
+        infinite: true,
+        speed: 500,
+      },
+    },
+    {
+      breakpoint: 980,
+      settings: {
+        slidesToShow: 1,
+        slidesToScroll: 1,
+        speed: 500,
+      },
+    },
+  ],
 };

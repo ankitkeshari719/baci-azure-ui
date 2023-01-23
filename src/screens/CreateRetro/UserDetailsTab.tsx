@@ -269,34 +269,34 @@ export function UserDetailsTab({
                 </Grid>
               </FormControl>
             </Box>
-            <Box
-              sx={{
-                width: '10%',
-                display: 'flex',
-                flex: '1 0 auto',
-                alignItems: 'flex-end',
-                justifyContent: 'space-between',
-              }}
-            >
-              <ContainedButton
-                name="Finish"
-                onClick={() => onClickNext('userDetailPanel', '')}
-                style={{
-                  mt: 5,
-                  minWidth: '75px !important',
-                  height: '36px !important',
+            <Grid item xs={2}>
+              <Box
+                sx={{
+                  width: '100%',
+                  display: 'flex'
                 }}
-              />
-              <OutlinedButton
-                name="Back"
-                onClick={() => onClickBack('pulseCheckPanel')}
-                style={{
-                  minWidth: '75px !important',
-                  height: '36px !important',
-                  mt: 5,
-                }}
-              />
-            </Box>
+              >
+                <ContainedButton
+                  name="Finish"
+                  onClick={() => onClickNext('userDetailPanel', '')}
+                  style={{
+                    mt: 5,
+                    minWidth: '75px !important',
+                    height: '36px !important',
+                  }}
+                />
+                <OutlinedButton
+                  name="Back"
+                  onClick={() => onClickBack('pulseCheckPanel')}
+                  style={{
+                    minWidth: '75px !important',
+                    height: '36px !important',
+                    mt: 5,
+                    ml: 6,
+                  }}
+                />
+              </Box>
+            </Grid>
           </Box>
         )}
         <Dialog
