@@ -390,7 +390,7 @@ export const pulseChecksData: pulseCheckInterface[] = [
     name: 'Pulse Check Not Required',
     description:
       'An oldie but a goodie, also known as the PPT Framework created in the 60s, it has long been the benchmark to understanding workforce management.',
-    pulseCheckImage: '/images/coming_soon.png',
+    pulseCheckImage: '/images/PulseCheckNotRequired.png',
     checked: false,
     value: [],
     valueDescription: [],
