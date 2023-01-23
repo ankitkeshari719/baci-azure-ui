@@ -30,6 +30,7 @@
     "react-countdown": "^2.3.2",
     "react-dom": "^17.0.2",
     "react-draggable": "^4.4.4",
+    "react-editext": "^5.1.0",
     "react-jss": "^10.9.2",
     "react-lazy-load-image-component": "^1.5.6",
     "react-router-dom": "^6.2.2",

@@ -125,7 +125,7 @@ export function CreateRetroWithTemplatePage({
     setSelectedTemplate(selectedTemplateData);
   }
 
-  function handleSelectClick(selectedTemplateId: string) {
+  function handleTemplateSelectClick(selectedTemplateId: string) {
     let data: any = templates?.map(template => {
       if (template.templateId === selectedTemplateId) {
         template.checked = true;
@@ -327,8 +327,9 @@ export function CreateRetroWithTemplatePage({
           onClickBack={onClickBack}
           selectedTemplate={selectedTemplate}
           handleCheckedTemplate={handleCheckedTemplate}
-          handleSelectClick={handleSelectClick}
+          handleTemplateSelectClick={handleTemplateSelectClick}
           templates={templates}
+          setSelectedTemplate={setSelectedTemplate}
         />
         <PulseCheckTab
           activePanel={activePanel}

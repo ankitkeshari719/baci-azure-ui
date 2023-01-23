@@ -67,7 +67,7 @@ const useStyles = createUseStyles({
     '& .slick-list': {
       marginLeft: '100px !important',
       marginRight: '100px  !important',
-      padding: '0px  !important'
+      padding: '0px  !important',
     },
   },
 });
@@ -79,7 +79,8 @@ type Props = {
   handleCheckedTemplate: (selectedPulseCheck: any) => void;
   onClickNext: (currentPanel: string, nextPanel: string) => void;
   onClickBack: (previousPanel: string) => void;
-  handleSelectClick: (selectedTemplateId: string) => void;
+  handleTemplateSelectClick: (selectedTemplateId: string) => void;
+  setSelectedTemplate: (selectedTemplate: any) => void;
 };
 
 export function RetroTemplateTab({
@@ -88,12 +89,14 @@ export function RetroTemplateTab({
   handleCheckedTemplate,
   onClickNext,
   onClickBack,
-  handleSelectClick,
+  handleTemplateSelectClick,
   templates,
+  setSelectedTemplate,
 }: Props) {
   const [openLearnMoreDialog, setOpenLearnMoreDialog] = React.useState(false);
   const [openCustomTemplateDialog, setOpenCustomTemplateDialog] =
     React.useState(false);
+  const [isTemplateCustomized, setIsTemplateCustomized] = React.useState(false);
   const [height, setHeight] = React.useState(0);
   const classes = useStyles();
 
@@ -170,15 +173,17 @@ export function RetroTemplateTab({
               >
                 {selectedTemplate?.templateName + ' Retro Template'}
               </Box>
-              {/* <Box
-                className="timeFrameSummary"
-                sx={{
-                  color: '#4E4E4E !important',
-                  ml: 5,
-                }}
-              >
-                Customized
-              </Box> */}
+              {isTemplateCustomized && (
+                <Box
+                  className="timeFrameSummary"
+                  sx={{
+                    color: '#4E4E4E !important',
+                    ml: 5,
+                  }}
+                >
+                  Customized
+                </Box>
+              )}
             </>
           ) : (
             <Typography
@@ -353,7 +358,7 @@ export function RetroTemplateTab({
           selectedTemplate={selectedTemplate}
           closeLearnMoreDialog={closeLearnMoreDialog}
           handleCustomTemplateDialog={handleCustomTemplateDialog}
-          handleSelectClick={handleSelectClick}
+          handleTemplateSelectClick={handleTemplateSelectClick}
         />
       </Dialog>
       <Dialog
@@ -364,7 +369,9 @@ export function RetroTemplateTab({
         <CustomizeTemplate
           closeCustomTemplateDialog={closeCustomTemplateDialog}
           selectedTemplate={selectedTemplate}
-          handleSelectClick={handleSelectClick}
+          handleTemplateSelectClick={handleTemplateSelectClick}
+          setSelectedTemplate={setSelectedTemplate}
+          setIsTemplateCustomized={setIsTemplateCustomized}
         />
       </Dialog>
     </>

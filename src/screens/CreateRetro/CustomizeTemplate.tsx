@@ -4,6 +4,7 @@ import {
   Box,
   Button,
   Grid,
+  styled,
   TextField,
   Toolbar,
   Typography,
@@ -11,19 +12,61 @@ import {
 import '../../global.scss';
 import './styles.scss';
 import { TopBar } from './TopBar';
-import Slider from 'react-slick';
 import * as Icons from 'heroicons-react';
+import EdiText from 'react-editext';
+
+const StyledEdiText = styled(EdiText)`
+  button {
+    border-radius: 5px;
+  }
+  button[editext='edit-button'] {
+    color: #000;
+    background: #ffffff;
+    width: 50px;
+  }
+  button[editext='save-button'] {
+    width: 50px;
+    background: #ffffff;
+    &:hover {
+      background: greenyellow;
+    }
+  }
+  button[editext='cancel-button'] {
+    width: 50px;
+    background: #ffffff;
+    &:hover {
+      background: crimson;
+      color: #fff;
+    }
+  }
+  div[editext='view-container'],
+  div[editext='edit-container'] {
+    font-family: 'Poppins';
+    font-style: normal;
+    font-weight: 600;
+    font-size: 16px;
+    line-height: 20px;
+    display: flex;
+    align-items: center;
+    letter-spacing: 0.6px;
+    padding: 15px;
+  }
+`;
 
 type Props = {
   closeCustomTemplateDialog: () => void;
   selectedTemplate: any;
-  handleSelectClick: (selectedTemplateId: string) => void;
+  handleTemplateSelectClick: (selectedTemplateId: string) => void;
+  setIsTemplateCustomized: (isTemplateCustomized: boolean) => void;
+  setSelectedTemplate: (selectedTemplate: any) => void;
 };
 
 export function CustomizeTemplate({
   closeCustomTemplateDialog,
   selectedTemplate,
-  handleSelectClick,
+  handleTemplateSelectClick,
+  setSelectedTemplate,
+  setIsTemplateCustomized
 }: Props) {
   const [tempSelectedTemplate, setTempSelectedTemplate] = React.useState<any>();
 
@@ -41,7 +84,9 @@ export function CustomizeTemplate({
       }
       return column;
     });
+    setIsTemplateCustomized(true);
     setTempSelectedTemplate({ ...tempSelectedTemplate, columns: [...data] });
+    setSelectedTemplate(tempSelectedTemplate);
   };
 
   return (
@@ -89,7 +134,7 @@ export function CustomizeTemplate({
                 autoFocus
                 variant="contained"
                 className="saveButton"
-                onClick={() => handleSelectClick(selectedTemplate.templateId)}
+                onClick={() => handleTemplateSelectClick(selectedTemplate.templateId)}
               >
                 <Typography className="saveButtonText" component="span">
                   Select
@@ -99,72 +144,124 @@ export function CustomizeTemplate({
           </AppBar>
         </Grid>
         {/* Columns */}
-        <Grid item xs={12} sx={{ mt: 4 }}>
-          <Box component="div" whiteSpace="normal">
-            {tempSelectedTemplate &&
-              tempSelectedTemplate.columns.map((column: any) => {
-                return (
+        <Box
+          sx={{
+            width: '100%',
+            display: 'grid',
+            gridTemplateColumns: 'repeat(3, 1fr)',
+            gap: 1,
+          }}
+        >
+          {tempSelectedTemplate &&
+            tempSelectedTemplate.columns.map((column: any) => {
+              return (
+                <Box
+                  key={column.id}
+                  whiteSpace="normal"
+                  sx={{
+                    width: '376px !important',
+                    height: '500px',
+                    display: 'flex',
+                    justifyContent: 'center',
+                    alignItems: 'flex-start',
+                    background: column.cardColor,
+                    border: '1px solid ' + column.groupFontColor,
+                    borderRadius: '8px',
+                  }}
+                >
                   <Box
-                    key={column.id}
-                    component="div"
                     whiteSpace="normal"
                     sx={{
-                      width: '376px !important',
-                      height: '500px',
+                      width: '100%',
+                      height: '48px',
                       display: 'flex',
                       justifyContent: 'center',
-                      alignItems: 'flex-start',
-                      background: column.cardColor,
-                      border: '1px solid ' + column.groupFontColor,
-                      borderRadius: '8px',
+                      alignItems: 'center',
+                      borderRadius: '9px 9px 0px 0px',
+                      background: column.groupColor,
                     }}
                   >
-                    <Box
-                      component="div"
-                      whiteSpace="normal"
-                      sx={{
-                        width: '100%',
-                        height: '48px',
-                        display: 'flex',
-                        justifyContent: 'center',
-                        alignItems: 'center',
-                        borderRadius: '9px 9px 0px 0px',
-                        background: column.groupColor,
+                    <StyledEdiText
+                      type="text"
+                      value={column.name}
+                      showButtonsOnHover
+                      onSave={value => handleColumnNameChange(value, column.id)}
+                      validation={val => val.length <= 35}
+                      inputProps={{
+                        style: {
+                          color: column.groupFontColor + '!important',
+                          fontSize: '16px',
+                          fontWeight: 600,
+                          fontFamily: 'Poppins',
+                          fontStyle: 'normal',
+                          lineHeight: '20px',
+                          display: 'flex',
+                          alignItems: 'center',
+                          letterSpacing: '0.6px',
+                          borderRadius: '8px',
+                        },
                       }}
-                    >
-                      <TextField
-                        maxRows={2}
-                        inputProps={{ maxLength: 150 }}
-                        multiline
-                        fullWidth
-                        value={column.name}
-                        sx={{
-                          fieldset: { border: 'none' },
-                          textarea: {
-                            color: column.groupFontColor + '!important',
-                            fontSize: '16px',
-                            fontWeight: 600,
-                            fontFamily: 'Poppins',
-                            fontStyle: 'normal',
-                            lineHeight: '20px',
-                            display: 'flex',
-                            alignItems: 'center',
-                            letterSpacing: '0.6px',
-                          },
-                        }}
-                        onChange={e =>
-                          handleColumnNameChange(
-                            e.currentTarget.value,
-                            column.id
-                          )
-                        }
-                      />
-                    </Box>
+                      hideIcons={true}
+                      editButtonContent={
+                        <Icons.PencilOutline
+                          size={20}
+                          style={{
+                            color: '#000000',
+                            fontSize: '14px',
+                            cursor: 'pointer',
+                          }}
+                        />
+                      }
+                      cancelButtonContent={
+                        <Icons.XOutline
+                          size={20}
+                          style={{
+                            color: '#000000',
+                            fontSize: '14px',
+                            cursor: 'pointer',
+                          }}
+                        />
+                      }
+                      saveButtonContent={
+                        <Icons.Check
+                          size={20}
+                          style={{
+                            color: '#000000',
+                            fontSize: '14px',
+                            cursor: 'pointer',
+                          }}
+                        />
+                      }
+                    />
+                    {/* <TextField
+                      maxRows={2}
+                      inputProps={{ maxLength: 150 }}
+                      multiline
+                      fullWidth
+                      value={column.name}
+                      sx={{
+                        fieldset: { border: 'none' },
+                        textarea: {
+                          color: column.groupFontColor + '!important',
+                          fontSize: '16px',
+                          fontWeight: 600,
+                          fontFamily: 'Poppins',
+                          fontStyle: 'normal',
+                          lineHeight: '20px',
+                          display: 'flex',
+                          alignItems: 'center',
+                          letterSpacing: '0.6px',
+                        },
+                      }}
+                      onChange={e =>
+                        handleColumnNameChange(e.currentTarget.value, column.id)
+                      }
+                    /> */}
                   </Box>
-                );
-              })}
-          </Box>
-        </Grid>
+                </Box>
+              );
+            })}
+        </Box>
       </Grid>
     </Box>
   );
