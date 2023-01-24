@@ -62,8 +62,8 @@ function SamplePrevArrow(props: any) {
 const useStyles = createUseStyles({
   sliderContainer: {
     '& .slick-list': {
-      marginLeft: '100px !important',
-      marginRight: '100px  !important',
+      marginLeft: '60px !important',
+      marginRight: '60px  !important',
       padding: '0px  !important',
     },
   },
@@ -164,22 +164,18 @@ export function PulseCheckTab({
                     <Card
                       key={pulseCheck.id}
                       sx={{
-                        height: height / 2 + 100 + 'px',
-                        width: 'calc(100% - 20px) !important',
-                        background: '#ffffff',
-                        border: '1px solid #E3E3E3',
+                        height: height / 2 + 20 + 'px',
+                        width: 'calc(100% - 50px) !important',
+                        background: pulseCheck.checked
+                          ? 'rgba(206, 239, 255, 0.4)'
+                          : '#ffffff',
+                        border: pulseCheck.checked
+                          ? '2px solid #2C69A1'
+                          : '1px solid #E3E3E3',
                         boxShadow: 'none',
                         borderRadius: '2px',
                         '&:hover': {
                           backgroundColor: 'rgba(206, 239, 255, 0.4)',
-                        },
-                        '& .MuiCard-root': {
-                          display: 'flex !important',
-                          flexDirection: 'column !important',
-                          justifyContent: 'space-between !important',
-                        },
-                        '& .MuiCardActions-root': {
-                          marginTop: 'auto !important',
                         },
                       }}
                       onClick={() => handlePulseCheck(pulseCheck)}
@@ -238,20 +234,22 @@ export function PulseCheckTab({
                           {pulseCheck.description}
                         </Typography>
                       </CardContent>
-                      <CardActions
-                        sx={{
-                          position: 'absolute',
-                          bottom: '20px',
-                          padding: '16px',
-                          width: 'calc(100% - 20px) !important',
-                        }}
-                      >
-                        <Button size="small" sx={{ padding: '0px' }}>
-                          <Typography className="templateLink">
-                            Learn More
-                          </Typography>
-                        </Button>
-                      </CardActions>
+                      {pulseCheck.id !== 'pulse_check_not_req' && (
+                        <CardActions
+                          sx={{
+                            position: 'absolute',
+                            bottom: '20px',
+                            padding: '16px',
+                            width: 'calc(100% - 20px) !important',
+                          }}
+                        >
+                          <Button size="small" sx={{ padding: '0px' }}>
+                            <Typography className="templateLink">
+                              Learn More
+                            </Typography>
+                          </Button>
+                        </CardActions>
+                      )}
                     </Card>
                   );
                 })}

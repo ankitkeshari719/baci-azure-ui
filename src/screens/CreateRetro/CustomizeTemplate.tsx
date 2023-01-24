@@ -21,13 +21,13 @@ const StyledEdiText = styled(EdiText)`
   }
   button[editext='edit-button'] {
     color: #000;
-    background: #ffffff;
+    background: #ffffff00;
     width: 50px;
     border: none;
   }
   button[editext='save-button'] {
     width: 50px;
-    background: #ffffff;
+    background: #ffffff00;
     border: none;
     &:hover {
       background: greenyellow;
@@ -35,7 +35,7 @@ const StyledEdiText = styled(EdiText)`
   }
   button[editext='cancel-button'] {
     width: 50px;
-    background:#ffffff;
+    background:#ffffff00;
     border: none;
     &:hover {
       background: crimson;

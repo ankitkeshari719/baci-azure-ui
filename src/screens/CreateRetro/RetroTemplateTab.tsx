@@ -65,8 +65,8 @@ function SamplePrevArrow(props: any) {
 const useStyles = createUseStyles({
   sliderContainer: {
     '& .slick-list': {
-      marginLeft: '100px !important',
-      marginRight: '100px  !important',
+      marginLeft: '60px !important',
+      marginRight: '60px  !important',
       padding: '0px  !important',
     },
   },
@@ -208,22 +208,18 @@ export function RetroTemplateTab({
                     <Card
                       key={template.templateId}
                       sx={{
-                        height: height / 2 + 100 + 'px',
-                        width: 'calc(100% - 20px) !important',
-                        background: '#ffffff',
-                        border: '1px solid #E3E3E3',
+                        height: height / 2 + 20 + 'px',
+                        width: 'calc(100% - 50px) !important',
+                        background: template.checked
+                          ? 'rgba(206, 239, 255, 0.4)'
+                          : '#ffffff',
+                        border: template.checked
+                          ? '2px solid #2C69A1'
+                          : '1px solid #E3E3E3',
                         boxShadow: 'none',
                         borderRadius: '2px',
                         '&:hover': {
                           backgroundColor: 'rgba(206, 239, 255, 0.4)',
-                        },
-                        '& .MuiCard-root': {
-                          display: 'flex !important',
-                          flexDirection: 'column !important',
-                          justifyContent: 'space-between !important',
-                        },
-                        '& .MuiCardActions-root': {
-                          marginTop: 'auto !important',
                         },
                       }}
                       onClick={() => handleCheckedTemplate(template)}
@@ -309,7 +305,7 @@ export function RetroTemplateTab({
                             size="small"
                             className="customButton"
                             onClick={handleCustomTemplateDialog}
-                            sx={{marginLeft: '20px'}}
+                            sx={{ marginLeft: '20px' }}
                           >
                             <Typography className="customText">
                               Customize
