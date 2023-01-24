@@ -52,9 +52,9 @@ const StyledEdiText = styled(EdiText)`
     }
   }
   div[editext='main-container'] {
-    width: 100%;
-    padding-left: 20px;
-    padding-right: 20px;
+    width: 100% !important;
+    padding-left: 20px !important;
+    padding-right: 20px !important;
   }
   div[editext='view-container'],
   div[editext='edit-container'] {

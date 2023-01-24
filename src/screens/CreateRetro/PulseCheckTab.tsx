@@ -164,6 +164,9 @@ export function PulseCheckTab({
                     <Card
                       key={pulseCheck.id}
                       sx={{
+                        display: 'flex !important',
+                        flexDirection: 'column !important',
+                        justifyContent: 'space-between !important',
                         height: height / 2 + 20 + 'px',
                         width: 'calc(100% - 50px) !important',
                         background: pulseCheck.checked
@@ -236,11 +239,9 @@ export function PulseCheckTab({
                       </CardContent>
                       {pulseCheck.id !== 'pulse_check_not_req' && (
                         <CardActions
+                          disableSpacing
                           sx={{
-                            position: 'absolute',
-                            bottom: '20px',
                             padding: '16px',
-                            width: 'calc(100% - 20px) !important',
                           }}
                         >
                           <Button size="small" sx={{ padding: '0px' }}>

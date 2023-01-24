@@ -208,6 +208,9 @@ export function RetroTemplateTab({
                     <Card
                       key={template.templateId}
                       sx={{
+                        display: 'flex !important',
+                        flexDirection: 'column !important',
+                        justifyContent: 'space-between !important',
                         height: height / 2 + 20 + 'px',
                         width: 'calc(100% - 50px) !important',
                         background: template.checked
@@ -277,41 +280,36 @@ export function RetroTemplateTab({
                         </Typography>
                       </CardContent>
                       <CardActions
+                        disableSpacing
                         sx={{
-                          position: 'absolute',
-                          bottom: '20px',
                           padding: '16px',
                         }}
                       >
-                        <Box
-                          sx={{
-                            display: 'flex',
-                            flex: '1 0 auto',
-                            alignItems: 'flex-end',
-                            justifyContent: 'space-between',
-                          }}
-                        >
-                          <Button
-                            size="small"
-                            onClick={handleLearnMoreDialog}
-                            sx={{ padding: '0px' }}
-                          >
-                            <Typography className="templateLink">
-                              Learn More
-                            </Typography>
-                          </Button>
-                          <Button
-                            variant="outlined"
-                            size="small"
-                            className="customButton"
-                            onClick={handleCustomTemplateDialog}
-                            sx={{ marginLeft: '20px' }}
-                          >
-                            <Typography className="customText">
-                              Customize
-                            </Typography>
-                          </Button>
-                        </Box>
+                        <Grid item xs={12}>
+                          <Box sx={{ float: 'left' }}>
+                            <Button
+                              size="small"
+                              onClick={handleLearnMoreDialog}
+                              sx={{ padding: '0px' }}
+                            >
+                              <Typography className="templateLink">
+                                Learn More
+                              </Typography>
+                            </Button>
+                          </Box>
+                          <Box sx={{ float: 'right' }}>
+                            <Button
+                              variant="outlined"
+                              size="small"
+                              className="customButton"
+                              onClick={handleCustomTemplateDialog}
+                            >
+                              <Typography className="customText">
+                                Customize
+                              </Typography>
+                            </Button>
+                          </Box>
+                        </Grid>
                       </CardActions>
                     </Card>
                   );
