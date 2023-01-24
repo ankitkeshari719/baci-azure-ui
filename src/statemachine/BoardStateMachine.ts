@@ -694,6 +694,7 @@ export const processAction = (
     }
     if (template != undefined && pulseCheck != null) {
       state.template = template;
+      state.columns = template.columns;
     }
     state.lastUpdatedBy = userId;
   };

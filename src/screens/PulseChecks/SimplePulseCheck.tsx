@@ -65,7 +65,7 @@ export default function SimplePulseCheck({ pulseCheck }: Props) {
   } = React.useContext(BoardContext);
 
   const [showBlankErrors, setShowBlankErrors] = React.useState(false);
-  const qs = pulseCheck && pulseCheck.value.map((q: string) => React.useState(-1));
+  const selectedQuestions = pulseCheck && pulseCheck.value.map((q: string) => React.useState(-1));
   const [scrollDownButton, setScrollDownButton] = React.useState(true);
   const [showSharePanel, setShowSharePanel] = React.useState(false);
   const [pulse1, setPulse1] = React.useState(false);
@@ -127,7 +127,7 @@ export default function SimplePulseCheck({ pulseCheck }: Props) {
   }, [users, user?.id && user?.id != '']);
 
   React.useEffect(() => {
-    qs.forEach((s: ((arg0: number) => void)[]) => {
+    selectedQuestions.forEach((s: ((arg0: number) => void)[]) => {
       s[1](-1);
     });
   }, [fullPulseCheck]);
@@ -147,11 +147,11 @@ export default function SimplePulseCheck({ pulseCheck }: Props) {
   };
 
   function setPulseBar(value: any) {
-    if ((value === 0 && pulse1 == false) || qs[value][0] !== -1) {
+    if ((value === 0 && pulse1 == false) || selectedQuestions[value][0] !== -1) {
       setPulse1(true);
-    } else if ((value = (1 && pulse2 == false) || qs[value][0] !== -1)) {
+    } else if ((value = (1 && pulse2 == false) || selectedQuestions[value][0] !== -1)) {
       setPulse2(true);
-    } else if ((value = (2 && pulse3 == false) || qs[value][0] !== -1)) {
+    } else if ((value = (2 && pulse3 == false) || selectedQuestions[value][0] !== -1)) {
       setPulse3(true);
     }
   }
@@ -176,12 +176,11 @@ export default function SimplePulseCheck({ pulseCheck }: Props) {
 
   const submitPulseCheck = () => {
     const someBlank =
-      qs.findIndex((q: number[]) => q[0] === -1) !== -1 &&
-      qs.findIndex((q: number[]) => q[0] === -1) < pulseCheck && pulseCheck.value.length;
+      selectedQuestions.findIndex((q: number[]) => q[0] === -1) !== -1 
     const submitter = async () => {
       // Submit
       await saveAndProcessAction(BoardActionType.SUBMIT_PULSE_CHECK, {
-        questions: qs.map((q: any[], i: any) => ({ id: String(i), entry: q[0] })),
+        questions: selectedQuestions.map((q: any[], i: any) => ({ id: String(i), entry: q[0] })),
       });
       setConfirmAction(undefined);
       dispatch({
@@ -380,7 +379,7 @@ export default function SimplePulseCheck({ pulseCheck }: Props) {
                           height: '40px',
                         }}
                         onClick={() => {
-                          qs[index][1](1);
+                          selectedQuestions[index][1](1);
                           setPulseBar(index);
                         }}
                       ></Box>
@@ -391,7 +390,7 @@ export default function SimplePulseCheck({ pulseCheck }: Props) {
                           marginTop: !isXsUp ? '-50px' : '-45px',
                           width: !isXsUp ? '64px' : '52px',
                           height: !isXsUp ? '64px' : '52px',
-                          display: qs[index][0] === 1 ? 'block' : 'none',
+                          display: selectedQuestions[index][0] === 1 ? 'block' : 'none',
                         }}
                       />
                     </Box>
@@ -410,7 +409,7 @@ export default function SimplePulseCheck({ pulseCheck }: Props) {
                           marginRight: '32px',
                         }}
                         onClick={() => {
-                          qs[index][1](2);
+                          selectedQuestions[index][1](2);
                           setPulseBar(index);
                         }}
                       ></Box>
@@ -421,7 +420,7 @@ export default function SimplePulseCheck({ pulseCheck }: Props) {
                           marginTop: !isXsUp ? '-50px' : '-45px',
                           width: !isXsUp ? '64px' : '52px',
                           height: !isXsUp ? '64px' : '52px',
-                          display: qs[index][0] === 2 ? 'block' : 'none',
+                          display: selectedQuestions[index][0] === 2 ? 'block' : 'none',
                         }}
                       ></img>
                     </Box>
@@ -439,7 +438,7 @@ export default function SimplePulseCheck({ pulseCheck }: Props) {
                           height: '40px',
                         }}
                         onClick={() => {
-                          qs[index][1](3);
+                          selectedQuestions[index][1](3);
                           setPulseBar(index);
                         }}
                       ></Box>
@@ -450,7 +449,7 @@ export default function SimplePulseCheck({ pulseCheck }: Props) {
                           marginTop: !isXsUp ? '-50px' : '-45px',
                           width: isXsUp ? '52px' : '64px',
                           height: isXsUp ? '52px' : '64px',
-                          display: qs[index][0] === 3 ? 'block' : 'none',
+                          display: selectedQuestions[index][0] === 3 ? 'block' : 'none',
                         }}
                       ></img>
                     </Box>

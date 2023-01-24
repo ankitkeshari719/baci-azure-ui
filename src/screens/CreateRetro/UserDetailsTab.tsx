@@ -28,7 +28,7 @@ const styles = {
       fontSize: '16px',
       lineHeight: '20px',
       letterSpacing: '0.6px',
-      color: 'rgba(0, 0, 0, 0.87) !important',
+      color: 'rgba(0, 0, 0, 0.6) !important',
     },
     '& .MuiFormLabel-root-MuiInputLabel-root.Mui-focused': {
       fontFamily: 'Poppins',
