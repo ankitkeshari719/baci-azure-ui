@@ -3,6 +3,7 @@ import { Box, Link, Typography } from '@mui/material';
 import { GlobalContext } from '../../contexts/GlobalContext';
 import { EmailShareButton } from 'react-share';
 import * as Icons from 'heroicons-react';
+import './styles.scss';
 
 export function ShareParticipants() {
   const [global, dispatch] = React.useContext(GlobalContext);

@@ -1,11 +1,17 @@
 import { BrowserRouter, Outlet, Route, Routes } from 'react-router-dom';
-import Board from './screens/Board';
+import { SnackMessage } from './elements/SnackMessage';
+import { ThemeProvider } from '@mui/material/styles';
+import theme from './theme/theme';
+import { MsalProvider, useMsal } from '@azure/msal-react';
+import { IPublicClientApplication } from '@azure/msal-browser';
+
 import { BoardProvider } from './contexts/BoardContext';
 import { ConfirmProvider } from './contexts/ConfirmContext';
 import { ErrorBoundary } from './contexts/ErrorBoundary';
 import { ErrorProvider } from './contexts/ErrorContext';
-import Feedback from './screens/Feedback';
 import { GlobalProvider } from './contexts/GlobalContext';
+import { SocketProvider } from './contexts/SocketProvider';
+
 import { Offboarding } from './screens/Offboarding';
 import { LandingPage } from './screens/LandingPage';
 import { RetroDetails } from './screens/RetroDetails';
@@ -13,23 +19,15 @@ import { ParticipantWaitingPage } from './screens/ParticipantWaitingPage';
 import { CreateNewRetro } from './screens/CreateRetroPage';
 import { AvatarNamePage } from './screens/AvatarNamePage';
 import { CreateRetroMain } from './screens/CreateRetro/CreateRetroMain';
-import PulseCheck from './screens/PulseCheck';
-import ReportScreen from './screens/ReportScreen';
-import { SnackMessage } from './elements/SnackMessage';
-import { ThemeProvider } from '@mui/material/styles';
-import theme from './theme/theme';
-
-import {
-  MsalProvider,
-  useMsal,
-} from '@azure/msal-react';
-import {
-  IPublicClientApplication,
-} from '@azure/msal-browser';
-import { SocketProvider } from './contexts/SocketProvider';
 import { StartRetro } from './screens/StartRetro';
 import { Grid } from '@mui/material';
 import { PageNotFound } from './screens/PageNotFound';
+import Feedback from './screens/Feedback';
+import PulseCheck from './screens/PulseCheck';
+import ReportScreen from './screens/ReportScreen';
+import Board from './screens/Board';
+import PulseCheckMain from './screens/PulseChecks/PulseCheckMain';
+import SimplePulseCheck from './screens/PulseChecks/SimplePulseCheck';
 
 type AppProps = {
   instance: IPublicClientApplication;
@@ -95,7 +93,7 @@ export default function App({ instance }: AppProps) {
 
                           <Route
                             path=":id/pulsecheck"
-                            element={<PulseCheck />}
+                            element={<PulseCheckMain />}
                           />
                           <Route path=":id/feedback" element={<Feedback />} />
                           <Route path=":id" element={<Board />} />

@@ -103,6 +103,7 @@ export default function PulseCheck() {
     }
 
     const gPulseCheckState = sessionStorage.getItem('pulseCheckState');
+
     if (gPulseCheckState) {
       const parseGPulseCheckState = JSON.parse(gPulseCheckState);
       if (

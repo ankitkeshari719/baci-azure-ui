@@ -772,7 +772,6 @@ export function RetroColumn({
             }}
           >
             <ColumnHeader
-
               column={column}
               columnId={columnId}
               columnName={columnName}

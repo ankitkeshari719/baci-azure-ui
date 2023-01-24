@@ -10,14 +10,14 @@ type Props = {
   selectedTemplate: any;
   closeLearnMoreDialog: () => void;
   handleCustomTemplateDialog: () => void;
-  handleSelectClick: (selectedTemplateId: string) => void;
+  handleTemplateSelectClick: (selectedTemplateId: string) => void;
 };
 
 export function LearnMore({
   selectedTemplate,
   closeLearnMoreDialog,
   handleCustomTemplateDialog,
-  handleSelectClick,
+  handleTemplateSelectClick,
 }: Props) {
   // Function to handle the custom button click
   const onClickCustomButton = () => {
@@ -81,7 +81,7 @@ export function LearnMore({
                 variant="contained"
                 className="saveButton"
                 sx={{ ml: 2 }}
-                onClick={() => handleSelectClick(selectedTemplate.templateId)}
+                onClick={() => handleTemplateSelectClick(selectedTemplate.templateId)}
               >
                 <Typography className="saveButtonText" component="span">
                   Select

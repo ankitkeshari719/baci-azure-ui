@@ -387,10 +387,10 @@ export const pulseChecksData: pulseCheckInterface[] = [
   },
   {
     id: 'pulse_check_not_req',
-    name: 'Pulse Check Not Required',
+    name: 'Skip Pulse Check',
     description:
-      'An oldie but a goodie, also known as the PPT Framework created in the 60s, it has long been the benchmark to understanding workforce management.',
-    pulseCheckImage: '/images/coming_soon.png',
+      'Regularly using and tracking the pulse check is recommended but sometimes all you want to do is get straight into the retro board.',
+    pulseCheckImage: '/images/PulseCheckNotRequired.png',
     checked: false,
     value: [],
     valueDescription: [],

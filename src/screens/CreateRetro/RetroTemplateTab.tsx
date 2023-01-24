@@ -6,19 +6,71 @@ import {
   CardContent,
   Box,
   Dialog,
-  FormHelperText,
   CardActions,
+  Grid,
 } from '@mui/material';
 import '../../global.scss';
 import './styles.scss';
 import Slider from 'react-slick';
 import { templatesData } from './const';
-import { settings } from './SliderConst';
 import { LearnMore } from './LearnMore';
 import { ContainedButton } from '../../components/ContainedButton';
 import { OutlinedButton } from '../../components/OutlinedButton';
 import { CustomizeTemplate } from './CustomizeTemplate';
 import * as Icons from 'heroicons-react';
+import { createUseStyles } from 'react-jss';
+
+function SampleNextArrow(props: any) {
+  const { className, style, onClick } = props;
+  return (
+    <Icons.ChevronRight
+      size={32}
+      className={className}
+      style={{
+        ...style,
+        width: '42px',
+        height: '42px',
+        display: 'block',
+        right: '0px',
+        color: '#0F172A',
+        fontSize: '14px',
+        cursor: 'pointer',
+      }}
+      onClick={onClick}
+    />
+  );
+}
+
+function SamplePrevArrow(props: any) {
+  const { className, style, onClick } = props;
+  return (
+    <Icons.ChevronLeft
+      size={32}
+      className={className}
+      style={{
+        ...style,
+        width: '42px',
+        height: '42px',
+        display: 'block',
+        left: '0px',
+        color: '#0F172A',
+        fontSize: '14px',
+        cursor: 'pointer',
+      }}
+      onClick={onClick}
+    />
+  );
+}
+
+const useStyles = createUseStyles({
+  sliderContainer: {
+    '& .slick-list': {
+      marginLeft: '60px !important',
+      marginRight: '60px  !important',
+      padding: '0px  !important',
+    },
+  },
+});
 
 type Props = {
   activePanel: string;
@@ -27,7 +79,8 @@ type Props = {
   handleCheckedTemplate: (selectedPulseCheck: any) => void;
   onClickNext: (currentPanel: string, nextPanel: string) => void;
   onClickBack: (previousPanel: string) => void;
-  handleSelectClick: (selectedTemplateId: string) => void;
+  handleTemplateSelectClick: (selectedTemplateId: string) => void;
+  setSelectedTemplate: (selectedTemplate: any) => void;
 };
 
 export function RetroTemplateTab({
@@ -36,13 +89,46 @@ export function RetroTemplateTab({
   handleCheckedTemplate,
   onClickNext,
   onClickBack,
-  handleSelectClick,
+  handleTemplateSelectClick,
   templates,
+  setSelectedTemplate,
 }: Props) {
   const [openLearnMoreDialog, setOpenLearnMoreDialog] = React.useState(false);
   const [openCustomTemplateDialog, setOpenCustomTemplateDialog] =
     React.useState(false);
+  const [isTemplateCustomized, setIsTemplateCustomized] = React.useState(false);
   const [height, setHeight] = React.useState(0);
+  const classes = useStyles();
+
+  const settings = {
+    infinite: true,
+    speed: 500,
+    slidesToShow: 3,
+    slidesToScroll: 3,
+    nextArrow: <SampleNextArrow />,
+    prevArrow: <SamplePrevArrow />,
+    className: classes.sliderContainer,
+    centerMode: true,
+    responsive: [
+      {
+        breakpoint: 1700,
+        settings: {
+          slidesToShow: 2,
+          slidesToScroll: 2,
+          infinite: true,
+          speed: 500,
+        },
+      },
+      {
+        breakpoint: 1260,
+        settings: {
+          slidesToShow: 1,
+          slidesToScroll: 1,
+          speed: 500,
+        },
+      },
+    ],
+  };
 
   React.useEffect(() => {
     setHeight(window.innerHeight);
@@ -87,15 +173,17 @@ export function RetroTemplateTab({
               >
                 {selectedTemplate?.templateName + ' Retro Template'}
               </Box>
-              {/* <Box
-                className="timeFrameSummary"
-                sx={{
-                  color: '#4E4E4E !important',
-                  ml: 5,
-                }}
-              >
-                Customized
-              </Box> */}
+              {isTemplateCustomized && (
+                <Box
+                  className="timeFrameSummary"
+                  sx={{
+                    color: '#4E4E4E !important',
+                    ml: 5,
+                  }}
+                >
+                  Customized
+                </Box>
+              )}
             </>
           ) : (
             <Typography
@@ -112,21 +200,28 @@ export function RetroTemplateTab({
           )}
         </Box>
         {activePanel === 'templatePanel' && (
-          <Box sx={{ mt: 4 }}>
-            <>
+          <>
+            <Box sx={{ mt: 4 }}>
               <Slider {...settings}>
                 {templatesData.map(template => {
                   return (
                     <Card
                       key={template.templateId}
                       sx={{
-                        maxWidth: '420px',
-                        height: '400px',
-                        background: '#ffffff',
-                        border: '1px solid #E3E3E3',
+                        display: 'flex !important',
+                        flexDirection: 'column !important',
+                        justifyContent: 'space-between !important',
+                        minHeight: '440px',
+                        height: height / 2 + 20 + 'px',
+                        width: 'calc(100% - 50px) !important',
+                        background: template.checked
+                          ? 'rgba(206, 239, 255, 0.4)'
+                          : '#ffffff',
+                        border: template.checked
+                          ? '2px solid #2C69A1'
+                          : '1px solid #E3E3E3',
                         boxShadow: 'none',
                         borderRadius: '2px',
-                        margin: '8px',
                         '&:hover': {
                           backgroundColor: 'rgba(206, 239, 255, 0.4)',
                         },
@@ -186,54 +281,47 @@ export function RetroTemplateTab({
                         </Typography>
                       </CardContent>
                       <CardActions
+                        disableSpacing
                         sx={{
-                          position: 'absolute',
-                          bottom: '20px',
-                          width: '388px',
                           padding: '16px',
                         }}
                       >
-                        <Box
-                          sx={{
-                            display: 'flex',
-                            flex: '1 0 auto',
-                            alignItems: 'flex-end',
-                            justifyContent: 'space-between',
-                            mt: 5,
-                          }}
-                        >
-                          <Button
-                            size="small"
-                            onClick={handleLearnMoreDialog}
-                            sx={{ padding: '0px' }}
-                          >
-                            <Typography className="templateLink">
-                              Learn More
-                            </Typography>
-                          </Button>
-                          <Button
-                            variant="outlined"
-                            size="small"
-                            className="customButton"
-                            onClick={handleCustomTemplateDialog}
-                          >
-                            <Typography className="customText">
-                              Customize
-                            </Typography>
-                          </Button>
-                        </Box>
+                        <Grid item xs={12}>
+                          <Box sx={{ float: 'left' }}>
+                            <Button
+                              size="small"
+                              onClick={handleLearnMoreDialog}
+                              sx={{ padding: '0px' }}
+                            >
+                              <Typography className="templateLink">
+                                Learn More
+                              </Typography>
+                            </Button>
+                          </Box>
+                          <Box sx={{ float: 'right' }}>
+                            <Button
+                              variant="outlined"
+                              size="small"
+                              className="customButton"
+                              onClick={handleCustomTemplateDialog}
+                            >
+                              <Typography className="customText">
+                                Customize
+                              </Typography>
+                            </Button>
+                          </Box>
+                        </Grid>
                       </CardActions>
                     </Card>
                   );
                 })}
               </Slider>
+            </Box>
+            <Grid item xs={2}>
               <Box
                 sx={{
-                  width: '10%',
+                  width: '100%',
                   display: 'flex',
-                  flex: '1 0 auto',
-                  alignItems: 'flex-end',
-                  justifyContent: 'space-between',
                 }}
               >
                 <ContainedButton
@@ -254,11 +342,12 @@ export function RetroTemplateTab({
                     minWidth: '75px !important',
                     height: '36px !important',
                     mt: 5,
+                    ml: 6,
                   }}
                 />
               </Box>
-            </>
-          </Box>
+            </Grid>
+          </>
         )}
       </Box>
       <Dialog
@@ -270,7 +359,7 @@ export function RetroTemplateTab({
           selectedTemplate={selectedTemplate}
           closeLearnMoreDialog={closeLearnMoreDialog}
           handleCustomTemplateDialog={handleCustomTemplateDialog}
-          handleSelectClick={handleSelectClick}
+          handleTemplateSelectClick={handleTemplateSelectClick}
         />
       </Dialog>
       <Dialog
@@ -281,7 +370,9 @@ export function RetroTemplateTab({
         <CustomizeTemplate
           closeCustomTemplateDialog={closeCustomTemplateDialog}
           selectedTemplate={selectedTemplate}
-          handleSelectClick={handleSelectClick}
+          handleTemplateSelectClick={handleTemplateSelectClick}
+          setSelectedTemplate={setSelectedTemplate}
+          setIsTemplateCustomized={setIsTemplateCustomized}
         />
       </Dialog>
     </>
