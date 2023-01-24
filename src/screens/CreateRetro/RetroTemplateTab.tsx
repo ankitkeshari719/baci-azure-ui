@@ -211,6 +211,7 @@ export function RetroTemplateTab({
                         display: 'flex !important',
                         flexDirection: 'column !important',
                         justifyContent: 'space-between !important',
+                        minHeight: '440px',
                         height: height / 2 + 20 + 'px',
                         width: 'calc(100% - 50px) !important',
                         background: template.checked
