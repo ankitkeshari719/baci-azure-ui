@@ -169,11 +169,12 @@ export default function RetroBoard() {
     columns
       ? columns.map(
           column => {
-            const groups = [...column.groups].sort(
-              (a, b) =>
-                (!b.reactions ? 0 : b.reactions.length) -
-                (!a.reactions ? 0 : a.reactions.length)
-            );
+            const groups = [...column.groups]
+            // .sort(
+            //   (a, b) =>
+            //     (!b.reactions ? 0 : b.reactions.length) -
+            //     (!a.reactions ? 0 : a.reactions.length)
+            // );
 
             return {
               ...column,
@@ -434,7 +435,7 @@ export default function RetroBoard() {
                   ? [...getProcessedColumns(), undefined]
                   : getProcessedColumns()
                 ).map((column, index) => (
-                  <React.Fragment key={index}>
+                  <React.Fragment key={index} >
                     {((isXsUp && index == value) ||
                       (!isXsUp &&
                         (global.expandColumn == -1 ||
@@ -459,6 +460,7 @@ export default function RetroBoard() {
                               setShowEditBox={setShowEditBox}
                               setIslanded={setIsLanded}
                               cardGroups={column.groups}
+                             
                             />
                           </>
                         ) : (
