@@ -50,7 +50,7 @@ const styles = {
   timeFramefield: {
     minWidth: '300px',
     '& label': {
-      color: 'rgba(0, 0, 0, 0.87) !important',
+      color: 'rgba(0, 0, 0, 0.6) !important',
       fontFamily: 'Poppins',
       fontStyle: 'normal',
       fontWeight: 400,
@@ -58,7 +58,7 @@ const styles = {
       lineHeight: '20px',
       letterSpacing: '0.6px',
       '&.Mui-focused': {
-        color: 'rgba(0, 0, 0, 0.6) !important',
+        color: 'rgba(0, 0, 0, 0.87) !important',
         fontFamily: 'Poppins',
         fontStyle: 'normal',
         fontWeight: 400,
