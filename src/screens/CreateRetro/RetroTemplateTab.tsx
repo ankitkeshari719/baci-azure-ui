@@ -208,7 +208,7 @@ export function RetroTemplateTab({
                     <Card
                       key={template.templateId}
                       sx={{
-                        height: height / 2,
+                        height: height / 2 + 100 + 'px',
                         width: 'calc(100% - 20px) !important',
                         background: '#ffffff',
                         border: '1px solid #E3E3E3',
@@ -285,7 +285,6 @@ export function RetroTemplateTab({
                           position: 'absolute',
                           bottom: '20px',
                           padding: '16px',
-                          width: 'calc(100% - 20px) !important',
                         }}
                       >
                         <Box
@@ -310,6 +309,7 @@ export function RetroTemplateTab({
                             size="small"
                             className="customButton"
                             onClick={handleCustomTemplateDialog}
+                            sx={{marginLeft: '20px'}}
                           >
                             <Typography className="customText">
                               Customize
