@@ -23,17 +23,20 @@ const StyledEdiText = styled(EdiText)`
     color: #000;
     background: #ffffff;
     width: 50px;
+    border: none;
   }
   button[editext='save-button'] {
     width: 50px;
     background: #ffffff;
+    border: none;
     &:hover {
       background: greenyellow;
     }
   }
   button[editext='cancel-button'] {
     width: 50px;
-    background: #ffffff;
+    background:#ffffff;
+    border: none;
     &:hover {
       background: crimson;
       color: #fff;

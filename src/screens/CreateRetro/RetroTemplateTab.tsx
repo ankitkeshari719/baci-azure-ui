@@ -20,6 +20,26 @@ import { CustomizeTemplate } from './CustomizeTemplate';
 import * as Icons from 'heroicons-react';
 import { createUseStyles } from 'react-jss';
 
+const styles = {
+  card: {
+    background: '#ffffff',
+    border: '1px solid #E3E3E3',
+    boxShadow: 'none',
+    borderRadius: '2px',
+    '&:hover': {
+      backgroundColor: 'rgba(206, 239, 255, 0.4)',
+    },
+    '& .MuiCard-root': {
+      display: 'flex !important',
+      flexDirection: 'column !important',
+      justifyContent: 'space-between !important',
+    },
+    '& .MuiCardActions-root': {
+      marginTop: 'auto !important',
+    },
+  },
+};
+
 function SampleNextArrow(props: any) {
   const { className, style, onClick } = props;
   return (
@@ -207,18 +227,7 @@ export function RetroTemplateTab({
                   return (
                     <Card
                       key={template.templateId}
-                      sx={{
-                        maxWidth: '26rem',
-                        height: '25rem',
-                        background: '#ffffff',
-                        border: '1px solid #E3E3E3',
-                        boxShadow: 'none',
-                        borderRadius: '2px',
-                        margin: '8px',
-                        '&:hover': {
-                          backgroundColor: 'rgba(206, 239, 255, 0.4)',
-                        },
-                      }}
+                      sx={styles.card}
                       onClick={() => handleCheckedTemplate(template)}
                     >
                       <CardContent>
@@ -273,21 +282,13 @@ export function RetroTemplateTab({
                           {template.templateDescription}
                         </Typography>
                       </CardContent>
-                      <CardActions
-                        sx={{
-                          position: 'absolute',
-                          bottom: '20px',
-                          width: '24rem',
-                          padding: '16px',
-                        }}
-                      >
+                      <CardActions>
                         <Box
                           sx={{
                             display: 'flex',
                             flex: '1 0 auto',
                             alignItems: 'flex-end',
                             justifyContent: 'space-between',
-                            mt: 5,
                           }}
                         >
                           <Button

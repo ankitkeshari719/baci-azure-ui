@@ -17,6 +17,26 @@ import { ContainedButton, OutlinedButton } from '../../components';
 import * as Icons from 'heroicons-react';
 import { createUseStyles } from 'react-jss';
 
+const styles = {
+  card: {
+    background: '#ffffff',
+    border: '1px solid #E3E3E3',
+    boxShadow: 'none',
+    borderRadius: '2px',
+    '&:hover': {
+      backgroundColor: 'rgba(206, 239, 255, 0.4)',
+    },
+    '& .MuiCard-root': {
+      display: 'flex !important',
+      flexDirection: 'column !important',
+      justifyContent: 'space-between !important',
+    },
+    '& .MuiCardActions-root': {
+      marginTop: 'auto !important',
+    },
+  },
+};
+
 function SampleNextArrow(props: any) {
   const { className, style, onClick } = props;
   return (
@@ -163,19 +183,7 @@ export function PulseCheckTab({
                   return (
                     <Card
                       key={pulseCheck.id}
-                      sx={{
-                        maxWidth: '26rem',
-                        width: '26rem',
-                        height: '25rem',
-                        background: '#ffffff',
-                        border: '1px solid #E3E3E3',
-                        boxShadow: 'none',
-                        borderRadius: '2px',
-                        margin: '8px',
-                        '&:hover': {
-                          backgroundColor: 'rgba(206, 239, 255, 0.4)',
-                        },
-                      }}
+                      sx={styles.card}
                       onClick={() => handlePulseCheck(pulseCheck)}
                     >
                       <CardContent>

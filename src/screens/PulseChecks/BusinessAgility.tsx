@@ -90,7 +90,6 @@ export default function BusinessAgility({ pulseCheck }: Props) {
       s[1](-1);
     });
   }, [fullPulseCheck]);
-  console.log('selectedQuestions:: ', selectedQuestions);
 
   React.useEffect(() => {
     if (
