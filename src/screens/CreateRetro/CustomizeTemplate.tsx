@@ -8,12 +8,21 @@ import {
   TextField,
   Toolbar,
   Typography,
+  useMediaQuery,
 } from '@mui/material';
 import '../../global.scss';
 import './styles.scss';
 import { TopBar } from './TopBar';
 import * as Icons from 'heroicons-react';
 import EdiText from 'react-editext';
+import theme from '../../theme/theme';
+
+const ColumnComponent = styled('div')({
+  height: 'calc(var(--app-height) - 160px)',
+  display: 'flex',
+  flexGrow: 1,
+  padding: 0,
+});
 
 const StyledEdiText = styled(EdiText)`
   button {
@@ -35,15 +44,22 @@ const StyledEdiText = styled(EdiText)`
   }
   button[editext='cancel-button'] {
     width: 50px;
-    background:#ffffff00;
+    background: #ffffff00;
     border: none;
     &:hover {
       background: crimson;
       color: #fff;
     }
   }
+  div[editext='main-container'] {
+    width: 100%;
+    padding-left: 20px;
+    padding-right: 20px;
+  }
   div[editext='view-container'],
   div[editext='edit-container'] {
+    display: flex;
+    justify-content: space-between;
     font-family: 'Poppins';
     font-style: normal;
     font-weight: 600;
@@ -52,7 +68,8 @@ const StyledEdiText = styled(EdiText)`
     display: flex;
     align-items: center;
     letter-spacing: 0.6px;
-    padding: 15px;
+    padding-left: 20px;
+    padding-right: 20px;
   }
 `;
 
@@ -69,8 +86,9 @@ export function CustomizeTemplate({
   selectedTemplate,
   handleTemplateSelectClick,
   setSelectedTemplate,
-  setIsTemplateCustomized
+  setIsTemplateCustomized,
 }: Props) {
+  const isXsUp = useMediaQuery(theme.breakpoints.only('xs'));
   const [tempSelectedTemplate, setTempSelectedTemplate] = React.useState<any>();
 
   React.useEffect(() => {
@@ -137,7 +155,9 @@ export function CustomizeTemplate({
                 autoFocus
                 variant="contained"
                 className="saveButton"
-                onClick={() => handleTemplateSelectClick(selectedTemplate.templateId)}
+                onClick={() =>
+                  handleTemplateSelectClick(selectedTemplate.templateId)
+                }
               >
                 <Typography className="saveButtonText" component="span">
                   Select
@@ -148,121 +168,98 @@ export function CustomizeTemplate({
         </Grid>
         {/* Columns */}
         <Box
-          sx={{
-            width: '100%',
-            display: 'grid',
-            gridTemplateColumns: 'repeat(3, 1fr)',
-            gap: 1,
-            mt: 4
-          }}
+          sx={{ display: 'flex', flexDirection: 'row', width: '100%', mt: 4 }}
         >
           {tempSelectedTemplate &&
-            tempSelectedTemplate.columns.map((column: any) => {
+            tempSelectedTemplate.columns.map((column: any, index: number) => {
               return (
-                <Box
-                  key={column.id}
-                  whiteSpace="normal"
+                <Grid
+                  item
+                  xs={4}
                   sx={{
-                    width: '376px !important',
-                    height: '500px',
-                    display: 'flex',
-                    justifyContent: 'center',
-                    alignItems: 'flex-start',
-                    background: column.cardColor,
-                    border: '1px solid ' + column.groupFontColor,
-                    borderRadius: '8px',
+                    marginLeft: index === 1 ? '10px' : '0px',
+                    marginRight: index === 1 ? '10px' : '0px',
                   }}
                 >
-                  <Box
-                    whiteSpace="normal"
+                  <ColumnComponent
                     sx={{
-                      width: '100%',
-                      height: '48px',
-                      display: 'flex',
-                      justifyContent: 'center',
-                      alignItems: 'center',
-                      borderRadius: '9px 9px 0px 0px',
-                      background: column.groupColor,
+                      height: isXsUp
+                        ? 'calc(var(--app-height) - 115px)'
+                        : 'calc(var(--app-height) - 160px)',
+                      background: column.cardColor,
+                      border: '1px solid ' + column.groupFontColor,
+                      borderRadius: '8px',
                     }}
                   >
-                    <StyledEdiText
-                      type="text"
-                      value={column.name}
-                      showButtonsOnHover
-                      onSave={value => handleColumnNameChange(value, column.id)}
-                      validation={val => val.length <= 35}
-                      inputProps={{
-                        style: {
-                          color: column.groupFontColor + '!important',
-                          fontSize: '16px',
-                          fontWeight: 600,
-                          fontFamily: 'Poppins',
-                          fontStyle: 'normal',
-                          lineHeight: '20px',
-                          display: 'flex',
-                          alignItems: 'center',
-                          letterSpacing: '0.6px',
-                          borderRadius: '8px',
-                        },
-                      }}
-                      hideIcons={true}
-                      editButtonContent={
-                        <Icons.PencilOutline
-                          size={20}
-                          style={{
-                            color: '#000000',
-                            fontSize: '14px',
-                            cursor: 'pointer',
-                          }}
-                        />
-                      }
-                      cancelButtonContent={
-                        <Icons.XOutline
-                          size={20}
-                          style={{
-                            color: '#000000',
-                            fontSize: '14px',
-                            cursor: 'pointer',
-                          }}
-                        />
-                      }
-                      saveButtonContent={
-                        <Icons.Check
-                          size={20}
-                          style={{
-                            color: '#000000',
-                            fontSize: '14px',
-                            cursor: 'pointer',
-                          }}
-                        />
-                      }
-                    />
-                    {/* <TextField
-                      maxRows={2}
-                      inputProps={{ maxLength: 150 }}
-                      multiline
-                      fullWidth
-                      value={column.name}
+                    <Box
+                      whiteSpace="normal"
                       sx={{
-                        fieldset: { border: 'none' },
-                        textarea: {
-                          color: column.groupFontColor + '!important',
-                          fontSize: '16px',
-                          fontWeight: 600,
-                          fontFamily: 'Poppins',
-                          fontStyle: 'normal',
-                          lineHeight: '20px',
-                          display: 'flex',
-                          alignItems: 'center',
-                          letterSpacing: '0.6px',
-                        },
+                        width: '100%',
+                        height: '48px',
+                        display: 'flex',
+                        justifyContent: 'center',
+                        alignItems: 'center',
+                        borderRadius: '9px 9px 0px 0px',
+                        background: column.groupColor,
                       }}
-                      onChange={e =>
-                        handleColumnNameChange(e.currentTarget.value, column.id)
-                      }
-                    /> */}
-                  </Box>
-                </Box>
+                    >
+                      <StyledEdiText
+                        type="text"
+                        value={column.name}
+                        showButtonsOnHover
+                        onSave={value =>
+                          handleColumnNameChange(value, column.id)
+                        }
+                        validation={val => val.length <= 35}
+                        inputProps={{
+                          style: {
+                            color: column.groupFontColor + '!important',
+                            fontSize: '16px',
+                            fontWeight: 600,
+                            fontFamily: 'Poppins',
+                            fontStyle: 'normal',
+                            lineHeight: '20px',
+                            display: 'flex',
+                            alignItems: 'center',
+                            letterSpacing: '0.6px',
+                            borderRadius: '8px',
+                          },
+                        }}
+                        hideIcons={true}
+                        editButtonContent={
+                          <Icons.PencilOutline
+                            size={20}
+                            style={{
+                              color: '#000000',
+                              fontSize: '14px',
+                              cursor: 'pointer',
+                            }}
+                          />
+                        }
+                        cancelButtonContent={
+                          <Icons.XOutline
+                            size={20}
+                            style={{
+                              color: '#000000',
+                              fontSize: '14px',
+                              cursor: 'pointer',
+                            }}
+                          />
+                        }
+                        saveButtonContent={
+                          <Icons.Check
+                            size={20}
+                            style={{
+                              color: '#000000',
+                              fontSize: '14px',
+                              cursor: 'pointer',
+                            }}
+                          />
+                        }
+                      />
+                    </Box>
+                  </ColumnComponent>
+                </Grid>
               );
             })}
         </Box>

@@ -766,7 +766,6 @@ export function RetroColumn({
             }}
           >
             <ColumnHeader
-
               column={column}
               columnId={columnId}
               columnName={columnName}
@@ -1065,7 +1064,6 @@ export function RetroColumn({
         )}
         <>
           <RetroColumnBottom
-
             isXsUp={isXsUp}
             columnId={columnId} column={column} global={global}
             ended={ended}
@@ -1074,7 +1072,6 @@ export function RetroColumn({
             setEmojiId={setEmojiId}
             focusTextBox={focusTextBox}
             setMouseOver={setMouseOver} submit={submit}
-
           />
         </>
       </div>
