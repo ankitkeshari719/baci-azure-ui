@@ -153,6 +153,7 @@ export function CustomizeTemplate({
             display: 'grid',
             gridTemplateColumns: 'repeat(3, 1fr)',
             gap: 1,
+            mt: 4
           }}
         >
           {tempSelectedTemplate &&
