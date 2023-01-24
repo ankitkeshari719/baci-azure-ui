@@ -6,6 +6,7 @@ import {
   CardContent,
   Box,
   CardActions,
+  Grid,
 } from '@mui/material';
 import '../../global.scss';
 import './styles.scss';
@@ -14,6 +15,7 @@ import Slider from 'react-slick';
 import { pulseChecksData, pulseCheckInterface } from './const';
 import { ContainedButton, OutlinedButton } from '../../components';
 import * as Icons from 'heroicons-react';
+import { createUseStyles } from 'react-jss';
 
 function SampleNextArrow(props: any) {
   const { className, style, onClick } = props;
@@ -23,6 +25,8 @@ function SampleNextArrow(props: any) {
       className={className}
       style={{
         ...style,
+        width: '42px',
+        height: '42px',
         display: 'block',
         right: '0px',
         color: '#0F172A',
@@ -42,6 +46,8 @@ function SamplePrevArrow(props: any) {
       className={className}
       style={{
         ...style,
+        width: '42px',
+        height: '42px',
         display: 'block',
         left: '0px',
         color: '#0F172A',
@@ -53,17 +59,15 @@ function SamplePrevArrow(props: any) {
   );
 }
 
-const settings = {
-  infinite: false,
-  speed: 500,
-  slidesToShow: 3,
-  slidesToScroll: 3,
-  className: 'center',
-  centerMode: true,
-  swipeToSlide: true,
-  nextArrow: <SampleNextArrow />,
-  prevArrow: <SamplePrevArrow />,
-};
+const useStyles = createUseStyles({
+  sliderContainer: {
+    '& .slick-list': {
+      marginLeft: '60px !important',
+      marginRight: '60px  !important',
+      padding: '0px  !important',
+    },
+  },
+});
 
 type Props = {
   activePanel: string;
@@ -81,10 +85,39 @@ export function PulseCheckTab({
   handlePulseCheck,
 }: Props) {
   const [height, setHeight] = React.useState(0);
+  const classes = useStyles();
 
   React.useEffect(() => {
     setHeight(window.innerHeight);
   }, []);
+
+  const settings = {
+    speed: 500,
+    slidesToShow: 3,
+    slidesToScroll: 3,
+    nextArrow: <SampleNextArrow />,
+    prevArrow: <SamplePrevArrow />,
+    className: classes.sliderContainer,
+    responsive: [
+      {
+        breakpoint: 1700,
+        settings: {
+          slidesToShow: 2,
+          slidesToScroll: 2,
+          infinite: true,
+          speed: 500,
+        },
+      },
+      {
+        breakpoint: 1260,
+        settings: {
+          slidesToShow: 1,
+          slidesToScroll: 1,
+          speed: 500,
+        },
+      },
+    ],
+  };
 
   return (
     <>
@@ -123,21 +156,28 @@ export function PulseCheckTab({
           )}
         </Box>
         {activePanel === 'pulseCheckPanel' && (
-          <Box sx={{ mt: 4 }}>
-            <>
+          <>
+            <Box sx={{ mt: 4 }}>
               <Slider {...settings}>
                 {pulseChecksData.map(pulseCheck => {
                   return (
                     <Card
                       key={pulseCheck.id}
                       sx={{
-                        maxWidth: '420px',
-                        height: '400px',
-                        background: '#ffffff',
-                        border: '1px solid #E3E3E3',
+                        display: 'flex !important',
+                        flexDirection: 'column !important',
+                        justifyContent: 'space-between !important',
+                        minHeight: '440px',
+                        height: height / 2 + 20 + 'px',
+                        width: 'calc(100% - 50px) !important',
+                        background: pulseCheck.checked
+                          ? 'rgba(206, 239, 255, 0.4)'
+                          : '#ffffff',
+                        border: pulseCheck.checked
+                          ? '2px solid #2C69A1'
+                          : '1px solid #E3E3E3',
                         boxShadow: 'none',
                         borderRadius: '2px',
-                        margin: '8px',
                         '&:hover': {
                           backgroundColor: 'rgba(206, 239, 255, 0.4)',
                         },
@@ -181,6 +221,7 @@ export function PulseCheckTab({
                             />
                           </Box>
                         )}
+                        {/* Template Name */}
                         <Typography
                           className="templateName"
                           component="div"
@@ -188,6 +229,7 @@ export function PulseCheckTab({
                         >
                           {pulseCheck.name}
                         </Typography>
+                        {/* Template Description */}
                         <Typography
                           className="templateDescription"
                           component="div"
@@ -196,24 +238,30 @@ export function PulseCheckTab({
                           {pulseCheck.description}
                         </Typography>
                       </CardContent>
-                      <CardActions sx={{ padding: '16px' }}>
-                        <Button size="small" sx={{ padding: '0px' }}>
-                          <Typography className="templateLink">
-                            Learn More
-                          </Typography>
-                        </Button>
-                      </CardActions>
+                      {pulseCheck.id !== 'pulse_check_not_req' && (
+                        <CardActions
+                          disableSpacing
+                          sx={{
+                            padding: '16px',
+                          }}
+                        >
+                          <Button size="small" sx={{ padding: '0px' }}>
+                            <Typography className="templateLink">
+                              Learn More
+                            </Typography>
+                          </Button>
+                        </CardActions>
+                      )}
                     </Card>
                   );
                 })}
               </Slider>
+            </Box>
+            <Grid item xs={2}>
               <Box
                 sx={{
-                  width: '10%',
+                  width: '100%',
                   display: 'flex',
-                  flex: '1 0 auto',
-                  alignItems: 'flex-end',
-                  justifyContent: 'space-between',
                 }}
               >
                 <ContainedButton
@@ -234,11 +282,12 @@ export function PulseCheckTab({
                     minWidth: '75px !important',
                     height: '36px !important',
                     mt: 5,
+                    ml: 6,
                   }}
                 />
               </Box>
-            </>
-          </Box>
+            </Grid>
+          </>
         )}
       </Box>
     </>

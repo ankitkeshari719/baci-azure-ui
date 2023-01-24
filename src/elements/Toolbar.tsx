@@ -4,6 +4,7 @@ import {
   Dialog,
   DialogActions,
   DialogContent,
+  Link,
   Menu,
   MenuItem,
   Popover,
@@ -26,36 +27,26 @@ import LeaveRetroDialog from '../atoms/LeaveRetroDialog';
 import theme from '../theme/theme';
 import { CountdownTimer } from './CountdownTimer';
 import FacilitatorDropDown from './FacilitatorDropDown';
-// import { ReactComponent as InfoSvg } from '../../public/svgs/Info.svg';
 const Toolbar = (props: any) => {
   const isXsUp = useMediaQuery(theme.breakpoints.only('xs'));
-  const [{ avatar, currentRetro, user, leaveRetro, loadingFlag }] =
-    React.useContext(GlobalContext);
   const navigate = useNavigate();
   const location = useLocation();
+
+  const [{ currentRetro, user, leaveRetro, loadingFlag }] =
+    React.useContext(GlobalContext);
+  const {
+    state: { retroName, retroDuration, ended },
+    commitAction,
+  } = React.useContext(BoardContext);
+
   const showFinishRetroButton =
     !location.pathname.includes('pulsecheck') &&
     !location.pathname.includes('report') &&
     !location.pathname.includes('startRetro') &&
     !location.pathname.includes('waiting') &&
     !location.pathname.includes('offboarding');
-  // const [editing, setEditing] = React.useState(true);
-  const RETRONAME_CHARACTER_LIMIT = 80;
   const [openDialog, setOpenDialog] = React.useState(false);
   const [leaveDiaOpen, setLeaveDiaOpen] = React.useState(false);
-
-  const {
-    state: {
-      retroName,
-      retroGoal,
-      retroTimeframe,
-      startedTimeStamp,
-      retroDuration,
-      users,
-      ended,
-    },
-    commitAction,
-  } = React.useContext(BoardContext);
 
   const [localRetroName, setLocalRetroName] = React.useState(
     currentRetro?.name
@@ -66,33 +57,23 @@ const Toolbar = (props: any) => {
   const [anchorE2, setAnchorE2] = React.useState<HTMLButtonElement | null>(
     null
   );
+  const open = Boolean(anchorEl);
   const openMenu = Boolean(anchorE2);
-
   const [showSessionEndMessage, setShowSessionEndMessage] =
     React.useState(false);
-
-  const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
-    setAnchorEl(event.currentTarget);
-  };
-
-  const handleClick1 = (event: React.MouseEvent<HTMLButtonElement>) => {
-    setAnchorE2(event.currentTarget);
-  };
-  const handleClose = () => {
-    setAnchorEl(null);
-  };
-
-  const open = Boolean(anchorEl);
   const id = open ? 'simple-popover' : undefined;
   const [showSummaryButton, setShowSummaryButton] = React.useState(false);
+
   React.useEffect(() => {
     if (retroName && retroName !== '') setLocalRetroName(retroName);
   }, [retroName]);
+
   React.useEffect(() => {
     if (!loadingFlag && ended) {
       setShowSummaryButton(true);
     }
   }, [loadingFlag, ended]);
+
   React.useEffect(() => {
     if (showFinishRetroButton && !leaveRetro) {
       const timer = setInterval(() => {
@@ -111,6 +92,16 @@ const Toolbar = (props: any) => {
       return () => clearTimeout(timer);
     }
   }, [retroDuration !== 0]);
+
+  const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
+    setAnchorEl(event.currentTarget);
+  };
+  const handleClick1 = (event: React.MouseEvent<HTMLButtonElement>) => {
+    setAnchorE2(event.currentTarget);
+  };
+  const handleClose = () => {
+    setAnchorEl(null);
+  };
 
   const saveAndProcessAction = async (
     actionName: BoardActionType,
@@ -139,11 +130,12 @@ const Toolbar = (props: any) => {
           paddingTop: isXsUp ? '14px' : 0,
           paddingBottom: isXsUp ? '14px' : 0,
           boxShadow: '0px 0px 2px rgba(0, 0, 0, 0.25)!important',
+          height: '64px'
         }}
       >
         {location.pathname.includes('report') ? (
           <>
-            <Button onClick={() => navigate('/')}>
+            <Link href="/">
               <img
                 src={BACILogo}
                 alt="Logo"
@@ -152,17 +144,19 @@ const Toolbar = (props: any) => {
                   height: isXsUp ? '18px' : '28px',
                 }}
               />
-            </Button>
+            </Link>
           </>
         ) : (
-          <img
-            src={BACILogo}
-            alt="Logo"
-            style={{
-              width: isXsUp ? '53px' : '82px',
-              height: isXsUp ? '18px' : '28px',
-            }}
-          />
+          <Link href="/">
+            <img
+              src={BACILogo}
+              alt="Logo"
+              style={{
+                width: isXsUp ? '53px' : '82px',
+                height: isXsUp ? '18px' : '28px',
+              }}
+            />
+          </Link>
         )}
 
         {currentRetro?.name &&
@@ -181,18 +175,10 @@ const Toolbar = (props: any) => {
               {user.userType == 2 && !ended ? (
                 <Tooltip title={localRetroName + ''}>
                   <TextField
-                    // noWrap
-                    // multiline
                     fullWidth
-                    InputLabelProps={
-                      {
-                        // style: { fontSize: 0 },
-                      }
-                    }
                     sx={{
                       fieldset: { border: 'none' },
                       color: '#2C69A1',
-                      // minWidth: '200px',
                       width: isXsUp ? '150px' : '270px',
                       minWidth: isXsUp ? '150px' : '270px',
                       marginLeft: isXsUp ? '10px' : '34px',
@@ -208,25 +194,11 @@ const Toolbar = (props: any) => {
                       style: {
                         fontSize: isXsUp ? '16px' : 24,
                         color: '#2C69A1',
-                        // borderBottom: 'none!important',
                         width: '250px',
                         borderBottom: '0px solid!important',
                         overflow: 'hidden !important',
                         textOverflow: 'ellipsis',
-                        // height:'100px'
                       },
-
-                      // endAdornment: (
-                      //   <InputAdornment position="start">
-                      //     <Button
-                      //       onClick={() => {
-                      //         setEditing(false);
-                      //       }}
-                      //     >
-                      //       save
-                      //     </Button>
-                      //   </InputAdornment>
-                      // ),
                     }}
                     value={localRetroName}
                     onChange={e => {
@@ -271,18 +243,11 @@ const Toolbar = (props: any) => {
                     overflow: 'hidden',
                     textOverflow: 'ellipsis',
                     display: 'inline-block',
-                    // height:'56px'
-                    // overflow: 'hidden !important',
-                    // textOverflow: 'ellipsis',
                   }}
-                  // onClick={() => {
-                  //   setEditing(true);
-                  // }}
                 >
                   {localRetroName}
                 </Typography>
               )}
-
               {!isXsUp && (
                 <>
                   <span style={{ width: '220px', display: 'flex' }}>
@@ -290,7 +255,6 @@ const Toolbar = (props: any) => {
                       sx={{
                         fontSize: '20px',
                         color: '#2C69A1',
-                        // marginLeft: '66px',
                         width: user.userType == 2 ? '150px' : '150px',
                       }}
                     >
@@ -339,8 +303,6 @@ const Toolbar = (props: any) => {
                   variant="contained"
                   id="finishRetro"
                   sx={{
-                    // background: '#159ADD',
-                    // color: 'white',
                     borderRadius: '24px',
                     width: '148px',
                     height: '44px',
@@ -350,7 +312,6 @@ const Toolbar = (props: any) => {
                     display: isXsUp ? 'none' : 'block',
                   }}
                   onClick={() => setOpenDialog(true)}
-                  // onTouchStart={() => setOpenDialog(true)}
                 >
                   FINISH RETRO
                 </Button>
@@ -371,8 +332,6 @@ const Toolbar = (props: any) => {
                     id="leaveRetro"
                     variant="contained"
                     sx={{
-                      // background: '#159ADD',
-                      // color: 'white',
                       borderRadius: '24px',
                       width: '148px',
                       height: '44px',
@@ -382,7 +341,6 @@ const Toolbar = (props: any) => {
                       display: isXsUp ? 'none' : 'block',
                     }}
                     onClick={() => setLeaveDiaOpen(true)}
-                    // onTouchStart={() => setLeaveDiaOpen(true)}
                   >
                     LEAVE RETRO
                   </Button>
@@ -401,8 +359,6 @@ const Toolbar = (props: any) => {
         )}
         {showSummaryButton && !location.pathname.includes('report') && (
           <Button
-            // variant="outlined"
-            // className="secondaryButton"
             style={{
               marginRight: '40px',
             }}
@@ -415,7 +371,6 @@ const Toolbar = (props: any) => {
               fontWeight: 500,
             }}
             onClick={() => navigate('/report/' + currentRetro?.id)}
-            // onTouchStart={() => joinRetro()}
           >
             VIEW SUMMARY
           </Button>
@@ -423,7 +378,6 @@ const Toolbar = (props: any) => {
         <LeaveRetroDialog
           open={leaveDiaOpen}
           onClose={(value: any) => {
-            // console.log(value, 'value');
             if (value) props.onFinishRetro();
             setLeaveDiaOpen(false);
           }}
@@ -478,7 +432,6 @@ const Toolbar = (props: any) => {
               <span> This will end retro for all participants.</span>
               <span> All participants will see feedback screen.</span>
             </span>
-            {/* </DialogContentText> */}
           </DialogContent>
           <DialogActions style={{ display: 'flex', flexDirection: 'column' }}>
             <Button
@@ -486,9 +439,7 @@ const Toolbar = (props: any) => {
               onClick={() => {
                 props.onFinishRetro(), setOpenDialog(false);
               }}
-              // onTouchStart={() => {
-              //   props.onFinishRetro(), setOpenDialog(false);
-              // }}
+              
               variant="contained"
               autoFocus
             >
@@ -503,7 +454,6 @@ const Toolbar = (props: any) => {
               }}
               variant="outlined"
               onClick={() => setOpenDialog(false)}
-              // onTouchStart={() => setOpenDialog(false)}
             >
               CONTINUE WITH RETRO
             </Button>
@@ -632,6 +582,7 @@ const Toolbar = (props: any) => {
           </>
         )}
       </Box>
+      {/* Leave Retro Button */}
       <Box
         sx={{
           display: isXsUp ? 'flex' : 'none',
@@ -647,8 +598,6 @@ const Toolbar = (props: any) => {
             id="leaveRetroIsXsUp"
             variant="contained"
             sx={{
-              // background: '#159ADD',
-              // color: 'white',
               borderRadius: '24px',
               width: '148px',
               height: '44px',
@@ -658,7 +607,6 @@ const Toolbar = (props: any) => {
               position: 'initial',
             }}
             onClick={() => setLeaveDiaOpen(true)}
-            // onTouchStart={() => setLeaveDiaOpen(true)}
           >
             LEAVE RETRO
           </Button>

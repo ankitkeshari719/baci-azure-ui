@@ -21,6 +21,8 @@ import { UNGROUPED } from '../constants';
 import { ConfirmContext } from '../contexts/ConfirmContext';
 import { ActionType, GlobalContext } from '../contexts/GlobalContext';
 import { flexbox } from '@mui/system';
+import { DraggableProvided, DraggableProvidedDraggableProps } from 'react-beautiful-dnd';
+
 
 const TextFieldNoBorderWrapper = styled('div')({
   '.MuiInputBase-multiline': {
@@ -46,6 +48,7 @@ export function RetroCardGroup({
   columnId,
   children,
   showCollapse,
+  provided,
   onCollapse,
 }: {
   admin: boolean;
@@ -54,6 +57,7 @@ export function RetroCardGroup({
   columnId: string;
   children: React.ReactNode;
   showCollapse: boolean;
+  provided:DraggableProvided;
   onCollapse: (value: any) => void;
 }) {
   const [global, dispatch] = React.useContext(GlobalContext);
@@ -166,9 +170,12 @@ export function RetroCardGroup({
           paddingBottom: '5px',
           width: '100%',
         }}
+        
       >
         {group.name !== UNGROUPED ? (
-          <Grid container justifyContent="space-between" paddingLeft={1.5} paddingRight={1.5}>
+          <div {...provided.dragHandleProps}>
+          <Grid container justifyContent="space-between" paddingLeft={1.5} paddingRight={1.5} >
+          
             <Grid
               item
               xs={6}
@@ -198,7 +205,7 @@ export function RetroCardGroup({
                     paddingBottom: 0,
                     padding: 0,
                     // paddingLeft: '12px!important',
-                    width: '100%',
+                    width: global.expandColumn!=-1?'200px': '100%',
                     // width: (nameSet ? name.length : 14) + 3 + 'ch',
                     div: { padding: 0, position: 'initial', width: '100%' },
                     position: 'initial',
@@ -316,7 +323,7 @@ export function RetroCardGroup({
                 {showCollapse ? <img src="/svgs/Down.svg" /> : <img src="/svgs/Up.svg" />}
               </Grid>
             </Grid>
-          </Grid>
+          </Grid></div>
         ) : null}
 
         {showCollapse &&
