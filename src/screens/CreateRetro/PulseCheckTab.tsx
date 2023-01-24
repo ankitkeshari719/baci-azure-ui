@@ -165,7 +165,7 @@ export function PulseCheckTab({
                       key={pulseCheck.id}
                       sx={{
                         height: height / 2,
-                        width: window.innerWidth,
+                        width: 'calc(100% - 20px) !important',
                         background: '#ffffff',
                         border: '1px solid #E3E3E3',
                         boxShadow: 'none',
@@ -238,7 +238,14 @@ export function PulseCheckTab({
                           {pulseCheck.description}
                         </Typography>
                       </CardContent>
-                      <CardActions sx={{ padding: '16px' }}>
+                      <CardActions
+                        sx={{
+                          position: 'absolute',
+                          bottom: '20px',
+                          padding: '16px',
+                          width: 'calc(100% - 20px) !important',
+                        }}
+                      >
                         <Button size="small" sx={{ padding: '0px' }}>
                           <Typography className="templateLink">
                             Learn More

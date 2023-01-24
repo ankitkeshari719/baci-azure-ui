@@ -209,7 +209,7 @@ export function RetroTemplateTab({
                       key={template.templateId}
                       sx={{
                         height: height / 2,
-                        width: window.innerWidth,
+                        width: 'calc(100% - 20px) !important',
                         background: '#ffffff',
                         border: '1px solid #E3E3E3',
                         boxShadow: 'none',
@@ -281,11 +281,12 @@ export function RetroTemplateTab({
                         </Typography>
                       </CardContent>
                       <CardActions
-                        // sx={{
-                        //   position: 'absolute',
-                        //   bottom: '20px',
-                        //   padding: '16px',
-                        // }}
+                        sx={{
+                          position: 'absolute',
+                          bottom: '20px',
+                          padding: '16px',
+                          width: 'calc(100% - 20px) !important',
+                        }}
                       >
                         <Box
                           sx={{
