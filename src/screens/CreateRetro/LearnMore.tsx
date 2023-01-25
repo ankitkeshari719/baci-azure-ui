@@ -101,8 +101,8 @@ export function LearnMore({
               alignItems: 'center',
             }}
           >
-            <span className="text_one">This is a for </span>
-            <span className="text_two">&nbsp;classic template</span>
+            <span className="text_one">This is a </span>
+            <span className="text_two">&nbsp;classic template for</span>
             <span className="text_one">&nbsp;retros</span>.
           </Box>
         </Grid>
