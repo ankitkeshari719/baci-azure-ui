@@ -110,7 +110,6 @@ export function PulseCheckTab({
         settings: {
           slidesToShow: 2,
           slidesToScroll: 2,
-          infinite: true,
           speed: 500,
         },
       },
