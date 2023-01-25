@@ -27,7 +27,6 @@ import PulseCheck from './screens/PulseCheck';
 import ReportScreen from './screens/ReportScreen';
 import Board from './screens/Board';
 import PulseCheckMain from './screens/PulseChecks/PulseCheckMain';
-import SimplePulseCheck from './screens/PulseChecks/SimplePulseCheck';
 
 type AppProps = {
   instance: IPublicClientApplication;

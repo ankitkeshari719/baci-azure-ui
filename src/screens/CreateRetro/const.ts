@@ -38,6 +38,8 @@ export interface pulseCheckInterface {
   value: Array<string>;
   valueDescription: Array<string>;
   checked: boolean;
+  isComingSoon: boolean,
+
 }
 
 export const RETRONAME_CHARACTER_LIMIT = 80;
@@ -54,6 +56,7 @@ export const templatesData = [
       'For the team to share how they feel in a structured manner and capture key learnings and ideas to progress.',
     templateImage: '/images/coming_soon.png',
     checked: false,
+    isComingSoon: true,
     columns: [
       {
         id: '0',
@@ -127,6 +130,7 @@ export const templatesData = [
       'The traffic light retro gives everyone in the team an opportunity to talk and quickly identify bottlenecks.',
     templateImage: '/images/coming_soon.png',
     checked: false,
+    isComingSoon: true,
     columns: [
       {
         id: '0',
@@ -200,6 +204,7 @@ export const templatesData = [
       'A fun way to think differently and reflect on the bigger picture.',
     templateImage: '/images/coming_soon.png',
     checked: false,
+    isComingSoon: true,
     columns: [
       {
         id: '0',
@@ -272,6 +277,7 @@ export const templatesData = [
     templateDescription: 'A classic template for retros.',
     templateImage: '/images/defaultRetroTemplate.png',
     checked: true,
+    isComingSoon: false,
     columns: [
       {
         id: '0',
@@ -348,6 +354,7 @@ export const pulseChecksData: pulseCheckInterface[] = [
       'An oldie but a goodie, also known as the PPT Framework created in the 60s, it has long been the benchmark to understanding workforce management.',
     pulseCheckImage: '/images/coming_soon.png',
     checked: true,
+    isComingSoon: false,
     value: [
       '1. People & Resources ',
       '2. Work Processes ',
@@ -363,9 +370,10 @@ export const pulseChecksData: pulseCheckInterface[] = [
     id: 'business_agility',
     name: 'Business Agility  (7 Questions)',
     description:
-      'An oldie but a goodie, also known as the PPT Framework created in the 60s, it has long been the benchmark to understanding workforce management.',
+      'We developed these to simplify what it takes for a company to be truly “agile”. Do and track these regularly to see how the team evolves.',
     pulseCheckImage: '/images/coming_soon.png',
     checked: false,
+    isComingSoon: true,
     value: [
       '1. Individual and Team Goals',
       '2. People and Resources',
@@ -392,6 +400,7 @@ export const pulseChecksData: pulseCheckInterface[] = [
       'Regularly using and tracking the pulse check is recommended but sometimes all you want to do is get straight into the retro board.',
     pulseCheckImage: '/images/PulseCheckNotRequired.png',
     checked: false,
+    isComingSoon: true,
     value: [],
     valueDescription: [],
   },
