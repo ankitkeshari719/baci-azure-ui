@@ -3,6 +3,7 @@ import { Box, Link, Typography } from '@mui/material';
 import { GlobalContext } from '../../contexts/GlobalContext';
 import { EmailShareButton } from 'react-share';
 import * as Icons from 'heroicons-react';
+import QRCode from 'qrcode.react';
 import './styles.scss';
 
 export function ShareParticipants() {
@@ -37,6 +38,7 @@ export function ShareParticipants() {
       >
         with code
       </Box>
+      {/* Human Id */}
       <Box
         sx={{ mt: 4 }}
         component="div"
@@ -45,12 +47,11 @@ export function ShareParticipants() {
       >
         {global?.currentRetro?.humanId}
       </Box>
-      <Box
-        sx={{ mt: 4 }}
-        component="img"
-        alt="Logo"
-        src="/images/barcode.png"
-      />
+      {/* Barcode */}
+      <Box sx={{ mt: 4 }}>
+        <QRCode value={global.currentRetro?.joinUrl || ''} className="qrCode" />
+      </Box>
+      {/* Join URL */}
       <Box
         sx={{
           mt: 4,
@@ -70,13 +71,14 @@ export function ShareParticipants() {
           size={20}
           style={{
             marginLeft: '8px',
-            cursor: 'pointer'
+            cursor: 'pointer',
           }}
           onClick={() =>
             navigator.clipboard.writeText(global?.currentRetro?.joinUrl!)
           }
         />
       </Box>
+      {/* Email Sharing */}
       <Box sx={{ mt: 4 }}>
         <EmailShareButton
           url={global.currentRetro?.joinUrl + ''}
