@@ -43,18 +43,11 @@ const StyledEdiText = styled(EdiText)`
     width: 50px;
     background: #ffffff00;
     border: none;
-    &:hover {
-      background: greenyellow;
-    }
   }
   button[editext='cancel-button'] {
     width: 50px;
     background: #ffffff00;
     border: none;
-    &:hover {
-      background: crimson;
-      color: #fff;
-    }
   }
   div[editext='main-container'] {
     width: 100% !important;

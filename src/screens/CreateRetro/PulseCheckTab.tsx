@@ -167,8 +167,8 @@ export function PulseCheckTab({
                         display: 'flex !important',
                         flexDirection: 'column !important',
                         justifyContent: 'space-between !important',
-                        minHeight: '440px',
-                        height: height / 2 + 20 + 'px',
+                        minHeight: '420px',
+                        height: height / 2 + 10 + 'px',
                         width: 'calc(100% - 50px) !important',
                         background: pulseCheck.checked
                           ? 'rgba(206, 239, 255, 0.4)'

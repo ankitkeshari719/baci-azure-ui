@@ -170,6 +170,6 @@ export const WHAT_DIDNT_GO_WELL = 1;
 export const ACTIONS_COLUMN = 2;
 
 export const UserTypeArray = [
-  { id: 1, type: 'Facilitator' },
-  { id: 2, type: 'Participant' },
+  { id: 1, type: 'Participant' },
+  { id: 2, type: 'Facilitator' },
 ];

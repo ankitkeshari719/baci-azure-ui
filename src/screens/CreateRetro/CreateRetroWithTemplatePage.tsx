@@ -214,12 +214,16 @@ export function CreateRetroWithTemplatePage({
         .then(
           res => {
             dispatch({ type: ActionType.CREATE_RETRO, payload: {} });
+            const userTypeValue: number =
+              global?.user?.id == res?.creatorId
+                ? UserTypeArray[1].id
+                : UserTypeArray[0].id;
             dispatch({
               type: ActionType.SET_PREFERRED_NICKNAME,
               payload: {
                 preferredNickname: userName,
                 avatar: selectedAvatar,
-                userType,
+                userType: userTypeValue,
               },
             });
             dispatch({
