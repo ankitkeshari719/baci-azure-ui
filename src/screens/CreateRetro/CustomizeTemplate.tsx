@@ -27,6 +27,9 @@ const ColumnComponent = styled('div')({
 });
 
 const StyledEdiText = styled(EdiText)`
+  width: 100%;
+  padding-left: 20px;
+  padding-right: 20px;
   button {
     border-radius: 5px;
   }
@@ -60,6 +63,7 @@ const StyledEdiText = styled(EdiText)`
   }
   div[editext='view-container'],
   div[editext='edit-container'] {
+    width: 100% !important;
     display: flex;
     justify-content: space-between;
     font-family: 'Poppins';
@@ -70,8 +74,6 @@ const StyledEdiText = styled(EdiText)`
     display: flex;
     align-items: center;
     letter-spacing: 0.6px;
-    padding-left: 20px;
-    padding-right: 20px;
   }
 `;
 
