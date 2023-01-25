@@ -110,6 +110,8 @@ export function CustomizeTemplate({
 
     //Updating the list
     setDragDropList(arr);
+    setTempSelectedTemplate({ ...tempSelectedTemplate, columns: [...arr] });
+    setSelectedTemplate(tempSelectedTemplate);
   };
 
   const handleColumnNameChange = (
