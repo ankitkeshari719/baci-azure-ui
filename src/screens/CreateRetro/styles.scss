@@ -1,5 +1,6 @@
 // Main Container
 .mainContainer {
+  font-family: 'Poppins', normal;
   width: 100% !important;
   height: 100vh !important;
   padding: 0 !important;
@@ -413,6 +414,18 @@
   text-align: center;
   letter-spacing: 0.4px;
   color: #ee7538;
-
   opacity: 0.8;
+}
+
+// Customize Template
+.drag-drop-list-container {
+  width: 100%;
+  display: flex;
+  align-items: center;
+}
+
+.material-symbols-outlined {
+  position: relative;
+  top: 45px;
+  right: 24px;
 }

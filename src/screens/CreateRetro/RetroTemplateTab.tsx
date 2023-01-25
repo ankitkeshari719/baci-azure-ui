@@ -8,6 +8,7 @@ import {
   Dialog,
   CardActions,
   Grid,
+  useMediaQuery
 } from '@mui/material';
 import '../../global.scss';
 import './styles.scss';
@@ -19,6 +20,8 @@ import { OutlinedButton } from '../../components/OutlinedButton';
 import { CustomizeTemplate } from './CustomizeTemplate';
 import * as Icons from 'heroicons-react';
 import { createUseStyles } from 'react-jss';
+import theme from '../../theme/theme';
+
 
 function SampleNextArrow(props: any) {
   const { className, style, onClick } = props;
@@ -99,6 +102,8 @@ export function RetroTemplateTab({
   const [isTemplateCustomized, setIsTemplateCustomized] = React.useState(false);
   const [height, setHeight] = React.useState(0);
   const classes = useStyles();
+  const isMdUp: any = useMediaQuery(theme.breakpoints.only('md'));
+  const isXsUp: any = useMediaQuery(theme.breakpoints.only('xs'));
 
   const settings = {
     infinite: true,
@@ -211,8 +216,12 @@ export function RetroTemplateTab({
                         display: 'flex !important',
                         flexDirection: 'column !important',
                         justifyContent: 'space-between !important',
-                        minHeight: '440px',
-                        height: height / 2 + 20 + 'px',
+                        minHeight: '420px',
+                        height: isMdUp
+                          ? height / 2 + 20 + 'px'
+                          : isXsUp
+                          ? height / 2 + 60 + 'px'
+                          : height / 2 - 40 + 'px',
                         width: 'calc(100% - 50px) !important',
                         background: template.checked
                           ? 'rgba(206, 239, 255, 0.4)'

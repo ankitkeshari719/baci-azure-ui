@@ -6,6 +6,10 @@ import { Column } from '../types';
 const ColumnHeader = ({column ,columnId,columnName,noHeader,groupFontColour,global,ended,leftHeaderComponent,value,submitColumnName,setColumnName,publishColumn,dispatch}:{
     column : Column ,columnId:string,columnName:string,noHeader:any,groupFontColour:string|undefined,global:any,ended:boolean,leftHeaderComponent:any,value:string,submitColumnName:(columnName:string)=>void,setColumnName:(columnName:string)=>void,publishColumn:(flag:boolean)=>void,dispatch:any
 }) => {
+const [showEdit,setShowEdit]=React.useState(false);
+const [enableSave,setEnableSave]=React.useState(false);
+
+
     return (
         <Grid
               container
@@ -71,6 +75,7 @@ const ColumnHeader = ({column ,columnId,columnName,noHeader,groupFontColour,glob
                               }
                               onBlur={() => submitColumnName(columnName)}
                               onSubmit={() => submitColumnName(columnName)}
+
                             ></TextField>
                             {/* {rightHeaderComponent} */}
                           </>

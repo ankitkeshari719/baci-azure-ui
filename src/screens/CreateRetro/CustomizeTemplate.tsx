@@ -1,4 +1,5 @@
 import * as React from 'react';
+import { DragDropContext, Draggable, Droppable } from 'react-beautiful-dnd';
 import {
   AppBar,
   Box,
@@ -16,6 +17,7 @@ import { TopBar } from './TopBar';
 import * as Icons from 'heroicons-react';
 import EdiText from 'react-editext';
 import theme from '../../theme/theme';
+import './styles.scss';
 
 const ColumnComponent = styled('div')({
   height: 'calc(var(--app-height) - 160px)',
@@ -25,6 +27,9 @@ const ColumnComponent = styled('div')({
 });
 
 const StyledEdiText = styled(EdiText)`
+  width: 100%;
+  padding-left: 20px;
+  padding-right: 20px;
   button {
     border-radius: 5px;
   }
@@ -38,18 +43,11 @@ const StyledEdiText = styled(EdiText)`
     width: 50px;
     background: #ffffff00;
     border: none;
-    &:hover {
-      background: greenyellow;
-    }
   }
   button[editext='cancel-button'] {
     width: 50px;
     background: #ffffff00;
     border: none;
-    &:hover {
-      background: crimson;
-      color: #fff;
-    }
   }
   div[editext='main-container'] {
     width: 100% !important;
@@ -58,6 +56,7 @@ const StyledEdiText = styled(EdiText)`
   }
   div[editext='view-container'],
   div[editext='edit-container'] {
+    width: 100% !important;
     display: flex;
     justify-content: space-between;
     font-family: 'Poppins';
@@ -68,8 +67,6 @@ const StyledEdiText = styled(EdiText)`
     display: flex;
     align-items: center;
     letter-spacing: 0.6px;
-    padding-left: 20px;
-    padding-right: 20px;
   }
 `;
 
@@ -90,10 +87,27 @@ export function CustomizeTemplate({
 }: Props) {
   const isXsUp = useMediaQuery(theme.breakpoints.only('xs'));
   const [tempSelectedTemplate, setTempSelectedTemplate] = React.useState<any>();
+  const [dragDropList, setDragDropList] = React.useState<any>([]);
 
   React.useEffect(() => {
     setTempSelectedTemplate(selectedTemplate);
+    setDragDropList(selectedTemplate.columns);
   }, []);
+
+  const onDragComplete = (result: any) => {
+    if (!result.destination) return;
+
+    const arr = [...dragDropList];
+
+    //Changing the position of Array element
+    let removedItem = arr.splice(result.source.index, 1)[0];
+    arr.splice(result.destination.index, 0, removedItem);
+
+    //Updating the list
+    setDragDropList(arr);
+    setTempSelectedTemplate({ ...tempSelectedTemplate, columns: [...arr] });
+    setSelectedTemplate(tempSelectedTemplate);
+  };
 
   const handleColumnNameChange = (
     value: React.SetStateAction<string>,
@@ -170,98 +184,128 @@ export function CustomizeTemplate({
         <Box
           sx={{ display: 'flex', flexDirection: 'row', width: '100%', mt: 4 }}
         >
-          {tempSelectedTemplate &&
-            tempSelectedTemplate.columns.map((column: any, index: number) => {
-              return (
-                <Grid
-                  item
-                  xs={4}
-                  sx={{
-                    marginLeft: index === 1 ? '10px' : '0px',
-                    marginRight: index === 1 ? '10px' : '0px',
-                  }}
+          <DragDropContext onDragEnd={onDragComplete}>
+            <Droppable droppableId="drag-drop-list" direction="horizontal">
+              {(provided, snapshot) => (
+                <div
+                  className="drag-drop-list-container"
+                  {...provided.droppableProps}
+                  ref={provided.innerRef}
                 >
-                  <ColumnComponent
-                    sx={{
-                      height: isXsUp
-                        ? 'calc(var(--app-height) - 115px)'
-                        : 'calc(var(--app-height) - 160px)',
-                      background: column.cardColor,
-                      border: '1px solid ' + column.groupFontColor,
-                      borderRadius: '8px',
-                    }}
-                  >
-                    <Box
-                      whiteSpace="normal"
-                      sx={{
-                        width: '100%',
-                        height: '48px',
-                        display: 'flex',
-                        justifyContent: 'center',
-                        alignItems: 'center',
-                        borderRadius: '9px 9px 0px 0px',
-                        background: column.groupColor,
-                      }}
+                  {dragDropList.map((column: any, index: number) => (
+                    <Draggable
+                      key={column.id}
+                      draggableId={column.id}
+                      index={index}
                     >
-                      <StyledEdiText
-                        type="text"
-                        value={column.name}
-                        showButtonsOnHover
-                        onSave={value =>
-                          handleColumnNameChange(value, column.id)
-                        }
-                        validation={val => val.length <= 35}
-                        inputProps={{
-                          style: {
-                            color: column.groupFontColor + '!important',
-                            fontSize: '16px',
-                            fontWeight: 600,
-                            fontFamily: 'Poppins',
-                            fontStyle: 'normal',
-                            lineHeight: '20px',
-                            display: 'flex',
-                            alignItems: 'center',
-                            letterSpacing: '0.6px',
-                            borderRadius: '8px',
-                          },
-                        }}
-                        hideIcons={true}
-                        editButtonContent={
-                          <Icons.PencilOutline
-                            size={20}
-                            style={{
-                              color: '#000000',
-                              fontSize: '14px',
-                              cursor: 'pointer',
+                      {provided => (
+                        <Grid
+                          item
+                          xs={4}
+                          sx={{
+                            marginLeft: index === 1 ? '24px' : '0px',
+                            marginRight: index === 1 ? '24px' : '0px',
+                          }}
+                          ref={provided.innerRef}
+                          {...provided.draggableProps}
+                          {...provided.dragHandleProps}
+                        >
+                          {/* <span className="material-symbols-outlined">
+                            <Icons.AdjustmentsOutline
+                              color="#676767"
+                              style={{
+                                width: '30px',
+                                height: '30px',
+                              }}
+                            />
+                          </span> */}
+                          <ColumnComponent
+                            sx={{
+                              height: isXsUp
+                                ? 'calc(var(--app-height) - 115px)'
+                                : 'calc(var(--app-height) - 160px)',
+                              background: column.cardColor,
+                              border: '1px solid ' + column.groupFontColor,
+                              borderRadius: '8px',
                             }}
-                          />
-                        }
-                        cancelButtonContent={
-                          <Icons.XOutline
-                            size={20}
-                            style={{
-                              color: '#000000',
-                              fontSize: '14px',
-                              cursor: 'pointer',
-                            }}
-                          />
-                        }
-                        saveButtonContent={
-                          <Icons.Check
-                            size={20}
-                            style={{
-                              color: '#000000',
-                              fontSize: '14px',
-                              cursor: 'pointer',
-                            }}
-                          />
-                        }
-                      />
-                    </Box>
-                  </ColumnComponent>
-                </Grid>
-              );
-            })}
+                          >
+                            <Box
+                              whiteSpace="normal"
+                              sx={{
+                                width: '100%',
+                                height: '48px',
+                                display: 'flex',
+                                justifyContent: 'center',
+                                alignItems: 'center',
+                                borderRadius: '9px 9px 0px 0px',
+                                background: column.groupColor,
+                              }}
+                            >
+                              <StyledEdiText
+                                type="text"
+                                value={column.name}
+                                showButtonsOnHover
+                                onSave={value =>
+                                  handleColumnNameChange(value, column.id)
+                                }
+                                validation={val => val.length <= 35}
+                                inputProps={{
+                                  style: {
+                                    color: column.groupFontColor + '!important',
+                                    fontSize: '16px',
+                                    fontWeight: 600,
+                                    fontFamily: 'Poppins',
+                                    fontStyle: 'normal',
+                                    lineHeight: '20px',
+                                    display: 'flex',
+                                    alignItems: 'center',
+                                    letterSpacing: '0.6px',
+                                    borderRadius: '8px',
+                                  },
+                                }}
+                                hideIcons={true}
+                                editButtonContent={
+                                  <Icons.PencilOutline
+                                    size={20}
+                                    style={{
+                                      color: '#000000',
+                                      fontSize: '14px',
+                                      cursor: 'pointer',
+                                    }}
+                                  />
+                                }
+                                cancelButtonContent={
+                                  <Icons.XOutline
+                                    size={20}
+                                    style={{
+                                      color: '#000000',
+                                      fontSize: '14px',
+                                      cursor: 'pointer',
+                                    }}
+                                  />
+                                }
+                                saveButtonContent={
+                                  <Icons.Check
+                                    size={20}
+                                    style={{
+                                      color: '#000000',
+                                      fontSize: '14px',
+                                      cursor: 'pointer',
+                                    }}
+                                  />
+                                }
+                              />
+                            </Box>
+                          </ColumnComponent>
+                        </Grid>
+                      )}
+                    </Draggable>
+                  ))}
+                  {provided.placeholder}
+                </div>
+              )}
+            </Droppable>
+          </DragDropContext>
         </Box>
       </Grid>
     </Box>

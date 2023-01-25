@@ -342,6 +342,7 @@ function BoardProvider(props: ComponentProps<any>) {
           <CircularProgress />
         </Box>
       )}
+     
       {props.children}
     </BoardContext.Provider>
   );
