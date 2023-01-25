@@ -123,7 +123,6 @@ export function PulseCheckTab({
     ],
   };
 
-  console.log('height', height);
   return (
     <>
       {/* Template Panel */}
