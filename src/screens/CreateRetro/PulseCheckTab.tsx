@@ -96,12 +96,14 @@ export function PulseCheckTab({
   }, []);
 
   const settings = {
+    infinite: true,
     speed: 500,
     slidesToShow: 3,
     slidesToScroll: 3,
     nextArrow: <SampleNextArrow />,
     prevArrow: <SamplePrevArrow />,
     className: classes.sliderContainer,
+    centerMode: true,
     responsive: [
       {
         breakpoint: 1700,
@@ -171,7 +173,7 @@ export function PulseCheckTab({
                         display: 'flex !important',
                         flexDirection: 'column !important',
                         justifyContent: 'space-between !important',
-                        minHeight: '400px',
+                        minHeight: '420px',
                         height: isMdUp
                           ? height / 2 + 20 + 'px'
                           : isXsUp
