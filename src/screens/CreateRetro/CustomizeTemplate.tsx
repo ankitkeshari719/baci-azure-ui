@@ -124,6 +124,12 @@ export function CustomizeTemplate({
     setSelectedTemplate(tempSelectedTemplate);
   };
 
+  // Function to handle the select button click
+  const onClickSelectButton = (templateId: string) => {
+    handleTemplateSelectClick(selectedTemplate.templateId);
+    closeCustomTemplateDialog();
+  };
+
   return (
     <Box className="mainContainer">
       <TopBar />
@@ -170,7 +176,7 @@ export function CustomizeTemplate({
                 variant="contained"
                 className="saveButton"
                 onClick={() =>
-                  handleTemplateSelectClick(selectedTemplate.templateId)
+                  onClickSelectButton(selectedTemplate.templateId)
                 }
               >
                 <Typography className="saveButtonText" component="span">
