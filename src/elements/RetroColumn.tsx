@@ -120,13 +120,6 @@ export function RetroColumn({
 
   const [columnName, setColumnName] = React.useState(column.name);
 
-  // React.useEffect(() => {
-  //   setColumnName(column.name);
-  // }, [column.name]);
-  // React.useEffect(() => {
-  //   console.log(groupCollapsed);
-  // }, [groupCollapsed]);
-
   const findCardInGroup = (group: CardGroup, id: string) =>
     group.cards.find(card => card.id === id);
 
@@ -206,7 +199,13 @@ export function RetroColumn({
     }, error => {
       dispatchLoadingFlag(false)
     })
+  }
 
+  const reorderGroups = async (groupId: string, index: number) => {
+    dispatchLoadingFlag(true)
+    await saveAndProcessAction(BoardActionType.REORDER_GROUP, {
+      groupId, index
+    }).then(() => { dispatchLoadingFlag(false) }, error => dispatchLoadingFlag(false))
   }
   const mergeCards = async (cardId1: string, cardId2: string) => {
     const groupId = shortid.generate();
@@ -718,7 +717,14 @@ export function RetroColumn({
   }
 
   const reorderNumbers = (result: any) => {
-    console.log(result, "destination   ", result.destination.index, "source   ", result.source.index);
+    if (result && result.destination != undefined && result.draggableId != undefined) {
+      reorderGroups(result.draggableId, result.destination.index);
+      const group = column.groups[result.source.index];
+      
+      column.groups.splice(result.source.index, 1);
+      column.groups.splice(result.destination.index, 0, group);
+
+    }
 
   }
 
@@ -785,8 +791,6 @@ export function RetroColumn({
         {/* </Box> */}
         {useMemo(
           () => (
-
-
             <>
               {!column.publish && global.user.userType !== 2 ? (
                 <Box
@@ -864,18 +868,20 @@ export function RetroColumn({
                     flexGrow: 2,
                   }}
                 >
-                  <DragDropContext onDragEnd={reorderNumbers}>
-                    <Droppable droppableId="droppable">
+                  <DragDropContext onDragEnd={reorderNumbers} >
+                    <Droppable droppableId="droppable" >
                       {(provided) => (
                         <div {...provided.droppableProps} ref={provided.innerRef}>
-                          {cardGroups.map((group, i) => (
-                            <Drag key={i} draggableId={group.id.toString()} index={i}>
+                          {column.groups.map((group, i) => (
+                            (true)&&
+                              <Drag key={group.id} draggableId={group.id.toString()} index={i} isDragDisabled={global.user.userType != 2} >
                               {/* <React.Fragment key={i}> */}
                               {(provided, snapshot) => (
                                 <div ref={provided.innerRef}
                                   {...provided.draggableProps}
+                                
                                 >
-                                  <span {...provided.dragHandleProps}></span>
+                                  <span {...provided.dragHandleProps}></span> 
                                   <Grid
                                     container
                                     lg={12}
@@ -889,6 +895,7 @@ export function RetroColumn({
                                       background:
                                         group.name !== UNGROUPED ? groupColour : 'none',
                                     }}
+                                
                                   >
                                     <RetroCardGroup
                                       admin={global.user.userType == 2}
@@ -905,6 +912,9 @@ export function RetroColumn({
                                         groupCollapsed[i] = !groupCollapsed[i];
                                         setGroupCollapsed([...groupCollapsed]);
                                       }}
+                                    onDispatchLoading={value=>{
+                                      dispatchLoadingFlag(value)
+                                    }}  
                                     >
                                       {group.name === UNGROUPED ||
                                         !groupCollapsed[i] ||
@@ -1051,14 +1061,14 @@ export function RetroColumn({
                     </Droppable>
 
                   </DragDropContext>
+
+  
                   <span
                     ref={surroundDiv}
                     style={{ display: 'none' }}
                   ></span>
                 </div>)}
             </>
-
-
           ),
           [column.groups, groupCollapsed]
         )}

@@ -22,6 +22,7 @@ export enum BoardActionType {
   MOVE_CARD = 'moveCard',
   MERGE_CARDS = 'mergeCards',
   REORDER_CARD = 'reorderCard',
+  REORDER_GROUP = "reorderGroup",
   ADD_REACT_TO_CARD = 'addReactToCard',
   ADD_REACT_TO_GROUP = 'addReactToGroup',
   REMOVE_REACT_FROM_CARD = 'removeReactFromCard',
@@ -507,6 +508,8 @@ export const validateAction = (
       );
     case BoardActionType.REORDER_CARD:
       return true;
+    case BoardActionType.REORDER_GROUP:
+      return true;
     case BoardActionType.ADD_REACT_TO_CARD:
       return isAddReactToCardValid(parameters.cardId, parameters.react, userId);
     case BoardActionType.REMOVE_REACT_FROM_CARD:
@@ -727,6 +730,7 @@ export const processAction = (
     userId: string,
     avatar: string
   ) => {
+  
     if (!findCard(id).card) {
       const { group } = findGroup(groupId);
       if (group) {
@@ -764,9 +768,9 @@ export const processAction = (
         group.cards.splice(index as number, 1);
         cardsList.splice(
           toIndex -
-            (group.id === targetGroup.id && (index as number) < toIndex
-              ? 1
-              : 0),
+          (group.id === targetGroup.id && (index as number) < toIndex
+            ? 1
+            : 0),
           0,
           card
         );
@@ -798,6 +802,17 @@ export const processAction = (
       }
     }
   };
+
+  const reorderGroups = (groupId: string, index: number, userId: string) => {
+    const { column, group, index: oldIndex } = findGroup(groupId);
+    if (column && group && index !== undefined && oldIndex != undefined) {
+      column.groups.splice(oldIndex, 1);
+      column.groups.splice(index, 0, group);
+    }
+
+
+
+  }
 
   const mergeCards = (
     groupId: string,
@@ -1177,6 +1192,9 @@ export const processAction = (
         parameters.moveToLast,
         userId
       );
+      break;
+    case BoardActionType.REORDER_GROUP:
+      reorderGroups(parameters.groupId, parameters.index, userId);
       break;
     case BoardActionType.ADD_REACT_TO_CARD:
       addReactToCard(parameters.cardId, parameters.react, userId);

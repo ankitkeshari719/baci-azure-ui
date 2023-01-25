@@ -22,24 +22,9 @@ import { ConfirmContext } from '../contexts/ConfirmContext';
 import { ActionType, GlobalContext } from '../contexts/GlobalContext';
 import { flexbox } from '@mui/system';
 import { DraggableProvided, DraggableProvidedDraggableProps } from 'react-beautiful-dnd';
+import { XMarkIcon, CheckIcon } from '@heroicons/react/24/solid';
 
 
-const TextFieldNoBorderWrapper = styled('div')({
-  '.MuiInputBase-multiline': {
-    paddingLeft: '10px',
-    paddingRight: '10px',
-  },
-  alignItems: 'center',
-  display: 'flex',
-  fieldset: {
-    border: 'none',
-  },
-  paddingTop: '10px',
-  paddingLeft: '15px',
-  input: {
-    padding: 0,
-  },
-});
 
 export function RetroCardGroup({
   admin,
@@ -50,6 +35,7 @@ export function RetroCardGroup({
   showCollapse,
   provided,
   onCollapse,
+  onDispatchLoading
 }: {
   admin: boolean;
   group: CardGroup;
@@ -57,8 +43,9 @@ export function RetroCardGroup({
   columnId: string;
   children: React.ReactNode;
   showCollapse: boolean;
-  provided:DraggableProvided;
+  provided: DraggableProvided;
   onCollapse: (value: any) => void;
+  onDispatchLoading: (value: any) => void;
 }) {
   const [global, dispatch] = React.useContext(GlobalContext);
 
@@ -72,6 +59,7 @@ export function RetroCardGroup({
   const [nameSet, setNameSet] = React.useState(!!group.name);
   const [reactGroups, setReactGroups] = React.useState<any>({});
   const [myReact, setMyReact] = React.useState<boolean>(false);
+  const [enableEdit, setEnableEdit] = React.useState<boolean>(false);
   const userReacted = !!group.reactions?.find(
     react => react.userId === global.user.id
   );
@@ -156,6 +144,36 @@ export function RetroCardGroup({
     );
   }, [group.reactions]);
 
+  React.useEffect(() => {
+    const inputText = document.getElementById("groupTextField" + group.id);
+    if (inputText && enableEdit) {
+      setNameSet(true);
+      inputText.focus();
+    }
+
+  }, [enableEdit])
+
+  const saveGroupName = async () => {
+
+    if (admin) {
+
+      lockGroup(group.id, false);
+      if (name == group.name || !name) {
+
+        setEnableEdit(false); setName(group.name)
+      } else {
+        onDispatchLoading(true)
+        await setGroupName(group.id, name).then(res => {
+          onDispatchLoading(false)
+          setEnableEdit(false);
+        }, err => {
+          setEnableEdit(false);
+        })
+
+      }
+    }
+  }
+
   return (
     <>
       <Card
@@ -170,160 +188,174 @@ export function RetroCardGroup({
           paddingBottom: '5px',
           width: '100%',
         }}
-        
+
       >
         {group.name !== UNGROUPED ? (
           <div {...provided.dragHandleProps}>
-          <Grid container justifyContent="space-between" paddingLeft={1.5} paddingRight={1.5} >
-          
-            <Grid
-              item
-              xs={6}
-              lg={global?.expandColumn !== -1 ? 8 : 6}
-              md={global?.expandColumn !== -1 ? 6 : 4}
-              sx={{
-                // height: '30px',
-                display: 'flex',
-                flexDirection: 'row',
-                alignItems: 'center',
-              }}
-            >
-              {admin ? (
-                <TextField
-                  type="text"
-                  sx={{
-                    // flexGrow: 22,
-                    fontStyle: nameSet ? 'normal' : 'italic',
-                    textarea: {
-                      fontWeight: '600',
-                      padding: 0,
-                      color: nameSet ? groupFontColour : '#8D858A',
-                    },
-                    fieldset: { border: 'none' },
-                    px: 2,
-                    py: 2,
-                    paddingBottom: 0,
-                    padding: 0,
-                    // paddingLeft: '12px!important',
-                    width: global.expandColumn!=-1?'200px': '100%',
-                    // width: (nameSet ? name.length : 14) + 3 + 'ch',
-                    div: { padding: 0, position: 'initial', width: '100%' },
-                    position: 'initial',
-                  }}
-                  maxRows={2}
-                  inputProps={{ maxLength: 25 }}
-                  value={nameSet ? name : 'Name grouping'}
-                  multiline
-                  onChange={event => {
-                    if (admin) {
-                      setName(
-                        event.target.value.replace(
-                          ' ( ' + group.cards.length + ' ) ',
-                          ''
-                        )
-                      );
-                    }
-                  }}
-                  InputProps={{
-                    readOnly: ended,
-                  }}
-                  onFocus={async event => {
-                    if (admin) {
-                      setNameSet(true);
-                      await lockGroup(group.id, true);
-                    }
-                  }}
-                  onBlur={async () => {
-                    if (admin) {
-                      lockGroup(group.id, false);
-                      if (!name) {
-                        setNameSet(false);
-                      } else {
-                        await setGroupName(group.id, name);
-                      }
-                    }
-                  }}
-                />
-              ) : (
-                <Typography
-                  sx={{
-                    color: nameSet ? groupFontColour : '#8D858A',
-                    whiteSpace: 'nowrap',
-                    width: '100%',
-                    overflow: 'hidden',
-                    textOverflow: 'ellipsis',
-                  }}
-                >
-                  {nameSet ? name : 'Name grouping'}
-                </Typography>
-              )}</Grid>
-            <Grid item lg={global?.expandColumn !== -1 ? 1 : 3} md={global?.expandColumn !== -1 ? 1.5 : 4} xs={4} container flexDirection="row" alignItems="center" justifyContent="space-between">
-              <Grid
-                style={{
-                  fontWeight: '600',
-                  padding: 0,
-                  color: nameSet ? groupFontColour : '#8D858A',
+            <Grid container justifyContent="space-between" paddingLeft={1.5} paddingRight={1.5} >
 
-                }}
-              >
-                {'( ' + group.cards.length + ' )'}
-              </Grid>
-              {group.name !== UNGROUPED && (
-
-                <Grid
-
-                  item
-                  display="flex"
-                  flexDirection="row"
-                  alignSelf="center"
-                  style={{ cursor: (!ended && !global.leaveRetro) ? "pointer" : "auto" }}
-
-                  onClick={() =>
-                    !ended && !global.leaveRetro
-                      ? userReacted
-                        ? addReactToGroup(group.id, '')
-                        : addReactToGroup(group.id, '👍')
-                      : null
-                  }
-                >
-                  {userReacted ? (
-                    <img src="/svgs/StarGold.svg" />
-
-                  ) : (
-                    <>
-                      {ended || global.leaveRetro ? (
-                        <img src="/svgs/StarDisabled.svg" />
-                      ) : (
-                        <img src="/svgs/StarEnabled.svg" />
-                      )}
-                    </>
-                  )}
-                  <Typography
-                    color="#FBBC05"
-                    style={{
-                      fontSize: '1rem',
-                      marginLeft: '6px',
-                      marginTop: '1px',
-                    }}
-                  >
-                    {group.reactions?.length ? group.reactions?.length : ''}
-                  </Typography>
-                </Grid>
-
-              )}
               <Grid
                 item
+                xs={6}
+                lg={global?.expandColumn !== -1 ? 8 : 8}
+                md={global?.expandColumn !== -1 ? 6 : 4}
                 sx={{
-                  cursor: 'pointer'
-                }}
-                onClick={event => {
-                  onCollapse(event)
+                  // height: '30px',
+                  display: 'flex',
+                  flexDirection: 'row',
+                  alignItems: 'center',
                 }}
               >
-                {showCollapse ? <img src="/svgs/Down.svg" /> : <img src="/svgs/Up.svg" />}
+                {admin && enableEdit ? (
+                  <>
+                    <Grid item lg={12}>
+                      <TextField
+                        type="text"
+                        sx={{
+                          // flexGrow: 22,
+                          fontStyle: nameSet ? 'normal' : 'italic',
+                          textarea: {
+                            fontWeight: '600',
+                            padding: 0,
+                            color: nameSet ? groupFontColour : '#8D858A',
+                          },
+                          fieldset: { border: 'none' },
+                          px: 2,
+                          py: 2,
+                          paddingBottom: 0,
+                          padding: 0,
+                          // paddingLeft: '12px!important',
+                          width: global.expandColumn != -1 ? '200px' : '100%',
+                          // width: (nameSet ? name.length : 14) + 3 + 'ch',
+                          div: { padding: 0, position: 'initial', width: '100%' },
+                          position: 'initial',
+                        }}
+                        id={"groupTextField" + group.id}
+                        maxRows={2}
+                        inputProps={{ maxLength: 25 }}
+                        value={nameSet ? name : 'Name grouping'}
+                        multiline
+                        onChange={event => {
+                          if (admin) {
+                            setName(
+                              event.target.value.replace(
+                                ' ( ' + group.cards.length + ' ) ',
+                                ''
+                              )
+                            );
+                          }
+                        }}
+                        InputProps={{
+                          readOnly: ended,
+                        }}
+                      // onFocus={async event => {
+                      //   if (admin) {
+                      //     setNameSet(true);
+                      //     await lockGroup(group.id, true);
+                      //   }
+                      // }}
+                      // onBlur={async () => {
+                      //   if (admin) {
+                      //     lockGroup(group.id, false);
+                      //     if (!name) {
+                      //       setNameSet(false);
+                      //     } else {
+                      //       await setGroupName(group.id, name);
+                      //     }
+                      //   }
+                      // }}
+                      />
+                    </Grid>
+                    <XMarkIcon color="red" onClick={() => { setEnableEdit(false); setName(group.name); }} style={{ height: '24px', width: '24px', fontWeight: '600', cursor: 'pointer' }} />
+
+                    <CheckIcon color="green" onClick={saveGroupName} style={{ height: '24px', width: '24px', fontWeight: '600', marginLeft: '10px', cursor: 'pointer' }} />
+                  </>
+                ) : (
+                  <Typography
+                    sx={{
+                      color: nameSet ? groupFontColour : '#8D858A',
+                      whiteSpace: 'nowrap',
+                      width: '100%',
+                      overflow: 'hidden',
+                      textOverflow: 'ellipsis',
+                      fontWeight: '600'
+                    }}
+                    onClick={(e) => {
+                      switch (e.detail) {
+                        case 2: setEnableEdit(true);
+                      }
+                    }}
+                  >
+                    {nameSet ? name : 'Name grouping'}
+                  </Typography>
+                )}</Grid>
+              <Grid item lg={global?.expandColumn !== -1 ? 1 : 3} md={global?.expandColumn !== -1 ? 1.5 : 4} xs={4} container flexDirection="row" alignItems="center" justifyContent="space-between">
+                <Grid
+                  style={{
+                    fontWeight: '600',
+                    padding: 0,
+                    color: nameSet ? groupFontColour : '#8D858A',
+
+                  }}
+                >
+                  {'( ' + group.cards.length + ' )'}
+                </Grid>
+                {group.name !== UNGROUPED && (
+
+                  <Grid
+
+                    item
+                    display="flex"
+                    flexDirection="row"
+                    alignSelf="center"
+                    style={{ cursor: (!ended && !global.leaveRetro) ? "pointer" : "auto" }}
+
+                    onClick={() =>
+                      !ended && !global.leaveRetro
+                        ? userReacted
+                          ? addReactToGroup(group.id, '')
+                          : addReactToGroup(group.id, '👍')
+                        : null
+                    }
+                  >
+                    {userReacted ? (
+                      <img src="/svgs/StarGold.svg" />
+
+                    ) : (
+                      <>
+                        {ended || global.leaveRetro ? (
+                          <img src="/svgs/StarDisabled.svg" />
+                        ) : (
+                          <img src="/svgs/StarEnabled.svg" />
+                        )}
+                      </>
+                    )}
+                    <Typography
+                      color="#FBBC05"
+                      style={{
+                        fontSize: '1rem',
+                        marginLeft: '6px',
+                        marginTop: '1px',
+                      }}
+                    >
+                      {group.reactions?.length ? group.reactions?.length : ''}
+                    </Typography>
+                  </Grid>
+
+                )}
+                <Grid
+                  item
+                  sx={{
+                    cursor: 'pointer'
+                  }}
+                  onClick={event => {
+                    onCollapse(event)
+                  }}
+                >
+                  {showCollapse ? <img src="/svgs/Down.svg" /> : <img src="/svgs/Up.svg" />}
+                </Grid>
               </Grid>
-            </Grid>
-          </Grid></div>
+            </Grid></div>
         ) : null}
 
         {showCollapse &&

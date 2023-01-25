@@ -62,9 +62,9 @@ const styles = {
 
 export function AvatarNamePage() {
   const [global, dispatch] = React.useContext(GlobalContext);
-  const [retroName, setRetroName] = React.useState(
-    sessionStorage.getItem('retroname') || ''
-  );
+  // const [retroName, setRetroName] = React.useState(
+  //   sessionStorage.getItem('retroname') || ''
+  // );
   const {
     state: {
       users,
@@ -74,6 +74,7 @@ export function AvatarNamePage() {
       ended,
       needsToShow,
       retroStatus,
+      retroName
     },
     commitAction,
   } = React.useContext(BoardContext);
@@ -205,41 +206,44 @@ export function AvatarNamePage() {
     setUserName(e);
   };
   React.useEffect(() => {
-    if (
-      !global.user.id ||
-      global.user.id == undefined ||
-      global.user.id == null
-    ) {
-      useAzureAuth;
-    } else {
-    }
-    if (!global.currentRetro?.name) {
-      dispatch({
-        type: ActionType.SET_LOADING,
-        payload: { loadingFlag: true },
-      });
-      joinRetro(true).then(
-        res => {
-          dispatch({
-            type: ActionType.SET_LOADING,
-            payload: { loadingFlag: false },
-          });
-
-          data123();
-        },
-        err => {
-          dispatch({
-            type: ActionType.SET_LOADING,
-            payload: { loadingFlag: false },
-          });
-        }
-      );
-    } else {
-      data123();
-    }
+  
+      if (
+        !global.user.id ||
+        global.user.id == undefined ||
+        global.user.id == null
+      ) {
+        useAzureAuth;
+      } else {
+      }
+      if (!global.currentRetro?.name) {
+        dispatch({
+          type: ActionType.SET_LOADING,
+          payload: { loadingFlag: true },
+        });
+        joinRetro(true).then(
+          res => {
+            dispatch({
+              type: ActionType.SET_LOADING,
+              payload: { loadingFlag: false },
+            });
+  
+            navigatorFunction();
+          },
+          err => {
+            dispatch({
+              type: ActionType.SET_LOADING,
+              payload: { loadingFlag: false },
+            });
+          }
+        );
+      } else {
+        navigatorFunction();
+      }
+    
+ 
   }, [users, global?.user?.id]);
 
-  const data123 = (): any => {
+  const navigatorFunction = (): any => {
     if (
       retroId != undefined &&
       retroId != '' &&
@@ -326,12 +330,12 @@ export function AvatarNamePage() {
                   color={commonStyles.primaryDark}
                   mt="30px"
                 >
-                  Who you are in ‘{global.currentRetro?.name}’?
+                  Who you are in ‘{retroName}’?
                 </Typography>
               </>
             ) : !isXsUp ? (
               <Typography variant="h3" color={commonStyles.primaryDark}>
-                Who you are in ‘{global.currentRetro?.name}’?
+                Who you are in ‘{retroName}’?
               </Typography>
             ) : (
               <>
