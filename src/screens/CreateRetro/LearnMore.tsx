@@ -64,7 +64,7 @@ export function LearnMore({
                 component="div"
                 className="selectedTemplate"
               >
-                Sailboat
+                {selectedTemplate.templateName}
               </Typography>
               <Button
                 autoFocus
@@ -102,8 +102,8 @@ export function LearnMore({
             }}
           >
             <span className="text_one">This is a </span>
-            <span className="text_two">&nbsp;classic template for</span>
-            <span className="text_one">&nbsp;retros</span>.
+            <span className="text_two">&nbsp;classic template</span>
+            <span className="text_one">&nbsp;for retros</span>.
           </Box>
         </Grid>
         {/* Text two */}
