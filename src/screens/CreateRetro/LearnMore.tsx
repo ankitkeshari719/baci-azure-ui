@@ -183,7 +183,7 @@ export function LearnMore({
             sx={{ mt: 4 }}
             component="img"
             alt="Logo"
-            src="/images/LearnMoreFour.png"
+            src="/images/whatWentWellImage.png"
           />
         </Grid>
         <Grid
