@@ -8,7 +8,7 @@ import {
   Dialog,
   CardActions,
   Grid,
-  useMediaQuery
+  useMediaQuery,
 } from '@mui/material';
 import '../../global.scss';
 import './styles.scss';
@@ -21,7 +21,6 @@ import { CustomizeTemplate } from './CustomizeTemplate';
 import * as Icons from 'heroicons-react';
 import { createUseStyles } from 'react-jss';
 import theme from '../../theme/theme';
-
 
 function SampleNextArrow(props: any) {
   const { className, style, onClick } = props;
@@ -298,6 +297,7 @@ export function RetroTemplateTab({
                         <Grid item xs={12}>
                           <Box sx={{ float: 'left' }}>
                             <Button
+                              disabled={template.isComingSoon}
                               size="small"
                               onClick={handleLearnMoreDialog}
                               sx={{ padding: '0px' }}
@@ -309,6 +309,7 @@ export function RetroTemplateTab({
                           </Box>
                           <Box sx={{ float: 'right' }}>
                             <Button
+                              disabled={template.isComingSoon}
                               variant="outlined"
                               size="small"
                               className="customButton"

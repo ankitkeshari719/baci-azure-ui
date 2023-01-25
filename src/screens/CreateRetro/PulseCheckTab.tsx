@@ -254,7 +254,11 @@ export function PulseCheckTab({
                             padding: '16px',
                           }}
                         >
-                          <Button size="small" sx={{ padding: '0px' }}>
+                          <Button
+                            size="small"
+                            sx={{ padding: '0px' }}
+                            disabled={pulseCheck.isComingSoon}
+                          >
                             <Typography className="templateLink">
                               Learn More
                             </Typography>
