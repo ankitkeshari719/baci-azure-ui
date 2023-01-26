@@ -381,6 +381,7 @@ export const pulseChecksData: pulseCheckInterface[] = [
       '4. Decision Making (Individual and Team)',
       '5. Openness to Feedback & Test and Learn',
       '6. Work Prioritisation',
+      '0. Code Hack--> Will Not going to show',
       '7. Work Technology and Tools',
     ],
     valueDescription: [
@@ -390,6 +391,7 @@ export const pulseChecksData: pulseCheckInterface[] = [
       'Your team have people with clear roles empowered to make decisions & you are supported with the right career opportunities',
       'You are free to give each other feedback, open to test & learn, and not afraid to make a mistake or fail',
       'Your team has a regular cadence to plan & prioritise work, and to change quickly if the workload is not sustainable',
+      '0. Code Hack--> Will Not going to show',
       'You have the necessary technological tools and modular architecture to foster minimum dependencies and maximum collaboration & delivery',
     ],
   },
