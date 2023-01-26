@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { Box, Link, Typography } from '@mui/material';
+import { Box, Link, Tooltip, Typography } from '@mui/material';
 import { GlobalContext } from '../../contexts/GlobalContext';
 import { EmailShareButton } from 'react-share';
 import * as Icons from 'heroicons-react';
@@ -8,6 +8,18 @@ import './styles.scss';
 
 export function ShareParticipants() {
   const [global, dispatch] = React.useContext(GlobalContext);
+  const [iscopied, setIsCopied] = React.useState(false);
+
+  const handleTooltipClose = () => {
+    setTimeout(() => {
+      setIsCopied(false);
+    }, 1500);
+  };
+
+  const onLinkCopied = () => {
+    navigator.clipboard.writeText(global?.currentRetro?.joinUrl!);
+    setIsCopied(true);
+  };
 
   return (
     <Box className="participantContainer">
@@ -64,19 +76,26 @@ export function ShareParticipants() {
         whiteSpace="normal"
         className="productUrl"
       >
-        <Link href="global?.currentRetro?.joinUrl" color="#676767;">
+        <Link href={global.currentRetro?.joinUrl + ''} color="#676767;">
           {global?.currentRetro?.joinUrl}{' '}
         </Link>
-        <Icons.DocumentDuplicateOutline
-          size={20}
-          style={{
-            marginLeft: '8px',
-            cursor: 'pointer',
-          }}
-          onClick={() =>
-            navigator.clipboard.writeText(global?.currentRetro?.joinUrl!)
-          }
-        />
+        <Tooltip
+          onClose={handleTooltipClose}
+          open={iscopied}
+          style={{ width: '20px', fontSize: '10px' }}
+          enterNextDelay={1500}
+          placement="top"
+          title="Link Copied!"
+        >
+          <Icons.DocumentDuplicateOutline
+            size={20}
+            style={{
+              marginLeft: '8px',
+              cursor: 'pointer',
+            }}
+            onClick={onLinkCopied}
+          />
+        </Tooltip>
       </Box>
       {/* Email Sharing */}
       <Box sx={{ mt: 4 }}>
