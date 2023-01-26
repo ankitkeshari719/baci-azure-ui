@@ -91,12 +91,17 @@ export function CustomizeTemplate({
 
   React.useEffect(() => {
     setTempSelectedTemplate(selectedTemplate);
-    setDragDropList(selectedTemplate.columns);
+    const newArr =
+      selectedTemplate.columns &&
+      selectedTemplate.columns.map((element: any) => ({
+        ...element,
+        isHovered: false,
+      }));
+    setDragDropList(newArr);
   }, []);
 
   const onDragComplete = (result: any) => {
     if (!result.destination) return;
-
     const arr = [...dragDropList];
 
     //Changing the position of Array element
@@ -105,7 +110,14 @@ export function CustomizeTemplate({
 
     //Updating the list
     setDragDropList(arr);
+
+    // Removing the isHovered
+    arr.forEach(function (v: any) {
+      delete v.isHovered;
+    });
+
     setTempSelectedTemplate({ ...tempSelectedTemplate, columns: [...arr] });
+
     setSelectedTemplate(tempSelectedTemplate);
   };
 
@@ -120,8 +132,33 @@ export function CustomizeTemplate({
       return column;
     });
     setIsTemplateCustomized(true);
+    data.forEach(function (v: any) {
+      delete v.isHovered;
+    });
+
     setTempSelectedTemplate({ ...tempSelectedTemplate, columns: [...data] });
+
     setSelectedTemplate(tempSelectedTemplate);
+  };
+
+  const handleMouseEnter = (i: number) => {
+    const newArr = dragDropList.map((element: any, index: number) => {
+      if (index === i) {
+        element.isHovered = true;
+      }
+      return element;
+    });
+    setDragDropList(newArr);
+  };
+
+  const handleMouseLeave = (i: number) => {
+    const newArr = dragDropList.map((element: any, index: number) => {
+      if (index === i) {
+        element.isHovered = false;
+      }
+      return element;
+    });
+    setDragDropList(newArr);
   };
 
   // Function to handle the select button click
@@ -175,9 +212,7 @@ export function CustomizeTemplate({
                 autoFocus
                 variant="contained"
                 className="saveButton"
-                onClick={() =>
-                  onClickSelectButton(selectedTemplate.templateId)
-                }
+                onClick={() => onClickSelectButton(selectedTemplate.templateId)}
               >
                 <Typography className="saveButtonText" component="span">
                   Select
@@ -209,98 +244,117 @@ export function CustomizeTemplate({
                           item
                           xs={4}
                           sx={{
-                            marginLeft: index === 1 ? '24px' : '0px',
-                            marginRight: index === 1 ? '24px' : '0px',
+                            marginLeft: index === 1 ? '48px' : '0px',
+                            marginRight: index === 1 ? '48px' : '0px',
                           }}
                           ref={provided.innerRef}
                           {...provided.draggableProps}
                           {...provided.dragHandleProps}
+                          onMouseEnter={() => handleMouseEnter(index)}
+                          onMouseLeave={() => handleMouseLeave(index)}
                         >
-                          {/* <span className="material-symbols-outlined">
-                            <Icons.AdjustmentsOutline
-                              color="#676767"
-                              style={{
-                                width: '30px',
-                                height: '30px',
-                              }}
-                            />
-                          </span> */}
                           <ColumnComponent
                             sx={{
                               height: isXsUp
                                 ? 'calc(var(--app-height) - 115px)'
                                 : 'calc(var(--app-height) - 160px)',
-                              background: column.cardColor,
-                              border: '1px solid ' + column.groupFontColor,
-                              borderRadius: '8px',
                             }}
                           >
+                            <Box>
+                              {column.isHovered && (
+                                <span>
+                                  <img
+                                    src="/images/drag_icon.png"
+                                    style={{
+                                      width: '20px',
+                                      height: '36px',
+                                      cursor: 'pointer',
+                                      position: 'relative',
+                                      top: ' 16px',
+                                    }}
+                                  />
+                                </span>
+                              )}
+                            </Box>
                             <Box
-                              whiteSpace="normal"
                               sx={{
                                 width: '100%',
-                                height: '48px',
-                                display: 'flex',
-                                justifyContent: 'center',
-                                alignItems: 'center',
-                                borderRadius: '9px 9px 0px 0px',
-                                background: column.groupColor,
+                                background: column.cardColor,
+                                border: '1px solid ' + column.groupFontColor,
+                                borderRadius: '8px',
                               }}
                             >
-                              <StyledEdiText
-                                type="text"
-                                value={column.name}
-                                showButtonsOnHover
-                                onSave={value =>
-                                  handleColumnNameChange(value, column.id)
-                                }
-                                validation={val => val.length <= 35}
-                                inputProps={{
-                                  style: {
-                                    color: column.groupFontColor + '!important',
-                                    fontSize: '16px',
-                                    fontWeight: 600,
-                                    fontFamily: 'Poppins',
-                                    fontStyle: 'normal',
-                                    lineHeight: '20px',
-                                    display: 'flex',
-                                    alignItems: 'center',
-                                    letterSpacing: '0.6px',
-                                    borderRadius: '8px',
-                                  },
+                              <Box
+                                whiteSpace="normal"
+                                sx={{
+                                  width: '100%',
+                                  height: '80px',
+                                  display: 'flex',
+                                  justifyContent: 'center',
+                                  alignItems: 'center',
+                                  borderRadius: '9px 9px 0px 0px',
+                                  background: column.groupColor,
+                                  wordBreak: 'break-all',
                                 }}
-                                hideIcons={true}
-                                editButtonContent={
-                                  <Icons.PencilOutline
-                                    size={20}
-                                    style={{
-                                      color: '#000000',
-                                      fontSize: '14px',
-                                      cursor: 'pointer',
-                                    }}
-                                  />
-                                }
-                                cancelButtonContent={
-                                  <Icons.XOutline
-                                    size={20}
-                                    style={{
-                                      color: '#000000',
-                                      fontSize: '14px',
-                                      cursor: 'pointer',
-                                    }}
-                                  />
-                                }
-                                saveButtonContent={
-                                  <Icons.Check
-                                    size={20}
-                                    style={{
-                                      color: '#000000',
-                                      fontSize: '14px',
-                                      cursor: 'pointer',
-                                    }}
-                                  />
-                                }
-                              />
+                              >
+                                <StyledEdiText
+                                  type="text"
+                                  value={column.name}
+                                  showButtonsOnHover
+                                  onSave={value =>
+                                    handleColumnNameChange(value, column.id)
+                                  }
+                                  validationMessage="Maximum 80 characters allowed."
+                                  validation={val => val.length <= 80}
+                                  inputProps={{
+                                    style: {
+                                      color:
+                                        column.groupFontColor + '!important',
+                                      fontSize: '16px',
+                                      fontWeight: 600,
+                                      fontFamily: 'Poppins',
+                                      fontStyle: 'normal',
+                                      lineHeight: '20px',
+                                      display: 'flex',
+                                      alignItems: 'center',
+                                      letterSpacing: '0.6px',
+                                      borderRadius: '8px',
+                                      wordBreak: 'break-all',
+                                    },
+                                  }}
+                                  hideIcons={true}
+                                  editButtonContent={
+                                    <Icons.PencilOutline
+                                      size={20}
+                                      style={{
+                                        color: '#000000',
+                                        fontSize: '14px',
+                                        cursor: 'pointer',
+                                      }}
+                                    />
+                                  }
+                                  cancelButtonContent={
+                                    <Icons.XOutline
+                                      size={20}
+                                      style={{
+                                        color: '#000000',
+                                        fontSize: '14px',
+                                        cursor: 'pointer',
+                                      }}
+                                    />
+                                  }
+                                  saveButtonContent={
+                                    <Icons.Check
+                                      size={20}
+                                      style={{
+                                        color: '#000000',
+                                        fontSize: '14px',
+                                        cursor: 'pointer',
+                                      }}
+                                    />
+                                  }
+                                />
+                              </Box>
                             </Box>
                           </ColumnComponent>
                         </Grid>
