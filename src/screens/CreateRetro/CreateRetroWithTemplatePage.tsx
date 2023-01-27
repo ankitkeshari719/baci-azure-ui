@@ -151,6 +151,18 @@ export function CreateRetroWithTemplatePage({
     setSelectedPulseCheck(selectedPulseCheck_l);
   }
 
+  function handlePulseCheckSelectClick(selectedPulseCheckId: any) {
+    let data: any = pulseChecks?.map(pulseCheck => {
+      if (pulseCheck.id === selectedPulseCheckId) {
+        pulseCheck.checked = true;
+      } else {
+        pulseCheck.checked = false;
+      }
+      return pulseCheck;
+    });
+    setTemplates(data);
+  }
+
   // Function to handle User Name on change
   const handleUsername = (e: string) => {
     setUserNameWarning('');
@@ -341,6 +353,7 @@ export function CreateRetroWithTemplatePage({
           onClickBack={onClickBack}
           selectedPulseCheck={selectedPulseCheck}
           handlePulseCheck={handlePulseCheck}
+          handlePulseCheckSelectClick={handlePulseCheckSelectClick}
         />
         <UserDetailsTab
           activePanel={activePanel}

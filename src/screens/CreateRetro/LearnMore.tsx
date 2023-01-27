@@ -21,7 +21,7 @@ export function LearnMore({
 }: Props) {
   // Function to handle the select button click
   const onClickSelectButton = (templateId: string) => {
-    handleTemplateSelectClick(selectedTemplate.templateId);
+    handleTemplateSelectClick(templateId);
     closeLearnMoreDialog();
   };
 

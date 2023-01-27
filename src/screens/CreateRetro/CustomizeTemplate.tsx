@@ -88,6 +88,7 @@ export function CustomizeTemplate({
   const isXsUp = useMediaQuery(theme.breakpoints.only('xs'));
   const [tempSelectedTemplate, setTempSelectedTemplate] = React.useState<any>();
   const [dragDropList, setDragDropList] = React.useState<any>([]);
+  const [initialHeight, setInitialHeight] = React.useState<string>('60px');
 
   React.useEffect(() => {
     setTempSelectedTemplate(selectedTemplate);
@@ -125,12 +126,22 @@ export function CustomizeTemplate({
     value: React.SetStateAction<string>,
     columnId: string
   ) => {
+    
     let data: any = tempSelectedTemplate.columns?.map((column: any) => {
       if (column.id === columnId) {
         column.name = value;
       }
       return column;
     });
+    if(value.length > 60 && value.length <= 80){
+      setInitialHeight('80px')
+    }else if(value.length > 80 && value.length <= 100){
+      setInitialHeight('100px')
+    }else if(value.length > 100 && value.length <= 120){
+      setInitialHeight('120px')
+    }else if(value.length > 120 && value.length <= 150){
+      setInitialHeight('140px')
+    }
     setIsTemplateCustomized(true);
     data.forEach(function (v: any) {
       delete v.isHovered;
@@ -288,7 +299,7 @@ export function CustomizeTemplate({
                                 whiteSpace="normal"
                                 sx={{
                                   width: '100%',
-                                  height: '80px',
+                                  height: initialHeight,
                                   display: 'flex',
                                   justifyContent: 'center',
                                   alignItems: 'center',
@@ -304,8 +315,8 @@ export function CustomizeTemplate({
                                   onSave={value =>
                                     handleColumnNameChange(value, column.id)
                                   }
-                                  validationMessage="Maximum 80 characters allowed."
-                                  validation={val => val.length <= 80}
+                                  validationMessage="Maximum 150 characters allowed."
+                                  validation={val => val.length <= 150}
                                   inputProps={{
                                     style: {
                                       color:

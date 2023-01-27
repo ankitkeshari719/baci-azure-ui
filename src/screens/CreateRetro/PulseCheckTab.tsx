@@ -8,6 +8,7 @@ import {
   CardActions,
   Grid,
   useMediaQuery,
+  Dialog,
 } from '@mui/material';
 import '../../global.scss';
 import './styles.scss';
@@ -18,6 +19,7 @@ import { ContainedButton, OutlinedButton } from '../../components';
 import * as Icons from 'heroicons-react';
 import { createUseStyles } from 'react-jss';
 import theme from '../../theme/theme';
+import { LearnMorePulseCheck } from './LearnMorePulseCheck';
 
 function SampleNextArrow(props: any) {
   const { className, style, onClick } = props;
@@ -77,6 +79,7 @@ type Props = {
   onClickBack: (previousPanel: string) => void;
   onClickNext: (currentPanel: string, nextPanel: string) => void;
   handlePulseCheck: (selectedPulseCheck: pulseCheckInterface) => void;
+  handlePulseCheckSelectClick: (selectedTemplateId: string) => void;
 };
 
 export function PulseCheckTab({
@@ -85,11 +88,13 @@ export function PulseCheckTab({
   onClickNext,
   onClickBack,
   handlePulseCheck,
+  handlePulseCheckSelectClick,
 }: Props) {
   const [height, setHeight] = React.useState(0);
   const classes = useStyles();
   const isMdUp: any = useMediaQuery(theme.breakpoints.only('md'));
   const isXsUp: any = useMediaQuery(theme.breakpoints.only('xs'));
+  const [openLearnMoreDialog, setOpenLearnMoreDialog] = React.useState(false);
 
   React.useEffect(() => {
     setHeight(window.innerHeight);
@@ -109,7 +114,7 @@ export function PulseCheckTab({
         breakpoint: 1700,
         settings: {
           slidesToShow: 2,
-          slidesToScroll: 2,  
+          slidesToScroll: 2,
           speed: 500,
         },
       },
@@ -122,6 +127,15 @@ export function PulseCheckTab({
         },
       },
     ],
+  };
+
+  // Learn More Dialog Open / Close
+  const handleLearnMoreDialog = () => {
+    setOpenLearnMoreDialog(true);
+  };
+
+  const closeLearnMoreDialog = () => {
+    setOpenLearnMoreDialog(false);
   };
 
   return (
@@ -258,6 +272,7 @@ export function PulseCheckTab({
                             size="small"
                             sx={{ padding: '0px' }}
                             disabled={pulseCheck.isComingSoon}
+                            onClick={handleLearnMoreDialog}
                           >
                             <Typography className="templateLink">
                               Learn More
@@ -303,6 +318,17 @@ export function PulseCheckTab({
           </>
         )}
       </Box>
+      <Dialog
+        fullScreen
+        open={openLearnMoreDialog}
+        onClose={closeLearnMoreDialog}
+      >
+        <LearnMorePulseCheck
+          selectedPulseCheck={selectedPulseCheck}
+          closeLearnMoreDialog={closeLearnMoreDialog}
+          handlePulseCheckSelectClick={handlePulseCheckSelectClick}
+        />
+      </Dialog>
     </>
   );
 }
