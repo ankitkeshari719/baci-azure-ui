@@ -67,6 +67,7 @@ const StyledEdiText = styled(EdiText)`
     display: flex;
     align-items: center;
     letter-spacing: 0.6px;
+    wordBreak: break-all;
   }
 `;
 
@@ -134,13 +135,13 @@ export function CustomizeTemplate({
       return column;
     });
     if(value.length > 60 && value.length <= 80){
-      setInitialHeight('80px')
+      setInitialHeight('80px !important')
     }else if(value.length > 80 && value.length <= 100){
-      setInitialHeight('100px')
+      setInitialHeight('100px !important')
     }else if(value.length > 100 && value.length <= 120){
-      setInitialHeight('120px')
+      setInitialHeight('120px !important')
     }else if(value.length > 120 && value.length <= 150){
-      setInitialHeight('140px')
+      setInitialHeight('140px !important')
     }
     setIsTemplateCustomized(true);
     data.forEach(function (v: any) {
