@@ -210,15 +210,16 @@ export default function BusinessAgility({ pulseCheck }: Props) {
   }
 
   const submitPulseCheck = () => {
+    const submittedQuestions = selectedQuestions.filter((e: any, index: number) => index != 6)
     const someBlank =
-      selectedQuestions.findIndex((q: number[]) => q[0] === -1) !== -1;
+      submittedQuestions.findIndex((q: number[]) => q[0] === -1) !== -1;
     const submitter = async () => {
       dispatch({
         type: ActionType.SET_LOADING,
         payload: { loadingFlag: true },
       });
       await saveAndProcessAction(BoardActionType.SUBMIT_PULSE_CHECK, {
-        questions: selectedQuestions.map((q: any[], i: any) => ({
+        questions: submittedQuestions.map((q: any[], i: any) => ({
           id: String(i),
           entry: q[0],
         })),
@@ -398,7 +399,7 @@ export default function BusinessAgility({ pulseCheck }: Props) {
                   }}
                   key={index}
                 >
-                  <Box>
+                  { index !== 6 && <Box>
                     {/* Question Part */}
                     <Typography className="question">
                       {question}
@@ -538,7 +539,7 @@ export default function BusinessAgility({ pulseCheck }: Props) {
                         ></img>
                       </Box>
                     </Box>
-                  </Box>
+                  </Box>}
                 </Grid>
               ))}
           </Box>
