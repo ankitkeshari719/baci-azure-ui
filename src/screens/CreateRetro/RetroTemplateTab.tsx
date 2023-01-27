@@ -297,10 +297,10 @@ export function RetroTemplateTab({
                         <Grid item xs={12}>
                           <Box sx={{ float: 'left' }}>
                             <Button
-                              disabled={template.isComingSoon}
                               size="small"
-                              onClick={handleLearnMoreDialog}
                               sx={{ padding: '0px' }}
+                              disabled={template.isComingSoon}
+                              onClick={handleLearnMoreDialog}
                             >
                               <Typography className="templateLink">
                                 Learn More

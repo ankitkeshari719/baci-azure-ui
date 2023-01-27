@@ -195,7 +195,7 @@
 
 // Share Participants
 .participantContainer {
-  height: 100%;
+  height: 100% !important;
   display: flex !important;
   justify-content: center !important;
   align-items: center !important;
@@ -203,58 +203,58 @@
   background: #fafafa;
 }
 .firstDesignSprint {
-  font-family: 'Poppins';
-  font-style: normal;
-  font-weight: 500;
-  font-size: 24px;
-  line-height: 32px;
-  letter-spacing: 0.5px;
-  color: #4e4e4e;
+  font-family: 'Poppins' !important;
+  font-style: normal !important;
+  font-weight: 500 !important;
+  font-size: 24px !important;
+  line-height: 32px !important;
+  letter-spacing: 0.5px !important;
+  color: #4e4e4e !important;
 }
 .joinUrl {
-  font-family: 'Poppins';
-  font-style: normal;
-  font-weight: 400;
-  font-size: 16px;
-  line-height: 20px;
-  letter-spacing: 0.4px;
-  text-decoration-line: underline;
-  color: #159add;
+  font-family: 'Poppins' !important;
+  font-style: normal !important;
+  font-weight: 400 !important;
+  font-size: 16px !important;
+  line-height: 20px !important;
+  letter-spacing: 0.4px !important;
+  text-decoration-line: underline !important;
+  color: #159add !important;
 }
 .withCode {
-  font-family: 'Poppins';
-  font-style: normal;
-  font-weight: 500;
-  font-size: 14px;
-  line-height: 20px;
-  letter-spacing: 0.4px;
-  text-transform: uppercase;
-  color: #2c69a1;
+  font-family: 'Poppins' !important;
+  font-style: normal !important;
+  font-weight: 500 !important;
+  font-size: 14px !important;
+  line-height: 20px !important;
+  letter-spacing: 0.4px !important;
+  text-transform: uppercase !important;
+  color: #2c69a1 !important;
 }
 .codeId {
-  font-family: 'Poppins';
-  font-style: normal;
-  font-weight: 500;
-  font-size: 36px;
-  line-height: 48px;
-  letter-spacing: 0.5px;
-  color: #2c69a1;
+  font-family: 'Poppins' !important;
+  font-style: normal !important;
+  font-weight: 500 !important;
+  font-size: 36px !important;
+  line-height: 48px !important;
+  letter-spacing: 0.5px !important;
+  color: #2c69a1 !important;
 }
 .qrCode {
   width: 200px !important;
   height: 200px !important;
 }
 .productUrl {
-  font-family: 'Poppins';
-  font-style: normal;
-  font-weight: 400;
-  font-size: 16px;
-  line-height: 20px;
-  display: flex;
-  align-items: center;
-  letter-spacing: 0.4px;
-  text-decoration-line: underline;
-  color: #676767;
+  font-family: 'Poppins' !important;
+  font-style: normal !important;
+  font-weight: 400 !important;
+  font-size: 16px !important;
+  line-height: 20px !important;
+  display: flex !important;
+  align-items: center !important;
+  letter-spacing: 0.4px !important;
+  text-decoration-line: underline !important;
+  color: #676767 !important;
 }
 .inviteButton {
   box-sizing: border-box !important;
@@ -353,77 +353,98 @@
   flex-grow: 0 !important;
 }
 .selectedTemplate {
-  font-family: 'Poppins';
-  font-style: normal;
-  font-weight: 500;
-  font-size: 24px;
-  line-height: 32px;
-  letter-spacing: 0.5px;
-  color: #2c69a1;
+  font-family: 'Poppins' !important;
+  font-style: normal !important;
+  font-weight: 500 !important;
+  font-size: 24px !important;
+  line-height: 32px !important;
+  letter-spacing: 0.5px !important;
+  color: #2c69a1 !important;
 }
 .text_one {
-  font-family: 'Poppins';
-  font-style: normal;
-  font-weight: 600;
-  font-size: 18px;
-  line-height: 24px;
-  letter-spacing: 0.5px;
-  color: rgba(0, 0, 0, 0.8);
+  font-family: 'Poppins' !important;
+  font-style: normal !important;
+  font-weight: 600 !important;
+  font-size: 18px !important;
+  line-height: 24px !important;
+  letter-spacing: 0.5px !important;
+  color: rgba(0, 0, 0, 0.8) !important;
 }
 .text_two {
-  font-family: 'Poppins';
-  font-style: normal;
-  font-weight: 500;
-  font-size: 24px;
-  line-height: 32px;
-  letter-spacing: 0.5px;
-  color: #2c69a1;
+  font-family: 'Poppins' !important;
+  font-style: normal !important;
+  font-weight: 500 !important;
+  font-size: 24px !important;
+  line-height: 32px !important;
+  letter-spacing: 0.5px !important;
+  color: #2c69a1 !important;
 }
 .aboutTemplate {
-  font-family: 'Poppins';
-  font-style: normal;
-  font-weight: 600;
-  font-size: 16px;
-  line-height: 20px;
-  letter-spacing: 0.6px;
-  color: #ee7538;
+  font-family: 'Poppins' !important;
+  font-style: normal !important;
+  font-weight: 600 !important;
+  font-size: 16px !important;
+  line-height: 20px !important;
+  letter-spacing: 0.6px !important;
+  color: #ee7538 !important;
+}
+.likeAndShare {
+  font-family: 'Poppins' !important;
+  font-style: normal !important;
+  font-weight: 400 !important;
+  font-size: 20px !important;
+  line-height: 28px !important;
+  text-align: center !important;
+  letter-spacing: 0.5px !important;
+  color: #ee7538 !important;
 }
 .templateDescription {
-  font-family: 'Poppins';
-  font-style: normal;
-  font-weight: 400;
-  font-size: 16px;
-  line-height: 20px;
-  letter-spacing: 0.6px;
-  color: #4e4e4e;
+  font-family: 'Poppins' !important;
+  font-style: normal !important;
+  font-weight: 400 !important;
+  font-size: 16px !important;
+  line-height: 20px !important;
+  letter-spacing: 0.6px !important;
+  color: #4e4e4e !important;
+}
+
+.footerDescription {
+  font-family: 'Poppins' !important;
+  font-style: normal !important;
+  font-weight: 400 !important;
+  font-size: 14px !important;
+  line-height: 18px !important;
+  text-align: center !important;
+  letter-spacing: 0.4px !important;
+  color: #4e4e4e !important;
 }
 
 // Time Input Dialog
 .time_text_one {
-  font-family: 'Poppins';
-  font-style: normal;
-  font-weight: 500;
-  font-size: 24px;
-  line-height: 32px;
-  text-align: center;
-  letter-spacing: 0.5px;
-  color: #ee7538;
+  font-family: 'Poppins' !important;
+  font-style: normal !important;
+  font-weight: 500 !important;
+  font-size: 24px !important;
+  line-height: 32px !important;
+  text-align: center !important;
+  letter-spacing: 0.5px !important;
+  color: #ee7538 !important;
 }
 .time_text_two {
-  font-family: 'Poppins';
-  font-style: normal;
-  font-weight: 400;
-  font-size: 14px;
-  line-height: 18px;
-  text-align: center;
-  letter-spacing: 0.4px;
-  color: #ee7538;
-  opacity: 0.8;
+  font-family: 'Poppins' !important;
+  font-style: normal !important;
+  font-weight: 400 !important;
+  font-size: 14px !important;
+  line-height: 18px !important;
+  text-align: center !important;
+  letter-spacing: 0.4px !important;
+  color: #ee7538 !important;
+  opacity: 0.8 !important;
 }
 
 // Customize Template
 .drag-drop-list-container {
-  width: 100%;
-  display: flex;
-  align-items: center;
+  width: 100% !important;
+  display: flex !important;
+  align-items: center !important;
 }
