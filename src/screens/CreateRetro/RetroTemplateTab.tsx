@@ -215,7 +215,7 @@ export function RetroTemplateTab({
                         display: 'flex !important',
                         flexDirection: 'column !important',
                         justifyContent: 'space-between !important',
-                        minHeight: '420px',
+                        minHeight: '440px',
                         height: isMdUp
                           ? height / 2 + 20 + 'px'
                           : isXsUp

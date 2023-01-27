@@ -109,7 +109,7 @@ export function PulseCheckTab({
         breakpoint: 1700,
         settings: {
           slidesToShow: 2,
-          slidesToScroll: 2,
+          slidesToScroll: 2,  
           speed: 500,
         },
       },
@@ -172,7 +172,7 @@ export function PulseCheckTab({
                         display: 'flex !important',
                         flexDirection: 'column !important',
                         justifyContent: 'space-between !important',
-                        minHeight: '420px',
+                        minHeight: '440px',
                         height: isMdUp
                           ? height / 2 + 20 + 'px'
                           : isXsUp
