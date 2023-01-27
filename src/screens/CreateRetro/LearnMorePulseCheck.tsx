@@ -40,7 +40,7 @@ export function LearnMorePulseCheck({
         {/* About Template */}
         <Grid item xs={12}>
           <Box component="div" whiteSpace="normal" className="createRetroText">
-            About Template
+            About Pulse Check
           </Box>
         </Grid>
         {/* App bar */}
@@ -284,7 +284,7 @@ export function LearnMorePulseCheck({
           </Grid>
         </Grid>
         {/* If you Enjoyed Learning and Reading. */}
-        <Grid container mt={6}>
+        {/* <Grid container mt={6}>
           <Grid
             item
             xs={12}
@@ -299,9 +299,9 @@ export function LearnMorePulseCheck({
               If you Enjoyed Learning and Reading.
             </Typography>
           </Grid>
-        </Grid>
+        </Grid> */}
         {/* Do Drop a Like and Share it. */}
-        <Grid container mt={1}>
+        {/* <Grid container mt={1}>
           <Grid
             item
             xs={12}
@@ -316,9 +316,9 @@ export function LearnMorePulseCheck({
               Do Drop a Like and Share it.
             </Typography>
           </Grid>
-        </Grid>
-        {/* Do Drop a Like and Share it. */}
-        <Grid container mt={3}>
+        </Grid> */}
+        {/* Icons. */}
+        {/* <Grid container mt={3}>
           <Grid
             item
             xs={12}
@@ -346,9 +346,9 @@ export function LearnMorePulseCheck({
               }}
             />
           </Grid>
-        </Grid>
-        {/* Do Drop a Like and Share it. */}
-        <Grid container mt={3}>
+        </Grid> */}
+        {/* Links #. */}
+        {/* <Grid container mt={3}>
           <Grid
             item
             xs={12}
@@ -367,7 +367,7 @@ export function LearnMorePulseCheck({
               #BACI #loveBACI #BACIRETRO
             </Typography>
           </Grid>
-        </Grid>
+        </Grid> */}
       </Grid>
     </Box>
   );
