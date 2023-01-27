@@ -291,6 +291,7 @@ export function RetroTemplateTab({
                       <CardActions
                         disableSpacing
                         sx={{
+                          display: template.isComingSoon ? 'none' : 'flex',
                           padding: '16px',
                         }}
                       >

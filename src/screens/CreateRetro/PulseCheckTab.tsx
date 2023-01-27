@@ -265,6 +265,7 @@ export function PulseCheckTab({
                         <CardActions
                           disableSpacing
                           sx={{
+                            display: pulseCheck.isComingSoon ? 'none' : 'flex',
                             padding: '16px',
                           }}
                         >
