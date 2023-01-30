@@ -108,7 +108,6 @@ export function PulseCheckTab({
     nextArrow: <SampleNextArrow />,
     prevArrow: <SamplePrevArrow />,
     className: classes.sliderContainer,
-    centerMode: true,
     responsive: [
       {
         breakpoint: 1700,
@@ -183,6 +182,7 @@ export function PulseCheckTab({
                     <Card
                       key={pulseCheck.id}
                       sx={{
+                        pointerEvents: pulseCheck.isComingSoon ? 'none' : 'initial',
                         display: 'flex !important',
                         flexDirection: 'column !important',
                         justifyContent: 'space-between !important',

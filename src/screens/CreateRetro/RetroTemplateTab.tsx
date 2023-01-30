@@ -213,6 +213,7 @@ export function RetroTemplateTab({
                       key={template.templateId}
                       sx={{
                         display: 'flex !important',
+                        pointerEvents: template.isComingSoon ? 'none' : 'initial',
                         flexDirection: 'column !important',
                         justifyContent: 'space-between !important',
                         minHeight: '440px',

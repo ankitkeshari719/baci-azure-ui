@@ -347,6 +347,25 @@ export const templatesData = [
 
 export const pulseChecksData: pulseCheckInterface[] = [
   {
+    id: 'simple',
+    name: 'Simple (3 Questions)',
+    description:
+      'An oldie but a goodie, also known as the PPT Framework created in the 60s, it has long been the benchmark to understanding workforce management.',
+    pulseCheckImage: '/images/blank.png',
+    checked: true,
+    isComingSoon: false,
+    value: [
+      '1. People & Resources ',
+      '2. Work Processes ',
+      '3. Technical Tools ',
+    ],
+    valueDescription: [
+      'Your team maintains clear roles & decision making, adequate funding, efficient team structure, adequate skills & capabilities, great career opportunities, and active knowledge share',
+      'Your team maintains clear goal setting, frequent planning and prioritisation, regular feedback loops, quick test and learn, and consistent cadence & transparency of work',
+      'Your team has the necessary tools to collaborate and work efficiently, and a modular architecture that minimise dependency and maximise delivery',
+    ],
+  },
+  {
     id: 'business_agility',
     name: 'Business Agility  (7 Questions)',
     description:
@@ -385,24 +404,5 @@ export const pulseChecksData: pulseCheckInterface[] = [
     isComingSoon: true,
     value: [],
     valueDescription: [],
-  },
-  {
-    id: 'simple',
-    name: 'Simple (3 Questions)',
-    description:
-      'An oldie but a goodie, also known as the PPT Framework created in the 60s, it has long been the benchmark to understanding workforce management.',
-    pulseCheckImage: '/images/blank.png',
-    checked: true,
-    isComingSoon: false,
-    value: [
-      '1. People & Resources ',
-      '2. Work Processes ',
-      '3. Technical Tools ',
-    ],
-    valueDescription: [
-      'Your team maintains clear roles & decision making, adequate funding, efficient team structure, adequate skills & capabilities, great career opportunities, and active knowledge share',
-      'Your team maintains clear goal setting, frequent planning and prioritisation, regular feedback loops, quick test and learn, and consistent cadence & transparency of work',
-      'Your team has the necessary tools to collaborate and work efficiently, and a modular architecture that minimise dependency and maximise delivery',
-    ],
   },
 ];
