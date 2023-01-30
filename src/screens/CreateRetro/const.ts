@@ -274,7 +274,7 @@ export const templatesData = [
     templateId: 'simple',
     templateName: 'Simple',
     templateDescription: 'A classic template for retros.',
-    templateImage: '/images/defaultRetroTemplate.png',
+    templateImage: '/images/SimpleDefaultRetroTemplate.png',
     checked: true,
     isComingSoon: false,
     columns: [
