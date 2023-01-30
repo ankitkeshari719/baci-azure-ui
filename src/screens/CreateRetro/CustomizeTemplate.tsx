@@ -67,7 +67,7 @@ const StyledEdiText = styled(EdiText)`
     display: flex;
     align-items: center;
     letter-spacing: 0.6px;
-    wordBreak: break-all;
+    word-break: break-all;
   }
 `;
 
@@ -127,21 +127,20 @@ export function CustomizeTemplate({
     value: React.SetStateAction<string>,
     columnId: string
   ) => {
-    
     let data: any = tempSelectedTemplate.columns?.map((column: any) => {
       if (column.id === columnId) {
         column.name = value;
       }
       return column;
     });
-    if(value.length > 60 && value.length <= 80){
-      setInitialHeight('80px !important')
-    }else if(value.length > 80 && value.length <= 100){
-      setInitialHeight('100px !important')
-    }else if(value.length > 100 && value.length <= 120){
-      setInitialHeight('120px !important')
-    }else if(value.length > 120 && value.length <= 150){
-      setInitialHeight('140px !important')
+    if (value.length > 60 && value.length <= 80) {
+      setInitialHeight('80px !important');
+    } else if (value.length > 80 && value.length <= 100) {
+      setInitialHeight('100px !important');
+    } else if (value.length > 100 && value.length <= 120) {
+      setInitialHeight('120px !important');
+    } else if (value.length > 120 && value.length <= 150) {
+      setInitialHeight('140px !important');
     }
     setIsTemplateCustomized(true);
     data.forEach(function (v: any) {
@@ -177,6 +176,15 @@ export function CustomizeTemplate({
   const onClickSelectButton = (templateId: string) => {
     handleTemplateSelectClick(selectedTemplate.templateId);
     closeCustomTemplateDialog();
+  };
+
+  const setValueLive = (e: any, columnId: string) => {
+    if (e.target.value.length > 150 && e.keyCode !== 46 && e.keyCode !== 8) {
+      e.preventDefault();
+      e.stopPropagation();
+      e.nativeEvent.stopImmediatePropagation();
+      return false;
+    }
   };
 
   return (
@@ -319,6 +327,11 @@ export function CustomizeTemplate({
                                   validationMessage="Maximum 150 characters allowed."
                                   validation={val => val.length <= 150}
                                   inputProps={{
+                                    onChange: (
+                                      e: React.ChangeEvent<HTMLInputElement>
+                                    ) => {
+                                      setValueLive(e, column.id);
+                                    },
                                     style: {
                                       color:
                                         column.groupFontColor + '!important',
