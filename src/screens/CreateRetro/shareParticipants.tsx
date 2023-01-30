@@ -40,7 +40,20 @@ export function ShareParticipants() {
         whiteSpace="normal"
         className="joinUrl"
       >
-        https://baciapp.com
+        <a
+          href={global.currentRetro?.joinUrl.substring(
+            0,
+            global.currentRetro?.joinUrl.indexOf('j')
+          )}
+          rel="noreferrer"
+          target="_blank"
+          style={{ color: '#159ADD' }}
+        >
+          {global.currentRetro?.joinUrl.substring(
+            0,
+            global.currentRetro?.joinUrl.indexOf('j')
+          )}
+        </a>
       </Box>
       <Box
         sx={{ mt: 4 }}
