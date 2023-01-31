@@ -21,6 +21,8 @@ export enum BoardActionType {
   DELETE_CARD = 'deleteCard',
   MOVE_CARD = 'moveCard',
   MERGE_CARDS = 'mergeCards',
+  REORDER_CARD = 'reorderCard',
+  REORDER_GROUP = "reorderGroup",
   ADD_REACT_TO_CARD = 'addReactToCard',
   ADD_REACT_TO_GROUP = 'addReactToGroup',
   REMOVE_REACT_FROM_CARD = 'removeReactFromCard',
@@ -45,6 +47,7 @@ export enum BoardActionType {
   START_RETRO = 'startRetro',
   PUBLISH_COLUMN = 'publishColumn',
   LOCK_COLUMN = 'lockColumn',
+  SET_FACILITATOR = 'setFacilitator',
 }
 
 export const BOARD_STATE_MACHINE_VERSION = 1;
@@ -100,6 +103,7 @@ export const validateAction = (
     }
     return {};
   };
+
   const findGroup = (
     id: string
   ): {
@@ -121,18 +125,25 @@ export const validateAction = (
     }
     return {};
   };
+
   const isFacilitator = (id: string): boolean => {
     if (state.creatorId === id) {
       return true;
     }
     return false;
   };
+
   const isUpdateRetroDetailsValid = (
-    retroName: string,
-    retroGoal: string,
-    retroTimeframe: string,
-    creatorId: string,
-    userId: string
+    retroName?: string,
+    retroGoal?: string,
+    retroTimeframe?: string,
+    fullPulseCheck?: boolean,
+    creatorId?: string,
+    userId?: string,
+    avatar?: string,
+    retroStatus?: string,
+    pulseCheck?: any,
+    template?: any
   ) => {
     // if (
     //   creatorId != '' &&
@@ -439,7 +450,13 @@ export const validateAction = (
   };
 
   const canEndRetro = (undo: boolean, userId: string) => {
-    return userId === state.creatorId && state.ended !== !undo;
+    const user = findUser(userId);
+
+    return user?.isFacilitator
+      ? state.ended !== !undo
+      : userId === state.creatorId && state.ended !== !undo;
+    //   (userId === state.creatorId || user?.isFacilitator) &&
+    // state.ended !== !undo;
   };
 
   switch (actionName) {
@@ -448,8 +465,12 @@ export const validateAction = (
         parameters.retroName,
         parameters.retroGoal,
         parameters.retroTimeframe,
-        parameters.creatorId,
-        userId
+        parameters.fullPulseCheck,
+        userId,
+        parameters.avatar,
+        parameters.retroStatus,
+        parameters.pulseCheck,
+        parameters.template
       );
     case BoardActionType.CREATE_GROUP:
       return isCreateGroupValid(
@@ -485,6 +506,10 @@ export const validateAction = (
         parameters.cardId2,
         userId
       );
+    case BoardActionType.REORDER_CARD:
+      return true;
+    case BoardActionType.REORDER_GROUP:
+      return true;
     case BoardActionType.ADD_REACT_TO_CARD:
       return isAddReactToCardValid(parameters.cardId, parameters.react, userId);
     case BoardActionType.REMOVE_REACT_FROM_CARD:
@@ -549,6 +574,8 @@ export const validateAction = (
       return canSubmitFeedback(parameters.feedback, userId);
     case BoardActionType.END_RETRO:
       return canEndRetro(parameters.undo, userId);
+    case BoardActionType.SET_FACILITATOR:
+      return true;
     // case BoardActionType.SET_LOADING:
     //   return true;
     default:
@@ -610,7 +637,6 @@ export const processAction = (
     }
     return {};
   };
-  // const [global, dispatch] = React.useContext(GlobalContext);
   const findGroup = (
     id: string
   ): {
@@ -641,7 +667,9 @@ export const processAction = (
     creatorId?: string,
     userId?: string,
     avatar?: string,
-    retroStatus?: string
+    retroStatus?: string,
+    pulseCheck?: any,
+    template?: any
   ) => {
     if (retroName !== undefined && retroName !== '') {
       state.retroName = retroName;
@@ -663,6 +691,12 @@ export const processAction = (
     }
     if (retroStatus != undefined) {
       state.retroStatus = retroStatus;
+    }
+    if (pulseCheck != undefined && pulseCheck != null) {
+      state.pulseCheck = pulseCheck;
+    }
+    if (template != undefined && pulseCheck != null) {
+      state.template = template;
     }
     state.lastUpdatedBy = userId;
   };
@@ -696,6 +730,7 @@ export const processAction = (
     userId: string,
     avatar: string
   ) => {
+  
     if (!findCard(id).card) {
       const { group } = findGroup(groupId);
       if (group) {
@@ -733,9 +768,9 @@ export const processAction = (
         group.cards.splice(index as number, 1);
         cardsList.splice(
           toIndex -
-            (group.id === targetGroup.id && (index as number) < toIndex
-              ? 1
-              : 0),
+          (group.id === targetGroup.id && (index as number) < toIndex
+            ? 1
+            : 0),
           0,
           card
         );
@@ -743,6 +778,41 @@ export const processAction = (
       }
     }
   };
+
+  const reorderCards = (
+    cardId: string,
+    targetCard: string,
+    order: number,
+    moveToLast: boolean,
+    userId: string
+  ) => {
+    const { column, card, group, index: index1 } = findCard(cardId);
+    const { index: index2 } = findCard(targetCard);
+    if (column && card && group && index1 != undefined && index2 != undefined) {
+      if (index1 < index2) {
+        group.cards.splice(index1, 1);
+        if (moveToLast) {
+          group.cards.splice(index2, 0, card);
+        } else {
+          group.cards.splice(index2 - 1, 0, card);
+        }
+      } else {
+        group.cards.splice(index1, 1);
+        group.cards.splice(index2, 0, card);
+      }
+    }
+  };
+
+  const reorderGroups = (groupId: string, index: number, userId: string) => {
+    const { column, group, index: oldIndex } = findGroup(groupId);
+    if (column && group && index !== undefined && oldIndex != undefined) {
+      column.groups.splice(oldIndex, 1);
+      column.groups.splice(index, 0, group);
+    }
+
+
+
+  }
 
   const mergeCards = (
     groupId: string,
@@ -916,15 +986,14 @@ export const processAction = (
     userNickname: string,
     date: Date | undefined,
     avatar: string,
-    userId: string
+    userId: string,
+    isMobile: boolean
   ) => {
     const user = findUser(userId);
-    // console.log(users, 'flag');
     if (!user) {
       if (date && !state.startedDate) {
         state.startedDate = new Date(date);
       }
-      // console.log(state.users);
       state.users.push({
         userId,
         userNickname,
@@ -932,6 +1001,8 @@ export const processAction = (
         feedback: [],
         pulseCheckQuestions: [],
         checked: true,
+        isFacilitator: false,
+        isMobile: isMobile,
       });
     } else if (user?.userNickname !== userNickname) {
       user.userNickname = userNickname;
@@ -1027,15 +1098,12 @@ export const processAction = (
   };
 
   const endRetro = (undo: boolean, date: Date | undefined, userId: string) => {
-    // console.log('endRetro', userId, state.creatorId, state.ended, undo);
-    if (userId === state.creatorId && state.ended !== !undo) {
-      state.ended = !undo;
-      if (state.ended && date && state.endedDate === undefined) {
-        state.endedDate = date;
-      }
-      if (!state.ended && state.endedDate !== undefined) {
-        state.endedDate = undefined;
-      }
+    state.ended = !undo;
+    if (state.ended && date && state.endedDate === undefined) {
+      state.endedDate = date;
+    }
+    if (!state.ended && state.endedDate !== undefined) {
+      state.endedDate = undefined;
     }
   };
 
@@ -1044,21 +1112,31 @@ export const processAction = (
     userId: string,
     creator: string
   ) => {
-    // console.log('userId', creator, ',', userId);
     if (userId === creator) {
       state.retroDuration = retroDuration;
       state.retroStarted = true;
-      state.startedTimeStamp=Date.now();
+      state.startedTimeStamp = Date.now();
     }
   };
+
   const publishRetro = (columnId: string, value: boolean, userId: string) => {
     const column = findColumn(columnId);
     if (column) {
       column.publish = value;
-      
     }
   };
+
+  const setFacilitator = (userId: string) => {
+    state.users.forEach(user => {
+      if (user.userId == userId) {
+        user.isFacilitator = !user.isFacilitator;
+      }
+    });
+    // state.users
+  };
+
   let noMatch = false;
+
   switch (actionName) {
     case BoardActionType.UPDATE_RETRO_DETAILS:
       updateRetroDetails(
@@ -1069,7 +1147,9 @@ export const processAction = (
         parameters.creatorId,
         userId,
         avatar,
-        parameters.retroStatus
+        parameters.retroStatus,
+        parameters.pulseCheck,
+        parameters.template
       );
       break;
     case BoardActionType.CREATE_GROUP:
@@ -1104,6 +1184,18 @@ export const processAction = (
         userId
       );
       break;
+    case BoardActionType.REORDER_CARD:
+      reorderCards(
+        parameters.cardId,
+        parameters.targetCard,
+        parameters.index,
+        parameters.moveToLast,
+        userId
+      );
+      break;
+    case BoardActionType.REORDER_GROUP:
+      reorderGroups(parameters.groupId, parameters.index, userId);
+      break;
     case BoardActionType.ADD_REACT_TO_CARD:
       addReactToCard(parameters.cardId, parameters.react, userId);
       break;
@@ -1129,7 +1221,13 @@ export const processAction = (
       deleteGroup(parameters.groupId, userId);
       break;
     case BoardActionType.JOIN_RETRO:
-      joinRetro(parameters.userNickname, date, parameters.avatar, userId);
+      joinRetro(
+        parameters.userNickname,
+        date,
+        parameters.avatar,
+        userId,
+        parameters.isMobile
+      );
       break;
     case BoardActionType.START_TIMER:
       startTimer(parameters.startTime, parameters.duration, userId);
@@ -1173,17 +1271,14 @@ export const processAction = (
     case BoardActionType.START_RETRO:
       startRetro(parameters.retroDuration, userId, parameters.creatorId);
       break;
-
-      // case BoardActionType.SET_LOADING:
-      //   {
-      //     console.log(parameters,"set loading")
-      //     setLoading(parameters.flag);
-      //   }
-      // break;
+    case BoardActionType.SET_FACILITATOR:
+      setFacilitator(parameters.userIdFac);
+      break;
     default:
       noMatch = true;
       break;
   }
+
   if (!noMatch) {
     state.lastStateUpdate = new Date();
   }

@@ -2,7 +2,6 @@ import React from 'react';
 import { BoardContext } from '../contexts/BoardContext';
 import { ActionType, GlobalContext } from '../contexts/GlobalContext';
 import { BoardActionType } from '../statemachine/BoardStateMachine';
-import shortid from 'shortid';
 import { Button } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
 import { getRetro } from '../msal/services';
@@ -57,12 +56,10 @@ const StartRetroButton = () => {
         retroDuration: duration,
       }).then(
         () => {
-          // console.log('started retro');
           dispatch({
             type: ActionType.SET_LOADING,
             payload: { loadingFlag: false },
           });
-          // navigate(`/board/${retroId}/pulsecheck`);
         },
         () => {
           dispatch({
@@ -75,8 +72,6 @@ const StartRetroButton = () => {
   };
 
   React.useEffect(() => {
-    // console.log(retroId, 'retroId',retroId || global.currentRetro?.id);
-
     if (retroStarted && retroId != undefined && retroId != '') {
       navigate(`/board/${retroId || global.currentRetro?.id}/pulsecheck`);
     }
@@ -91,14 +86,12 @@ const StartRetroButton = () => {
   };
   const handleSubmit = (value: any) => {
     setOpen(false);
-    // console.log(value);
     setSelectedValue(value);
     startRetro(value);
   };
   return (
     <>
       {global?.currentRetro?.creatorId === global?.user?.id && (
-        // <button onClick={startRetro}>Start</button>
         <>
           {' '}
           <Button
@@ -106,7 +99,6 @@ const StartRetroButton = () => {
             className="secondaryButton"
             style={styles.goToRetroBtn}
             onClick={() => setOpen(true)}
-            // onTouchStart={() => setOpen(true)}
           >
             <span className="secondaryButtonText">Start retro</span>
           </Button>

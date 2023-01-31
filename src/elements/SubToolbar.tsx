@@ -1,29 +1,16 @@
 import { Box } from '@material-ui/core';
-import {
-  Autocomplete,
-  Button,
-  ListItemIcon,
-  Popover,
-  TextField,
-  Tooltip,
-  Typography,
-} from '@mui/material';
+import { Tooltip, Typography } from '@mui/material';
 import React, { useEffect } from 'react';
 import { BoardContext } from '../contexts/BoardContext';
 import OutlinedInput from '@mui/material/OutlinedInput';
-import InputLabel from '@mui/material/InputLabel';
 import MenuItem from '@mui/material/MenuItem';
-import FormControl from '@mui/material/FormControl';
 import ListItemText from '@mui/material/ListItemText';
 import Select, { SelectChangeEvent } from '@mui/material/Select';
 import Checkbox from '@mui/material/Checkbox';
 import Avatar from './Avatar';
-import CheckBoxOutlineBlankIcon from '@mui/icons-material/CheckBoxOutlineBlank';
-import CheckBoxIcon from '@mui/icons-material/CheckBox';
 import { CountdownTimer } from './CountdownTimer';
 import { ActionType, GlobalContext } from '../contexts/GlobalContext';
 import commonStyles from './../style.module.scss';
-// import Person from '@material-ui/icons/Person';
 
 const ITEM_HEIGHT = 48;
 const ITEM_PADDING_TOP = 8;
@@ -67,8 +54,6 @@ const SubToolbar = (props: any) => {
     const {
       target: { value },
     } = event;
-    // console.log(value);
-
     if (value[value.length - 1] === 'all') {
       setUserSelected(
         userSelected.length === users.length ? [] : getValueForAll().split(',')
@@ -154,7 +139,7 @@ const SubToolbar = (props: any) => {
                   key={user.userId}
                   avatar={user.avatar}
                   onClickAvatar={() => {
-                    console.log("click")
+                    console.log('click');
                   }}
                   css={{
                     width: '40px',
@@ -170,20 +155,7 @@ const SubToolbar = (props: any) => {
               )
           )}
         </>
-        {/* <Button
-          style={{ marginLeft: '15px' }}
-          onClick={(event: any) => {
-            setShowSelect(!showSelect)
-          }}
-      
-        >
-          {' '}
-          {global.user.id === global.currentRetro?.creatorId ? (
-            <img src="/svgs/Subtract.svg"></img>
-          ) : (
-            <img src="/svgs/Down.svg"></img>
-          )}
-             </Button> */}
+
         <Select
           sx={{
             fieldset: {
@@ -191,20 +163,14 @@ const SubToolbar = (props: any) => {
               div: { padding: 0 },
               opacity: 1,
             },
-            // padding: '1px!important',
-            // width: '20px',
           }}
           inputProps={{ style: { width: '20px', padding: 0 } }}
-          // open={showSelect}
           labelId="demo-multiple-checkbox-label"
           id="demo-multiple-checkbox"
           multiple
           onClick={(event: any) => {
-            // console.log('clicked');
-            // setShowSelect(false);
             setOpenUserSelect(true);
           }}
-          // onTouchStart={() => setOpenUserSelect(true)}
           value={userSelected}
           onChange={event => {
             global.user.userType == 2 && handleChange(event);
@@ -218,23 +184,6 @@ const SubToolbar = (props: any) => {
           }
           renderValue={(selected: any) => {
             return (
-              // <>
-              //   {' '}
-              //   {userNameIdArray &&
-              //     userNameIdArray?.length > 0 &&
-              //     userNameIdArray.map(user => (
-              //       <Avatar
-              //         key={user?.userId}
-              //         avatar={user?.avatar}
-              //         css={{
-              //           width: '40px',
-              //           marginLeft: '0',
-              //           marginRight: '-8px',
-              //           border: 'none',
-              //         }}
-              //       />
-              //     ))}
-              // </>
               <>
                 {global.user.userType == 2 ? (
                   <img src="/svgs/Subtract.svg"></img>
@@ -242,30 +191,19 @@ const SubToolbar = (props: any) => {
                   <img src="/svgs/Down.svg"></img>
                 )}
               </>
-              // <img src="/svgs/Subtract.svg"></img>
             );
           }}
           MenuProps={MenuProps}
         >
           {global.user.userType == 2 && !ended && (
-            <MenuItem
-              value="all"
-
-              // classes={{
-              //   root: isAllSelected ? classes.selectedAll : '',
-              // }}
-            >
-              {/* <ListItemIcon> */}
+            <MenuItem value="all">
               <Checkbox
-                // classes={{ indeterminate: classes.indeterminateColor }}
                 checked={isAllSelected}
                 indeterminate={
                   userSelected.length > 0 && userSelected.length < users.length
                 }
               />
-              {/* </ListItemIcon> */}
               <ListItemText
-                // classes={{ primary: classes.selectAllText }}
                 primary="Select All"
               />
             </MenuItem>
@@ -283,8 +221,6 @@ const SubToolbar = (props: any) => {
 
           {users.map((user, index) => (
             <MenuItem
-              // disabled={global.user.userType != 2}
-              // style={{ hover: 'none!important', cursor: 'text' }}
               sx={{
                 hover: global.user.userType != 2 ? 'none!important' : '',
                 cursor: global.user.userType != 2 ? 'text' : '',
@@ -302,13 +238,14 @@ const SubToolbar = (props: any) => {
               <Avatar
                 avatar={user.avatar}
                 onClickAvatar={() => {
-            console.log("click")
+                  console.log('click');
                 }}
                 css={{
                   width: '40px',
                   height: '40px',
                   marginLeft: '20px',
                   marginRight: '8px',
+                  border:'none'
                 }}
               />
               <Tooltip title={user.userNickname}>

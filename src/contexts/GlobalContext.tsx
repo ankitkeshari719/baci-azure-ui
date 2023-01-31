@@ -21,6 +21,7 @@ export enum ActionType {
   SET_LEAVE_RETRO = 'setLeaveRetro',
   SET_FEEDBACK = 'setFeedback',
   CREATE_RETRO = 'createRetro',
+  SET_EMOJI_ID="setEmojiId"
 }
 
 export class ReducerPayload {
@@ -37,6 +38,8 @@ export class ReducerPayload {
   userType?: number;
   leaveRetro?: boolean;
   feedbackSubmit?: boolean;
+  isMobile?: boolean;
+  emojiId?:string;
 }
 
 type ContextType = [
@@ -140,6 +143,11 @@ function GlobalProvider(props: ComponentProps<any>) {
           ...state,
           leaveRetro: action.payload?.leaveRetro,
         });
+        case ActionType.SET_EMOJI_ID:
+          return saveState({
+            ...state,
+            emojiId:action.payload?.emojiId
+          })
       case ActionType.SET_FEEDBACK:
         return saveState({
           ...state,

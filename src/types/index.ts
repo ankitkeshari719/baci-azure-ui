@@ -44,6 +44,7 @@ export class Global {
   usersSelected?: any[] = [];
   leaveRetro?: boolean = false;
   feedbackSubmit?: boolean = false;
+  emojiId?: string = '';
 }
 
 export interface Card {
@@ -111,6 +112,8 @@ export class BoardState {
     feedback: FeedbackEntry[];
     pulseCheckQuestions: PulseCheckEntry[];
     checked: boolean;
+    isFacilitator: boolean;
+    isMobile: boolean;
   }[] = [];
   countdownFrom: number = -1;
   countdownDuration: number = 5 * 60 * 1000;
@@ -132,6 +135,8 @@ export class BoardState {
   endedDate: Date | undefined;
   lastStateUpdate: Date | undefined;
   avatar: string | undefined;
+  pulseCheck?: any;
+  template?: any
 
   constructor(retroId: string, columns: Column[]) {
     this.retroId = retroId;

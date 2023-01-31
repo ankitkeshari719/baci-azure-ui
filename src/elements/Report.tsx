@@ -1,9 +1,6 @@
 import {
   ACTIONS_COLUMN,
   FEEDBACK_QUESTIONS,
-  FEEDBACK_QUESTIONS_COLORS,
-  FEEDBACK_QUESTIONS_FILLED,
-  FEEDBACK_QUESTIONS_OUTLINE,
   PULSE_CHECK_QUESTIONS,
   QUICK_PULSE_CHECK_QUESTIONS,
   WHAT_DIDNT_GO_WELL,
@@ -19,9 +16,8 @@ import {
   styled,
   LinearProgress,
   linearProgressClasses,
-  Button,
 } from '@mui/material';
-import StackedBarChart, { Question } from './PulseCheckChart';
+import { Question } from './PulseCheckChart';
 import WordCloud, { Word } from './WordCloud';
 import { eng, removeStopwords } from 'stopword';
 import commonStyles from './../style.module.scss';
@@ -29,11 +25,9 @@ import './../global.scss';
 import { BoardContext } from '../contexts/BoardContext';
 import React from 'react';
 import { RetroColumn } from './RetroColumn';
-import StarIcon from '@mui/icons-material/Star';
 import * as Icons from 'heroicons-react';
 import Toolbar from '../elements/Toolbar';
 import { GlobalContext } from '../contexts/GlobalContext';
-import { display } from '@mui/system';
 import ReactToPrint from 'react-to-print';
 import { Bar } from 'react-chartjs-2';
 import {
@@ -179,7 +173,7 @@ export const Report = React.forwardRef((props, ref) => {
   const [global, dispatch] = React.useContext(GlobalContext);
   const [retroDate, setRetroDate] = React.useState('');
   let componentRef = React.useRef(null);
- // const componentRef = React.createRef<HTMLDivElement>();
+  // const componentRef = React.createRef<HTMLDivElement>();
   function getBarColor(val: number) {
     if (val > 50) {
       return '#34A853';
@@ -197,7 +191,9 @@ export const Report = React.forwardRef((props, ref) => {
     }).format(new Date());
     setRetroDate(longEnUSFormatter);
   });
-  React.useEffect(() => {console.log(componentRef)});
+  React.useEffect(() => {
+    console.log(componentRef);
+  });
   React.useEffect(() => {
     const wentWell_cardValues = [] as string[];
     const didntWentWell_cardValues = [] as string[];
@@ -358,169 +354,6 @@ export const Report = React.forwardRef((props, ref) => {
   }, [lastStateUpdate]);
 
   return (
-    // <Box
-    //   ref={ref}
-    //   sx={{
-    //     maxWidth: '1000px',
-    //     display: 'flex',
-    //     width: '100%',
-    //     flexDirection: 'column',
-    //   }}
-    // >
-    //   <Typography sx={{ margin: '20px 0  0 10px', fontSize: '16px' }}>
-    //     Retro name :<span style={{ fontWeight: 'bold' }}>{retroName}</span>
-    //   </Typography>
-    //   <Typography sx={{ margin: '0 0 0 10px', fontSize: '16px' }}>
-    //     Date :{' '}
-    //     <span style={{ fontWeight: 'bold' }}>
-    //       {startedDate?.toLocaleDateString()}
-    //     </span>
-    //   </Typography>
-
-    //   {words.length !== 0 ? (
-    //     <>
-    //       <Typography
-    //         variant="h5"
-    //         sx={{ margin: '10px', fontSize: '18px', marginTop: '30px' }}
-    //       >
-    //         Celebrate what went well
-    //       </Typography>
-    //       <Box
-    //         sx={{
-    //           border: '2px solid gray',
-    //           margin: '20px',
-    //           display: 'flex',
-    //           justifyContent: 'center',
-    //           alignItems: 'center',
-    //         }}
-    //       >
-    //         <WordCloud data={words}></WordCloud>
-    //       </Box>{' '}
-    //     </>
-    //   ) : null}
-
-    //   {actions.length !== 0 ? (
-    //     <>
-    //       <Typography
-    //         variant="h5"
-    //         sx={{ margin: '10px', fontSize: '18px', marginTop: '30px' }}
-    //       >
-    //         Actions
-    //       </Typography>
-    //       <RetroColumn
-    //         leftHeaderComponent={undefined}
-    //         rightHeaderComponent={undefined}
-    //         noHeightLimit
-    //         noHeader
-    //         expandAllGroups
-    //         column={columns[ACTIONS_COLUMN]}
-    //         columnId={columns[ACTIONS_COLUMN].id}
-    //         showEditBox={false}
-    //         setIslanded={setIsLanded}
-    //         setShowEditBox={() => {}}
-    //         cardGroups={columns[ACTIONS_COLUMN].groups}
-    //       />
-    //     </>
-    //   ) : null}
-
-    // <>
-    //   <Typography
-    //     variant="h5"
-    //     sx={{ margin: '10px', fontSize: '18px', marginTop: '30px' }}
-    //   >
-    //     Pulse Check
-    //   </Typography>
-    //    <Box
-    //      sx={{
-    //       border: '2px solid gray',
-    //       margin: '20px',
-    //       display: 'flex',
-    //       justifyContent: 'center',
-    //       alignItems: 'center',
-    //     }}
-    //   >
-    //     {questions.length !== 0 ? (
-    //       <StackedBarChart questions={questions}></StackedBarChart>
-    //     ) : (
-    //       <span style={{ fontSize: '16px' }}>
-    //         No responses have been submitted
-    //       </span>
-    //     )}
-    //   </Box>{' '}
-    // </>
-
-    //   {/* {feedback ? ( */}
-    //   <>
-    //     <Typography
-    //       variant="h5"
-    //       sx={{ margin: '10px', fontSize: '18px', marginTop: '30px' }}
-    //     >
-    //       Feedback for facilitator
-    //     </Typography>
-    //     <Box
-    //       sx={{
-    //         border: '2px solid gray',
-    //         margin: '20px',
-    //         display: 'flex',
-    //         justifyContent: 'center',
-    //         alignItems: 'center',
-    //         marginBottom:"50px"
-    //       }}
-    //     >
-    //       {feedback ? (
-    //         <Grid container sx={{ justifyContent: 'center' }}>
-    //           {FEEDBACK_QUESTIONS.map((v, index) => (
-    //             <Grid
-    //               item
-    //               xs={12 / FEEDBACK_QUESTIONS.length}
-    //               sx={{ display: 'flex', justifyContent: 'center' }}
-    //             >
-    //               <Card variant="outlined" sx={{ margin: '10px' }}>
-    //                 <CardContent>
-    //                   <Typography
-    //                     variant="h5"
-    //                     sx={{
-    //                       justifyContent: 'center',
-    //                       display: 'flex',
-    //                       gap: '5px',
-    //                       alignItems: 'center',
-    //                     }}
-    //                   >
-    //                     {(feedback[0][index] / feedback[1][index]).toFixed(1)}
-    //                     <StarIcon
-    //                       sx={{
-    //                         fontSize: 40,
-    //                         color: FEEDBACK_QUESTIONS_COLORS[index],
-    //                       }}
-    //                     />
-    //                   </Typography>
-    //                   <Typography
-    //                     sx={{
-    //                       fontWeight: 'bold',
-    //                       justifyContent: 'center',
-    //                       display: 'flex',
-    //                       gap: '5px',
-    //                       alignItems: 'center',
-    //                     }}
-    //                   >
-    //                     {feedback[1][index]} response
-    //                     {feedback[1][index] === 1 ? '' : 's'}
-    //                   </Typography>
-    //                   <Typography>{FEEDBACK_QUESTIONS[index]}</Typography>
-    //                 </CardContent>
-    //               </Card>
-    //             </Grid>
-    //           ))}
-    //         </Grid>
-    //       ) : (
-    //         <span style={{ fontSize: '16px' }}>
-    //           No responses have been submitted
-    //         </span>
-    //       )}
-    //     </Box>{' '}
-    //   </>
-    //   {/* ) : null} */}
-    // </Box>
     <Box
       style={{
         height: '985px',
@@ -550,16 +383,6 @@ export const Report = React.forwardRef((props, ref) => {
               </Typography>
             </Grid>
             <Grid item display="flex" justifyContent="flex-end">
-              {/* <Icons.Share
-                size={20}
-                color="#4E4E4E"
-                style={{ marginRight: '46px' }}
-              ></Icons.Share>
-              <Icons.Download
-                size={20}
-                color="#4E4E4E"
-                style={{ marginRight: '46px' }}
-              ></Icons.Download> */}
               <ReactToPrint
                 trigger={() => (
                   <Icons.Printer
@@ -567,9 +390,8 @@ export const Report = React.forwardRef((props, ref) => {
                     color="#4E4E4E"
                     style={{ cursor: 'pointer', padding: '20px' }}
                   ></Icons.Printer>
-                )
-              }
-                content={() =>componentRef.current}
+                )}
+                content={() => componentRef.current}
               />
             </Grid>
           </Grid>
@@ -581,7 +403,6 @@ export const Report = React.forwardRef((props, ref) => {
           justifyContent="center"
         >
           <Grid
-          
             display="flex"
             lg={8}
             md={12}
@@ -589,9 +410,8 @@ export const Report = React.forwardRef((props, ref) => {
             flexDirection="column"
             item
           >
-            <Grid item sx={{ flexDirection: 'row' }}  ref={componentRef}>
+            <Grid item sx={{ flexDirection: 'row' }} ref={componentRef}>
               <Box
-
                 style={{
                   display: 'flex',
                   flexDirection: 'row',
@@ -672,7 +492,7 @@ export const Report = React.forwardRef((props, ref) => {
                   </>
                 ) : null}
               </Box>
-              <Box mt="48px" sx={styles.actionBox} className='page-break '>
+              <Box mt="48px" sx={styles.actionBox} className="page-break ">
                 <Typography
                   ml="24px"
                   mt="24px"
@@ -682,7 +502,8 @@ export const Report = React.forwardRef((props, ref) => {
                 >
                   Actions
                 </Typography>
-                <Box>
+                <Grid container spacing={2} justifyContent="center" mt={1}>
+                <Grid item lg={10} >
                   {actions.length !== 0 ? (
                     <>
                       <RetroColumn
@@ -697,10 +518,13 @@ export const Report = React.forwardRef((props, ref) => {
                         setIslanded={setIsLanded}
                         setShowEditBox={() => {}}
                         cardGroups={columns[ACTIONS_COLUMN].groups}
+                        // setEmojiPicker={() => {}}
+                        // emojiPickerid={''}
                       />
                     </>
                   ) : null}
-                </Box>
+                </Grid>
+                </Grid>
               </Box>
               <Grid item mt="48px" sx={styles.pulseCheckBox}>
                 <Grid item>
@@ -722,26 +546,7 @@ export const Report = React.forwardRef((props, ref) => {
                     alignItems: 'center',
                   }}
                 >
-                  {/* <StackedBarChart questions={questions}></StackedBarChart> */}
                   {QUICK_PULSE_CHECK_QUESTIONS.length !== 0 ? (
-                    // <Grid container >
-                    //   <Grid item xs={12} flexDirection='row' justifyContent='center'>
-                    //     { questions.map((que, i)=>(
-                    //       <Box sx={{ alignItems: "baseline",
-                    //       display: "flex",
-                    //       flexDirection: "row",
-                    //       justifyContent: "center"}}>
-                    //       <Typography>{que.question}</Typography>
-                    //       <BorderLinearProgress variant="determinate" sx={{"& .MuiLinearProgress-barColorPrimary": {
-                    //         backgroundColor: getBarColor(80)
-                    //       }}} value={50} />
-                    //       </Box>
-                    //   ))
-
-                    //   }
-                    //     {/* <StackedBarChart questions={questions}></StackedBarChart> */}
-                    //   </Grid>
-                    // </Grid>
                     <>
                       <Box
                         sx={{

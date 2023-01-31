@@ -22,12 +22,6 @@ const FirstTimeExperience = (props: any) => {
     //
   }, [showManual && props.facilitator == true]);
   React.useEffect(() => {
-    // console.log(
-    //   sessionStorage.getItem('showManual'),
-    //   'data',
-    //   props.facilitator
-    // );
-    console.log(isXsUp, 'size');
     if (showManual == undefined || showManual == null || showManual == '1') {
       if (props.facilitator === false) showLeaveInfo();
     }
@@ -86,15 +80,11 @@ const FirstTimeExperience = (props: any) => {
       publishPaper.style.display = 'none';
     let id = 'leaveRetro';
     if (isXsUp) {
-      console.log(isXsUp, 'isXsup');
       id = 'leaveRetroIsXsUp';
     } else {
       id = 'leaveRetro';
     }
-    console.log(id, 'id');
     let leaveRetro = document.getElementById(id);
-    console.log(leaveRetro && leaveRetro.getBoundingClientRect(), 'bounding');
-
     if (leaveRetro != null && leaveRetro != undefined) {
       var d = document.getElementById('publishDiv');
       var leaveRetroPaper = document.getElementById('leaveRetroPaper');

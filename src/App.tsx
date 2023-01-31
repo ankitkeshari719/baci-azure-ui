@@ -1,49 +1,32 @@
 import { BrowserRouter, Outlet, Route, Routes } from 'react-router-dom';
-import Board from './screens/Board';
-import { BoardProvider } from './contexts/BoardContext';
-import Box from '@mui/material/Box';
-import { ConfirmProvider } from './contexts/ConfirmContext';
-import CssBaseline from '@mui/material/CssBaseline';
-import { ErrorBoundary } from './contexts/ErrorBoundary';
-import { ErrorProvider } from './contexts/ErrorContext';
-import Feedback from './screens/Feedback';
-import { GlobalProvider } from './contexts/GlobalContext';
-import { Offboarding } from './screens/Offboarding';
-import { LandingPage } from './screens/LandingPage';
-import { RetroDetails } from './screens/RetroDetails';
-import { Onboarding } from './screens/Onboarding';
-import { ParticipantWaitingPage } from './screens/ParticipantWaitingPage';
-import { CreateNewRetro } from './screens/CreateRetroPage';
-import { AvatarNamePage } from './screens/AvatarNamePage';
-
-import PulseCheck from './screens/PulseCheck';
-import ReportScreen from './screens/ReportScreen';
 import { SnackMessage } from './elements/SnackMessage';
 import { ThemeProvider } from '@mui/material/styles';
 import theme from './theme/theme';
-// import './index.scss';
-//import { useFirebase } from './firebase';
-//import { useAuth } from './firebase/auth';
-import { useAzureAuth } from './msal/azureauth';
-import {
-  MsalProvider,
-  useMsal,
-  AuthenticatedTemplate,
-  UnauthenticatedTemplate,
-} from '@azure/msal-react';
-import {
-  EventType,
-  InteractionType,
-  IPublicClientApplication,
-} from '@azure/msal-browser';
-import { loginRequest, b2cPolicies } from './authConfig';
-import ButtonGroup from '@material-ui/core/ButtonGroup';
-import { Link as RouterLink } from 'react-router-dom';
-import Button from '@material-ui/core/Button';
+import { MsalProvider, useMsal } from '@azure/msal-react';
+import { IPublicClientApplication } from '@azure/msal-browser';
+
+import { BoardProvider } from './contexts/BoardContext';
+import { ConfirmProvider } from './contexts/ConfirmContext';
+import { ErrorBoundary } from './contexts/ErrorBoundary';
+import { ErrorProvider } from './contexts/ErrorContext';
+import { GlobalProvider } from './contexts/GlobalContext';
 import { SocketProvider } from './contexts/SocketProvider';
+
+import { Offboarding } from './screens/Offboarding';
+import { LandingPage } from './screens/LandingPage';
+import { RetroDetails } from './screens/RetroDetails';
+import { ParticipantWaitingPage } from './screens/ParticipantWaitingPage';
+import { CreateNewRetro } from './screens/CreateRetroPage';
+import { AvatarNamePage } from './screens/AvatarNamePage';
+import { CreateRetroMain } from './screens/CreateRetro/CreateRetroMain';
 import { StartRetro } from './screens/StartRetro';
 import { Grid } from '@mui/material';
 import { PageNotFound } from './screens/PageNotFound';
+import Feedback from './screens/Feedback';
+import PulseCheck from './screens/PulseCheck';
+import ReportScreen from './screens/ReportScreen';
+import Board from './screens/Board';
+import PulseCheckMain from './screens/PulseChecks/PulseCheckMain';
 
 type AppProps = {
   instance: IPublicClientApplication;
@@ -52,17 +35,6 @@ type AppProps = {
 function MainContent() {
   const { instance } = useMsal();
   return (
-    // <Box sx={{ display: 'flex', minHeight: '100%', maxHeight: '100%' }}>
-    //   <CssBaseline />
-    //   <Box sx={{ flex: 1, display: 'flex', flexDirection: 'column' }}>
-    //     <Box
-    //       component="main"
-    //       sx={{ display: 'flex', flex: 1, py: 0, px: 0 }}
-    //     >
-    //       <Outlet />
-    //     </Box>
-    //   </Box>
-    // </Box>
     <Grid container spacing={0}>
       <Outlet />
     </Grid>
@@ -87,6 +59,10 @@ export default function App({ instance }: AppProps) {
                           element={<CreateNewRetro></CreateNewRetro>}
                         />
                         <Route
+                          path="/createretrowithtemplate"
+                          element={<CreateRetroMain></CreateRetroMain>}
+                        />
+                        <Route
                           path="/join/:id"
                           element={<AvatarNamePage></AvatarNamePage>}
                         />
@@ -98,8 +74,10 @@ export default function App({ instance }: AppProps) {
                           path="/offboarding"
                           element={<Offboarding></Offboarding>}
                         />
-                        <Route path="*" 
-                        element={<PageNotFound></PageNotFound>} />
+                        <Route
+                          path="*"
+                          element={<PageNotFound></PageNotFound>}
+                        />
                         <Route path="/board" element={<MainContent />}>
                           <Route
                             path=":id/waiting"

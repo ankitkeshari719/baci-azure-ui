@@ -6,19 +6,15 @@ import {
   FormControl,
   FormHelperText,
   Grid,
-  Paper,
   TextField,
   Typography,
   useMediaQuery,
 } from '@mui/material';
 import * as React from 'react';
-import ReactDOM from 'react-dom';
-import LandingImage from '../assets/img/landingimage.png';
-import BACILogo from '../assets/img/bacilogo.png';
 import { LandingLayout } from './LandingLayout';
 import commonStyles from './../style.module.scss';
 import './../global.scss';
-import { Link, useNavigate, useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import { Retro as RetroType } from '../types';
 import { useRetro } from '../helpers';
 import { ActionType, GlobalContext } from '../contexts/GlobalContext';
@@ -28,7 +24,6 @@ import { useAzureAuth } from '../msal/azureauth';
 import { UserTypeArray } from '../constants';
 import { BoardContext } from '../contexts/BoardContext';
 import theme from '../theme/theme';
-import { display } from '@mui/system';
 const AVATAR_CHARACTER_LIMIT = 30;
 const styles = {
   avatarfield: {
@@ -61,16 +56,15 @@ const styles = {
     width: '50px',
     height: '50px',
     marginBottom: '15px',
-    // marginRight: '15px',
     borderRadius: '50%',
   },
 };
 
 export function AvatarNamePage() {
   const [global, dispatch] = React.useContext(GlobalContext);
-  const [retroName, setRetroName] = React.useState(
-    sessionStorage.getItem('retroname') || ''
-  );
+  // const [retroName, setRetroName] = React.useState(
+  //   sessionStorage.getItem('retroname') || ''
+  // );
   const {
     state: {
       users,
@@ -80,6 +74,7 @@ export function AvatarNamePage() {
       ended,
       needsToShow,
       retroStatus,
+      retroName
     },
     commitAction,
   } = React.useContext(BoardContext);
@@ -139,7 +134,6 @@ export function AvatarNamePage() {
   const onClickAvatar = (avatarName: any) => {
     setAvatar(avatarName);
     setAvatarSelectionError('');
-    // console.log(avatarName);
   };
 
   const setName = () => {
@@ -163,7 +157,6 @@ export function AvatarNamePage() {
       });
       if (!global.currentRetro || joining) {
         joinRetro(false).then(retro => {
-          // console.log('retro', retro);
           dispatch({
             type: ActionType.SET_LOADING,
             payload: { loadingFlag: false },
@@ -213,54 +206,53 @@ export function AvatarNamePage() {
     setUserName(e);
   };
   React.useEffect(() => {
-    if (
-      !global.user.id ||
-      global.user.id == undefined ||
-      global.user.id == null
-    ) {
-      useAzureAuth;
-    } else {
-    }
-    if (!global.currentRetro?.name) {
-      dispatch({
-        type: ActionType.SET_LOADING,
-        payload: { loadingFlag: true },
-      });
-      joinRetro(true).then(
-        res => {
-          // console.log("res")
-          dispatch({
-            type: ActionType.SET_LOADING,
-            payload: { loadingFlag: false },
-          });
-
-          data123();
-        },
-        err => {
-          dispatch({
-            type: ActionType.SET_LOADING,
-            payload: { loadingFlag: false },
-          });
-        }
-      );
-    } else {
-      data123();
-    }
+  
+      if (
+        !global.user.id ||
+        global.user.id == undefined ||
+        global.user.id == null
+      ) {
+        useAzureAuth;
+      } else {
+      }
+      if (!global.currentRetro?.name) {
+        dispatch({
+          type: ActionType.SET_LOADING,
+          payload: { loadingFlag: true },
+        });
+        joinRetro(true).then(
+          res => {
+            dispatch({
+              type: ActionType.SET_LOADING,
+              payload: { loadingFlag: false },
+            });
+  
+            navigatorFunction();
+          },
+          err => {
+            dispatch({
+              type: ActionType.SET_LOADING,
+              payload: { loadingFlag: false },
+            });
+          }
+        );
+      } else {
+        navigatorFunction();
+      }
+    
+ 
   }, [users, global?.user?.id]);
 
-  const data123 = (): any => {
+  const navigatorFunction = (): any => {
     if (
       retroId != undefined &&
       retroId != '' &&
       retroId == global?.currentRetro?.id &&
       global.user.id != ''
     ) {
-      // console.log(global?.user.id);
       const currentUser: any = users.find(
         user => user.userId === global.user.id
       );
-      // console.log(users, 'users', currentUser, global.user.id);
-
       if (currentUser) {
         const userTypeValue: number =
           global?.user?.id == global.currentRetro?.creatorId
@@ -338,12 +330,12 @@ export function AvatarNamePage() {
                   color={commonStyles.primaryDark}
                   mt="30px"
                 >
-                  Who you are in ‘{global.currentRetro?.name}’?
+                  Who you are in ‘{retroName}’?
                 </Typography>
               </>
             ) : !isXsUp ? (
               <Typography variant="h3" color={commonStyles.primaryDark}>
-                Who you are in ‘{global.currentRetro?.name}’?
+                Who you are in ‘{retroName}’?
               </Typography>
             ) : (
               <>
@@ -391,10 +383,7 @@ export function AvatarNamePage() {
                 Choose your avatar
               </Typography>
               <Box sx={styles.avatarBox}>
-                {/* <Avatar avatar={`Animals-avatar_${i}avatar`}></Avatar>; */}
-                {/* <Box> */}
                 {avatarList
-                  // .sort(() => Math.random() - 0.5)
                   .map((avatar: any, index) => (
                     <Avatar
                       key={index}
@@ -404,7 +393,6 @@ export function AvatarNamePage() {
                       selectedAvatar={selectedAvatar}
                     ></Avatar>
                   ))}
-                {/* </Box> */}
               </Box>
               {avatarSelectionError !== '' && (
                 <Box
