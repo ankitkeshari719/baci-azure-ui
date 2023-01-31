@@ -92,7 +92,7 @@ export default function App({ instance }: AppProps) {
 
                           <Route
                             path=":id/pulsecheck"
-                            element={<PulseCheckMain />}
+                            element={<PulseCheck />}
                           />
                           <Route path=":id/feedback" element={<Feedback />} />
                           <Route path=":id" element={<Board />} />
