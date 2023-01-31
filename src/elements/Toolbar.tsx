@@ -288,7 +288,7 @@ const Toolbar = (props: any) => {
                     </Popover>
                   </span>
 
-                  {!ended ? <FacilitatorDropDown /> : null}
+                  {/* {!ended ? <FacilitatorDropDown /> : null} */}
                 </>
               )}
             </Box>
@@ -541,6 +541,7 @@ const Toolbar = (props: any) => {
               <MenuItem
                 sx={{ width: '250px', display: 'flex', flexDirection: 'row' }}
               >
+                
                 <Avatar
                   avatar={user?.avatar}
                   onClickAvatar={() => {
@@ -566,8 +567,10 @@ const Toolbar = (props: any) => {
             </Menu>
           </>
         ) : (
-          <>
+          <Tooltip title={user?.name+''}>
+            <span>
             {user?.avatar && (
+
               <Avatar
                 avatar={user?.avatar}
                 onClickAvatar={() => {}}
@@ -579,7 +582,8 @@ const Toolbar = (props: any) => {
                 }}
               ></Avatar>
             )}
-          </>
+            </span>
+          </Tooltip>
         )}
       </Box>
       {/* Leave Retro Button */}
