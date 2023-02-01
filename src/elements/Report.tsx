@@ -1,6 +1,9 @@
 import {
   ACTIONS_COLUMN,
   FEEDBACK_QUESTIONS,
+  FEEDBACK_QUESTIONS_COLORS,
+  FEEDBACK_QUESTIONS_FILLED,
+  FEEDBACK_QUESTIONS_OUTLINE,
   PULSE_CHECK_QUESTIONS,
   QUICK_PULSE_CHECK_QUESTIONS,
   WHAT_DIDNT_GO_WELL,
@@ -16,8 +19,9 @@ import {
   styled,
   LinearProgress,
   linearProgressClasses,
+  Button,
 } from '@mui/material';
-import { Question } from './PulseCheckChart';
+import StackedBarChart, { Question } from './PulseCheckChart';
 import WordCloud, { Word } from './WordCloud';
 import { eng, removeStopwords } from 'stopword';
 import commonStyles from './../style.module.scss';
@@ -25,9 +29,11 @@ import './../global.scss';
 import { BoardContext } from '../contexts/BoardContext';
 import React from 'react';
 import { RetroColumn } from './RetroColumn';
+import StarIcon from '@mui/icons-material/Star';
 import * as Icons from 'heroicons-react';
 import Toolbar from '../elements/Toolbar';
 import { GlobalContext } from '../contexts/GlobalContext';
+import { display } from '@mui/system';
 import ReactToPrint from 'react-to-print';
 import { Bar } from 'react-chartjs-2';
 import {
@@ -502,11 +508,15 @@ export const Report = React.forwardRef((props, ref) => {
                 >
                   Actions
                 </Typography>
-                <Grid container spacing={2} justifyContent="center" mt={1}>
-                <Grid item lg={10} >
+                <Box   ml="24px"
+                  mt="24px"
+                  mr="24px"
+                  
+                  >
                   {actions.length !== 0 ? (
                     <>
                       <RetroColumn
+                      
                         leftHeaderComponent={undefined}
                         rightHeaderComponent={undefined}
                         noHeightLimit
@@ -523,8 +533,7 @@ export const Report = React.forwardRef((props, ref) => {
                       />
                     </>
                   ) : null}
-                </Grid>
-                </Grid>
+                </Box>
               </Box>
               <Grid item mt="48px" sx={styles.pulseCheckBox}>
                 <Grid item>
@@ -786,3 +795,4 @@ export const Report = React.forwardRef((props, ref) => {
     </Box>
   );
 });
+
