@@ -52,13 +52,14 @@ function initialBoardState(retroId: string): BoardState {
 }
 
 function BoardProvider(props: ComponentProps<any>) {
+  const [state, setState] = React.useState<BoardState>(initialBoardState(''));
+  const [global, dispatch] = React.useContext(GlobalContext);
   const history = React.useRef<{ action: Action }[]>([]);
 
   const [{ currentRetro, user }] = React.useContext(GlobalContext);
   const socket = React.useContext(SocketContext);
 
-  const [state, setState] = React.useState<BoardState>(initialBoardState(''));
-  const [global, dispatch] = React.useContext(GlobalContext);
+
   const stateSnapshots = React.useRef<
     { index: number; actionId: string; state: BoardState }[]
   >([]);

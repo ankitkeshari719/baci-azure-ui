@@ -809,9 +809,6 @@ export const processAction = (
       column.groups.splice(oldIndex, 1);
       column.groups.splice(index, 0, group);
     }
-
-
-
   }
 
   const mergeCards = (
