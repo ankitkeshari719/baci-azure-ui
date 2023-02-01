@@ -225,7 +225,7 @@ export function RetroCardGroup({
                           paddingBottom: 0,
                           padding: 0,
                           // paddingLeft: '12px!important',
-                          width: global.expandColumn != -1 ? '200px' : '100%',
+                          width: global.expandColumn != -1 ||(location.pathname.includes('report')) ? '200px' : '100%',
                           // width: (nameSet ? name.length : 14) + 3 + 'ch',
                           div: { padding: 0, position: 'initial', width: '100%' },
                           position: 'initial',
@@ -282,14 +282,14 @@ export function RetroCardGroup({
                     }}
                     onClick={(e) => {
                       switch (e.detail) {
-                        case 2: setEnableEdit(true);
+                        case 2: {!ended&&setEnableEdit(true)};
                       }
                     }}
                   >
                     {nameSet ? name : 'Name grouping'}
                   </Typography>
                 )}</Grid>
-              <Grid item lg={global?.expandColumn !== -1 ? 1 : 3} md={global?.expandColumn !== -1 ? 1.5 : 4} xs={4} container flexDirection="row" alignItems="center" justifyContent="space-between">
+              <Grid item lg={global?.expandColumn !== -1||(location.pathname.includes('report')) ? 1 : 3} md={global?.expandColumn !== -1 ||(location.pathname.includes('report')) ? 1.5 : 4} xs={4} container flexDirection="row" alignItems="center" justifyContent="space-between">
                 <Grid
                   style={{
                     fontWeight: '600',
@@ -343,17 +343,18 @@ export function RetroCardGroup({
                   </Grid>
 
                 )}
-                <Grid
+                {!(location.pathname.includes('report')) && <Grid
                   item
                   sx={{
                     cursor: 'pointer'
+
                   }}
                   onClick={event => {
                     onCollapse(event)
                   }}
                 >
                   {showCollapse ? <img src="/svgs/Down.svg" /> : <img src="/svgs/Up.svg" />}
-                </Grid>
+                </Grid>}
               </Grid>
             </Grid></div>
         ) : null}
