@@ -7,10 +7,7 @@ import {
   DialogTitle,
   Grid,
   Link,
-  styled,
   Tooltip,
-  tooltipClasses,
-  TooltipProps,
   Typography,
   useMediaQuery,
 } from '@mui/material';
@@ -38,20 +35,6 @@ import happyMask from '../assets/img/Happy_Mask.png';
 import sadMask from '../assets/img/sad_mask.png';
 import neutralMask from '../assets/img/Neutral_Mask.png';
 import Toolbar from '../elements/Toolbar';
-
-const BootstrapTooltip = styled(({ className, ...props }: TooltipProps) => (
-  <Tooltip {...props} classes={{ popper: className }}>
-    {props.children}
-  </Tooltip>
-))(({ theme }) => ({
-  [`& .${tooltipClasses.arrow}`]: {
-    color: theme.palette.common.black,
-  },
-  [`& .${tooltipClasses.tooltip}`]: {
-    backgroundColor: theme.palette.common.black,
-    fontSize: '14px',
-  },
-}));
 
 export default function PulseCheck() {
   const navigate = useNavigate();
@@ -86,7 +69,6 @@ export default function PulseCheck() {
       user.id != ''
     ) {
       const currentUser: any = users.find(user1 => user1.userId === user.id);
-      // console.log("current user",currentUser.pulseCheckQuestions.length>0)
       if (currentUser?.pulseCheckQuestions.length > 0) {
         navigate('/board/' + currentRetro?.id);
         dispatch({
@@ -111,8 +93,6 @@ export default function PulseCheck() {
         parseGPulseCheckState.pulseSubmitState &&
         parseGPulseCheckState?.retroId === currentRetro?.id
       ) {
-        // console.log('already pulse checked');
-
         navigate('/board/' + currentRetro?.id);
         dispatch({
           type: ActionType.SET_SNACK_MESSAGE,
@@ -149,7 +129,6 @@ export default function PulseCheck() {
   };
 
   function setPulseBar(value: any) {
-    // console.log(qs, value);
     if ((value === 0 && pulse1 == false) || qs[value][0] !== -1) {
       setPulse1(true);
     } else if ((value = (1 && pulse2 == false) || qs[value][0] !== -1)) {
@@ -217,7 +196,6 @@ export default function PulseCheck() {
     const someBlank =
       qs.findIndex(q => q[0] === -1) !== -1 &&
       qs.findIndex(q => q[0] === -1) < QUICK_PULSE_CHECK_QUESTIONS.length;
-    // console.log('pulse check array', qs);
     const submitter = async () => {
       // Submit
       await saveAndProcessAction(BoardActionType.SUBMIT_PULSE_CHECK, {

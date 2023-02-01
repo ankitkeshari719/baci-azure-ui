@@ -63,7 +63,6 @@ function loadState() {
     : initialGlobalState();
   parsingSavedContext.loadingFlag = false;
 
-  // return savedContext ? JSON.parse(savedContext) : initialGlobalState();
   return parsingSavedContext;
 }
 

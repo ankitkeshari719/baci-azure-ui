@@ -1,30 +1,21 @@
 import {
   Box,
   Grid,
-  Button,
   styled,
-  TextField,
-  Typography,
   useMediaQuery,
-  Link,
-  Tooltip,
 } from '@mui/material';
-import React, { ReactElement, useEffect, useMemo } from 'react';
+import React, { ReactElement, useMemo } from 'react';
 import Draggable, { DraggableData, DraggableEvent } from 'react-draggable';
-import { MAX_CARD_TEXT_LENGTH, UNGROUPED } from '../constants';
+import { UNGROUPED } from '../constants';
 import { BoardContext } from '../contexts/BoardContext';
 import { BoardActionType } from '../statemachine/BoardStateMachine';
 import { Card, Card as RetroCardType, CardGroup, Column } from '../types';
-import Avatar from '../elements/Avatar';
-import SendIcon from '@mui/icons-material/Send';
-import Color from 'color';
 import shortid from 'shortid';
 import { ActionType, GlobalContext } from '../contexts/GlobalContext';
 import { RetroCard } from './retroCard/RetroCard';
 import theme from '../theme/theme';
 import { RetroCardGroup } from './RetroCardGroup';
-import EmojiPicker from 'emoji-picker-react';
-import { DragDropContext, Draggable as Drag, Droppable, DropResult } from "react-beautiful-dnd"
+import { DragDropContext, Draggable as Drag, Droppable } from "react-beautiful-dnd"
 import ColumnHeader from './ColumnHeader';
 import RetroColumnBottom from './RetroColumnBottom';
 
@@ -145,7 +136,6 @@ export function RetroColumn({
 
   const addNewCard = async (cardGroupId: string, value: string) => {
     const id = shortid.generate();
-    // console.log(id, 'id');
     await saveAndProcessAction(BoardActionType.ADD_NEW_CARD, {
       groupId: cardGroupId,
       id,
@@ -224,7 +214,6 @@ export function RetroColumn({
   };
 
   const publishColumn = async (value: boolean) => {
-    // console.log('publish');
     if (true) {
       dispatchLoadingFlag(true)
       await saveAndProcessAction(BoardActionType.PUBLISH_COLUMN, {
@@ -258,8 +247,6 @@ export function RetroColumn({
     event: DraggableEvent,
     data: DraggableData
   ): void => {
-    // (cardRefs[i][j].current as HTMLDivElement).style.maxHeight = '0';
-    // (landingZones[i][j].current as HTMLDivElement).style.display = 'none';
     if (cardRefs && landingZones) {
       const { top, left, width, height } = (
         (cardRefs[i][j] as HTMLDivElement).firstChild as any
@@ -333,7 +320,6 @@ export function RetroColumn({
       for (const groupRef of groupRefs) {
 
         if (groupRef !== null && ii !== i) {
-          // console.log(ii,"ii")
           let {
             top: t,
             left: l,
@@ -623,7 +609,6 @@ export function RetroColumn({
               selectedCard.current !== null &&
               targetLanding.current !== null
             ) {
-              console.log("move 2");
               moveCard(
                 cardGroups[selectedCard.current[0]].cards[
                   selectedCard.current[1]

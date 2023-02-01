@@ -3,21 +3,13 @@ import {
   Dialog,
   DialogActions,
   DialogContent,
-  DialogTitle,
   FormControl,
   FormHelperText,
-  Grid,
   Input,
   InputLabel,
-  List,
-  MenuItem,
-  Select,
-  SelectChangeEvent,
-  TextField,
   Typography,
 } from '@mui/material';
 import React from 'react';
-import { FEATURE_FLAGS_SET } from '../constants/FeatureFlags';
 export interface RetroTimeInputDialogProps {
   open: boolean;
   selectedValue: any;
@@ -52,7 +44,6 @@ const RetroTimeInputDialog = (props: RetroTimeInputDialogProps) => {
     const currentTime = new Date(epochTime);
     if (flag) return endEpochTime;
 
-
     // setMinTime(currentTime.getHours()+":"+currentTime.getMinutes())
     const hr =
       dateTime.getHours() < 10
@@ -62,7 +53,6 @@ const RetroTimeInputDialog = (props: RetroTimeInputDialogProps) => {
       dateTime.getMinutes() < 10
         ? '0' + dateTime.getMinutes()
         : dateTime.getMinutes() + '';
-
 
     return hr + ':' + min;
   };
@@ -87,7 +77,6 @@ const RetroTimeInputDialog = (props: RetroTimeInputDialogProps) => {
     >
       <img
         onClick={handleClose}
-        // onTouchStart={handleClose}
         style={{
           position: 'absolute',
           right: '20px',
@@ -124,19 +113,15 @@ const RetroTimeInputDialog = (props: RetroTimeInputDialogProps) => {
             Select End Time
           </InputLabel>
           <Input
-            // sx={{ minWidth: '220px' }}
             id="time"
             type="time"
-            //   InputProps={{sx:{width:'200px'}}}
             defaultValue={getCurrentTimeInEpoch(false)}
             onChange={(event: any) => {
-            
               const current = new Date();
               const hr = event.target.value.split(':');
               current.setHours(hr[0]);
               current.setMinutes(hr[1]);
               setEndEpochTime(current.getTime());
-            
             }}
           />
           {currentEpoch > endEpochTime && (
@@ -156,7 +141,6 @@ const RetroTimeInputDialog = (props: RetroTimeInputDialogProps) => {
             borderRadius: '24px',
           }}
           onClick={() => onSubmit(endEpochTime)}
-          // onTouchStart={()=>onSubmit(endEpochTime)}
         >
           START RETRO
         </Button>

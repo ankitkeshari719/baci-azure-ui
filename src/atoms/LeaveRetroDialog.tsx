@@ -1,17 +1,8 @@
-import React from 'react';
 import {
   Button,
   Dialog,
   DialogActions,
   DialogContent,
-  DialogTitle,
-  FormControl,
-  Grid,
-  InputLabel,
-  List,
-  MenuItem,
-  Select,
-  SelectChangeEvent,
   Typography,
 } from '@mui/material';
 
@@ -33,14 +24,12 @@ const LeaveRetroDialog = (props: any) => {
           display: 'flex',
           flexDirection: 'column',
           alignItems: 'center',
-          
         },
-        }}
-      sx={{'&& .MuiDialog-paper': {overflowX: 'hidden'}}}
+      }}
+      sx={{ '&& .MuiDialog-paper': { overflowX: 'hidden' } }}
     >
       <img
         onClick={handleClose}
-        // onTouchStart={handleClose}
         style={{
           position: 'absolute',
           right: '20px',
@@ -60,17 +49,18 @@ const LeaveRetroDialog = (props: any) => {
           In case of any doubts, please confirm with facilitator before leaving
         </Typography>
       </DialogContent>
-      <DialogActions sx={{display:"flex",flexDirection:'column',alignItems:'center'}}>
+      <DialogActions
+        sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}
+      >
         <Button
           variant="contained"
           sx={{
             padding: '10px 20px',
             boxShadow: '0px 2px 4px rgba(0, 0, 0, 0.25)',
             borderRadius: '24px',
-            width:'200px'
+            width: '200px',
           }}
           onClick={() => onClose(true)}
-          // onTouchStart={()=>onClose(true)}
         >
           LEAVE RETRO
         </Button>
@@ -80,11 +70,10 @@ const LeaveRetroDialog = (props: any) => {
             padding: '10px 20px',
             boxShadow: '0px 2px 4px rgba(0, 0, 0, 0.25)',
             borderRadius: '24px',
-            width:'200px',
-            marginTop:'20px'
+            width: '200px',
+            marginTop: '20px',
           }}
           onClick={() => handleClose()}
-          // onTouchStart={()=>handleClose()}
         >
           BACK TO BOARD
         </Button>

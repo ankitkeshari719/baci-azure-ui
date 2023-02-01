@@ -131,20 +131,9 @@ const BorderLinearProgress = styled(LinearProgress)(({ theme }) => ({
   marginTop: '32px',
   marginLeft: '100px',
   width: '600px',
-  //  "& .MuiLinearProgress-colorPrimary": {
-  //   backgroundColor: "#f6ce95"
-  // },
-  // "& .MuiLinearProgress-barColorPrimary": {
-  //   backgroundColor: "#f0ad4e"
-  // },
-
   [`&.${linearProgressClasses.colorPrimary}`]: {
     background: 'none',
   },
-  // [`& .${linearProgressClasses.bar}`]: {
-  //   borderRadius: 16,
-  //   backgroundColor: theme.palette.mode === 'light' ? '#1a90ff' : '#308fe8',
-  // },
 }));
 
 export const Report = React.forwardRef((props, ref) => {
@@ -173,7 +162,6 @@ export const Report = React.forwardRef((props, ref) => {
   const [global, dispatch] = React.useContext(GlobalContext);
   const [retroDate, setRetroDate] = React.useState('');
   let componentRef = React.useRef(null);
-  // const componentRef = React.createRef<HTMLDivElement>();
   function getBarColor(val: number) {
     if (val > 50) {
       return '#34A853';
@@ -191,9 +179,7 @@ export const Report = React.forwardRef((props, ref) => {
     }).format(new Date());
     setRetroDate(longEnUSFormatter);
   });
-  React.useEffect(() => {
-    console.log(componentRef);
-  });
+
   React.useEffect(() => {
     const wentWell_cardValues = [] as string[];
     const didntWentWell_cardValues = [] as string[];
@@ -237,7 +223,6 @@ export const Report = React.forwardRef((props, ref) => {
         }, [])
         .filter((entry: { text: string; size: number }) => entry.size >= 2);
     }
-    // console.log(wordsMaps_wentWell);
     setwentWellwords(wordsMaps_wentWell);
 
     //for didn't went well word cloud
@@ -248,10 +233,12 @@ export const Report = React.forwardRef((props, ref) => {
         if (clean !== '') didntWentWell_cardValues.push(clean);
       })
     );
+
     const totalvalues = Object.values(didntWentWell_cardValues)
       .join(' ')
       .toLowerCase()
       .split(' ');
+
     let wordsMaps_didntWentWell = [];
     if (totalvalues.length !== 0) {
       const noStopwords = removeStopwords(totalvalues, [
@@ -272,7 +259,7 @@ export const Report = React.forwardRef((props, ref) => {
         }, [])
         .filter((entry: { text: string; size: number }) => entry.size >= 2);
     }
-    // console.log(wordsMaps_didntWentWell);
+
     setdidntWentWellwords(wordsMaps_didntWentWell);
 
     //get total count of user submitted the pulsechek
@@ -295,12 +282,8 @@ export const Report = React.forwardRef((props, ref) => {
           feedbackCount[feedback.id] =
             (feedbackCount[feedback.id] ? feedbackCount[feedback.id] : 0) + 1;
         }
-        // console.log(feedback);
       });
-      // [feedbackValues, feedbackCount].map((index)=>{
-      //   index[0][index]=index[0][index]/ index[1][index]
-      // })
-      // console.log([feedbackValues, feedbackCount]);
+
       user?.pulseCheckQuestions.forEach(question => {
         totalPulseCheckCount = totalPulseCheckCount + 1;
         const text = (questionsDef as any)[question.id];
@@ -321,7 +304,6 @@ export const Report = React.forwardRef((props, ref) => {
       });
     });
 
-    // console.log('total pulsecount', totalPulseCheckCount);
     if (Object.keys(feedbackValues).length !== 0) {
       setFeedback([feedbackValues, feedbackCount]);
     }
@@ -340,7 +322,6 @@ export const Report = React.forwardRef((props, ref) => {
     newArr.map(data => {
       return sampleArray.push(Object.values(data));
     });
-    // console.log('sample', sampleArray);
     let tempArr: any = [];
     if (sampleArray.length === 3) {
       tempArr.push([sampleArray[0][0], sampleArray[1][0], sampleArray[2][0]]);
@@ -349,8 +330,6 @@ export const Report = React.forwardRef((props, ref) => {
     }
 
     setBarData(tempArr);
-    // console.log('bar', barData);
-    // console.log('format', newQuestions, feedbackValues, feedbackCount);
   }, [lastStateUpdate]);
 
   return (
@@ -503,27 +482,25 @@ export const Report = React.forwardRef((props, ref) => {
                   Actions
                 </Typography>
                 <Grid container spacing={2} justifyContent="center" mt={1}>
-                <Grid item lg={10} >
-                  {actions.length !== 0 ? (
-                    <>
-                      <RetroColumn
-                        leftHeaderComponent={undefined}
-                        rightHeaderComponent={undefined}
-                        noHeightLimit
-                        noHeader
-                        expandAllGroups
-                        column={columns[ACTIONS_COLUMN]}
-                        columnId={columns[ACTIONS_COLUMN].id}
-                        showEditBox={false}
-                        setIslanded={setIsLanded}
-                        setShowEditBox={() => {}}
-                        cardGroups={columns[ACTIONS_COLUMN].groups}
-                        // setEmojiPicker={() => {}}
-                        // emojiPickerid={''}
-                      />
-                    </>
-                  ) : null}
-                </Grid>
+                  <Grid item lg={10}>
+                    {actions.length !== 0 ? (
+                      <>
+                        <RetroColumn
+                          leftHeaderComponent={undefined}
+                          rightHeaderComponent={undefined}
+                          noHeightLimit
+                          noHeader
+                          expandAllGroups
+                          column={columns[ACTIONS_COLUMN]}
+                          columnId={columns[ACTIONS_COLUMN].id}
+                          showEditBox={false}
+                          setIslanded={setIsLanded}
+                          setShowEditBox={() => {}}
+                          cardGroups={columns[ACTIONS_COLUMN].groups}
+                        />
+                      </>
+                    ) : null}
+                  </Grid>
                 </Grid>
               </Box>
               <Grid item mt="48px" sx={styles.pulseCheckBox}>

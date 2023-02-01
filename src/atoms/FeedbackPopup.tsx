@@ -4,7 +4,6 @@ import {
   Dialog,
   DialogActions,
   DialogContent,
-  DialogContentText,
   DialogTitle,
   styled,
   Typography,
@@ -23,7 +22,6 @@ import LinearProgress, {
 import commonStyles from './../style.module.scss';
 import './../global.scss';
 import React from 'react';
-import { display } from '@mui/system';
 import { BoardActionType } from '../statemachine/BoardStateMachine';
 import { BoardContext } from '../contexts/BoardContext';
 import { ActionType, GlobalContext } from '../contexts/GlobalContext';
@@ -165,7 +163,6 @@ export default function FeedbackPopup(props: {
             top: '10px',
             cursor: 'pointer',
           }}
-          //  onTouchStart={closeFeedback}
         ></img>
       </Box>
       {showThankYou ? (
@@ -251,7 +248,6 @@ export default function FeedbackPopup(props: {
                       qs[index][1](i);
                       setFeedbackBar(index);
                     }}
-                    // onTouchStart={() => qs[index][1](i)}
                   >
                     {i > qs[index][0]
                       ? FEEDBACK_QUESTIONS_OUTLINE[index]

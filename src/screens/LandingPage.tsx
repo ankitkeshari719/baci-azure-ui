@@ -260,14 +260,14 @@ export function LandingPage() {
               >
                 Create New Retro
               </Button>
-              {/* <Button
+              <Button
                 style={styles.newUserText}
                 onClick={() => {
                   CreateNewRetroWithTemplate();
                 }}
               >
                 Create New Template Based Retro 
-              </Button> */}
+              </Button>
             </Grid>
           </Grid>
         </Grid>

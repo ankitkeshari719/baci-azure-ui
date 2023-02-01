@@ -17,7 +17,6 @@ export const useAzureAuth = () => {
   };
 
   React.useEffect(() => {
-    // console.log('in Azure Auth', global.user);
     const uuid = localStorage.getItem('uuid');
     if (uuid != undefined && uuid != null && uuid != '') {
       if (!global.user.id) {

@@ -110,16 +110,13 @@ export const addFeedback = async (retroId: string, user: User, rating: number, c
 export const onSnapshotRetroActions = (socket: Socket<DefaultEventsMap, DefaultEventsMap>,id: string, userId: string, fromTimestamp: number | undefined, callback: (([]) => void)): () => void => {
         const unsubscribe = socket.on('newMessage',(snapshot: { retroId: string; action: any; }[]) => {
         const results = [] as any[];
-        console.log("Got Snaphsot message !!!!",snapshot,'length-----',snapshot.length);
         snapshot.forEach((change: { retroId: string; action: any; }) => {
-            console.log("change",change);
-            // if ((change.type === "modified" || change.type === "added") && !change.doc.metadata.hasPendingWrites) {
+           // if ((change.type === "modified" || change.type === "added") && !change.doc.metadata.hasPendingWrites) {
             if (change.retroId === id) {    
                 const data = change.action;
                 if (!data.onlyVisibleBy || data.onlyVisibleBy.includes(userId)) {
                     results.push(data);
                 }
-                console.log('results',results)
             }
             // }
         });

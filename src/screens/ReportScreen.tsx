@@ -1,28 +1,14 @@
 import {
-  AppBar,
   Box,
-  Button,
-  CircularProgress,
-  Container,
-  Dialog,
-  DialogContent,
-  DialogTitle,
-  Grid,
-  Typography,
   useMediaQuery,
-  DialogActions,
-  DialogContentText,
 } from '@mui/material';
 
 import { BoardContext } from '../contexts/BoardContext';
 import { GlobalContext } from '../contexts/GlobalContext';
-import React, { useEffect } from 'react';
-import ReactToPrint from 'react-to-print';
+import React from 'react';
 import { Report } from '../elements/Report';
-import { UserAvatar } from '../atoms/UserAvatar';
 import theme from '../theme/theme';
-import useLoadRetro from '../hooks/useLoadRetro';
-import { Navigate, useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { ActionType } from '../contexts/GlobalContext';
 
 export default function ReportScreen() {
@@ -54,7 +40,6 @@ export default function ReportScreen() {
       day: 'numeric',
     }).format(new Date());
     setRetroDate(longEnUSFormatter);
-    // console.log(longEnUSFormatter, typeof(longEnUSFormatter));
   });
 
   const handleClickOpen = () => {

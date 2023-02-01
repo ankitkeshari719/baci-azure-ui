@@ -20,15 +20,10 @@ import { BoardContext } from '../../contexts/BoardContext';
 import { BoardActionType } from '../../statemachine/BoardStateMachine';
 import { Card as RetroCardType, CardGroup } from '../../types';
 
-import CheckIcon from '@mui/icons-material/Check';
-import CloseIcon from '@mui/icons-material/Close';
 import DeleteForever from '@mui/icons-material/DeleteForever';
-import EditIcon from '@mui/icons-material/Edit';
-import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
 import MoveDownIcon from '@mui/icons-material/MoveDown';
-import ThumbUpOffAlt from '@mui/icons-material/ThumbUpOffAlt';
 import Color from 'color';
-import React, { useEffect } from 'react';
+import React from 'react';
 import shortid from 'shortid';
 import { ConfirmContext } from '../../contexts/ConfirmContext';
 import { ActionType, GlobalContext } from '../../contexts/GlobalContext';
@@ -146,6 +141,7 @@ export function RetroCard({
       order: 0,
     });
   };
+
   const deleteCard = async (cardId: string) => {
     setConfirmAction({
       action: 'Delete',
@@ -160,6 +156,7 @@ export function RetroCard({
       },
     });
   };
+
   const addReactToCard = async (cardId: string) => {
     dispatch({
       type: ActionType.SET_LOADING,
@@ -175,12 +172,14 @@ export function RetroCard({
       });
     });
   };
+
   const removeReactFromCard = async (cardId: string) => {
     await saveAndProcessAction(BoardActionType.REMOVE_REACT_FROM_CARD, {
       cardId,
       react: '👍',
     });
   };
+
   const submit = async (value: string) => {
     if (card.value !== value) {
       dispatch({
@@ -216,8 +215,6 @@ export function RetroCard({
 
   const userReacted = !!(card.reacts || []).find(r => r.by === global.user.id);
 
-  // ----------------------------------
-
   const functionToReturnGroupName = (name: string, index: number) => {
     if (name != '' && name != null && name != undefined) {
       return name;
@@ -241,7 +238,6 @@ export function RetroCard({
           callback: () => handleMove(group.id),
         })
       );
-    // console.log('items', items);
     return items;
   };
 
@@ -278,14 +274,9 @@ export function RetroCard({
     ],
   };
 
-  //___________________________________
-
   return (
     <>
       {
-        // (
-        //   card.createdBy === global.user.id ||
-        //   global.user.userType == 2 || column.publish) &&
         <Card
           variant="outlined"
           sx={{
@@ -293,19 +284,7 @@ export function RetroCard({
             border: '1px solid ' + Color(cardColour).darken(0.1),
             borderRadius: '8px',
             boxShadow: '-2px 5px 9px -4px rgba(0,0,0,0.74)',
-            // opacity: 0.7,
-            // minWidth: isXsUp
-            //   ? '44vw'
-            //   : isSmUp
-            //   ? '20vw'
-            //   : isMdUp
-            //   ? '13vw'
-            //   : isLgUp
-            //   ? '13.5vw'
-            //   : isLxUp
-            //   ? '14vw'
-            //   : '12vw',
-            // maxWidth: isXsUp ? '44vw' : isSmUp ? '20vw' : '12vw',
+
             width: '100%',
             animation: animate ? `${bumpAnimation} 300ms ease` : 'none',
             '&:hover': {
@@ -314,19 +293,6 @@ export function RetroCard({
           }}
           className="cardStyle"
         >
-          {/* Drag handle */}
-          {/* <span
-          style={{
-            position: 'initial',
-            padding: 0,
-            minWidth: 'calc(100% - 32px)',
-            float: 'left',
-          }}
-          className="handle"
-        >
-          &nbsp;
-        </span> */}
-
           <CardContent
             sx={{
               paddingBottom: editing ? '0' : 'initial',
@@ -380,7 +346,6 @@ export function RetroCard({
                     onChange={e => {
                       const tempValue = value;
                       const removedEnter = tempValue.replace(/[\r\n]/gm, '');
-                      // setValue(removedEnter);
                       const removedSpaces = removedEnter.replace(/ /g, '');
 
                       if (removedSpaces.length === 0) {
@@ -453,20 +418,6 @@ export function RetroCard({
                     (edited)
                   </Typography>
                 ) : null}
-                {/* {editing && value && value.length >= MAX_CARD_TEXT_LENGTH - 20 ? (
-                <Typography
-                  style={{
-                    fontSize: '0.75rem',
-                    textAlign: 'left',
-                    margin: '10px 0',
-                  }}
-                >
-                  Characters remaining: {MAX_CARD_TEXT_LENGTH - value.length}
-                </Typography>
-              ) : null} */}
-                {/* {editing ? (
-               
-              ) : null} */}
               </Box>
             </Box>
           </CardContent>
@@ -474,13 +425,11 @@ export function RetroCard({
             <CardActions
               style={{ justifyContent: 'space-between', padding: 0 }}
             >
-              {/* <div style={{ flexGrow: 2 }}>&nbsp;</div> */}
               {!hideButtons ? (
                 <Button
                   sx={{ minWidth: '0px', position: 'initial' }}
                   disabled={ended || global.leaveRetro}
                   onClick={e => {
-                    // console.log('e', e, ended, userReacted);
                     !ended && userReacted
                       ? removeReactFromCard(card.id)
                       : addReactToCard(card.id);
@@ -496,7 +445,6 @@ export function RetroCard({
                   // }}
                 >
                   {userReacted ? (
-                    // <img src="/svgs/Star.svg" />
                     <svg
                       width="20"
                       height="20"
@@ -514,7 +462,6 @@ export function RetroCard({
                       />
                     </svg>
                   ) : (
-                    // <img src="/svgs/GrayStar.svg" />
                     <svg
                       width="20"
                       height="20"
@@ -561,12 +508,8 @@ export function RetroCard({
                       setEditing(true);
                       setAnchorEl(null);
                     }}
-                    // onTouchStart={e => {
-                    //   setEditing(true);
-                    //   setAnchorEl(null);
-                    // }}
+                    
                   >
-                    {/* <img id="editLogo" src="/svgs/Edit.svg" /> */}
                     <svg
                       width="21"
                       height="21"
@@ -584,11 +527,9 @@ export function RetroCard({
                       />
                     </svg>
 
-                    {/* <DeleteForever sx={{ height: '20px', color: '#9EA7AC' }} /> */}
                   </Button>
                 ) : null}
 
-                {/* { card.createdBy===global.user.id && !hideButtons && !ended ? ():null} */}
                 {!hideButtons &&
                 !ended &&
                 !global.leaveRetro &&

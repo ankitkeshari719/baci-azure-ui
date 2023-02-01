@@ -22,7 +22,6 @@ import _ from 'lodash';
 import log from 'loglevel';
 import shortid from 'shortid';
 import stringifyDate from 'json-stringify-date';
-import { useSocket } from '../hooks/useSocket';
 import { SocketContext } from './SocketProvider';
 
 export interface ReducerPayload {
