@@ -299,8 +299,8 @@ export function CustomizeTemplate({
                             <Box
                               sx={{
                                 width: '100%',
-                                background: column.cardColor,
-                                border: '1px solid ' + column.groupFontColor,
+                                background: column.cardColour,
+                                border: '1px solid ' + column.groupFontColour,
                                 borderRadius: '8px',
                               }}
                             >
@@ -313,7 +313,7 @@ export function CustomizeTemplate({
                                   justifyContent: 'center',
                                   alignItems: 'center',
                                   borderRadius: '9px 9px 0px 0px',
-                                  background: column.groupColor,
+                                  background: column.groupColour,
                                   wordBreak: 'break-all',
                                 }}
                               >
@@ -334,7 +334,7 @@ export function CustomizeTemplate({
                                     },
                                     style: {
                                       color:
-                                        column.groupFontColor + '!important',
+                                        column.groupFontColour + '!important',
                                       fontSize: '16px',
                                       fontWeight: 600,
                                       fontFamily: 'Poppins',

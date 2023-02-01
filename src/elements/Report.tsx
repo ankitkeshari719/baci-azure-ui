@@ -179,9 +179,7 @@ export const Report = React.forwardRef((props, ref) => {
     }).format(new Date());
     setRetroDate(longEnUSFormatter);
   });
-  React.useEffect(() => {
-    console.log(componentRef);
-  });
+
   React.useEffect(() => {
     const wentWell_cardValues = [] as string[];
     const didntWentWell_cardValues = [] as string[];

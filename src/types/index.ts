@@ -138,9 +138,8 @@ export class BoardState {
   pulseCheck?: any;
   template?: any
 
-  constructor(retroId: string, columns: Column[]) {
+  constructor(retroId: string) {
     this.retroId = retroId;
-    this.columns = columns;
   }
 }
 
