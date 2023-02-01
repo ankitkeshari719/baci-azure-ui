@@ -1,6 +1,9 @@
 import {
   ACTIONS_COLUMN,
   FEEDBACK_QUESTIONS,
+  FEEDBACK_QUESTIONS_COLORS,
+  FEEDBACK_QUESTIONS_FILLED,
+  FEEDBACK_QUESTIONS_OUTLINE,
   PULSE_CHECK_QUESTIONS,
   QUICK_PULSE_CHECK_QUESTIONS,
   WHAT_DIDNT_GO_WELL,
@@ -16,8 +19,9 @@ import {
   styled,
   LinearProgress,
   linearProgressClasses,
+  Button,
 } from '@mui/material';
-import { Question } from './PulseCheckChart';
+import StackedBarChart, { Question } from './PulseCheckChart';
 import WordCloud, { Word } from './WordCloud';
 import { eng, removeStopwords } from 'stopword';
 import commonStyles from './../style.module.scss';
@@ -25,9 +29,11 @@ import './../global.scss';
 import { BoardContext } from '../contexts/BoardContext';
 import React from 'react';
 import { RetroColumn } from './RetroColumn';
+import StarIcon from '@mui/icons-material/Star';
 import * as Icons from 'heroicons-react';
 import Toolbar from '../elements/Toolbar';
 import { GlobalContext } from '../contexts/GlobalContext';
+import { display } from '@mui/system';
 import ReactToPrint from 'react-to-print';
 import { Bar } from 'react-chartjs-2';
 import {
@@ -131,9 +137,20 @@ const BorderLinearProgress = styled(LinearProgress)(({ theme }) => ({
   marginTop: '32px',
   marginLeft: '100px',
   width: '600px',
+  //  "& .MuiLinearProgress-colorPrimary": {
+  //   backgroundColor: "#f6ce95"
+  // },
+  // "& .MuiLinearProgress-barColorPrimary": {
+  //   backgroundColor: "#f0ad4e"
+  // },
+
   [`&.${linearProgressClasses.colorPrimary}`]: {
     background: 'none',
   },
+  // [`& .${linearProgressClasses.bar}`]: {
+  //   borderRadius: 16,
+  //   backgroundColor: theme.palette.mode === 'light' ? '#1a90ff' : '#308fe8',
+  // },
 }));
 
 export const Report = React.forwardRef((props, ref) => {
@@ -162,6 +179,7 @@ export const Report = React.forwardRef((props, ref) => {
   const [global, dispatch] = React.useContext(GlobalContext);
   const [retroDate, setRetroDate] = React.useState('');
   let componentRef = React.useRef(null);
+  // const componentRef = React.createRef<HTMLDivElement>();
   function getBarColor(val: number) {
     if (val > 50) {
       return '#34A853';
@@ -179,7 +197,9 @@ export const Report = React.forwardRef((props, ref) => {
     }).format(new Date());
     setRetroDate(longEnUSFormatter);
   });
-
+  React.useEffect(() => {
+    console.log(componentRef);
+  });
   React.useEffect(() => {
     const wentWell_cardValues = [] as string[];
     const didntWentWell_cardValues = [] as string[];
@@ -223,6 +243,7 @@ export const Report = React.forwardRef((props, ref) => {
         }, [])
         .filter((entry: { text: string; size: number }) => entry.size >= 2);
     }
+    // console.log(wordsMaps_wentWell);
     setwentWellwords(wordsMaps_wentWell);
 
     //for didn't went well word cloud
@@ -233,12 +254,10 @@ export const Report = React.forwardRef((props, ref) => {
         if (clean !== '') didntWentWell_cardValues.push(clean);
       })
     );
-
     const totalvalues = Object.values(didntWentWell_cardValues)
       .join(' ')
       .toLowerCase()
       .split(' ');
-
     let wordsMaps_didntWentWell = [];
     if (totalvalues.length !== 0) {
       const noStopwords = removeStopwords(totalvalues, [
@@ -259,7 +278,7 @@ export const Report = React.forwardRef((props, ref) => {
         }, [])
         .filter((entry: { text: string; size: number }) => entry.size >= 2);
     }
-
+    // console.log(wordsMaps_didntWentWell);
     setdidntWentWellwords(wordsMaps_didntWentWell);
 
     //get total count of user submitted the pulsechek
@@ -282,8 +301,12 @@ export const Report = React.forwardRef((props, ref) => {
           feedbackCount[feedback.id] =
             (feedbackCount[feedback.id] ? feedbackCount[feedback.id] : 0) + 1;
         }
+        // console.log(feedback);
       });
-
+      // [feedbackValues, feedbackCount].map((index)=>{
+      //   index[0][index]=index[0][index]/ index[1][index]
+      // })
+      // console.log([feedbackValues, feedbackCount]);
       user?.pulseCheckQuestions.forEach(question => {
         totalPulseCheckCount = totalPulseCheckCount + 1;
         const text = (questionsDef as any)[question.id];
@@ -304,6 +327,7 @@ export const Report = React.forwardRef((props, ref) => {
       });
     });
 
+    // console.log('total pulsecount', totalPulseCheckCount);
     if (Object.keys(feedbackValues).length !== 0) {
       setFeedback([feedbackValues, feedbackCount]);
     }
@@ -322,6 +346,7 @@ export const Report = React.forwardRef((props, ref) => {
     newArr.map(data => {
       return sampleArray.push(Object.values(data));
     });
+    // console.log('sample', sampleArray);
     let tempArr: any = [];
     if (sampleArray.length === 3) {
       tempArr.push([sampleArray[0][0], sampleArray[1][0], sampleArray[2][0]]);
@@ -330,6 +355,8 @@ export const Report = React.forwardRef((props, ref) => {
     }
 
     setBarData(tempArr);
+    // console.log('bar', barData);
+    // console.log('format', newQuestions, feedbackValues, feedbackCount);
   }, [lastStateUpdate]);
 
   return (
@@ -481,27 +508,32 @@ export const Report = React.forwardRef((props, ref) => {
                 >
                   Actions
                 </Typography>
-                <Grid container spacing={2} justifyContent="center" mt={1}>
-                  <Grid item lg={10}>
-                    {actions.length !== 0 ? (
-                      <>
-                        <RetroColumn
-                          leftHeaderComponent={undefined}
-                          rightHeaderComponent={undefined}
-                          noHeightLimit
-                          noHeader
-                          expandAllGroups
-                          column={columns[ACTIONS_COLUMN]}
-                          columnId={columns[ACTIONS_COLUMN].id}
-                          showEditBox={false}
-                          setIslanded={setIsLanded}
-                          setShowEditBox={() => {}}
-                          cardGroups={columns[ACTIONS_COLUMN].groups}
-                        />
-                      </>
-                    ) : null}
-                  </Grid>
-                </Grid>
+                <Box   ml="24px"
+                  mt="24px"
+                  mr="24px"
+                  
+                  >
+                  {actions.length !== 0 ? (
+                    <>
+                      <RetroColumn
+                      
+                        leftHeaderComponent={undefined}
+                        rightHeaderComponent={undefined}
+                        noHeightLimit
+                        noHeader
+                        expandAllGroups
+                        column={columns[ACTIONS_COLUMN]}
+                        columnId={columns[ACTIONS_COLUMN].id}
+                        showEditBox={false}
+                        setIslanded={setIsLanded}
+                        setShowEditBox={() => {}}
+                        cardGroups={columns[ACTIONS_COLUMN].groups}
+                        // setEmojiPicker={() => {}}
+                        // emojiPickerid={''}
+                      />
+                    </>
+                  ) : null}
+                </Box>
               </Box>
               <Grid item mt="48px" sx={styles.pulseCheckBox}>
                 <Grid item>
