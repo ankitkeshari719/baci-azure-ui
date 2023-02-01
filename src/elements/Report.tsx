@@ -1,9 +1,6 @@
 import {
   ACTIONS_COLUMN,
   FEEDBACK_QUESTIONS,
-  FEEDBACK_QUESTIONS_COLORS,
-  FEEDBACK_QUESTIONS_FILLED,
-  FEEDBACK_QUESTIONS_OUTLINE,
   PULSE_CHECK_QUESTIONS,
   QUICK_PULSE_CHECK_QUESTIONS,
   WHAT_DIDNT_GO_WELL,
@@ -19,9 +16,8 @@ import {
   styled,
   LinearProgress,
   linearProgressClasses,
-  Button,
 } from '@mui/material';
-import StackedBarChart, { Question } from './PulseCheckChart';
+import { Question } from './PulseCheckChart';
 import WordCloud, { Word } from './WordCloud';
 import { eng, removeStopwords } from 'stopword';
 import commonStyles from './../style.module.scss';
@@ -29,11 +25,9 @@ import './../global.scss';
 import { BoardContext } from '../contexts/BoardContext';
 import React from 'react';
 import { RetroColumn } from './RetroColumn';
-import StarIcon from '@mui/icons-material/Star';
 import * as Icons from 'heroicons-react';
 import Toolbar from '../elements/Toolbar';
 import { GlobalContext } from '../contexts/GlobalContext';
-import { display } from '@mui/system';
 import ReactToPrint from 'react-to-print';
 import { Bar } from 'react-chartjs-2';
 import {
@@ -137,20 +131,9 @@ const BorderLinearProgress = styled(LinearProgress)(({ theme }) => ({
   marginTop: '32px',
   marginLeft: '100px',
   width: '600px',
-  //  "& .MuiLinearProgress-colorPrimary": {
-  //   backgroundColor: "#f6ce95"
-  // },
-  // "& .MuiLinearProgress-barColorPrimary": {
-  //   backgroundColor: "#f0ad4e"
-  // },
-
   [`&.${linearProgressClasses.colorPrimary}`]: {
     background: 'none',
   },
-  // [`& .${linearProgressClasses.bar}`]: {
-  //   borderRadius: 16,
-  //   backgroundColor: theme.palette.mode === 'light' ? '#1a90ff' : '#308fe8',
-  // },
 }));
 
 export const Report = React.forwardRef((props, ref) => {
@@ -179,7 +162,6 @@ export const Report = React.forwardRef((props, ref) => {
   const [global, dispatch] = React.useContext(GlobalContext);
   const [retroDate, setRetroDate] = React.useState('');
   let componentRef = React.useRef(null);
-  // const componentRef = React.createRef<HTMLDivElement>();
   function getBarColor(val: number) {
     if (val > 50) {
       return '#34A853';
@@ -243,7 +225,6 @@ export const Report = React.forwardRef((props, ref) => {
         }, [])
         .filter((entry: { text: string; size: number }) => entry.size >= 2);
     }
-    // console.log(wordsMaps_wentWell);
     setwentWellwords(wordsMaps_wentWell);
 
     //for didn't went well word cloud
@@ -278,7 +259,6 @@ export const Report = React.forwardRef((props, ref) => {
         }, [])
         .filter((entry: { text: string; size: number }) => entry.size >= 2);
     }
-    // console.log(wordsMaps_didntWentWell);
     setdidntWentWellwords(wordsMaps_didntWentWell);
 
     //get total count of user submitted the pulsechek
@@ -301,12 +281,7 @@ export const Report = React.forwardRef((props, ref) => {
           feedbackCount[feedback.id] =
             (feedbackCount[feedback.id] ? feedbackCount[feedback.id] : 0) + 1;
         }
-        // console.log(feedback);
       });
-      // [feedbackValues, feedbackCount].map((index)=>{
-      //   index[0][index]=index[0][index]/ index[1][index]
-      // })
-      // console.log([feedbackValues, feedbackCount]);
       user?.pulseCheckQuestions.forEach(question => {
         totalPulseCheckCount = totalPulseCheckCount + 1;
         const text = (questionsDef as any)[question.id];
@@ -327,13 +302,11 @@ export const Report = React.forwardRef((props, ref) => {
       });
     });
 
-    // console.log('total pulsecount', totalPulseCheckCount);
     if (Object.keys(feedbackValues).length !== 0) {
       setFeedback([feedbackValues, feedbackCount]);
     }
 
     setQuestions(newQuestions);
-    //formated data for bar chart
     const newArr = newQuestions.map(({ question, ...rest }) => {
       return rest;
     });
@@ -346,7 +319,6 @@ export const Report = React.forwardRef((props, ref) => {
     newArr.map(data => {
       return sampleArray.push(Object.values(data));
     });
-    // console.log('sample', sampleArray);
     let tempArr: any = [];
     if (sampleArray.length === 3) {
       tempArr.push([sampleArray[0][0], sampleArray[1][0], sampleArray[2][0]]);
@@ -355,8 +327,6 @@ export const Report = React.forwardRef((props, ref) => {
     }
 
     setBarData(tempArr);
-    // console.log('bar', barData);
-    // console.log('format', newQuestions, feedbackValues, feedbackCount);
   }, [lastStateUpdate]);
 
   return (
@@ -528,8 +498,6 @@ export const Report = React.forwardRef((props, ref) => {
                         setIslanded={setIsLanded}
                         setShowEditBox={() => {}}
                         cardGroups={columns[ACTIONS_COLUMN].groups}
-                        // setEmojiPicker={() => {}}
-                        // emojiPickerid={''}
                       />
                     </>
                   ) : null}
