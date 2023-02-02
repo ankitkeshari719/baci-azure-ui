@@ -1,12 +1,9 @@
-import {
-  ACTIONS_COLUMN,
-  FEEDBACK_QUESTIONS,
-  PULSE_CHECK_QUESTIONS,
-  QUICK_PULSE_CHECK_QUESTIONS,
-  WHAT_DIDNT_GO_WELL,
-  WHAT_WENT_WELL_COLUMN,
-  WORD_CLOUD_IGNORE_WORDS,
-} from '../constants';
+
+import React from 'react';
+import { Bar } from 'react-chartjs-2';
+import ReactToPrint from 'react-to-print';
+import { eng, removeStopwords } from 'stopword';
+import * as Icons from 'heroicons-react';
 import {
   Box,
   Card,
@@ -17,19 +14,6 @@ import {
   LinearProgress,
   linearProgressClasses,
 } from '@mui/material';
-import { Question } from './PulseCheckChart';
-import WordCloud, { Word } from './WordCloud';
-import { eng, removeStopwords } from 'stopword';
-import commonStyles from './../style.module.scss';
-import './../global.scss';
-import { BoardContext } from '../contexts/BoardContext';
-import React from 'react';
-import { RetroColumn } from './RetroColumn';
-import * as Icons from 'heroicons-react';
-import Toolbar from '../elements/Toolbar';
-import { GlobalContext } from '../contexts/GlobalContext';
-import ReactToPrint from 'react-to-print';
-import { Bar } from 'react-chartjs-2';
 import {
   Chart as ChartJS,
   CategoryScale,
@@ -39,6 +23,26 @@ import {
   Tooltip,
   Legend,
 } from 'chart.js';
+
+import './../global.scss';
+import commonStyles from './../style.module.scss';
+
+import {
+  ACTIONS_COLUMN,
+  FEEDBACK_QUESTIONS,
+  PULSE_CHECK_QUESTIONS,
+  QUICK_PULSE_CHECK_QUESTIONS,
+  WHAT_DIDNT_GO_WELL,
+  WHAT_WENT_WELL_COLUMN,
+  WORD_CLOUD_IGNORE_WORDS,
+} from '../constants';
+import { Question } from './PulseCheckChart';
+import WordCloud, { Word } from './WordCloud';
+import { BoardContext } from '../contexts/BoardContext';
+import { RetroColumn } from './RetroColumn';
+import Toolbar from '../elements/Toolbar';
+import { GlobalContext } from '../contexts/GlobalContext';
+
 ChartJS.register(
   CategoryScale,
   LinearScale,
@@ -47,6 +51,7 @@ ChartJS.register(
   Tooltip,
   Legend
 );
+
 export const options = {
   responsive: true,
   maintainAspectRatio: false,
