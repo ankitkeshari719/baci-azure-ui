@@ -1,9 +1,12 @@
-
-import React from 'react';
-import { Bar } from 'react-chartjs-2';
-import ReactToPrint from 'react-to-print';
-import { eng, removeStopwords } from 'stopword';
-import * as Icons from 'heroicons-react';
+import {
+  ACTIONS_COLUMN,
+  FEEDBACK_QUESTIONS,
+  PULSE_CHECK_QUESTIONS,
+  QUICK_PULSE_CHECK_QUESTIONS,
+  WHAT_DIDNT_GO_WELL,
+  WHAT_WENT_WELL_COLUMN,
+  WORD_CLOUD_IGNORE_WORDS,
+} from '../constants';
 import {
   Box,
   Card,
@@ -14,6 +17,19 @@ import {
   LinearProgress,
   linearProgressClasses,
 } from '@mui/material';
+import { Question } from './PulseCheckChart';
+import WordCloud, { Word } from './WordCloud';
+import { eng, removeStopwords } from 'stopword';
+import commonStyles from './../style.module.scss';
+import './../global.scss';
+import { BoardContext } from '../contexts/BoardContext';
+import React from 'react';
+import { RetroColumn } from './RetroColumn';
+import * as Icons from 'heroicons-react';
+import Toolbar from '../elements/Toolbar';
+import { GlobalContext } from '../contexts/GlobalContext';
+import ReactToPrint from 'react-to-print';
+import { Bar } from 'react-chartjs-2';
 import {
   Chart as ChartJS,
   CategoryScale,
@@ -23,26 +39,6 @@ import {
   Tooltip,
   Legend,
 } from 'chart.js';
-
-import './../global.scss';
-import commonStyles from './../style.module.scss';
-
-import {
-  ACTIONS_COLUMN,
-  FEEDBACK_QUESTIONS,
-  PULSE_CHECK_QUESTIONS,
-  QUICK_PULSE_CHECK_QUESTIONS,
-  WHAT_DIDNT_GO_WELL,
-  WHAT_WENT_WELL_COLUMN,
-  WORD_CLOUD_IGNORE_WORDS,
-} from '../constants';
-import { Question } from './PulseCheckChart';
-import WordCloud, { Word } from './WordCloud';
-import { BoardContext } from '../contexts/BoardContext';
-import { RetroColumn } from './RetroColumn';
-import Toolbar from '../elements/Toolbar';
-import { GlobalContext } from '../contexts/GlobalContext';
-
 ChartJS.register(
   CategoryScale,
   LinearScale,
@@ -51,7 +47,6 @@ ChartJS.register(
   Tooltip,
   Legend
 );
-
 export const options = {
   responsive: true,
   maintainAspectRatio: false,
@@ -136,9 +131,20 @@ const BorderLinearProgress = styled(LinearProgress)(({ theme }) => ({
   marginTop: '32px',
   marginLeft: '100px',
   width: '600px',
+  //  "& .MuiLinearProgress-colorPrimary": {
+  //   backgroundColor: "#f6ce95"
+  // },
+  // "& .MuiLinearProgress-barColorPrimary": {
+  //   backgroundColor: "#f0ad4e"
+  // },
+
   [`&.${linearProgressClasses.colorPrimary}`]: {
     background: 'none',
   },
+  // [`& .${linearProgressClasses.bar}`]: {
+  //   borderRadius: 16,
+  //   backgroundColor: theme.palette.mode === 'light' ? '#1a90ff' : '#308fe8',
+  // },
 }));
 
 export const Report = React.forwardRef((props, ref) => {
@@ -167,6 +173,7 @@ export const Report = React.forwardRef((props, ref) => {
   const [global, dispatch] = React.useContext(GlobalContext);
   const [retroDate, setRetroDate] = React.useState('');
   let componentRef = React.useRef(null);
+  // const componentRef = React.createRef<HTMLDivElement>();
   function getBarColor(val: number) {
     if (val > 50) {
       return '#34A853';
@@ -184,7 +191,9 @@ export const Report = React.forwardRef((props, ref) => {
     }).format(new Date());
     setRetroDate(longEnUSFormatter);
   });
-
+  React.useEffect(() => {
+    console.log(componentRef);
+  });
   React.useEffect(() => {
     const wentWell_cardValues = [] as string[];
     const didntWentWell_cardValues = [] as string[];
@@ -310,6 +319,7 @@ export const Report = React.forwardRef((props, ref) => {
     }
 
     setQuestions(newQuestions);
+    //formated data for bar chart
     const newArr = newQuestions.map(({ question, ...rest }) => {
       return rest;
     });
@@ -481,15 +491,10 @@ export const Report = React.forwardRef((props, ref) => {
                 >
                   Actions
                 </Typography>
-                <Box   ml="24px"
-                  mt="24px"
-                  mr="24px"
-                  
-                  >
+                <Box ml="24px" mt="24px" mr="24px">
                   {actions.length !== 0 ? (
                     <>
                       <RetroColumn
-                      
                         leftHeaderComponent={undefined}
                         rightHeaderComponent={undefined}
                         noHeightLimit
@@ -501,6 +506,8 @@ export const Report = React.forwardRef((props, ref) => {
                         setIslanded={setIsLanded}
                         setShowEditBox={() => {}}
                         cardGroups={columns[ACTIONS_COLUMN].groups}
+                        // setEmojiPicker={() => {}}
+                        // emojiPickerid={''}
                       />
                     </>
                   ) : null}

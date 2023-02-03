@@ -247,6 +247,8 @@ export function RetroColumn({
     event: DraggableEvent,
     data: DraggableData
   ): void => {
+    // (cardRefs[i][j].current as HTMLDivElement).style.maxHeight = '0';
+    // (landingZones[i][j].current as HTMLDivElement).style.display = 'none';
     if (cardRefs && landingZones) {
       const { top, left, width, height } = (
         (cardRefs[i][j] as HTMLDivElement).firstChild as any
@@ -1371,5 +1373,4 @@ export function RetroColumn({
   }
 
 }
-
 
