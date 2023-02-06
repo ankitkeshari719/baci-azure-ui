@@ -90,12 +90,15 @@ export function CustomizeTemplate({
   const [tempSelectedTemplate, setTempSelectedTemplate] = React.useState<any>();
   const [dragDropList, setDragDropList] = React.useState<any>([]);
   const [initialHeight, setInitialHeight] = React.useState<string>('60px');
+  const localStorageTemplateTemp = localStorage.getItem('selectedTemplate');
+  const localStorageTemplate =
+    localStorageTemplateTemp && JSON.parse(localStorageTemplateTemp);
 
   React.useEffect(() => {
-    setTempSelectedTemplate(selectedTemplate);
+    setTempSelectedTemplate(localStorageTemplate);
     const newArr =
-      selectedTemplate.columns &&
-      selectedTemplate.columns.map((element: any) => ({
+      localStorageTemplate.columns &&
+      localStorageTemplate.columns.map((element: any) => ({
         ...element,
         isHovered: false,
       }));
@@ -113,14 +116,13 @@ export function CustomizeTemplate({
     //Updating the list
     setDragDropList(arr);
 
-    // Removing the isHovered
-    arr.forEach(function (v: any) {
-      delete v.isHovered;
-    });
-
     setTempSelectedTemplate({ ...tempSelectedTemplate, columns: [...arr] });
+    localStorage.setItem(
+      'selectedTemplate',
+      JSON.stringify({ ...tempSelectedTemplate, columns: [...arr] })
+    );
 
-    setSelectedTemplate(tempSelectedTemplate);
+    setSelectedTemplate({ ...selectedTemplate, columns: [...arr] });
   };
 
   const handleColumnNameChange = (
@@ -148,6 +150,10 @@ export function CustomizeTemplate({
     });
 
     setTempSelectedTemplate({ ...tempSelectedTemplate, columns: [...data] });
+    localStorage.setItem(
+      'selectedTemplate',
+      JSON.stringify({ ...tempSelectedTemplate, columns: [...data] })
+    );
 
     setSelectedTemplate(tempSelectedTemplate);
   };
@@ -174,7 +180,7 @@ export function CustomizeTemplate({
 
   // Function to handle the select button click
   const onClickSelectButton = (templateId: string) => {
-    handleTemplateSelectClick(selectedTemplate.templateId);
+    handleTemplateSelectClick(templateId);
     closeCustomTemplateDialog();
   };
 

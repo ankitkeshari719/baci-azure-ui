@@ -109,15 +109,6 @@ export function LandingPage() {
       payload: { retroCreateState: true },
     });
     setCodeError('');
-    navigate('/createretro/');
-  }
-
-  function CreateNewRetroWithTemplate() {
-    dispatch({
-      type: ActionType.SET_RETRO_CREATE,
-      payload: { retroCreateState: true },
-    });
-    setCodeError('');
     navigate('/createretrowithtemplate/');
   }
 
@@ -188,7 +179,7 @@ export function LandingPage() {
                 className="secondaryButton"
                 style={{ width: '100%' }}
                 onClick={() => joinRetro()}
-              //onTouchStart={() => joinRetro()}
+                //onTouchStart={() => joinRetro()}
               >
                 <span className="secondaryButtonText">Go on..</span>
               </Button>
@@ -245,28 +236,17 @@ export function LandingPage() {
                 className="secondaryButton"
                 style={styles.signInMargin}
                 onClick={() => joinRetro()}
-              // onTouchStart={() => joinRetro()}
+                // onTouchStart={() => joinRetro()}
               >
                 <span className="secondaryButtonText">Go on..</span>
               </Button>
               <Button
                 style={styles.newUserText}
-                // onTouchStart={() => {
-                //   CreateNewRetro();
-                // }}
                 onClick={() => {
                   CreateNewRetro();
                 }}
               >
                 Create New Retro
-              </Button>
-              <Button
-                style={styles.newUserText}
-                onClick={() => {
-                  CreateNewRetroWithTemplate();
-                }}
-              >
-                Create New Template Based Retro 
               </Button>
             </Grid>
           </Grid>

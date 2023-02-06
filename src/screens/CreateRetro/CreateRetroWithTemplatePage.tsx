@@ -76,6 +76,10 @@ export function CreateRetroWithTemplatePage({
     const initialPulseCheck = pulseChecksData.filter(e => e.checked == true);
     const initialTemplate: any = templatesData.filter(e => e.checked == true);
     setSelectedTemplate(initialTemplate && initialTemplate[0]);
+    localStorage.setItem(
+      'selectedTemplate',
+      JSON.stringify(initialTemplate && initialTemplate[0])
+    );
     setSelectedPulseCheck(initialPulseCheck && initialPulseCheck[0]);
   }, []);
 
@@ -123,6 +127,10 @@ export function CreateRetroWithTemplatePage({
     });
     setTemplates(data);
     setSelectedTemplate(selectedTemplateData);
+    localStorage.setItem(
+      'selectedTemplate',
+      JSON.stringify(selectedTemplateData)
+    );
   }
 
   function handleTemplateSelectClick(selectedTemplateId: string) {
@@ -191,6 +199,9 @@ export function CreateRetroWithTemplatePage({
 
   // Function to create a New Retro
   const create = async () => {
+    const localStorageTemplateTemp = localStorage.getItem('selectedTemplate');
+    const localStorageTemplate =
+      localStorageTemplateTemp && JSON.parse(localStorageTemplateTemp);
     sessionStorage.setItem('retroname', retroName);
     setLocalRetroName(retroName);
     const userType: number =

@@ -49,7 +49,7 @@ const BoardContext = React.createContext<ContextType>({
 });
 
 function initialBoardState(retroId: string): BoardState {
-  return new BoardState(retroId, INITIAL_COLUMNS);
+  return new BoardState(retroId);
 }
 
 function BoardProvider(props: ComponentProps<any>) {
