@@ -14,6 +14,7 @@ import {
   LinearProgress,
   linearProgressClasses,
   useMediaQuery,
+  Dialog,
 } from '@mui/material';
 import { Row, Col, Container } from 'react-bootstrap';
 import {
@@ -45,6 +46,7 @@ import { RetroColumn } from '../../elements/RetroColumn';
 import { BoardContext } from '../../contexts/BoardContext';
 import { GlobalContext } from '../../contexts/GlobalContext';
 import { border, borderColor } from '@mui/system';
+import { ViewParticipants } from './ViewParticipants';
 
 ChartJS.register(
   CategoryScale,
@@ -95,6 +97,15 @@ export const options = {
   },
 };
 
+const BootstrapDialog = styled(Dialog)(({ theme }) => ({
+  '& .MuiDialogContent-root': {
+    padding: theme.spacing(2),
+  },
+  '& .MuiDialogActions-root': {
+    padding: theme.spacing(1),
+  },
+}));
+
 const styles = {
   whatWentwellBox: {
     background: 'rgba(11, 102, 35,0.04)',
@@ -138,24 +149,20 @@ const styles = {
   },
 };
 
-export const SummaryReport = React.forwardRef((props, ref) => {
+export default function ReportSummary() {
   const isXsUp = useMediaQuery(theme.breakpoints.between('xs', 'sm'));
   const {
-    state: {
-      lastStateUpdate,
-      startedDate,
-      columns,
-      retroName,
-      fullPulseCheck,
-      users,
-    },
+    state: { lastStateUpdate, columns, fullPulseCheck, users },
   } = React.useContext(BoardContext);
+
   const [isWellCloudOpen, setIsWellCloudOpen] = React.useState(false);
   const [isNotWellCloudOpen, setIsNotWellCloudOpen] = React.useState(false);
   const [isActionCloudOpen, setIsActionCloudOpen] = React.useState(false);
+  const [isViewParticipantsDialogOpen, setIsViewParticipantsDialogOpen] =
+    React.useState(false);
+  const [wentWellWords, setWentWellWords] = React.useState<Word[]>([]);
 
-  const [wentWellwords, setwentWellwords] = React.useState<Word[]>([]);
-  const [didntWentWellwords, setdidntWentWellwords] = React.useState<Word[]>(
+  const [didNotWentWellWords, setDidNotWentWellWords] = React.useState<Word[]>(
     []
   );
   const [actions, setActions] = React.useState<string[]>([]);
@@ -168,7 +175,6 @@ export const SummaryReport = React.forwardRef((props, ref) => {
   const [islanded, setIsLanded] = React.useState(true);
   const [global, dispatch] = React.useContext(GlobalContext);
   const [retroDate, setRetroDate] = React.useState('');
-  let componentRef = React.useRef(null);
 
   function getBarColor(val: number) {
     if (val > 50) {
@@ -181,48 +187,38 @@ export const SummaryReport = React.forwardRef((props, ref) => {
   }
 
   React.useEffect(() => {
-    const longEnUSFormatter = new Intl.DateTimeFormat('en-US', {
-      year: 'numeric',
-      month: 'long',
-      day: 'numeric',
-    }).format(new Date());
-    setRetroDate(longEnUSFormatter);
-  });
+    const wentWellCardValues = [] as string[];
+    const didNotWentWellCardValues = [] as string[];
+    const actionsCardValues = [] as string[];
+    let wentWellWordCloudData = [];
+    let didNotWentWellWordCloudData = [];
 
-  React.useEffect(() => {
-    const wentWell_cardValues = [] as string[];
-    const didntWentWell_cardValues = [] as string[];
+    // What Went Well Data
+    columns.forEach(column => {
+      if (column.id === '0') {
+        column.groups.forEach(group => {
+          group.cards.forEach(card => {
+            const clean = card.value.replace(/[\W_]+/g, ' ').trim();
+            if (clean !== '') wentWellCardValues.push(clean);
+          });
+        });
+      }
+    });
 
-    //For Action cloud
-    columns[ACTIONS_COLUMN].groups.forEach(group =>
-      group.cards.forEach(card => {
-        actions.push(card.value);
-      })
-    );
-
-    setActions(actions);
-
-    //For went well word cloud
-    columns[WHAT_WENT_WELL_COLUMN].groups.forEach(group =>
-      group.cards.forEach(card => {
-        const clean = card.value.replace(/[\W_]+/g, ' ').trim();
-        if (clean !== '') wentWell_cardValues.push(clean);
-      })
-    );
-
-    const total = Object.values(wentWell_cardValues)
+    // What Went Well Total
+    const wentWellCardValuesTotal = Object.values(wentWellCardValues)
       .join(' ')
       .toLowerCase()
       .split(' ');
-    let wordsMaps_wentWell = [];
-    let noStopwords = [];
-    if (total.length !== 0) {
-      noStopwords = removeStopwords(total, [
+
+    // Getting the what went well word cloud data
+    if (wentWellCardValuesTotal.length !== 0) {
+      const noStopWords = removeStopwords(wentWellCardValuesTotal, [
         ...eng,
         ...WORD_CLOUD_IGNORE_WORDS,
       ]);
 
-      wordsMaps_wentWell = noStopwords
+      wentWellWordCloudData = noStopWords
         .reduce((current: { text: string; size: number }[], text: string) => {
           const exist = current.find(c => c.text === text);
           if (exist) {
@@ -234,29 +230,34 @@ export const SummaryReport = React.forwardRef((props, ref) => {
         }, [])
         .filter((entry: { text: string; size: number }) => entry.size >= 2);
     }
-    setwentWellwords(wordsMaps_wentWell);
+    setWentWellWords(wentWellWordCloudData);
 
-    //For didn't went well word cloud
-    columns[WHAT_DIDNT_GO_WELL].groups.forEach(group =>
-      group.cards.forEach(card => {
-        const clean = card.value.replace(/[\W_]+/g, ' ').trim();
+    // Did Not Went Well Data
+    columns.forEach(column => {
+      if (column.id === '1') {
+        column.groups.forEach(group => {
+          group.cards.forEach(card => {
+            const clean = card.value.replace(/[\W_]+/g, ' ').trim();
+            if (clean !== '') didNotWentWellCardValues.push(clean);
+          });
+        });
+      }
+    });
 
-        if (clean !== '') didntWentWell_cardValues.push(clean);
-      })
-    );
-
-    const totalvalues = Object.values(didntWentWell_cardValues)
+    //  Did Not Went Well Total
+    const didNotWellCardValuesTotal = Object.values(didNotWentWellCardValues)
       .join(' ')
       .toLowerCase()
       .split(' ');
-    let wordsMaps_didntWentWell = [];
-    if (totalvalues.length !== 0) {
-      const noStopwords = removeStopwords(totalvalues, [
+
+    // Getting the what went did not well word cloud data
+    if (didNotWellCardValuesTotal.length !== 0) {
+      const noStopWords = removeStopwords(didNotWellCardValuesTotal, [
         ...eng,
         ...WORD_CLOUD_IGNORE_WORDS,
       ]);
 
-      wordsMaps_didntWentWell = noStopwords
+      didNotWentWellWordCloudData = noStopWords
         .reduce((current: { text: string; size: number }[], text: string) => {
           const exist = current.find(c => c.text === text);
 
@@ -269,9 +270,29 @@ export const SummaryReport = React.forwardRef((props, ref) => {
         }, [])
         .filter((entry: { text: string; size: number }) => entry.size >= 2);
     }
-    setdidntWentWellwords(wordsMaps_didntWentWell);
+    setDidNotWentWellWords(didNotWentWellWordCloudData);
 
-    //get total count of user submitted the pulsechek
+    // Action Data
+    columns.forEach(column => {
+      if (column.id === '2') {
+        column.groups.forEach(group => {
+          group.cards.forEach(card => {
+            const clean = card.value.replace(/[\W_]+/g, ' ').trim();
+            if (clean !== '') actionsCardValues.push(clean);
+          });
+        });
+      }
+    });
+    console.log('wentWellCardValues', wentWellCardValues);
+    console.log('wentWellCardValuesTotal', wentWellCardValuesTotal);
+    console.log('wentWellWordCloudData', wentWellWordCloudData);
+    console.log('didNotWentWellCardValues', didNotWentWellCardValues);
+    console.log('didNotWellCardValuesTotal', didNotWellCardValuesTotal);
+    console.log('didNotWentWellWordCloudData', didNotWentWellWordCloudData);
+    console.log('actionsCardValues', actionsCardValues);
+    setActions(actionsCardValues);
+
+    //Get total count of user submitted the pulsechek
     const newQuestions = [] as Question[];
     const feedbackValues = {} as any;
     const feedbackCount = {} as any;
@@ -319,15 +340,18 @@ export const SummaryReport = React.forwardRef((props, ref) => {
     const newArr = newQuestions.map(({ question, ...rest }) => {
       return rest;
     });
+
     newArr.map(data => {
       data[1] = Math.round((data[1] / totalPulseCheckCount) * 100);
       data[2] = Math.round((data[2] / totalPulseCheckCount) * 100);
       data[3] = Math.round((data[3] / totalPulseCheckCount) * 100);
     });
+
     let sampleArray: any = [];
     newArr.map(data => {
       return sampleArray.push(Object.values(data));
     });
+
     let tempArr: any = [];
     if (sampleArray.length === 3) {
       tempArr.push([sampleArray[0][0], sampleArray[1][0], sampleArray[2][0]]);
@@ -337,6 +361,15 @@ export const SummaryReport = React.forwardRef((props, ref) => {
     setBarData(tempArr);
   }, [lastStateUpdate]);
 
+  React.useEffect(() => {
+    const longEnUSFormatter = new Intl.DateTimeFormat('en-US', {
+      year: 'numeric',
+      month: 'long',
+      day: 'numeric',
+    }).format(new Date());
+    setRetroDate(longEnUSFormatter);
+  });
+
   const handleIsWellCloudOpen = () => {
     setIsWellCloudOpen(!isWellCloudOpen);
   };
@@ -344,8 +377,17 @@ export const SummaryReport = React.forwardRef((props, ref) => {
   const handleIsNotWellCloudOpen = () => {
     setIsNotWellCloudOpen(!isNotWellCloudOpen);
   };
+
   const handleIsActionCloudOpen = () => {
     setIsActionCloudOpen(!isActionCloudOpen);
+  };
+
+  const handleViewParticipantsDialogOpen = () => {
+    setIsViewParticipantsDialogOpen(true);
+  };
+
+  const handleViewParticipantsDialogClose = () => {
+    setIsViewParticipantsDialogOpen(false);
   };
 
   return (
@@ -390,7 +432,14 @@ export const SummaryReport = React.forwardRef((props, ref) => {
                 console.log('Here');
               }}
             />
-            <ReactToPrint
+            <Icons.DownloadOutline
+              size={20}
+              color="#4E4E4E"
+              style={{
+                cursor: 'pointer',
+              }}
+            />
+            {/* <ReactToPrint
               trigger={() => (
                 <Icons.DownloadOutline
                   size={20}
@@ -400,8 +449,8 @@ export const SummaryReport = React.forwardRef((props, ref) => {
                   }}
                 />
               )}
-              content={() => componentRef.current}
-            />
+              content={(<></>)}
+            /> */}
           </Col>
         </Row>
         {/* Line 2 */}
@@ -430,13 +479,31 @@ export const SummaryReport = React.forwardRef((props, ref) => {
           >
             <Typography className="textTypeOne">No. Of Participants</Typography>
             <Typography className="textTypeTwo" ml={2}>
-              40m
+              40
             </Typography>
           </Col>
           <Col
-            xs={{ span: 2, offset: 1 }}
-            className="d-flex justify-content-around align-items-center"
-          ></Col>
+            xs={{ span: 2, offset: 4 }}
+            className="d-flex justify-content-end align-items-center"
+          >
+            <Typography
+              className="viewWorldCould"
+              onClick={handleViewParticipantsDialogOpen}
+            >
+              View Participants
+              <Icons.ClipboardCopyOutline
+                size={20}
+                color="#159ADD"
+                style={{
+                  cursor: 'pointer',
+                  marginLeft: '20px',
+                }}
+                onClick={() => {
+                  console.log('Here');
+                }}
+              />
+            </Typography>
+          </Col>
         </Row>
         {/* Pulse Check Section 1*/}
         <Row style={{ marginTop: '36px' }}>
@@ -578,7 +645,7 @@ export const SummaryReport = React.forwardRef((props, ref) => {
           >
             {isWellCloudOpen ? (
               <Box sx={styles.whatWentwellBox}>
-                {wentWellwords.length !== 0 ? (
+                {wentWellWords.length !== 0 ? (
                   <Grid
                     item
                     display="flex"
@@ -587,7 +654,7 @@ export const SummaryReport = React.forwardRef((props, ref) => {
                     height="272px"
                   >
                     <WordCloud
-                      data={wentWellwords}
+                      data={wentWellWords}
                       showOn="whatWentWell"
                     ></WordCloud>
                   </Grid>
@@ -642,7 +709,7 @@ export const SummaryReport = React.forwardRef((props, ref) => {
           >
             {isNotWellCloudOpen ? (
               <Box sx={styles.whatdidnwellBox}>
-                {didntWentWellwords.length !== 0 ? (
+                {didNotWentWellWords.length !== 0 ? (
                   <Grid
                     item
                     display="flex"
@@ -651,7 +718,7 @@ export const SummaryReport = React.forwardRef((props, ref) => {
                     height="272px"
                   >
                     <WordCloud
-                      data={didntWentWellwords}
+                      data={didNotWentWellWords}
                       showOn="whatDidntWentWell"
                     ></WordCloud>
                   </Grid>
@@ -739,283 +806,15 @@ export const SummaryReport = React.forwardRef((props, ref) => {
         </Row>
       </Container>
       {/* End Container */}
+      <BootstrapDialog
+        open={isViewParticipantsDialogOpen}
+        onClose={handleViewParticipantsDialogClose}
+        aria-labelledby="customized-dialog-title"
+      >
+        <ViewParticipants
+          handleViewParticipantsDialogClose={handleViewParticipantsDialogClose}
+        />
+      </BootstrapDialog>
     </>
   );
-});
-
-{
-  /* <Grid
-        container
-        spacing={0}
-        sx={{
-          backgroundColor: '#F5F5F5',
-          padding: isXsUp ? '8px' : '56px',
-          overflowY: isXsUp ? 'scroll' : 'auto',
-          height: isXsUp ? 'calc(100vh - 120px)' : 'calc(100vh - 24px)',
-        }}
-      >
-        <Grid item xs={12}>
-          <Box mt="48px" sx={styles.whatWentwellBox}>
-            <Typography
-              ml="24px"
-              mt="24px"
-              color="#0B6623"
-              variant="h4"
-              sx={styles.textOpacity}
-            >
-              What Went Well
-            </Typography>
-
-            {wentWellwords.length !== 0 ? (
-              <>
-                <Grid
-                  item
-                  display="flex"
-                  justifyContent="center"
-                  alignItems="center"
-                  height="272px"
-                >
-                  <WordCloud
-                    data={wentWellwords}
-                    showOn="whatWentWell"
-                  ></WordCloud>
-                </Grid>{' '}
-              </>
-            ) : null}
-          </Box>
-        </Grid>
-        <Grid item xs={12}>
-          <Box mt="48px" sx={styles.whatdidnwellBox}>
-            <Typography
-              ml="24px"
-              mt="24px"
-              color="#F79722"
-              variant="h4"
-              sx={styles.textOpacity}
-            >
-              What Didn’t Go Well
-            </Typography>
-            {didntWentWellwords.length !== 0 ? (
-              <>
-                <Grid
-                  item
-                  display="flex"
-                  justifyContent="center"
-                  alignItems="center"
-                  height="272px"
-                >
-                  <WordCloud
-                    data={didntWentWellwords}
-                    showOn="whatDidntWentWell"
-                  ></WordCloud>
-                </Grid>{' '}
-              </>
-            ) : null}
-          </Box>
-        </Grid>
-        <Grid item xs={12}>
-          <Box mt="48px" sx={styles.actionBox} className="page-break ">
-            <Typography
-              ml="24px"
-              mt="24px"
-              color="#8A38F5"
-              variant="h4"
-              sx={styles.textOpacity}
-            >
-              Actions
-            </Typography>
-            <Box ml="24px" mt="24px" mr="24px">
-              {actions.length !== 0 ? (
-                <>
-                  <RetroColumn
-                    leftHeaderComponent={undefined}
-                    rightHeaderComponent={undefined}
-                    noHeightLimit
-                    noHeader
-                    expandAllGroups
-                    column={columns[ACTIONS_COLUMN]}
-                    columnId={columns[ACTIONS_COLUMN].id}
-                    showEditBox={false}
-                    setIslanded={setIsLanded}
-                    setShowEditBox={() => {}}
-                    cardGroups={columns[ACTIONS_COLUMN].groups}
-                  />
-                </>
-              ) : null}
-            </Box>
-          </Box>
-        </Grid>
-        <Grid
-          xs={12}
-          mt="48px"
-          item
-          flexDirection="row"
-          justifyContent="center"
-          sx={styles.facilitatorFeedbackBox}
-        >
-          <Grid item>
-            <Typography
-              ml="24px"
-              mt="24px"
-              color="#343434"
-              variant="h4"
-              sx={styles.textOpacity}
-            >
-              Feedback for facilitator
-            </Typography>
-          </Grid>
-          <Grid item mt="32px" mb="48px">
-            {feedback ? (
-              <Grid
-                container
-                sx={{ flexDirection: 'row', justifyContent: 'center' }}
-              >
-                {FEEDBACK_QUESTIONS.map((v, index) => (
-                  <Grid
-                    item
-                    xs={12 / FEEDBACK_QUESTIONS.length}
-                    sx={{ display: 'flex', justifyContent: 'center' }}
-                    key={index + 'feed'}
-                  >
-                    <Card
-                      variant="outlined"
-                      sx={{
-                        margin: '10px',
-                        maxWidth: '351px',
-                        height: '238px',
-                        background: '#FFFFFF',
-                        borderRadius: '10px',
-                      }}
-                    >
-                      <CardContent>
-                        <Typography
-                          variant="h2"
-                          sx={{
-                            justifyContent: 'center',
-                            display: 'flex',
-                            gap: '5px',
-                            alignItems: 'center',
-                            fontWeight: 500,
-                          }}
-                        >
-                          {(feedback[0][index] / feedback[1][index]).toFixed(1)}
-                        </Typography>
-                        <Box
-                          sx={{
-                            display: 'flex',
-                            justifyContent: 'center',
-                          }}
-                          mt="14.5px"
-                          mb="14.5px"
-                        >
-                          {[1, 2, 3, 4, 5].map(i =>
-                            i <= feedback[0][index] / feedback[1][index] ? (
-                              <Icons.Star
-                                key={i + ''}
-                                size={22}
-                                color="#FCB34C"
-                                style={{ margin: '8px' }}
-                              ></Icons.Star>
-                            ) : (
-                              <Icons.StarOutline
-                                key={i + ''}
-                                size={22}
-                                color="#808080"
-                                style={{ margin: '8px' }}
-                              ></Icons.StarOutline>
-                            )
-                          )}
-                        </Box>
-
-                        <Typography
-                          sx={{
-                            fontWeight: 400,
-                            fontSize: '16px',
-                            justifyContent: 'center',
-                            display: 'flex',
-                            color: '#808080',
-                            alignItems: 'center',
-                          }}
-                          mt="4px"
-                        >
-                          {feedback[1][index]} Response
-                          {feedback[1][index] === 1 ? '' : 's'}
-                        </Typography>
-                        <Typography
-                          mt="24px"
-                          mb="25px"
-                          sx={{
-                            fontWeight: 400,
-                            fontSize: '16px',
-                            justifyContent: 'center',
-                            display: 'flex',
-                            color: '#343434',
-                            alignItems: 'center',
-                          }}
-                        >
-                          {FEEDBACK_QUESTIONS[index]}
-                        </Typography>
-                      </CardContent>
-                    </Card>
-                  </Grid>
-                ))}
-              </Grid>
-            ) : (
-              <Box display="flex" justifyContent="center" alignItems="center">
-                <Typography>No responses have been submitted</Typography>
-              </Box>
-            )}
-          </Grid>
-        </Grid>
-        <Grid item xs={12}>
-          <Box
-            mt="96px"
-            sx={{
-              display: 'flex',
-              justifyContent: 'center',
-              alignItems: 'center',
-            }}
-          >
-            <Typography variant="h1" color={commonStyles.secondaryMain}>
-              Thank You for using{' '}
-            </Typography>
-            <Typography
-              mr="10px"
-              ml="10px"
-              variant="h1"
-              color={commonStyles.PrimaryMain}
-            >
-              BACI
-            </Typography>
-            <Typography variant="h1" color={commonStyles.secondaryMain}>
-              Retros
-            </Typography>
-          </Box>
-        </Grid>
-        <Grid item xs={12}>
-          <Box
-            mt="31px"
-            mb="105px"
-            sx={{
-              display: 'flex',
-              justifyContent: 'center',
-              alignItems: 'center',
-            }}
-          >
-            <Typography
-              mr="5px"
-              sx={{ fontSize: '16px', textDecoration: 'underline' }}
-              color={commonStyles.info}
-            >
-              SignUp
-            </Typography>
-            <Typography
-              sx={{ fontSize: '16px' }}
-              color={commonStyles.primaryDark}
-            >
-              to explore more exciting features!
-            </Typography>
-          </Box>
-        </Grid>
-      </Grid> */
 }

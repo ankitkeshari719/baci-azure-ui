@@ -159,14 +159,15 @@ export const Report = React.forwardRef((props, ref) => {
     },
   } = React.useContext(BoardContext);
 
-  const [wentWellwords, setwentWellwords] = React.useState<Word[]>([]);
-  const [didntWentWellwords, setdidntWentWellwords] = React.useState<Word[]>(
-    []
-  );
-  const [barData, setBarData] = React.useState<{ 1: any; 2: any; 3: any }[]>(
+  const [wentWellWords, setWentWellWords] = React.useState<Word[]>([]);
+  const [didNotWentWellWords, setDidNotWentWellWords] = React.useState<Word[]>(
     []
   );
   const [actions, setActions] = React.useState<string[]>([]);
+
+  const [barData, setBarData] = React.useState<{ 1: any; 2: any; 3: any }[]>(
+    []
+  );
   const [questions, setQuestions] = React.useState<Question[]>([]);
   const [feedback, setFeedback] = React.useState<any | undefined>();
   const [islanded, setIsLanded] = React.useState(true);
@@ -194,37 +195,79 @@ export const Report = React.forwardRef((props, ref) => {
   React.useEffect(() => {
     console.log(componentRef);
   });
+
   React.useEffect(() => {
-    const wentWell_cardValues = [] as string[];
-    const didntWentWell_cardValues = [] as string[];
+    const wentWellCardValues = [] as string[];
+    const didNotWentWellCardValues = [] as string[];
+    const actionsCardValues = [] as string[];
+    let wentWellWordCloudData = [];
+    let didNotWentWellWordCloudData = [];
 
-    columns[ACTIONS_COLUMN].groups.forEach(group =>
-      group.cards.forEach(card => {
-        actions.push(card.value);
-      })
-    );
-    setActions(actions);
-    //for went well word cloud
-    columns[WHAT_WENT_WELL_COLUMN].groups.forEach(group =>
-      group.cards.forEach(card => {
-        const clean = card.value.replace(/[\W_]+/g, ' ').trim();
-        if (clean !== '') wentWell_cardValues.push(clean);
-      })
-    );
+    // What Went Well Data
+    columns.forEach(column => {
+      if (column.id === '0') {
+        column.groups.forEach(group => {
+          group.cards.forEach(card => {
+            const clean = card.value.replace(/[\W_]+/g, ' ').trim();
+            if (clean !== '') wentWellCardValues.push(clean);
+          });
+        });
+      }
+    });
 
-    //for went well word cloud
-    const total = Object.values(wentWell_cardValues)
+    // What Went Well Total
+    const wentWellCardValuesTotal = Object.values(wentWellCardValues)
       .join(' ')
       .toLowerCase()
       .split(' ');
-    let wordsMaps_wentWell = [];
-    if (total.length !== 0) {
-      const noStopwords = removeStopwords(total, [
+
+    // Getting the what went well word cloud data
+    if (wentWellCardValuesTotal.length !== 0) {
+      const noStopWords = removeStopwords(wentWellCardValuesTotal, [
         ...eng,
         ...WORD_CLOUD_IGNORE_WORDS,
       ]);
 
-      wordsMaps_wentWell = noStopwords
+      wentWellWordCloudData = noStopWords
+        .reduce((current: { text: string; size: number }[], text: string) => {
+          const exist = current.find(c => c.text === text);
+          if (exist) {
+            exist.size++;
+          } else if (text.length > 2) {
+            current.push({ text, size: 1 });
+          }
+          return current;
+        }, [])
+        .filter((entry: { text: string; size: number }) => entry.size >= 2);
+    }
+    setWentWellWords(wentWellWordCloudData);
+
+    // Did Not Went Well Data
+    columns.forEach(column => {
+      if (column.id === '1') {
+        column.groups.forEach(group => {
+          group.cards.forEach(card => {
+            const clean = card.value.replace(/[\W_]+/g, ' ').trim();
+            if (clean !== '') didNotWentWellCardValues.push(clean);
+          });
+        });
+      }
+    });
+
+    //  Did Not Went Well Total
+    const didNotWellCardValuesTotal = Object.values(didNotWentWellCardValues)
+      .join(' ')
+      .toLowerCase()
+      .split(' ');
+
+    // Getting the what went did not well word cloud data
+    if (didNotWellCardValuesTotal.length !== 0) {
+      const noStopWords = removeStopwords(didNotWellCardValuesTotal, [
+        ...eng,
+        ...WORD_CLOUD_IGNORE_WORDS,
+      ]);
+
+      didNotWentWellWordCloudData = noStopWords
         .reduce((current: { text: string; size: number }[], text: string) => {
           const exist = current.find(c => c.text === text);
 
@@ -237,44 +280,29 @@ export const Report = React.forwardRef((props, ref) => {
         }, [])
         .filter((entry: { text: string; size: number }) => entry.size >= 2);
     }
-    setwentWellwords(wordsMaps_wentWell);
+    setDidNotWentWellWords(didNotWentWellWordCloudData);
 
-    //for didn't went well word cloud
-    columns[WHAT_DIDNT_GO_WELL].groups.forEach(group =>
-      group.cards.forEach(card => {
-        const clean = card.value.replace(/[\W_]+/g, ' ').trim();
+    // Action Data
+    columns.forEach(column => {
+      if (column.id === '2') {
+        column.groups.forEach(group => {
+          group.cards.forEach(card => {
+            const clean = card.value.replace(/[\W_]+/g, ' ').trim();
+            if (clean !== '') actionsCardValues.push(clean);
+          });
+        });
+      }
+    });
+    console.log('wentWellCardValues', wentWellCardValues);
+    console.log('wentWellCardValuesTotal', wentWellCardValuesTotal);
+    console.log('wentWellWordCloudData', wentWellWordCloudData);
+    console.log('didNotWentWellCardValues', didNotWentWellCardValues);
+    console.log('didNotWellCardValuesTotal', didNotWellCardValuesTotal);
+    console.log('didNotWentWellWordCloudData', didNotWentWellWordCloudData);
+    console.log('actionsCardValues', actionsCardValues);
+    setActions(actionsCardValues);
 
-        if (clean !== '') didntWentWell_cardValues.push(clean);
-      })
-    );
-    const totalvalues = Object.values(didntWentWell_cardValues)
-      .join(' ')
-      .toLowerCase()
-      .split(' ');
-    let wordsMaps_didntWentWell = [];
-    if (totalvalues.length !== 0) {
-      const noStopwords = removeStopwords(totalvalues, [
-        ...eng,
-        ...WORD_CLOUD_IGNORE_WORDS,
-      ]);
-
-      wordsMaps_didntWentWell = noStopwords
-        .reduce((current: { text: string; size: number }[], text: string) => {
-          const exist = current.find(c => c.text === text);
-
-          if (exist) {
-            exist.size++;
-          } else if (text.length > 2) {
-            current.push({ text, size: 1 });
-          }
-          return current;
-        }, [])
-        .filter((entry: { text: string; size: number }) => entry.size >= 2);
-    }
-    setdidntWentWellwords(wordsMaps_didntWentWell);
-
-    //get total count of user submitted the pulsechek
-
+    //Get total count of user submitted the pulsechek
     const newQuestions = [] as Question[];
     const feedbackValues = {} as any;
     const feedbackCount = {} as any;
@@ -319,26 +347,27 @@ export const Report = React.forwardRef((props, ref) => {
     }
 
     setQuestions(newQuestions);
-    //formated data for bar chart
     const newArr = newQuestions.map(({ question, ...rest }) => {
       return rest;
     });
+
     newArr.map(data => {
       data[1] = Math.round((data[1] / totalPulseCheckCount) * 100);
       data[2] = Math.round((data[2] / totalPulseCheckCount) * 100);
       data[3] = Math.round((data[3] / totalPulseCheckCount) * 100);
     });
+
     let sampleArray: any = [];
     newArr.map(data => {
       return sampleArray.push(Object.values(data));
     });
+
     let tempArr: any = [];
     if (sampleArray.length === 3) {
       tempArr.push([sampleArray[0][0], sampleArray[1][0], sampleArray[2][0]]);
       tempArr.push([sampleArray[0][1], sampleArray[1][1], sampleArray[2][1]]);
       tempArr.push([sampleArray[0][2], sampleArray[1][2], sampleArray[2][2]]);
     }
-
     setBarData(tempArr);
   }, [lastStateUpdate]);
 
@@ -437,7 +466,7 @@ export const Report = React.forwardRef((props, ref) => {
                   What Went Well
                 </Typography>
 
-                {wentWellwords.length !== 0 ? (
+                {wentWellWords.length !== 0 ? (
                   <>
                     <Grid
                       item
@@ -447,7 +476,7 @@ export const Report = React.forwardRef((props, ref) => {
                       height="272px"
                     >
                       <WordCloud
-                        data={wentWellwords}
+                        data={wentWellWords}
                         showOn="whatWentWell"
                       ></WordCloud>
                     </Grid>{' '}
@@ -464,7 +493,7 @@ export const Report = React.forwardRef((props, ref) => {
                 >
                   What Didn’t Go Well
                 </Typography>
-                {didntWentWellwords.length !== 0 ? (
+                {didNotWentWellWords.length !== 0 ? (
                   <>
                     <Grid
                       item
@@ -474,7 +503,7 @@ export const Report = React.forwardRef((props, ref) => {
                       height="272px"
                     >
                       <WordCloud
-                        data={didntWentWellwords}
+                        data={didNotWentWellWords}
                         showOn="whatDidntWentWell"
                       ></WordCloud>
                     </Grid>{' '}
