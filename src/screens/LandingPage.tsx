@@ -126,13 +126,13 @@ export function LandingPage() {
     dispatch({
       type: ActionType.CLOSE_CURRENT_RETRO,
     });
-  }, []);
-  React.useEffect(() => {
+    // console.log("useEffect called")
     sessionStorage.removeItem('BoardContext');
     sessionStorage.removeItem('GlobalContext');
     sessionStorage.removeItem('retroname');
     sessionStorage.removeItem('showManual');
-  });
+  }, []);
+
   return (
     <>
       {isXsUp ? (
