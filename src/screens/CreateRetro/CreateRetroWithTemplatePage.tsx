@@ -76,10 +76,6 @@ export function CreateRetroWithTemplatePage({
     const initialPulseCheck = pulseChecksData.filter(e => e.checked == true);
     const initialTemplate: any = templatesData.filter(e => e.checked == true);
     setSelectedTemplate(initialTemplate && initialTemplate[0]);
-    localStorage.setItem(
-      'selectedTemplate',
-      JSON.stringify(initialTemplate && initialTemplate[0])
-    );
     setSelectedPulseCheck(initialPulseCheck && initialPulseCheck[0]);
   }, []);
 
@@ -127,10 +123,6 @@ export function CreateRetroWithTemplatePage({
     });
     setTemplates(data);
     setSelectedTemplate(selectedTemplateData);
-    localStorage.setItem(
-      'selectedTemplate',
-      JSON.stringify(selectedTemplateData)
-    );
   }
 
   function handleTemplateSelectClick(selectedTemplateId: string) {
@@ -232,7 +224,7 @@ export function CreateRetroWithTemplatePage({
           selectedAvatar,
           userType,
           selectedPulseCheck,
-          selectedTemplate
+          localStorageTemplate
         )
         .then(
           res => {
@@ -269,6 +261,7 @@ export function CreateRetroWithTemplatePage({
               });
             setIsStartRetro(true);
             handleStartRetro();
+            localStorage.removeItem('selectedTemplate');
           },
           err => {
             console.log('err', err);

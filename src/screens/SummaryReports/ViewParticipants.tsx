@@ -1,16 +1,15 @@
-import {
-  DialogContent,
-  Typography,
-  DialogActions,
-  DialogTitle,
-  IconButton,
-} from '@mui/material';
+import { Box, DialogContent, DialogTitle, Typography } from '@mui/material';
 import * as React from 'react';
-import { Button } from 'react-bootstrap';
-import * as Icons from 'heroicons-react';
+import '../../global.scss';
+import './styles.scss';
+
+import { Row, Col } from 'react-bootstrap';
+import Avatar from '../../elements/Avatar';
+import { LazyLoadImage } from 'react-lazy-load-image-component';
 
 type Props = {
   handleViewParticipantsDialogClose: () => void;
+  users: any;
 };
 
 export interface DialogTitleProps {
@@ -24,65 +23,73 @@ function BootstrapDialogTitle(props: DialogTitleProps) {
 
   return (
     <DialogTitle sx={{ m: 0, p: 2 }} {...other}>
-      {children}
-      {onClose ? (
-        <IconButton
-          aria-label="close"
-          onClick={onClose}
-          sx={{
-            position: 'absolute',
-            right: 8,
-            top: 8,
-            color: theme => theme.palette.grey[500],
-          }}
+      <Row>
+        <Col xs="6" className="d-flex justify-content-start align-items-center">
+          {children}
+        </Col>
+        <Col
+          xs={{ span: 1, offset: 5 }}
+          className="d-flex justify-content-end align-items-center"
         >
-          <Icons.LockClosed
-            size={20}
-            color="#159ADD"
-            style={{
-              cursor: 'pointer',
-              marginLeft: '20px',
-            }}
-            onClick={() => {
-              console.log('Here');
-            }}
-          />
-        </IconButton>
-      ) : null}
+          {onClose ? (
+            <img
+              width="45px"
+              height="45px"
+              onClick={onClose}
+              src="/svgs/CloseDialog.svg"
+              style={{ cursor: 'pointer' }}
+            />
+          ) : null}
+        </Col>
+      </Row>
     </DialogTitle>
   );
 }
 
-export function ViewParticipants({ handleViewParticipantsDialogClose }: Props) {
+export function ViewParticipants({
+  handleViewParticipantsDialogClose,
+  users,
+}: Props) {
   return (
-    <>
+    <Box sx={{ minWidth: '450px', maxHeight: '450px', overflowY: 'auto' }}>
       <BootstrapDialogTitle
         id="customized-dialog-title"
         onClose={handleViewParticipantsDialogClose}
       >
-        VIEW PARTICIPANTS
+        <Typography className="allParticipants">All PARTICIPANTS</Typography>
       </BootstrapDialogTitle>
       <DialogContent dividers>
-        <Typography gutterBottom>
-          Cras mattis consectetur purus sit amet fermentum. Cras justo odio,
-          dapibus ac facilisis in, egestas eget quam. Morbi leo risus, porta ac
-          consectetur ac, vestibulum at eros.
-        </Typography>
-        <Typography gutterBottom>
-          Praesent commodo cursus magna, vel scelerisque nisl consectetur et.
-          Vivamus sagittis lacus vel augue laoreet rutrum faucibus dolor auctor.
-        </Typography>
-        <Typography gutterBottom>
-          Aenean lacinia bibendum nulla sed consectetur. Praesent commodo cursus
-          magna, vel scelerisque nisl consectetur et. Donec sed odio dui. Donec
-          ullamcorper nulla non metus auctor fringilla.
-        </Typography>
+        <Box>
+          {users?.map((user: any, index: any) => (
+            <Row
+              style={{ marginBottom: index < users.length - 1 ? '16px' : '0px' }}
+              key={index}
+            >
+              <Col
+                xs="12"
+                className="d-flex justify-content-start align-items-center"
+              >
+                <LazyLoadImage
+                  className="avatar"
+                  style={{
+                    width: '60px',
+                    height: '60px',
+                    borderRadius: '50%',
+                    border: '5px solid #f9fbf8',
+                  }}
+                  src={'/avatars/animals/' + user.avatar + '.svg'}
+                ></LazyLoadImage>
+                <Typography
+                  className="allParticipants"
+                  sx={{ marginLeft: '8px' }}
+                >
+                  {user.userNickname}
+                </Typography>
+              </Col>
+            </Row>
+          ))}
+        </Box>
       </DialogContent>
-      <DialogActions>
-        <Button autoFocus onClick={handleViewParticipantsDialogClose}>
-          Save changes
-        </Button>
-      </DialogActions>
-    </>
+    </Box>
   );
 }

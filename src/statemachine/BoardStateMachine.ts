@@ -22,7 +22,7 @@ export enum BoardActionType {
   MOVE_CARD = 'moveCard',
   MERGE_CARDS = 'mergeCards',
   REORDER_CARD = 'reorderCard',
-  REORDER_GROUP = "reorderGroup",
+  REORDER_GROUP = 'reorderGroup',
   ADD_REACT_TO_CARD = 'addReactToCard',
   ADD_REACT_TO_GROUP = 'addReactToGroup',
   REMOVE_REACT_FROM_CARD = 'removeReactFromCard',
@@ -143,7 +143,9 @@ export const validateAction = (
     avatar?: string,
     retroStatus?: string,
     pulseCheck?: any,
-    template?: any
+    template?: any,
+    feedbackSubmitted?: boolean,
+    isFeedbackSubmittedByFacilitator?:number
   ) => {
     // if (
     //   creatorId != '' &&
@@ -470,7 +472,9 @@ export const validateAction = (
         parameters.avatar,
         parameters.retroStatus,
         parameters.pulseCheck,
-        parameters.template
+        parameters.template,
+        parameters.feedbackSubmitted,
+        parameters.isFeedbackSubmittedByFacilitator
       );
     case BoardActionType.CREATE_GROUP:
       return isCreateGroupValid(
@@ -669,7 +673,9 @@ export const processAction = (
     avatar?: string,
     retroStatus?: string,
     pulseCheck?: any,
-    template?: any
+    template?: any,
+    feedbackSubmitted?: boolean,
+    isFeedbackSubmittedByFacilitator?:number
   ) => {
     if (retroName !== undefined && retroName !== '') {
       state.retroName = retroName;
@@ -700,6 +706,12 @@ export const processAction = (
     }
     if (template != undefined && pulseCheck != null) {
       state.columns = template.columns;
+    }
+    if (feedbackSubmitted != undefined) {
+      state.feedbackSubmitted = feedbackSubmitted;
+    }
+    if (feedbackSubmitted != undefined) {
+      state.isFeedbackSubmittedByFacilitator = isFeedbackSubmittedByFacilitator;
     }
     state.lastUpdatedBy = userId;
   };
@@ -733,7 +745,6 @@ export const processAction = (
     userId: string,
     avatar: string
   ) => {
-  
     if (!findCard(id).card) {
       const { group } = findGroup(groupId);
       if (group) {
@@ -771,9 +782,9 @@ export const processAction = (
         group.cards.splice(index as number, 1);
         cardsList.splice(
           toIndex -
-          (group.id === targetGroup.id && (index as number) < toIndex
-            ? 1
-            : 0),
+            (group.id === targetGroup.id && (index as number) < toIndex
+              ? 1
+              : 0),
           0,
           card
         );
@@ -812,7 +823,7 @@ export const processAction = (
       column.groups.splice(oldIndex, 1);
       column.groups.splice(index, 0, group);
     }
-  }
+  };
 
   const mergeCards = (
     groupId: string,
@@ -1149,7 +1160,9 @@ export const processAction = (
         avatar,
         parameters.retroStatus,
         parameters.pulseCheck,
-        parameters.template
+        parameters.template,
+        parameters.feedbackSubmitted,
+        parameters.isFeedbackSubmittedByFacilitator
       );
       break;
     case BoardActionType.CREATE_GROUP:

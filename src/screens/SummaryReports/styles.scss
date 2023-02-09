@@ -64,6 +64,20 @@
   letter-spacing: 0.6px !important;
   color: #4e4e4e !important;
 }
+.viewParticipants {
+  font-family: 'Poppins' !important;
+  font-style: normal !important;
+  font-weight: 500 !important;
+  font-size: 14px !important;
+  line-height: 20px !important;
+  display: flex !important;
+  align-items: center !important;
+  text-align: center !important;
+  letter-spacing: 0.4px !important;
+  text-transform: uppercase !important;
+  color: #159add !important;
+  cursor: pointer !important;
+}
 .viewWorldCould {
   font-family: 'Poppins' !important;
   font-style: normal !important;
@@ -79,11 +93,95 @@
   cursor: pointer !important;
 }
 .participantsResponded {
-  font-family: 'Poppins';
-  font-style: normal;
-  font-weight: 600;
-  font-size: 16px;
-  line-height: 20px;
-  letter-spacing: 0.6px;
-  color: #4e4e4e;
+  font-family: 'Poppins' !important;
+  font-style: normal !important;
+  font-weight: 600 !important;
+  font-size: 16px !important;
+  line-height: 20px !important;
+  letter-spacing: 0.6px !important;
+  color: #4e4e4e !important;
+}
+.thankingNoteOne {
+  font-family: 'Poppins' !important;
+  font-style: normal !important;
+  font-weight: 500 !important;
+  font-size: 24px !important;
+  line-height: 32px !important;
+  text-align: center !important;
+  letter-spacing: 0.5px !important;
+  color: #ee7538 !important;
+  flex: none !important;
+  order: 6 !important;
+  flex-grow: 0 !important;
+}
+.thankingNoteTwo {
+  font-family: 'Poppins' !important;
+  font-style: normal !important;
+  font-weight: 500 !important;
+  font-size: 24px !important;
+  line-height: 32px !important;
+  text-align: center !important;
+  letter-spacing: 0.5px !important;
+  color: #159add !important;
+  flex: none !important;
+  order: 6 !important;
+  flex-grow: 0 !important;
+}
+.allParticipants {
+  font-family: 'Poppins' !important;
+  font-style: normal !important;
+  font-weight: 400 !important;
+  font-size: 16px !important;
+  line-height: 20px !important;
+  letter-spacing: 0.6px !important;
+  color: #343434 !important;
+  flex: none !important;
+  order: 0 !important;
+  flex-grow: 0 !important;
+}
+.actionValue {
+  font-family: 'Poppins' !important;
+  font-style: normal !important;
+  font-weight: 400 !important;
+  font-size: 16px !important;
+  line-height: 20px !important;
+  letter-spacing: 0.6px !important;
+  color: #4e4e4e !important;
+}
+.topVoted {
+  font-family: 'Poppins' !important;
+  font-style: normal !important;
+  font-weight: 600 !important;
+  font-size: 16px !important;
+  line-height: 20px !important;
+  letter-spacing: 0.6px !important;
+  color: #4e4e4e !important;
+}
+// Feedback for Facilitator
+.feedbackName {
+  font-family: 'Poppins' !important;
+  font-style: normal !important;
+  font-weight: 600 !important;
+  font-size: 16px !important;
+  line-height: 20px !important;
+  letter-spacing: 0.6px !important;
+  color: #4e4e4e !important;
+}
+.feedbackRatingNumber {
+  font-family: 'Poppins' !important;
+  font-style: normal !important;
+  font-weight: 600 !important;
+  font-size: 16px !important;
+  line-height: 20px !important;
+  letter-spacing: 0.6px !important;
+  color: #4e4e4e !important;
+}
+.feedbackResponse {
+  font-family: 'Poppins' !important;
+font-style: normal !important;
+font-weight: 400 !important;
+font-size: 16px !important;
+line-height: 20px !important;
+letter-spacing: 0.6px !important;
+color: #4E4E4E !important;
 }

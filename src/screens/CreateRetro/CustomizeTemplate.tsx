@@ -18,6 +18,9 @@ import * as Icons from 'heroicons-react';
 import EdiText from 'react-editext';
 import theme from '../../theme/theme';
 import './styles.scss';
+import { BoardContext } from '../../contexts/BoardContext';
+import { BoardActionType } from '../../statemachine/BoardStateMachine';
+import { ActionType, GlobalContext } from '../../contexts/GlobalContext';
 
 const ColumnComponent = styled('div')({
   height: 'calc(var(--app-height) - 160px)',
@@ -87,24 +90,26 @@ export function CustomizeTemplate({
   setIsTemplateCustomized,
 }: Props) {
   const isXsUp = useMediaQuery(theme.breakpoints.only('xs'));
+  const { commitAction } = React.useContext(BoardContext);
+  const [global, dispatch] = React.useContext(GlobalContext);
+
   const [tempSelectedTemplate, setTempSelectedTemplate] = React.useState<any>();
   const [dragDropList, setDragDropList] = React.useState<any>([]);
   const [initialHeight, setInitialHeight] = React.useState<string>('60px');
-  const localStorageTemplateTemp = localStorage.getItem('selectedTemplate');
-  const localStorageTemplate =
-    localStorageTemplateTemp && JSON.parse(localStorageTemplateTemp);
 
   React.useEffect(() => {
-    setTempSelectedTemplate(localStorageTemplate);
+    setTempSelectedTemplate(selectedTemplate);
+    localStorage.setItem('selectedTemplate', JSON.stringify(selectedTemplate));
     const newArr =
-      localStorageTemplate.columns &&
-      localStorageTemplate.columns.map((element: any) => ({
+      selectedTemplate.columns &&
+      selectedTemplate.columns.map((element: any) => ({
         ...element,
         isHovered: false,
       }));
     setDragDropList(newArr);
   }, []);
 
+  // On Dragging the Column
   const onDragComplete = (result: any) => {
     if (!result.destination) return;
     const arr = [...dragDropList];
@@ -121,10 +126,10 @@ export function CustomizeTemplate({
       'selectedTemplate',
       JSON.stringify({ ...tempSelectedTemplate, columns: [...arr] })
     );
-
     setSelectedTemplate({ ...selectedTemplate, columns: [...arr] });
   };
 
+  // On Changing the column
   const handleColumnNameChange = (
     value: React.SetStateAction<string>,
     columnId: string
@@ -145,17 +150,29 @@ export function CustomizeTemplate({
       setInitialHeight('140px !important');
     }
     setIsTemplateCustomized(true);
-    data.forEach(function (v: any) {
-      delete v.isHovered;
-    });
-
-    setTempSelectedTemplate({ ...tempSelectedTemplate, columns: [...data] });
     localStorage.setItem(
       'selectedTemplate',
       JSON.stringify({ ...tempSelectedTemplate, columns: [...data] })
     );
-
+    setTempSelectedTemplate({ ...tempSelectedTemplate, columns: [...data] });
     setSelectedTemplate(tempSelectedTemplate);
+  };
+
+  const saveAndProcessAction = async (
+    actionName: BoardActionType,
+    parameters: any
+  ) => {
+    await commitAction(actionName as BoardActionType, {
+      parameters,
+      userId: global.user.id,
+    });
+  };
+
+  // Function to handle the select button click
+  const onClickSelectButton = (templateId: string) => {
+    const localStorageTemplate = localStorage.getItem('selectedTemplate');
+    handleTemplateSelectClick(templateId);
+    closeCustomTemplateDialog();
   };
 
   const handleMouseEnter = (i: number) => {
@@ -176,12 +193,6 @@ export function CustomizeTemplate({
       return element;
     });
     setDragDropList(newArr);
-  };
-
-  // Function to handle the select button click
-  const onClickSelectButton = (templateId: string) => {
-    handleTemplateSelectClick(templateId);
-    closeCustomTemplateDialog();
   };
 
   const setValueLive = (e: any, columnId: string) => {
