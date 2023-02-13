@@ -244,6 +244,14 @@ export const ReportSummary = React.forwardRef((props, ref) => {
     }
   }
 
+  const windowWidth = React.useRef(window.innerWidth);
+  const windowHeight = React.useRef(window.innerHeight);
+
+  React.useEffect(() => {
+    console.log('width: ', windowWidth.current);
+    console.log('height: ', windowHeight.current);
+  });
+
   React.useEffect(() => {
     const wentWellCardValues = [] as string[];
     const didNotWentWellCardValues = [] as string[];
@@ -394,7 +402,11 @@ export const ReportSummary = React.forwardRef((props, ref) => {
       .filter((item, i, ar) => ar.indexOf(item) === i);
     setWentWellCreatedBy(wentWellUniqueCreatedBy.length);
     setWentWellCardData(wentWellCards);
-    setWentWellTopVotedCards(wentWellCards.slice(0, 4));
+    setWentWellTopVotedCards(
+      windowWidth.current <= 800
+        ? wentWellCards.slice(0, 3)
+        : wentWellCards.slice(0, 4)
+    );
 
     // What did not went well Cards Data
     columns.forEach(column => {
@@ -416,7 +428,11 @@ export const ReportSummary = React.forwardRef((props, ref) => {
       .filter((item, i, ar) => ar.indexOf(item) === i);
     setDidNotWentWellCreatedBy(didNotWentWellUniqueCreatedBy.length);
     setDidNotWentWellCardData(didNotWentWellCards);
-    setDidNotWentWellTopVotedCards(didNotWentWellCards.slice(0, 4));
+    setDidNotWentWellTopVotedCards(
+      windowWidth.current <= 800
+        ? didNotWentWellCards.slice(0, 3)
+        : didNotWentWellCards.slice(0, 4)
+    );
 
     // Develope Action Cards Data
     columns.forEach(column => {
@@ -937,7 +953,7 @@ export const ReportSummary = React.forwardRef((props, ref) => {
                     {wentWellTopVotedCards.map((card: any, index: number) => {
                       return (
                         <Col
-                          xs="3"
+                          xs={windowWidth.current <= 800 ? '4' : '3'}
                           className="d-flex justify-content-center align-items-center"
                           key={index}
                         >
@@ -1096,7 +1112,7 @@ export const ReportSummary = React.forwardRef((props, ref) => {
                       (card: any, index: number) => {
                         return (
                           <Col
-                            xs="3"
+                            xs={windowWidth.current <= 800 ? '4' : '3'}
                             className="d-flex justify-content-center align-items-center"
                             key={index}
                           >
