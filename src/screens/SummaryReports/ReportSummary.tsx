@@ -403,7 +403,7 @@ export const ReportSummary = React.forwardRef((props, ref) => {
     setWentWellCreatedBy(wentWellUniqueCreatedBy.length);
     setWentWellCardData(wentWellCards);
     setWentWellTopVotedCards(
-      windowWidth.current <= 800
+      windowWidth.current <= 1500
         ? wentWellCards.slice(0, 3)
         : wentWellCards.slice(0, 4)
     );
@@ -429,7 +429,7 @@ export const ReportSummary = React.forwardRef((props, ref) => {
     setDidNotWentWellCreatedBy(didNotWentWellUniqueCreatedBy.length);
     setDidNotWentWellCardData(didNotWentWellCards);
     setDidNotWentWellTopVotedCards(
-      windowWidth.current <= 800
+      windowWidth.current <= 1500
         ? didNotWentWellCards.slice(0, 3)
         : didNotWentWellCards.slice(0, 4)
     );
@@ -953,7 +953,7 @@ export const ReportSummary = React.forwardRef((props, ref) => {
                     {wentWellTopVotedCards.map((card: any, index: number) => {
                       return (
                         <Col
-                          xs={windowWidth.current <= 800 ? '4' : '3'}
+                          xs={windowWidth.current <= 1500 ? '4' : '3'}
                           className="d-flex justify-content-center align-items-center"
                           key={index}
                         >
@@ -1112,7 +1112,7 @@ export const ReportSummary = React.forwardRef((props, ref) => {
                       (card: any, index: number) => {
                         return (
                           <Col
-                            xs={windowWidth.current <= 800 ? '4' : '3'}
+                            xs={windowWidth.current <= 1500 ? '4' : '3'}
                             className="d-flex justify-content-center align-items-center"
                             key={index}
                           >
