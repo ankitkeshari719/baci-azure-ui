@@ -687,7 +687,8 @@ export const ReportSummary = React.forwardRef((props, ref) => {
             <Typography className="textTypeOne">Report For</Typography>
           </Col>
           <Col
-            xs="2"
+            xs="4"
+            lg="2"
             className="d-flex justify-content-start align-items-center"
           >
             <Typography className="textTypeThree">
@@ -695,7 +696,8 @@ export const ReportSummary = React.forwardRef((props, ref) => {
             </Typography>
           </Col>
           <Col
-            xs={{ span: 1, offset: 8 }}
+            xs={{ span: 1, offset: 6 }}
+            lg={{ span: 1, offset: 8 }}
             className="d-flex justify-content-end align-items-center"
           >
             {/* <Icons.ShareOutline
@@ -726,7 +728,8 @@ export const ReportSummary = React.forwardRef((props, ref) => {
         {/* Line 2 */}
         <Row style={{ marginTop: '36px' }}>
           <Col
-            xs="2"
+            xs="3"
+            lg="2"
             className="d-flex justify-content-start align-items-center"
           >
             <Typography className="textTypeOne">Date</Typography>
@@ -735,7 +738,8 @@ export const ReportSummary = React.forwardRef((props, ref) => {
             </Typography>
           </Col>
           <Col
-            xs="3"
+            xs="4"
+            lg="3"
             className="d-flex justify-content-start align-items-center"
           >
             <Typography className="textTypeOne">Time Taken</Typography>
@@ -753,7 +757,8 @@ export const ReportSummary = React.forwardRef((props, ref) => {
             </Typography>
           </Col>
           <Col
-            xs={{ span: 2, offset: 3 }}
+            xs={{ span: 2, offset: 1 }}
+            lg={{ span: 2, offset: 3 }}
             className="d-flex justify-content-end align-items-center"
           >
             <Typography
@@ -867,7 +872,8 @@ export const ReportSummary = React.forwardRef((props, ref) => {
         {/* What Went Well Section 2*/}
         <Row style={{ marginTop: '16px' }}>
           <Col
-            xs="2"
+            xs="4"
+            lg="2"
             className="d-flex justify-content-start align-items-center"
           >
             <Typography className="participantsResponded">
@@ -879,7 +885,8 @@ export const ReportSummary = React.forwardRef((props, ref) => {
           </Col>
           {wentWellWords.length === 0 ? null : (
             <Col
-              xs={{ span: 2, offset: 8 }}
+              xs={{ span: 3, offset: 5 }}
+              lg={{ span: 2, offset: 8 }}
               className="d-flex justify-content-end align-items-center"
             >
               <Typography
@@ -1023,7 +1030,8 @@ export const ReportSummary = React.forwardRef((props, ref) => {
         {/* What Didn’t Go Well? Section 2*/}
         <Row style={{ marginTop: '16px' }}>
           <Col
-            xs="2"
+            xs="4"
+            lg="2"
             className="d-flex justify-content-start align-items-center"
           >
             <Typography className="participantsResponded">
@@ -1035,7 +1043,8 @@ export const ReportSummary = React.forwardRef((props, ref) => {
           </Col>
           {didNotWentWellWords.length === 0 ? null : (
             <Col
-              xs={{ span: 2, offset: 8 }}
+              xs={{ span: 3, offset: 5 }}
+              lg={{ span: 2, offset: 8 }}
               className="d-flex justify-content-end align-items-center"
             >
               <Typography
