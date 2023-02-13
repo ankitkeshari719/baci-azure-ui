@@ -27,6 +27,7 @@ import LeaveRetroDialog from '../atoms/LeaveRetroDialog';
 import theme from '../theme/theme';
 import { CountdownTimer } from './CountdownTimer';
 import FacilitatorDropDown from './FacilitatorDropDown';
+import { ContainedButton } from '../components/ContainedButton';
 const Toolbar = (props: any) => {
   const isXsUp = useMediaQuery(theme.breakpoints.only('xs'));
   const navigate = useNavigate();
@@ -300,7 +301,7 @@ const Toolbar = (props: any) => {
           <>
             {user.userType == 2 ? (
               <>
-                <Button
+                {/* <Button
                   variant="contained"
                   id="finishRetro"
                   sx={{
@@ -315,7 +316,18 @@ const Toolbar = (props: any) => {
                   onClick={() => setOpenDialog(true)}
                 >
                   FINISH RETRO
-                </Button>
+                </Button> */}
+                <ContainedButton
+                  id="finishRetro"
+                  name="FINISH RETRO"
+                  onClick={() => setOpenDialog(true)}
+                  style={{
+                    minWidth: '150px !important',
+                    height: '40px !important',
+                    marginRight: '40px',
+                    display: isXsUp ? 'none' : 'block',
+                  }}
+                />
                 {showSessionEndMessage && (
                   <SessionEndingMessage
                     hideSessionEndingMessage={() => {
@@ -327,24 +339,35 @@ const Toolbar = (props: any) => {
               </>
             ) : (
               <>
-                {' '}
                 {!leaveRetro && (
-                  <Button
+                  <ContainedButton
                     id="leaveRetro"
-                    variant="contained"
-                    sx={{
-                      borderRadius: '24px',
-                      width: '148px',
-                      height: '44px',
-                      padding: '10px 20px',
+                    name="LEAVE RETRO"
+                    onClick={() => setLeaveDiaOpen(true)}
+                    style={{
+                      minWidth: '150px !important',
+                      width: '150px !important',
+                      height: '40px !important',
                       marginRight: '40px',
-                      fontWeight: 500,
                       display: isXsUp ? 'none' : 'block',
                     }}
-                    onClick={() => setLeaveDiaOpen(true)}
-                  >
-                    LEAVE RETRO
-                  </Button>
+                  />
+                  // <Button
+                  //   id="leaveRetro"
+                  //   variant="contained"
+                  //   sx={{
+                  //     borderRadius: '24px',
+                  //     width: '148px',
+                  //     height: '44px',
+                  //     padding: '10px 20px',
+                  //     marginRight: '40px',
+                  //     fontWeight: 500,
+                  //     display: isXsUp ? 'none' : 'block',
+                  //   }}
+                  //   onClick={() => setLeaveDiaOpen(true)}
+                  // >
+                  //   LEAVE RETRO
+                  // </Button>
                 )}
                 {showSessionEndMessage && (
                   <SessionEndingMessage
@@ -594,22 +617,34 @@ const Toolbar = (props: any) => {
         }}
       >
         {!leaveRetro && showFinishRetroButton && (
-          <Button
-            id="leaveRetroIsXsUp"
-            variant="contained"
-            sx={{
-              borderRadius: '24px',
-              width: '148px',
-              height: '44px',
-              padding: '10px 20px',
-              marginRight: '16px',
-              fontWeight: 500,
-              position: 'initial',
-            }}
-            onClick={() => setLeaveDiaOpen(true)}
-          >
-            LEAVE RETRO
-          </Button>
+          <ContainedButton
+          id="leaveRetroIsXsUp"
+          name="LEAVE RETRO"
+          onClick={() => setLeaveDiaOpen(true)}
+          style={{
+            minWidth: '150px !important',
+            width: '150px !important',
+            height: '40px !important',
+            marginRight: '40px',
+            position: 'initial',
+          }}
+        />
+          // <Button
+          //   id="leaveRetroIsXsUp"
+          //   variant="contained"
+          //   sx={{
+          //     borderRadius: '24px',
+          //     width: '148px',
+          //     height: '44px',
+          //     padding: '10px 20px',
+          //     marginRight: '16px',
+          //     fontWeight: 500,
+          //     position: 'initial',
+          //   }}
+          //   onClick={() => setLeaveDiaOpen(true)}
+          // >
+          //   LEAVE RETRO
+          // </Button>
         )}
         {!ended && (
           <CountdownTimer color={'#2B9FDE'} bold={true}></CountdownTimer>
