@@ -49,6 +49,8 @@ export function CreateRetroWithTemplatePage({
   }
   const [templates, setTemplates] = React.useState(templatesData);
   const [selectedTemplate, setSelectedTemplate] = React.useState(null);
+  const [customizedTemplate, setCustomizedTemplate] = React.useState(null);
+  const [isTemplateCustomized, setIsTemplateCustomized] = React.useState(false);
   {
     /* Pulse Check Panel Constant */
   }
@@ -75,7 +77,9 @@ export function CreateRetroWithTemplatePage({
   React.useEffect(() => {
     const initialPulseCheck = pulseChecksData.filter(e => e.checked == true);
     const initialTemplate: any = templatesData.filter(e => e.checked == true);
-    setSelectedTemplate(initialTemplate && initialTemplate[0]);
+    if (!isTemplateCustomized) {
+      setSelectedTemplate(initialTemplate && initialTemplate[0]);
+    }
     setSelectedPulseCheck(initialPulseCheck && initialPulseCheck[0]);
   }, []);
 
@@ -125,7 +129,10 @@ export function CreateRetroWithTemplatePage({
     setSelectedTemplate(selectedTemplateData);
   }
 
-  function handleTemplateSelectClick(selectedTemplateId: string) {
+  function handleTemplateSelectClick(
+    selectedTemplateId: string,
+    customizedTemplateData: any
+  ) {
     let data: any = templates?.map(template => {
       if (template.templateId === selectedTemplateId) {
         template.checked = true;
@@ -134,6 +141,8 @@ export function CreateRetroWithTemplatePage({
       }
       return template;
     });
+    setCustomizedTemplate(customizedTemplateData);
+    setSelectedTemplate({ ...customizedTemplateData });
     setTemplates(data);
   }
 
@@ -191,9 +200,15 @@ export function CreateRetroWithTemplatePage({
 
   // Function to create a New Retro
   const create = async () => {
-    const localStorageTemplateTemp = localStorage.getItem('selectedTemplate');
-    const localStorageTemplate =
-      localStorageTemplateTemp && JSON.parse(localStorageTemplateTemp);
+    let mySelectedTemplate;
+    if (isTemplateCustomized) {
+      const localStorageTemplateTemp = localStorage.getItem('selectedTemplate');
+      mySelectedTemplate =
+        localStorageTemplateTemp && JSON.parse(localStorageTemplateTemp);
+    } else {
+      mySelectedTemplate = selectedTemplate;
+    }
+
     sessionStorage.setItem('retroname', retroName);
     setLocalRetroName(retroName);
     const userType: number =
@@ -224,7 +239,7 @@ export function CreateRetroWithTemplatePage({
           selectedAvatar,
           userType,
           selectedPulseCheck,
-          localStorageTemplate
+          mySelectedTemplate
         )
         .then(
           res => {
@@ -350,6 +365,9 @@ export function CreateRetroWithTemplatePage({
           handleTemplateSelectClick={handleTemplateSelectClick}
           templates={templates}
           setSelectedTemplate={setSelectedTemplate}
+          isTemplateCustomized={isTemplateCustomized}
+          setIsTemplateCustomized={setIsTemplateCustomized}
+          customizedTemplate={customizedTemplate}
         />
         <PulseCheckTab
           activePanel={activePanel}

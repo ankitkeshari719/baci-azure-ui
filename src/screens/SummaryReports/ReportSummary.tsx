@@ -530,7 +530,7 @@ export const ReportSummary = React.forwardRef((props, ref) => {
   };
 
   const handleIsActionCloudOpen = () => {
-    setIsAllAction(true);
+    setIsAllAction(!isAllActionOpen);
   };
 
   const handleViewParticipantsDialogOpen = () => {
@@ -651,13 +651,16 @@ export const ReportSummary = React.forwardRef((props, ref) => {
       {/* Start Container */}
       <Container
         fluid
-        style={{
-          backgroundColor: '#F5F5F5',
-          padding: isXsUp ? '8px' : '56px',
-          overflowY: isXsUp ? 'scroll' : 'auto',
-          height: isXsUp ? 'calc(100vh - 120px)' : 'calc(100vh - 24px)',
-        }}
         ref={componentRef}
+        id="scrollableDiv"
+        style={{
+          display: 'flex',
+          flexDirection: 'column',
+          height: '100%',
+          overflowY: 'auto',
+          backgroundColor: '#F5F5F5',
+          padding: isXsUp ? '8px' : '16px 56px',
+        }}
       >
         {/* Line 1 */}
         <Row>
@@ -679,7 +682,7 @@ export const ReportSummary = React.forwardRef((props, ref) => {
             xs={{ span: 1, offset: 8 }}
             className="d-flex justify-content-end align-items-center"
           >
-            <Icons.ShareOutline
+            {/* <Icons.ShareOutline
               size={20}
               color="#4E4E4E"
               style={{
@@ -689,7 +692,7 @@ export const ReportSummary = React.forwardRef((props, ref) => {
               onClick={() => {
                 console.log('Here');
               }}
-            />
+            /> */}
             <ReactToPrint
               trigger={() => (
                 <Icons.DownloadOutline
@@ -712,7 +715,7 @@ export const ReportSummary = React.forwardRef((props, ref) => {
           >
             <Typography className="textTypeOne">Date</Typography>
             <Typography className="textTypeTwo" ml={2}>
-              {moment(startedDate).format('do MMM, YYYY')}
+              {moment(startedDate, 'DD MMM YYYY').format('Do MMM YYYY')}
             </Typography>
           </Col>
           <Col
@@ -858,174 +861,80 @@ export const ReportSummary = React.forwardRef((props, ref) => {
               {wentWellCreatedBy}/{users.length}
             </Typography>
           </Col>
-          <Col
-            xs={{ span: 2, offset: 8 }}
-            className="d-flex justify-content-end align-items-center"
-          >
-            <Typography
-              className="viewWorldCould"
-              onClick={handleIsWellCloudOpen}
+          {wentWellWords.length === 0 ? null : (
+            <Col
+              xs={{ span: 2, offset: 8 }}
+              className="d-flex justify-content-end align-items-center"
             >
-              {!isWellCloudOpen ? 'View Top Voted Cards' : 'View Word Cloud'}
-            </Typography>
-          </Col>
+              <Typography
+                className="viewWorldCould"
+                onClick={handleIsWellCloudOpen}
+              >
+                {isWellCloudOpen ? 'View Top Voted Cards' : 'View Word Cloud'}
+              </Typography>
+            </Col>
+          )}
         </Row>
         {/* What Went Well Section 3*/}
-        <Row style={{ marginTop: '16px' }}>
-          <Col
-            xs="12"
-            className="d-flex justify-content-start align-items-center"
-          >
-            {!isWellCloudOpen ? (
-              <Box sx={styles.whatWentWellBox}>
-                {wentWellWords.length !== 0 ? (
-                  <Grid
-                    item
-                    display="flex"
-                    justifyContent="center"
-                    alignItems="center"
-                    height="272px"
-                  >
-                    <WordCloud
-                      data={wentWellWords}
-                      showOn="whatWentWell"
-                    ></WordCloud>
-                  </Grid>
-                ) : null}
-              </Box>
-            ) : (
-              <Box sx={{ width: '100%' }}>
-                <Row>
-                  <Col xs="12">
-                    <Typography className="topVoted">Top Voted</Typography>
-                  </Col>
-                </Row>
-                <Row style={{ marginTop: '16px' }}>
-                  {wentWellTopVotedCards.map((card: any, index: number) => {
-                    return (
-                      <Col
-                        xs="3"
-                        className="d-flex justify-content-center align-items-center"
-                        key={index}
-                      >
-                        <Box
-                          sx={{
-                            minWidth: '300px',
-                            minHeight: '100px',
-                            background: '#FFFFFF',
-                            opacity: '0.7',
-                            boxShadow: '0px 0px 20px rgba(0, 0, 0, 0.15)',
-                            borderRadius: '8px',
-                            padding: '8px',
-                          }}
-                        >
-                          <Row>
-                            <Col
-                              xs="12"
-                              className="d-flex justify-content-start align-items-center"
-                            >
-                              <LazyLoadImage
-                                className="avatar"
-                                style={{
-                                  width: '40px',
-                                  height: '40px',
-                                  borderRadius: '50%',
-                                  border: '5px solid #f9fbf8',
-                                }}
-                                src={'/avatars/animals/' + card.avatar + '.svg'}
-                              ></LazyLoadImage>
-                              <Typography>{card.value}</Typography>
-                            </Col>
-                          </Row>
-                          <Row>
-                            <Col
-                              xs="12"
-                              className="d-flex justify-content-start align-items-center"
-                            >
-                              <Icons.Star size={20} color="#CCCCCC" />
-                              <Typography sx={{ marginLeft: '8px' }}>
-                                {card.reacts.length}
-                              </Typography>
-                            </Col>
-                          </Row>
-                        </Box>
-                      </Col>
-                    );
-                  })}
-                </Row>
-              </Box>
-            )}
-          </Col>
-        </Row>
-        {/* What Didn’t Go Well? Section 1*/}
-        <Row style={{ marginTop: '36px' }}>
-          <Col
-            xs="12"
-            className="d-flex justify-content-start align-items-center"
-          >
-            <Typography className="textTypeFour">
-              {didNotWentWellColumnName}
-            </Typography>
-          </Col>
-        </Row>
-        {/* What Didn’t Go Well? Section 2*/}
-        <Row style={{ marginTop: '16px' }}>
-          <Col
-            xs="2"
-            className="d-flex justify-content-start align-items-center"
-          >
-            <Typography className="participantsResponded">
-              Participants Responded
-            </Typography>
-            <Typography className="participantsResponded" ml={2}>
-              {didNotWentWellCreatedBy}/{users.length}
-            </Typography>
-          </Col>
-          <Col
-            xs={{ span: 2, offset: 8 }}
-            className="d-flex justify-content-end align-items-center"
-          >
-            <Typography
-              className="viewWorldCould"
-              onClick={handleIsNotWellCloudOpen}
+        {wentWellWords.length === 0 ? (
+          <Row style={{ marginTop: '16px' }}>
+            <Col
+              xs="12"
+              className="d-flex justify-content-start align-items-center"
             >
-              {!isNotWellCloudOpen ? 'View Top Voted Cards' : 'View Word Cloud'}
-            </Typography>
-          </Col>
-        </Row>
-        {/* What Didn’t Go Well? Section 3*/}
-        <Row style={{ marginTop: '16px' }}>
-          <Col
-            xs="12"
-            className="d-flex justify-content-start align-items-center"
-          >
-            {!isNotWellCloudOpen ? (
-              <Box sx={styles.whatDidNotWellBox}>
-                {didNotWentWellWords.length !== 0 ? (
-                  <Grid
-                    item
-                    display="flex"
-                    justifyContent="center"
-                    alignItems="center"
-                    height="272px"
-                  >
-                    <WordCloud
-                      data={didNotWentWellWords}
-                      showOn="whatDidntWentWell"
-                    ></WordCloud>
-                  </Grid>
-                ) : null}
+              <Box
+                sx={{
+                  width: '100%',
+                  height: '240px',
+                  display: 'flex',
+                  justifyContent: 'center',
+                  alignItems: 'center',
+                  flexDirection: 'column',
+                  background: '#FAFAFA',
+                  border: '1px solid #CCCCCC',
+                }}
+              >
+                <Box
+                  component="div"
+                  sx={{ textAlign: 'justify', marginTop: '16px' }}
+                >
+                  <Typography className="text1">No data present</Typography>
+                </Box>
               </Box>
-            ) : (
-              <Box sx={{ width: '100%' }}>
-                <Row>
-                  <Col xs="12">
-                    <Typography className="topVoted">Top Voted</Typography>
-                  </Col>
-                </Row>
-                <Row style={{ marginTop: '16px' }}>
-                  {didNotWentWellTopVotedCards.map(
-                    (card: any, index: number) => {
+            </Col>
+          </Row>
+        ) : (
+          <Row style={{ marginTop: '16px' }}>
+            <Col
+              xs="12"
+              className="d-flex justify-content-start align-items-center"
+            >
+              {isWellCloudOpen ? (
+                <Box sx={styles.whatWentWellBox}>
+                  {wentWellWords.length !== 0 ? (
+                    <Grid
+                      item
+                      display="flex"
+                      justifyContent="center"
+                      alignItems="center"
+                      height="272px"
+                    >
+                      <WordCloud
+                        data={wentWellWords}
+                        showOn="whatWentWell"
+                      ></WordCloud>
+                    </Grid>
+                  ) : null}
+                </Box>
+              ) : (
+                <Box sx={{ width: '100%' }}>
+                  <Row>
+                    <Col xs="12">
+                      <Typography className="topVoted">Top Voted</Typography>
+                    </Col>
+                  </Row>
+                  <Row style={{ marginTop: '16px' }}>
+                    {wentWellTopVotedCards.map((card: any, index: number) => {
                       return (
                         <Col
                           xs="3"
@@ -1034,8 +943,8 @@ export const ReportSummary = React.forwardRef((props, ref) => {
                         >
                           <Box
                             sx={{
-                              minWidth: '300px',
-                              minHeight: '100px',
+                              minWidth: '400px',
+                              minHeight: '140px',
                               background: '#FFFFFF',
                               opacity: '0.7',
                               boxShadow: '0px 0px 20px rgba(0, 0, 0, 0.15)',
@@ -1077,135 +986,335 @@ export const ReportSummary = React.forwardRef((props, ref) => {
                           </Box>
                         </Col>
                       );
-                    }
-                  )}
-                </Row>
-              </Box>
-            )}
+                    })}
+                  </Row>
+                </Box>
+              )}
+            </Col>
+          </Row>
+        )}
+        {/* What Didn’t Go Well? Section 1*/}
+        <Row style={{ marginTop: '36px' }}>
+          <Col
+            xs="12"
+            className="d-flex justify-content-start align-items-center"
+          >
+            <Typography className="textTypeFour">
+              {didNotWentWellColumnName}
+            </Typography>
           </Col>
         </Row>
+        {/* What Didn’t Go Well? Section 2*/}
+        <Row style={{ marginTop: '16px' }}>
+          <Col
+            xs="2"
+            className="d-flex justify-content-start align-items-center"
+          >
+            <Typography className="participantsResponded">
+              Participants Responded
+            </Typography>
+            <Typography className="participantsResponded" ml={2}>
+              {didNotWentWellCreatedBy}/{users.length}
+            </Typography>
+          </Col>
+          {didNotWentWellWords.length === 0 ? null : (
+            <Col
+              xs={{ span: 2, offset: 8 }}
+              className="d-flex justify-content-end align-items-center"
+            >
+              <Typography
+                className="viewWorldCould"
+                onClick={handleIsNotWellCloudOpen}
+              >
+                {isNotWellCloudOpen
+                  ? 'View Top Voted Cards'
+                  : 'View Word Cloud'}
+              </Typography>
+            </Col>
+          )}
+        </Row>
+        {/* What Didn’t Go Well? Section 3*/}
+        {didNotWentWellWords.length === 0 ? (
+          <Row style={{ marginTop: '16px' }}>
+            <Col
+              xs="12"
+              className="d-flex justify-content-start align-items-center"
+            >
+              <Box
+                sx={{
+                  width: '100%',
+                  height: '240px',
+                  display: 'flex',
+                  justifyContent: 'center',
+                  alignItems: 'center',
+                  flexDirection: 'column',
+                  background: '#FAFAFA',
+                  border: '1px solid #CCCCCC',
+                }}
+              >
+                <Box
+                  component="div"
+                  sx={{ textAlign: 'justify', marginTop: '16px' }}
+                >
+                  <Typography className="text1">No data present</Typography>
+                </Box>
+              </Box>
+            </Col>
+          </Row>
+        ) : (
+          <Row style={{ marginTop: '16px' }}>
+            <Col
+              xs="12"
+              className="d-flex justify-content-start align-items-center"
+            >
+              {isNotWellCloudOpen ? (
+                <Box sx={styles.whatDidNotWellBox}>
+                  {didNotWentWellWords.length !== 0 ? (
+                    <Grid
+                      item
+                      display="flex"
+                      justifyContent="center"
+                      alignItems="center"
+                      height="272px"
+                    >
+                      <WordCloud
+                        data={didNotWentWellWords}
+                        showOn="whatDidntWentWell"
+                      ></WordCloud>
+                    </Grid>
+                  ) : null}
+                </Box>
+              ) : (
+                <Box sx={{ width: '100%' }}>
+                  <Row>
+                    <Col xs="12">
+                      <Typography className="topVoted">Top Voted</Typography>
+                    </Col>
+                  </Row>
+                  <Row style={{ marginTop: '16px' }}>
+                    {didNotWentWellTopVotedCards.map(
+                      (card: any, index: number) => {
+                        return (
+                          <Col
+                            xs="3"
+                            className="d-flex justify-content-center align-items-center"
+                            key={index}
+                          >
+                            <Box
+                              sx={{
+                                minWidth: '400px',
+                                minHeight: '140px',
+                                background: '#FFFFFF',
+                                opacity: '0.7',
+                                boxShadow: '0px 0px 20px rgba(0, 0, 0, 0.15)',
+                                borderRadius: '8px',
+                                padding: '8px',
+                              }}
+                            >
+                              <Row>
+                                <Col
+                                  xs="12"
+                                  className="d-flex justify-content-start align-items-center"
+                                >
+                                  <LazyLoadImage
+                                    className="avatar"
+                                    style={{
+                                      width: '40px',
+                                      height: '40px',
+                                      borderRadius: '50%',
+                                      border: '5px solid #f9fbf8',
+                                    }}
+                                    src={
+                                      '/avatars/animals/' + card.avatar + '.svg'
+                                    }
+                                  ></LazyLoadImage>
+                                  <Typography>{card.value}</Typography>
+                                </Col>
+                              </Row>
+                              <Row>
+                                <Col
+                                  xs="12"
+                                  className="d-flex justify-content-start align-items-center"
+                                >
+                                  <Icons.Star size={20} color="#CCCCCC" />
+                                  <Typography sx={{ marginLeft: '8px' }}>
+                                    {card.reacts.length}
+                                  </Typography>
+                                </Col>
+                              </Row>
+                            </Box>
+                          </Col>
+                        );
+                      }
+                    )}
+                  </Row>
+                </Box>
+              )}
+            </Col>
+          </Row>
+        )}
         {/* Actions to be Taken Section 1*/}
         <Row style={{ marginTop: '36px' }}>
           <Col
             xs="2"
             className="d-flex justify-content-start align-items-center"
           >
-            <Typography className="textTypeFour">{actionColumnName}</Typography>
-          </Col>
-          <Col
-            xs={{ span: 2, offset: 8 }}
-            className="d-flex justify-content-end align-items-center"
-          >
-            <Typography className="viewParticipants" onClick={copyAllActions}>
-              Copy to Clipboard
+            <Typography className="textTypeFour">
+              Actions to be Taken
             </Typography>
           </Col>
+          {actionCardData.length === 0 ? null : (
+            <Col
+              xs={{ span: 2, offset: 8 }}
+              className="d-flex justify-content-end align-items-center"
+            >
+              <Typography className="viewParticipants" onClick={copyAllActions}>
+                Copy to Clipboard
+              </Typography>
+            </Col>
+          )}
         </Row>
         {/* Actions to be Taken Section 2*/}
-        <Box sx={{ marginTop: '36px' }}>
-          {isAllActionOpen ? (
-            <>
-              {actionCardData.map((action: any, index: number) => {
-                return (
-                  <Row
-                    style={{ marginTop: index > 0 ? '16px' : '0px' }}
-                    key={index}
-                  >
-                    <Col
-                      xs="12"
-                      className="d-flex justify-content-start align-items-center"
+        {actionCardData.length === 0 ? (
+          <Row style={{ marginTop: '16px' }}>
+            <Col
+              xs="12"
+              className="d-flex justify-content-start align-items-center"
+            >
+              <Box
+                sx={{
+                  width: '100%',
+                  height: '240px',
+                  display: 'flex',
+                  justifyContent: 'center',
+                  alignItems: 'center',
+                  flexDirection: 'column',
+                  background: '#FAFAFA',
+                  border: '1px solid #CCCCCC',
+                }}
+              >
+                <Box
+                  component="div"
+                  sx={{ textAlign: 'justify', marginTop: '16px' }}
+                >
+                  <Typography className="text1">No data present</Typography>
+                </Box>
+              </Box>
+            </Col>
+          </Row>
+        ) : (
+          <Box sx={{ marginTop: '16px' }}>
+            {isAllActionOpen ? (
+              <>
+                {actionCardData.map((action: any, index: number) => {
+                  return (
+                    <Row
+                      style={{ marginTop: index > 0 ? '16px' : '0px' }}
+                      key={index}
                     >
-                      <LazyLoadImage
-                        className="avatar"
-                        style={{
-                          width: '40px',
-                          height: '40px',
-                          borderRadius: '50%',
-                          border: '5px solid #f9fbf8',
-                        }}
-                        src={'/avatars/animals/' + action.avatar + '.svg'}
-                      ></LazyLoadImage>
-                      <Typography
-                        style={{ marginLeft: '12px' }}
-                        className="actionValue"
+                      <Col
+                        xs="12"
+                        className="d-flex justify-content-start align-items-center"
                       >
-                        {action.value}
-                      </Typography>
-                    </Col>
-                  </Row>
-                );
-              })}
-            </>
-          ) : (
-            <>
-              {actionTopVotedCards.map((action: any, index: number) => {
-                return (
-                  <Row
-                    style={{ marginTop: index > 0 ? '16px' : '0px' }}
-                    key={index}
-                  >
-                    <Col
-                      xs="12"
-                      className="d-flex justify-content-start align-items-center"
-                    >
-                      <LazyLoadImage
-                        className="avatar"
-                        style={{
-                          width: '40px',
-                          height: '40px',
-                          borderRadius: '50%',
-                          border: '5px solid #f9fbf8',
-                        }}
-                        src={'/avatars/animals/' + action.avatar + '.svg'}
-                      ></LazyLoadImage>
-                      <Typography
-                        style={{ marginLeft: '12px' }}
-                        className="actionValue"
-                      >
-                        {action.value}
-                      </Typography>
-                    </Col>
-                  </Row>
-                );
-              })}
-              {actionCardData.length > 4 && (
-                <Row style={{ marginTop: '16px' }}>
-                  <Col
-                    xs="12"
-                    className="d-flex justify-content-start align-items-center"
-                  >
-                    {actionLastVotedCards.map((card: any, index: number) => {
-                      return (
-                        <Avatar
-                          key={card.id}
-                          avatar={card.avatar}
-                          onClickAvatar={() => {
-                            console.log('click');
-                          }}
-                          css={{
+                        <LazyLoadImage
+                          className="avatar"
+                          style={{
                             width: '40px',
                             height: '40px',
-                            marginLeft: '0',
-                            marginRight: '-8px',
-                            border: '3px solid transparent',
+                            borderRadius: '50%',
+                            border: '5px solid #f9fbf8',
                           }}
-                        />
-                      );
-                    })}
-                    <Typography
-                      className="viewWorldCould"
-                      sx={{ marginLeft: '8px' }}
-                      onClick={handleIsActionCloudOpen}
+                          src={'/avatars/animals/' + action.avatar + '.svg'}
+                        ></LazyLoadImage>
+                        <Typography
+                          style={{ marginLeft: '12px' }}
+                          className="actionValue"
+                        >
+                          {action.value}
+                        </Typography>
+                      </Col>
+                    </Row>
+                  );
+                })}
+                <Typography
+                  className="viewWorldCould"
+                  sx={{ marginTop: '8px' }}
+                  onClick={handleIsActionCloudOpen}
+                >
+                  Show Less
+                </Typography>
+              </>
+            ) : (
+              <>
+                {actionTopVotedCards.map((action: any, index: number) => {
+                  return (
+                    <Row
+                      style={{ marginTop: index > 0 ? '16px' : '0px' }}
+                      key={index}
                     >
-                      View More Comments from {actionCardData.length - 4}&nbsp;
-                      Participants
-                    </Typography>
-                  </Col>
-                </Row>
-              )}
-            </>
-          )}
-        </Box>
+                      <Col
+                        xs="12"
+                        className="d-flex justify-content-start align-items-center"
+                      >
+                        <LazyLoadImage
+                          className="avatar"
+                          style={{
+                            width: '40px',
+                            height: '40px',
+                            borderRadius: '50%',
+                            border: '5px solid #f9fbf8',
+                          }}
+                          src={'/avatars/animals/' + action.avatar + '.svg'}
+                        ></LazyLoadImage>
+                        <Typography
+                          style={{ marginLeft: '12px' }}
+                          className="actionValue"
+                        >
+                          {action.value}
+                        </Typography>
+                      </Col>
+                    </Row>
+                  );
+                })}
+                {actionCardData.length > 4 && (
+                  <Row style={{ marginTop: '16px' }}>
+                    <Col
+                      xs="12"
+                      className="d-flex justify-content-start align-items-center"
+                    >
+                      {actionLastVotedCards.map((card: any, index: number) => {
+                        return (
+                          <Avatar
+                            key={card.id}
+                            avatar={card.avatar}
+                            // onClickAvatar={() => {
+                            //   console.log('click');
+                            // }}
+                            css={{
+                              width: '40px',
+                              height: '40px',
+                              marginLeft: '0',
+                              marginRight: '-8px',
+                              border: '3px solid transparent',
+                            }}
+                          />
+                        );
+                      })}
+                      <Typography
+                        className="viewWorldCould"
+                        sx={{ marginLeft: '8px' }}
+                        onClick={handleIsActionCloudOpen}
+                      >
+                        View More Comments from {users.length}&nbsp;
+                        Participants
+                      </Typography>
+                    </Col>
+                  </Row>
+                )}
+              </>
+            )}
+          </Box>
+        )}
         {/* Feedback for Facilitator 1 */}
         <Row style={{ marginTop: '36px' }}>
           <Col
@@ -1312,9 +1421,15 @@ export const ReportSummary = React.forwardRef((props, ref) => {
           </Row>
         )}
         {/* Divider */}
-        <Divider color="#CDCDD4" style={{ width: '100%', marginTop: '16px' }} />
+        <Divider color="#CDCDD4" style={{ width: '100%', marginTop: '36px' }} />
         {/* Thank You for using BACI Retros */}
-        <Row style={{ marginTop: '36px' }}>
+        <Row
+          style={{
+            marginTop: '36px',
+            marginBottom:
+              isFeedbackSubmittedByFacilitator === 1 ? '56px' : '0px',
+          }}
+        >
           <Col
             xs="12"
             className="d-flex justify-content-center align-items-center"
@@ -1330,7 +1445,7 @@ export const ReportSummary = React.forwardRef((props, ref) => {
         </Row>
         {/* Feedback Container */}
         {isFeedbackSubmittedByFacilitator === 0 ? (
-          <Box>
+          <Box sx={{ marginBottom: '56px' }}>
             {/* Want to suggest BACI a Feedback? */}
             <Row style={{ marginTop: '64px' }}>
               <Col

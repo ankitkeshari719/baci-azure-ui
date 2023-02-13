@@ -192,9 +192,6 @@ export const Report = React.forwardRef((props, ref) => {
     }).format(new Date());
     setRetroDate(longEnUSFormatter);
   });
-  React.useEffect(() => {
-    console.log(componentRef);
-  });
 
   React.useEffect(() => {
     const wentWellCardValues = [] as string[];
@@ -293,13 +290,6 @@ export const Report = React.forwardRef((props, ref) => {
         });
       }
     });
-    console.log('wentWellCardValues', wentWellCardValues);
-    console.log('wentWellCardValuesTotal', wentWellCardValuesTotal);
-    console.log('wentWellWordCloudData', wentWellWordCloudData);
-    console.log('didNotWentWellCardValues', didNotWentWellCardValues);
-    console.log('didNotWellCardValuesTotal', didNotWellCardValuesTotal);
-    console.log('didNotWentWellWordCloudData', didNotWentWellWordCloudData);
-    console.log('actionsCardValues', actionsCardValues);
     setActions(actionsCardValues);
 
     //Get total count of user submitted the pulsechek

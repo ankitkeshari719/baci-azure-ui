@@ -1,13 +1,21 @@
-import { Box, DialogContent, DialogTitle, Typography } from '@mui/material';
+import {
+  Box,
+  DialogActions,
+  DialogContent,
+  DialogTitle,
+  Typography,
+} from '@mui/material';
 import * as React from 'react';
 import '../../global.scss';
 import './styles.scss';
 import commonStyles from '../../style.module.scss';
 
-import { Row, Col } from 'react-bootstrap';
+import { Row, Col, Button } from 'react-bootstrap';
+import { ContainedButton } from '../../components';
 
 type Props = {
-  handleFeedbackSubmitClose: () => void;
+  handleIsChangeDialogClose: () => void;
+  closeCustomTemplateDialog: () => void;
 };
 
 export interface DialogTitleProps {
@@ -44,39 +52,58 @@ function BootstrapDialogTitle(props: DialogTitleProps) {
   );
 }
 
-export function FeedbackSubmitDialog({ handleFeedbackSubmitClose }: Props) {
+export function CustomizeTemplateDialog({ handleIsChangeDialogClose,closeCustomTemplateDialog }: Props) {
   return (
     <Box
       sx={{
         width: '800px',
         maxWidth: '800px',
-        height: '400px',
-        maxHeight: '400px',
+        height: '265px',
+        maxHeight: '265px',
       }}
     >
       <BootstrapDialogTitle
         id="customized-dialog-title"
-        onClose={handleFeedbackSubmitClose}
-      ></BootstrapDialogTitle>
+        onClose={handleIsChangeDialogClose}
+      >
+        Are you sure to go back?
+      </BootstrapDialogTitle>
       <DialogContent
+        dividers
         sx={{
           display: 'flex',
           flexDirection: 'column',
           alignItems: 'center',
         }}
       >
-        <img src="/images/RetroFinish.gif"></img>
-        <Typography color={commonStyles.secondaryMain} fontSize="24px">
-          We value your inputs and strive to improve.
-        </Typography>
         <Typography
           color={commonStyles.secondaryMain}
           fontSize="24px"
-          mt="16px"
+          mt="15px"
         >
-          Thank you- ♥ Team BACI
+          Your Changes wll discard
         </Typography>
       </DialogContent>
+      <DialogActions>
+        <ContainedButton
+          name="Yes"
+          onClick={closeCustomTemplateDialog}
+          style={{
+            mt: 5,
+            minWidth: '140px !important',
+            height: '36px !important',
+          }}
+        />
+        <ContainedButton
+          name="No"
+          onClick={handleIsChangeDialogClose}
+          style={{
+            mt: 5,
+            minWidth: '140px !important',
+            height: '36px !important',
+          }}
+        />
+      </DialogActions>
     </Box>
   );
 }

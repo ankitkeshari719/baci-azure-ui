@@ -123,6 +123,7 @@ export function LandingPage() {
     sessionStorage.removeItem('GlobalContext');
     sessionStorage.removeItem('retroname');
     sessionStorage.removeItem('showManual');
+    localStorage.removeItem('selectedTemplate');
   });
   return (
     <>

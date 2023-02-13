@@ -1,3 +1,15 @@
+@media print {
+  body,
+  #scrollableDiv {
+    display: block !important;
+    position: relative !important;
+    width: auto !important;
+    height: auto !important;
+    overflow: visible !important;
+    margin-left: 0 !important;
+  }
+}
+
 // Main Container
 .mainContainer {
   width: 100% !important;
@@ -178,10 +190,10 @@
 }
 .feedbackResponse {
   font-family: 'Poppins' !important;
-font-style: normal !important;
-font-weight: 400 !important;
-font-size: 16px !important;
-line-height: 20px !important;
-letter-spacing: 0.6px !important;
-color: #4E4E4E !important;
+  font-style: normal !important;
+  font-weight: 400 !important;
+  font-size: 16px !important;
+  line-height: 20px !important;
+  letter-spacing: 0.6px !important;
+  color: #4e4e4e !important;
 }

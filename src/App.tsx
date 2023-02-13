@@ -97,7 +97,7 @@ export default function App({ instance }: AppProps) {
                           <Route path=":id/feedback" element={<Feedback />} />
                           <Route path=":id" element={<Board />} />
                         </Route>
-                        <Route path="/report/:id" element={<ReportScreen />} />
+                        <Route path="/report/:id" element={<SummaryReportMain />} />
                       </Routes>
                     </MsalProvider>
                     <SnackMessage />

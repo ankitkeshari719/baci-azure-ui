@@ -120,17 +120,18 @@ const Toolbar = (props: any) => {
           display: 'flex',
           alignItems: 'center',
           flexDirection: 'row',
-          width: !location.pathname.includes('offboarding')
-            ? isXsUp
-              ? 'calc(100% - 32px)'
-              : 'calc(100% - 112px)'
-            : 'calc(100%)',
+          // width: !location.pathname.includes('offboarding')
+          //   ? isXsUp
+          //     ? 'calc(100% - 32px)'
+          //     : 'calc(100% - 112px)'
+          //   : 'calc(100%)',
+          width: '100%',
           paddingLeft: isXsUp ? '16px' : '56px',
           paddingRight: isXsUp ? '16px' : '56px',
           paddingTop: isXsUp ? '14px' : 0,
           paddingBottom: isXsUp ? '14px' : 0,
           boxShadow: '0px 0px 2px rgba(0, 0, 0, 0.25)!important',
-          height: '64px'
+          height: '64px',
         }}
       >
         {location.pathname.includes('report') ? (
@@ -439,7 +440,6 @@ const Toolbar = (props: any) => {
               onClick={() => {
                 props.onFinishRetro(), setOpenDialog(false);
               }}
-              
               variant="contained"
               autoFocus
             >
@@ -541,11 +541,9 @@ const Toolbar = (props: any) => {
               <MenuItem
                 sx={{ width: '250px', display: 'flex', flexDirection: 'row' }}
               >
-                
                 <Avatar
                   avatar={user?.avatar}
-                  onClickAvatar={() => {
-                  }}
+                  onClickAvatar={() => {}}
                   css={{
                     width: '44px',
                     height: '44px',
@@ -566,21 +564,20 @@ const Toolbar = (props: any) => {
             </Menu>
           </>
         ) : (
-          <Tooltip title={user?.name+''}>
+          <Tooltip title={user?.name + ''}>
             <span>
-            {user?.avatar && (
-
-              <Avatar
-                avatar={user?.avatar}
-                onClickAvatar={() => {}}
-                css={{
-                  width: '56px',
-                  height: '56px',
-                  borderRadius: '50%',
-                  border: 'none',
-                }}
-              ></Avatar>
-            )}
+              {user?.avatar && (
+                <Avatar
+                  avatar={user?.avatar}
+                  onClickAvatar={() => {}}
+                  css={{
+                    width: '56px',
+                    height: '56px',
+                    borderRadius: '50%',
+                    border: 'none',
+                  }}
+                ></Avatar>
+              )}
             </span>
           </Tooltip>
         )}
