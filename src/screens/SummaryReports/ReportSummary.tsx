@@ -873,7 +873,7 @@ export const ReportSummary = React.forwardRef((props, ref) => {
         <Row style={{ marginTop: '16px' }}>
           <Col
             xs="4"
-            lg="2"
+            lg="4"
             className="d-flex justify-content-start align-items-center"
           >
             <Typography className="participantsResponded">
@@ -886,7 +886,7 @@ export const ReportSummary = React.forwardRef((props, ref) => {
           {wentWellWords.length === 0 ? null : (
             <Col
               xs={{ span: 3, offset: 5 }}
-              lg={{ span: 2, offset: 8 }}
+              lg={{ span: 2, offset: 6 }}
               className="d-flex justify-content-end align-items-center"
             >
               <Typography
@@ -1031,7 +1031,7 @@ export const ReportSummary = React.forwardRef((props, ref) => {
         <Row style={{ marginTop: '16px' }}>
           <Col
             xs="4"
-            lg="2"
+            lg="4"
             className="d-flex justify-content-start align-items-center"
           >
             <Typography className="participantsResponded">
@@ -1044,7 +1044,7 @@ export const ReportSummary = React.forwardRef((props, ref) => {
           {didNotWentWellWords.length === 0 ? null : (
             <Col
               xs={{ span: 3, offset: 5 }}
-              lg={{ span: 2, offset: 8 }}
+              lg={{ span: 2, offset: 6 }}
               className="d-flex justify-content-end align-items-center"
             >
               <Typography
