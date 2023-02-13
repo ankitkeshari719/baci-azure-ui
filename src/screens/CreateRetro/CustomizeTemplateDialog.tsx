@@ -81,7 +81,7 @@ export function CustomizeTemplateDialog({ handleIsChangeDialogClose,closeCustomT
           fontSize="24px"
           mt="15px"
         >
-          Your Changes wll discard
+          Your changes will discard
         </Typography>
       </DialogContent>
       <DialogActions>
