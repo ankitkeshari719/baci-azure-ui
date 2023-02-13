@@ -675,7 +675,10 @@ export const ReportSummary = React.forwardRef((props, ref) => {
           height: '100%',
           overflowY: 'auto',
           backgroundColor: '#F5F5F5',
-          padding: isXsUp ? '8px' : '16px 56px',
+          paddingLeft: isXsUp ? '8px' : windowWidth.current >= 2560 ? '370px' : '56px',
+          paddingRight: isXsUp ? '8px' : windowWidth.current >= 2560 ? '370px' : '56px',
+          paddingTop: isXsUp ? '8px' : windowWidth.current >= 2560 ? '32px' : '16px',
+          paddingBottom: isXsUp ? '8px' : windowWidth.current >= 2560 ? '32px' : '32px',
         }}
       >
         {/* Line 1 */}
