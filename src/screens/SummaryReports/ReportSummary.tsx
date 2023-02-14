@@ -699,23 +699,16 @@ export const ReportSummary = React.forwardRef((props, ref) => {
           {/* Line 1 */}
           <Row>
             <Col
-              xs="1"
+              xs="4"
               className="d-flex justify-content-start align-items-center"
             >
               <Typography className="textTypeOne">Report For</Typography>
-            </Col>
-            <Col
-              xs="4"
-              lg="2"
-              className="d-flex justify-content-start align-items-center"
-            >
-              <Typography className="textTypeThree">
+              <Typography className="textTypeThree" ml={2}>
                 {global.currentRetro?.name}
               </Typography>
             </Col>
             <Col
-              xs={{ span: 1, offset: 6 }}
-              lg={{ span: 1, offset: 8 }}
+              xs={{ span: 1, offset: 7 }}
               className="d-flex justify-content-end align-items-center"
             >
               {/* <Icons.ShareOutline
