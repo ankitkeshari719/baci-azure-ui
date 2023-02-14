@@ -16,7 +16,7 @@ import {
   Divider,
   FormHelperText,
 } from '@mui/material';
-import { Row, Col, Container } from 'react-bootstrap';
+import { Row, Col, Container, Table } from 'react-bootstrap';
 import './styles.scss';
 import '../../global.scss';
 import {
@@ -207,8 +207,20 @@ export const ReportSummary = React.forwardRef((props, ref) => {
   const [wentWellTopVotedCards, setWentWellTopVotedCards] = React.useState<any>(
     []
   );
+  const [wentWellTopVotedCardsPrint_1, setWentWellTopVotedCardsPrint_1] =
+    React.useState<any>([]);
+  const [wentWellTopVotedCardsPrint_2, setWentWellTopVotedCardsPrint_2] =
+    React.useState<any>([]);
   const [didNotWentWellTopVotedCards, setDidNotWentWellTopVotedCards] =
     React.useState<any>([]);
+  const [
+    didNotWentWellTopVotedCardsPrint_1,
+    setDidNotWentWellTopVotedCardsPrint_1,
+  ] = React.useState<any>([]);
+  const [
+    didNotWentWellTopVotedCardsPrint_2,
+    setDidNotWentWellTopVotedCardsPrint_2,
+  ] = React.useState<any>([]);
   const [actionTopVotedCards, setActionTopVotedCards] = React.useState<any>([]);
   const [actionLastVotedCards, setActionLastVotedCards] = React.useState<any>(
     []
@@ -233,6 +245,8 @@ export const ReportSummary = React.forwardRef((props, ref) => {
   const [islanded, setIsLanded] = React.useState(true);
   const [retroDate, setRetroDate] = React.useState('');
   const [isActionCopied, setIsActionCopied] = React.useState(false);
+
+  const [isPrintOptionOpen, setIsPrintOptionOpen] = React.useState(false);
 
   function getBarColor(val: number) {
     if (val > 50) {
@@ -407,6 +421,8 @@ export const ReportSummary = React.forwardRef((props, ref) => {
         ? wentWellCards.slice(0, 3)
         : wentWellCards.slice(0, 4)
     );
+    setWentWellTopVotedCardsPrint_1(wentWellCards.slice(0, 2));
+    setWentWellTopVotedCardsPrint_2(wentWellCards.slice(2, 4));
 
     // What did not went well Cards Data
     columns.forEach(column => {
@@ -433,7 +449,8 @@ export const ReportSummary = React.forwardRef((props, ref) => {
         ? didNotWentWellCards.slice(0, 3)
         : didNotWentWellCards.slice(0, 4)
     );
-
+    setDidNotWentWellTopVotedCardsPrint_1(didNotWentWellCards.slice(0, 2));
+    setDidNotWentWellTopVotedCardsPrint_2(didNotWentWellCards.slice(2, 4));
     // Develope Action Cards Data
     columns.forEach(column => {
       if (column.id === '2') {
@@ -662,6 +679,14 @@ export const ReportSummary = React.forwardRef((props, ref) => {
     }
   };
 
+  const reactPrintDisplayOpen = () => {
+    setIsPrintOptionOpen(true);
+  };
+
+  const reactPrintDisplayClose = () => {
+    setIsPrintOptionOpen(false);
+  };
+
   return (
     <>
       {/* Start Container */}
@@ -697,7 +722,7 @@ export const ReportSummary = React.forwardRef((props, ref) => {
       >
         <Box ref={componentRef} id="scrollableDiv">
           {/* Line 1 */}
-          <Row>
+          <Row id="line_1">
             <Col
               xs="4"
               className="d-flex justify-content-start align-items-center"
@@ -733,11 +758,74 @@ export const ReportSummary = React.forwardRef((props, ref) => {
                   />
                 )}
                 content={() => componentRef.current}
+                onBeforePrint={reactPrintDisplayOpen}
+                onAfterPrint={reactPrintDisplayClose}
               />
             </Col>
           </Row>
+          {/* React Print Section 1 */}
+          <Row id="line_1_react_print" style={{ display: 'none' }}>
+            <Col xs="6">
+              <Table>
+                <tr>
+                  <td>
+                    <Typography className="textTypeOne">Report For</Typography>
+                  </td>
+                  <td>
+                    <Typography
+                      className="textTypeThree"
+                      sx={{ textAlign: ' start !important' }}
+                    >
+                      {global.currentRetro?.name}
+                    </Typography>
+                  </td>
+                </tr>
+                <tr>
+                  <td>
+                    <Typography className="textTypeOne">Date</Typography>
+                  </td>
+                  <td>
+                    <Typography
+                      className="textTypeTwo"
+                      sx={{ textAlign: ' start !important' }}
+                    >
+                      {moment(startedDate, 'DD MMM YYYY').format('Do MMM YYYY')}
+                    </Typography>
+                  </td>
+                </tr>
+                <tr>
+                  <td>
+                    <Typography className="textTypeOne">Time Taken</Typography>
+                  </td>
+                  <td>
+                    <Typography
+                      className="textTypeTwo"
+                      sx={{ textAlign: ' start !important' }}
+                    >
+                      {timeTaken}
+                    </Typography>
+                  </td>
+                </tr>
+                <tr>
+                  <td>
+                    <Typography className="textTypeOne">
+                      No. Of Participants
+                    </Typography>
+                  </td>
+                  <td>
+                    <Typography
+                      className="textTypeTwo"
+                      sx={{ textAlign: ' start !important' }}
+                    >
+                      {users.length}
+                    </Typography>
+                  </td>
+                </tr>
+              </Table>
+            </Col>
+          </Row>
           {/* Line 2 */}
-          <Row style={{ marginTop: '36px' }}>
+          <Row id="line_2" style={{ marginTop: '36px' }}>
             <Col
               xs="3"
               lg="2"
@@ -905,6 +993,7 @@ export const ReportSummary = React.forwardRef((props, ref) => {
                 xs={{ span: 3, offset: 5 }}
                 lg={{ span: 2, offset: 6 }}
                 className="d-flex justify-content-end align-items-center"
+                id="view-top-voted-card-1"
               >
                 <Typography
                   className="viewWorldCould"
@@ -973,7 +1062,11 @@ export const ReportSummary = React.forwardRef((props, ref) => {
                         <Typography className="topVoted">Top Voted</Typography>
                       </Col>
                     </Row>
-                    <Row style={{ marginTop: '16px' }}>
+                    {/* went-well-top-voted-cards */}
+                    <Row
+                      style={{ marginTop: '16px' }}
+                      id="went-well-top-voted-cards"
+                    >
                       {wentWellTopVotedCards.map((card: any, index: number) => {
                         return (
                           <Col
@@ -1028,6 +1121,132 @@ export const ReportSummary = React.forwardRef((props, ref) => {
                         );
                       })}
                     </Row>
+                    {/* "went-well-top-voted-cards-react-print */}
+                    <Box
+                      id="went-well-top-voted-cards-react-print"
+                      sx={{ display: 'none' }}
+                    >
+                      <Row style={{ marginTop: '16px' }}>
+                        {wentWellTopVotedCardsPrint_1.map(
+                          (card: any, index: number) => {
+                            return (
+                              <Col
+                                xs="6"
+                                className="d-flex justify-content-center align-items-center"
+                                key={index}
+                              >
+                                <Box
+                                  sx={{
+                                    minWidth: '400px',
+                                    minHeight: '140px',
+                                    background: '#FFFFFF',
+                                    opacity: '0.7',
+                                    boxShadow:
+                                      '0px 0px 20px rgba(0, 0, 0, 0.15)',
+                                    borderRadius: '8px',
+                                    padding: '8px',
+                                  }}
+                                >
+                                  <Row>
+                                    <Col
+                                      xs="12"
+                                      className="d-flex justify-content-start align-items-center"
+                                    >
+                                      <LazyLoadImage
+                                        className="avatar"
+                                        style={{
+                                          width: '40px',
+                                          height: '40px',
+                                          borderRadius: '50%',
+                                          border: '5px solid #f9fbf8',
+                                        }}
+                                        src={
+                                          '/avatars/animals/' +
+                                          card.avatar +
+                                          '.svg'
+                                        }
+                                      ></LazyLoadImage>
+                                      <Typography>{card.value}</Typography>
+                                    </Col>
+                                  </Row>
+                                  <Row>
+                                    <Col
+                                      xs="12"
+                                      className="d-flex justify-content-start align-items-center"
+                                    >
+                                      <Icons.Star size={20} color="#CCCCCC" />
+                                      <Typography sx={{ marginLeft: '8px' }}>
+                                        {card.reacts.length}
+                                      </Typography>
+                                    </Col>
+                                  </Row>
+                                </Box>
+                              </Col>
+                            );
+                          }
+                        )}
+                      </Row>
+                      <Row style={{ marginTop: '16px' }}>
+                        {wentWellTopVotedCardsPrint_2.map(
+                          (card: any, index: number) => {
+                            return (
+                              <Col
+                                xs="6"
+                                className="d-flex justify-content-center align-items-center"
+                                key={index}
+                              >
+                                <Box
+                                  sx={{
+                                    minWidth: '400px',
+                                    minHeight: '140px',
+                                    background: '#FFFFFF',
+                                    opacity: '0.7',
+                                    boxShadow:
+                                      '0px 0px 20px rgba(0, 0, 0, 0.15)',
+                                    borderRadius: '8px',
+                                    padding: '8px',
+                                  }}
+                                >
+                                  <Row>
+                                    <Col
+                                      xs="12"
+                                      className="d-flex justify-content-start align-items-center"
+                                    >
+                                      <LazyLoadImage
+                                        className="avatar"
+                                        style={{
+                                          width: '40px',
+                                          height: '40px',
+                                          borderRadius: '50%',
+                                          border: '5px solid #f9fbf8',
+                                        }}
+                                        src={
+                                          '/avatars/animals/' +
+                                          card.avatar +
+                                          '.svg'
+                                        }
+                                      ></LazyLoadImage>
+                                      <Typography>{card.value}</Typography>
+                                    </Col>
+                                  </Row>
+                                  <Row>
+                                    <Col
+                                      xs="12"
+                                      className="d-flex justify-content-start align-items-center"
+                                    >
+                                      <Icons.Star size={20} color="#CCCCCC" />
+                                      <Typography sx={{ marginLeft: '8px' }}>
+                                        {card.reacts.length}
+                                      </Typography>
+                                    </Col>
+                                  </Row>
+                                </Box>
+                              </Col>
+                            );
+                          }
+                        )}
+                      </Row>
+                    </Box>
                   </Box>
                 )}
               </Col>
@@ -1063,6 +1282,7 @@ export const ReportSummary = React.forwardRef((props, ref) => {
                 xs={{ span: 3, offset: 5 }}
                 lg={{ span: 2, offset: 6 }}
                 className="d-flex justify-content-end align-items-center"
+                id="view-top-voted-card-2"
               >
                 <Typography
                   className="viewWorldCould"
@@ -1133,7 +1353,11 @@ export const ReportSummary = React.forwardRef((props, ref) => {
                         <Typography className="topVoted">Top Voted</Typography>
                       </Col>
                     </Row>
-                    <Row style={{ marginTop: '16px' }}>
+                    {/* did-Not-Went-Well-Top-Voted-Cards */}
+                    <Row
+                      style={{ marginTop: '16px' }}
+                      id="did-Not-Went-Well-Top-Voted-Cards"
+                    >
                       {didNotWentWellTopVotedCards.map(
                         (card: any, index: number) => {
                           return (
@@ -1192,6 +1416,136 @@ export const ReportSummary = React.forwardRef((props, ref) => {
                         }
                       )}
                     </Row>
+                    {/* did-Not-Went-Well-Top-Voted-Cards-print */}
+                    <Box
+                      id="did-Not-Went-Well-Top-Voted-Cards-print"
+                      sx={{ display: 'none' }}
+                    >
+                      <Row
+                        style={{ marginTop: '16px' }}
+                      >
+                        {didNotWentWellTopVotedCardsPrint_1.map(
+                          (card: any, index: number) => {
+                            return (
+                              <Col
+                                xs="6"
+                                className="d-flex justify-content-center align-items-center"
+                                key={index}
+                              >
+                                <Box
+                                  sx={{
+                                    minWidth: '400px',
+                                    minHeight: '140px',
+                                    background: '#FFFFFF',
+                                    opacity: '0.7',
+                                    boxShadow:
+                                      '0px 0px 20px rgba(0, 0, 0, 0.15)',
+                                    borderRadius: '8px',
+                                    padding: '8px',
+                                  }}
+                                >
+                                  <Row>
+                                    <Col
+                                      xs="12"
+                                      className="d-flex justify-content-start align-items-center"
+                                    >
+                                      <LazyLoadImage
+                                        className="avatar"
+                                        style={{
+                                          width: '40px',
+                                          height: '40px',
+                                          borderRadius: '50%',
+                                          border: '5px solid #f9fbf8',
+                                        }}
+                                        src={
+                                          '/avatars/animals/' +
+                                          card.avatar +
+                                          '.svg'
+                                        }
+                                      ></LazyLoadImage>
+                                      <Typography>{card.value}</Typography>
+                                    </Col>
+                                  </Row>
+                                  <Row>
+                                    <Col
+                                      xs="12"
+                                      className="d-flex justify-content-start align-items-center"
+                                    >
+                                      <Icons.Star size={20} color="#CCCCCC" />
+                                      <Typography sx={{ marginLeft: '8px' }}>
+                                        {card.reacts.length}
+                                      </Typography>
+                                    </Col>
+                                  </Row>
+                                </Box>
+                              </Col>
+                            );
+                          }
+                        )}
+                      </Row>
+                      <Row
+                        style={{ marginTop: '16px' }}
+                      >
+                        {didNotWentWellTopVotedCardsPrint_2.map(
+                          (card: any, index: number) => {
+                            return (
+                              <Col
+                                xs='6'
+                                className="d-flex justify-content-center align-items-center"
+                                key={index}
+                              >
+                                <Box
+                                  sx={{
+                                    minWidth: '400px',
+                                    minHeight: '140px',
+                                    background: '#FFFFFF',
+                                    opacity: '0.7',
+                                    boxShadow:
+                                      '0px 0px 20px rgba(0, 0, 0, 0.15)',
+                                    borderRadius: '8px',
+                                    padding: '8px',
+                                  }}
+                                >
+                                  <Row>
+                                    <Col
+                                      xs="12"
+                                      className="d-flex justify-content-start align-items-center"
+                                    >
+                                      <LazyLoadImage
+                                        className="avatar"
+                                        style={{
+                                          width: '40px',
+                                          height: '40px',
+                                          borderRadius: '50%',
+                                          border: '5px solid #f9fbf8',
+                                        }}
+                                        src={
+                                          '/avatars/animals/' +
+                                          card.avatar +
+                                          '.svg'
+                                        }
+                                      ></LazyLoadImage>
+                                      <Typography>{card.value}</Typography>
+                                    </Col>
+                                  </Row>
+                                  <Row>
+                                    <Col
+                                      xs="12"
+                                      className="d-flex justify-content-start align-items-center"
+                                    >
+                                      <Icons.Star size={20} color="#CCCCCC" />
+                                      <Typography sx={{ marginLeft: '8px' }}>
+                                        {card.reacts.length}
+                                      </Typography>
+                                    </Col>
+                                  </Row>
+                                </Box>
+                              </Col>
+                            );
+                          }
+                        )}
+                      </Row>
+                    </Box>
                   </Box>
                 )}
               </Col>
@@ -1211,6 +1565,7 @@ export const ReportSummary = React.forwardRef((props, ref) => {
               <Col
                 xs={{ span: 2, offset: 8 }}
                 className="d-flex justify-content-end align-items-center"
+                id='copy-to-clipboard'
               >
                 <Typography
                   className="viewParticipants"

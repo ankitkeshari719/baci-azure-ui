@@ -6,7 +6,36 @@
     width: auto !important;
     height: auto !important;
     overflow: visible !important;
-    margin-left: 0 !important;
+  }
+  #line_1 {
+    display: none !important;
+  }
+  #line_1_react_print {
+    display: block !important;
+  }
+  #line_2 {
+    display: none !important;
+  }
+  #view-top-voted-card-1 {
+    display: none !important;
+  }
+  #went-well-top-voted-cards {
+    display: none !important;
+  }
+  #went-well-top-voted-cards-react-print {
+    display: block !important;
+  }
+  #view-top-voted-card-2 {
+    display: none !important;
+  }
+  #did-Not-Went-Well-Top-Voted-Cards {
+    display: none !important;
+  }
+  #did-Not-Went-Well-Top-Voted-Cards-print {
+    display: block !important;
+  }
+  #copy-to-clipboard {
+    display: none !important;
   }
 }
 
