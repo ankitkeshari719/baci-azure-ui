@@ -765,13 +765,13 @@ export const ReportSummary = React.forwardRef((props, ref) => {
           </Row>
           {/* React Print Section 1 */}
           <Row id="line_1_react_print" style={{ display: 'none' }}>
-            <Col xs="6">
-              <Table>
-                <tr>
-                  <td>
+            <Col xs="12">
+              <Table striped>
+                <tr style={{ border: '1px solid #CCCCCC' }}>
+                  <td style={{ border: '1px solid #CCCCCC' }}>
                     <Typography className="textTypeOne">Report For</Typography>
                   </td>
-                  <td>
+                  <td style={{ border: '1px solid #CCCCCC' }}>
                     <Typography
                       className="textTypeThree"
                       sx={{ textAlign: ' start !important' }}
@@ -780,11 +780,11 @@ export const ReportSummary = React.forwardRef((props, ref) => {
                     </Typography>
                   </td>
                 </tr>
-                <tr>
-                  <td>
+                <tr style={{ border: '1px solid #CCCCCC' }}>
+                  <td style={{ border: '1px solid #CCCCCC' }}>
                     <Typography className="textTypeOne">Date</Typography>
                   </td>
-                  <td>
+                  <td style={{ border: '1px solid #CCCCCC' }}>
                     <Typography
                       className="textTypeTwo"
                       sx={{ textAlign: ' start !important' }}
@@ -793,11 +793,11 @@ export const ReportSummary = React.forwardRef((props, ref) => {
                     </Typography>
                   </td>
                 </tr>
-                <tr>
-                  <td>
+                <tr style={{ border: '1px solid #CCCCCC' }}>
+                  <td style={{ border: '1px solid #CCCCCC' }}>
                     <Typography className="textTypeOne">Time Taken</Typography>
                   </td>
-                  <td>
+                  <td style={{ border: '1px solid #CCCCCC' }}>
                     <Typography
                       className="textTypeTwo"
                       sx={{ textAlign: ' start !important' }}
@@ -806,13 +806,13 @@ export const ReportSummary = React.forwardRef((props, ref) => {
                     </Typography>
                   </td>
                 </tr>
-                <tr>
-                  <td>
+                <tr style={{ border: '1px solid #CCCCCC' }}>
+                  <td style={{ border: '1px solid #CCCCCC' }}>
                     <Typography className="textTypeOne">
                       No. Of Participants
                     </Typography>
                   </td>
-                  <td>
+                  <td style={{ border: '1px solid #CCCCCC' }}>
                     <Typography
                       className="textTypeTwo"
                       sx={{ textAlign: ' start !important' }}
@@ -887,10 +887,11 @@ export const ReportSummary = React.forwardRef((props, ref) => {
               <Col
                 xs="6"
                 className="d-flex justify-content-start align-items-center"
+                id="pulse-check-chart"
               >
                 <Bar
                   style={{
-                    height: '260px',
+                    height: '300px',
                     border: 'none',
                   }}
                   options={options}
@@ -917,50 +918,103 @@ export const ReportSummary = React.forwardRef((props, ref) => {
                 ></Bar>
               </Col>
             ) : (
-              <Col
-                xs="12"
-                className="d-flex justify-content-start align-items-center"
-              >
-                <Box
-                  sx={{
-                    width: '100%',
-                    height: '240px',
-                    display: 'flex',
-                    justifyContent: 'center',
-                    alignItems: 'center',
-                    flexDirection: 'column',
-                    background: '#FAFAFA',
-                    border: '1px solid #CCCCCC',
-                  }}
+              <>
+                <Col
+                  xs="12"
+                  className="d-flex justify-content-start align-items-center"
+                  id="pulse-check-not-data"
                 >
-                  <Box component="div">
-                    <img src="/svgs/LineChart.svg" />
-                  </Box>
                   <Box
-                    component="div"
-                    sx={{ textAlign: 'justify', marginTop: '16px' }}
-                  >
-                    <Typography className="text1">
-                      Sorry, Pulse Check was not selected
-                    </Typography>
-                  </Box>
-                  <Box
-                    component="div"
                     sx={{
-                      width: '40%',
-                      textAlign: 'justify',
-                      marginTop: '16px',
+                      width: '100%',
+                      height: '240px',
+                      display: 'flex',
+                      justifyContent: 'center',
+                      alignItems: 'center',
+                      flexDirection: 'column',
+                      background: '#FAFAFA',
+                      border: '1px solid #CCCCCC',
                     }}
                   >
-                    <Typography>
-                      Pulse Check helps the team to quickly understand their
-                      feelings about work. Conducting it consistently will help
-                      the team to track progress and also to compare & contrast
-                      against BACI retro outcomes.
-                    </Typography>
+                    <Box component="div">
+                      <img src="/svgs/LineChart.svg" />
+                    </Box>
+                    <Box
+                      component="div"
+                      sx={{ textAlign: 'justify', marginTop: '16px' }}
+                    >
+                      <Typography className="text1">
+                        Sorry, Pulse Check was not selected
+                      </Typography>
+                    </Box>
+                    <Box
+                      component="div"
+                      sx={{
+                        width: '40%',
+                        textAlign: 'justify',
+                        marginTop: '16px',
+                      }}
+                    >
+                      <Typography>
+                        Pulse Check helps the team to quickly understand their
+                        feelings about work. Conducting it consistently will
+                        help the team to track progress and also to compare &
+                        contrast against BACI retro outcomes.
+                      </Typography>
+                    </Box>
                   </Box>
+                </Col>
+                <Box
+                  id="pulse-check-not-data-print"
+                  sx={{ display: 'none !important' }}
+                >
+                  <Col
+                    xs="12"
+                    className="d-flex justify-content-start align-items-center"
+                  >
+                    <Box
+                      sx={{
+                        width: '100%',
+                        height: '300px',
+                        minHeight: '300px',
+                        display: 'flex',
+                        justifyContent: 'center',
+                        alignItems: 'center',
+                        flexDirection: 'column',
+                        background: '#FAFAFA',
+                        border: '1px solid #CCCCCC',
+                      }}
+                    >
+                      <Box component="div">
+                        <img src="/svgs/LineChart.svg" />
+                      </Box>
+                      <Box
+                        component="div"
+                        sx={{ textAlign: 'justify', marginTop: '16px' }}
+                      >
+                        <Typography className="text1">
+                          Sorry, Pulse Check was not selected
+                        </Typography>
+                      </Box>
+                      <Box
+                        component="div"
+                        sx={{
+                          width: '40%',
+                          textAlign: 'justify',
+                          marginTop: '16px',
+                        }}
+                      >
+                        <Typography>
+                          Pulse Check helps the team to quickly understand their
+                          feelings about work. Conducting it consistently will
+                          help the team to track progress and also to compare &
+                          contrast against BACI retro outcomes.
+                        </Typography>
+                      </Box>
+                    </Box>
+                  </Col>
                 </Box>
-              </Col>
+              </>
             )}
           </Row>
           {/* What Went Well Section 1*/}
@@ -975,7 +1029,7 @@ export const ReportSummary = React.forwardRef((props, ref) => {
             </Col>
           </Row>
           {/* What Went Well Section 2*/}
-          <Row style={{ marginTop: '16px' }}>
+          <Row style={{ marginTop: '16px' }} id="view-top-voted-card-1">
             <Col
               xs="4"
               lg="4"
@@ -993,7 +1047,6 @@ export const ReportSummary = React.forwardRef((props, ref) => {
                 xs={{ span: 3, offset: 5 }}
                 lg={{ span: 2, offset: 6 }}
                 className="d-flex justify-content-end align-items-center"
-                id="view-top-voted-card-1"
               >
                 <Typography
                   className="viewWorldCould"
@@ -1003,6 +1056,23 @@ export const ReportSummary = React.forwardRef((props, ref) => {
                 </Typography>
               </Col>
             )}
+          </Row>
+          {/* What Went Well Section 2 print*/}
+          <Row
+            style={{ marginTop: '16px', display: 'none' }}
+            id="view-top-voted-card-print-1"
+          >
+            <Col
+              xs="12"
+              className="d-flex justify-content-start align-items-center"
+            >
+              <Typography className="participantsResponded">
+                Participants Responded
+              </Typography>
+              <Typography className="participantsResponded" ml={2}>
+                {wentWellCreatedBy}/{users.length}
+              </Typography>
+            </Col>
           </Row>
           {/* What Went Well Section 3*/}
           {wentWellWords.length === 0 ? (
@@ -1132,13 +1202,14 @@ export const ReportSummary = React.forwardRef((props, ref) => {
                             return (
                               <Col
                                 xs="6"
-                                className="d-flex justify-content-center align-items-center"
+                                className="d-flex justify-content-start align-items-center"
                                 key={index}
                               >
                                 <Box
                                   sx={{
-                                    minWidth: '400px',
-                                    minHeight: '140px',
+                                    minWidth: '360px',
+                                    maxWidth: '360px',
+                                    minHeight: '150px',
                                     background: '#FFFFFF',
                                     opacity: '0.7',
                                     boxShadow:
@@ -1192,13 +1263,14 @@ export const ReportSummary = React.forwardRef((props, ref) => {
                             return (
                               <Col
                                 xs="6"
-                                className="d-flex justify-content-center align-items-center"
+                                className="d-flex justify-content-start align-items-center"
                                 key={index}
                               >
                                 <Box
                                   sx={{
-                                    minWidth: '400px',
-                                    minHeight: '140px',
+                                    minWidth: '360px',
+                                    maxWidth: '360px',
+                                    minHeight: '150px',
                                     background: '#FFFFFF',
                                     opacity: '0.7',
                                     boxShadow:
@@ -1264,7 +1336,7 @@ export const ReportSummary = React.forwardRef((props, ref) => {
             </Col>
           </Row>
           {/* What Didn’t Go Well? Section 2*/}
-          <Row style={{ marginTop: '16px' }}>
+          <Row style={{ marginTop: '16px' }} id="view-top-voted-card-2">
             <Col
               xs="4"
               lg="4"
@@ -1282,7 +1354,6 @@ export const ReportSummary = React.forwardRef((props, ref) => {
                 xs={{ span: 3, offset: 5 }}
                 lg={{ span: 2, offset: 6 }}
                 className="d-flex justify-content-end align-items-center"
-                id="view-top-voted-card-2"
               >
                 <Typography
                   className="viewWorldCould"
@@ -1294,6 +1365,20 @@ export const ReportSummary = React.forwardRef((props, ref) => {
                 </Typography>
               </Col>
             )}
+          </Row>
+          {/* What Didn’t Go Well? Section print 2*/}
+          <Row style={{ marginTop: '16px' }} id="view-top-voted-card-print-2">
+            <Col
+              xs="12"
+              className="d-flex justify-content-start align-items-center"
+            >
+              <Typography className="participantsResponded">
+                Participants Responded
+              </Typography>
+              <Typography className="participantsResponded" ml={2}>
+                {didNotWentWellCreatedBy}/{users.length}
+              </Typography>
+            </Col>
           </Row>
           {/* What Didn’t Go Well? Section 3*/}
           {didNotWentWellWords.length === 0 ? (
@@ -1421,21 +1506,20 @@ export const ReportSummary = React.forwardRef((props, ref) => {
                       id="did-Not-Went-Well-Top-Voted-Cards-print"
                       sx={{ display: 'none' }}
                     >
-                      <Row
-                        style={{ marginTop: '16px' }}
-                      >
+                      <Row style={{ marginTop: '16px' }}>
                         {didNotWentWellTopVotedCardsPrint_1.map(
                           (card: any, index: number) => {
                             return (
                               <Col
                                 xs="6"
-                                className="d-flex justify-content-center align-items-center"
+                                className="d-flex justify-content-start align-items-center"
                                 key={index}
                               >
                                 <Box
                                   sx={{
-                                    minWidth: '400px',
-                                    minHeight: '140px',
+                                    minWidth: '360px',
+                                    maxWidth: '360px',
+                                    minHeight: '150px',
                                     background: '#FFFFFF',
                                     opacity: '0.7',
                                     boxShadow:
@@ -1483,21 +1567,20 @@ export const ReportSummary = React.forwardRef((props, ref) => {
                           }
                         )}
                       </Row>
-                      <Row
-                        style={{ marginTop: '16px' }}
-                      >
+                      <Row style={{ marginTop: '16px' }}>
                         {didNotWentWellTopVotedCardsPrint_2.map(
                           (card: any, index: number) => {
                             return (
                               <Col
-                                xs='6'
-                                className="d-flex justify-content-center align-items-center"
+                                xs="6"
+                                className="d-flex justify-content-start align-items-center"
                                 key={index}
                               >
                                 <Box
                                   sx={{
-                                    minWidth: '400px',
-                                    minHeight: '140px',
+                                    minWidth: '360px',
+                                    maxWidth: '360px',
+                                    minHeight: '150px',
                                     background: '#FFFFFF',
                                     opacity: '0.7',
                                     boxShadow:
@@ -1565,7 +1648,7 @@ export const ReportSummary = React.forwardRef((props, ref) => {
               <Col
                 xs={{ span: 2, offset: 8 }}
                 className="d-flex justify-content-end align-items-center"
-                id='copy-to-clipboard'
+                id="copy-to-clipboard"
               >
                 <Typography
                   className="viewParticipants"
@@ -1605,119 +1688,156 @@ export const ReportSummary = React.forwardRef((props, ref) => {
               </Col>
             </Row>
           ) : (
-            <Box sx={{ marginTop: '16px' }}>
-              {isAllActionOpen ? (
-                <>
-                  {actionCardData.map((action: any, index: number) => {
-                    return (
-                      <Row
-                        style={{ marginTop: index > 0 ? '16px' : '0px' }}
-                        key={index}
-                      >
+            <>
+              <Box sx={{ marginTop: '16px' }} id="actions-column">
+                {isAllActionOpen ? (
+                  <>
+                    {actionCardData.map((action: any, index: number) => {
+                      return (
+                        <Row
+                          style={{ marginTop: index > 0 ? '16px' : '0px' }}
+                          key={index}
+                        >
+                          <Col
+                            xs="12"
+                            className="d-flex justify-content-start align-items-center"
+                          >
+                            <LazyLoadImage
+                              className="avatar"
+                              style={{
+                                width: '40px',
+                                height: '40px',
+                                borderRadius: '50%',
+                                border: '5px solid #f9fbf8',
+                              }}
+                              src={'/avatars/animals/' + action.avatar + '.svg'}
+                            ></LazyLoadImage>
+                            <Typography
+                              style={{ marginLeft: '12px' }}
+                              className="actionValue"
+                            >
+                              {action.value}
+                            </Typography>
+                          </Col>
+                        </Row>
+                      );
+                    })}
+                    <Typography
+                      className="viewWorldCould"
+                      sx={{ marginTop: '8px' }}
+                      onClick={handleIsActionCloudOpen}
+                    >
+                      Show Less
+                    </Typography>
+                  </>
+                ) : (
+                  <>
+                    {actionTopVotedCards.map((action: any, index: number) => {
+                      return (
+                        <Row
+                          style={{ marginTop: index > 0 ? '16px' : '0px' }}
+                          key={index}
+                        >
+                          <Col
+                            xs="12"
+                            className="d-flex justify-content-start align-items-center"
+                          >
+                            <LazyLoadImage
+                              className="avatar"
+                              style={{
+                                width: '40px',
+                                height: '40px',
+                                borderRadius: '50%',
+                                border: '5px solid #f9fbf8',
+                              }}
+                              src={'/avatars/animals/' + action.avatar + '.svg'}
+                            ></LazyLoadImage>
+                            <Typography
+                              style={{ marginLeft: '12px' }}
+                              className="actionValue"
+                            >
+                              {action.value}
+                            </Typography>
+                          </Col>
+                        </Row>
+                      );
+                    })}
+                    {actionCardData.length > 4 && (
+                      <Row style={{ marginTop: '16px' }}>
                         <Col
                           xs="12"
                           className="d-flex justify-content-start align-items-center"
                         >
-                          <LazyLoadImage
-                            className="avatar"
-                            style={{
-                              width: '40px',
-                              height: '40px',
-                              borderRadius: '50%',
-                              border: '5px solid #f9fbf8',
-                            }}
-                            src={'/avatars/animals/' + action.avatar + '.svg'}
-                          ></LazyLoadImage>
+                          {actionLastVotedCards.map(
+                            (card: any, index: number) => {
+                              return (
+                                <Avatar
+                                  key={card.id}
+                                  avatar={card.avatar}
+                                  // onClickAvatar={() => {
+                                  //   console.log('click');
+                                  // }}
+                                  css={{
+                                    width: '40px',
+                                    height: '40px',
+                                    marginLeft: '0',
+                                    marginRight: '-8px',
+                                    border: '3px solid transparent',
+                                  }}
+                                />
+                              );
+                            }
+                          )}
                           <Typography
-                            style={{ marginLeft: '12px' }}
-                            className="actionValue"
+                            className="viewWorldCould"
+                            sx={{ marginLeft: '8px' }}
+                            onClick={handleIsActionCloudOpen}
                           >
-                            {action.value}
+                            View More Comments from {users.length}&nbsp;
+                            Participants
                           </Typography>
                         </Col>
                       </Row>
-                    );
-                  })}
-                  <Typography
-                    className="viewWorldCould"
-                    sx={{ marginTop: '8px' }}
-                    onClick={handleIsActionCloudOpen}
-                  >
-                    Show Less
-                  </Typography>
-                </>
-              ) : (
-                <>
-                  {actionTopVotedCards.map((action: any, index: number) => {
-                    return (
-                      <Row
-                        style={{ marginTop: index > 0 ? '16px' : '0px' }}
-                        key={index}
-                      >
-                        <Col
-                          xs="12"
-                          className="d-flex justify-content-start align-items-center"
-                        >
-                          <LazyLoadImage
-                            className="avatar"
-                            style={{
-                              width: '40px',
-                              height: '40px',
-                              borderRadius: '50%',
-                              border: '5px solid #f9fbf8',
-                            }}
-                            src={'/avatars/animals/' + action.avatar + '.svg'}
-                          ></LazyLoadImage>
-                          <Typography
-                            style={{ marginLeft: '12px' }}
-                            className="actionValue"
-                          >
-                            {action.value}
-                          </Typography>
-                        </Col>
-                      </Row>
-                    );
-                  })}
-                  {actionCardData.length > 4 && (
-                    <Row style={{ marginTop: '16px' }}>
+                    )}
+                  </>
+                )}
+              </Box>
+              <Box
+                sx={{ marginTop: '16px', display: 'none' }}
+                id="actions-column-print"
+              >
+                {actionCardData.map((action: any, index: number) => {
+                  return (
+                    <Row
+                      style={{ marginTop: index > 0 ? '16px' : '0px' }}
+                      key={index}
+                    >
                       <Col
                         xs="12"
                         className="d-flex justify-content-start align-items-center"
                       >
-                        {actionLastVotedCards.map(
-                          (card: any, index: number) => {
-                            return (
-                              <Avatar
-                                key={card.id}
-                                avatar={card.avatar}
-                                // onClickAvatar={() => {
-                                //   console.log('click');
-                                // }}
-                                css={{
-                                  width: '40px',
-                                  height: '40px',
-                                  marginLeft: '0',
-                                  marginRight: '-8px',
-                                  border: '3px solid transparent',
-                                }}
-                              />
-                            );
-                          }
-                        )}
+                        <LazyLoadImage
+                          className="avatar"
+                          style={{
+                            width: '40px',
+                            height: '40px',
+                            borderRadius: '50%',
+                            border: '5px solid #f9fbf8',
+                          }}
+                          src={'/avatars/animals/' + action.avatar + '.svg'}
+                        ></LazyLoadImage>
                         <Typography
-                          className="viewWorldCould"
-                          sx={{ marginLeft: '8px' }}
-                          onClick={handleIsActionCloudOpen}
+                          style={{ marginLeft: '12px' }}
+                          className="actionValue"
                         >
-                          View More Comments from {users.length}&nbsp;
-                          Participants
+                          {action.value}
                         </Typography>
                       </Col>
                     </Row>
-                  )}
-                </>
-              )}
-            </Box>
+                  );
+                })}
+              </Box>
+            </>
           )}
           {/* Feedback for Facilitator 1 */}
           <Row style={{ marginTop: '36px' }}>

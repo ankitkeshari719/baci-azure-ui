@@ -19,6 +19,9 @@
   #view-top-voted-card-1 {
     display: none !important;
   }
+  #view-top-voted-card-print-1 {
+    display: block !important;
+  }
   #went-well-top-voted-cards {
     display: none !important;
   }
@@ -28,6 +31,9 @@
   #view-top-voted-card-2 {
     display: none !important;
   }
+  #view-top-voted-card-print-2 {
+    display: block !important;
+  }
   #did-Not-Went-Well-Top-Voted-Cards {
     display: none !important;
   }
@@ -36,6 +42,21 @@
   }
   #copy-to-clipboard {
     display: none !important;
+  }
+  #actions-column {
+    display: none !important;
+  }
+  #actions-column-print {
+    display: block !important;
+  }
+  #pulse-check-not-data {
+    display: none !important;
+  }
+  #pulse-check-not-data-print {
+    display: block !important;
+  }
+  #pulse-check-chart {
+    display: block !important;
   }
 }
 
