@@ -130,7 +130,7 @@ const Toolbar = (props: any) => {
           paddingTop: isXsUp ? '14px' : 0,
           paddingBottom: isXsUp ? '14px' : 0,
           boxShadow: '0px 0px 2px rgba(0, 0, 0, 0.25)!important',
-          height: '64px'
+          height: '64px',
         }}
       >
         {location.pathname.includes('report') ? (
@@ -357,24 +357,26 @@ const Toolbar = (props: any) => {
             )}
           </>
         )}
-        {showSummaryButton && !location.pathname.includes('report') && (
-          <Button
-            style={{
-              marginRight: '40px',
-            }}
-            variant="contained"
-            sx={{
-              borderRadius: '24px',
-              padding: '10px 20px',
-              width: '162px',
-              marginRight: '15px',
-              fontWeight: 500,
-            }}
-            onClick={() => navigate('/report/' + currentRetro?.id)}
-          >
-            VIEW SUMMARY
-          </Button>
-        )}
+        {showSummaryButton &&
+          !location.pathname.includes('report') &&
+          user.userType === 2 && (
+            <Button
+              style={{
+                marginRight: '40px',
+              }}
+              variant="contained"
+              sx={{
+                borderRadius: '24px',
+                padding: '10px 20px',
+                width: '162px',
+                marginRight: '15px',
+                fontWeight: 500,
+              }}
+              onClick={() => navigate('/report/' + currentRetro?.id)}
+            >
+              VIEW SUMMARY
+            </Button>
+          )}
         <LeaveRetroDialog
           open={leaveDiaOpen}
           onClose={(value: any) => {
@@ -439,7 +441,6 @@ const Toolbar = (props: any) => {
               onClick={() => {
                 props.onFinishRetro(), setOpenDialog(false);
               }}
-              
               variant="contained"
               autoFocus
             >
@@ -541,7 +542,6 @@ const Toolbar = (props: any) => {
               <MenuItem
                 sx={{ width: '250px', display: 'flex', flexDirection: 'row' }}
               >
-                
                 <Avatar
                   avatar={user?.avatar}
                   onClickAvatar={() => {
@@ -567,21 +567,20 @@ const Toolbar = (props: any) => {
             </Menu>
           </>
         ) : (
-          <Tooltip title={user?.name+''}>
+          <Tooltip title={user?.name + ''}>
             <span>
-            {user?.avatar && (
-
-              <Avatar
-                avatar={user?.avatar}
-                onClickAvatar={() => {}}
-                css={{
-                  width: '56px',
-                  height: '56px',
-                  borderRadius: '50%',
-                  border: 'none',
-                }}
-              ></Avatar>
-            )}
+              {user?.avatar && (
+                <Avatar
+                  avatar={user?.avatar}
+                  onClickAvatar={() => {}}
+                  css={{
+                    width: '56px',
+                    height: '56px',
+                    borderRadius: '50%',
+                    border: 'none',
+                  }}
+                ></Avatar>
+              )}
             </span>
           </Tooltip>
         )}
