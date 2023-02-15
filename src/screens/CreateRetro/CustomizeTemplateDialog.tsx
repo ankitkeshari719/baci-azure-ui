@@ -86,10 +86,10 @@ export function CustomizeTemplateDialog({
         <Typography className="unsavedChangesTextOne">
           Unsaved Changes
         </Typography>
-        <Typography className="unsavedChangesTextTwo" mt="40px">
+        <Typography className="unsavedChangesTextTwo" mt="60px">
           You have unsaved changes to your retro board
         </Typography>
-        <Typography className="unsavedChangesTextTwo" mt="8px">
+        <Typography className="unsavedChangesTextTwo" mt="4px">
           Are you sure you want to loose these changes?
         </Typography>
       </DialogContent>
@@ -100,8 +100,8 @@ export function CustomizeTemplateDialog({
           name="Exit without saving"
           onClick={closeCustomTemplateDialog}
           style={{
-            minWidth: '240px !important',
-            height: '36px !important',
+            minWidth: '225px !important',
+            height: '44px !important',
             textTransform: 'uppercase !important',
             marginTop: '0px !important',
           }}
@@ -110,10 +110,10 @@ export function CustomizeTemplateDialog({
           name="Save and Exit"
           onClick={() => onClickSelectButton(templateId)}
           style={{
-            minWidth: '240px !important',
-            height: '36px !important',
+            minWidth: '225px !important',
+            height: '44px !important',
             textTransform: 'uppercase !important',
-            marginLeft: '32px !important'
+            marginLeft: '50px !important'
           }}
         />
       </DialogActions>
