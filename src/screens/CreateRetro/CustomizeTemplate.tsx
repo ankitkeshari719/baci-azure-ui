@@ -465,14 +465,17 @@ export function CustomizeTemplate({
         PaperProps={{
           sx: {
             width: '800px',
+            height: '418px',
             maxWidth: '800px',
-            height: '265px',
-            maxHeight: '265px',
+            minHeight: '418px',
             padding: isXsUp ? '16px' : '0px',
             display: 'flex',
             flexDirection: 'column',
             alignItems: 'center',
             overflowX: 'hidden',
+            background: '#FFFFFF',
+            boxShadow: '0px 1px 10px rgba(0, 0, 0, 0.15)',
+            borderRadius: '20px',
           },
         }}
         sx={{
@@ -483,6 +486,8 @@ export function CustomizeTemplate({
         <CustomizeTemplateDialog
           handleIsChangeDialogClose={handleIsChangeDialogClose}
           closeCustomTemplateDialog={closeCustomTemplateDialog}
+          templateId={selectedTemplate.templateId}
+          onClickSelectButton={onClickSelectButton}
         />
       </BootstrapDialog>
     </>

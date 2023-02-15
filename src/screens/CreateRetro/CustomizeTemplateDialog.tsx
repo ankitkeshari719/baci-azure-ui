@@ -11,11 +11,13 @@ import './styles.scss';
 import commonStyles from '../../style.module.scss';
 
 import { Row, Col, Button } from 'react-bootstrap';
-import { ContainedButton } from '../../components';
+import { ContainedButton, OutlinedButton } from '../../components';
 
 type Props = {
   handleIsChangeDialogClose: () => void;
   closeCustomTemplateDialog: () => void;
+  onClickSelectButton: (selectedId: string) => void;
+  templateId: string;
 };
 
 export interface DialogTitleProps {
@@ -52,55 +54,66 @@ function BootstrapDialogTitle(props: DialogTitleProps) {
   );
 }
 
-export function CustomizeTemplateDialog({ handleIsChangeDialogClose,closeCustomTemplateDialog }: Props) {
+export function CustomizeTemplateDialog({
+  handleIsChangeDialogClose,
+  closeCustomTemplateDialog,
+  onClickSelectButton,
+  templateId,
+}: Props) {
   return (
     <Box
       sx={{
         width: '800px',
+        height: '418px',
         maxWidth: '800px',
-        height: '265px',
-        maxHeight: '265px',
+        minHeight: '418px',
+        background: '#FFFFFF',
+        boxShadow: '0px 1px 10px rgba(0, 0, 0, 0.15)',
+        borderRadius: '20px',
       }}
     >
       <BootstrapDialogTitle
         id="customized-dialog-title"
         onClose={handleIsChangeDialogClose}
-      >
-        Are you sure to go back?
-      </BootstrapDialogTitle>
+      ></BootstrapDialogTitle>
       <DialogContent
-        dividers
         sx={{
           display: 'flex',
           flexDirection: 'column',
           alignItems: 'center',
         }}
       >
-        <Typography
-          color={commonStyles.secondaryMain}
-          fontSize="24px"
-          mt="15px"
-        >
-          Your changes will discard
+        <Typography className="unsavedChangesTextOne">
+          Unsaved Changes
+        </Typography>
+        <Typography className="unsavedChangesTextTwo" mt="40px">
+          You have unsaved changes to your retro board
+        </Typography>
+        <Typography className="unsavedChangesTextTwo" mt="8px">
+          Are you sure you want to loose these changes?
         </Typography>
       </DialogContent>
-      <DialogActions>
-        <ContainedButton
-          name="Yes"
+      <DialogActions
+        sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', marginTop: '40px' }}
+      >
+        <OutlinedButton
+          name="Exit without saving"
           onClick={closeCustomTemplateDialog}
           style={{
-            mt: 5,
-            minWidth: '140px !important',
+            minWidth: '240px !important',
             height: '36px !important',
+            textTransform: 'uppercase !important',
+            marginTop: '0px !important',
           }}
         />
         <ContainedButton
-          name="No"
-          onClick={handleIsChangeDialogClose}
+          name="Save and Exit"
+          onClick={() => onClickSelectButton(templateId)}
           style={{
-            mt: 5,
-            minWidth: '140px !important',
+            minWidth: '240px !important',
             height: '36px !important',
+            textTransform: 'uppercase !important',
+            marginLeft: '32px !important'
           }}
         />
       </DialogActions>
