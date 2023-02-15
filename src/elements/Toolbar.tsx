@@ -27,6 +27,7 @@ import LeaveRetroDialog from '../atoms/LeaveRetroDialog';
 import theme from '../theme/theme';
 import { CountdownTimer } from './CountdownTimer';
 import FacilitatorDropDown from './FacilitatorDropDown';
+import { ContainedButton } from '../components/ContainedButton';
 const Toolbar = (props: any) => {
   const isXsUp = useMediaQuery(theme.breakpoints.only('xs'));
   const navigate = useNavigate();
@@ -120,17 +121,18 @@ const Toolbar = (props: any) => {
           display: 'flex',
           alignItems: 'center',
           flexDirection: 'row',
-          width: !location.pathname.includes('offboarding')
-            ? isXsUp
-              ? 'calc(100% - 32px)'
-              : 'calc(100% - 112px)'
-            : 'calc(100%)',
+          // width: !location.pathname.includes('offboarding')
+          //   ? isXsUp
+          //     ? 'calc(100% - 32px)'
+          //     : 'calc(100% - 112px)'
+          //   : 'calc(100%)',
+          width: '100%',
           paddingLeft: isXsUp ? '16px' : '56px',
           paddingRight: isXsUp ? '16px' : '56px',
           paddingTop: isXsUp ? '14px' : 0,
           paddingBottom: isXsUp ? '14px' : 0,
           boxShadow: '0px 0px 2px rgba(0, 0, 0, 0.25)!important',
-          height: '64px'
+          height: '64px',
         }}
       >
         {location.pathname.includes('report') ? (
@@ -299,22 +301,34 @@ const Toolbar = (props: any) => {
           <>
             {user.userType == 2 ? (
               <>
-                <Button
+                {/* <Button
                   variant="contained"
                   id="finishRetro"
                   sx={{
-                    borderRadius: '24px',
                     width: '148px',
                     height: '44px',
                     padding: '10px 20px',
-                    marginRight: '40px',
+                    borderRadius: '24px',
                     fontWeight: 500,
+                    marginRight: '40px',
                     display: isXsUp ? 'none' : 'block',
                   }}
                   onClick={() => setOpenDialog(true)}
                 >
                   FINISH RETRO
-                </Button>
+                </Button> */}
+                <ContainedButton
+                  id="finishRetro"
+                  name="FINISH RETRO"
+                  onClick={() => setOpenDialog(true)}
+                  style={{
+                    minWidth: '150px !important',
+                    width: '150px !important',
+                    height: '40px !important',
+                    marginRight: '40px',
+                    display: isXsUp ? 'none' : 'block',
+                  }}
+                />
                 {showSessionEndMessage && (
                   <SessionEndingMessage
                     hideSessionEndingMessage={() => {
@@ -326,24 +340,35 @@ const Toolbar = (props: any) => {
               </>
             ) : (
               <>
-                {' '}
                 {!leaveRetro && (
-                  <Button
+                  // <Button
+                  //   id="leaveRetro"
+                  //   variant="contained"
+                  //   sx={{
+                  //     width: '148px',
+                  //     height: '44px',
+                  //     padding: '10px 20px',
+                  //     borderRadius: '24px',
+                  //     fontWeight: 500,
+                  //     marginRight: '40px',
+                  //     display: isXsUp ? 'none' : 'block',
+                  //   }}
+                  //   onClick={() => setLeaveDiaOpen(true)}
+                  // >
+                  //   LEAVE RETRO
+                  // </Button>
+                  <ContainedButton
                     id="leaveRetro"
-                    variant="contained"
-                    sx={{
-                      borderRadius: '24px',
-                      width: '148px',
-                      height: '44px',
-                      padding: '10px 20px',
+                    name="LEAVE RETRO"
+                    onClick={() => setLeaveDiaOpen(true)}
+                    style={{
+                      minWidth: '150px !important',
+                      width: '150px !important',
+                      height: '40px !important',
                       marginRight: '40px',
-                      fontWeight: 500,
                       display: isXsUp ? 'none' : 'block',
                     }}
-                    onClick={() => setLeaveDiaOpen(true)}
-                  >
-                    LEAVE RETRO
-                  </Button>
+                  />
                 )}
                 {showSessionEndMessage && (
                   <SessionEndingMessage
@@ -358,22 +383,33 @@ const Toolbar = (props: any) => {
           </>
         )}
         {showSummaryButton && !location.pathname.includes('report') && (
-          <Button
-            style={{
-              marginRight: '40px',
-            }}
-            variant="contained"
-            sx={{
-              borderRadius: '24px',
-              padding: '10px 20px',
-              width: '162px',
-              marginRight: '15px',
-              fontWeight: 500,
-            }}
+          // <Button
+          //   style={{
+          //     marginRight: '40px',
+          //   }}
+          //   variant="contained"
+          //   sx={{
+          //     width: '162px',
+          //     borderRadius: '24px',
+          //     padding: '10px 20px',
+          //     fontWeight: 500,
+          //     marginRight: '15px',
+          //   }}
+          //   onClick={() => navigate('/report/' + currentRetro?.id)}
+          // >
+          //   VIEW SUMMARY
+          // </Button>
+          <ContainedButton
+            id="view-summary"
+            name="VIEW SUMMARY"
             onClick={() => navigate('/report/' + currentRetro?.id)}
-          >
-            VIEW SUMMARY
-          </Button>
+            style={{
+              minWidth: '150px !important',
+              height: '40px !important',
+              width: '150px !important',
+              marginRight: '16px',
+            }}
+          />
         )}
         <LeaveRetroDialog
           open={leaveDiaOpen}
@@ -439,7 +475,6 @@ const Toolbar = (props: any) => {
               onClick={() => {
                 props.onFinishRetro(), setOpenDialog(false);
               }}
-              
               variant="contained"
               autoFocus
             >
@@ -471,7 +506,7 @@ const Toolbar = (props: any) => {
             >
               Retro Finished
             </Typography>
-            <Button
+            {/* <Button
               variant="contained"
               sx={{
                 borderRadius: '24px',
@@ -485,10 +520,23 @@ const Toolbar = (props: any) => {
               }}
             >
               REVIEW BOARD
-            </Button>
+            </Button> */}
+            <ContainedButton
+              id="review-board"
+              name="REVIEW BOARD"
+              onClick={() => {
+                navigate('/board/' + currentRetro?.id);
+              }}
+              style={{
+                minWidth: '150px !important',
+                width: '150px !important',
+                height: '40px !important',
+                marginRight: '16px',
+                position: 'initial',
+              }}
+            />
           </>
         )}
-
         {isXsUp ? (
           <>
             <Button
@@ -541,12 +589,9 @@ const Toolbar = (props: any) => {
               <MenuItem
                 sx={{ width: '250px', display: 'flex', flexDirection: 'row' }}
               >
-                
                 <Avatar
                   avatar={user?.avatar}
-                  onClickAvatar={() => {
-                    console.log('click');
-                  }}
+                  onClickAvatar={() => {}}
                   css={{
                     width: '44px',
                     height: '44px',
@@ -567,21 +612,20 @@ const Toolbar = (props: any) => {
             </Menu>
           </>
         ) : (
-          <Tooltip title={user?.name+''}>
+          <Tooltip title={user?.name + ''}>
             <span>
-            {user?.avatar && (
-
-              <Avatar
-                avatar={user?.avatar}
-                onClickAvatar={() => {}}
-                css={{
-                  width: '56px',
-                  height: '56px',
-                  borderRadius: '50%',
-                  border: 'none',
-                }}
-              ></Avatar>
-            )}
+              {user?.avatar && (
+                <Avatar
+                  avatar={user?.avatar}
+                  onClickAvatar={() => {}}
+                  css={{
+                    width: '56px',
+                    height: '56px',
+                    borderRadius: '50%',
+                    border: 'none',
+                  }}
+                ></Avatar>
+              )}
             </span>
           </Tooltip>
         )}
@@ -598,22 +642,34 @@ const Toolbar = (props: any) => {
         }}
       >
         {!leaveRetro && showFinishRetroButton && (
-          <Button
+          // <Button
+          //   id="leaveRetroIsXsUp"
+          //   variant="contained"
+          //   sx={{
+          //     borderRadius: '24px',
+          //     width: '148px',
+          //     height: '44px',
+          //     padding: '10px 20px',
+          //     marginRight: '16px',
+          //     fontWeight: 500,
+          //     position: 'initial',
+          //   }}
+          //   onClick={() => setLeaveDiaOpen(true)}
+          // >
+          //   LEAVE RETRO
+          // </Button>
+          <ContainedButton
             id="leaveRetroIsXsUp"
-            variant="contained"
-            sx={{
-              borderRadius: '24px',
-              width: '148px',
-              height: '44px',
-              padding: '10px 20px',
+            name="LEAVE RETRO"
+            onClick={() => setLeaveDiaOpen(true)}
+            style={{
+              minWidth: '150px !important',
+              width: '150px !important',
+              height: '40px !important',
               marginRight: '16px',
-              fontWeight: 500,
               position: 'initial',
             }}
-            onClick={() => setLeaveDiaOpen(true)}
-          >
-            LEAVE RETRO
-          </Button>
+          />
         )}
         {!ended && (
           <CountdownTimer color={'#2B9FDE'} bold={true}></CountdownTimer>

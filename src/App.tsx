@@ -27,6 +27,7 @@ import PulseCheck from './screens/PulseCheck';
 import ReportScreen from './screens/ReportScreen';
 import Board from './screens/Board';
 import PulseCheckMain from './screens/PulseChecks/PulseCheckMain';
+import SummaryReportMain from './screens/SummaryReports/SummaryReportMain';
 
 type AppProps = {
   instance: IPublicClientApplication;
@@ -89,15 +90,14 @@ export default function App({ instance }: AppProps) {
                             path=":id/startRetro"
                             element={<StartRetro></StartRetro>}
                           />
-
                           <Route
                             path=":id/pulsecheck"
-                            element={<PulseCheck />}
+                            element={<PulseCheckMain />}
                           />
                           <Route path=":id/feedback" element={<Feedback />} />
                           <Route path=":id" element={<Board />} />
                         </Route>
-                        <Route path="/report/:id" element={<ReportScreen />} />
+                        <Route path="/report/:id" element={<SummaryReportMain />} />
                       </Routes>
                     </MsalProvider>
                     <SnackMessage />

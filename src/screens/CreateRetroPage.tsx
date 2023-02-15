@@ -4,9 +4,7 @@ import {
   FormControl,
   FormHelperText,
   Grid,
-  InputLabel,
   MenuItem,
-  Select,
   TextField,
 } from '@mui/material';
 import * as React from 'react';
@@ -16,8 +14,6 @@ import './../global.scss';
 import { useNavigate, useParams } from 'react-router-dom';
 import { useRetro } from '../helpers';
 import { useAzureAuth } from '../msal/azureauth';
-import { BoardActionType } from '../statemachine/BoardStateMachine';
-import { BoardContext } from '../contexts/BoardContext';
 import { GlobalContext } from '../contexts/GlobalContext';
 import { ActionType } from '../contexts/GlobalContext';
 
@@ -54,9 +50,6 @@ const styles = {
         color: 'rgba(0, 0, 0, 0.6) !important',
       },
     },
-    // "&:MuiSelect-select-MuiInputBase-input-MuiInput-input:focus":{
-    //     backgroundColor:'white'
-    // }
   },
   proceedButton: {
     marginTop: '53px',
@@ -124,7 +117,6 @@ export function CreateNewRetro() {
   }
 
   const create = async () => {
-    // console.log('create');
     sessionStorage.setItem('retroname', retroName);
     setlocalRetroName(retroName);
 
@@ -143,8 +135,6 @@ export function CreateNewRetro() {
             payload: { loadingFlag: false },
           });
           navigate('/join/' + res.humanId);
-
-          // navigate('/retrodetails/');
         },
         err => {
           console.log('err', err);

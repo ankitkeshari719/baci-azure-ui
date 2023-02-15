@@ -136,11 +136,12 @@ export class BoardState {
   lastStateUpdate: Date | undefined;
   avatar: string | undefined;
   pulseCheck?: any;
-  template?: any
+  template?: any;
+  feedbackSubmitted?: boolean = false;
+  isFeedbackSubmittedByFacilitator?: number = 0;
 
-  constructor(retroId: string, columns: Column[]) {
+  constructor(retroId: string) {
     this.retroId = retroId;
-    this.columns = columns;
   }
 }
 

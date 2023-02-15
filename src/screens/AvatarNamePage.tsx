@@ -62,9 +62,6 @@ const styles = {
 
 export function AvatarNamePage() {
   const [global, dispatch] = React.useContext(GlobalContext);
-  // const [retroName, setRetroName] = React.useState(
-  //   sessionStorage.getItem('retroname') || ''
-  // );
   const {
     state: {
       users,
@@ -74,7 +71,7 @@ export function AvatarNamePage() {
       ended,
       needsToShow,
       retroStatus,
-      retroName
+      retroName,
     },
     commitAction,
   } = React.useContext(BoardContext);
@@ -183,7 +180,6 @@ export function AvatarNamePage() {
       if (userName === '') setCodeError('Please enter avatar name');
       else {
         setAvatarSelectionError('Please select avatar');
-        console.log(avatarSelectionError);
       }
     }
   };
@@ -206,41 +202,38 @@ export function AvatarNamePage() {
     setUserName(e);
   };
   React.useEffect(() => {
-  
-      if (
-        !global.user.id ||
-        global.user.id == undefined ||
-        global.user.id == null
-      ) {
-        useAzureAuth;
-      } else {
-      }
-      if (!global.currentRetro?.name) {
-        dispatch({
-          type: ActionType.SET_LOADING,
-          payload: { loadingFlag: true },
-        });
-        joinRetro(true).then(
-          res => {
-            dispatch({
-              type: ActionType.SET_LOADING,
-              payload: { loadingFlag: false },
-            });
-  
-            navigatorFunction();
-          },
-          err => {
-            dispatch({
-              type: ActionType.SET_LOADING,
-              payload: { loadingFlag: false },
-            });
-          }
-        );
-      } else {
-        navigatorFunction();
-      }
-    
- 
+    if (
+      !global.user.id ||
+      global.user.id == undefined ||
+      global.user.id == null
+    ) {
+      useAzureAuth;
+    } else {
+    }
+    if (!global.currentRetro?.name) {
+      dispatch({
+        type: ActionType.SET_LOADING,
+        payload: { loadingFlag: true },
+      });
+      joinRetro(true).then(
+        res => {
+          dispatch({
+            type: ActionType.SET_LOADING,
+            payload: { loadingFlag: false },
+          });
+
+          navigatorFunction();
+        },
+        err => {
+          dispatch({
+            type: ActionType.SET_LOADING,
+            payload: { loadingFlag: false },
+          });
+        }
+      );
+    } else {
+      navigatorFunction();
+    }
   }, [users, global?.user?.id]);
 
   const navigatorFunction = (): any => {
@@ -383,16 +376,15 @@ export function AvatarNamePage() {
                 Choose your avatar
               </Typography>
               <Box sx={styles.avatarBox}>
-                {avatarList
-                  .map((avatar: any, index) => (
-                    <Avatar
-                      key={index}
-                      avatar={avatar}
-                      css={styles.avatarSvg}
-                      onClickAvatar={onClickAvatar}
-                      selectedAvatar={selectedAvatar}
-                    ></Avatar>
-                  ))}
+                {avatarList.map((avatar: any, index) => (
+                  <Avatar
+                    key={index}
+                    avatar={avatar}
+                    css={styles.avatarSvg}
+                    onClickAvatar={onClickAvatar}
+                    selectedAvatar={selectedAvatar}
+                  ></Avatar>
+                ))}
               </Box>
               {avatarSelectionError !== '' && (
                 <Box

@@ -1,4 +1,4 @@
-import { Typography, Box, Button } from '@mui/material';
+import { Typography, Button } from '@mui/material';
 import React from 'react';
 import { GlobalContext } from '../contexts/GlobalContext';
 
@@ -34,20 +34,16 @@ const SessionEndingMessage = ({
       <Button
         variant="contained"
         sx={{
-          // background: '#159ADD',
-          // color: 'white',
           borderRadius: '24px',
           width: '148px',
           height: '44px',
-          // padding: '10px 20px',
-          // marginRight: '40px',
+
           fontWeight: 500,
           filter: 'blur(3px)',
         }}
       >
         LEAVE RETRO
       </Button>
-      {/* </Box> */}
       <Typography
         sx={{
           fontWeight: '600',
@@ -63,9 +59,7 @@ const SessionEndingMessage = ({
         {global.user.userType == 2 ? 'FINISH RETRO' : 'LEAVE RETRO'} button.
       </Typography>
       <Typography
-        // type="button"
         onClick={hideSessionEndingMessage}
-        // onTouchStart={hideSessionEndingMessage}
         sx={{
           textDecorationLine: 'underline',
           marginTop: '18px',

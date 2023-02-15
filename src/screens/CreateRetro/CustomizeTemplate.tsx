@@ -4,6 +4,7 @@ import {
   AppBar,
   Box,
   Button,
+  Dialog,
   Grid,
   styled,
   TextField,
@@ -18,6 +19,10 @@ import * as Icons from 'heroicons-react';
 import EdiText from 'react-editext';
 import theme from '../../theme/theme';
 import './styles.scss';
+import { BoardContext } from '../../contexts/BoardContext';
+import { BoardActionType } from '../../statemachine/BoardStateMachine';
+import { ActionType, GlobalContext } from '../../contexts/GlobalContext';
+import { CustomizeTemplateDialog } from './CustomizeTemplateDialog';
 
 const ColumnComponent = styled('div')({
   height: 'calc(var(--app-height) - 160px)',
@@ -25,6 +30,15 @@ const ColumnComponent = styled('div')({
   flexGrow: 1,
   padding: 0,
 });
+
+const BootstrapDialog = styled(Dialog)(({ theme }) => ({
+  '& .MuiDialogContent-root': {
+    padding: theme.spacing(2),
+  },
+  '& .MuiDialogActions-root': {
+    padding: theme.spacing(1),
+  },
+}));
 
 const StyledEdiText = styled(EdiText)`
   width: 100%;
@@ -74,34 +88,65 @@ const StyledEdiText = styled(EdiText)`
 type Props = {
   closeCustomTemplateDialog: () => void;
   selectedTemplate: any;
-  handleTemplateSelectClick: (selectedTemplateId: string) => void;
+  handleTemplateSelectClick: (
+    selectedTemplateId: string,
+    selectedTemplate: any
+  ) => void;
   setIsTemplateCustomized: (isTemplateCustomized: boolean) => void;
   setSelectedTemplate: (selectedTemplate: any) => void;
+  customizedTemplate: any;
+  isTemplateCustomized: boolean;
 };
 
 export function CustomizeTemplate({
   closeCustomTemplateDialog,
   selectedTemplate,
   handleTemplateSelectClick,
-  setSelectedTemplate,
   setIsTemplateCustomized,
+  customizedTemplate,
+  isTemplateCustomized,
 }: Props) {
   const isXsUp = useMediaQuery(theme.breakpoints.only('xs'));
+  const { commitAction } = React.useContext(BoardContext);
+  const [global, dispatch] = React.useContext(GlobalContext);
+  const [isChangesHappen, setIsChangesHappen] = React.useState<boolean>(false);
+  const [isChangeDialogOpen, setIsChangeDialogOpen] = React.useState(false);
+
   const [tempSelectedTemplate, setTempSelectedTemplate] = React.useState<any>();
   const [dragDropList, setDragDropList] = React.useState<any>([]);
   const [initialHeight, setInitialHeight] = React.useState<string>('60px');
 
   React.useEffect(() => {
-    setTempSelectedTemplate(selectedTemplate);
-    const newArr =
-      selectedTemplate.columns &&
-      selectedTemplate.columns.map((element: any) => ({
-        ...element,
-        isHovered: false,
-      }));
-    setDragDropList(newArr);
+    if (!isTemplateCustomized) {
+      setTempSelectedTemplate(selectedTemplate);
+      localStorage.setItem(
+        'selectedTemplate',
+        JSON.stringify(selectedTemplate)
+      );
+      const newArr =
+        selectedTemplate.columns &&
+        selectedTemplate.columns.map((element: any) => ({
+          ...element,
+          isHovered: false,
+        }));
+      setDragDropList(newArr);
+    } else {
+      setTempSelectedTemplate(customizedTemplate);
+      localStorage.setItem(
+        'selectedTemplate',
+        JSON.stringify(customizedTemplate)
+      );
+      const newArr =
+        customizedTemplate.columns &&
+        customizedTemplate.columns.map((element: any) => ({
+          ...element,
+          isHovered: false,
+        }));
+      setDragDropList(newArr);
+    }
   }, []);
 
+  // On Dragging the Column
   const onDragComplete = (result: any) => {
     if (!result.destination) return;
     const arr = [...dragDropList];
@@ -112,17 +157,15 @@ export function CustomizeTemplate({
 
     //Updating the list
     setDragDropList(arr);
-
-    // Removing the isHovered
-    arr.forEach(function (v: any) {
-      delete v.isHovered;
-    });
-
+    setIsChangesHappen(true);
     setTempSelectedTemplate({ ...tempSelectedTemplate, columns: [...arr] });
-
-    setSelectedTemplate(tempSelectedTemplate);
+    localStorage.setItem(
+      'selectedTemplate',
+      JSON.stringify({ ...tempSelectedTemplate, columns: [...arr] })
+    );
   };
 
+  // On Changing the column name
   const handleColumnNameChange = (
     value: React.SetStateAction<string>,
     columnId: string
@@ -142,14 +185,34 @@ export function CustomizeTemplate({
     } else if (value.length > 120 && value.length <= 150) {
       setInitialHeight('140px !important');
     }
-    setIsTemplateCustomized(true);
-    data.forEach(function (v: any) {
-      delete v.isHovered;
-    });
-
+    setIsChangesHappen(true);
+    localStorage.setItem(
+      'selectedTemplate',
+      JSON.stringify({ ...tempSelectedTemplate, columns: [...data] })
+    );
     setTempSelectedTemplate({ ...tempSelectedTemplate, columns: [...data] });
+  };
 
-    setSelectedTemplate(tempSelectedTemplate);
+  // Function to handle the select button click
+  const onClickSelectButton = (templateId: string) => {
+    setIsTemplateCustomized(true);
+    const localStorageTemplateTemp = localStorage.getItem('selectedTemplate');
+    const localStorageTemplate =
+      localStorageTemplateTemp && JSON.parse(localStorageTemplateTemp);
+    closeCustomTemplateDialog();
+    handleTemplateSelectClick(templateId, localStorageTemplate);
+  };
+
+  const handleIsChangeDialogClose = () => {
+    setIsChangeDialogOpen(false);
+  };
+
+  const onClickBack = () => {
+    if (isChangesHappen) {
+      setIsChangeDialogOpen(true);
+    } else {
+      closeCustomTemplateDialog();
+    }
   };
 
   const handleMouseEnter = (i: number) => {
@@ -172,12 +235,6 @@ export function CustomizeTemplate({
     setDragDropList(newArr);
   };
 
-  // Function to handle the select button click
-  const onClickSelectButton = (templateId: string) => {
-    handleTemplateSelectClick(selectedTemplate.templateId);
-    closeCustomTemplateDialog();
-  };
-
   const setValueLive = (e: any, columnId: string) => {
     if (e.target.value.length > 150 && e.keyCode !== 46 && e.keyCode !== 8) {
       e.preventDefault();
@@ -188,211 +245,251 @@ export function CustomizeTemplate({
   };
 
   return (
-    <Box className="mainContainer">
-      <TopBar />
-      <Grid container spacing={0} className="retroContainer">
-        {/* About Template */}
-        <Grid item xs={12}>
-          <Box component="div" whiteSpace="normal" className="createRetroText">
-            Customize Template
-          </Box>
-        </Grid>
-        {/* App bar */}
-        <Grid item xs={12} sx={{ mt: 4 }}>
-          <AppBar position="static" className="learnMoreAppBar">
-            <Toolbar
-              variant="dense"
-              sx={{
-                display: 'flex',
-                alignItems: 'center',
-                paddingLeft: '0px !important',
-              }}
+    <>
+      <Box className="mainContainer">
+        <TopBar />
+        <Grid container spacing={0} className="retroContainer">
+          {/* About Template */}
+          <Grid item xs={12}>
+            <Box
+              component="div"
+              whiteSpace="normal"
+              className="createRetroText"
             >
-              <Icons.ArrowCircleLeftOutline
-                size={20}
-                style={{
-                  width: '24px',
-                  height: '24px',
-                  display: 'block',
-                  right: '0px',
-                  color: '#159ADD',
-                  fontSize: '14px',
-                  cursor: 'pointer',
+              Customize Template
+            </Box>
+          </Grid>
+          {/* App bar */}
+          <Grid item xs={12} sx={{ mt: 4 }}>
+            <AppBar position="static" className="learnMoreAppBar">
+              <Toolbar
+                variant="dense"
+                sx={{
+                  display: 'flex',
+                  alignItems: 'center',
+                  paddingLeft: '0px !important',
                 }}
-                onClick={closeCustomTemplateDialog}
-              />
-              <Typography
-                sx={{ ml: 1, flex: 1 }}
-                component="div"
-                className="selectedTemplate"
               >
-                {tempSelectedTemplate && tempSelectedTemplate.templateName}
-              </Typography>
-              <Button
-                autoFocus
-                variant="contained"
-                className="saveButton"
-                onClick={() => onClickSelectButton(selectedTemplate.templateId)}
-              >
-                <Typography className="saveButtonText" component="span">
-                  Select
-                </Typography>
-              </Button>
-            </Toolbar>
-          </AppBar>
-        </Grid>
-        {/* Columns */}
-        <Box
-          sx={{ display: 'flex', flexDirection: 'row', width: '100%', mt: 4 }}
-        >
-          <DragDropContext onDragEnd={onDragComplete}>
-            <Droppable droppableId="drag-drop-list" direction="horizontal">
-              {(provided, snapshot) => (
-                <div
-                  className="drag-drop-list-container"
-                  {...provided.droppableProps}
-                  ref={provided.innerRef}
+                <Icons.ArrowCircleLeftOutline
+                  size={20}
+                  style={{
+                    width: '24px',
+                    height: '24px',
+                    display: 'block',
+                    right: '0px',
+                    color: '#159ADD',
+                    fontSize: '14px',
+                    cursor: 'pointer',
+                  }}
+                  onClick={onClickBack}
+                />
+                <Typography
+                  sx={{ ml: 1, flex: 1 }}
+                  component="div"
+                  className="selectedTemplate"
                 >
-                  {dragDropList.map((column: any, index: number) => (
-                    <Draggable
-                      key={column.id}
-                      draggableId={column.id}
-                      index={index}
-                    >
-                      {provided => (
-                        <Grid
-                          item
-                          xs={4}
-                          sx={{
-                            marginLeft: index === 1 ? '48px' : '0px',
-                            marginRight: index === 1 ? '48px' : '0px',
-                          }}
-                          ref={provided.innerRef}
-                          {...provided.draggableProps}
-                          {...provided.dragHandleProps}
-                          onMouseEnter={() => handleMouseEnter(index)}
-                          onMouseLeave={() => handleMouseLeave(index)}
-                        >
-                          <ColumnComponent
+                  {tempSelectedTemplate && tempSelectedTemplate.templateName}
+                </Typography>
+                <Button
+                  autoFocus
+                  variant="contained"
+                  className="saveButton"
+                  onClick={() =>
+                    onClickSelectButton(selectedTemplate.templateId)
+                  }
+                >
+                  <Typography className="saveButtonText" component="span">
+                    Select
+                  </Typography>
+                </Button>
+              </Toolbar>
+            </AppBar>
+          </Grid>
+          {/* Columns */}
+          <Box
+            sx={{ display: 'flex', flexDirection: 'row', width: '100%', mt: 4 }}
+          >
+            <DragDropContext onDragEnd={onDragComplete}>
+              <Droppable droppableId="drag-drop-list" direction="horizontal">
+                {(provided, snapshot) => (
+                  <div
+                    className="drag-drop-list-container"
+                    {...provided.droppableProps}
+                    ref={provided.innerRef}
+                  >
+                    {dragDropList.map((column: any, index: number) => (
+                      <Draggable
+                        key={column.id}
+                        draggableId={column.id}
+                        index={index}
+                      >
+                        {provided => (
+                          <Grid
+                            item
+                            xs={4}
                             sx={{
-                              height: isXsUp
-                                ? 'calc(var(--app-height) - 115px)'
-                                : 'calc(var(--app-height) - 160px)',
+                              marginLeft: index === 1 ? '48px' : '0px',
+                              marginRight: index === 1 ? '48px' : '0px',
                             }}
+                            ref={provided.innerRef}
+                            {...provided.draggableProps}
+                            {...provided.dragHandleProps}
+                            onMouseEnter={() => handleMouseEnter(index)}
+                            onMouseLeave={() => handleMouseLeave(index)}
                           >
-                            <Box>
-                              {column.isHovered && (
-                                <span>
-                                  <img
-                                    src="/images/drag_icon.png"
-                                    style={{
-                                      width: '20px',
-                                      height: '36px',
-                                      cursor: 'pointer',
-                                      position: 'relative',
-                                      top: ' 16px',
-                                    }}
-                                  />
-                                </span>
-                              )}
-                            </Box>
-                            <Box
+                            <ColumnComponent
                               sx={{
-                                width: '100%',
-                                background: column.cardColor,
-                                border: '1px solid ' + column.groupFontColor,
-                                borderRadius: '8px',
+                                height: isXsUp
+                                  ? 'calc(var(--app-height) - 115px)'
+                                  : 'calc(var(--app-height) - 160px)',
                               }}
                             >
+                              <Box>
+                                {column.isHovered && (
+                                  <span>
+                                    <img
+                                      src="/images/drag_icon.png"
+                                      style={{
+                                        width: '20px',
+                                        height: '36px',
+                                        cursor: 'pointer',
+                                        position: 'relative',
+                                        top: ' 16px',
+                                      }}
+                                    />
+                                  </span>
+                                )}
+                              </Box>
                               <Box
-                                whiteSpace="normal"
                                 sx={{
                                   width: '100%',
-                                  height: initialHeight,
-                                  display: 'flex',
-                                  justifyContent: 'center',
-                                  alignItems: 'center',
-                                  borderRadius: '9px 9px 0px 0px',
-                                  background: column.groupColor,
-                                  wordBreak: 'break-all',
+                                  background: column.cardColour,
+                                  border: '1px solid ' + column.groupFontColour,
+                                  borderRadius: '8px',
                                 }}
                               >
-                                <StyledEdiText
-                                  type="text"
-                                  value={column.name}
-                                  showButtonsOnHover
-                                  onSave={value =>
-                                    handleColumnNameChange(value, column.id)
-                                  }
-                                  validationMessage="Maximum 150 characters allowed."
-                                  validation={val => val.length <= 150}
-                                  inputProps={{
-                                    onChange: (
-                                      e: React.ChangeEvent<HTMLInputElement>
-                                    ) => {
-                                      setValueLive(e, column.id);
-                                    },
-                                    style: {
-                                      color:
-                                        column.groupFontColor + '!important',
-                                      fontSize: '16px',
-                                      fontWeight: 600,
-                                      fontFamily: 'Poppins',
-                                      fontStyle: 'normal',
-                                      lineHeight: '20px',
-                                      display: 'flex',
-                                      alignItems: 'center',
-                                      letterSpacing: '0.6px',
-                                      borderRadius: '8px',
-                                      wordBreak: 'break-all',
-                                    },
+                                <Box
+                                  whiteSpace="normal"
+                                  sx={{
+                                    width: '100%',
+                                    height: initialHeight,
+                                    display: 'flex',
+                                    justifyContent: 'center',
+                                    alignItems: 'center',
+                                    borderRadius: '9px 9px 0px 0px',
+                                    background: column.groupColour,
+                                    wordBreak: 'break-all',
                                   }}
-                                  hideIcons={true}
-                                  editButtonContent={
-                                    <Icons.PencilOutline
-                                      size={20}
-                                      style={{
-                                        color: '#000000',
-                                        fontSize: '14px',
-                                        cursor: 'pointer',
-                                      }}
-                                    />
-                                  }
-                                  cancelButtonContent={
-                                    <Icons.XOutline
-                                      size={20}
-                                      style={{
-                                        color: '#000000',
-                                        fontSize: '14px',
-                                        cursor: 'pointer',
-                                      }}
-                                    />
-                                  }
-                                  saveButtonContent={
-                                    <Icons.Check
-                                      size={20}
-                                      style={{
-                                        color: '#000000',
-                                        fontSize: '14px',
-                                        cursor: 'pointer',
-                                      }}
-                                    />
-                                  }
-                                />
+                                >
+                                  <StyledEdiText
+                                    type="text"
+                                    value={column.name}
+                                    showButtonsOnHover
+                                    onSave={value =>
+                                      handleColumnNameChange(value, column.id)
+                                    }
+                                    validationMessage="Maximum 150 characters allowed."
+                                    validation={val => val.length <= 150}
+                                    inputProps={{
+                                      onChange: (
+                                        e: React.ChangeEvent<HTMLInputElement>
+                                      ) => {
+                                        setValueLive(e, column.id);
+                                      },
+                                      style: {
+                                        color:
+                                          column.groupFontColour + '!important',
+                                        fontSize: '16px',
+                                        fontWeight: 600,
+                                        fontFamily: 'Poppins',
+                                        fontStyle: 'normal',
+                                        lineHeight: '20px',
+                                        display: 'flex',
+                                        alignItems: 'center',
+                                        letterSpacing: '0.6px',
+                                        borderRadius: '8px',
+                                        wordBreak: 'break-all',
+                                      },
+                                    }}
+                                    hideIcons={true}
+                                    editButtonContent={
+                                      <Icons.PencilOutline
+                                        size={20}
+                                        style={{
+                                          color: '#000000',
+                                          fontSize: '14px',
+                                          cursor: 'pointer',
+                                        }}
+                                      />
+                                    }
+                                    cancelButtonContent={
+                                      <Icons.XOutline
+                                        size={20}
+                                        style={{
+                                          color: '#000000',
+                                          fontSize: '14px',
+                                          cursor: 'pointer',
+                                        }}
+                                      />
+                                    }
+                                    saveButtonContent={
+                                      <Icons.Check
+                                        size={20}
+                                        style={{
+                                          color: '#000000',
+                                          fontSize: '14px',
+                                          cursor: 'pointer',
+                                        }}
+                                      />
+                                    }
+                                  />
+                                </Box>
                               </Box>
-                            </Box>
-                          </ColumnComponent>
-                        </Grid>
-                      )}
-                    </Draggable>
-                  ))}
-                  {provided.placeholder}
-                </div>
-              )}
-            </Droppable>
-          </DragDropContext>
-        </Box>
-      </Grid>
-    </Box>
+                            </ColumnComponent>
+                          </Grid>
+                        )}
+                      </Draggable>
+                    ))}
+                    {provided.placeholder}
+                  </div>
+                )}
+              </Droppable>
+            </DragDropContext>
+          </Box>
+        </Grid>
+      </Box>
+      <BootstrapDialog
+        open={isChangeDialogOpen}
+        onClose={handleIsChangeDialogClose}
+        aria-labelledby="customized-dialog-title"
+        PaperProps={{
+          sx: {
+            width: '800px',
+            height: '418px',
+            maxWidth: '800px',
+            minHeight: '418px',
+            padding: isXsUp ? '16px' : '0px',
+            display: 'flex',
+            flexDirection: 'column',
+            alignItems: 'center',
+            overflowX: 'hidden',
+            background: '#FFFFFF',
+            boxShadow: '0px 1px 10px rgba(0, 0, 0, 0.15)',
+            borderRadius: '20px',
+          },
+        }}
+        sx={{
+          boxShadow: '0px 1px 10px rgba(0, 0, 0, 0.15)',
+          borderRadius: '20px',
+        }}
+      >
+        <CustomizeTemplateDialog
+          handleIsChangeDialogClose={handleIsChangeDialogClose}
+          closeCustomTemplateDialog={closeCustomTemplateDialog}
+          templateId={selectedTemplate.templateId}
+          onClickSelectButton={onClickSelectButton}
+        />
+      </BootstrapDialog>
+    </>
   );
 }

@@ -1,9 +1,6 @@
 import {
   ACTIONS_COLUMN,
   FEEDBACK_QUESTIONS,
-  FEEDBACK_QUESTIONS_COLORS,
-  FEEDBACK_QUESTIONS_FILLED,
-  FEEDBACK_QUESTIONS_OUTLINE,
   PULSE_CHECK_QUESTIONS,
   QUICK_PULSE_CHECK_QUESTIONS,
   WHAT_DIDNT_GO_WELL,
@@ -19,9 +16,8 @@ import {
   styled,
   LinearProgress,
   linearProgressClasses,
-  Button,
 } from '@mui/material';
-import StackedBarChart, { Question } from './PulseCheckChart';
+import { Question } from './PulseCheckChart';
 import WordCloud, { Word } from './WordCloud';
 import { eng, removeStopwords } from 'stopword';
 import commonStyles from './../style.module.scss';
@@ -29,11 +25,9 @@ import './../global.scss';
 import { BoardContext } from '../contexts/BoardContext';
 import React from 'react';
 import { RetroColumn } from './RetroColumn';
-import StarIcon from '@mui/icons-material/Star';
 import * as Icons from 'heroicons-react';
 import Toolbar from '../elements/Toolbar';
 import { GlobalContext } from '../contexts/GlobalContext';
-import { display } from '@mui/system';
 import ReactToPrint from 'react-to-print';
 import { Bar } from 'react-chartjs-2';
 import {
@@ -165,14 +159,15 @@ export const Report = React.forwardRef((props, ref) => {
     },
   } = React.useContext(BoardContext);
 
-  const [wentWellwords, setwentWellwords] = React.useState<Word[]>([]);
-  const [didntWentWellwords, setdidntWentWellwords] = React.useState<Word[]>(
-    []
-  );
-  const [barData, setBarData] = React.useState<{ 1: any; 2: any; 3: any }[]>(
+  const [wentWellWords, setWentWellWords] = React.useState<Word[]>([]);
+  const [didNotWentWellWords, setDidNotWentWellWords] = React.useState<Word[]>(
     []
   );
   const [actions, setActions] = React.useState<string[]>([]);
+
+  const [barData, setBarData] = React.useState<{ 1: any; 2: any; 3: any }[]>(
+    []
+  );
   const [questions, setQuestions] = React.useState<Question[]>([]);
   const [feedback, setFeedback] = React.useState<any | undefined>();
   const [islanded, setIsLanded] = React.useState(true);
@@ -197,40 +192,79 @@ export const Report = React.forwardRef((props, ref) => {
     }).format(new Date());
     setRetroDate(longEnUSFormatter);
   });
-  React.useEffect(() => {
-    console.log(componentRef);
-  });
-  React.useEffect(() => {
-    const wentWell_cardValues = [] as string[];
-    const didntWentWell_cardValues = [] as string[];
 
-    columns[ACTIONS_COLUMN].groups.forEach(group =>
-      group.cards.forEach(card => {
-        actions.push(card.value);
-      })
-    );
-    setActions(actions);
-    //for went well word cloud
-    columns[WHAT_WENT_WELL_COLUMN].groups.forEach(group =>
-      group.cards.forEach(card => {
-        const clean = card.value.replace(/[\W_]+/g, ' ').trim();
-        if (clean !== '') wentWell_cardValues.push(clean);
-      })
-    );
+  React.useEffect(() => {
+    const wentWellCardValues = [] as string[];
+    const didNotWentWellCardValues = [] as string[];
+    const actionsCardValues = [] as string[];
+    let wentWellWordCloudData = [];
+    let didNotWentWellWordCloudData = [];
 
-    //for went well word cloud
-    const total = Object.values(wentWell_cardValues)
+    // What Went Well Data
+    columns.forEach(column => {
+      if (column.id === '0') {
+        column.groups.forEach(group => {
+          group.cards.forEach(card => {
+            const clean = card.value.replace(/[\W_]+/g, ' ').trim();
+            if (clean !== '') wentWellCardValues.push(clean);
+          });
+        });
+      }
+    });
+
+    // What Went Well Total
+    const wentWellCardValuesTotal = Object.values(wentWellCardValues)
       .join(' ')
       .toLowerCase()
       .split(' ');
-    let wordsMaps_wentWell = [];
-    if (total.length !== 0) {
-      const noStopwords = removeStopwords(total, [
+
+    // Getting the what went well word cloud data
+    if (wentWellCardValuesTotal.length !== 0) {
+      const noStopWords = removeStopwords(wentWellCardValuesTotal, [
         ...eng,
         ...WORD_CLOUD_IGNORE_WORDS,
       ]);
 
-      wordsMaps_wentWell = noStopwords
+      wentWellWordCloudData = noStopWords
+        .reduce((current: { text: string; size: number }[], text: string) => {
+          const exist = current.find(c => c.text === text);
+          if (exist) {
+            exist.size++;
+          } else if (text.length > 2) {
+            current.push({ text, size: 1 });
+          }
+          return current;
+        }, [])
+        .filter((entry: { text: string; size: number }) => entry.size >= 2);
+    }
+    setWentWellWords(wentWellWordCloudData);
+
+    // Did Not Went Well Data
+    columns.forEach(column => {
+      if (column.id === '1') {
+        column.groups.forEach(group => {
+          group.cards.forEach(card => {
+            const clean = card.value.replace(/[\W_]+/g, ' ').trim();
+            if (clean !== '') didNotWentWellCardValues.push(clean);
+          });
+        });
+      }
+    });
+
+    //  Did Not Went Well Total
+    const didNotWellCardValuesTotal = Object.values(didNotWentWellCardValues)
+      .join(' ')
+      .toLowerCase()
+      .split(' ');
+
+    // Getting the what went did not well word cloud data
+    if (didNotWellCardValuesTotal.length !== 0) {
+      const noStopWords = removeStopwords(didNotWellCardValuesTotal, [
+        ...eng,
+        ...WORD_CLOUD_IGNORE_WORDS,
+      ]);
+
+      didNotWentWellWordCloudData = noStopWords
         .reduce((current: { text: string; size: number }[], text: string) => {
           const exist = current.find(c => c.text === text);
 
@@ -243,46 +277,22 @@ export const Report = React.forwardRef((props, ref) => {
         }, [])
         .filter((entry: { text: string; size: number }) => entry.size >= 2);
     }
-    // console.log(wordsMaps_wentWell);
-    setwentWellwords(wordsMaps_wentWell);
+    setDidNotWentWellWords(didNotWentWellWordCloudData);
 
-    //for didn't went well word cloud
-    columns[WHAT_DIDNT_GO_WELL].groups.forEach(group =>
-      group.cards.forEach(card => {
-        const clean = card.value.replace(/[\W_]+/g, ' ').trim();
+    // Action Data
+    columns.forEach(column => {
+      if (column.id === '2') {
+        column.groups.forEach(group => {
+          group.cards.forEach(card => {
+            const clean = card.value.replace(/[\W_]+/g, ' ').trim();
+            if (clean !== '') actionsCardValues.push(clean);
+          });
+        });
+      }
+    });
+    setActions(actionsCardValues);
 
-        if (clean !== '') didntWentWell_cardValues.push(clean);
-      })
-    );
-    const totalvalues = Object.values(didntWentWell_cardValues)
-      .join(' ')
-      .toLowerCase()
-      .split(' ');
-    let wordsMaps_didntWentWell = [];
-    if (totalvalues.length !== 0) {
-      const noStopwords = removeStopwords(totalvalues, [
-        ...eng,
-        ...WORD_CLOUD_IGNORE_WORDS,
-      ]);
-
-      wordsMaps_didntWentWell = noStopwords
-        .reduce((current: { text: string; size: number }[], text: string) => {
-          const exist = current.find(c => c.text === text);
-
-          if (exist) {
-            exist.size++;
-          } else if (text.length > 2) {
-            current.push({ text, size: 1 });
-          }
-          return current;
-        }, [])
-        .filter((entry: { text: string; size: number }) => entry.size >= 2);
-    }
-    // console.log(wordsMaps_didntWentWell);
-    setdidntWentWellwords(wordsMaps_didntWentWell);
-
-    //get total count of user submitted the pulsechek
-
+    //Get total count of user submitted the pulsechek
     const newQuestions = [] as Question[];
     const feedbackValues = {} as any;
     const feedbackCount = {} as any;
@@ -301,12 +311,7 @@ export const Report = React.forwardRef((props, ref) => {
           feedbackCount[feedback.id] =
             (feedbackCount[feedback.id] ? feedbackCount[feedback.id] : 0) + 1;
         }
-        // console.log(feedback);
       });
-      // [feedbackValues, feedbackCount].map((index)=>{
-      //   index[0][index]=index[0][index]/ index[1][index]
-      // })
-      // console.log([feedbackValues, feedbackCount]);
       user?.pulseCheckQuestions.forEach(question => {
         totalPulseCheckCount = totalPulseCheckCount + 1;
         const text = (questionsDef as any)[question.id];
@@ -327,36 +332,33 @@ export const Report = React.forwardRef((props, ref) => {
       });
     });
 
-    // console.log('total pulsecount', totalPulseCheckCount);
     if (Object.keys(feedbackValues).length !== 0) {
       setFeedback([feedbackValues, feedbackCount]);
     }
 
     setQuestions(newQuestions);
-    //formated data for bar chart
     const newArr = newQuestions.map(({ question, ...rest }) => {
       return rest;
     });
+
     newArr.map(data => {
       data[1] = Math.round((data[1] / totalPulseCheckCount) * 100);
       data[2] = Math.round((data[2] / totalPulseCheckCount) * 100);
       data[3] = Math.round((data[3] / totalPulseCheckCount) * 100);
     });
+
     let sampleArray: any = [];
     newArr.map(data => {
       return sampleArray.push(Object.values(data));
     });
-    // console.log('sample', sampleArray);
+
     let tempArr: any = [];
     if (sampleArray.length === 3) {
       tempArr.push([sampleArray[0][0], sampleArray[1][0], sampleArray[2][0]]);
       tempArr.push([sampleArray[0][1], sampleArray[1][1], sampleArray[2][1]]);
       tempArr.push([sampleArray[0][2], sampleArray[1][2], sampleArray[2][2]]);
     }
-
     setBarData(tempArr);
-    // console.log('bar', barData);
-    // console.log('format', newQuestions, feedbackValues, feedbackCount);
   }, [lastStateUpdate]);
 
   return (
@@ -454,7 +456,7 @@ export const Report = React.forwardRef((props, ref) => {
                   What Went Well
                 </Typography>
 
-                {wentWellwords.length !== 0 ? (
+                {wentWellWords.length !== 0 ? (
                   <>
                     <Grid
                       item
@@ -464,7 +466,7 @@ export const Report = React.forwardRef((props, ref) => {
                       height="272px"
                     >
                       <WordCloud
-                        data={wentWellwords}
+                        data={wentWellWords}
                         showOn="whatWentWell"
                       ></WordCloud>
                     </Grid>{' '}
@@ -481,7 +483,7 @@ export const Report = React.forwardRef((props, ref) => {
                 >
                   What Didn’t Go Well
                 </Typography>
-                {didntWentWellwords.length !== 0 ? (
+                {didNotWentWellWords.length !== 0 ? (
                   <>
                     <Grid
                       item
@@ -491,7 +493,7 @@ export const Report = React.forwardRef((props, ref) => {
                       height="272px"
                     >
                       <WordCloud
-                        data={didntWentWellwords}
+                        data={didNotWentWellWords}
                         showOn="whatDidntWentWell"
                       ></WordCloud>
                     </Grid>{' '}
@@ -508,15 +510,10 @@ export const Report = React.forwardRef((props, ref) => {
                 >
                   Actions
                 </Typography>
-                <Box   ml="24px"
-                  mt="24px"
-                  mr="24px"
-                  
-                  >
+                <Box ml="24px" mt="24px" mr="24px">
                   {actions.length !== 0 ? (
                     <>
                       <RetroColumn
-                      
                         leftHeaderComponent={undefined}
                         rightHeaderComponent={undefined}
                         noHeightLimit
@@ -795,4 +792,3 @@ export const Report = React.forwardRef((props, ref) => {
     </Box>
   );
 });
-

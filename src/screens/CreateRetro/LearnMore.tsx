@@ -10,7 +10,10 @@ type Props = {
   selectedTemplate: any;
   closeLearnMoreDialog: () => void;
   handleCustomTemplateDialog: () => void;
-  handleTemplateSelectClick: (selectedTemplateId: string) => void;
+  handleTemplateSelectClick: (
+    selectedTemplateId: string,
+    selectedTemplate: any
+  ) => void;
 };
 
 export function LearnMore({
@@ -21,7 +24,7 @@ export function LearnMore({
 }: Props) {
   // Function to handle the select button click
   const onClickSelectButton = (templateId: string) => {
-    handleTemplateSelectClick(templateId);
+    handleTemplateSelectClick(templateId, selectedTemplate);
     closeLearnMoreDialog();
   };
 
