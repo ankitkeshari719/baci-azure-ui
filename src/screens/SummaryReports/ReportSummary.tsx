@@ -7,7 +7,6 @@ import * as Icons from 'heroicons-react';
 import theme from '../../theme/theme';
 import {
   Box,
-  Grid,
   Typography,
   styled,
   useMediaQuery,
@@ -35,13 +34,10 @@ import {
   FEEDBACK_QUESTIONS,
 } from '../../constants';
 import { Question } from '../../elements/PulseCheckChart';
-import WordCloud, { Word } from '../../elements/WordCloud';
-import { RetroColumn } from '../../elements/RetroColumn';
+import { Word } from '../../elements/WordCloud';
 import { BoardContext } from '../../contexts/BoardContext';
 import { ActionType, GlobalContext } from '../../contexts/GlobalContext';
 import { ViewParticipants } from './ViewParticipants';
-import { LazyLoadImage } from 'react-lazy-load-image-component';
-import Avatar from '../../elements/Avatar';
 import { ContainedButton } from '../../components';
 import { addFeedback } from '../../msal/services';
 import happy from '../../assets/img/happy.png';
@@ -262,10 +258,10 @@ export const ReportSummary = React.forwardRef((props, ref) => {
   const windowWidth = React.useRef(window.innerWidth);
   const windowHeight = React.useRef(window.innerHeight);
 
-  React.useEffect(() => {
-    console.log('width: ', windowWidth.current);
-    console.log('height: ', windowHeight.current);
-  });
+  // React.useEffect(() => {
+  //   console.log('width: ', windowWidth.current);
+  //   console.log('height: ', windowHeight.current);
+  // });
 
   React.useEffect(() => {
     const wentWellCardValues = [] as string[];
@@ -315,7 +311,6 @@ export const ReportSummary = React.forwardRef((props, ref) => {
         setActionColumnName(column.name);
       }
     });
-    console.log('columns:: ', columns);
 
     // --------------------------------------------------- What Went Well Data ------------------------------------------------
     columns.forEach(column => {
@@ -1005,41 +1000,133 @@ export const ReportSummary = React.forwardRef((props, ref) => {
               </>
             )}
           </Row>
-          <WhatWentWell
-            wentWellColumnName={wentWellColumnName}
-            wentWellCreatedBy={wentWellCreatedBy}
-            users={users}
-            wentWellWords={wentWellWords}
-            handleIsWellCloudOpen={handleIsWellCloudOpen}
-            isWellCloudOpen={isWellCloudOpen}
-            wentWellTopVotedCards={wentWellTopVotedCards}
-            wentWellTopVotedCardsPrint_1={wentWellTopVotedCardsPrint_1}
-            wentWellTopVotedCardsPrint_2={wentWellTopVotedCardsPrint_2}
-          />
-          <DidNotWentWell
-            didNotWentWellColumnName={didNotWentWellColumnName}
-            didNotWentWellCreatedBy={didNotWentWellCreatedBy}
-            users={users}
-            didNotWentWellWords={didNotWentWellWords}
-            handleIsNotWellCloudOpen={handleIsNotWellCloudOpen}
-            isNotWellCloudOpen={isNotWellCloudOpen}
-            didNotWentWellTopVotedCards={didNotWentWellTopVotedCards}
-            didNotWentWellTopVotedCardsPrint_1={
-              didNotWentWellTopVotedCardsPrint_1
-            }
-            didNotWentWellTopVotedCardsPrint_2={
-              didNotWentWellTopVotedCardsPrint_2
-            }
-          />
-          <DevelopAction
-            actionCardData={actionCardData}
-            copyAllActions={copyAllActions}
-            handleIsActionCloudOpen={handleIsActionCloudOpen}
-            users={users}
-            isAllActionOpen={isAllActionOpen}
-            actionTopVotedCards={actionTopVotedCards}
-            actionLastVotedCards={actionLastVotedCards}
-          />
+          {/* Section 1*/}
+          {columns && columns[0] && columns[0].id === '0' ? (
+            <WhatWentWell
+              wentWellColumnName={wentWellColumnName}
+              wentWellCreatedBy={wentWellCreatedBy}
+              users={users}
+              wentWellWords={wentWellWords}
+              handleIsWellCloudOpen={handleIsWellCloudOpen}
+              isWellCloudOpen={isWellCloudOpen}
+              wentWellTopVotedCards={wentWellTopVotedCards}
+              wentWellTopVotedCardsPrint_1={wentWellTopVotedCardsPrint_1}
+              wentWellTopVotedCardsPrint_2={wentWellTopVotedCardsPrint_2}
+            />
+          ) : null}
+          {columns && columns[0] && columns[0].id === '1' ? (
+            <DidNotWentWell
+              didNotWentWellColumnName={didNotWentWellColumnName}
+              didNotWentWellCreatedBy={didNotWentWellCreatedBy}
+              users={users}
+              didNotWentWellWords={didNotWentWellWords}
+              handleIsNotWellCloudOpen={handleIsNotWellCloudOpen}
+              isNotWellCloudOpen={isNotWellCloudOpen}
+              didNotWentWellTopVotedCards={didNotWentWellTopVotedCards}
+              didNotWentWellTopVotedCardsPrint_1={
+                didNotWentWellTopVotedCardsPrint_1
+              }
+              didNotWentWellTopVotedCardsPrint_2={
+                didNotWentWellTopVotedCardsPrint_2
+              }
+            />
+          ) : null}
+          {columns && columns[0] && columns[0].id === '2' ? (
+            <DevelopAction
+              actionCardData={actionCardData}
+              copyAllActions={copyAllActions}
+              handleIsActionCloudOpen={handleIsActionCloudOpen}
+              users={users}
+              isAllActionOpen={isAllActionOpen}
+              actionTopVotedCards={actionTopVotedCards}
+              actionLastVotedCards={actionLastVotedCards}
+            />
+          ) : null}
+
+          {/* Section 2*/}
+          {columns && columns[1] && columns[1].id === '0' ? (
+            <WhatWentWell
+              wentWellColumnName={wentWellColumnName}
+              wentWellCreatedBy={wentWellCreatedBy}
+              users={users}
+              wentWellWords={wentWellWords}
+              handleIsWellCloudOpen={handleIsWellCloudOpen}
+              isWellCloudOpen={isWellCloudOpen}
+              wentWellTopVotedCards={wentWellTopVotedCards}
+              wentWellTopVotedCardsPrint_1={wentWellTopVotedCardsPrint_1}
+              wentWellTopVotedCardsPrint_2={wentWellTopVotedCardsPrint_2}
+            />
+          ) : null}
+          {columns && columns[1] && columns[1].id === '1' ? (
+            <DidNotWentWell
+              didNotWentWellColumnName={didNotWentWellColumnName}
+              didNotWentWellCreatedBy={didNotWentWellCreatedBy}
+              users={users}
+              didNotWentWellWords={didNotWentWellWords}
+              handleIsNotWellCloudOpen={handleIsNotWellCloudOpen}
+              isNotWellCloudOpen={isNotWellCloudOpen}
+              didNotWentWellTopVotedCards={didNotWentWellTopVotedCards}
+              didNotWentWellTopVotedCardsPrint_1={
+                didNotWentWellTopVotedCardsPrint_1
+              }
+              didNotWentWellTopVotedCardsPrint_2={
+                didNotWentWellTopVotedCardsPrint_2
+              }
+            />
+          ) : null}
+          {columns && columns[1] && columns[1].id === '2' ? (
+            <DevelopAction
+              actionCardData={actionCardData}
+              copyAllActions={copyAllActions}
+              handleIsActionCloudOpen={handleIsActionCloudOpen}
+              users={users}
+              isAllActionOpen={isAllActionOpen}
+              actionTopVotedCards={actionTopVotedCards}
+              actionLastVotedCards={actionLastVotedCards}
+            />
+          ) : null}
+          {/* Section 3*/}
+          {columns && columns[2] && columns[2].id === '0' ? (
+            <WhatWentWell
+              wentWellColumnName={wentWellColumnName}
+              wentWellCreatedBy={wentWellCreatedBy}
+              users={users}
+              wentWellWords={wentWellWords}
+              handleIsWellCloudOpen={handleIsWellCloudOpen}
+              isWellCloudOpen={isWellCloudOpen}
+              wentWellTopVotedCards={wentWellTopVotedCards}
+              wentWellTopVotedCardsPrint_1={wentWellTopVotedCardsPrint_1}
+              wentWellTopVotedCardsPrint_2={wentWellTopVotedCardsPrint_2}
+            />
+          ) : null}
+          {columns && columns[2] && columns[2].id === '1' ? (
+            <DidNotWentWell
+              didNotWentWellColumnName={didNotWentWellColumnName}
+              didNotWentWellCreatedBy={didNotWentWellCreatedBy}
+              users={users}
+              didNotWentWellWords={didNotWentWellWords}
+              handleIsNotWellCloudOpen={handleIsNotWellCloudOpen}
+              isNotWellCloudOpen={isNotWellCloudOpen}
+              didNotWentWellTopVotedCards={didNotWentWellTopVotedCards}
+              didNotWentWellTopVotedCardsPrint_1={
+                didNotWentWellTopVotedCardsPrint_1
+              }
+              didNotWentWellTopVotedCardsPrint_2={
+                didNotWentWellTopVotedCardsPrint_2
+              }
+            />
+          ) : null}
+          {columns && columns[2] && columns[2].id === '2' ? (
+            <DevelopAction
+              actionCardData={actionCardData}
+              copyAllActions={copyAllActions}
+              handleIsActionCloudOpen={handleIsActionCloudOpen}
+              users={users}
+              isAllActionOpen={isAllActionOpen}
+              actionTopVotedCards={actionTopVotedCards}
+              actionLastVotedCards={actionLastVotedCards}
+            />
+          ) : null}
 
           {/* Feedback for Facilitator 1 */}
           <Row style={{ marginTop: '36px' }}>
