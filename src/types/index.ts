@@ -139,6 +139,7 @@ export class BoardState {
   template?: any;
   feedbackSubmitted?: boolean = false;
   isFeedbackSubmittedByFacilitator?: number = 0;
+  disconnected?:boolean=false;
 
   constructor(retroId: string) {
     this.retroId = retroId;
