@@ -382,35 +382,37 @@ const Toolbar = (props: any) => {
             )}
           </>
         )}
-        {showSummaryButton && !location.pathname.includes('report') && (
-          // <Button
-          //   style={{
-          //     marginRight: '40px',
-          //   }}
-          //   variant="contained"
-          //   sx={{
-          //     width: '162px',
-          //     borderRadius: '24px',
-          //     padding: '10px 20px',
-          //     fontWeight: 500,
-          //     marginRight: '15px',
-          //   }}
-          //   onClick={() => navigate('/report/' + currentRetro?.id)}
-          // >
-          //   VIEW SUMMARY
-          // </Button>
-          <ContainedButton
-            id="view-summary"
-            name="VIEW SUMMARY"
-            onClick={() => navigate('/report/' + currentRetro?.id)}
-            style={{
-              minWidth: '150px !important',
-              height: '40px !important',
-              width: '150px !important',
-              marginRight: '16px',
-            }}
-          />
-        )}
+        {showSummaryButton &&
+          !location.pathname.includes('report') &&
+          user.userType === 2 && (
+            // <Button
+            //   style={{
+            //     marginRight: '40px',
+            //   }}
+            //   variant="contained"
+            //   sx={{
+            //     width: '162px',
+            //     borderRadius: '24px',
+            //     padding: '10px 20px',
+            //     fontWeight: 500,
+            //     marginRight: '15px',
+            //   }}
+            //   onClick={() => navigate('/report/' + currentRetro?.id)}
+            // >
+            //   VIEW SUMMARY
+            // </Button>
+            <ContainedButton
+              id="view-summary"
+              name="VIEW SUMMARY"
+              onClick={() => navigate('/report/' + currentRetro?.id)}
+              style={{
+                minWidth: '150px !important',
+                height: '40px !important',
+                width: '150px !important',
+                marginRight: '16px',
+              }}
+            />
+          )}
         <LeaveRetroDialog
           open={leaveDiaOpen}
           onClose={(value: any) => {
