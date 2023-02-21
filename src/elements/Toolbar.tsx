@@ -340,7 +340,7 @@ const Toolbar = (props: any) => {
               </>
             ) : (
               <>
-                {!leaveRetro && (
+                {!leaveRetro && !isXsUp && (
                   // <Button
                   //   id="leaveRetro"
                   //   variant="contained"
@@ -643,7 +643,7 @@ const Toolbar = (props: any) => {
           marginBottom: isXsUp ? '10px' : 0,
         }}
       >
-        {!leaveRetro && showFinishRetroButton && (
+        {!leaveRetro && showFinishRetroButton &&  (
           // <Button
           //   id="leaveRetroIsXsUp"
           //   variant="contained"

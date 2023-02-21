@@ -18,12 +18,13 @@ import { addRetroAction, getRetroActions } from '../msal/services';
 
 import { GlobalContext } from './GlobalContext';
 import { INITIAL_COLUMNS } from '../constants';
-import _ from 'lodash';
+import _, { set } from 'lodash';
 import log from 'loglevel';
 import shortid from 'shortid';
 import stringifyDate from 'json-stringify-date';
 import { useSocket } from '../hooks/useSocket';
 import { SocketContext } from './SocketProvider';
+import { ErrorContext } from './ErrorContext';
 
 export interface ReducerPayload {
   parameters: any;
@@ -45,7 +46,7 @@ type ContextType = {
 };
 const BoardContext = React.createContext<ContextType>({
   state: initialBoardState(''),
-  commitAction: () => {},
+  commitAction: () => { },
 });
 
 function initialBoardState(retroId: string): BoardState {
@@ -57,7 +58,7 @@ function BoardProvider(props: ComponentProps<any>) {
 
   const [{ currentRetro, user }] = React.useContext(GlobalContext);
   const socket = React.useContext(SocketContext);
-
+  const { error, setError } = React.useContext(ErrorContext);
   const [state, setState] = React.useState<BoardState>(initialBoardState(''));
   const [global, dispatch] = React.useContext(GlobalContext);
   const stateSnapshots = React.useRef<
@@ -65,7 +66,7 @@ function BoardProvider(props: ComponentProps<any>) {
   >([]);
   const lastActionTimestamp = React.useRef(0);
   const lastActionId = React.useRef('');
-  const snapshotUnsubscriber = React.useRef<() => void>(() => {});
+  const snapshotUnsubscriber = React.useRef<() => void>(() => { });
 
   function saveState(state: BoardState) {
     const value = stringifyDate.stringify({
@@ -150,7 +151,7 @@ function BoardProvider(props: ComponentProps<any>) {
       actionA.sourceActionTimestamp !== actionB.sourceActionTimestamp
         ? actionA.sourceActionTimestamp - actionB.sourceActionTimestamp
         : (actionA.timestamp ? actionA.timestamp : Number.MAX_SAFE_INTEGER) -
-          (actionB.timestamp ? actionB.timestamp : Number.MAX_SAFE_INTEGER);
+        (actionB.timestamp ? actionB.timestamp : Number.MAX_SAFE_INTEGER);
     actions.sort(actionSortFunction);
 
     actions.forEach(action => {
@@ -192,8 +193,8 @@ function BoardProvider(props: ComponentProps<any>) {
       !SNAPSHOTS_ENABLED || stateSnapshots.current.length === 0
         ? initialBoardState(state.retroId)
         : _.cloneDeep(
-            stateSnapshots.current[stateSnapshots.current.length - 1].state
-          );
+          stateSnapshots.current[stateSnapshots.current.length - 1].state
+        );
     const startIndex =
       !SNAPSHOTS_ENABLED || stateSnapshots.current.length === 0
         ? 0
@@ -245,6 +246,42 @@ function BoardProvider(props: ComponentProps<any>) {
     return newState;
   };
 
+
+
+  React.useEffect(() => {
+   
+   
+    if (!currentRetro?.id  && !location.pathname.includes('createretrowithtemplate')) {
+    
+      console.log("------- closing socket -------")
+      socket.close()
+
+    }
+    else if(currentRetro?.id  && location.pathname.includes('createretrowithtemplate')){
+  
+      socket.connect().on("connect",()=>{
+        console.log("------- socket connected -------")
+      })
+    }
+     
+      socket.on("close", () => {
+        console.log("------- socket disconnected -------");
+
+        setError("error : Socket disconnected")
+      })
+      socket.on("connect_error", () => {
+        console.log("------- socket errors -------");
+        setError("error : Socket disconnected")
+      })
+      socket.on('disconnect', () => {
+        console.log("------- socket disconnected -------");
+        setState({ ...state, disconnected: true });
+        setError("error : Socket disconnected")
+      })
+    // }
+  }, [currentRetro?.id, socket])
+
+
   React.useEffect(() => {
     snapshotUnsubscriber?.current();
     if (currentRetro?.id) {
@@ -256,6 +293,15 @@ function BoardProvider(props: ComponentProps<any>) {
         clearState();
         state.retroId = currentRetro?.id;
       }
+
+
+
+
+
+
+
+
+
 
       getRetroActions(
         currentRetro?.id as string,
@@ -272,19 +318,19 @@ function BoardProvider(props: ComponentProps<any>) {
           }
         }
         socket.emit('retro', currentRetro?.id);
+
         socket.on(
           'newMessage',
           (snapshot: { retroId: string; action: any }[]) => {
-            socket.on('disconnect',()=>{
-              console.log("socket disconnected")
-            })
+
+
             const results = [] as any[];
             snapshot.forEach((change: { retroId: string; action: any }) => {
               if (
                 change.retroId === currentRetro?.id &&
                 (change.action.sourceActionTimestamp >=
                   lastActionTimestamp.current ===
-                undefined
+                  undefined
                   ? 0
                   : lastActionTimestamp.current)
               ) {
@@ -308,11 +354,16 @@ function BoardProvider(props: ComponentProps<any>) {
     } else {
       clearState();
 
-    
-    }
-  }, [currentRetro?.id,currentRetro?.id&&socket]);
 
-  
+    }
+
+
+  }, [currentRetro?.id, currentRetro?.id && socket]);
+
+  const keepAlive = () => {
+    console.log("alive")
+    socket.emit('alive')
+  }
   return (
     <BoardContext.Provider value={{ state, commitAction }}>
       {!currentRetro && !state.loading ? (
@@ -342,7 +393,7 @@ function BoardProvider(props: ComponentProps<any>) {
           <CircularProgress />
         </Box>
       )}
-     
+
       {props.children}
     </BoardContext.Provider>
   );
