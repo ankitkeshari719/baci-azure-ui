@@ -34,9 +34,8 @@ export const useRetro = () => {
         name: 'Retro',
         ...(retro ? retro : {}),
         humanId,
-        joinUrl: `${window.location.protocol}//${window.location.hostname}${
-          window.location.port ? ':' + window.location.port : ''
-        }/join/${humanId}`,
+        joinUrl: `${window.location.protocol}//${window.location.hostname}${window.location.port ? ':' + window.location.port : ''
+          }/join/${humanId}`,
       } as Retro;
 
       const id = await createRetro(currentRetro, state.user);
@@ -88,14 +87,13 @@ export const useRetro = () => {
         name: 'Retro',
         ...(retro ? retro : {}),
         humanId,
-        joinUrl: `${window.location.protocol}//${window.location.hostname}${
-          window.location.port ? ':' + window.location.port : ''
-        }/join/${humanId}`,
+        joinUrl: `${window.location.protocol}//${window.location.hostname}${window.location.port ? ':' + window.location.port : ''
+          }/join/${humanId}`,
       } as Retro;
 
       const id = await createRetro(currentRetro, state.user);
       const retrievedRetro = await getRetro(id);
-
+      console.log("------------- setting retro details in index -------------", retro)
       dispatch({
         type: ActionType.SET_CURRENT_RETRO,
         payload: { retro: retrievedRetro },
@@ -108,9 +106,8 @@ export const useRetro = () => {
           retroName: retro?.name,
           retroTimeframe,
           retroGoal,
-          joinUrl: `${window.location.protocol}//${window.location.hostname}${
-            window.location.port ? ':' + window.location.port : ''
-          }/join/${humanId}`,
+          joinUrl: `${window.location.protocol}//${window.location.hostname}${window.location.port ? ':' + window.location.port : ''
+            }/join/${humanId}`,
           creatorId: state.currentRetro?.creatorId,
           userId: state.user.id,
           humanId: humanId,
