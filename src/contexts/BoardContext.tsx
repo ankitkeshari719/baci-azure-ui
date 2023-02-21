@@ -33,6 +33,8 @@ import shortid from 'shortid';
 import stringifyDate from 'json-stringify-date';
 import { useSocket } from '../hooks/useSocket';
 import { SocketContext } from './SocketProvider';
+import { ErrorContext } from './ErrorContext';
+
 
 export interface ReducerPayload {
   parameters: any;
@@ -63,7 +65,7 @@ function initialBoardState(retroId: string): BoardState {
 
 function BoardProvider(props: ComponentProps<any>) {
   const history = React.useRef<{ action: Action }[]>([]);
-
+  const { error, setError } = React.useContext(ErrorContext);
   const [{ currentRetro, user }] = React.useContext(GlobalContext);
   const socket = React.useContext(SocketContext);
 
@@ -257,6 +259,43 @@ function BoardProvider(props: ComponentProps<any>) {
     setState(newState);
     return newState;
   };
+
+
+  React.useEffect(() => {
+   
+   
+    if (!currentRetro?.id  && !location.pathname.includes('createretrowithtemplate')) {
+    
+      console.log("------- closing socket -------")
+      socket.close()
+
+    }
+    console.log("------- retroId: "+ currentRetro?.id+" -------")
+    if(currentRetro?.id  && location.pathname.includes('createretrowithtemplate')){
+  
+      socket.connect().on("connect",()=>{
+        console.log("------- socket connected -------")
+      })
+    }
+     
+      socket.on("close", () => {
+        console.log("------- socket disconnected -------");
+
+        setError("error : Socket disconnected")
+      })
+      socket.on("connect_error", () => {
+        console.log("------- socket errors -------");
+        setError("error : Socket disconnected")
+      })
+      socket.on('disconnect', () => {
+        console.log("------- socket disconnected -------");
+        setState({ ...state, disconnected: true });
+        setError("error : Socket disconnected")
+      })
+    // }
+  }, [currentRetro?.id, socket])
+
+
 
   React.useEffect(() => {
     snapshotUnsubscriber?.current();
