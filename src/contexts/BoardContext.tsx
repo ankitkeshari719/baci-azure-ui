@@ -261,39 +261,39 @@ function BoardProvider(props: ComponentProps<any>) {
   };
 
 
-  // React.useEffect(() => {
+  React.useEffect(() => {
    
    
-  //   if (!currentRetro?.id  && !location.pathname.includes('createretrowithtemplate')) {
+    // if (!currentRetro?.id  && !location.pathname.includes('createretrowithtemplate')) {
     
-  //     console.log("------- closing socket -------")
-  //     socket.close()
+    //   console.log("------- closing socket -------")
+    //   socket.close()
 
-  //   }
-  //   console.log("------- retroId: "+ currentRetro?.id+" -------")
-  //   if(currentRetro?.id  || location.pathname.includes('createretrowithtemplate')){
+    // }
+    // console.log("------- retroId: "+ currentRetro?.id+" -------")
+    // if(currentRetro?.id  || location.pathname.includes('createretrowithtemplate')){
   
-  //     socket.connect().on("connect",()=>{
-  //       console.log("------- socket connected -------")
-  //     })
-  //   }
+    //   socket.connect().on("connect",()=>{
+    //     console.log("------- socket connected -------")
+    //   })
+    // }
      
-  //     socket.on("close", () => {
-  //       console.log("------- socket disconnected -------");
+      socket.on("close", () => {
+        console.log("------- socket disconnected -------");
 
-  //       setError("error : Socket disconnected")
-  //     })
-  //     socket.on("connect_error", () => {
-  //       console.log("------- socket errors -------");
-  //       setError("error : Socket disconnected")
-  //     })
-  //     socket.on('disconnect', () => {
-  //       console.log("------- socket disconnected -------");
-  //       setState({ ...state, disconnected: true });
-  //       setError("error : Socket disconnected")
-  //     })
-  //   // }
-  // }, [currentRetro?.id, socket])
+        setError("error : Socket disconnected")
+      })
+      socket.on("connect_error", () => {
+        console.log("------- socket error -------");
+        setError("error : Socket disconnected")
+      })
+      socket.on('disconnect', () => {
+        console.log("------- socket disconnected -------");
+        setState({ ...state, disconnected: true });
+        setError("error : Socket disconnected")
+      })
+    // }
+  }, [currentRetro?.id, socket])
 
 
 
