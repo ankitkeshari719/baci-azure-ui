@@ -75,7 +75,7 @@ export const options = {
       min: 0,
       max: 100,
       ticks: {
-        // forces step size to be 50 units
+        // forces step size to be 10 units
         stepSize: 10,
       },
     },
@@ -241,27 +241,10 @@ export const ReportSummary = React.forwardRef((props, ref) => {
   );
   const [questions, setQuestions] = React.useState<Question[]>([]);
   const [feedback, setFeedback] = React.useState<any | undefined>();
-  const [islanded, setIsLanded] = React.useState(true);
   const [retroDate, setRetroDate] = React.useState('');
   const [isActionCopied, setIsActionCopied] = React.useState(false);
 
-  function getBarColor(val: number) {
-    if (val > 50) {
-      return '#34A853';
-    } else if (val == 50) {
-      return '#FBBC05 !important';
-    } else {
-      return '#EA4335';
-    }
-  }
-
   const windowWidth = React.useRef(window.innerWidth);
-  const windowHeight = React.useRef(window.innerHeight);
-
-  // React.useEffect(() => {
-  //   console.log('width: ', windowWidth.current);
-  //   console.log('height: ', windowHeight.current);
-  // });
 
   React.useEffect(() => {
     const wentWellCardValues = [] as string[];
@@ -479,14 +462,9 @@ export const ReportSummary = React.forwardRef((props, ref) => {
       setActionLastVotedCards(actionCards.slice(4, actionCards.length));
     }
 
-    //Get total count of user submitted the pulsechek
-    const newQuestions = [] as Question[];
+    //---------------------------------------------- Users Feedback -----------------------------------------------------------
     const feedbackValues = {} as any;
     const feedbackCount = {} as any;
-    let totalPulseCheckCount = 0;
-    const questionsDef = fullPulseCheck
-      ? PULSE_CHECK_QUESTIONS
-      : QUICK_PULSE_CHECK_QUESTIONS;
 
     users.forEach(user => {
       user.feedback.forEach((feedback, i) => {
@@ -499,8 +477,23 @@ export const ReportSummary = React.forwardRef((props, ref) => {
             (feedbackCount[feedback.id] ? feedbackCount[feedback.id] : 0) + 1;
         }
       });
+    });
 
+    if (Object.keys(feedbackValues).length !== 0) {
+      setFeedback([feedbackValues, feedbackCount]);
+    }
+
+    //---------------------------------------------- Users Pulse Check Data -----------------------------------------------------------
+
+    const newQuestions = [] as Question[];
+    let totalPulseCheckCount = 0;
+    const questionsDef = fullPulseCheck
+      ? PULSE_CHECK_QUESTIONS
+      : QUICK_PULSE_CHECK_QUESTIONS;
+
+    users.forEach(user => {
       user?.pulseCheckQuestions.forEach(question => {
+        console.log('question:: ', question);
         totalPulseCheckCount = totalPulseCheckCount + 1;
         const text = (questionsDef as any)[question.id];
         const entry = newQuestions.find(nq => nq.question === text);
@@ -519,11 +512,6 @@ export const ReportSummary = React.forwardRef((props, ref) => {
         }
       });
     });
-
-    if (Object.keys(feedbackValues).length !== 0) {
-      setFeedback([feedbackValues, feedbackCount]);
-    }
-
     setQuestions(newQuestions);
     const newArr = newQuestions.map(({ question, ...rest }) => {
       return rest;
@@ -1000,7 +988,7 @@ export const ReportSummary = React.forwardRef((props, ref) => {
               </>
             )}
           </Row>
-          {/* Section 1*/}
+          {/* Column Section 1*/}
           {columns && columns[0] && columns[0].id === '0' ? (
             <WhatWentWell
               wentWellColumnName={wentWellColumnName}
@@ -1043,7 +1031,7 @@ export const ReportSummary = React.forwardRef((props, ref) => {
             />
           ) : null}
 
-          {/* Section 2*/}
+          {/* Column Section 2*/}
           {columns && columns[1] && columns[1].id === '0' ? (
             <WhatWentWell
               wentWellColumnName={wentWellColumnName}
@@ -1085,7 +1073,7 @@ export const ReportSummary = React.forwardRef((props, ref) => {
               actionLastVotedCards={actionLastVotedCards}
             />
           ) : null}
-          {/* Section 3*/}
+          {/* Column Section 3*/}
           {columns && columns[2] && columns[2].id === '0' ? (
             <WhatWentWell
               wentWellColumnName={wentWellColumnName}
