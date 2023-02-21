@@ -271,7 +271,7 @@ function BoardProvider(props: ComponentProps<any>) {
 
     }
     console.log("------- retroId: "+ currentRetro?.id+" -------")
-    if(currentRetro?.id  && location.pathname.includes('createretrowithtemplate')){
+    if(currentRetro?.id  || location.pathname.includes('createretrowithtemplate')){
   
       socket.connect().on("connect",()=>{
         console.log("------- socket connected -------")
