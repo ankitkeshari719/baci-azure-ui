@@ -600,8 +600,9 @@ export const ReportSummary = React.forwardRef((props, ref) => {
   // Copy to clipboard
   const copyAllActions = () => {
     const actionValues = actionCardData.map((actionCard: any) => {
-      return actionCard.value;
+      return actionCard.value + '\r\n';
     });
+
     navigator.clipboard.writeText(actionValues);
     setIsActionCopied(true);
   };
