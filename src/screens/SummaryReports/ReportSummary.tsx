@@ -899,7 +899,7 @@ export const ReportSummary = React.forwardRef((props, ref) => {
                     datasets: [
                       {
                         data: barData[0],
-                        label: 'Happy',
+                        label: 'Satisfied',
                         backgroundColor: '#84CA97',
                       },
                       {
@@ -909,7 +909,7 @@ export const ReportSummary = React.forwardRef((props, ref) => {
                       },
                       {
                         data: barData[2],
-                        label: 'Sad',
+                        label: 'Concerned',
                         backgroundColor: '#F28D85',
                       },
                     ],
