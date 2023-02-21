@@ -15,10 +15,11 @@ import {
   BOARD_STATE_MACHINE_VERSION,
 } from '../statemachine/BoardStateMachine';
 import { pulseCheckInterface } from '../screens/CreateRetro/const';
+import { SocketContext } from '../contexts/SocketProvider';
 
 export const useRetro = () => {
   const [state, dispatch] = React.useContext(GlobalContext);
-
+  const socket = React.useContext(SocketContext);
   return {
     create: async (
       retro: Partial<Omit<Retro, 'id'>>,
@@ -93,11 +94,17 @@ export const useRetro = () => {
 
       const id = await createRetro(currentRetro, state.user);
       const retrievedRetro = await getRetro(id);
-      console.log("------------- setting retro details in index -------------", retro)
-      dispatch({
-        type: ActionType.SET_CURRENT_RETRO,
-        payload: { retro: retrievedRetro },
-      });
+      console.log("------------- setting retro details in index -------------", retro);
+      socket.connect().on("connect", () => {
+
+        dispatch({
+          type: ActionType.SET_CURRENT_RETRO,
+          payload: { retro: retrievedRetro },
+        });
+  
+        
+
+      })
 
       const action: Action = {
         id: shortid.generate(),
@@ -125,6 +132,9 @@ export const useRetro = () => {
       };
       await addRetroAction(id, action);
       return retrievedRetro;
+      
+
+      
     },
     getById: async (id: string): Promise<Retro | undefined> => {
       const retro = await getRetro(id);
