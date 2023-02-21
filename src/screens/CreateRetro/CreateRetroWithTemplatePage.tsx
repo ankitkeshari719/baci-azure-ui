@@ -224,7 +224,7 @@ export function CreateRetroWithTemplatePage({
       selectedPulseCheck != null &&
       selectedTemplate != null
     ) {
-      dispatch({ type: ActionType.CREATE_RETRO, payload: {} });
+       dispatch({ type: ActionType.CREATE_RETRO, payload: {} });
       dispatch({
         type: ActionType.SET_LOADING,
         payload: { loadingFlag: true },
@@ -244,7 +244,7 @@ export function CreateRetroWithTemplatePage({
         )
         .then(
           res => {
-           
+            // dispatch({ type: ActionType.CREATE_RETRO, payload: {} });
             const userTypeValue: number =
               global?.user?.id == res?.creatorId
                 ? UserTypeArray[1].id
