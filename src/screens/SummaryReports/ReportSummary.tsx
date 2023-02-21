@@ -485,21 +485,36 @@ export const ReportSummary = React.forwardRef((props, ref) => {
 
     //---------------------------------------------- Users Pulse Check Data -----------------------------------------------------------
 
-    const newQuestions = [] as Question[];
-    let totalPulseCheckCount = 0;
+    const entryData = [] as Question[];
+    let questionOneTotalResponse: number = 0;
+    let questionTwoTotalResponse: number = 0;
+    let questionThreeTotalResponse: number = 0;
+    let barDataPercentage: any = [];
     const questionsDef = fullPulseCheck
       ? PULSE_CHECK_QUESTIONS
       : QUICK_PULSE_CHECK_QUESTIONS;
 
     users.forEach(user => {
       user?.pulseCheckQuestions.forEach(question => {
-        console.log('question:: ', question);
-        totalPulseCheckCount = totalPulseCheckCount + 1;
+        if (question.id === '0' && question.entry != -1) {
+          questionOneTotalResponse++;
+        }
+        if (question.id === '1' && question.entry != -1) {
+          questionTwoTotalResponse++;
+        }
+        if (question.id === '2' && question.entry != -1) {
+          questionThreeTotalResponse++;
+        }
+      });
+    });
+
+    users.forEach(user => {
+      user?.pulseCheckQuestions.forEach(question => {
         const text = (questionsDef as any)[question.id];
-        const entry = newQuestions.find(nq => nq.question === text);
+        const entry = entryData.find(nq => nq.question === text);
         if (question.entry !== -1) {
           if (!entry) {
-            newQuestions.push({
+            entryData.push({
               question: text,
               1: 0,
               2: 0,
@@ -512,29 +527,41 @@ export const ReportSummary = React.forwardRef((props, ref) => {
         }
       });
     });
-    setQuestions(newQuestions);
-    const newArr = newQuestions.map(({ question, ...rest }) => {
+    setQuestions(entryData);
+
+    const responsePercentages = entryData.map(({ question, ...rest }) => {
       return rest;
     });
 
-    newArr.map(data => {
-      data[1] = Math.round((data[1] / totalPulseCheckCount) * 100);
-      data[2] = Math.round((data[2] / totalPulseCheckCount) * 100);
-      data[3] = Math.round((data[3] / totalPulseCheckCount) * 100);
+    responsePercentages.map(data => {
+      data[1] = Math.round((data[1] / questionOneTotalResponse) * 100);
+      data[2] = Math.round((data[2] / questionTwoTotalResponse) * 100);
+      data[3] = Math.round((data[3] / questionThreeTotalResponse) * 100);
     });
 
-    let sampleArray: any = [];
-    newArr.map(data => {
-      return sampleArray.push(Object.values(data));
+    responsePercentages.map(data => {
+      return barDataPercentage.push(Object.values(data));
     });
 
-    let tempArr: any = [];
-    if (sampleArray.length === 3) {
-      tempArr.push([sampleArray[0][0], sampleArray[1][0], sampleArray[2][0]]);
-      tempArr.push([sampleArray[0][1], sampleArray[1][1], sampleArray[2][1]]);
-      tempArr.push([sampleArray[0][2], sampleArray[1][2], sampleArray[2][2]]);
+    let barData: any = [];
+    if (barDataPercentage.length === 3) {
+      barData.push([
+        barDataPercentage[0][0],
+        barDataPercentage[1][0],
+        barDataPercentage[2][0],
+      ]);
+      barData.push([
+        barDataPercentage[0][1],
+        barDataPercentage[1][1],
+        barDataPercentage[2][1],
+      ]);
+      barData.push([
+        barDataPercentage[0][2],
+        barDataPercentage[1][2],
+        barDataPercentage[2][2],
+      ]);
     }
-    setBarData(tempArr);
+    setBarData(barData);
   }, [lastStateUpdate]);
 
   React.useEffect(() => {
