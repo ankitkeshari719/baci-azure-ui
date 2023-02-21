@@ -15,7 +15,7 @@ import { ContainedButton, OutlinedButton } from '../../components';
 
 type Props = {
   handleIsChangeDialogClose: () => void;
-  closeCustomTemplateDialog: () => void;
+  exitWithOutExit: () => void;
   onClickSelectButton: (selectedId: string) => void;
   templateId: string;
 };
@@ -56,7 +56,7 @@ function BootstrapDialogTitle(props: DialogTitleProps) {
 
 export function CustomizeTemplateDialog({
   handleIsChangeDialogClose,
-  closeCustomTemplateDialog,
+  exitWithOutExit,
   onClickSelectButton,
   templateId,
 }: Props) {
@@ -94,11 +94,16 @@ export function CustomizeTemplateDialog({
         </Typography>
       </DialogContent>
       <DialogActions
-        sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', marginTop: '40px' }}
+        sx={{
+          display: 'flex',
+          justifyContent: 'center',
+          alignItems: 'center',
+          marginTop: '40px',
+        }}
       >
         <OutlinedButton
           name="Exit without saving"
-          onClick={closeCustomTemplateDialog}
+          onClick={exitWithOutExit}
           style={{
             minWidth: '225px !important',
             height: '44px !important',
@@ -113,7 +118,7 @@ export function CustomizeTemplateDialog({
             minWidth: '225px !important',
             height: '44px !important',
             textTransform: 'uppercase !important',
-            marginLeft: '50px !important'
+            marginLeft: '50px !important',
           }}
         />
       </DialogActions>

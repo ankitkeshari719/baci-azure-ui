@@ -124,6 +124,7 @@ export function LandingPage() {
     sessionStorage.removeItem('retroname');
     sessionStorage.removeItem('showManual');
     localStorage.removeItem('selectedTemplate');
+    localStorage.removeItem('tempSelectedTemplateData');
   });
   return (
     <>
