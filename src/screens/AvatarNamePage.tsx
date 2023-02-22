@@ -24,6 +24,7 @@ import { useAzureAuth } from '../msal/azureauth';
 import { UserTypeArray } from '../constants';
 import { BoardContext } from '../contexts/BoardContext';
 import theme from '../theme/theme';
+import { SocketContext } from '../contexts/SocketProvider';
 const AVATAR_CHARACTER_LIMIT = 30;
 const styles = {
   avatarfield: {
@@ -90,6 +91,7 @@ export function AvatarNamePage() {
   const [started, setStarted] = React.useState(
     global.retroCreateState || false
   );
+  const socket = React.useContext(SocketContext);
   const [joining, setJoining] = React.useState(id ? true : false);
   const [captureName, setCaptureName] = React.useState(id ? true : false);
   const isXsUp = useMediaQuery(theme.breakpoints.between('xs', 'sm'));
@@ -98,6 +100,7 @@ export function AvatarNamePage() {
   React.useEffect(() => {
     setAvatarList(avatarName.sort(() => Math.random() - 0.5));
     setHeight(window.innerHeight);
+    
   }, []);
   useAzureAuth();
   const joinRetro = async (
@@ -113,6 +116,7 @@ export function AvatarNamePage() {
     if (!foundRetro) {
       foundRetro = await retro.getById(humanId);
     }
+
     dispatch({
       type: ActionType.SET_CURRENT_RETRO,
       payload: { retro: foundRetro },
@@ -202,6 +206,10 @@ export function AvatarNamePage() {
     setUserName(e);
   };
   React.useEffect(() => {
+  
+    socket.connect().on("connect",()=>{
+      console.log("----------- socket connected ------------")
+    })
     if (
       !global.user.id ||
       global.user.id == undefined ||

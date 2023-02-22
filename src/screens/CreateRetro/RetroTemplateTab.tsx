@@ -390,13 +390,12 @@ export function RetroTemplateTab({
         onClose={closeCustomTemplateDialog}
       >
         <CustomizeTemplate
-          closeCustomTemplateDialog={closeCustomTemplateDialog}
           selectedTemplate={selectedTemplate}
+          customizedTemplate={customizedTemplate}
+          closeCustomTemplateDialog={closeCustomTemplateDialog}
           handleTemplateSelectClick={handleTemplateSelectClick}
-          setSelectedTemplate={setSelectedTemplate}
           setIsTemplateCustomized={setIsTemplateCustomized}
           isTemplateCustomized={isTemplateCustomized}
-          customizedTemplate={customizedTemplate}
         />
       </Dialog>
     </>

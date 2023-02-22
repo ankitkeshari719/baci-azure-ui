@@ -224,6 +224,7 @@ export function CreateRetroWithTemplatePage({
       selectedPulseCheck != null &&
       selectedTemplate != null
     ) {
+      dispatch({ type: ActionType.CREATE_RETRO, payload: {} });
       dispatch({
         type: ActionType.SET_LOADING,
         payload: { loadingFlag: true },
@@ -243,7 +244,7 @@ export function CreateRetroWithTemplatePage({
         )
         .then(
           res => {
-            dispatch({ type: ActionType.CREATE_RETRO, payload: {} });
+            // dispatch({ type: ActionType.CREATE_RETRO, payload: {} });
             const userTypeValue: number =
               global?.user?.id == res?.creatorId
                 ? UserTypeArray[1].id
@@ -265,6 +266,10 @@ export function CreateRetroWithTemplatePage({
             getRetro(res.id as string)
               .then(retro => {
                 if (retro && retro.id) {
+                  console.log(
+                    '------------- Setting retro details for BoardState in create retro temp page -------------',
+                    retro
+                  );
                   dispatch({
                     type: ActionType.SET_CURRENT_RETRO,
                     payload: { retro },

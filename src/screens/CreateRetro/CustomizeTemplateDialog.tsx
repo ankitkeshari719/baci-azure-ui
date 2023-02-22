@@ -15,7 +15,7 @@ import { ContainedButton, OutlinedButton } from '../../components';
 
 type Props = {
   handleIsChangeDialogClose: () => void;
-  closeCustomTemplateDialog: () => void;
+  exitWithOutExit: (selectedId: string) => void;
   onClickSelectButton: (selectedId: string) => void;
   templateId: string;
 };
@@ -56,7 +56,7 @@ function BootstrapDialogTitle(props: DialogTitleProps) {
 
 export function CustomizeTemplateDialog({
   handleIsChangeDialogClose,
-  closeCustomTemplateDialog,
+  exitWithOutExit,
   onClickSelectButton,
   templateId,
 }: Props) {
@@ -86,22 +86,27 @@ export function CustomizeTemplateDialog({
         <Typography className="unsavedChangesTextOne">
           Unsaved Changes
         </Typography>
-        <Typography className="unsavedChangesTextTwo" mt="40px">
+        <Typography className="unsavedChangesTextTwo" mt="60px">
           You have unsaved changes to your retro board
         </Typography>
-        <Typography className="unsavedChangesTextTwo" mt="8px">
+        <Typography className="unsavedChangesTextTwo" mt="4px">
           Are you sure you want to loose these changes?
         </Typography>
       </DialogContent>
       <DialogActions
-        sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', marginTop: '40px' }}
+        sx={{
+          display: 'flex',
+          justifyContent: 'center',
+          alignItems: 'center',
+          marginTop: '40px',
+        }}
       >
         <OutlinedButton
           name="Exit without saving"
-          onClick={closeCustomTemplateDialog}
+          onClick={() => exitWithOutExit(templateId)}
           style={{
-            minWidth: '240px !important',
-            height: '36px !important',
+            minWidth: '225px !important',
+            height: '44px !important',
             textTransform: 'uppercase !important',
             marginTop: '0px !important',
           }}
@@ -110,10 +115,10 @@ export function CustomizeTemplateDialog({
           name="Save and Exit"
           onClick={() => onClickSelectButton(templateId)}
           style={{
-            minWidth: '240px !important',
-            height: '36px !important',
+            minWidth: '225px !important',
+            height: '44px !important',
             textTransform: 'uppercase !important',
-            marginLeft: '32px !important'
+            marginLeft: '50px !important',
           }}
         />
       </DialogActions>

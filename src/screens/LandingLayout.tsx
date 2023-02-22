@@ -7,6 +7,7 @@ import BACILogo from '../assets/img/bacilogo.png';
 import commomStyles from './../style.module.scss';
 import theme from '../theme/theme';
 import { LazyLoadImage } from 'react-lazy-load-image-component';
+import { SocketContext } from '../contexts/SocketProvider';
 const styles = {
   mainDiv: {
     backgroundImage: `url(${LandingImage})`,
@@ -78,9 +79,14 @@ const styles = {
 export function LandingLayout() {
   const isXsUp = useMediaQuery(theme.breakpoints.between('xs', 'sm'));
   const [height, setHeight] = React.useState('');
+  const socket = React.useContext(SocketContext);
   React.useEffect(() => {
     setHeight('48vh');
-  });
+    console.log("-------- closing socket ----------")
+    socket.close()
+
+
+  },[]);
   return (
     <>
       <>

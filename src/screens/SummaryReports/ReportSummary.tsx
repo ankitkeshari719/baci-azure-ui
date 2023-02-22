@@ -7,7 +7,6 @@ import * as Icons from 'heroicons-react';
 import theme from '../../theme/theme';
 import {
   Box,
-  Grid,
   Typography,
   styled,
   useMediaQuery,
@@ -35,13 +34,10 @@ import {
   FEEDBACK_QUESTIONS,
 } from '../../constants';
 import { Question } from '../../elements/PulseCheckChart';
-import WordCloud, { Word } from '../../elements/WordCloud';
-import { RetroColumn } from '../../elements/RetroColumn';
+import { Word } from '../../elements/WordCloud';
 import { BoardContext } from '../../contexts/BoardContext';
 import { ActionType, GlobalContext } from '../../contexts/GlobalContext';
 import { ViewParticipants } from './ViewParticipants';
-import { LazyLoadImage } from 'react-lazy-load-image-component';
-import Avatar from '../../elements/Avatar';
 import { ContainedButton } from '../../components';
 import { addFeedback } from '../../msal/services';
 import happy from '../../assets/img/happy.png';
@@ -52,6 +48,9 @@ import sadMask from '../../assets/img/sad_mask.png';
 import neutralMask from '../../assets/img/Neutral_Mask.png';
 import { BoardActionType } from '../../statemachine/BoardStateMachine';
 import { FeedbackSubmitDialog } from './FeedbackSubmitDialog';
+import DevelopAction from './DevelopAction';
+import DidNotWentWell from './DidNotWentWell';
+import WhatWentWell from './WhatWentWellCoulmn';
 
 ChartJS.register(
   CategoryScale,
@@ -76,7 +75,7 @@ export const options = {
       min: 0,
       max: 100,
       ticks: {
-        // forces step size to be 50 units
+        // forces step size to be 10 units
         stepSize: 10,
       },
     },
@@ -242,29 +241,10 @@ export const ReportSummary = React.forwardRef((props, ref) => {
   );
   const [questions, setQuestions] = React.useState<Question[]>([]);
   const [feedback, setFeedback] = React.useState<any | undefined>();
-  const [islanded, setIsLanded] = React.useState(true);
   const [retroDate, setRetroDate] = React.useState('');
   const [isActionCopied, setIsActionCopied] = React.useState(false);
 
-  const [isPrintOptionOpen, setIsPrintOptionOpen] = React.useState(false);
-
-  function getBarColor(val: number) {
-    if (val > 50) {
-      return '#34A853';
-    } else if (val == 50) {
-      return '#FBBC05 !important';
-    } else {
-      return '#EA4335';
-    }
-  }
-
   const windowWidth = React.useRef(window.innerWidth);
-  const windowHeight = React.useRef(window.innerHeight);
-
-  React.useEffect(() => {
-    console.log('width: ', windowWidth.current);
-    console.log('height: ', windowHeight.current);
-  });
 
   React.useEffect(() => {
     const wentWellCardValues = [] as string[];
@@ -315,7 +295,7 @@ export const ReportSummary = React.forwardRef((props, ref) => {
       }
     });
 
-    // What Went Well Data
+    // --------------------------------------------------- What Went Well Data ------------------------------------------------
     columns.forEach(column => {
       if (column.id === '0') {
         column.groups.forEach(group => {
@@ -354,7 +334,37 @@ export const ReportSummary = React.forwardRef((props, ref) => {
     }
     setWentWellWords(wentWellWordCloudData);
 
-    // Did Not Went Well Data
+    // What went well Cards Data
+    columns.forEach(column => {
+      if (column.id === '0') {
+        column.groups.forEach(group => {
+          group.cards.forEach(card => {
+            wentWellCards.push(card);
+          });
+        });
+      }
+    });
+
+    wentWellCards.sort(
+      (a, b) => parseFloat(b.reacts.length) - parseFloat(a.reacts.length)
+    );
+
+    const wentWellUniqueCreatedBy: any[] = wentWellCards
+      .map((card: any) => {
+        return card.createdBy;
+      })
+      .filter((item, i, ar) => ar.indexOf(item) === i);
+    setWentWellCreatedBy(wentWellUniqueCreatedBy.length);
+    setWentWellCardData(wentWellCards);
+    setWentWellTopVotedCards(
+      windowWidth.current <= 1500
+        ? wentWellCards.slice(0, 3)
+        : wentWellCards.slice(0, 4)
+    );
+    setWentWellTopVotedCardsPrint_1(wentWellCards.slice(0, 2));
+    setWentWellTopVotedCardsPrint_2(wentWellCards.slice(2, 4));
+
+    // ------------------------------------------------------------- Did Not Went Well Data ---------------------------------------------------------
     columns.forEach(column => {
       if (column.id === '1') {
         column.groups.forEach(group => {
@@ -394,36 +404,6 @@ export const ReportSummary = React.forwardRef((props, ref) => {
     }
     setDidNotWentWellWords(didNotWentWellWordCloudData);
 
-    // What went well Cards Data
-    columns.forEach(column => {
-      if (column.id === '0') {
-        column.groups.forEach(group => {
-          group.cards.forEach(card => {
-            wentWellCards.push(card);
-          });
-        });
-      }
-    });
-
-    wentWellCards.sort(
-      (a, b) => parseFloat(b.reacts.length) - parseFloat(a.reacts.length)
-    );
-
-    const wentWellUniqueCreatedBy: any[] = wentWellCards
-      .map((card: any) => {
-        return card.createdBy;
-      })
-      .filter((item, i, ar) => ar.indexOf(item) === i);
-    setWentWellCreatedBy(wentWellUniqueCreatedBy.length);
-    setWentWellCardData(wentWellCards);
-    setWentWellTopVotedCards(
-      windowWidth.current <= 1500
-        ? wentWellCards.slice(0, 3)
-        : wentWellCards.slice(0, 4)
-    );
-    setWentWellTopVotedCardsPrint_1(wentWellCards.slice(0, 2));
-    setWentWellTopVotedCardsPrint_2(wentWellCards.slice(2, 4));
-
     // What did not went well Cards Data
     columns.forEach(column => {
       if (column.id === '1') {
@@ -434,9 +414,11 @@ export const ReportSummary = React.forwardRef((props, ref) => {
         });
       }
     });
+
     didNotWentWellCards.sort(
       (a, b) => parseFloat(b.reacts.length) - parseFloat(a.reacts.length)
     );
+
     const didNotWentWellUniqueCreatedBy: any[] = didNotWentWellCards
       .map((card: any) => {
         return card.createdBy;
@@ -451,7 +433,8 @@ export const ReportSummary = React.forwardRef((props, ref) => {
     );
     setDidNotWentWellTopVotedCardsPrint_1(didNotWentWellCards.slice(0, 2));
     setDidNotWentWellTopVotedCardsPrint_2(didNotWentWellCards.slice(2, 4));
-    // Develope Action Cards Data
+
+    //---------------------------------------------- Develope Action Cards Data -----------------------------------------------------------
     columns.forEach(column => {
       if (column.id === '2') {
         column.groups.forEach(group => {
@@ -461,9 +444,11 @@ export const ReportSummary = React.forwardRef((props, ref) => {
         });
       }
     });
+
     actionCards.sort(
       (a, b) => parseFloat(b.reacts.length) - parseFloat(a.reacts.length)
     );
+
     const actionUniqueCreatedBy: any[] = actionCards
       .map((card: any) => {
         return card.createdBy;
@@ -472,18 +457,14 @@ export const ReportSummary = React.forwardRef((props, ref) => {
     setActionCreatedBy(actionUniqueCreatedBy.length);
     setActionCardData(actionCards);
     setActionTopVotedCards(actionCards.slice(0, 4));
+
     if (actionCards.length > 4) {
       setActionLastVotedCards(actionCards.slice(4, actionCards.length));
     }
 
-    //Get total count of user submitted the pulsechek
-    const newQuestions = [] as Question[];
+    //---------------------------------------------- Users Feedback -----------------------------------------------------------
     const feedbackValues = {} as any;
     const feedbackCount = {} as any;
-    let totalPulseCheckCount = 0;
-    const questionsDef = fullPulseCheck
-      ? PULSE_CHECK_QUESTIONS
-      : QUICK_PULSE_CHECK_QUESTIONS;
 
     users.forEach(user => {
       user.feedback.forEach((feedback, i) => {
@@ -496,13 +477,44 @@ export const ReportSummary = React.forwardRef((props, ref) => {
             (feedbackCount[feedback.id] ? feedbackCount[feedback.id] : 0) + 1;
         }
       });
+    });
+
+    if (Object.keys(feedbackValues).length !== 0) {
+      setFeedback([feedbackValues, feedbackCount]);
+    }
+
+    //---------------------------------------------- Users Pulse Check Data -----------------------------------------------------------
+
+    const entryData = [] as Question[];
+    let questionOneTotalResponse: number = 0;
+    let questionTwoTotalResponse: number = 0;
+    let questionThreeTotalResponse: number = 0;
+    let barDataPercentage: any = [];
+    const questionsDef = fullPulseCheck
+      ? PULSE_CHECK_QUESTIONS
+      : QUICK_PULSE_CHECK_QUESTIONS;
+
+    users.forEach(user => {
       user?.pulseCheckQuestions.forEach(question => {
-        totalPulseCheckCount = totalPulseCheckCount + 1;
+        if (question.id === '0' && question.entry != -1) {
+          questionOneTotalResponse++;
+        }
+        if (question.id === '1' && question.entry != -1) {
+          questionTwoTotalResponse++;
+        }
+        if (question.id === '2' && question.entry != -1) {
+          questionThreeTotalResponse++;
+        }
+      });
+    });
+
+    users.forEach(user => {
+      user?.pulseCheckQuestions.forEach(question => {
         const text = (questionsDef as any)[question.id];
-        const entry = newQuestions.find(nq => nq.question === text);
+        const entry = entryData.find(nq => nq.question === text);
         if (question.entry !== -1) {
           if (!entry) {
-            newQuestions.push({
+            entryData.push({
               question: text,
               1: 0,
               2: 0,
@@ -515,34 +527,41 @@ export const ReportSummary = React.forwardRef((props, ref) => {
         }
       });
     });
+    setQuestions(entryData);
 
-    if (Object.keys(feedbackValues).length !== 0) {
-      setFeedback([feedbackValues, feedbackCount]);
-    }
-
-    setQuestions(newQuestions);
-    const newArr = newQuestions.map(({ question, ...rest }) => {
+    const responsePercentages = entryData.map(({ question, ...rest }) => {
       return rest;
     });
 
-    newArr.map(data => {
-      data[1] = Math.round((data[1] / totalPulseCheckCount) * 100);
-      data[2] = Math.round((data[2] / totalPulseCheckCount) * 100);
-      data[3] = Math.round((data[3] / totalPulseCheckCount) * 100);
+    responsePercentages.map(data => {
+      data[1] = Math.round((data[1] / questionOneTotalResponse) * 100);
+      data[2] = Math.round((data[2] / questionTwoTotalResponse) * 100);
+      data[3] = Math.round((data[3] / questionThreeTotalResponse) * 100);
     });
 
-    let sampleArray: any = [];
-    newArr.map(data => {
-      return sampleArray.push(Object.values(data));
+    responsePercentages.map(data => {
+      return barDataPercentage.push(Object.values(data));
     });
 
-    let tempArr: any = [];
-    if (sampleArray.length === 3) {
-      tempArr.push([sampleArray[0][0], sampleArray[1][0], sampleArray[2][0]]);
-      tempArr.push([sampleArray[0][1], sampleArray[1][1], sampleArray[2][1]]);
-      tempArr.push([sampleArray[0][2], sampleArray[1][2], sampleArray[2][2]]);
+    let barData: any = [];
+    if (barDataPercentage.length === 3) {
+      barData.push([
+        barDataPercentage[0][0],
+        barDataPercentage[1][0],
+        barDataPercentage[2][0],
+      ]);
+      barData.push([
+        barDataPercentage[0][1],
+        barDataPercentage[1][1],
+        barDataPercentage[2][1],
+      ]);
+      barData.push([
+        barDataPercentage[0][2],
+        barDataPercentage[1][2],
+        barDataPercentage[2][2],
+      ]);
     }
-    setBarData(tempArr);
+    setBarData(barData);
   }, [lastStateUpdate]);
 
   React.useEffect(() => {
@@ -581,8 +600,9 @@ export const ReportSummary = React.forwardRef((props, ref) => {
   // Copy to clipboard
   const copyAllActions = () => {
     const actionValues = actionCardData.map((actionCard: any) => {
-      return actionCard.value;
+      return actionCard.value + '\r\n';
     });
+
     navigator.clipboard.writeText(actionValues);
     setIsActionCopied(true);
   };
@@ -679,14 +699,6 @@ export const ReportSummary = React.forwardRef((props, ref) => {
     }
   };
 
-  const reactPrintDisplayOpen = () => {
-    setIsPrintOptionOpen(true);
-  };
-
-  const reactPrintDisplayClose = () => {
-    setIsPrintOptionOpen(false);
-  };
-
   return (
     <>
       {/* Start Container */}
@@ -736,17 +748,6 @@ export const ReportSummary = React.forwardRef((props, ref) => {
               xs={{ span: 1, offset: 7 }}
               className="d-flex justify-content-end align-items-center"
             >
-              {/* <Icons.ShareOutline
-              size={20}
-              color="#4E4E4E"
-              style={{
-                cursor: 'pointer',
-                marginRight: '16px',
-              }}
-              onClick={() => {
-                console.log('Here');
-              }}
-            /> */}
               <ReactToPrint
                 trigger={() => (
                   <Icons.DownloadOutline
@@ -758,12 +759,10 @@ export const ReportSummary = React.forwardRef((props, ref) => {
                   />
                 )}
                 content={() => componentRef.current}
-                onBeforePrint={reactPrintDisplayOpen}
-                onAfterPrint={reactPrintDisplayClose}
               />
             </Col>
           </Row>
-          {/* React Print Section 1 */}
+          {/* Line 1 print */}
           <Row id="line_1_react_print" style={{ display: 'none' }}>
             <Col xs="12">
               <Table striped>
@@ -900,7 +899,7 @@ export const ReportSummary = React.forwardRef((props, ref) => {
                     datasets: [
                       {
                         data: barData[0],
-                        label: 'Happy',
+                        label: 'Satisfied',
                         backgroundColor: '#84CA97',
                       },
                       {
@@ -910,7 +909,7 @@ export const ReportSummary = React.forwardRef((props, ref) => {
                       },
                       {
                         data: barData[2],
-                        label: 'Sad',
+                        label: 'Concerned',
                         backgroundColor: '#F28D85',
                       },
                     ],
@@ -1017,828 +1016,134 @@ export const ReportSummary = React.forwardRef((props, ref) => {
               </>
             )}
           </Row>
-          {/* What Went Well Section 1*/}
-          <Row style={{ marginTop: '36px' }}>
-            <Col
-              xs="12"
-              className="d-flex justify-content-start align-items-center"
-            >
-              <Typography className="textTypeFour">
-                {wentWellColumnName}
-              </Typography>
-            </Col>
-          </Row>
-          {/* What Went Well Section 2*/}
-          <Row style={{ marginTop: '16px' }} id="view-top-voted-card-1">
-            <Col
-              xs="4"
-              lg="4"
-              className="d-flex justify-content-start align-items-center"
-            >
-              <Typography className="participantsResponded">
-                Participants Responded
-              </Typography>
-              <Typography className="participantsResponded" ml={2}>
-                {wentWellCreatedBy}/{users.length}
-              </Typography>
-            </Col>
-            {wentWellWords.length === 0 ? null : (
-              <Col
-                xs={{ span: 3, offset: 5 }}
-                lg={{ span: 2, offset: 6 }}
-                className="d-flex justify-content-end align-items-center"
-              >
-                <Typography
-                  className="viewWorldCould"
-                  onClick={handleIsWellCloudOpen}
-                >
-                  {isWellCloudOpen ? 'View Top Voted Cards' : 'View Word Cloud'}
-                </Typography>
-              </Col>
-            )}
-          </Row>
-          {/* What Went Well Section 2 print*/}
-          <Row
-            style={{ marginTop: '16px', display: 'none' }}
-            id="view-top-voted-card-print-1"
-          >
-            <Col
-              xs="12"
-              className="d-flex justify-content-start align-items-center"
-            >
-              <Typography className="participantsResponded">
-                Participants Responded
-              </Typography>
-              <Typography className="participantsResponded" ml={2}>
-                {wentWellCreatedBy}/{users.length}
-              </Typography>
-            </Col>
-          </Row>
-          {/* What Went Well Section 3*/}
-          {wentWellWords.length === 0 ? (
-            <Row style={{ marginTop: '16px' }}>
-              <Col
-                xs="12"
-                className="d-flex justify-content-start align-items-center"
-              >
-                <Box
-                  sx={{
-                    width: '100%',
-                    height: '240px',
-                    display: 'flex',
-                    justifyContent: 'center',
-                    alignItems: 'center',
-                    flexDirection: 'column',
-                    background: '#FAFAFA',
-                    border: '1px solid #CCCCCC',
-                  }}
-                >
-                  <Box
-                    component="div"
-                    sx={{ textAlign: 'justify', marginTop: '16px' }}
-                  >
-                    <Typography className="text1">No data present</Typography>
-                  </Box>
-                </Box>
-              </Col>
-            </Row>
-          ) : (
-            <Row style={{ marginTop: '16px' }}>
-              <Col
-                xs="12"
-                className="d-flex justify-content-start align-items-center"
-              >
-                {isWellCloudOpen ? (
-                  <Box sx={styles.whatWentWellBox}>
-                    {wentWellWords.length !== 0 ? (
-                      <Grid
-                        item
-                        display="flex"
-                        justifyContent="center"
-                        alignItems="center"
-                        height="272px"
-                      >
-                        <WordCloud
-                          data={wentWellWords}
-                          showOn="whatWentWell"
-                        ></WordCloud>
-                      </Grid>
-                    ) : null}
-                  </Box>
-                ) : (
-                  <Box sx={{ width: '100%' }}>
-                    <Row>
-                      <Col xs="12">
-                        <Typography className="topVoted">Top Voted</Typography>
-                      </Col>
-                    </Row>
-                    {/* went-well-top-voted-cards */}
-                    <Row
-                      style={{ marginTop: '16px' }}
-                      id="went-well-top-voted-cards"
-                    >
-                      {wentWellTopVotedCards.map((card: any, index: number) => {
-                        return (
-                          <Col
-                            xs={windowWidth.current <= 1500 ? '4' : '3'}
-                            className="d-flex justify-content-center align-items-center"
-                            key={index}
-                          >
-                            <Box
-                              sx={{
-                                minWidth: '400px',
-                                minHeight: '140px',
-                                background: '#FFFFFF',
-                                opacity: '0.7',
-                                boxShadow: '0px 0px 20px rgba(0, 0, 0, 0.15)',
-                                borderRadius: '8px',
-                                padding: '8px',
-                              }}
-                            >
-                              <Row>
-                                <Col
-                                  xs="12"
-                                  className="d-flex justify-content-start align-items-center"
-                                >
-                                  <LazyLoadImage
-                                    className="avatar"
-                                    style={{
-                                      width: '40px',
-                                      height: '40px',
-                                      borderRadius: '50%',
-                                      border: '5px solid #f9fbf8',
-                                    }}
-                                    src={
-                                      '/avatars/animals/' + card.avatar + '.svg'
-                                    }
-                                  ></LazyLoadImage>
-                                  <Typography>{card.value}</Typography>
-                                </Col>
-                              </Row>
-                              <Row>
-                                <Col
-                                  xs="12"
-                                  className="d-flex justify-content-start align-items-center"
-                                >
-                                  <Icons.Star size={20} color="#CCCCCC" />
-                                  <Typography sx={{ marginLeft: '8px' }}>
-                                    {card.reacts.length}
-                                  </Typography>
-                                </Col>
-                              </Row>
-                            </Box>
-                          </Col>
-                        );
-                      })}
-                    </Row>
-                    {/* "went-well-top-voted-cards-react-print */}
-                    <Box
-                      id="went-well-top-voted-cards-react-print"
-                      sx={{ display: 'none' }}
-                    >
-                      <Row style={{ marginTop: '16px' }}>
-                        {wentWellTopVotedCardsPrint_1.map(
-                          (card: any, index: number) => {
-                            return (
-                              <Col
-                                xs="6"
-                                className="d-flex justify-content-start align-items-center"
-                                key={index}
-                              >
-                                <Box
-                                  sx={{
-                                    minWidth: '360px',
-                                    maxWidth: '360px',
-                                    minHeight: '150px',
-                                    background: '#FFFFFF',
-                                    opacity: '0.7',
-                                    boxShadow:
-                                      '0px 0px 20px rgba(0, 0, 0, 0.15)',
-                                    borderRadius: '8px',
-                                    padding: '8px',
-                                  }}
-                                >
-                                  <Row>
-                                    <Col
-                                      xs="12"
-                                      className="d-flex justify-content-start align-items-center"
-                                    >
-                                      <LazyLoadImage
-                                        className="avatar"
-                                        style={{
-                                          width: '40px',
-                                          height: '40px',
-                                          borderRadius: '50%',
-                                          border: '5px solid #f9fbf8',
-                                        }}
-                                        src={
-                                          '/avatars/animals/' +
-                                          card.avatar +
-                                          '.svg'
-                                        }
-                                      ></LazyLoadImage>
-                                      <Typography>{card.value}</Typography>
-                                    </Col>
-                                  </Row>
-                                  <Row>
-                                    <Col
-                                      xs="12"
-                                      className="d-flex justify-content-start align-items-center"
-                                    >
-                                      <Icons.Star size={20} color="#CCCCCC" />
-                                      <Typography sx={{ marginLeft: '8px' }}>
-                                        {card.reacts.length}
-                                      </Typography>
-                                    </Col>
-                                  </Row>
-                                </Box>
-                              </Col>
-                            );
-                          }
-                        )}
-                      </Row>
-                      <Row style={{ marginTop: '16px' }}>
-                        {wentWellTopVotedCardsPrint_2.map(
-                          (card: any, index: number) => {
-                            return (
-                              <Col
-                                xs="6"
-                                className="d-flex justify-content-start align-items-center"
-                                key={index}
-                              >
-                                <Box
-                                  sx={{
-                                    minWidth: '360px',
-                                    maxWidth: '360px',
-                                    minHeight: '150px',
-                                    background: '#FFFFFF',
-                                    opacity: '0.7',
-                                    boxShadow:
-                                      '0px 0px 20px rgba(0, 0, 0, 0.15)',
-                                    borderRadius: '8px',
-                                    padding: '8px',
-                                  }}
-                                >
-                                  <Row>
-                                    <Col
-                                      xs="12"
-                                      className="d-flex justify-content-start align-items-center"
-                                    >
-                                      <LazyLoadImage
-                                        className="avatar"
-                                        style={{
-                                          width: '40px',
-                                          height: '40px',
-                                          borderRadius: '50%',
-                                          border: '5px solid #f9fbf8',
-                                        }}
-                                        src={
-                                          '/avatars/animals/' +
-                                          card.avatar +
-                                          '.svg'
-                                        }
-                                      ></LazyLoadImage>
-                                      <Typography>{card.value}</Typography>
-                                    </Col>
-                                  </Row>
-                                  <Row>
-                                    <Col
-                                      xs="12"
-                                      className="d-flex justify-content-start align-items-center"
-                                    >
-                                      <Icons.Star size={20} color="#CCCCCC" />
-                                      <Typography sx={{ marginLeft: '8px' }}>
-                                        {card.reacts.length}
-                                      </Typography>
-                                    </Col>
-                                  </Row>
-                                </Box>
-                              </Col>
-                            );
-                          }
-                        )}
-                      </Row>
-                    </Box>
-                  </Box>
-                )}
-              </Col>
-            </Row>
-          )}
-          {/* What Didn’t Go Well? Section 1*/}
-          <Row style={{ marginTop: '36px' }}>
-            <Col
-              xs="12"
-              className="d-flex justify-content-start align-items-center"
-            >
-              <Typography className="textTypeFour">
-                {didNotWentWellColumnName}
-              </Typography>
-            </Col>
-          </Row>
-          {/* What Didn’t Go Well? Section 2*/}
-          <Row style={{ marginTop: '16px' }} id="view-top-voted-card-2">
-            <Col
-              xs="4"
-              lg="4"
-              className="d-flex justify-content-start align-items-center"
-            >
-              <Typography className="participantsResponded">
-                Participants Responded
-              </Typography>
-              <Typography className="participantsResponded" ml={2}>
-                {didNotWentWellCreatedBy}/{users.length}
-              </Typography>
-            </Col>
-            {didNotWentWellWords.length === 0 ? null : (
-              <Col
-                xs={{ span: 3, offset: 5 }}
-                lg={{ span: 2, offset: 6 }}
-                className="d-flex justify-content-end align-items-center"
-              >
-                <Typography
-                  className="viewWorldCould"
-                  onClick={handleIsNotWellCloudOpen}
-                >
-                  {isNotWellCloudOpen
-                    ? 'View Top Voted Cards'
-                    : 'View Word Cloud'}
-                </Typography>
-              </Col>
-            )}
-          </Row>
-          {/* What Didn’t Go Well? Section print 2*/}
-          <Row style={{ marginTop: '16px' }} id="view-top-voted-card-print-2">
-            <Col
-              xs="12"
-              className="d-flex justify-content-start align-items-center"
-            >
-              <Typography className="participantsResponded">
-                Participants Responded
-              </Typography>
-              <Typography className="participantsResponded" ml={2}>
-                {didNotWentWellCreatedBy}/{users.length}
-              </Typography>
-            </Col>
-          </Row>
-          {/* What Didn’t Go Well? Section 3*/}
-          {didNotWentWellWords.length === 0 ? (
-            <Row style={{ marginTop: '16px' }}>
-              <Col
-                xs="12"
-                className="d-flex justify-content-start align-items-center"
-              >
-                <Box
-                  sx={{
-                    width: '100%',
-                    height: '240px',
-                    display: 'flex',
-                    justifyContent: 'center',
-                    alignItems: 'center',
-                    flexDirection: 'column',
-                    background: '#FAFAFA',
-                    border: '1px solid #CCCCCC',
-                  }}
-                >
-                  <Box
-                    component="div"
-                    sx={{ textAlign: 'justify', marginTop: '16px' }}
-                  >
-                    <Typography className="text1">No data present</Typography>
-                  </Box>
-                </Box>
-              </Col>
-            </Row>
-          ) : (
-            <Row style={{ marginTop: '16px' }}>
-              <Col
-                xs="12"
-                className="d-flex justify-content-start align-items-center"
-              >
-                {isNotWellCloudOpen ? (
-                  <Box sx={styles.whatDidNotWellBox}>
-                    {didNotWentWellWords.length !== 0 ? (
-                      <Grid
-                        item
-                        display="flex"
-                        justifyContent="center"
-                        alignItems="center"
-                        height="272px"
-                      >
-                        <WordCloud
-                          data={didNotWentWellWords}
-                          showOn="whatDidntWentWell"
-                        ></WordCloud>
-                      </Grid>
-                    ) : null}
-                  </Box>
-                ) : (
-                  <Box sx={{ width: '100%' }}>
-                    <Row>
-                      <Col xs="12">
-                        <Typography className="topVoted">Top Voted</Typography>
-                      </Col>
-                    </Row>
-                    {/* did-Not-Went-Well-Top-Voted-Cards */}
-                    <Row
-                      style={{ marginTop: '16px' }}
-                      id="did-Not-Went-Well-Top-Voted-Cards"
-                    >
-                      {didNotWentWellTopVotedCards.map(
-                        (card: any, index: number) => {
-                          return (
-                            <Col
-                              xs={windowWidth.current <= 1500 ? '4' : '3'}
-                              className="d-flex justify-content-center align-items-center"
-                              key={index}
-                            >
-                              <Box
-                                sx={{
-                                  minWidth: '400px',
-                                  minHeight: '140px',
-                                  background: '#FFFFFF',
-                                  opacity: '0.7',
-                                  boxShadow: '0px 0px 20px rgba(0, 0, 0, 0.15)',
-                                  borderRadius: '8px',
-                                  padding: '8px',
-                                }}
-                              >
-                                <Row>
-                                  <Col
-                                    xs="12"
-                                    className="d-flex justify-content-start align-items-center"
-                                  >
-                                    <LazyLoadImage
-                                      className="avatar"
-                                      style={{
-                                        width: '40px',
-                                        height: '40px',
-                                        borderRadius: '50%',
-                                        border: '5px solid #f9fbf8',
-                                      }}
-                                      src={
-                                        '/avatars/animals/' +
-                                        card.avatar +
-                                        '.svg'
-                                      }
-                                    ></LazyLoadImage>
-                                    <Typography>{card.value}</Typography>
-                                  </Col>
-                                </Row>
-                                <Row>
-                                  <Col
-                                    xs="12"
-                                    className="d-flex justify-content-start align-items-center"
-                                  >
-                                    <Icons.Star size={20} color="#CCCCCC" />
-                                    <Typography sx={{ marginLeft: '8px' }}>
-                                      {card.reacts.length}
-                                    </Typography>
-                                  </Col>
-                                </Row>
-                              </Box>
-                            </Col>
-                          );
-                        }
-                      )}
-                    </Row>
-                    {/* did-Not-Went-Well-Top-Voted-Cards-print */}
-                    <Box
-                      id="did-Not-Went-Well-Top-Voted-Cards-print"
-                      sx={{ display: 'none' }}
-                    >
-                      <Row style={{ marginTop: '16px' }}>
-                        {didNotWentWellTopVotedCardsPrint_1.map(
-                          (card: any, index: number) => {
-                            return (
-                              <Col
-                                xs="6"
-                                className="d-flex justify-content-start align-items-center"
-                                key={index}
-                              >
-                                <Box
-                                  sx={{
-                                    minWidth: '360px',
-                                    maxWidth: '360px',
-                                    minHeight: '150px',
-                                    background: '#FFFFFF',
-                                    opacity: '0.7',
-                                    boxShadow:
-                                      '0px 0px 20px rgba(0, 0, 0, 0.15)',
-                                    borderRadius: '8px',
-                                    padding: '8px',
-                                  }}
-                                >
-                                  <Row>
-                                    <Col
-                                      xs="12"
-                                      className="d-flex justify-content-start align-items-center"
-                                    >
-                                      <LazyLoadImage
-                                        className="avatar"
-                                        style={{
-                                          width: '40px',
-                                          height: '40px',
-                                          borderRadius: '50%',
-                                          border: '5px solid #f9fbf8',
-                                        }}
-                                        src={
-                                          '/avatars/animals/' +
-                                          card.avatar +
-                                          '.svg'
-                                        }
-                                      ></LazyLoadImage>
-                                      <Typography>{card.value}</Typography>
-                                    </Col>
-                                  </Row>
-                                  <Row>
-                                    <Col
-                                      xs="12"
-                                      className="d-flex justify-content-start align-items-center"
-                                    >
-                                      <Icons.Star size={20} color="#CCCCCC" />
-                                      <Typography sx={{ marginLeft: '8px' }}>
-                                        {card.reacts.length}
-                                      </Typography>
-                                    </Col>
-                                  </Row>
-                                </Box>
-                              </Col>
-                            );
-                          }
-                        )}
-                      </Row>
-                      <Row style={{ marginTop: '16px' }}>
-                        {didNotWentWellTopVotedCardsPrint_2.map(
-                          (card: any, index: number) => {
-                            return (
-                              <Col
-                                xs="6"
-                                className="d-flex justify-content-start align-items-center"
-                                key={index}
-                              >
-                                <Box
-                                  sx={{
-                                    minWidth: '360px',
-                                    maxWidth: '360px',
-                                    minHeight: '150px',
-                                    background: '#FFFFFF',
-                                    opacity: '0.7',
-                                    boxShadow:
-                                      '0px 0px 20px rgba(0, 0, 0, 0.15)',
-                                    borderRadius: '8px',
-                                    padding: '8px',
-                                  }}
-                                >
-                                  <Row>
-                                    <Col
-                                      xs="12"
-                                      className="d-flex justify-content-start align-items-center"
-                                    >
-                                      <LazyLoadImage
-                                        className="avatar"
-                                        style={{
-                                          width: '40px',
-                                          height: '40px',
-                                          borderRadius: '50%',
-                                          border: '5px solid #f9fbf8',
-                                        }}
-                                        src={
-                                          '/avatars/animals/' +
-                                          card.avatar +
-                                          '.svg'
-                                        }
-                                      ></LazyLoadImage>
-                                      <Typography>{card.value}</Typography>
-                                    </Col>
-                                  </Row>
-                                  <Row>
-                                    <Col
-                                      xs="12"
-                                      className="d-flex justify-content-start align-items-center"
-                                    >
-                                      <Icons.Star size={20} color="#CCCCCC" />
-                                      <Typography sx={{ marginLeft: '8px' }}>
-                                        {card.reacts.length}
-                                      </Typography>
-                                    </Col>
-                                  </Row>
-                                </Box>
-                              </Col>
-                            );
-                          }
-                        )}
-                      </Row>
-                    </Box>
-                  </Box>
-                )}
-              </Col>
-            </Row>
-          )}
-          {/* Actions to be Taken Section 1*/}
-          <Row style={{ marginTop: '36px' }}>
-            <Col
-              xs="2"
-              className="d-flex justify-content-start align-items-center"
-            >
-              <Typography className="textTypeFour">
-                Actions to be Taken
-              </Typography>
-            </Col>
-            {actionCardData.length === 0 ? null : (
-              <Col
-                xs={{ span: 2, offset: 8 }}
-                className="d-flex justify-content-end align-items-center"
-                id="copy-to-clipboard"
-              >
-                <Typography
-                  className="viewParticipants"
-                  onClick={copyAllActions}
-                >
-                  Copy to Clipboard
-                </Typography>
-              </Col>
-            )}
-          </Row>
-          {/* Actions to be Taken Section 2*/}
-          {actionCardData.length === 0 ? (
-            <Row style={{ marginTop: '16px' }}>
-              <Col
-                xs="12"
-                className="d-flex justify-content-start align-items-center"
-              >
-                <Box
-                  sx={{
-                    width: '100%',
-                    height: '240px',
-                    display: 'flex',
-                    justifyContent: 'center',
-                    alignItems: 'center',
-                    flexDirection: 'column',
-                    background: '#FAFAFA',
-                    border: '1px solid #CCCCCC',
-                  }}
-                >
-                  <Box
-                    component="div"
-                    sx={{ textAlign: 'justify', marginTop: '16px' }}
-                  >
-                    <Typography className="text1">No data present</Typography>
-                  </Box>
-                </Box>
-              </Col>
-            </Row>
-          ) : (
-            <>
-              <Box sx={{ marginTop: '16px' }} id="actions-column">
-                {isAllActionOpen ? (
-                  <>
-                    {actionCardData.map((action: any, index: number) => {
-                      return (
-                        <Row
-                          style={{ marginTop: index > 0 ? '16px' : '0px' }}
-                          key={index}
-                        >
-                          <Col
-                            xs="12"
-                            className="d-flex justify-content-start align-items-center"
-                          >
-                            <LazyLoadImage
-                              className="avatar"
-                              style={{
-                                width: '40px',
-                                height: '40px',
-                                borderRadius: '50%',
-                                border: '5px solid #f9fbf8',
-                              }}
-                              src={'/avatars/animals/' + action.avatar + '.svg'}
-                            ></LazyLoadImage>
-                            <Typography
-                              style={{ marginLeft: '12px' }}
-                              className="actionValue"
-                            >
-                              {action.value}
-                            </Typography>
-                          </Col>
-                        </Row>
-                      );
-                    })}
-                    <Typography
-                      className="viewWorldCould"
-                      sx={{ marginTop: '8px' }}
-                      onClick={handleIsActionCloudOpen}
-                    >
-                      Show Less
-                    </Typography>
-                  </>
-                ) : (
-                  <>
-                    {actionTopVotedCards.map((action: any, index: number) => {
-                      return (
-                        <Row
-                          style={{ marginTop: index > 0 ? '16px' : '0px' }}
-                          key={index}
-                        >
-                          <Col
-                            xs="12"
-                            className="d-flex justify-content-start align-items-center"
-                          >
-                            <LazyLoadImage
-                              className="avatar"
-                              style={{
-                                width: '40px',
-                                height: '40px',
-                                borderRadius: '50%',
-                                border: '5px solid #f9fbf8',
-                              }}
-                              src={'/avatars/animals/' + action.avatar + '.svg'}
-                            ></LazyLoadImage>
-                            <Typography
-                              style={{ marginLeft: '12px' }}
-                              className="actionValue"
-                            >
-                              {action.value}
-                            </Typography>
-                          </Col>
-                        </Row>
-                      );
-                    })}
-                    {actionCardData.length > 4 && (
-                      <Row style={{ marginTop: '16px' }}>
-                        <Col
-                          xs="12"
-                          className="d-flex justify-content-start align-items-center"
-                        >
-                          {actionLastVotedCards.map(
-                            (card: any, index: number) => {
-                              return (
-                                <Avatar
-                                  key={card.id}
-                                  avatar={card.avatar}
-                                  // onClickAvatar={() => {
-                                  //   console.log('click');
-                                  // }}
-                                  css={{
-                                    width: '40px',
-                                    height: '40px',
-                                    marginLeft: '0',
-                                    marginRight: '-8px',
-                                    border: '3px solid transparent',
-                                  }}
-                                />
-                              );
-                            }
-                          )}
-                          <Typography
-                            className="viewWorldCould"
-                            sx={{ marginLeft: '8px' }}
-                            onClick={handleIsActionCloudOpen}
-                          >
-                            View More Comments from {users.length}&nbsp;
-                            Participants
-                          </Typography>
-                        </Col>
-                      </Row>
-                    )}
-                  </>
-                )}
-              </Box>
-              <Box
-                sx={{ marginTop: '16px', display: 'none' }}
-                id="actions-column-print"
-              >
-                {actionCardData.map((action: any, index: number) => {
-                  return (
-                    <Row
-                      style={{ marginTop: index > 0 ? '16px' : '0px' }}
-                      key={index}
-                    >
-                      <Col
-                        xs="12"
-                        className="d-flex justify-content-start align-items-center"
-                      >
-                        <LazyLoadImage
-                          className="avatar"
-                          style={{
-                            width: '40px',
-                            height: '40px',
-                            borderRadius: '50%',
-                            border: '5px solid #f9fbf8',
-                          }}
-                          src={'/avatars/animals/' + action.avatar + '.svg'}
-                        ></LazyLoadImage>
-                        <Typography
-                          style={{ marginLeft: '12px' }}
-                          className="actionValue"
-                        >
-                          {action.value}
-                        </Typography>
-                      </Col>
-                    </Row>
-                  );
-                })}
-              </Box>
-            </>
-          )}
+          {/* Column Section 1*/}
+          {columns && columns[0] && columns[0].id === '0' ? (
+            <WhatWentWell
+              wentWellColumnName={wentWellColumnName}
+              wentWellCreatedBy={wentWellCreatedBy}
+              users={users}
+              wentWellWords={wentWellWords}
+              handleIsWellCloudOpen={handleIsWellCloudOpen}
+              isWellCloudOpen={isWellCloudOpen}
+              wentWellTopVotedCards={wentWellTopVotedCards}
+              wentWellTopVotedCardsPrint_1={wentWellTopVotedCardsPrint_1}
+              wentWellTopVotedCardsPrint_2={wentWellTopVotedCardsPrint_2}
+            />
+          ) : null}
+          {columns && columns[0] && columns[0].id === '1' ? (
+            <DidNotWentWell
+              didNotWentWellColumnName={didNotWentWellColumnName}
+              didNotWentWellCreatedBy={didNotWentWellCreatedBy}
+              users={users}
+              didNotWentWellWords={didNotWentWellWords}
+              handleIsNotWellCloudOpen={handleIsNotWellCloudOpen}
+              isNotWellCloudOpen={isNotWellCloudOpen}
+              didNotWentWellTopVotedCards={didNotWentWellTopVotedCards}
+              didNotWentWellTopVotedCardsPrint_1={
+                didNotWentWellTopVotedCardsPrint_1
+              }
+              didNotWentWellTopVotedCardsPrint_2={
+                didNotWentWellTopVotedCardsPrint_2
+              }
+            />
+          ) : null}
+          {columns && columns[0] && columns[0].id === '2' ? (
+            <DevelopAction
+              actionCardData={actionCardData}
+              copyAllActions={copyAllActions}
+              handleIsActionCloudOpen={handleIsActionCloudOpen}
+              users={users}
+              isAllActionOpen={isAllActionOpen}
+              actionTopVotedCards={actionTopVotedCards}
+              actionLastVotedCards={actionLastVotedCards}
+            />
+          ) : null}
+
+          {/* Column Section 2*/}
+          {columns && columns[1] && columns[1].id === '0' ? (
+            <WhatWentWell
+              wentWellColumnName={wentWellColumnName}
+              wentWellCreatedBy={wentWellCreatedBy}
+              users={users}
+              wentWellWords={wentWellWords}
+              handleIsWellCloudOpen={handleIsWellCloudOpen}
+              isWellCloudOpen={isWellCloudOpen}
+              wentWellTopVotedCards={wentWellTopVotedCards}
+              wentWellTopVotedCardsPrint_1={wentWellTopVotedCardsPrint_1}
+              wentWellTopVotedCardsPrint_2={wentWellTopVotedCardsPrint_2}
+            />
+          ) : null}
+          {columns && columns[1] && columns[1].id === '1' ? (
+            <DidNotWentWell
+              didNotWentWellColumnName={didNotWentWellColumnName}
+              didNotWentWellCreatedBy={didNotWentWellCreatedBy}
+              users={users}
+              didNotWentWellWords={didNotWentWellWords}
+              handleIsNotWellCloudOpen={handleIsNotWellCloudOpen}
+              isNotWellCloudOpen={isNotWellCloudOpen}
+              didNotWentWellTopVotedCards={didNotWentWellTopVotedCards}
+              didNotWentWellTopVotedCardsPrint_1={
+                didNotWentWellTopVotedCardsPrint_1
+              }
+              didNotWentWellTopVotedCardsPrint_2={
+                didNotWentWellTopVotedCardsPrint_2
+              }
+            />
+          ) : null}
+          {columns && columns[1] && columns[1].id === '2' ? (
+            <DevelopAction
+              actionCardData={actionCardData}
+              copyAllActions={copyAllActions}
+              handleIsActionCloudOpen={handleIsActionCloudOpen}
+              users={users}
+              isAllActionOpen={isAllActionOpen}
+              actionTopVotedCards={actionTopVotedCards}
+              actionLastVotedCards={actionLastVotedCards}
+            />
+          ) : null}
+          {/* Column Section 3*/}
+          {columns && columns[2] && columns[2].id === '0' ? (
+            <WhatWentWell
+              wentWellColumnName={wentWellColumnName}
+              wentWellCreatedBy={wentWellCreatedBy}
+              users={users}
+              wentWellWords={wentWellWords}
+              handleIsWellCloudOpen={handleIsWellCloudOpen}
+              isWellCloudOpen={isWellCloudOpen}
+              wentWellTopVotedCards={wentWellTopVotedCards}
+              wentWellTopVotedCardsPrint_1={wentWellTopVotedCardsPrint_1}
+              wentWellTopVotedCardsPrint_2={wentWellTopVotedCardsPrint_2}
+            />
+          ) : null}
+          {columns && columns[2] && columns[2].id === '1' ? (
+            <DidNotWentWell
+              didNotWentWellColumnName={didNotWentWellColumnName}
+              didNotWentWellCreatedBy={didNotWentWellCreatedBy}
+              users={users}
+              didNotWentWellWords={didNotWentWellWords}
+              handleIsNotWellCloudOpen={handleIsNotWellCloudOpen}
+              isNotWellCloudOpen={isNotWellCloudOpen}
+              didNotWentWellTopVotedCards={didNotWentWellTopVotedCards}
+              didNotWentWellTopVotedCardsPrint_1={
+                didNotWentWellTopVotedCardsPrint_1
+              }
+              didNotWentWellTopVotedCardsPrint_2={
+                didNotWentWellTopVotedCardsPrint_2
+              }
+            />
+          ) : null}
+          {columns && columns[2] && columns[2].id === '2' ? (
+            <DevelopAction
+              actionCardData={actionCardData}
+              copyAllActions={copyAllActions}
+              handleIsActionCloudOpen={handleIsActionCloudOpen}
+              users={users}
+              isAllActionOpen={isAllActionOpen}
+              actionTopVotedCards={actionTopVotedCards}
+              actionLastVotedCards={actionLastVotedCards}
+            />
+          ) : null}
+
           {/* Feedback for Facilitator 1 */}
           <Row style={{ marginTop: '36px' }}>
             <Col
