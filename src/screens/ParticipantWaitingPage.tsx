@@ -33,24 +33,24 @@ export function ParticipantWaitingPage() {
   const [animateThird, setAnimateThird] = React.useState(false);
   const isXsUp = useMediaQuery(theme.breakpoints.between('xs', 'sm'));
   useLoadRetro();
-  React.useEffect(() => {
-    let interval1 = setInterval(() => {
-      setAnimateFirst(false);
-      setAnimatesecond(true);
-      setAnimateThird(false);
-    }, 10000);
+  // React.useEffect(() => {
+  //   let interval1 = setInterval(() => {
+  //     setAnimateFirst(false);
+  //     setAnimatesecond(true);
+  //     setAnimateThird(false);
+  //   }, 10000);
 
-    let interval2 = setInterval(() => {
-      setAnimateFirst(false);
-      setAnimatesecond(false);
-      setAnimateThird(true);
-    }, 10000);
-    let interval3 = setInterval(() => {
-      setAnimateFirst(true);
-      setAnimatesecond(false);
-      setAnimateThird(false);
-    }, 10000);
-  });
+  //   let interval2 = setInterval(() => {
+  //     setAnimateFirst(false);
+  //     setAnimatesecond(false);
+  //     setAnimateThird(true);
+  //   }, 10000);
+  //   let interval3 = setInterval(() => {
+  //     setAnimateFirst(true);
+  //     setAnimatesecond(false);
+  //     setAnimateThird(false);
+  //   }, 10000);
+  // });
   return (
     <Grid container>
       <Grid xs={12} item>
@@ -94,7 +94,7 @@ export function ParticipantWaitingPage() {
         <Box sx={{ display: 'flex', justifyContent: 'center' }}>
           <img width={isXsUp ? '280px' : '500px'} src={gif}></img>
         </Box>
-        {animateFirst && !isXsUp && (
+        {/* {animateFirst && !isXsUp && (
           <Box
             mt="16px"
             style={{
@@ -179,7 +179,7 @@ export function ParticipantWaitingPage() {
             </h4>
             <h4 style={{ color: commomStyles.primaryDark }}>Actions</h4>
           </Box>
-        )}
+        )} */}
       </Box>
       <StartRetroButton></StartRetroButton>
     </Grid>
