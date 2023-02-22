@@ -76,11 +76,12 @@ export default function useLoadRetro() {
           avatar: global.avatar,
           isMobile: window.innerWidth < 700,
         }).then(() => {
+          console.log(retroId,"checking",FEATURE_FLAGS.pulseCheck)
           if (global.currentRetro && retroStarted) {
             if (FEATURE_FLAGS.pulseCheck) {
-              navigate(
-                `/board/${retroId || global.currentRetro?.id}/pulsecheck`
-              );
+              // navigate(
+              //   `/board/${retroId || global.currentRetro?.id}/pulsecheck`
+              // );
               return;
             }
           } else {
@@ -95,5 +96,5 @@ export default function useLoadRetro() {
         return;
       }
     }
-  }, [retroId, loading]);
+  }, [retroId,loading]);
 }
