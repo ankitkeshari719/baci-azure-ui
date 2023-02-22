@@ -93,7 +93,6 @@ type Props = {
     selectedTemplate: any
   ) => void;
   setIsTemplateCustomized: (isTemplateCustomized: boolean) => void;
-  setSelectedTemplate: (selectedTemplate: any) => void;
   customizedTemplate: any;
   isTemplateCustomized: boolean;
 };
@@ -123,6 +122,10 @@ export function CustomizeTemplate({
         'selectedTemplate',
         JSON.stringify(selectedTemplate)
       );
+      localStorage.setItem(
+        'tempSelectedTemplateData',
+        JSON.stringify(selectedTemplate)
+      );
       const newArr =
         selectedTemplate.columns &&
         selectedTemplate.columns.map((element: any) => ({
@@ -134,6 +137,10 @@ export function CustomizeTemplate({
       setTempSelectedTemplate(customizedTemplate);
       localStorage.setItem(
         'selectedTemplate',
+        JSON.stringify(customizedTemplate)
+      );
+      localStorage.setItem(
+        'tempSelectedTemplateData',
         JSON.stringify(customizedTemplate)
       );
       const newArr =
@@ -157,12 +164,12 @@ export function CustomizeTemplate({
 
     //Updating the list
     setDragDropList(arr);
-    setIsChangesHappen(true);
     setTempSelectedTemplate({ ...tempSelectedTemplate, columns: [...arr] });
     localStorage.setItem(
-      'selectedTemplate',
+      'tempSelectedTemplateData',
       JSON.stringify({ ...tempSelectedTemplate, columns: [...arr] })
     );
+    setIsChangesHappen(true);
   };
 
   // On Changing the column name
@@ -187,20 +194,33 @@ export function CustomizeTemplate({
     }
     setIsChangesHappen(true);
     localStorage.setItem(
-      'selectedTemplate',
+      'tempSelectedTemplateData',
       JSON.stringify({ ...tempSelectedTemplate, columns: [...data] })
     );
     setTempSelectedTemplate({ ...tempSelectedTemplate, columns: [...data] });
   };
 
-  // Function to handle the select button click
+  // Function to handle the select button click and SaveAndExit button
   const onClickSelectButton = (templateId: string) => {
-    setIsTemplateCustomized(true);
-    const localStorageTemplateTemp = localStorage.getItem('selectedTemplate');
+    const localStorageTemplateTemp = localStorage.getItem(
+      'tempSelectedTemplateData'
+    );
     const localStorageTemplate =
       localStorageTemplateTemp && JSON.parse(localStorageTemplateTemp);
-    closeCustomTemplateDialog();
+    localStorage.setItem(
+      'selectedTemplate',
+      JSON.stringify(localStorageTemplate)
+    );
     handleTemplateSelectClick(templateId, localStorageTemplate);
+    setIsTemplateCustomized(true);
+    closeCustomTemplateDialog();
+    localStorage.removeItem('tempSelectedTemplateData');
+  };
+
+  // Function to handle the ExitWithOutExit button
+  const exitWithOutExit = () => {
+    closeCustomTemplateDialog();
+    localStorage.removeItem('tempSelectedTemplateData');
   };
 
   const handleIsChangeDialogClose = () => {
@@ -485,7 +505,7 @@ export function CustomizeTemplate({
       >
         <CustomizeTemplateDialog
           handleIsChangeDialogClose={handleIsChangeDialogClose}
-          closeCustomTemplateDialog={closeCustomTemplateDialog}
+          exitWithOutExit={exitWithOutExit}
           templateId={selectedTemplate.templateId}
           onClickSelectButton={onClickSelectButton}
         />
