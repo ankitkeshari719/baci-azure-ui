@@ -15,7 +15,7 @@ import { ContainedButton, OutlinedButton } from '../../components';
 
 type Props = {
   handleIsChangeDialogClose: () => void;
-  exitWithOutExit: () => void;
+  exitWithOutExit: (selectedId: string) => void;
   onClickSelectButton: (selectedId: string) => void;
   templateId: string;
 };
@@ -103,7 +103,7 @@ export function CustomizeTemplateDialog({
       >
         <OutlinedButton
           name="Exit without saving"
-          onClick={exitWithOutExit}
+          onClick={() => exitWithOutExit(templateId)}
           style={{
             minWidth: '225px !important',
             height: '44px !important',

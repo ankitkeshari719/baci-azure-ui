@@ -218,9 +218,13 @@ export function CustomizeTemplate({
   };
 
   // Function to handle the ExitWithOutExit button
-  const exitWithOutExit = () => {
+  const exitWithOutExit = (templateId: string) => {
     closeCustomTemplateDialog();
     localStorage.removeItem('tempSelectedTemplateData');
+    const localStorageTemplateTemp = localStorage.getItem('selectedTemplate');
+    const localStorageTemplate =
+      localStorageTemplateTemp && JSON.parse(localStorageTemplateTemp);
+    handleTemplateSelectClick(templateId, localStorageTemplate);
   };
 
   const handleIsChangeDialogClose = () => {

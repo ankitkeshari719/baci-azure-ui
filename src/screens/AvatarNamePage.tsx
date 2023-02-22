@@ -206,7 +206,7 @@ export function AvatarNamePage() {
     setUserName(e);
   };
   React.useEffect(() => {
-    console.log("vishal")
+  
     socket.connect().on("connect",()=>{
       console.log("----------- socket connected ------------")
     })
