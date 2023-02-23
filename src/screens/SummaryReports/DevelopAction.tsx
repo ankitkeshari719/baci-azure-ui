@@ -7,49 +7,6 @@ import { LazyLoadImage } from 'react-lazy-load-image-component';
 import Avatar from '../../elements/Avatar';
 import { Word } from '../../elements/WordCloud';
 
-const styles = {
-  whatWentWellBox: {
-    background: 'rgba(11, 102, 35,0.04)',
-    border: '1px solid rgba(11, 102, 35,0.5)',
-    borderRadius: '20px',
-    height: '392px',
-    width: '100% !important',
-  },
-  whatDidNotWellBox: {
-    background: 'rgba(247, 151, 34, 0.04)',
-    border: '1px solid rgba(247, 151, 34, 0.5)',
-    borderRadius: '20px',
-    boxSizing: 'border-box',
-    height: '392px',
-    width: '100% !important',
-  },
-  actionBox: {
-    background: 'rgba(138, 56, 245, 0.04)',
-    border: '1px solid rgba(138, 56, 245, 0.5)',
-    borderRadius: '20px',
-    boxSizing: 'border-box',
-    minHeight: '392px',
-    width: '100% !important',
-  },
-  pulseCheckBox: {
-    background: 'rgba(52, 52, 52, 0.04)',
-    border: '1px solid rgba(52, 52, 52, 0.5)',
-    borderRadius: '20px',
-    boxSizing: 'border-box',
-    height: '392px',
-  },
-  facilitatorFeedbackBox: {
-    background: 'rgba(52, 52, 52, 0.04)',
-    border: '1px solid rgba(52, 52, 52, 0.5)',
-    borderRadius: '20px',
-    boxSizing: 'border-box',
-    height: '392px',
-  },
-  textOpacity: {
-    opacity: 0.9,
-  },
-};
-
 type Props = {
   actionCardData: any;
   copyAllActions: () => void;
