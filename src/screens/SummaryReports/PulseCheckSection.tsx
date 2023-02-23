@@ -77,6 +77,7 @@ export const options = {
           size: 14,
           lineHeight: '20px',
         },
+        
       },
     },
   },
@@ -94,6 +95,9 @@ export const options = {
           lineHeight: '20px',
         },
       },
+    },
+    tooltip: {
+        enabled: false,
     },
   },
 };
