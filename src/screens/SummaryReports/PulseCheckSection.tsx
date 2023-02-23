@@ -13,7 +13,6 @@ import {
   Tooltip,
   Legend,
 } from 'chart.js';
-import { QUICK_PULSE_CHECK_QUESTIONS } from '../../constants';
 import { Question } from '../../elements/PulseCheckChart';
 
 ChartJS.register(
@@ -35,12 +34,26 @@ export const options = {
         display: true,
         text: '% Response',
         color: '#343434',
+        font: {
+          family: 'Poppins',
+          styles: 'normal',
+          weight: '400',
+          size: 16,
+          lineHeight: '20px',
+        },
       },
       min: 0,
       max: 100,
       ticks: {
-        // forces step size to be 10 units
         stepSize: 10,
+        color: '#808080',
+        font: {
+          family: 'Poppins',
+          styles: 'normal',
+          weight: '400',
+          size: 14,
+          lineHeight: '0.4px',
+        },
       },
     },
     y: {
@@ -52,15 +65,32 @@ export const options = {
         drawOnChartArea: false,
         drawTicks: true,
       },
+      ticks: {
+        color: '#343434',
+        font: {
+          family: 'Poppins',
+          styles: 'normal',
+          //   weight: '400',
+          //   size: 16,
+          lineHeight: '20px',
+        },
+      },
     },
   },
-
   elements: {
     bar: {},
   },
   plugins: {
     legend: {
       position: 'right' as const,
+      labels: {
+        font: {
+          weight: '400',
+          size: 16,
+          family: 'Poppins',
+          lineHeight: '20px',
+        },
+      },
     },
   },
 };
@@ -68,10 +98,26 @@ export const options = {
 type Props = {
   questions: Question[];
   barData: { 1: any; 2: any; 3: any }[];
+  questionOneResponse: number | undefined;
+  questionTwoResponse: number | undefined;
+  questionThreeResponse: number | undefined;
 };
 
-export default function PulseCheckSection({ questions, barData }: Props) {
-  console.log('QUICK_PULSE_CHECK_QUESTIONS:: ', QUICK_PULSE_CHECK_QUESTIONS);
+export default function PulseCheckSection({
+  questions,
+  barData,
+  questionOneResponse,
+  questionTwoResponse,
+  questionThreeResponse,
+}: Props) {
+  const labelOne =
+    'People & Resources ' + '( ' + questionOneResponse + ' Response' + ' )';
+  const labelTwo =
+    'Work Processes ' + '( ' + questionTwoResponse + ' Response' + ' )';
+  const labelThree =
+    'Technical Tools ' + '( ' + questionThreeResponse + ' Response' + ' )';
+  const labels = [labelOne, labelTwo, labelThree];
+
   return (
     <Box>
       {/* Pulse Check Section 1*/}
@@ -89,7 +135,7 @@ export default function PulseCheckSection({ questions, barData }: Props) {
       <Row style={{ marginTop: '16px' }}>
         {questions.length !== 0 ? (
           <Col
-            xs="6"
+            xs="8"
             className="d-flex justify-content-start align-items-center"
             id="pulse-check-chart"
           >
@@ -100,7 +146,7 @@ export default function PulseCheckSection({ questions, barData }: Props) {
               }}
               options={options}
               data={{
-                labels: QUICK_PULSE_CHECK_QUESTIONS, // datasets is an array of objects where each object represents a set of data to display corresponding to the labels above. for brevity, we'll keep it at one object
+                labels: labels, // datasets is an array of objects where each object represents a set of data to display corresponding to the labels above. for brevity, we'll keep it at one object
                 datasets: [
                   {
                     data: barData[0],

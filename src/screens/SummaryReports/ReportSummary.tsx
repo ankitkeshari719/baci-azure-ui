@@ -142,6 +142,14 @@ export const ReportSummary = React.forwardRef((props, ref) => {
     []
   );
 
+  // Pulse Check response
+  const [questionOneResponse, setQuestionOneResponse] =
+    React.useState<number>();
+  const [questionTwoResponse, setQuestionTwoResponse] =
+    React.useState<number>();
+  const [questionThreeResponse, setQuestionThreeResponse] =
+    React.useState<number>();
+
   // Unique CreatedBy Length
   const [wentWellCreatedBy, setWentWellCreatedBy] = React.useState<number>();
   const [didNotWentWellCreatedBy, setDidNotWentWellCreatedBy] =
@@ -424,6 +432,9 @@ export const ReportSummary = React.forwardRef((props, ref) => {
         }
       });
     });
+    setQuestionOneResponse(questionOneTotalResponse);
+    setQuestionTwoResponse(questionTwoTotalResponse);
+    setQuestionThreeResponse(questionThreeTotalResponse);
 
     users.forEach(user => {
       user?.pulseCheckQuestions.forEach(question => {
@@ -786,7 +797,13 @@ export const ReportSummary = React.forwardRef((props, ref) => {
               </Typography>
             </Col>
           </Row>
-          <PulseCheckSection questions={questions} barData={barData} />
+          <PulseCheckSection
+            questions={questions}
+            barData={barData}
+            questionOneResponse={questionOneResponse}
+            questionTwoResponse={questionTwoResponse}
+            questionThreeResponse={questionThreeResponse}
+          />
           {/* Column Section 1*/}
           {columns && columns[0] && columns[0].id === '0' ? (
             <WhatWentWell
