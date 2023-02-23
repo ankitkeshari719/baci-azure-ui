@@ -350,7 +350,7 @@ export const pulseChecksData: pulseCheckInterface[] = [
     name: 'Simple (3 Questions)',
     description:
       'An oldie but a goodie, also known as the PPT Framework created in the 60s, it has long been the benchmark to understanding workforce management.',
-    pulseCheckImage: '/images/blank.png',
+    pulseCheckImage: '/images/simplePulseCheckImage.png',
     checked: true,
     isComingSoon: false,
     value: [
