@@ -30,10 +30,14 @@ export const options = {
   indexAxis: 'y' as const,
   scales: {
     x: {
+      position: 'top' as const,
+      min: 0,
+      max: 100,
       title: {
         display: true,
         text: '% Response',
         color: '#343434',
+        padding: 20,
         font: {
           family: 'Poppins',
           styles: 'normal',
@@ -42,8 +46,6 @@ export const options = {
           lineHeight: '20px',
         },
       },
-      min: 0,
-      max: 100,
       ticks: {
         stepSize: 10,
         color: '#808080',
@@ -67,11 +69,12 @@ export const options = {
       },
       ticks: {
         color: '#343434',
+        padding: 25,
         font: {
           family: 'Poppins',
           styles: 'normal',
-          //   weight: '400',
-          //   size: 16,
+          weight: '400',
+          size: 14,
           lineHeight: '20px',
         },
       },
@@ -110,12 +113,9 @@ export default function PulseCheckSection({
   questionTwoResponse,
   questionThreeResponse,
 }: Props) {
-  const labelOne =
-    'People & Resources ' + '( ' + questionOneResponse + ' Response' + ' )';
-  const labelTwo =
-    'Work Processes ' + '( ' + questionTwoResponse + ' Response' + ' )';
-  const labelThree =
-    'Technical Tools ' + '( ' + questionThreeResponse + ' Response' + ' )';
+  const labelOne = ['People & Resources ', questionOneResponse + ' Responses'];
+  const labelTwo = ['Work Processes ', questionTwoResponse + ' Responses'];
+  const labelThree = ['Technical Tools ', questionThreeResponse + ' Responses'];
   const labels = [labelOne, labelTwo, labelThree];
 
   return (
@@ -141,7 +141,7 @@ export default function PulseCheckSection({
           >
             <Bar
               style={{
-                height: '300px',
+                height: '380px',
                 border: 'none',
               }}
               options={options}
