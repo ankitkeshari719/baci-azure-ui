@@ -77,7 +77,6 @@ export const options = {
           size: 14,
           lineHeight: '20px',
         },
-        
       },
     },
   },
@@ -95,9 +94,12 @@ export const options = {
           lineHeight: '20px',
         },
       },
+      callbacks: function (label: any, index: any, labels: any) {
+        console.log(label, index, labels);
+      },
     },
     tooltip: {
-        enabled: false,
+      enabled: false,
     },
   },
 };
@@ -153,7 +155,7 @@ export default function PulseCheckSection({
                 labels: labels, // datasets is an array of objects where each object represents a set of data to display corresponding to the labels above. for brevity, we'll keep it at one object
                 datasets: [
                   {
-                    data: barData[0],
+                    data: barData[2],
                     label: 'Satisfied',
                     backgroundColor: '#84CA97',
                   },
@@ -163,7 +165,7 @@ export default function PulseCheckSection({
                     backgroundColor: '#FBBC05',
                   },
                   {
-                    data: barData[2],
+                    data: barData[0],
                     label: 'Concerned',
                     backgroundColor: '#F28D85',
                   },
