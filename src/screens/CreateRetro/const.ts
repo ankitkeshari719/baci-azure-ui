@@ -350,7 +350,7 @@ export const pulseChecksData: pulseCheckInterface[] = [
     name: 'Simple (3 Questions)',
     description:
       'An oldie but a goodie, also known as the PPT Framework created in the 60s, it has long been the benchmark to understanding workforce management.',
-    pulseCheckImage: '/images/simplePulseCheckImage.png',
+    pulseCheckImage: '/images/SimplePulseCheck.png',
     checked: true,
     isComingSoon: false,
     value: [
@@ -369,7 +369,7 @@ export const pulseChecksData: pulseCheckInterface[] = [
     name: 'Business Agility  (7 Questions)',
     description:
       'We developed these to simplify what it takes for a company to be truly “agile”. Do and track these regularly to see how the team evolves.',
-    pulseCheckImage: '/images/coming_soon.png',
+    pulseCheckImage: '/images/BussinessAgility.png',
     checked: false,
     isComingSoon: true,
     value: [
