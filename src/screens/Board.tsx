@@ -1,11 +1,4 @@
-import {
-  Box,
-  Button,
-  Grid,
-  Tab,
-  Tabs,
-  useMediaQuery,
-} from '@mui/material';
+import { Box, Button, Grid, Tab, Tabs, useMediaQuery } from '@mui/material';
 import React, { useMemo } from 'react';
 import { UNGROUPED } from '../constants';
 
@@ -190,6 +183,7 @@ export default function RetroBoard() {
       ? 1
       : columns.length
     : 0;
+
   const LeftContainer = ({ index }: { index: number }) =>
     isSmUp && currentColumn === index ? (
       <Button
@@ -230,6 +224,7 @@ export default function RetroBoard() {
     });
   };
 
+  // Finish Retro
   const finishRetro = () => {
     if (global.user.userType == 2) {
       sessionStorage.removeItem('retoname');
@@ -278,6 +273,7 @@ export default function RetroBoard() {
       setshowFeedback(true);
     }
   };
+
   const create10Cards = async () => {
     setIsLanded(false);
     for (let i = 0; i < 10; i++) {
@@ -332,9 +328,11 @@ export default function RetroBoard() {
         height: 'calc(var(--app-height))',
       }}
     >
+      {/* First Time Experience : User is facilitator */}
       {global?.user.userType == 2 && !ended && (
         <FirstTimeExperience facilitator={true} />
       )}
+      {/* First Time Experience : User is not facilitator */}
       {global?.user.userType != 2 &&
         !ended &&
         (isXsUp ? (
@@ -342,6 +340,7 @@ export default function RetroBoard() {
         ) : (
           <FirstTimeExperience facilitator={false} isXsUp={false} />
         ))}
+
       <Grid xs={12} item>
         <Toolbar onFinishRetro={finishRetro}></Toolbar>
         {!isXsUp && <SubToolbar></SubToolbar>}
@@ -357,6 +356,7 @@ export default function RetroBoard() {
           paddingRight: isXsUp ? 0 : '42px',
         }}
       >
+        {/* Feedback Pop up */}
         {showFeedback ? (
           <FeedbackPopup show={true} showThankYou={ended}></FeedbackPopup>
         ) : null}
@@ -367,6 +367,7 @@ export default function RetroBoard() {
             width: '100%',
           }}
         >
+          {/* Column View For Mobile User */}
           {isXsUp && getColumns().length !== 0 ? (
             <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
               <StyledTabs
@@ -406,49 +407,52 @@ export default function RetroBoard() {
                 (false
                   ? [...getProcessedColumns(), undefined]
                   : getProcessedColumns()
-                ).map((column, index) => (
-                  <React.Fragment key={index}>
-                    {((isXsUp && index == value) ||
-                      (!isXsUp &&
-                        (global.expandColumn == -1 ||
-                          index == global.expandColumn))) && (
-                      <ColumnContainer
-                        totalPanels={totalPanels}
-                        key={index + '1'}
-                      >
-                        {!!column ? (
-                          <>
-                            <RetroColumn
+                ).map((column, index) => {
+                  return (
+                    <React.Fragment key={index}>
+                      {((isXsUp && index == value) ||
+                        (!isXsUp &&
+                          (global.expandColumn == -1 ||
+                            (column &&
+                              +column.id == global.expandColumn)))) && (
+                        <ColumnContainer
+                          totalPanels={totalPanels}
+                          key={index + '1'}
+                        >
+                          {!!column ? (
+                            <>
+                              <RetroColumn
+                                leftHeaderComponent={
+                                  <LeftContainer index={index} />
+                                }
+                                rightHeaderComponent={
+                                  <RightContainer index={index} />
+                                }
+                                column={column}
+                                columnId={column.id}
+                                noHeader={false}
+                                showEditBox={showEditBox}
+                                setShowEditBox={setShowEditBox}
+                                setIslanded={setIsLanded}
+                                cardGroups={column.groups}
+                              />
+                            </>
+                          ) : (
+                            <FeedbackColumn
+                              noHeader={isXsUp}
                               leftHeaderComponent={
                                 <LeftContainer index={index} />
                               }
                               rightHeaderComponent={
                                 <RightContainer index={index} />
                               }
-                              column={column}
-                              columnId={column.id}
-                              noHeader={false}
-                              showEditBox={showEditBox}
-                              setShowEditBox={setShowEditBox}
-                              setIslanded={setIsLanded}
-                              cardGroups={column.groups}
                             />
-                          </>
-                        ) : (
-                          <FeedbackColumn
-                            noHeader={isXsUp}
-                            leftHeaderComponent={
-                              <LeftContainer index={index} />
-                            }
-                            rightHeaderComponent={
-                              <RightContainer index={index} />
-                            }
-                          />
-                        )}
-                      </ColumnContainer>
-                    )}
-                  </React.Fragment>
-                )),
+                          )}
+                        </ColumnContainer>
+                      )}
+                    </React.Fragment>
+                  );
+                }),
               [
                 lastStateUpdate,
                 isXsUp,
