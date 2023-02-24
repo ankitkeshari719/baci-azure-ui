@@ -51,6 +51,7 @@ import DevelopAction from './DevelopAction';
 import DidNotWentWell from './DidNotWentWell';
 import WhatWentWell from './WhatWentWellCoulmn';
 import PulseCheckSection from './PulseCheckSection';
+import DevelopActionRedesign from './DevelopActionRedesign';
 
 ChartJS.register(
   CategoryScale,
@@ -114,12 +115,16 @@ export const ReportSummary = React.forwardRef((props, ref) => {
   const [didNotWentWellWords, setDidNotWentWellWords] = React.useState<Word[]>(
     []
   );
+  const [developeActionWords, setDevelopeActionWords] = React.useState<Word[]>(
+    []
+  );
   // Card Data
   const [wentWellCardData, setWentWellCardData] = React.useState<any>([]);
   const [didNotWentWellCardData, setDidNotWentWellCardData] =
     React.useState<any>([]);
   const [actionCardData, setActionCardData] = React.useState<any>([]);
-  // Top Voted Card
+
+  // What went well Top Voted Card
   const [wentWellTopVotedCards, setWentWellTopVotedCards] = React.useState<any>(
     []
   );
@@ -127,6 +132,8 @@ export const ReportSummary = React.forwardRef((props, ref) => {
     React.useState<any>([]);
   const [wentWellTopVotedCardsPrint_2, setWentWellTopVotedCardsPrint_2] =
     React.useState<any>([]);
+
+  // What didn't went well Top Voted Card
   const [didNotWentWellTopVotedCards, setDidNotWentWellTopVotedCards] =
     React.useState<any>([]);
   const [
@@ -137,10 +144,26 @@ export const ReportSummary = React.forwardRef((props, ref) => {
     didNotWentWellTopVotedCardsPrint_2,
     setDidNotWentWellTopVotedCardsPrint_2,
   ] = React.useState<any>([]);
+
+  // Develope Action Top Voted Card
   const [actionTopVotedCards, setActionTopVotedCards] = React.useState<any>([]);
+  const [
+    developeActionTopVotedCardsPrint_1,
+    setDevelopeActionTopVotedCardsPrint_1,
+  ] = React.useState<any>([]);
+  const [
+    developeActionTopVotedCardsPrint_2,
+    setDevelopeActionTopVotedCardsPrint_2,
+  ] = React.useState<any>([]);
   const [actionLastVotedCards, setActionLastVotedCards] = React.useState<any>(
     []
   );
+
+  // Unique CreatedBy Length
+  const [wentWellCreatedBy, setWentWellCreatedBy] = React.useState<number>();
+  const [didNotWentWellCreatedBy, setDidNotWentWellCreatedBy] =
+    React.useState<number>();
+  const [actionCreatedBy, setActionCreatedBy] = React.useState<number>();
 
   // Pulse Check response
   const [questionOneResponse, setQuestionOneResponse] =
@@ -149,12 +172,6 @@ export const ReportSummary = React.forwardRef((props, ref) => {
     React.useState<number>();
   const [questionThreeResponse, setQuestionThreeResponse] =
     React.useState<number>();
-
-  // Unique CreatedBy Length
-  const [wentWellCreatedBy, setWentWellCreatedBy] = React.useState<number>();
-  const [didNotWentWellCreatedBy, setDidNotWentWellCreatedBy] =
-    React.useState<number>();
-  const [actionCreatedBy, setActionCreatedBy] = React.useState<number>();
 
   // Submitted Feedback
   const [submittedFeedback, setSubmittedFeedback] = React.useState<string>('');
@@ -177,6 +194,7 @@ export const ReportSummary = React.forwardRef((props, ref) => {
     const actionsCardValues = [] as string[];
     let wentWellWordCloudData = [];
     let didNotWentWellWordCloudData = [];
+    let developActionWordCloudData = [];
     let wentWellCards: any[] = [];
     let didNotWentWellCards: any[] = [];
     let actionCards: any[] = [];
@@ -364,6 +382,47 @@ export const ReportSummary = React.forwardRef((props, ref) => {
       if (column.id === '2') {
         column.groups.forEach(group => {
           group.cards.forEach(card => {
+            const clean = card.value.replace(/[\W_]+/g, ' ').trim();
+            if (clean !== '') actionsCardValues.push(clean);
+          });
+        });
+      }
+    });
+
+    //  Develope action Total
+    const developActionTotal = Object.values(actionsCardValues)
+      .join(' ')
+      .toLowerCase()
+      .split(' ');
+
+    // Getting the develop action word cloud data
+    if (developActionTotal.length !== 0) {
+      const noStopWords = removeStopwords(developActionTotal, [
+        ...eng,
+        ...WORD_CLOUD_IGNORE_WORDS,
+      ]);
+
+      developActionWordCloudData = noStopWords
+        .reduce((current: { text: string; size: number }[], text: string) => {
+          const exist = current.find(c => c.text === text);
+
+          if (exist) {
+            exist.size++;
+          } else if (text.length > 2) {
+            current.push({ text, size: 1 });
+          }
+          return current;
+        }, [])
+        .filter((entry: { text: string; size: number }) => entry.size >= 2);
+    }
+
+    setDevelopeActionWords(developActionWordCloudData);
+
+    // Develope Cards Data
+    columns.forEach(column => {
+      if (column.id === '2') {
+        column.groups.forEach(group => {
+          group.cards.forEach(card => {
             actionCards.push(card);
           });
         });
@@ -381,7 +440,13 @@ export const ReportSummary = React.forwardRef((props, ref) => {
       .filter((item, i, ar) => ar.indexOf(item) === i);
     setActionCreatedBy(actionUniqueCreatedBy.length);
     setActionCardData(actionCards);
-    setActionTopVotedCards(actionCards.slice(0, 4));
+    setActionTopVotedCards(
+      windowWidth.current <= 1500
+        ? actionCards.slice(0, 3)
+        : actionCards.slice(0, 4)
+    );
+    setDevelopeActionTopVotedCardsPrint_1(actionCards.slice(0, 2));
+    setDevelopeActionTopVotedCardsPrint_2(actionCards.slice(2, 4));
 
     if (actionCards.length > 4) {
       setActionLastVotedCards(actionCards.slice(4, actionCards.length));
@@ -837,14 +902,20 @@ export const ReportSummary = React.forwardRef((props, ref) => {
             />
           ) : null}
           {columns && columns[0] && columns[0].id === '2' ? (
-            <DevelopAction
-              actionCardData={actionCardData}
-              copyAllActions={copyAllActions}
-              handleIsActionCloudOpen={handleIsActionCloudOpen}
+            <DevelopActionRedesign
+              actionColumnName={actionColumnName}
+              actionCreatedBy={actionCreatedBy}
               users={users}
+              developeActionWords={developeActionWords}
+              handleIsActionCloudOpen={handleIsActionCloudOpen}
               isAllActionOpen={isAllActionOpen}
               actionTopVotedCards={actionTopVotedCards}
-              actionLastVotedCards={actionLastVotedCards}
+              developeActionTopVotedCardsPrint_1={
+                developeActionTopVotedCardsPrint_1
+              }
+              developeActionTopVotedCardsPrint_2={
+                developeActionTopVotedCardsPrint_2
+              }
             />
           ) : null}
 
@@ -880,14 +951,20 @@ export const ReportSummary = React.forwardRef((props, ref) => {
             />
           ) : null}
           {columns && columns[1] && columns[1].id === '2' ? (
-            <DevelopAction
-              actionCardData={actionCardData}
-              copyAllActions={copyAllActions}
-              handleIsActionCloudOpen={handleIsActionCloudOpen}
+            <DevelopActionRedesign
+              actionColumnName={actionColumnName}
+              actionCreatedBy={actionCreatedBy}
               users={users}
+              developeActionWords={developeActionWords}
+              handleIsActionCloudOpen={handleIsActionCloudOpen}
               isAllActionOpen={isAllActionOpen}
               actionTopVotedCards={actionTopVotedCards}
-              actionLastVotedCards={actionLastVotedCards}
+              developeActionTopVotedCardsPrint_1={
+                developeActionTopVotedCardsPrint_1
+              }
+              developeActionTopVotedCardsPrint_2={
+                developeActionTopVotedCardsPrint_2
+              }
             />
           ) : null}
           {/* Column Section 3*/}
@@ -922,14 +999,20 @@ export const ReportSummary = React.forwardRef((props, ref) => {
             />
           ) : null}
           {columns && columns[2] && columns[2].id === '2' ? (
-            <DevelopAction
-              actionCardData={actionCardData}
-              copyAllActions={copyAllActions}
-              handleIsActionCloudOpen={handleIsActionCloudOpen}
+            <DevelopActionRedesign
+              actionColumnName={actionColumnName}
+              actionCreatedBy={actionCreatedBy}
               users={users}
+              developeActionWords={developeActionWords}
+              handleIsActionCloudOpen={handleIsActionCloudOpen}
               isAllActionOpen={isAllActionOpen}
               actionTopVotedCards={actionTopVotedCards}
-              actionLastVotedCards={actionLastVotedCards}
+              developeActionTopVotedCardsPrint_1={
+                developeActionTopVotedCardsPrint_1
+              }
+              developeActionTopVotedCardsPrint_2={
+                developeActionTopVotedCardsPrint_2
+              }
             />
           ) : null}
 
