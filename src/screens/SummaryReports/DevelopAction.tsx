@@ -161,9 +161,6 @@ export default function DevelopAction({
                           <Avatar
                             key={card.id}
                             avatar={card.avatar}
-                            // onClickAvatar={() => {
-                            //   console.log('click');
-                            // }}
                             css={{
                               width: '40px',
                               height: '40px',
