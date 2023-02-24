@@ -435,6 +435,7 @@ export default function RetroBoard() {
                                 setShowEditBox={setShowEditBox}
                                 setIslanded={setIsLanded}
                                 cardGroups={column.groups}
+                                columnIndex={index}
                               />
                             </>
                           ) : (

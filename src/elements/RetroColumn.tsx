@@ -40,6 +40,7 @@ export function RetroColumn({
   setIslanded,
   leftHeaderComponent,
   rightHeaderComponent,
+  columnIndex
 }: {
   column: Column;
   columnId: string;
@@ -52,6 +53,7 @@ export function RetroColumn({
   rightHeaderComponent: any;
   setIslanded: (islanded: boolean) => void;
   setShowEditBox: (showEditBox: boolean) => void;
+  columnIndex?: number;
 }): ReactElement {
   const selectedCard = React.useRef<number[] | null>(null);
   const selectedCardCopy = React.useRef<number[] | null>(null);
@@ -281,7 +283,6 @@ export function RetroColumn({
       dragStartTime.current = new Date().getTime();
     }
   };
-
 
   var timeoutForBorder: any;
   const handleDrag = (
@@ -773,6 +774,7 @@ export function RetroColumn({
               setColumnName={setColumnName}
               publishColumn={publishColumn}
               dispatch={dispatch}
+              columnIndex={columnIndex}
             />
           </div>
         )}

@@ -17,6 +17,7 @@ const ColumnHeader = ({
   setColumnName,
   publishColumn,
   dispatch,
+  columnIndex
 }: {
   column: Column;
   columnId: string;
@@ -31,6 +32,7 @@ const ColumnHeader = ({
   setColumnName: (columnName: string) => void;
   publishColumn: (flag: boolean) => void;
   dispatch: any;
+  columnIndex: number | undefined;
 }) => {
   const [showEdit, setShowEdit] = React.useState(false);
   const [enableSave, setEnableSave] = React.useState(false);
@@ -133,7 +135,7 @@ const ColumnHeader = ({
               <Typography style={{ color: '#808080' }}>Published</Typography>
             ) : (
               <Typography
-                id={'publish' + columnId}
+                id={'publish' + columnIndex}
                 onClick={() => {
                   if (!ended) {
                     publishColumn(true);

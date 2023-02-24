@@ -76,7 +76,6 @@ export default function useLoadRetro() {
           avatar: global.avatar,
           isMobile: window.innerWidth < 700,
         }).then(() => {
-          console.log(retroId,"checking",FEATURE_FLAGS.pulseCheck)
           if (global.currentRetro && retroStarted) {
             if (FEATURE_FLAGS.pulseCheck) {
               // navigate(
