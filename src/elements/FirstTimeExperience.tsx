@@ -186,7 +186,7 @@ const FirstTimeExperience = (props: any) => {
               }}
             ></div>
           </Box>
-
+          {/* ‘Publish Info */}
           <Paper
             id="publishPaper"
             sx={{
@@ -252,7 +252,7 @@ const FirstTimeExperience = (props: any) => {
               </Box>
             </Box>
           </Paper>
-
+          {/* Finish Retro Info */}
           <Paper
             id="finishRetroPaper"
             sx={{
@@ -317,7 +317,7 @@ const FirstTimeExperience = (props: any) => {
               <Box sx={{ display: 'flex', width: '35%' }}></Box>
             </Box>
           </Paper>
-
+          {/* Leave Retro Info */}
           <Paper
             id="leaveRetroPaper"
             sx={{
