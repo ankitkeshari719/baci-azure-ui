@@ -369,7 +369,7 @@ export const pulseChecksData: pulseCheckInterface[] = [
     name: 'Business Agility  (7 Questions)',
     description:
       'We developed these to simplify what it takes for a company to be truly “agile”. Do and track these regularly to see how the team evolves.',
-    pulseCheckImage: '/images/BussinessAgility.png',
+    pulseCheckImage: '/images/coming_soon.png',
     checked: false,
     isComingSoon: true,
     value: [
