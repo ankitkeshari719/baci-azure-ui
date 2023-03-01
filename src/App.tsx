@@ -57,12 +57,12 @@ export default function App({ instance }: AppProps) {
                         <Route path="/" element={<LandingPage></LandingPage>} />
                         <Route
                           path="/createretro"
-                          element={<CreateNewRetro></CreateNewRetro>}
-                        />
-                        <Route
-                          path="/createretrowithtemplate"
                           element={<CreateRetroMain></CreateRetroMain>}
                         />
+                        {/* <Route
+                          path="/createretrowithtemplate"
+                          element={<CreateRetroMain></CreateRetroMain>}
+                        /> */}
                         <Route
                           path="/join/:id"
                           element={<AvatarNamePage></AvatarNamePage>}
@@ -97,7 +97,10 @@ export default function App({ instance }: AppProps) {
                           <Route path=":id/feedback" element={<Feedback />} />
                           <Route path=":id" element={<Board />} />
                         </Route>
-                        <Route path="/report/:id" element={<SummaryReportMain />} />
+                        <Route
+                          path="/report/:id"
+                          element={<SummaryReportMain />}
+                        />
                       </Routes>
                     </MsalProvider>
                     <SnackMessage />
