@@ -35,7 +35,6 @@ import { useSocket } from '../hooks/useSocket';
 import { SocketContext } from './SocketProvider';
 import { ErrorContext } from './ErrorContext';
 
-
 export interface ReducerPayload {
   parameters: any;
   userId: string;
@@ -260,42 +259,23 @@ function BoardProvider(props: ComponentProps<any>) {
     return newState;
   };
 
-
   React.useEffect(() => {
-   
-   
-    // if (!currentRetro?.id  && !location.pathname.includes('createretrowithtemplate')) {
-    
-    //   console.log("------- closing socket -------")
-    //   socket.close()
+    socket.on('close', () => {
+      console.log('------- socket disconnected -------');
 
+      setError('error : Socket disconnected');
+    });
+    socket.on('connect_error', () => {
+      console.log('------- socket error -------');
+      setError('error : Socket disconnected');
+    });
+    socket.on('disconnect', () => {
+      console.log('------- socket disconnected -------');
+      setState({ ...state, disconnected: true });
+      setError('error : Socket disconnected');
+    });
     // }
-    // console.log("------- retroId: "+ currentRetro?.id+" -------")
-    // if(currentRetro?.id  || location.pathname.includes('createretrowithtemplate')){
-  
-    //   socket.connect().on("connect",()=>{
-    //     console.log("------- socket connected -------")
-    //   })
-    // }
-     
-      socket.on("close", () => {
-        console.log("------- socket disconnected -------");
-
-        setError("error : Socket disconnected")
-      })
-      socket.on("connect_error", () => {
-        console.log("------- socket error -------");
-        setError("error : Socket disconnected")
-      })
-      socket.on('disconnect', () => {
-        console.log("------- socket disconnected -------");
-        setState({ ...state, disconnected: true });
-        setError("error : Socket disconnected")
-      })
-    // }
-  }, [currentRetro?.id, socket])
-
-
+  }, [currentRetro?.id, socket]);
 
   React.useEffect(() => {
     snapshotUnsubscriber?.current();
@@ -304,7 +284,7 @@ function BoardProvider(props: ComponentProps<any>) {
       if (state.retroId === '' && loadState()) {
         loadedState = true;
 
-        setState({...state});
+        setState({ ...state });
       } else {
         clearState();
         state.retroId = currentRetro?.id;
@@ -420,4 +400,3 @@ function BoardProvider(props: ComponentProps<any>) {
 }
 
 export { BoardProvider, BoardContext };
-

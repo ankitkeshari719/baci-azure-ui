@@ -109,7 +109,7 @@ export function LandingPage() {
       payload: { retroCreateState: true },
     });
     setCodeError('');
-    navigate('/createretrowithtemplate/');
+    navigate('/createretro/');
   }
 
   React.useEffect(() => {
