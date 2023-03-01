@@ -280,7 +280,7 @@ export default function WhatWentWell({
                                   xs="12"
                                   className="d-flex justify-content-start align-items-center"
                                 >
-                                  <LazyLoadImage
+                                  <img
                                     className="avatar"
                                     style={{
                                       width: '40px',
@@ -291,7 +291,7 @@ export default function WhatWentWell({
                                     src={
                                       '/avatars/animals/' + card.avatar + '.svg'
                                     }
-                                  ></LazyLoadImage>
+                                  />
                                   <Typography>{card.value}</Typography>
                                 </Col>
                               </Row>
@@ -337,7 +337,7 @@ export default function WhatWentWell({
                                   xs="12"
                                   className="d-flex justify-content-start align-items-center"
                                 >
-                                  <LazyLoadImage
+                                  <img
                                     className="avatar"
                                     style={{
                                       width: '40px',
@@ -348,7 +348,7 @@ export default function WhatWentWell({
                                     src={
                                       '/avatars/animals/' + card.avatar + '.svg'
                                     }
-                                  ></LazyLoadImage>
+                                  />
                                   <Typography>{card.value}</Typography>
                                 </Col>
                               </Row>
