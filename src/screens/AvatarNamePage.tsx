@@ -97,11 +97,22 @@ export function AvatarNamePage() {
   const isXsUp = useMediaQuery(theme.breakpoints.between('xs', 'sm'));
   const [openAvatarDialog, setOpenAvatarDialog] = React.useState(false);
   const [height, setHeight] = React.useState(0);
-  React.useEffect(() => {
+  React.useEffect( () => {
+    
+    loadRetroDetails();
     setAvatarList(avatarName.sort(() => Math.random() - 0.5));
     setHeight(window.innerHeight);
     
   }, []);
+
+
+  const loadRetroDetails =async()=>{
+    let foundRetro = await retro.getByHumanId(humanId);
+    dispatch({
+      type: ActionType.SET_CURRENT_RETRO,
+      payload: { retro: foundRetro },
+    });
+  }
   useAzureAuth();
   const joinRetro = async (
     retrunBool: boolean
@@ -116,7 +127,6 @@ export function AvatarNamePage() {
     if (!foundRetro) {
       foundRetro = await retro.getById(humanId);
     }
-
     dispatch({
       type: ActionType.SET_CURRENT_RETRO,
       payload: { retro: foundRetro },

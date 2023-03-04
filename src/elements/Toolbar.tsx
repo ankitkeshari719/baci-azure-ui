@@ -39,7 +39,7 @@ const Toolbar = (props: any) => {
     state: { retroName, retroDuration, ended },
     commitAction,
   } = React.useContext(BoardContext);
-
+  const reloadPage = () => { window.location.reload();navigate(`/`);};
   const showFinishRetroButton =
     !location.pathname.includes('pulsecheck') &&
     !location.pathname.includes('report') &&
@@ -145,6 +145,7 @@ const Toolbar = (props: any) => {
                   width: isXsUp ? '53px' : '82px',
                   height: isXsUp ? '18px' : '28px',
                 }}
+                onClick={reloadPage}
               />
             </Link>
           </>
@@ -157,6 +158,7 @@ const Toolbar = (props: any) => {
                 width: isXsUp ? '53px' : '82px',
                 height: isXsUp ? '18px' : '28px',
               }}
+              onClick={reloadPage}
             />
           </Link>
         )}
@@ -385,22 +387,6 @@ const Toolbar = (props: any) => {
         {showSummaryButton &&
           !location.pathname.includes('report') &&
           user.userType === 2 && (
-            // <Button
-            //   style={{
-            //     marginRight: '40px',
-            //   }}
-            //   variant="contained"
-            //   sx={{
-            //     width: '162px',
-            //     borderRadius: '24px',
-            //     padding: '10px 20px',
-            //     fontWeight: 500,
-            //     marginRight: '15px',
-            //   }}
-            //   onClick={() => navigate('/report/' + currentRetro?.id)}
-            // >
-            //   VIEW SUMMARY
-            // </Button>
             <ContainedButton
               id="view-summary"
               name="VIEW SUMMARY"

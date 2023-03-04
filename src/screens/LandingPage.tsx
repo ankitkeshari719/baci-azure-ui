@@ -118,6 +118,7 @@ export function LandingPage() {
       type: ActionType.CLOSE_CURRENT_RETRO,
     });
   }, []);
+
   React.useEffect(() => {
     sessionStorage.removeItem('BoardContext');
     sessionStorage.removeItem('GlobalContext');
@@ -125,7 +126,8 @@ export function LandingPage() {
     sessionStorage.removeItem('showManual');
     localStorage.removeItem('selectedTemplate');
     localStorage.removeItem('tempSelectedTemplateData');
-  });
+  }, []);
+  
   return (
     <>
       {isXsUp ? (
