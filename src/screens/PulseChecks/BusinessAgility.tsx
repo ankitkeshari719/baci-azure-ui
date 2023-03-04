@@ -210,7 +210,9 @@ export default function BusinessAgility({ pulseCheck }: Props) {
   }
 
   const submitPulseCheck = () => {
-    const submittedQuestions = selectedQuestions.filter((e: any, index: number) => index != 6)
+    const submittedQuestions = selectedQuestions.filter(
+      (e: any, index: number) => index != 6
+    );
     const someBlank =
       submittedQuestions.findIndex((q: number[]) => q[0] === -1) !== -1;
     const submitter = async () => {
@@ -277,129 +279,113 @@ export default function BusinessAgility({ pulseCheck }: Props) {
   };
 
   return (
-    <>
-      <Grid
-        container
-        spacing={0}
-        sx={{
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'center',
-          padding: isXsUp ? '8px' : '56px',
-          overflowY: isXsUp ? 'scroll' : 'auto',
-          height: isXsUp ? 'calc(100vh - 120px)' : 'calc(100vh - 24px)',
-        }}
-      >
-        {/* Text one */}
-        <Grid item xs={12}>
-          <Box
-            sx={{
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-              userSelect: 'none',
-              background: 'white',
-            }}
-          >
-            <Typography variant={isXsUp ? 'h6' : 'h4'} className="textOne">
-              Let's start with a quick Pulse Check to see how you are feeling
-            </Typography>
-          </Box>
-        </Grid>
-        {/* Text two */}
-        <Grid item xs={12}>
-          <Box
-            sx={{
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-              userSelect: 'none',
-              background: 'white',
-              marginTop: isXsUp ? '24px' : '48px',
-            }}
-          >
-            <Typography className="textTwo">
-              Your identity will be confidential
-            </Typography>
-          </Box>
-        </Grid>
-        {/* Pulsebar Image */}
-        <Grid item xs={12}>
-          {!isXsUp && (
-            <Box
-              sx={{
-                display: 'flex',
-                justifyContent: 'center',
-                marginTop: isXsUp ? '24px' : '48px',
-              }}
-            >
-              <span
-                className={pulse1 ? 'pulseLineBlue' : 'pulseLineGrey'}
-              ></span>
-              <img src={pulse1 ? Bluepulse : Greypulse} />
-              <span
-                className={pulse2 ? 'pulseLineBlue' : 'pulseLineGrey'}
-              ></span>
-              <img src={pulse2 ? Bluepulse : Greypulse} />
-              <span
-                className={pulse3 ? 'pulseLineBlue' : 'pulseLineGrey'}
-              ></span>
-              <img src={pulse3 ? Bluepulse : Greypulse} />
-              <span
-                className={pulse4 ? 'pulseLineBlue' : 'pulseLineGrey'}
-              ></span>
-              <img src={pulse4 ? Bluepulse : Greypulse} />
-              <span
-                className={pulse5 ? 'pulseLineBlue' : 'pulseLineGrey'}
-              ></span>
-              <img src={pulse5 ? Bluepulse : Greypulse} />
-              <span
-                className={pulse6 ? 'pulseLineBlue' : 'pulseLineGrey'}
-              ></span>
-              <img src={pulse6 ? Bluepulse : Greypulse} />
-              <span
-                className={pulse7 ? 'pulseLineBlue' : 'pulseLineGrey'}
-              ></span>
-              <img src={pulse7 ? Bluepulse : Greypulse} />
-              <span
-                className={pulse7 ? 'pulseLineBlue' : 'pulseLineGrey'}
-              ></span>
-            </Box>
-          )}
-        </Grid>
-        {/* QUICK PULSE CHECK QUESTIONS Section */}
-        <Grid
-          item
-          xs={12}
+    <Grid
+      container
+      spacing={0}
+      sx={{
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+        padding: isXsUp ? '8px' : '56px',
+        overflowY: isXsUp ? 'scroll' : 'auto',
+        height: isXsUp ? 'calc(100vh - 120px)' : 'calc(100vh - 24px)',
+      }}
+    >
+      {/* Text one */}
+      <Grid item xs={12}>
+        <Box
           sx={{
             display: 'flex',
-            justifyContent: 'center',
             alignItems: 'center',
+            justifyContent: 'center',
+            userSelect: 'none',
+            background: 'white',
+          }}
+        >
+          <Typography variant={isXsUp ? 'h6' : 'h4'} className="textOne">
+            Let's start with a quick Pulse Check to see how you are feeling
+          </Typography>
+        </Box>
+      </Grid>
+      {/* Text two */}
+      <Grid item xs={12}>
+        <Box
+          sx={{
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            userSelect: 'none',
+            background: 'white',
             marginTop: isXsUp ? '24px' : '48px',
           }}
         >
+          <Typography className="textTwo">
+            Your identity will be confidential
+          </Typography>
+        </Box>
+      </Grid>
+      {/* Pulsebar Image */}
+      <Grid item xs={12}>
+        {!isXsUp && (
           <Box
             sx={{
-              width: '100%',
-              display: 'grid',
-              gap: 5,
-              gridTemplateColumns: isXsUp ? 'repeat(1, 2fr)' : 'repeat(3, 1fr)',
-              flexDirection: isXsUp ? 'column' : 'row',
+              display: 'flex',
+              justifyContent: 'center',
+              marginTop: isXsUp ? '24px' : '48px',
             }}
           >
-            {pulseCheck &&
-              pulseCheck.value.map((question: any, index: any) => (
-                <Grid
-                  item
-                  xs={12}
-                  sx={{
-                    display: 'flex',
-                    justifyContent: 'center',
-                    alignItems: 'center',
-                  }}
-                  key={index}
-                >
-                  { index !== 6 && <Box>
+            <span className={pulse1 ? 'pulseLineBlue' : 'pulseLineGrey'}></span>
+            <img src={pulse1 ? Bluepulse : Greypulse} />
+            <span className={pulse2 ? 'pulseLineBlue' : 'pulseLineGrey'}></span>
+            <img src={pulse2 ? Bluepulse : Greypulse} />
+            <span className={pulse3 ? 'pulseLineBlue' : 'pulseLineGrey'}></span>
+            <img src={pulse3 ? Bluepulse : Greypulse} />
+            <span className={pulse4 ? 'pulseLineBlue' : 'pulseLineGrey'}></span>
+            <img src={pulse4 ? Bluepulse : Greypulse} />
+            <span className={pulse5 ? 'pulseLineBlue' : 'pulseLineGrey'}></span>
+            <img src={pulse5 ? Bluepulse : Greypulse} />
+            <span className={pulse6 ? 'pulseLineBlue' : 'pulseLineGrey'}></span>
+            <img src={pulse6 ? Bluepulse : Greypulse} />
+            <span className={pulse7 ? 'pulseLineBlue' : 'pulseLineGrey'}></span>
+            <img src={pulse7 ? Bluepulse : Greypulse} />
+            <span className={pulse7 ? 'pulseLineBlue' : 'pulseLineGrey'}></span>
+          </Box>
+        )}
+      </Grid>
+      {/* QUICK PULSE CHECK QUESTIONS Section */}
+      <Grid
+        item
+        xs={12}
+        sx={{
+          display: 'flex',
+          justifyContent: 'center',
+          alignItems: 'center',
+          marginTop: isXsUp ? '24px' : '48px',
+        }}
+      >
+        <Box
+          sx={{
+            width: '100%',
+            display: 'grid',
+            gap: 5,
+            gridTemplateColumns: isXsUp ? 'repeat(1, 2fr)' : 'repeat(3, 1fr)',
+            flexDirection: isXsUp ? 'column' : 'row',
+          }}
+        >
+          {pulseCheck &&
+            pulseCheck.value.map((question: any, index: any) => (
+              <Grid
+                item
+                xs={12}
+                sx={{
+                  display: 'flex',
+                  justifyContent: 'center',
+                  alignItems: 'center',
+                }}
+                key={index}
+              >
+                {index !== 6 && (
+                  <Box>
                     {/* Question Part */}
                     <Typography className="question">
                       {question}
@@ -539,92 +525,92 @@ export default function BusinessAgility({ pulseCheck }: Props) {
                         ></img>
                       </Box>
                     </Box>
-                  </Box>}
-                </Grid>
-              ))}
-          </Box>
-        </Grid>
-        {/* Submit and go to retro button */}
-        <Grid item xs={12}>
-          <Box
-            sx={{
-              display: 'flex',
-              justifyContent: 'center',
-              marginTop: isXsUp ? '24px' : '24px',
-            }}
-          >
-            <ContainedButton
-              name="Submit and go to retro"
-              onClick={submitPulseCheck}
-              style={{
-                minWidth: '260px !important',
-                height: '36px !important',
-              }}
-            />
-          </Box>
-        </Grid>
-        {/* Skip Pulse Check button */}
-        <Grid item xs={12}>
-          <Box
-            sx={{
-              display: 'flex',
-              justifyContent: 'center',
-              cursor: 'pointer',
-              marginTop: isXsUp ? '24px' : '24px',
-            }}
-          >
-            <Link className="infoLink" onClick={skipPulseCheck}>
-              Skip Pulse Check
-            </Link>
-          </Box>
-        </Grid>
-        <Dialog open={openHelpPopup} onClose={handleClose}>
-          <DialogTitle
-            sx={{
-              display: 'flex',
-              justifyContent: 'center',
-              alignItems: 'center',
-              marginTop: '24px',
-            }}
-          >
-            <Typography variant="h6" color={commonStyles.secondaryMain}>
-              {popupTitle}
-            </Typography>
-          </DialogTitle>
-          <DialogContent
-            sx={{
-              display: 'flex',
-              justifyContent: 'center',
-              alignItems: 'center',
-            }}
-          >
-            <Typography
-              variant="h5"
-              color={commonStyles.grey60}
-              sx={{ textAlign: 'justify' }}
-            >
-              {popupContent}
-            </Typography>
-          </DialogContent>
-          <DialogActions
-            sx={{
-              display: 'flex',
-              justifyContent: 'center',
-              alignItems: 'center',
-              marginBottom: '24px',
-            }}
-          >
-            <Button
-              variant="outlined"
-              className="secondaryButton"
-              onClick={handleClose}
-              sx={{ width: '100%' }}
-            >
-              <span className="secondaryButtonText">close</span>
-            </Button>
-          </DialogActions>
-        </Dialog>
+                  </Box>
+                )}
+              </Grid>
+            ))}
+        </Box>
       </Grid>
-    </>
+      {/* Submit and go to retro button */}
+      <Grid item xs={12}>
+        <Box
+          sx={{
+            display: 'flex',
+            justifyContent: 'center',
+            marginTop: isXsUp ? '24px' : '24px',
+          }}
+        >
+          <ContainedButton
+            name="Submit and go to retro"
+            onClick={submitPulseCheck}
+            style={{
+              minWidth: '260px !important',
+              height: '36px !important',
+            }}
+          />
+        </Box>
+      </Grid>
+      {/* Skip Pulse Check button */}
+      <Grid item xs={12}>
+        <Box
+          sx={{
+            display: 'flex',
+            justifyContent: 'center',
+            cursor: 'pointer',
+            marginTop: isXsUp ? '24px' : '24px',
+          }}
+        >
+          <Link className="infoLink" onClick={skipPulseCheck}>
+            Skip Pulse Check
+          </Link>
+        </Box>
+      </Grid>
+      <Dialog open={openHelpPopup} onClose={handleClose}>
+        <DialogTitle
+          sx={{
+            display: 'flex',
+            justifyContent: 'center',
+            alignItems: 'center',
+            marginTop: '24px',
+          }}
+        >
+          <Typography variant="h6" color={commonStyles.secondaryMain}>
+            {popupTitle}
+          </Typography>
+        </DialogTitle>
+        <DialogContent
+          sx={{
+            display: 'flex',
+            justifyContent: 'center',
+            alignItems: 'center',
+          }}
+        >
+          <Typography
+            variant="h5"
+            color={commonStyles.grey60}
+            sx={{ textAlign: 'justify' }}
+          >
+            {popupContent}
+          </Typography>
+        </DialogContent>
+        <DialogActions
+          sx={{
+            display: 'flex',
+            justifyContent: 'center',
+            alignItems: 'center',
+            marginBottom: '24px',
+          }}
+        >
+          <Button
+            variant="outlined"
+            className="secondaryButton"
+            onClick={handleClose}
+            sx={{ width: '100%' }}
+          >
+            <span className="secondaryButtonText">close</span>
+          </Button>
+        </DialogActions>
+      </Dialog>
+    </Grid>
   );
 }

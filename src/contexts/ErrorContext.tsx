@@ -16,7 +16,7 @@ function ErrorProvider(props: ComponentProps<any>) {
   const [error, setError] = React.useState<string | undefined>(undefined);
   return (
     <ErrorContext.Provider value={{ error, setError }}>
-      {error ? <ErrorDialog /> : null}
+      {error  ? <ErrorDialog error={error} />: null}
       {props.children}
     </ErrorContext.Provider>
   );

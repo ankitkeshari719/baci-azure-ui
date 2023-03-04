@@ -21,10 +21,11 @@ import { UNGROUPED } from '../constants';
 import { ConfirmContext } from '../contexts/ConfirmContext';
 import { ActionType, GlobalContext } from '../contexts/GlobalContext';
 import { flexbox } from '@mui/system';
-import { DraggableProvided, DraggableProvidedDraggableProps } from 'react-beautiful-dnd';
+import {
+  DraggableProvided,
+  DraggableProvidedDraggableProps,
+} from 'react-beautiful-dnd';
 import { XMarkIcon, CheckIcon } from '@heroicons/react/24/solid';
-
-
 
 export function RetroCardGroup({
   admin,
@@ -35,7 +36,7 @@ export function RetroCardGroup({
   showCollapse,
   provided,
   onCollapse,
-  onDispatchLoading
+  onDispatchLoading,
 }: {
   admin: boolean;
   group: CardGroup;
@@ -145,34 +146,33 @@ export function RetroCardGroup({
   }, [group.reactions]);
 
   React.useEffect(() => {
-    const inputText = document.getElementById("groupTextField" + group.id);
+    const inputText = document.getElementById('groupTextField' + group.id);
     if (inputText && enableEdit) {
       setNameSet(true);
       inputText.focus();
     }
-
-  }, [enableEdit])
+  }, [enableEdit]);
 
   const saveGroupName = async () => {
-
     if (admin) {
-
       lockGroup(group.id, false);
       if (name == group.name || !name) {
-
-        setEnableEdit(false); setName(group.name)
+        setEnableEdit(false);
+        setName(group.name);
       } else {
-        onDispatchLoading(true)
-        await setGroupName(group.id, name).then(res => {
-          onDispatchLoading(false)
-          setEnableEdit(false);
-        }, err => {
-          setEnableEdit(false);
-        })
-
+        onDispatchLoading(true);
+        await setGroupName(group.id, name).then(
+          res => {
+            onDispatchLoading(false);
+            setEnableEdit(false);
+          },
+          err => {
+            setEnableEdit(false);
+          }
+        );
       }
     }
-  }
+  };
 
   return (
     <>
@@ -188,12 +188,15 @@ export function RetroCardGroup({
           paddingBottom: '5px',
           width: '100%',
         }}
-
       >
         {group.name !== UNGROUPED ? (
           <div {...provided.dragHandleProps}>
-            <Grid container justifyContent="space-between" paddingLeft={1.5} paddingRight={1.5} >
-
+            <Grid
+              container
+              justifyContent="space-between"
+              paddingLeft={1.5}
+              paddingRight={1.5}
+            >
               <Grid
                 item
                 xs={6}
@@ -225,12 +228,20 @@ export function RetroCardGroup({
                           paddingBottom: 0,
                           padding: 0,
                           // paddingLeft: '12px!important',
-                          width: global.expandColumn != -1 ||(location.pathname.includes('report')) ? '200px' : '100%',
+                          width:
+                            global.expandColumn != -1 ||
+                            location.pathname.includes('report')
+                              ? '200px'
+                              : '100%',
                           // width: (nameSet ? name.length : 14) + 3 + 'ch',
-                          div: { padding: 0, position: 'initial', width: '100%' },
+                          div: {
+                            padding: 0,
+                            position: 'initial',
+                            width: '100%',
+                          },
                           position: 'initial',
                         }}
-                        id={"groupTextField" + group.id}
+                        id={'groupTextField' + group.id}
                         maxRows={2}
                         inputProps={{ maxLength: 25 }}
                         value={nameSet ? name : 'Name grouping'}
@@ -248,27 +259,49 @@ export function RetroCardGroup({
                         InputProps={{
                           readOnly: ended,
                         }}
-                      // onFocus={async event => {
-                      //   if (admin) {
-                      //     setNameSet(true);
-                      //     await lockGroup(group.id, true);
-                      //   }
-                      // }}
-                      // onBlur={async () => {
-                      //   if (admin) {
-                      //     lockGroup(group.id, false);
-                      //     if (!name) {
-                      //       setNameSet(false);
-                      //     } else {
-                      //       await setGroupName(group.id, name);
-                      //     }
-                      //   }
-                      // }}
+                        // onFocus={async event => {
+                        //   if (admin) {
+                        //     setNameSet(true);
+                        //     await lockGroup(group.id, true);
+                        //   }
+                        // }}
+                        // onBlur={async () => {
+                        //   if (admin) {
+                        //     lockGroup(group.id, false);
+                        //     if (!name) {
+                        //       setNameSet(false);
+                        //     } else {
+                        //       await setGroupName(group.id, name);
+                        //     }
+                        //   }
+                        // }}
                       />
                     </Grid>
-                    <XMarkIcon color="red" onClick={() => { setEnableEdit(false); setName(group.name); }} style={{ height: '24px', width: '24px', fontWeight: '600', cursor: 'pointer' }} />
+                    <XMarkIcon
+                      color="red"
+                      onClick={() => {
+                        setEnableEdit(false);
+                        setName(group.name);
+                      }}
+                      style={{
+                        height: '24px',
+                        width: '24px',
+                        fontWeight: '600',
+                        cursor: 'pointer',
+                      }}
+                    />
 
-                    <CheckIcon color="green" onClick={saveGroupName} style={{ height: '24px', width: '24px', fontWeight: '600', marginLeft: '10px', cursor: 'pointer' }} />
+                    <CheckIcon
+                      color="green"
+                      onClick={saveGroupName}
+                      style={{
+                        height: '24px',
+                        width: '24px',
+                        fontWeight: '600',
+                        marginLeft: '10px',
+                        cursor: 'pointer',
+                      }}
+                    />
                   </>
                 ) : (
                   <Typography
@@ -278,38 +311,58 @@ export function RetroCardGroup({
                       width: '100%',
                       overflow: 'hidden',
                       textOverflow: 'ellipsis',
-                      fontWeight: '600'
+                      fontWeight: '600',
                     }}
-                    onClick={(e) => {
+                    onClick={e => {
                       switch (e.detail) {
-                        case 2: {!ended&&setEnableEdit(true)};
+                        case 2: {
+                          !ended && setEnableEdit(true);
+                        }
                       }
                     }}
                   >
                     {nameSet ? name : 'Name grouping'}
                   </Typography>
-                )}</Grid>
-              <Grid item lg={global?.expandColumn !== -1||(location.pathname.includes('report')) ? 1 : 3} md={global?.expandColumn !== -1 ||(location.pathname.includes('report')) ? 1.5 : 4} xs={4} container flexDirection="row" alignItems="center" justifyContent="space-between">
+                )}
+              </Grid>
+              <Grid
+                item
+                lg={
+                  global?.expandColumn !== -1 ||
+                  location.pathname.includes('report')
+                    ? 1
+                    : 3
+                }
+                md={
+                  global?.expandColumn !== -1 ||
+                  location.pathname.includes('report')
+                    ? 1.5
+                    : 4
+                }
+                xs={4}
+                container
+                flexDirection="row"
+                alignItems="center"
+                justifyContent="space-between"
+              >
                 <Grid
                   style={{
                     fontWeight: '600',
                     padding: 0,
                     color: nameSet ? groupFontColour : '#8D858A',
-
                   }}
                 >
                   {'( ' + group.cards.length + ' )'}
                 </Grid>
                 {group.name !== UNGROUPED && (
-
                   <Grid
-
                     item
                     display="flex"
                     flexDirection="row"
                     alignSelf="center"
-                    style={{ cursor: (!ended && !global.leaveRetro) ? "pointer" : "auto" }}
-
+                    style={{
+                      cursor: !ended && !global.leaveRetro ? 'pointer' : 'auto',
+                    }}
                     onClick={() =>
                       !ended && !global.leaveRetro
                         ? userReacted
@@ -320,7 +373,6 @@ export function RetroCardGroup({
                   >
                     {userReacted ? (
                       <img src="/svgs/StarGold.svg" />
-
                     ) : (
                       <>
                         {ended || global.leaveRetro ? (
@@ -341,27 +393,32 @@ export function RetroCardGroup({
                       {group.reactions?.length ? group.reactions?.length : ''}
                     </Typography>
                   </Grid>
-
                 )}
-                {!(location.pathname.includes('report')) && <Grid
-                  item
-                  sx={{
-                    cursor: 'pointer'
-
-                  }}
-                  onClick={event => {
-                    onCollapse(event)
-                  }}
-                >
-                  {showCollapse ? <img src="/svgs/Down.svg" /> : <img src="/svgs/Up.svg" />}
-                </Grid>}
+                {!location.pathname.includes('report') && (
+                  <Grid
+                    item
+                    sx={{
+                      cursor: 'pointer',
+                    }}
+                    onClick={event => {
+                      onCollapse(event);
+                    }}
+                  >
+                    {showCollapse ? (
+                      <img src="/svgs/Down.svg" />
+                    ) : (
+                      <img src="/svgs/Up.svg" />
+                    )}
+                  </Grid>
+                )}
               </Grid>
-            </Grid></div>
+            </Grid>
+          </div>
         ) : null}
 
         {showCollapse &&
-          group.cards.length === 0 &&
-          group.name !== UNGROUPED ? (
+        group.cards.length === 0 &&
+        group.name !== UNGROUPED ? (
           <Grid container direction="row" justifyContent="center">
             <Grid
               item

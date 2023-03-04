@@ -49,6 +49,8 @@ export function CreateRetroWithTemplatePage({
   }
   const [templates, setTemplates] = React.useState(templatesData);
   const [selectedTemplate, setSelectedTemplate] = React.useState(null);
+  const [customizedTemplate, setCustomizedTemplate] = React.useState(null);
+  const [isTemplateCustomized, setIsTemplateCustomized] = React.useState(false);
   {
     /* Pulse Check Panel Constant */
   }
@@ -75,7 +77,9 @@ export function CreateRetroWithTemplatePage({
   React.useEffect(() => {
     const initialPulseCheck = pulseChecksData.filter(e => e.checked == true);
     const initialTemplate: any = templatesData.filter(e => e.checked == true);
-    setSelectedTemplate(initialTemplate && initialTemplate[0]);
+    if (!isTemplateCustomized) {
+      setSelectedTemplate(initialTemplate && initialTemplate[0]);
+    }
     setSelectedPulseCheck(initialPulseCheck && initialPulseCheck[0]);
   }, []);
 
@@ -125,7 +129,10 @@ export function CreateRetroWithTemplatePage({
     setSelectedTemplate(selectedTemplateData);
   }
 
-  function handleTemplateSelectClick(selectedTemplateId: string) {
+  function handleTemplateSelectClick(
+    selectedTemplateId: string,
+    customizedTemplateData: any
+  ) {
     let data: any = templates?.map(template => {
       if (template.templateId === selectedTemplateId) {
         template.checked = true;
@@ -134,6 +141,8 @@ export function CreateRetroWithTemplatePage({
       }
       return template;
     });
+    setCustomizedTemplate(customizedTemplateData);
+    setSelectedTemplate({ ...customizedTemplateData });
     setTemplates(data);
   }
 
@@ -191,6 +200,15 @@ export function CreateRetroWithTemplatePage({
 
   // Function to create a New Retro
   const create = async () => {
+    let mySelectedTemplate;
+    if (isTemplateCustomized) {
+      const localStorageTemplateTemp = localStorage.getItem('selectedTemplate');
+      mySelectedTemplate =
+        localStorageTemplateTemp && JSON.parse(localStorageTemplateTemp);
+    } else {
+      mySelectedTemplate = selectedTemplate;
+    }
+
     sessionStorage.setItem('retroname', retroName);
     setLocalRetroName(retroName);
     const userType: number =
@@ -206,6 +224,7 @@ export function CreateRetroWithTemplatePage({
       selectedPulseCheck != null &&
       selectedTemplate != null
     ) {
+      dispatch({ type: ActionType.CREATE_RETRO, payload: {} });
       dispatch({
         type: ActionType.SET_LOADING,
         payload: { loadingFlag: true },
@@ -221,11 +240,11 @@ export function CreateRetroWithTemplatePage({
           selectedAvatar,
           userType,
           selectedPulseCheck,
-          selectedTemplate
+          mySelectedTemplate
         )
         .then(
           res => {
-            dispatch({ type: ActionType.CREATE_RETRO, payload: {} });
+            // dispatch({ type: ActionType.CREATE_RETRO, payload: {} });
             const userTypeValue: number =
               global?.user?.id == res?.creatorId
                 ? UserTypeArray[1].id
@@ -247,6 +266,10 @@ export function CreateRetroWithTemplatePage({
             getRetro(res.id as string)
               .then(retro => {
                 if (retro && retro.id) {
+                  console.log(
+                    '------------- Setting retro details for BoardState in create retro temp page -------------',
+                    retro
+                  );
                   dispatch({
                     type: ActionType.SET_CURRENT_RETRO,
                     payload: { retro },
@@ -258,6 +281,7 @@ export function CreateRetroWithTemplatePage({
               });
             setIsStartRetro(true);
             handleStartRetro();
+            localStorage.removeItem('selectedTemplate');
           },
           err => {
             console.log('err', err);
@@ -346,6 +370,9 @@ export function CreateRetroWithTemplatePage({
           handleTemplateSelectClick={handleTemplateSelectClick}
           templates={templates}
           setSelectedTemplate={setSelectedTemplate}
+          isTemplateCustomized={isTemplateCustomized}
+          setIsTemplateCustomized={setIsTemplateCustomized}
+          customizedTemplate={customizedTemplate}
         />
         <PulseCheckTab
           activePanel={activePanel}

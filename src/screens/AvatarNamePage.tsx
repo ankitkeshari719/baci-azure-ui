@@ -24,6 +24,7 @@ import { useAzureAuth } from '../msal/azureauth';
 import { UserTypeArray } from '../constants';
 import { BoardContext } from '../contexts/BoardContext';
 import theme from '../theme/theme';
+import { SocketContext } from '../contexts/SocketProvider';
 const AVATAR_CHARACTER_LIMIT = 30;
 const styles = {
   avatarfield: {
@@ -62,9 +63,6 @@ const styles = {
 
 export function AvatarNamePage() {
   const [global, dispatch] = React.useContext(GlobalContext);
-  // const [retroName, setRetroName] = React.useState(
-  //   sessionStorage.getItem('retroname') || ''
-  // );
   const {
     state: {
       users,
@@ -74,7 +72,7 @@ export function AvatarNamePage() {
       ended,
       needsToShow,
       retroStatus,
-      retroName
+      retroName,
     },
     commitAction,
   } = React.useContext(BoardContext);
@@ -93,6 +91,7 @@ export function AvatarNamePage() {
   const [started, setStarted] = React.useState(
     global.retroCreateState || false
   );
+  const socket = React.useContext(SocketContext);
   const [joining, setJoining] = React.useState(id ? true : false);
   const [captureName, setCaptureName] = React.useState(id ? true : false);
   const isXsUp = useMediaQuery(theme.breakpoints.between('xs', 'sm'));
@@ -103,6 +102,7 @@ export function AvatarNamePage() {
     loadRetroDetails();
     setAvatarList(avatarName.sort(() => Math.random() - 0.5));
     setHeight(window.innerHeight);
+    
   }, []);
 
 
@@ -127,7 +127,6 @@ export function AvatarNamePage() {
     if (!foundRetro) {
       foundRetro = await retro.getById(humanId);
     }
- 
     dispatch({
       type: ActionType.SET_CURRENT_RETRO,
       payload: { retro: foundRetro },
@@ -195,7 +194,6 @@ export function AvatarNamePage() {
       if (userName === '') setCodeError('Please enter avatar name');
       else {
         setAvatarSelectionError('Please select avatar');
-        console.log(avatarSelectionError);
       }
     }
   };
@@ -219,40 +217,41 @@ export function AvatarNamePage() {
   };
   React.useEffect(() => {
   
-      if (
-        !global.user.id ||
-        global.user.id == undefined ||
-        global.user.id == null
-      ) {
-        useAzureAuth;
-      } else {
-      }
-      if (!global.currentRetro?.name) {
-        dispatch({
-          type: ActionType.SET_LOADING,
-          payload: { loadingFlag: true },
-        });
-        joinRetro(true).then(
-          res => {
-            dispatch({
-              type: ActionType.SET_LOADING,
-              payload: { loadingFlag: false },
-            });
-  
-            navigatorFunction();
-          },
-          err => {
-            dispatch({
-              type: ActionType.SET_LOADING,
-              payload: { loadingFlag: false },
-            });
-          }
-        );
-      } else {
-        navigatorFunction();
-      }
-    
- 
+    socket.connect().on("connect",()=>{
+      console.log("----------- socket connected ------------")
+    })
+    if (
+      !global.user.id ||
+      global.user.id == undefined ||
+      global.user.id == null
+    ) {
+      useAzureAuth;
+    } else {
+    }
+    if (!global.currentRetro?.name) {
+      dispatch({
+        type: ActionType.SET_LOADING,
+        payload: { loadingFlag: true },
+      });
+      joinRetro(true).then(
+        res => {
+          dispatch({
+            type: ActionType.SET_LOADING,
+            payload: { loadingFlag: false },
+          });
+
+          navigatorFunction();
+        },
+        err => {
+          dispatch({
+            type: ActionType.SET_LOADING,
+            payload: { loadingFlag: false },
+          });
+        }
+      );
+    } else {
+      navigatorFunction();
+    }
   }, [users, global?.user?.id]);
 
   const navigatorFunction = (): any => {
@@ -395,16 +394,15 @@ export function AvatarNamePage() {
                 Choose your avatar
               </Typography>
               <Box sx={styles.avatarBox}>
-                {avatarList
-                  .map((avatar: any, index) => (
-                    <Avatar
-                      key={index}
-                      avatar={avatar}
-                      css={styles.avatarSvg}
-                      onClickAvatar={onClickAvatar}
-                      selectedAvatar={selectedAvatar}
-                    ></Avatar>
-                  ))}
+                {avatarList.map((avatar: any, index) => (
+                  <Avatar
+                    key={index}
+                    avatar={avatar}
+                    css={styles.avatarSvg}
+                    onClickAvatar={onClickAvatar}
+                    selectedAvatar={selectedAvatar}
+                  ></Avatar>
+                ))}
               </Box>
               {avatarSelectionError !== '' && (
                 <Box

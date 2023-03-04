@@ -1,30 +1,21 @@
 import {
   Box,
   Grid,
-  Button,
   styled,
-  TextField,
-  Typography,
   useMediaQuery,
-  Link,
-  Tooltip,
 } from '@mui/material';
-import React, { ReactElement, useEffect, useMemo } from 'react';
+import React, { ReactElement, useMemo } from 'react';
 import Draggable, { DraggableData, DraggableEvent } from 'react-draggable';
-import { MAX_CARD_TEXT_LENGTH, UNGROUPED } from '../constants';
+import { UNGROUPED } from '../constants';
 import { BoardContext } from '../contexts/BoardContext';
 import { BoardActionType } from '../statemachine/BoardStateMachine';
 import { Card, Card as RetroCardType, CardGroup, Column } from '../types';
-import Avatar from '../elements/Avatar';
-import SendIcon from '@mui/icons-material/Send';
-import Color from 'color';
 import shortid from 'shortid';
 import { ActionType, GlobalContext } from '../contexts/GlobalContext';
 import { RetroCard } from './retroCard/RetroCard';
 import theme from '../theme/theme';
 import { RetroCardGroup } from './RetroCardGroup';
-import EmojiPicker from 'emoji-picker-react';
-import { DragDropContext, Draggable as Drag, Droppable, DropResult } from "react-beautiful-dnd"
+import { DragDropContext, Draggable as Drag, Droppable } from "react-beautiful-dnd"
 import ColumnHeader from './ColumnHeader';
 import RetroColumnBottom from './RetroColumnBottom';
 
@@ -49,6 +40,7 @@ export function RetroColumn({
   setIslanded,
   leftHeaderComponent,
   rightHeaderComponent,
+  columnIndex
 }: {
   column: Column;
   columnId: string;
@@ -61,6 +53,7 @@ export function RetroColumn({
   rightHeaderComponent: any;
   setIslanded: (islanded: boolean) => void;
   setShowEditBox: (showEditBox: boolean) => void;
+  columnIndex?: number;
 }): ReactElement {
   const selectedCard = React.useRef<number[] | null>(null);
   const selectedCardCopy = React.useRef<number[] | null>(null);
@@ -145,7 +138,6 @@ export function RetroColumn({
 
   const addNewCard = async (cardGroupId: string, value: string) => {
     const id = shortid.generate();
-    // console.log(id, 'id');
     await saveAndProcessAction(BoardActionType.ADD_NEW_CARD, {
       groupId: cardGroupId,
       id,
@@ -224,7 +216,6 @@ export function RetroColumn({
   };
 
   const publishColumn = async (value: boolean) => {
-    // console.log('publish');
     if (true) {
       dispatchLoadingFlag(true)
       await saveAndProcessAction(BoardActionType.PUBLISH_COLUMN, {
@@ -293,7 +284,6 @@ export function RetroColumn({
     }
   };
 
-
   var timeoutForBorder: any;
   const handleDrag = (
     i: number,
@@ -333,7 +323,6 @@ export function RetroColumn({
       for (const groupRef of groupRefs) {
 
         if (groupRef !== null && ii !== i) {
-          // console.log(ii,"ii")
           let {
             top: t,
             left: l,
@@ -623,7 +612,6 @@ export function RetroColumn({
               selectedCard.current !== null &&
               targetLanding.current !== null
             ) {
-              console.log("move 2");
               moveCard(
                 cardGroups[selectedCard.current[0]].cards[
                   selectedCard.current[1]
@@ -786,6 +774,7 @@ export function RetroColumn({
               setColumnName={setColumnName}
               publishColumn={publishColumn}
               dispatch={dispatch}
+              columnIndex={columnIndex}
             />
           </div>
         )}
@@ -1386,5 +1375,4 @@ export function RetroColumn({
   }
 
 }
-
 

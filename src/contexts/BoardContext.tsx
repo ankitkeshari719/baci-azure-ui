@@ -14,7 +14,16 @@ import {
   Grid,
 } from '@mui/material';
 import React, { ComponentProps } from 'react';
-import { addRetroAction, getRetroActions } from '../msal/services';
+/* import {
+  onSnapshotRetroActions,
+  addRetroAction,
+  getRetroActions
+} from '../firebase/firestore'; */
+import {
+  addRetroAction,
+  getRetroActions,
+  // onSnapshotRetroActions
+} from '../msal/services';
 
 import { GlobalContext } from './GlobalContext';
 import { INITIAL_COLUMNS } from '../constants';
@@ -24,6 +33,7 @@ import shortid from 'shortid';
 import stringifyDate from 'json-stringify-date';
 import { useSocket } from '../hooks/useSocket';
 import { SocketContext } from './SocketProvider';
+import { ErrorContext } from './ErrorContext';
 
 export interface ReducerPayload {
   parameters: any;
@@ -49,12 +59,12 @@ const BoardContext = React.createContext<ContextType>({
 });
 
 function initialBoardState(retroId: string): BoardState {
-  return new BoardState(retroId, INITIAL_COLUMNS);
+  return new BoardState(retroId);
 }
 
 function BoardProvider(props: ComponentProps<any>) {
   const history = React.useRef<{ action: Action }[]>([]);
-
+  const { error, setError } = React.useContext(ErrorContext);
   const [{ currentRetro, user }] = React.useContext(GlobalContext);
   const socket = React.useContext(SocketContext);
 
@@ -68,6 +78,7 @@ function BoardProvider(props: ComponentProps<any>) {
   const snapshotUnsubscriber = React.useRef<() => void>(() => {});
 
   function saveState(state: BoardState) {
+    // console.log(state,'imp');
     const value = stringifyDate.stringify({
       boardId: currentRetro?.id,
       history: history.current,
@@ -154,6 +165,7 @@ function BoardProvider(props: ComponentProps<any>) {
     actions.sort(actionSortFunction);
 
     actions.forEach(action => {
+      // console.log(action,"action")
       const existingActionIndex = history.current.findIndex(
         (a: { action: { id: string } }) => a.action.id === action.id
       );
@@ -234,6 +246,8 @@ function BoardProvider(props: ComponentProps<any>) {
           stateSnapshots.current = stateSnapshots.current.slice(-MAX_SNAPSHOTS);
         }
       }
+
+      // newState.loading = false;
       if (action.timestamp) {
         lastActionTimestamp.current = action.timestamp;
       }
@@ -246,15 +260,36 @@ function BoardProvider(props: ComponentProps<any>) {
   };
 
   React.useEffect(() => {
+    socket.on('close', () => {
+      console.log('------- socket disconnected -------');
+
+      setError('error : Socket disconnected');
+    });
+    socket.on('connect_error', () => {
+      console.log('------- socket error -------');
+      setError('error : Socket disconnected');
+    });
+    socket.on('disconnect', () => {
+      console.log('------- socket disconnected -------');
+      setState({ ...state, disconnected: true });
+      setError('error : Socket disconnected');
+    });
+    // }
+  }, [currentRetro?.id, socket]);
+
+  React.useEffect(() => {
     snapshotUnsubscriber?.current();
     if (currentRetro?.id) {
       let loadedState = false;
       if (state.retroId === '' && loadState()) {
         loadedState = true;
+
         setState({ ...state });
       } else {
         clearState();
         state.retroId = currentRetro?.id;
+
+        // state.creatorId=currentRetro?.creatorId;
       }
 
       getRetroActions(
@@ -275,11 +310,13 @@ function BoardProvider(props: ComponentProps<any>) {
         socket.on(
           'newMessage',
           (snapshot: { retroId: string; action: any }[]) => {
-            socket.on('disconnect',()=>{
-              console.log("socket disconnected")
-            })
             const results = [] as any[];
             snapshot.forEach((change: { retroId: string; action: any }) => {
+              // console.log("change",change)
+              // if(change?.action?.actionName==="updateRetroDetails"){
+
+              // }
+              // if ((change.type === "modified" || change.type === "added") && !change.doc.metadata.hasPendingWrites) {
               if (
                 change.retroId === currentRetro?.id &&
                 (change.action.sourceActionTimestamp >=
@@ -304,15 +341,24 @@ function BoardProvider(props: ComponentProps<any>) {
             }
           }
         );
+
+        /* snapshotUnsubscriber.current = onSnapshotRetroActions(
+          currentRetro?.id as string,
+          user.id,
+          lastActionTimestamp.current,
+          actions => {
+            console.log("processing action",actions)
+            if (actions.length !== 0) {
+              processActions(actions);
+            }
+          }
+        );  */
       });
     } else {
       clearState();
-
-    
     }
-  }, [currentRetro?.id,currentRetro?.id&&socket]);
+  }, [currentRetro?.id]);
 
-  
   return (
     <BoardContext.Provider value={{ state, commitAction }}>
       {!currentRetro && !state.loading ? (
@@ -325,7 +371,9 @@ function BoardProvider(props: ComponentProps<any>) {
           </DialogContent>
         </Dialog>
       ) : null}
-
+      {/* <Dialog open={true}>
+        <DialogContent>
+          <Grid container justifyContent="center"> */}
       {global.loadingFlag && (
         <Box
           sx={{
@@ -342,7 +390,10 @@ function BoardProvider(props: ComponentProps<any>) {
           <CircularProgress />
         </Box>
       )}
-     
+
+      {/* </Grid>
+        </DialogContent>
+      </Dialog> */}
       {props.children}
     </BoardContext.Provider>
   );

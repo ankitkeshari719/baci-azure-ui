@@ -7,11 +7,13 @@ type Props = {
   onClick: (...param: any) => void;
   style?: any;
   disabled?: boolean;
+  id?: string;
 };
 
-export function ContainedButton({ name, onClick, style, disabled }: Props) {
+export function ContainedButton({ id, name, onClick, style, disabled }: Props) {
   return (
     <Button
+    id= {id}
       variant="contained"
       className="containedButton"
       onClick={onClick}

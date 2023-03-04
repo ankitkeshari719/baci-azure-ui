@@ -78,9 +78,9 @@ export default function useLoadRetro() {
         }).then(() => {
           if (global.currentRetro && retroStarted) {
             if (FEATURE_FLAGS.pulseCheck) {
-              navigate(
-                `/board/${retroId || global.currentRetro?.id}/pulsecheck`
-              );
+              // navigate(
+              //   `/board/${retroId || global.currentRetro?.id}/pulsecheck`
+              // );
               return;
             }
           } else {
@@ -95,5 +95,5 @@ export default function useLoadRetro() {
         return;
       }
     }
-  }, [retroId, loading]);
+  }, [retroId,loading]);
 }

@@ -167,7 +167,7 @@
   color: #159add !important;
 }
 .avatarDialog {
-  width: 90% !important;
+  width: 100% !important;
   padding: 16px !important;
   background: #ffffff !important;
   display: flex !important;
@@ -447,4 +447,25 @@
   width: 100% !important;
   display: flex !important;
   align-items: center !important;
+}
+.unsavedChangesTextOne {
+  font-family: 'Poppins' !important;
+  font-style: normal !important;
+  font-weight: 500 !important;
+  font-size: 24px !important;
+  line-height: 32px !important;
+  text-align: center !important;
+  letter-spacing: 0.5px !important;
+  color: #ee7538 !important;
+}
+
+.unsavedChangesTextTwo {
+  font-family: 'Poppins' !important;
+  font-style: normal !important;
+  font-weight: 400 !important;
+  font-size: 20px !important;
+  line-height: 28px !important;
+  text-align: center !important;
+  letter-spacing: 0.5px !important;
+  color: #343434 !important;
 }

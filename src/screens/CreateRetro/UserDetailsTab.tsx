@@ -273,7 +273,7 @@ export function UserDetailsTab({
               <Box
                 sx={{
                   width: '100%',
-                  display: 'flex'
+                  display: 'flex',
                 }}
               >
                 <ContainedButton
@@ -299,93 +299,96 @@ export function UserDetailsTab({
             </Grid>
           </Box>
         )}
-        <Dialog
-          open={openAvatarDialog}
+      </Box>
+      <Dialog
+        open={openAvatarDialog}
+        sx={{
+          height: height - 100,
+        }}
+      >
+        <DialogTitle style={{ padding: '16px' }}>
+          <Grid container sx={{ display: 'flex', alignItems: 'center' }}>
+            <Grid item sm={6}>
+              <Box display="flex" justifyContent="flex-start">
+                <Typography component="span" className="selectAvatarText">
+                  Select Avatar
+                </Typography>
+              </Box>
+            </Grid>
+            <Grid item sm={6}>
+              <Box display="flex" justifyContent="flex-end">
+                <img
+                  width="45px"
+                  height="45px"
+                  onClick={() => setOpenAvatarDialog(false)}
+                  src="/svgs/CloseDialog.svg"
+                />
+              </Box>
+            </Grid>
+          </Grid>
+        </DialogTitle>
+        {/* Avatar List */}
+        <Box
+          className="avatarDialog"
           sx={{
-            height: height - 100,
+            height: height / 2,
           }}
         >
-          <DialogTitle>
-            <Grid container sx={{ display: 'flex', alignItems: 'center' }}>
-              <Grid item sm={6}>
-                <Box display="flex" justifyContent="flex-start">
-                  <Typography component="span" className="selectAvatarText">
-                    Select Avatar
-                  </Typography>
-                </Box>
-              </Grid>
-              <Grid item sm={6}>
-                <Box display="flex" justifyContent="flex-end">
-                  <img
-                    width="45px"
-                    height="45px"
-                    onClick={() => setOpenAvatarDialog(false)}
-                    src="/svgs/CloseDialog.svg"
-                  />
-                </Box>
-              </Grid>
-            </Grid>
-          </DialogTitle>
+          {avatarList.map((avatar: any, index) => (
+            <Avatar
+              key={index}
+              avatar={avatar}
+              className="avatarSvgXs"
+              onClickAvatar={onSelectAvatar}
+              selectedAvatar={tempAvatar}
+              css={{
+                width: '60px',
+                height: '60px',
+                borderRadius: '50%',
+                margin: '16px',
+              }}
+            ></Avatar>
+          ))}
+        </Box>
+        {/* Error Message */}
+        <Box sx={{ mx: 3, mt: 2 }}>
+          {avatarError !== '' && (
+            <FormHelperText sx={{ color: '#d32f2f', mt: 2 }}>
+              {avatarError}
+            </FormHelperText>
+          )}
+        </Box>
+        {/* Buttons */}
+        <Box sx={{ mx: 3 }}>
           <Box
-            className="avatarDialog"
             sx={{
-              height: height / 2,
+              width: '100%',
+              display: 'flex',
+              flex: '1 0 auto',
+              alignItems: 'flex-end',
+              justifyContent: 'space-between',
+              my: 2,
             }}
           >
-            {avatarList.map((avatar: any, index) => (
-              <Avatar
-                key={index}
-                avatar={avatar}
-                className="avatarSvgXs"
-                onClickAvatar={onSelectAvatar}
-                selectedAvatar={tempAvatar}
-                css={{
-                  width: '60px',
-                  height: '60px',
-                  borderRadius: '50%',
-                  margin: '16px',
-                }}
-              ></Avatar>
-            ))}
-          </Box>
-          <Box sx={{ mx: 3, mt: 2 }}>
-            {avatarError !== '' && (
-              <FormHelperText sx={{ color: '#d32f2f', mt: 2 }}>
-                {avatarError}
-              </FormHelperText>
-            )}
-          </Box>
-          <Box sx={{ mx: 3 }}>
-            <Box
-              sx={{
-                width: '100%',
-                display: 'flex',
-                flex: '1 0 auto',
-                alignItems: 'flex-end',
-                justifyContent: 'space-between',
-                my: 2,
+            <OutlinedButton
+              name="Cancel"
+              onClick={() => setOpenAvatarDialog(false)}
+              style={{
+                minWidth: '75px !important',
+                height: '36px !important',
               }}
-            >
-              <OutlinedButton
-                name="Cancel"
-                onClick={() => setOpenAvatarDialog(false)}
-                style={{
-                  minWidth: '75px !important',
-                  height: '36px !important',
-                }}
-              />
-              <ContainedButton
-                name="Select"
-                onClick={onClickSubmit}
-                style={{
-                  minWidth: '75px !important',
-                  height: '36px !important',
-                }}
-              />
-            </Box>
+            />
+            <ContainedButton
+              name="Select"
+              onClick={onClickSubmit}
+              style={{
+                minWidth: '75px !important',
+                height: '36px !important',
+              }}
+            />
           </Box>
-        </Dialog>
-      </Box>
+        </Box>
+      </Dialog>
     </>
   );
 }

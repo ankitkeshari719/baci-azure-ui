@@ -109,8 +109,6 @@ export default function SimplePulseCheck({ pulseCheck }: Props) {
         parseGPulseCheckState.pulseSubmitState &&
         parseGPulseCheckState?.retroId === currentRetro?.id
       ) {
-        // console.log('already pulse checked');
-
         navigate('/board/' + currentRetro?.id);
         dispatch({
           type: ActionType.SET_SNACK_MESSAGE,

@@ -32,9 +32,7 @@ const WordCloud: FunctionComponent<WordCloudProps> = ({ data, showOn }) => {
         // }else{
         //   return datum.size ? datum.size * 5 : 0;
         // }
-        // console.log(datum, datum.size)
         return datum.size ? datum.size < 15 ? 18 : datum.size < 30 ? 15 : datum.size < 45 ? 12 : 8 : 16;
-        // return datum.size ? 5 + datum.size * 7 / 3 : 0; 
       })
       .padding(10)
       .rotate(() => 0)

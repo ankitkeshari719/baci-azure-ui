@@ -81,8 +81,14 @@ type Props = {
   handleCheckedTemplate: (selectedPulseCheck: any) => void;
   onClickNext: (currentPanel: string, nextPanel: string) => void;
   onClickBack: (previousPanel: string) => void;
-  handleTemplateSelectClick: (selectedTemplateId: string) => void;
+  handleTemplateSelectClick: (
+    selectedTemplateId: string,
+    selectedTemplate: any
+  ) => void;
   setSelectedTemplate: (selectedTemplate: any) => void;
+  setIsTemplateCustomized: (isTemplateCustomized: boolean) => void;
+  customizedTemplate: any;
+  isTemplateCustomized: boolean;
 };
 
 export function RetroTemplateTab({
@@ -94,11 +100,13 @@ export function RetroTemplateTab({
   handleTemplateSelectClick,
   templates,
   setSelectedTemplate,
+  isTemplateCustomized,
+  setIsTemplateCustomized,
+  customizedTemplate,
 }: Props) {
   const [openLearnMoreDialog, setOpenLearnMoreDialog] = React.useState(false);
   const [openCustomTemplateDialog, setOpenCustomTemplateDialog] =
     React.useState(false);
-  const [isTemplateCustomized, setIsTemplateCustomized] = React.useState(false);
   const [height, setHeight] = React.useState(0);
   const classes = useStyles();
   const isMdUp: any = useMediaQuery(theme.breakpoints.only('md'));
@@ -213,7 +221,9 @@ export function RetroTemplateTab({
                       key={template.templateId}
                       sx={{
                         display: 'flex !important',
-                        pointerEvents: template.isComingSoon ? 'none' : 'initial',
+                        pointerEvents: template.isComingSoon
+                          ? 'none'
+                          : 'initial',
                         flexDirection: 'column !important',
                         justifyContent: 'space-between !important',
                         minHeight: '440px',
@@ -380,11 +390,12 @@ export function RetroTemplateTab({
         onClose={closeCustomTemplateDialog}
       >
         <CustomizeTemplate
-          closeCustomTemplateDialog={closeCustomTemplateDialog}
           selectedTemplate={selectedTemplate}
+          customizedTemplate={customizedTemplate}
+          closeCustomTemplateDialog={closeCustomTemplateDialog}
           handleTemplateSelectClick={handleTemplateSelectClick}
-          setSelectedTemplate={setSelectedTemplate}
           setIsTemplateCustomized={setIsTemplateCustomized}
+          isTemplateCustomized={isTemplateCustomized}
         />
       </Dialog>
     </>
