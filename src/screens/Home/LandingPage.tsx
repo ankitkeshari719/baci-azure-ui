@@ -21,9 +21,9 @@ import { LandingLayout } from '../LandingLayout';
 import { Retro as RetroType } from '../../types';
 import { useRetro } from '../../helpers';
 import { ActionType, GlobalContext } from '../../contexts/GlobalContext';
-import { addDeploymentData, getDeploymentData } from '../../msal/services';
+import { addDeploymentData } from '../../msal/services';
 import { AddDeploymentDataDialog } from '../Utils/Dialogs/AddDeploymentDataDialog';
-import { InfoAlert } from '../Utils/Alerts/CustomAlert';
+import { DeploymentPopUp } from './DeploymentPopUp';
 
 const BootstrapDialog = styled(Dialog)(({ theme }) => ({
   '& .MuiDialogContent-root': {
@@ -63,46 +63,26 @@ export function LandingPage() {
   const isSmUp = useMediaQuery(theme.breakpoints.only('sm'));
   const [isAddDeploymentDataDialogOpen, setIsAddDeploymentDataDialogOpen] =
     React.useState(false);
-  const [deploymentData, setDeploymentData] = React.useState([]);
 
   useAzureAuth();
 
   React.useEffect(() => {
-    handleGetDeploymentData();
+    setHeight(window.innerHeight);
+    dispatch({
+      type: ActionType.CLOSE_CURRENT_RETRO,
+    });
   }, []);
 
-  const joinRetro = async (): Promise<RetroType | undefined> => {
-    let foundRetro = await retro.getByHumanId(humanId);
-    if (humanId === '') {
-      setCodeError('Please enter access code');
-    } else {
-      setCodeError('');
-    }
-    if (!foundRetro) {
-      setCodeError('Sorry, wrong code. Please try again');
-      //foundRetro = await retro.getById(humanId);
-    }
-    dispatch({
-      type: ActionType.SET_CURRENT_RETRO,
-      payload: { retro: foundRetro },
-    });
-    if (foundRetro !== undefined) {
-      navigate('/join/' + humanId);
-      return foundRetro;
-    } else {
-      setCodeError('Sorry, wrong code. Please try again');
-    }
-  };
+  React.useEffect(() => {
+    sessionStorage.removeItem('BoardContext');
+    sessionStorage.removeItem('GlobalContext');
+    sessionStorage.removeItem('retroname');
+    sessionStorage.removeItem('showManual');
+    localStorage.removeItem('selectedTemplate');
+    localStorage.removeItem('tempSelectedTemplateData');
+  }, []);
 
-  function CreateNewRetro() {
-    dispatch({
-      type: ActionType.SET_RETRO_CREATE,
-      payload: { retroCreateState: true },
-    });
-    setCodeError('');
-    navigate('/createretro/');
-  }
-
+  // Function to add deployment data
   const handleAddDeploymentData = async (
     deploymentDate: Dayjs | null,
     notificationDate: Dayjs | null
@@ -148,29 +128,6 @@ export function LandingPage() {
     }
   };
 
-  const handleGetDeploymentData = async () => {
-    await getDeploymentData().then(
-      res => {
-        setDeploymentData(res);
-      },
-      err => {
-        console.log('err', err);
-
-        dispatch({
-          type: ActionType.SET_SNACK_MESSAGE,
-          payload: {
-            snackMessage: {
-              snackMessageType: 'error',
-              message: 'Error while getting the deployment data!',
-            },
-          },
-        });
-      }
-    );
-  };
-
-  console.log('deploymentData', deploymentData);
-
   const handleAddDeploymentDataOpen = () => {
     setIsAddDeploymentDataDialogOpen(true);
   };
@@ -179,21 +136,39 @@ export function LandingPage() {
     setIsAddDeploymentDataDialogOpen(false);
   };
 
-  React.useEffect(() => {
-    setHeight(window.innerHeight);
+  // Function to join existing retro
+  const joinRetro = async (): Promise<RetroType | undefined> => {
+    let foundRetro = await retro.getByHumanId(humanId);
+    if (humanId === '') {
+      setCodeError('Please enter access code');
+    } else {
+      setCodeError('');
+    }
+    if (!foundRetro) {
+      setCodeError('Sorry, wrong code. Please try again');
+      //foundRetro = await retro.getById(humanId);
+    }
     dispatch({
-      type: ActionType.CLOSE_CURRENT_RETRO,
+      type: ActionType.SET_CURRENT_RETRO,
+      payload: { retro: foundRetro },
     });
-  }, []);
+    if (foundRetro !== undefined) {
+      navigate('/join/' + humanId);
+      return foundRetro;
+    } else {
+      setCodeError('Sorry, wrong code. Please try again');
+    }
+  };
 
-  React.useEffect(() => {
-    sessionStorage.removeItem('BoardContext');
-    sessionStorage.removeItem('GlobalContext');
-    sessionStorage.removeItem('retroname');
-    sessionStorage.removeItem('showManual');
-    localStorage.removeItem('selectedTemplate');
-    localStorage.removeItem('tempSelectedTemplateData');
-  }, []);
+  // Function to navigate on create new retro page
+  function CreateNewRetro() {
+    dispatch({
+      type: ActionType.SET_RETRO_CREATE,
+      payload: { retroCreateState: true },
+    });
+    setCodeError('');
+    navigate('/createretro/');
+  }
 
   return (
     <>
@@ -258,9 +233,7 @@ export function LandingPage() {
         </Box>
       ) : (
         <Grid container spacing={0}>
-          {/* <Grid item xs={12}>
-            <InfoAlert />
-          </Grid> */}
+          {/* <DeploymentPopUp /> */}
           <Grid item xs={6}>
             <LandingLayout></LandingLayout>
           </Grid>
@@ -280,7 +253,6 @@ export function LandingPage() {
               <Typography variant="h2" color={commonStyles.primaryDark}>
                 What BACI retro are you joining today?
               </Typography>
-
               <TextField
                 autoFocus
                 variant="standard"
@@ -309,7 +281,6 @@ export function LandingPage() {
                 className="secondaryButton"
                 style={styles.signInMargin}
                 onClick={() => joinRetro()}
-                // onTouchStart={() => joinRetro()}
               >
                 <span className="secondaryButtonText">Go on..</span>
               </Button>
@@ -320,6 +291,12 @@ export function LandingPage() {
                 }}
               >
                 Create New Retro
+              </Button>
+              <Button
+                className="newUserText"
+                onClick={handleAddDeploymentDataOpen}
+              >
+                Add Deployment Data
               </Button>
             </Grid>
           </Grid>

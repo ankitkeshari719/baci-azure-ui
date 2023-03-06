@@ -38,7 +38,11 @@ const styles = {
   },
 };
 
-export function InfoAlert() {
+type Props = {
+  handleAlertClose: () => void;
+};
+
+export function InfoAlert({ handleAlertClose }: Props) {
   return (
     <Alert
       severity="info"
@@ -46,9 +50,7 @@ export function InfoAlert() {
       sx={{
         ...styles.accessCodeTextField,
       }}
-      onClose={() => {
-        console.log('text...');
-      }}
+      onClose={handleAlertClose}
     >
       <Icons.InformationCircle
         style={{

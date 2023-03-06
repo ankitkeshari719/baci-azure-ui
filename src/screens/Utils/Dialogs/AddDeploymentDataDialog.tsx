@@ -64,10 +64,10 @@ export function AddDeploymentDataDialog({
   handleAddDeploymentData,
 }: Props) {
   const [deploymentDate, setDeploymentDate] = React.useState<Dayjs | null>(
-    dayjs('2014-08-18T21:11:54')
+    dayjs()
   );
   const [notificationDate, setNotificationDate] = React.useState<Dayjs | null>(
-    dayjs('2014-08-18T21:11:54')
+    dayjs()
   );
 
   const handleDeploymentDateChange = (newValue: Dayjs | null) => {
