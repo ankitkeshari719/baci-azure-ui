@@ -23,7 +23,7 @@ import { useRetro } from '../../helpers';
 import { ActionType, GlobalContext } from '../../contexts/GlobalContext';
 import { addDeploymentData } from '../../msal/services';
 import { AddDeploymentDataDialog } from '../Utils/Dialogs/AddDeploymentDataDialog';
-import { DeploymentPopUp } from './DeploymentPopUp';
+import { DeploymentPopUp } from '../Utils/Alerts/DeploymentPopUp';
 
 const BootstrapDialog = styled(Dialog)(({ theme }) => ({
   '& .MuiDialogContent-root': {
@@ -174,6 +174,7 @@ export function LandingPage() {
     <>
       {isXsUp ? (
         <Box height={height} sx={{ overflowY: 'auto' }}>
+           <DeploymentPopUp />
           <LandingLayout></LandingLayout>
           <Box
             sx={{
@@ -233,7 +234,7 @@ export function LandingPage() {
         </Box>
       ) : (
         <Grid container spacing={0}>
-          {/* <DeploymentPopUp /> */}
+          <DeploymentPopUp />
           <Grid item xs={6}>
             <LandingLayout></LandingLayout>
           </Grid>
@@ -292,12 +293,12 @@ export function LandingPage() {
               >
                 Create New Retro
               </Button>
-              <Button
+              {/* <Button
                 className="newUserText"
                 onClick={handleAddDeploymentDataOpen}
               >
                 Add Deployment Data
-              </Button>
+              </Button> */}
             </Grid>
           </Grid>
         </Grid>

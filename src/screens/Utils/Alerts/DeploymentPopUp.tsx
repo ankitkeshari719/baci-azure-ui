@@ -1,11 +1,11 @@
 import * as React from 'react';
 import { Grid } from '@mui/material';
-import './../../global.scss';
+import './../../../global.scss';
 import './styles.scss';
 import dayjs, { Dayjs } from 'dayjs';
-import { ActionType, GlobalContext } from '../../contexts/GlobalContext';
-import { getDeploymentData } from '../../msal/services';
-import { InfoAlert } from '../Utils/Alerts/CustomAlert';
+import { ActionType, GlobalContext } from '../../../contexts/GlobalContext';
+import { getDeploymentData } from '../../../msal/services';
+import { InfoAlert } from './CustomAlert';
 
 export function DeploymentPopUp() {
   const [global, dispatch] = React.useContext(GlobalContext);

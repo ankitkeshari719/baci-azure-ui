@@ -143,7 +143,6 @@ export default function Feedback() {
           </Grid>
         </Toolbar>
       </AppBar>
-
       {!ended || creatorId === user.id ? (
         <AppBar
           component="div"

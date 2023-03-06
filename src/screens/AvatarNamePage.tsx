@@ -25,6 +25,7 @@ import { UserTypeArray } from '../constants';
 import { BoardContext } from '../contexts/BoardContext';
 import theme from '../theme/theme';
 import { SocketContext } from '../contexts/SocketProvider';
+import { DeploymentPopUp } from './Utils/Alerts/DeploymentPopUp';
 const AVATAR_CHARACTER_LIMIT = 30;
 const styles = {
   avatarfield: {
@@ -291,6 +292,7 @@ export function AvatarNamePage() {
   };
   return (
     <Grid container spacing={0} style={{ overflowY: 'auto' }}>
+       <DeploymentPopUp />
       <Grid item xs={isXsUp ? 12 : 6}>
         <LandingLayout></LandingLayout>
       </Grid>

@@ -59,10 +59,6 @@ export default function App({ instance }: AppProps) {
                           path="/createretro"
                           element={<CreateRetroMain></CreateRetroMain>}
                         />
-                        {/* <Route
-                          path="/createretrowithtemplate"
-                          element={<CreateRetroMain></CreateRetroMain>}
-                        /> */}
                         <Route
                           path="/join/:id"
                           element={<AvatarNamePage></AvatarNamePage>}
