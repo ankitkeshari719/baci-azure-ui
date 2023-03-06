@@ -8,9 +8,8 @@ import {
 import * as React from 'react';
 import '../../global.scss';
 import './styles.scss';
-import commonStyles from '../../style.module.scss';
 
-import { Row, Col, Button } from 'react-bootstrap';
+import { Row, Col } from 'react-bootstrap';
 import { ContainedButton, OutlinedButton } from '../../components';
 
 type Props = {
@@ -76,7 +75,7 @@ export function CustomizeTemplateDialog({
         id="customized-dialog-title"
         onClose={handleIsChangeDialogClose}
       ></BootstrapDialogTitle>
-      <DialogContent
+      <DialogContent 
         sx={{
           display: 'flex',
           flexDirection: 'column',
