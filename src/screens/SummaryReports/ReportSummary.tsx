@@ -700,7 +700,7 @@ export const ReportSummary = React.forwardRef((props, ref) => {
         style={{
           display: 'flex',
           flexDirection: 'column',
-          height: '100%',
+          height: '95%',
           overflowY: 'auto',
           backgroundColor: '#F5F5F5',
           paddingLeft: isXsUp
