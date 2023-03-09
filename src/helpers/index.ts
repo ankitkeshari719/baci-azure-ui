@@ -20,7 +20,7 @@ import { SocketContext } from '../contexts/SocketProvider';
 export const useRetro = () => {
   const [state, dispatch] = React.useContext(GlobalContext);
   const socket = React.useContext(SocketContext);
-  return {    
+  return {
     create: async (
       retro: Partial<Omit<Retro, 'id'>>,
       retroTimeframe: string,
@@ -35,8 +35,9 @@ export const useRetro = () => {
         name: 'Retro',
         ...(retro ? retro : {}),
         humanId,
-        joinUrl: `${window.location.protocol}//${window.location.hostname}${window.location.port ? ':' + window.location.port : ''
-          }/join/${humanId}`,
+        joinUrl: `${window.location.protocol}//${window.location.hostname}${
+          window.location.port ? ':' + window.location.port : ''
+        }/join/${humanId}`,
       } as Retro;
 
       const id = await createRetro(currentRetro, state.user);
@@ -77,7 +78,7 @@ export const useRetro = () => {
       selectedAvatar: string,
       userType: number,
       selectedPulseCheck: pulseCheckInterface | null,
-      selectedTemplate: any,
+      selectedTemplate: any
     ): Promise<Retro> => {
       const humanId = (
         '' +
@@ -88,23 +89,24 @@ export const useRetro = () => {
         name: 'Retro',
         ...(retro ? retro : {}),
         humanId,
-        joinUrl: `${window.location.protocol}//${window.location.hostname}${window.location.port ? ':' + window.location.port : ''
-          }/join/${humanId}`,
+        joinUrl: `${window.location.protocol}//${window.location.hostname}${
+          window.location.port ? ':' + window.location.port : ''
+        }/join/${humanId}`,
       } as Retro;
 
       const id = await createRetro(currentRetro, state.user);
       const retrievedRetro = await getRetro(id);
-      console.log("------------- setting retro details in index -------------", retro);
-      socket.connect().on("connect", () => {
-
+      sessionStorage.setItem('lastRetroName', JSON.stringify(retrievedRetro.name));
+      console.log(
+        '------------- setting retro details in index -------------',
+        retro
+      );
+      socket.connect().on('connect', () => {
         dispatch({
           type: ActionType.SET_CURRENT_RETRO,
           payload: { retro: retrievedRetro },
         });
-  
-        
-
-      })
+      });
 
       const action: Action = {
         id: shortid.generate(),
@@ -113,8 +115,9 @@ export const useRetro = () => {
           retroName: retro?.name,
           retroTimeframe,
           retroGoal,
-          joinUrl: `${window.location.protocol}//${window.location.hostname}${window.location.port ? ':' + window.location.port : ''
-            }/join/${humanId}`,
+          joinUrl: `${window.location.protocol}//${window.location.hostname}${
+            window.location.port ? ':' + window.location.port : ''
+          }/join/${humanId}`,
           creatorId: state.currentRetro?.creatorId,
           userId: state.user.id,
           humanId: humanId,
@@ -132,9 +135,6 @@ export const useRetro = () => {
       };
       await addRetroAction(id, action);
       return retrievedRetro;
-      
-
-      
     },
 
     getById: async (id: string): Promise<Retro | undefined> => {

@@ -18,9 +18,27 @@ export function DeploymentPopUp() {
   const [isCurrentDateBefore, setIsCurrentDateBefore] =
     React.useState<boolean>();
   const [isCurrentDateAfter, setIsCurrentDateAfter] = React.useState<boolean>();
+
   const [openAlert, setOpenAlert] = React.useState<boolean>(true);
 
   React.useEffect(() => {
+    const maintenanceScheduled_1 = sessionStorage.getItem(
+      'isMaintenanceScheduled'
+    );
+    const lastRetroName_1 = sessionStorage.getItem('lastRetroName');
+    const maintenanceScheduled_2 =
+      maintenanceScheduled_1 && JSON.parse(maintenanceScheduled_1);
+    const lastRetroName_2 = lastRetroName_1 && JSON.parse(lastRetroName_1);
+    if (lastRetroName_2 === undefined || lastRetroName_2 === null) {
+      setOpenAlert(true);
+      sessionStorage.setItem('isMaintenanceScheduled', JSON.stringify(true));
+    } else {
+      if (maintenanceScheduled_2) {
+        setOpenAlert(true);
+      } else {
+        setOpenAlert(false);
+      }
+    }
     handleGetDeploymentData();
   }, []);
 
@@ -57,6 +75,8 @@ export function DeploymentPopUp() {
   };
 
   const handleAlertClose = () => {
+    sessionStorage.setItem('isMaintenanceScheduled', JSON.stringify(false));
+    sessionStorage.setItem('lastRetroName', JSON.stringify(''));
     setOpenAlert(false);
   };
 
