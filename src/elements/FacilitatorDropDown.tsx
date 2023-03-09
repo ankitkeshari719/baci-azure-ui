@@ -21,99 +21,23 @@ const MenuProps = {
   },
 };
 
-const FacilitatorDropDown = () => {
+type Props = {
+  personName: any[];
+  onClickOfUser: (val: any, user: any) => void;
+};
+
+const FacilitatorDropDown = ({ personName, onClickOfUser }: Props) => {
   const {
     state: { users },
     commitAction,
   } = React.useContext(BoardContext);
   const [global, dispatch] = React.useContext(GlobalContext);
-  const [personName, setPersonName] = React.useState<any[]>([]);
 
-  const saveAndProcessAction = async (
-    actionName: BoardActionType,
-    parameters: any
-  ) => {
-    await commitAction(actionName as BoardActionType, {
-      parameters,
-      userId: global.user.id,
-    });
-  };
-  const assignFacilitatorsRights = async (userId: string) => {
-    dispatch({
-      type: ActionType.SET_LOADING,
-      payload: { loadingFlag: true },
-    });
-    await saveAndProcessAction(BoardActionType.SET_FACILITATOR, {
-      userIdFac: userId,
-    }).then(
-      res => {
-        dispatch({
-          type: ActionType.SET_LOADING,
-          payload: { loadingFlag: false },
-        });
-      },
-      error => {
-        dispatch({
-          type: ActionType.SET_LOADING,
-          payload: { loadingFlag: false },
-        });
-      }
-    );
-  };
-  useEffect(() => {
-    let valueToBeDisplayed: any[] = [global.currentRetro?.creatorId];
-
-    users.forEach(user => {
-      if (user.isFacilitator) {
-        valueToBeDisplayed.push(user.userId);
-      }
-      if (
-        user.isFacilitator &&
-        user.userId == global.user.id
-      ) {
-        dispatch({
-          type: ActionType.SET_USER,
-          payload: {
-            user: {
-              id: global.user.id,
-              name: global.user.name,
-              avatar: global.user.avatar,
-              userType: 2,
-            },
-          },
-        });
-      } else if (
-        !user.isFacilitator &&
-        user.userId == global.user.id &&
-        user.userId != global.currentRetro?.creatorId
-      ) {
-        dispatch({
-          type: ActionType.SET_USER,
-          payload: {
-            user: {
-              id: global.user.id,
-              name: global.user.name,
-              avatar: global.user.avatar,
-              userType: 1,
-            },
-          },
-        });
-      }
-    });
-    setPersonName(valueToBeDisplayed);
-  }, [users]);
-  const onClickOfUser = (val: any, user: any) => {
-    assignFacilitatorsRights(user);
-  };
   return (
     <>
       <span
         style={{
-          display:
-            global.user.userType==2 &&
-            !window.location.pathname.includes('pulsecheck')&&!window.location.pathname.includes('feedback') 
-              ? 'flex'
-              : 'none',
+          display:'flex',
           flexDirection: 'row',
           width: '450px',
           minWidth: '300px',
@@ -181,7 +105,7 @@ const FacilitatorDropDown = () => {
                 onClick={event => onClickOfUser(event, name.userId)}
                 disabled={
                   name.isMobile == true ||
-                  name.userId==global.user.id||
+                  name.userId == global.user.id ||
                   name.userId == global.currentRetro?.creatorId
                 }
               >

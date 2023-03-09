@@ -14,7 +14,7 @@ import {
   useMediaQuery,
 } from '@mui/material';
 import React from 'react';
-import { GlobalContext } from '../contexts/GlobalContext';
+import { ActionType, GlobalContext } from '../contexts/GlobalContext';
 import Avatar from './Avatar';
 import BACILogo from '../assets/img/bacilogo.png';
 import { useLocation, useNavigate } from 'react-router-dom';
@@ -35,8 +35,9 @@ const Toolbar = (props: any) => {
 
   const [{ currentRetro, user, leaveRetro, loadingFlag }] =
     React.useContext(GlobalContext);
+  const [global, dispatch] = React.useContext(GlobalContext);
   const {
-    state: { retroName, retroDuration, ended },
+    state: { retroName, retroDuration, ended, users },
     commitAction,
   } = React.useContext(BoardContext);
 
@@ -46,12 +47,13 @@ const Toolbar = (props: any) => {
     !location.pathname.includes('startRetro') &&
     !location.pathname.includes('waiting') &&
     !location.pathname.includes('offboarding');
+
   const [openDialog, setOpenDialog] = React.useState(false);
   const [leaveDiaOpen, setLeaveDiaOpen] = React.useState(false);
-
   const [localRetroName, setLocalRetroName] = React.useState(
     currentRetro?.name
   );
+
   const [anchorEl, setAnchorEl] = React.useState<HTMLButtonElement | null>(
     null
   );
@@ -59,6 +61,7 @@ const Toolbar = (props: any) => {
     null
   );
   const open = Boolean(anchorEl);
+
   const openMenu = Boolean(anchorE2);
   const [showSessionEndMessage, setShowSessionEndMessage] =
     React.useState(false);
@@ -94,15 +97,46 @@ const Toolbar = (props: any) => {
     }
   }, [retroDuration !== 0]);
 
-  const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
-    setAnchorEl(event.currentTarget);
-  };
-  const handleClick1 = (event: React.MouseEvent<HTMLButtonElement>) => {
-    setAnchorE2(event.currentTarget);
-  };
-  const handleClose = () => {
-    setAnchorEl(null);
-  };
+  const [personName, setPersonName] = React.useState<any[]>([]);
+  React.useEffect(() => {
+    let valueToBeDisplayed: any[] = [global.currentRetro?.creatorId];
+
+    users.forEach(user => {
+      if (user.isFacilitator) {
+        valueToBeDisplayed.push(user.userId);
+      }
+      if (user.isFacilitator && user.userId == global.user.id) {
+        dispatch({
+          type: ActionType.SET_USER,
+          payload: {
+            user: {
+              id: global.user.id,
+              name: global.user.name,
+              avatar: global.user.avatar,
+              userType: 2,
+            },
+          },
+        });
+      } else if (
+        !user.isFacilitator &&
+        user.userId == global.user.id &&
+        user.userId != global.currentRetro?.creatorId
+      ) {
+        dispatch({
+          type: ActionType.SET_USER,
+          payload: {
+            user: {
+              id: global.user.id,
+              name: global.user.name,
+              avatar: global.user.avatar,
+              userType: 1,
+            },
+          },
+        });
+      }
+    });
+    setPersonName(valueToBeDisplayed);
+  }, [users]);
 
   const saveAndProcessAction = async (
     actionName: BoardActionType,
@@ -114,6 +148,45 @@ const Toolbar = (props: any) => {
     });
   };
 
+  const assignFacilitatorsRights = async (userId: string) => {
+    dispatch({
+      type: ActionType.SET_LOADING,
+      payload: { loadingFlag: true },
+    });
+    await saveAndProcessAction(BoardActionType.SET_FACILITATOR, {
+      userIdFac: userId,
+    }).then(
+      res => {
+        dispatch({
+          type: ActionType.SET_LOADING,
+          payload: { loadingFlag: false },
+        });
+      },
+      error => {
+        dispatch({
+          type: ActionType.SET_LOADING,
+          payload: { loadingFlag: false },
+        });
+      }
+    );
+  };
+
+  const onClickOfUser = (val: any, user: any) => {
+    assignFacilitatorsRights(user);
+  };
+
+  const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
+    setAnchorEl(event.currentTarget);
+  };
+
+  const handleClick1 = (event: React.MouseEvent<HTMLButtonElement>) => {
+    setAnchorE2(event.currentTarget);
+  };
+
+  const handleClose = () => {
+    setAnchorEl(null);
+  };
+
   return (
     <Box sx={{ display: 'flex', flexDirection: 'column' }}>
       <Box
@@ -121,11 +194,6 @@ const Toolbar = (props: any) => {
           display: 'flex',
           alignItems: 'center',
           flexDirection: 'row',
-          // width: !location.pathname.includes('offboarding')
-          //   ? isXsUp
-          //     ? 'calc(100% - 32px)'
-          //     : 'calc(100% - 112px)'
-          //   : 'calc(100%)',
           width: '100%',
           paddingLeft: isXsUp ? '16px' : '56px',
           paddingRight: isXsUp ? '16px' : '56px',
@@ -290,7 +358,18 @@ const Toolbar = (props: any) => {
                     </Popover>
                   </span>
 
-                  {/* {!ended ? <FacilitatorDropDown /> : null} */}
+                  {!ended ? (
+                    <>
+                      {global.user.userType == 2 &&
+                        !window.location.pathname.includes('pulsecheck') &&
+                        !window.location.pathname.includes('feedback') && (
+                          <FacilitatorDropDown
+                            personName={personName}
+                            onClickOfUser={onClickOfUser}
+                          />
+                        )}
+                    </>
+                  ) : null}
                 </>
               )}
             </Box>
@@ -301,22 +380,6 @@ const Toolbar = (props: any) => {
           <>
             {user.userType == 2 ? (
               <>
-                {/* <Button
-                  variant="contained"
-                  id="finishRetro"
-                  sx={{
-                    width: '148px',
-                    height: '44px',
-                    padding: '10px 20px',
-                    borderRadius: '24px',
-                    fontWeight: 500,
-                    marginRight: '40px',
-                    display: isXsUp ? 'none' : 'block',
-                  }}
-                  onClick={() => setOpenDialog(true)}
-                >
-                  FINISH RETRO
-                </Button> */}
                 <ContainedButton
                   id="finishRetro"
                   name="FINISH RETRO"
@@ -341,22 +404,6 @@ const Toolbar = (props: any) => {
             ) : (
               <>
                 {!leaveRetro && !isXsUp && (
-                  // <Button
-                  //   id="leaveRetro"
-                  //   variant="contained"
-                  //   sx={{
-                  //     width: '148px',
-                  //     height: '44px',
-                  //     padding: '10px 20px',
-                  //     borderRadius: '24px',
-                  //     fontWeight: 500,
-                  //     marginRight: '40px',
-                  //     display: isXsUp ? 'none' : 'block',
-                  //   }}
-                  //   onClick={() => setLeaveDiaOpen(true)}
-                  // >
-                  //   LEAVE RETRO
-                  // </Button>
                   <ContainedButton
                     id="leaveRetro"
                     name="LEAVE RETRO"
@@ -385,22 +432,6 @@ const Toolbar = (props: any) => {
         {showSummaryButton &&
           !location.pathname.includes('report') &&
           user.userType === 2 && (
-            // <Button
-            //   style={{
-            //     marginRight: '40px',
-            //   }}
-            //   variant="contained"
-            //   sx={{
-            //     width: '162px',
-            //     borderRadius: '24px',
-            //     padding: '10px 20px',
-            //     fontWeight: 500,
-            //     marginRight: '15px',
-            //   }}
-            //   onClick={() => navigate('/report/' + currentRetro?.id)}
-            // >
-            //   VIEW SUMMARY
-            // </Button>
             <ContainedButton
               id="view-summary"
               name="VIEW SUMMARY"
@@ -455,7 +486,6 @@ const Toolbar = (props: any) => {
               </span>
             </span>
           </div>
-
           <DialogContent>
             <span
               style={{
@@ -496,10 +526,8 @@ const Toolbar = (props: any) => {
             </Button>
           </DialogActions>
         </Dialog>
-
         {location.pathname.includes('report') && (
           <>
-            {' '}
             <Typography
               color={commonStyles.secondaryMain}
               fontSize="28px"
@@ -508,21 +536,6 @@ const Toolbar = (props: any) => {
             >
               Retro Finished
             </Typography>
-            {/* <Button
-              variant="contained"
-              sx={{
-                borderRadius: '24px',
-                padding: '10px 20px',
-                width: '162px',
-                marginRight: '15px',
-                fontWeight: 500,
-              }}
-              onClick={() => {
-                navigate('/board/' + currentRetro?.id);
-              }}
-            >
-              REVIEW BOARD
-            </Button> */}
             <ContainedButton
               id="review-board"
               name="REVIEW BOARD"
@@ -552,7 +565,6 @@ const Toolbar = (props: any) => {
             >
               <img src="/svgs/MobileMenu.svg" />
             </Button>
-
             <Menu
               anchorEl={anchorE2}
               id="account-menu"
@@ -643,23 +655,7 @@ const Toolbar = (props: any) => {
           marginBottom: isXsUp ? '10px' : 0,
         }}
       >
-        {!leaveRetro && showFinishRetroButton &&  (
-          // <Button
-          //   id="leaveRetroIsXsUp"
-          //   variant="contained"
-          //   sx={{
-          //     borderRadius: '24px',
-          //     width: '148px',
-          //     height: '44px',
-          //     padding: '10px 20px',
-          //     marginRight: '16px',
-          //     fontWeight: 500,
-          //     position: 'initial',
-          //   }}
-          //   onClick={() => setLeaveDiaOpen(true)}
-          // >
-          //   LEAVE RETRO
-          // </Button>
+        {!leaveRetro && showFinishRetroButton && (
           <ContainedButton
             id="leaveRetroIsXsUp"
             name="LEAVE RETRO"
