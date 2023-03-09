@@ -295,7 +295,8 @@ function BoardProvider(props: ComponentProps<any>) {
       getRetroActions(
         currentRetro?.id as string,
         user.id,
-        lastActionTimestamp.current
+        lastActionTimestamp.current,
+        user.userType
       ).then(actions => {
         if (actions.length === 0 && !loadedState) {
           setState({ ...initialBoardState(currentRetro?.id), loading: false });

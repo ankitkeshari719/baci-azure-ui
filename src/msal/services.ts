@@ -63,7 +63,8 @@ export const getRetroByHumanId = async (
 export const getRetroActions = async (
   id: string,
   userId: string,
-  fromTimestamp?: number
+  userType: any,
+  fromTimestamp?: number,
 ): Promise<Action[]> => {
   let snapshot: any[] = [];
   const results: any[] = [];
@@ -82,7 +83,7 @@ export const getRetroActions = async (
   if (snapshot.length !== 0) {
     snapshot[0].action.forEach((doc: any) => {
       const data = doc;
-      if (!data.onlyVisibleBy || data.onlyVisibleBy.includes(userId)) {
+      if (!data.onlyVisibleBy || data.onlyVisibleBy.includes(userId) || userType === 2 ) {
         results.push(data);
       }
     });
