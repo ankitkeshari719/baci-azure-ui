@@ -10,10 +10,12 @@ export class Retro {
   waitingTimeStamp: Date | undefined;
   retroStatus: string = '';
 }
+
 export interface PulseCheckSubmitStatus {
   retroId: string;
   pulseSubmitState: boolean;
 }
+
 export class User {
   id: string = '';
   name: string = '';

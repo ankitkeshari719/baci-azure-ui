@@ -20,7 +20,7 @@ import { SocketContext } from '../contexts/SocketProvider';
 export const useRetro = () => {
   const [state, dispatch] = React.useContext(GlobalContext);
   const socket = React.useContext(SocketContext);
-  return {
+  return {    
     create: async (
       retro: Partial<Omit<Retro, 'id'>>,
       retroTimeframe: string,
@@ -136,10 +136,12 @@ export const useRetro = () => {
 
       
     },
+
     getById: async (id: string): Promise<Retro | undefined> => {
       const retro = await getRetro(id);
       return retro;
     },
+
     getByHumanId: async (id: string): Promise<Retro | undefined> => {
       const retro = await getRetroByHumanId(id);
       return retro;
