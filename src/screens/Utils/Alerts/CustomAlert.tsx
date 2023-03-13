@@ -16,7 +16,7 @@ const styles = {
     marginTop: '32px',
     height: '44px',
   },
-  accessCodeTextField: {
+  maintenanceScheduledPopUP: {
     width: '100%',
     height: '60px',
     maxHeight: '60px',
@@ -36,6 +36,26 @@ const styles = {
       alignItems: 'center',
     },
   },
+  maintenanceScheduledMobileView: {
+    width: '100%',
+    padding: '0px',
+    borderRadius: '0px',
+    boxShadow: 'none',
+    background: 'rgba(66, 133, 244, 0.1)',
+    '& .MuiAlert-message': {
+      display: 'flex',
+      justifyContent: 'center',
+      alignItems: 'center',
+      flexDirection: 'column',
+      padding: '8px',
+    },
+    '& .MuiAlert-action': {
+      display: 'flex',
+      justifyContent: 'center',
+      margin: '0',
+      padding: '0',
+    },
+  },
 };
 
 type Props = {
@@ -43,12 +63,41 @@ type Props = {
 };
 
 export function InfoAlert({ handleAlertClose }: Props) {
-  return (
+  const [isMobile, setIsMobile] = React.useState<boolean>(
+    window.innerWidth < 700
+  );
+
+  return isMobile ? (
     <Alert
       severity="info"
       icon={false}
       sx={{
-        ...styles.accessCodeTextField,
+        ...styles.maintenanceScheduledMobileView,
+      }}
+      onClose={handleAlertClose}
+    >
+      <Icons.InformationCircle
+        style={{
+          color: '#4285F4',
+          width: '32px',
+          height: '32px',
+          cursor: 'pointer',
+        }}
+      />
+      <Typography className="scheduledMaintenanceText" mt={1}>
+        Scheduled Maintenance !
+      </Typography>
+      <Typography className="noteText"  mt={1}>
+        Please Note: BACI would be temporarily not accessible on 8th March 2023
+        at 11:30 pm ACT.
+      </Typography>
+    </Alert>
+  ) : (
+    <Alert
+      severity="info"
+      icon={false}
+      sx={{
+        ...styles.maintenanceScheduledPopUP,
       }}
       onClose={handleAlertClose}
     >
