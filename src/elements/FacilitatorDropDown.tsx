@@ -9,7 +9,7 @@ import { GlobalContext } from '../contexts/GlobalContext';
 import { ListItemIcon, Typography } from '@mui/material';
 import { LazyLoadImage } from 'react-lazy-load-image-component';
 import { UserType } from '../types';
-import { withStyles } from '@material-ui/core/styles';
+import * as Icons from 'heroicons-react';
 
 const ITEM_HEIGHT = 48;
 const ITEM_PADDING_TOP = 8;
@@ -23,12 +23,6 @@ const MenuProps = {
       boxShadow: '0px 1px 10px rgba(0, 0, 0, 0.15)',
       borderRadius: '10px',
     },
-  },
-};
-
-const iconStyles = {
-  selectIcon: {
-    color: 'green',
   },
 };
 
@@ -121,7 +115,16 @@ const FacilitatorDropDown = ({ personName, onClickOfUser }: Props) => {
               });
               return valueToBeDisplayed;
             }}
-            IconComponent={() => <img src="/svgs/Down.svg" />}
+            IconComponent={props => (
+              <Icons.ChevronDownOutline
+                size={24}
+                color="#4E4E4E"
+                style={{
+                  cursor: 'pointer',
+                }}
+                {...props}
+              />
+            )}
             MenuProps={MenuProps}
           >
             {tempUsers.map(name => {
