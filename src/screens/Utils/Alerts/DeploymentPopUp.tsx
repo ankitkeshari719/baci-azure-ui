@@ -52,7 +52,6 @@ export function DeploymentPopUp() {
     await getDeploymentData().then(
       res => {
         if (res && res.result && res.result[0]) {
-          console.log('res::', res);
           setDeploymentDate(dayjs(res.result[0].deploymentDate));
           setNotificationDate(dayjs(res.result[0].notificationDate));
           setIsActive(res.result[0].isActive);
