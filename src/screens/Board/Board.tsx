@@ -1,26 +1,26 @@
 import { Box, Button, Grid, Tab, Tabs, useMediaQuery } from '@mui/material';
 import React, { useMemo } from 'react';
-import { UNGROUPED } from '../constants';
+import { UNGROUPED } from '../../constants';
 
 import ArrowBackIosIcon from '@mui/icons-material/ArrowBackIos';
 import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
 import { useNavigate } from 'react-router-dom';
 import shortid from 'shortid';
 import { sentence } from 'txtgen';
-import { BoardContext } from '../contexts/BoardContext';
-import { BoardActionType } from '../statemachine/BoardStateMachine';
-import { ConfirmContext } from '../contexts/ConfirmContext';
-import { ActionType, GlobalContext } from '../contexts/GlobalContext';
-import { FeedbackColumn } from '../elements/FeedbackColumn';
-import { RetroColumn } from '../elements/RetroColumn';
-import useLoadRetro from '../hooks/useLoadRetro';
-import theme from '../theme/theme';
-import FeedbackPopup from '../atoms/FeedbackPopup';
-import Toolbar from '../elements/Toolbar';
-import SubToolbar from '../elements/SubToolbar';
-import FirstTimeExperience from '../elements/FirstTimeExperience';
+import { BoardContext } from '../../contexts/BoardContext';
+import { BoardActionType } from '../../statemachine/BoardStateMachine';
+import { ConfirmContext } from '../../contexts/ConfirmContext';
+import { ActionType, GlobalContext } from '../../contexts/GlobalContext';
+import { FeedbackColumn } from '../../elements/FeedbackColumn';
+import { RetroColumn } from '../../elements/RetroColumn';
+import useLoadRetro from '../../hooks/useLoadRetro';
+import theme from '../../theme/theme';
+import FeedbackPopup from '../../atoms/FeedbackPopup';
+import Toolbar from '../../elements/Toolbar';
+import SubToolbar from '../../elements/SubToolbar';
+import FirstTimeExperience from '../../elements/FirstTimeExperience';
 import { styled } from '@mui/material/styles';
-import { DeploymentPopUp } from './Utils/Alerts/DeploymentPopUp';
+import { DeploymentPopUp } from '../Utils/Alerts/DeploymentPopUp';
 
 interface StyledTabsProps {
   children?: React.ReactNode;

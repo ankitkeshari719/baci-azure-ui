@@ -11,21 +11,21 @@ import {
   useMediaQuery,
 } from '@mui/material';
 import * as React from 'react';
-import { LandingLayout } from './LandingLayout';
-import commonStyles from './../style.module.scss';
-import './../global.scss';
 import { useNavigate, useParams } from 'react-router-dom';
-import { Retro as RetroType } from '../types';
-import { useRetro } from '../helpers';
-import { ActionType, GlobalContext } from '../contexts/GlobalContext';
-import Avatar from '../elements/Avatar';
-import { avatarName } from '../constants/AvatarName';
-import { useAzureAuth } from '../msal/azureauth';
-import { UserTypeArray } from '../constants';
-import { BoardContext } from '../contexts/BoardContext';
-import theme from '../theme/theme';
-import { SocketContext } from '../contexts/SocketProvider';
-import { DeploymentPopUp } from './Utils/Alerts/DeploymentPopUp';
+import { LandingLayout } from './../LandingLayout';
+import commonStyles from './../../style.module.scss';
+import './../../global.scss';
+import { Retro as RetroType } from '../../types';
+import { useRetro } from '../../helpers';
+import { ActionType, GlobalContext } from '../../contexts/GlobalContext';
+import Avatar from '../../elements/Avatar';
+import { avatarName } from '../../constants/AvatarName';
+import { useAzureAuth } from '../../msal/azureauth';
+import { UserTypeArray } from '../../constants';
+import { BoardContext } from '../../contexts/BoardContext';
+import theme from '../../theme/theme';
+import { SocketContext } from '../../contexts/SocketProvider';
+import { DeploymentPopUp } from './../Utils/Alerts/DeploymentPopUp';
 const AVATAR_CHARACTER_LIMIT = 30;
 const styles = {
   avatarfield: {
@@ -62,7 +62,7 @@ const styles = {
   },
 };
 
-export function AvatarNamePage() {
+export function JoinRetro() {
   const [global, dispatch] = React.useContext(GlobalContext);
   const {
     state: {

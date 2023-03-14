@@ -167,7 +167,7 @@ export function LandingPage() {
       payload: { retroCreateState: true },
     });
     setCodeError('');
-    navigate('/createretro/');
+    navigate('/create/');
   }
 
   return (

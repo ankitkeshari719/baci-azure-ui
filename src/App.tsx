@@ -15,16 +15,16 @@ import { SocketProvider } from './contexts/SocketProvider';
 import { Offboarding } from './screens/Offboarding';
 import { RetroDetails } from './screens/RetroDetails';
 import { ParticipantWaitingPage } from './screens/ParticipantWaitingPage';
-import { AvatarNamePage } from './screens/AvatarNamePage';
 import { CreateRetroMain } from './screens/CreateRetro/CreateRetroMain';
 import { StartRetro } from './screens/StartRetro';
 import { Grid } from '@mui/material';
 import { PageNotFound } from './screens/PageNotFound';
 import Feedback from './screens/Feedback';
-import Board from './screens/Board';
+import Board from './screens/Board/Board';
 import PulseCheckMain from './screens/PulseChecks/PulseCheckMain';
 import SummaryReportMain from './screens/SummaryReports/SummaryReportMain';
 import { LandingPage } from './screens/Home/LandingPage';
+import { JoinRetro } from './screens/Home/JoinRetro';
 
 type AppProps = {
   instance: IPublicClientApplication;
@@ -53,12 +53,12 @@ export default function App({ instance }: AppProps) {
                       <Routes>
                         <Route path="/" element={<LandingPage></LandingPage>} />
                         <Route
-                          path="/createretro"
+                          path="/create"
                           element={<CreateRetroMain></CreateRetroMain>}
                         />
                         <Route
                           path="/join/:id"
-                          element={<AvatarNamePage></AvatarNamePage>}
+                          element={<JoinRetro></JoinRetro>}
                         />
                         <Route
                           path="/retrodetails"
@@ -67,10 +67,6 @@ export default function App({ instance }: AppProps) {
                         <Route
                           path="/offboarding"
                           element={<Offboarding></Offboarding>}
-                        />
-                        <Route
-                          path="*"
-                          element={<PageNotFound></PageNotFound>}
                         />
                         <Route path="/board" element={<MainContent />}>
                           <Route
@@ -93,6 +89,10 @@ export default function App({ instance }: AppProps) {
                         <Route
                           path="/report/:id"
                           element={<SummaryReportMain />}
+                        />
+                        <Route
+                          path="*"
+                          element={<PageNotFound></PageNotFound>}
                         />
                       </Routes>
                     </MsalProvider>
