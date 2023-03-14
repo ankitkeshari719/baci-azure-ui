@@ -83,7 +83,7 @@ export const getRetroActions = async (
   if (snapshot.length !== 0) {
     snapshot[0].action.forEach((doc: any) => {
       const data = doc;
-      if (!data.onlyVisibleBy || data.onlyVisibleBy.includes(userId) || userType === 2 ) {
+      if (!data.onlyVisibleBy || data.onlyVisibleBy.includes(userId)) {
         results.push(data);
       }
     });
