@@ -5,7 +5,7 @@ import './styles.scss';
 import dayjs, { Dayjs } from 'dayjs';
 import { ActionType, GlobalContext } from '../../../contexts/GlobalContext';
 import { getDeploymentData } from '../../../msal/services';
-import { InfoAlert } from './CustomAlert';
+import { CustomAlert } from './CustomAlert';
 
 export function DeploymentPopUp() {
   const [global, dispatch] = React.useContext(GlobalContext);
@@ -87,7 +87,7 @@ export function DeploymentPopUp() {
         isCurrentDateBefore &&
         isCurrentDateAfter && (
           <Grid item xs={12}>
-            <InfoAlert handleAlertClose={handleAlertClose} />
+            <CustomAlert handleAlertClose={handleAlertClose} deploymentDate={deploymentDate} />
           </Grid>
         )}
     </>

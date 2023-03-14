@@ -3,6 +3,7 @@ import MuiAlert, { AlertProps } from '@mui/material/Alert';
 import { Typography } from '@mui/material';
 import * as Icons from 'heroicons-react';
 import './styles.scss';
+import { Dayjs } from 'dayjs';
 
 const Alert = React.forwardRef<HTMLDivElement, AlertProps>(function Alert(
   props,
@@ -60,12 +61,14 @@ const styles = {
 
 type Props = {
   handleAlertClose: () => void;
+  deploymentDate: Dayjs | null | undefined;
 };
 
-export function InfoAlert({ handleAlertClose }: Props) {
+export function CustomAlert({ handleAlertClose, deploymentDate }: Props) {
   const [isMobile, setIsMobile] = React.useState<boolean>(
     window.innerWidth < 700
   );
+  console.log('deploymentDate:: ', deploymentDate);
 
   return isMobile ? (
     <Alert
@@ -87,7 +90,7 @@ export function InfoAlert({ handleAlertClose }: Props) {
       <Typography className="scheduledMaintenanceText" mt={1}>
         Scheduled Maintenance !
       </Typography>
-      <Typography className="noteText"  mt={1}>
+      <Typography className="noteText" mt={1}>
         Please Note: BACI would be temporarily not accessible on 8th March 2023
         at 11:30 pm ACT.
       </Typography>
