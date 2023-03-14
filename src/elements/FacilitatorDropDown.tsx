@@ -95,21 +95,29 @@ const FacilitatorDropDown = ({ personName, onClickOfUser }: Props) => {
             value={personName}
             renderValue={selected => {
               var valueToBeDisplayed = '';
-              users.forEach(element => {
-                if (element.userId == global.user.id) {
+              let selectedUsers: UserType[] = [];
+              users.forEach(user => {
+                selected.forEach(select => {
+                  if (user.userId == select) {
+                    selectedUsers.push(user);
+                  }
+                });
+              });
+              selectedUsers.forEach(user => {
+                if (user.userId === global.user.id) {
                   if (valueToBeDisplayed == '') {
                     valueToBeDisplayed = 'You';
                   } else {
                     valueToBeDisplayed = valueToBeDisplayed + ', ' + 'You';
                   }
-                } else if (element.isFacilitator) {
+                } else {
                   if (valueToBeDisplayed == '') {
-                    valueToBeDisplayed = element.userNickname;
+                    valueToBeDisplayed = user.userNickname;
                   } else {
                     valueToBeDisplayed =
                       valueToBeDisplayed +
                       ', ' +
-                      element.userNickname.split(' ')[0];
+                      user.userNickname.split(' ')[0];
                   }
                 }
               });
@@ -145,7 +153,10 @@ const FacilitatorDropDown = ({ personName, onClickOfUser }: Props) => {
                       name.isFacilitator ||
                       name.userId == global.currentRetro?.creatorId
                     }
-                    disabled={name.userId === global.user.id}
+                    disabled={
+                      name.userId === global.user.id ||
+                      name.userId == global.currentRetro?.creatorId
+                    }
                   />
                   <ListItemIcon>
                     <LazyLoadImage
