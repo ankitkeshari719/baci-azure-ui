@@ -10,12 +10,10 @@ export class Retro {
   waitingTimeStamp: Date | undefined;
   retroStatus: string = '';
 }
-
 export interface PulseCheckSubmitStatus {
   retroId: string;
   pulseSubmitState: boolean;
 }
-
 export class User {
   id: string = '';
   name: string = '';
@@ -101,24 +99,22 @@ export interface FeedbackEntry {
   entry: string;
 }
 
-export interface UserType {
-  userId: string;
-  userNickname: string;
-  avatar: string;
-  feedback: FeedbackEntry[];
-  pulseCheckQuestions: PulseCheckEntry[];
-  checked: boolean;
-  isFacilitator: boolean;
-  isMobile: boolean;
-}
-
 export class BoardState {
   retroId: string = '';
   // publishColumn: any[] = [];
   loading: boolean = true;
   columns: Column[] = [];
   creatorId: string = '';
-  users: UserType[] = [];
+  users: {
+    userId: string;
+    userNickname: string;
+    avatar: string;
+    feedback: FeedbackEntry[];
+    pulseCheckQuestions: PulseCheckEntry[];
+    checked: boolean;
+    isFacilitator: boolean;
+    isMobile: boolean;
+  }[] = [];
   countdownFrom: number = -1;
   countdownDuration: number = 5 * 60 * 1000;
   countdownPaused: boolean = false;
@@ -143,7 +139,7 @@ export class BoardState {
   template?: any;
   feedbackSubmitted?: boolean = false;
   isFeedbackSubmittedByFacilitator?: number = 0;
-  disconnected?: boolean = false;
+  disconnected?:boolean=false;
 
   constructor(retroId: string) {
     this.retroId = retroId;

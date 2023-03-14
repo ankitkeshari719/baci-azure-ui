@@ -47,6 +47,7 @@ import sadMask from '../../assets/img/sad_mask.png';
 import neutralMask from '../../assets/img/Neutral_Mask.png';
 import { BoardActionType } from '../../statemachine/BoardStateMachine';
 import { FeedbackSubmitDialog } from './FeedbackSubmitDialog';
+import DevelopAction from './DevelopAction';
 import DidNotWentWell from './DidNotWentWell';
 import WhatWentWell from './WhatWentWellCoulmn';
 import PulseCheckSection from './PulseCheckSection';
@@ -700,7 +701,7 @@ export const ReportSummary = React.forwardRef((props, ref) => {
         style={{
           display: 'flex',
           flexDirection: 'column',
-          height: '95%',
+          height: '100%',
           overflowY: 'auto',
           backgroundColor: '#F5F5F5',
           paddingLeft: isXsUp

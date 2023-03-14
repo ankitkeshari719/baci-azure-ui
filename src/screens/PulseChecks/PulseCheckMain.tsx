@@ -6,7 +6,6 @@ import { GlobalContext } from '../../contexts/GlobalContext';
 import SimplePulseCheck from './SimplePulseCheck';
 import BusinessAgility from './BusinessAgility';
 import Toolbar from '../../elements/Toolbar';
-import { DeploymentPopUp } from '../Utils/Alerts/DeploymentPopUp';
 
 export default function PulseCheckMain() {
   const navigate = useNavigate();
@@ -23,13 +22,10 @@ export default function PulseCheckMain() {
 
   return (
     <Box className="mainContainer">
-      {/* <DeploymentPopUp /> */}
       <Toolbar />
-      {pulseCheck && pulseCheck.id === 'simple' && (
-        <SimplePulseCheck pulseCheck={pulseCheck} />
-      )}
+      {pulseCheck && pulseCheck.id === 'simple' && <SimplePulseCheck pulseCheck={pulseCheck}/>}
       {pulseCheck && pulseCheck.id === 'business_agility' && (
-        <BusinessAgility pulseCheck={pulseCheck} />
+        <BusinessAgility pulseCheck={pulseCheck}/>
       )}
     </Box>
   );

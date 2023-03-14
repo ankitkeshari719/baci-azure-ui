@@ -175,6 +175,7 @@ export function LandingLayout() {
                 >
                   {'\u002E'}
                 </Typography>
+
                 <Typography
                   variant="h1"
                   color={commomStyles.secondaryMain}

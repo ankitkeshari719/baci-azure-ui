@@ -65,8 +65,7 @@ export default function SimplePulseCheck({ pulseCheck }: Props) {
   } = React.useContext(BoardContext);
 
   const [showBlankErrors, setShowBlankErrors] = React.useState(false);
-  const selectedQuestions =
-    pulseCheck && pulseCheck.value.map((q: string) => React.useState(-1));
+  const selectedQuestions = pulseCheck && pulseCheck.value.map((q: string) => React.useState(-1));
   const [scrollDownButton, setScrollDownButton] = React.useState(true);
   const [showSharePanel, setShowSharePanel] = React.useState(false);
   const [pulse1, setPulse1] = React.useState(false);
@@ -146,18 +145,11 @@ export default function SimplePulseCheck({ pulseCheck }: Props) {
   };
 
   function setPulseBar(value: any) {
-    if (
-      (value === 0 && pulse1 == false) ||
-      selectedQuestions[value][0] !== -1
-    ) {
+    if ((value === 0 && pulse1 == false) || selectedQuestions[value][0] !== -1) {
       setPulse1(true);
-    } else if (
-      (value = (1 && pulse2 == false) || selectedQuestions[value][0] !== -1)
-    ) {
+    } else if ((value = (1 && pulse2 == false) || selectedQuestions[value][0] !== -1)) {
       setPulse2(true);
-    } else if (
-      (value = (2 && pulse3 == false) || selectedQuestions[value][0] !== -1)
-    ) {
+    } else if ((value = (2 && pulse3 == false) || selectedQuestions[value][0] !== -1)) {
       setPulse3(true);
     }
   }
@@ -182,14 +174,11 @@ export default function SimplePulseCheck({ pulseCheck }: Props) {
 
   const submitPulseCheck = () => {
     const someBlank =
-      selectedQuestions.findIndex((q: number[]) => q[0] === -1) !== -1;
+      selectedQuestions.findIndex((q: number[]) => q[0] === -1) !== -1 
     const submitter = async () => {
       // Submit
       await saveAndProcessAction(BoardActionType.SUBMIT_PULSE_CHECK, {
-        questions: selectedQuestions.map((q: any[], i: any) => ({
-          id: String(i),
-          entry: q[0],
-        })),
+        questions: selectedQuestions.map((q: any[], i: any) => ({ id: String(i), entry: q[0] })),
       });
       setConfirmAction(undefined);
       dispatch({
@@ -249,7 +238,7 @@ export default function SimplePulseCheck({ pulseCheck }: Props) {
           justifyContent: 'center',
           padding: isXsUp ? '8px' : '56px',
           overflowY: isXsUp ? 'scroll' : 'auto',
-          height: isXsUp ? 'calc(100vh - 192px)' : 'calc(100vh - 64px)',
+          height: isXsUp ? 'calc(100vh - 120px)' : 'calc(100vh - 32px)',
         }}
       >
         {/* Text one */}
@@ -277,7 +266,7 @@ export default function SimplePulseCheck({ pulseCheck }: Props) {
               justifyContent: 'center',
               userSelect: 'none',
               background: 'white',
-              marginTop: isXsUp ? '16px' : '40px',
+              marginTop: isXsUp ? '24px' : '48px',
             }}
           >
             <Typography className="textTwo">
@@ -286,13 +275,13 @@ export default function SimplePulseCheck({ pulseCheck }: Props) {
           </Box>
         </Grid>
         {/* Pulsebar Image */}
-        {!isXsUp ? (
-          <Grid item xs={12}>
+        <Grid item xs={12}>
+          {!isXsUp && (
             <Box
               sx={{
                 display: 'flex',
                 justifyContent: 'center',
-                marginTop: isXsUp ? '16px' : '40px',
+                marginTop: isXsUp ? '24px' : '48px',
               }}
             >
               <span
@@ -310,9 +299,9 @@ export default function SimplePulseCheck({ pulseCheck }: Props) {
               <span
                 className={pulse3 ? 'pulseLineBlue' : 'pulseLineGrey'}
               ></span>
-            </Box>{' '}
-          </Grid>
-        ) : null}
+            </Box>
+          )}
+        </Grid>
         {/* QUICK PULSE CHECK QUESTIONS Section */}
         <Grid item xs={12}>
           <Box
@@ -320,162 +309,152 @@ export default function SimplePulseCheck({ pulseCheck }: Props) {
               display: 'flex',
               alignItems: 'center',
               flexDirection: isXsUp ? 'column' : 'row',
-              marginTop: isXsUp ? '16px' : '40px',
+              marginTop: isXsUp ? '24px' : '48px',
             }}
           >
-            {pulseCheck &&
-              pulseCheck.value.map((question: any, index: any) => (
-                <Grid
-                  item
-                  xs={12}
-                  lg={4}
-                  sx={{
-                    display: 'flex',
-                    justifyContent: 'center',
-                    alignItems: 'center',
-                  }}
-                  key={index}
-                >
-                  <Box>
-                    {/* Question Part */}
-                    <Typography className="question">
-                      {question}
-                      {isXsUp ? (
+            {pulseCheck && pulseCheck.value.map((question: any, index:any) => (
+              <Grid
+                item
+                xs={12}
+                lg={4}
+                sx={{
+                  display: 'flex',
+                  justifyContent: 'center',
+                  alignItems: 'center',
+                }}
+                key={index}
+              >
+                <Box>
+                  {/* Question Part */}
+                  <Typography className="question">
+                    {question}
+                    {isXsUp ? (
+                      <Icons.QuestionMarkCircleOutline
+                        size={20}
+                        color={commonStyles.secondaryMain}
+                        style={{
+                          marginBottom: '-5px',
+                          marginLeft: '5px',
+                          cursor: 'pointer',
+                        }}
+                        onClick={() => {
+                          SetOpenHelpPopup(true);
+                          setPopupData(index);
+                        }}
+                      />
+                    ) : (
+                      <Tooltip
+                        placement="top"
+                        title={pulseCheck.valueDescription[index]}
+                      >
                         <Icons.QuestionMarkCircleOutline
                           size={20}
                           color={commonStyles.secondaryMain}
-                          style={{
-                            marginBottom: '-5px',
-                            marginLeft: '5px',
-                            cursor: 'pointer',
-                          }}
-                          onClick={() => {
-                            SetOpenHelpPopup(true);
-                            setPopupData(index);
-                          }}
+                          style={{ marginBottom: '-5px', marginLeft: '5px' }}
                         />
-                      ) : (
-                        <Tooltip
-                          placement="top"
-                          title={pulseCheck.valueDescription[index]}
-                        >
-                          <Icons.QuestionMarkCircleOutline
-                            size={20}
-                            color={commonStyles.secondaryMain}
-                            style={{ marginBottom: '-5px', marginLeft: '5px' }}
-                          />
-                        </Tooltip>
-                      )}
-                    </Typography>
-                    {/* Image Part */}
+                      </Tooltip>
+                    )}
+                  </Typography>
+                  {/* Image Part */}
+                  <Box
+                    sx={{
+                      display: 'flex',
+                      justifyContent: 'center',
+                      marginTop: isXsUp ? '24px' : '48px',
+                    }}
+                  >
+                    {/* Sad */}
                     <Box
                       sx={{
-                        display: 'flex',
-                        justifyContent: 'center',
-                        marginTop: isXsUp ? '24px' : '48px',
+                        width: !isXsUp ? '64px' : '52px',
+                        height: !isXsUp ? '64px' : '52px',
                       }}
                     >
-                      {/* Sad */}
                       <Box
-                        sx={{
+                        style={{
+                          backgroundImage: 'url(' + sad + ')',
+                          width: '40px',
+                          height: '40px',
+                        }}
+                        onClick={() => {
+                          selectedQuestions[index][1](1);
+                          setPulseBar(index);
+                        }}
+                      ></Box>
+                      <img
+                        src={sadMask}
+                        style={{
+                          marginLeft: !isXsUp ? '-10px' : '-6px',
+                          marginTop: !isXsUp ? '-50px' : '-45px',
                           width: !isXsUp ? '64px' : '52px',
                           height: !isXsUp ? '64px' : '52px',
+                          display: selectedQuestions[index][0] === 1 ? 'block' : 'none',
                         }}
-                      >
-                        <Box
-                          style={{
-                            backgroundImage: 'url(' + sad + ')',
-                            width: '40px',
-                            height: '40px',
-                          }}
-                          onClick={() => {
-                            selectedQuestions[index][1](1);
-                            setPulseBar(index);
-                          }}
-                        ></Box>
-                        <img
-                          src={sadMask}
-                          style={{
-                            marginLeft: !isXsUp ? '-10px' : '-6px',
-                            marginTop: !isXsUp ? '-50px' : '-45px',
-                            width: !isXsUp ? '64px' : '52px',
-                            height: !isXsUp ? '64px' : '52px',
-                            display:
-                              selectedQuestions[index][0] === 1
-                                ? 'block'
-                                : 'none',
-                          }}
-                        />
-                      </Box>
-                      {/* Neutral */}
+                      />
+                    </Box>
+                    {/* Neutral */}
+                    <Box
+                      sx={{
+                        width: !isXsUp ? '64px' : '52px',
+                        height: !isXsUp ? '64px' : '52px',
+                      }}
+                    >
                       <Box
-                        sx={{
+                        style={{
+                          backgroundImage: 'url(' + neutral + ')',
+                          width: '40px',
+                          height: '40px',
+                          marginRight: '32px',
+                        }}
+                        onClick={() => {
+                          selectedQuestions[index][1](2);
+                          setPulseBar(index);
+                        }}
+                      ></Box>
+                      <img
+                        src={neutralMask}
+                        style={{
+                          marginLeft: !isXsUp ? '-10px' : '-6px',
+                          marginTop: !isXsUp ? '-50px' : '-45px',
                           width: !isXsUp ? '64px' : '52px',
                           height: !isXsUp ? '64px' : '52px',
+                          display: selectedQuestions[index][0] === 2 ? 'block' : 'none',
                         }}
-                      >
-                        <Box
-                          style={{
-                            backgroundImage: 'url(' + neutral + ')',
-                            width: '40px',
-                            height: '40px',
-                            marginRight: '32px',
-                          }}
-                          onClick={() => {
-                            selectedQuestions[index][1](2);
-                            setPulseBar(index);
-                          }}
-                        ></Box>
-                        <img
-                          src={neutralMask}
-                          style={{
-                            marginLeft: !isXsUp ? '-10px' : '-6px',
-                            marginTop: !isXsUp ? '-50px' : '-45px',
-                            width: !isXsUp ? '64px' : '52px',
-                            height: !isXsUp ? '64px' : '52px',
-                            display:
-                              selectedQuestions[index][0] === 2
-                                ? 'block'
-                                : 'none',
-                          }}
-                        ></img>
-                      </Box>
-                      {/* Happy */}
+                      ></img>
+                    </Box>
+                    {/* Happy */}
+                    <Box
+                      sx={{
+                        width: !isXsUp ? '64px' : '52px',
+                        height: !isXsUp ? '64px' : '52px',
+                      }}
+                    >
                       <Box
-                        sx={{
-                          width: !isXsUp ? '64px' : '52px',
-                          height: !isXsUp ? '64px' : '52px',
+                        style={{
+                          backgroundImage: 'url(' + happy + ')',
+                          width: '40px',
+                          height: '40px',
                         }}
-                      >
-                        <Box
-                          style={{
-                            backgroundImage: 'url(' + happy + ')',
-                            width: '40px',
-                            height: '40px',
-                          }}
-                          onClick={() => {
-                            selectedQuestions[index][1](3);
-                            setPulseBar(index);
-                          }}
-                        ></Box>
-                        <img
-                          src={happyMask}
-                          style={{
-                            marginLeft: !isXsUp ? '-10px' : '-6px',
-                            marginTop: !isXsUp ? '-50px' : '-45px',
-                            width: isXsUp ? '52px' : '64px',
-                            height: isXsUp ? '52px' : '64px',
-                            display:
-                              selectedQuestions[index][0] === 3
-                                ? 'block'
-                                : 'none',
-                          }}
-                        ></img>
-                      </Box>
+                        onClick={() => {
+                          selectedQuestions[index][1](3);
+                          setPulseBar(index);
+                        }}
+                      ></Box>
+                      <img
+                        src={happyMask}
+                        style={{
+                          marginLeft: !isXsUp ? '-10px' : '-6px',
+                          marginTop: !isXsUp ? '-50px' : '-45px',
+                          width: isXsUp ? '52px' : '64px',
+                          height: isXsUp ? '52px' : '64px',
+                          display: selectedQuestions[index][0] === 3 ? 'block' : 'none',
+                        }}
+                      ></img>
                     </Box>
                   </Box>
-                </Grid>
-              ))}
+                </Box>
+              </Grid>
+            ))}
           </Box>
         </Grid>
         {/* Submit and go to retro button */}
@@ -484,7 +463,7 @@ export default function SimplePulseCheck({ pulseCheck }: Props) {
             sx={{
               display: 'flex',
               justifyContent: 'center',
-              marginTop: isXsUp ? '16px' : '40px',
+              marginTop: isXsUp ? '24px' : '48px',
             }}
           >
             <ContainedButton

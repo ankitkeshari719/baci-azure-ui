@@ -1,43 +1,60 @@
-import * as React from 'react';
 import {
   Box,
   Button,
-  Dialog,
+  FormControl,
   FormHelperText,
   Grid,
-  styled,
+  Paper,
   TextField,
   Typography,
   useMediaQuery,
 } from '@mui/material';
-import theme from '../../theme/theme';
-import './../../global.scss';
-import './styles.scss';
-import commonStyles from './../../style.module.scss';
+import * as React from 'react';
+import ReactDOM from 'react-dom';
+import LandingImage from '../assets/img/landingimage.png';
+import BACILogo from '../assets/img/bacilogo.png';
+import { LandingLayout } from './LandingLayout';
+import commonStyles from './../style.module.scss';
+import './../global.scss';
 import { useNavigate, useParams } from 'react-router-dom';
-import { useAzureAuth } from '../../msal/azureauth';
-import { Dayjs } from 'dayjs';
-import { LandingLayout } from '../LandingLayout';
-import { Retro as RetroType } from '../../types';
-import { useRetro } from '../../helpers';
-import { ActionType, GlobalContext } from '../../contexts/GlobalContext';
-import { addDeploymentData } from '../../msal/services';
-import { AddDeploymentDataDialog } from '../Utils/Dialogs/AddDeploymentDataDialog';
-import { DeploymentPopUp } from '../Utils/Alerts/DeploymentPopUp';
+import { Retro as RetroType } from '../types';
+import { useRetro } from '../helpers';
+import { ActionType, GlobalContext } from '../contexts/GlobalContext';
+import { useAzureAuth } from '../msal/azureauth';
+import theme from '../theme/theme';
 
-const BootstrapDialog = styled(Dialog)(({ theme }) => ({
-  '& .MuiDialogContent-root': {
-    padding: theme.spacing(2),
-  },
-  '& .MuiDialogActions-root': {
-    padding: theme.spacing(1),
-  },
-}));
-
+// import {primaryButton,primaryButtonText, secondaryButton,secondaryButtonText } from './../style.module.scss';
 const styles = {
+  retroJoiningText: {
+    height: '38px',
+    left: '1040px',
+    marginTop: '300px',
+    fontFamily: "'Poppins'",
+    fontStyle: 'normal',
+    fontWeight: 500,
+    fontSize: '28px',
+    lineHeight: '38px',
+    letterSpacing: '0.5px',
+    color: commonStyles.primaryDark,
+  },
+  newUserText: {
+    height: '20px',
+    marginTop: '42px',
+    fontFamily: "'Poppins'",
+    fontStyle: 'normal',
+    fontWeight: 400,
+    fontSize: '16px',
+    lineHeight: '20px',
+    letterSpacing: '0.4px',
+    textDecorationLine: 'underline',
+  },
   signInMargin: {
+    //margin: '2% 6% 1% 1%',
     marginTop: '32px',
     height: '44px',
+  },
+  joiningTextMargin: {
+    margin: '30% 10% 40% 10%',
   },
   accessCodeTextField: {
     minWidth: '288px',
@@ -61,82 +78,8 @@ export function LandingPage() {
   const [global, dispatch] = React.useContext(GlobalContext);
   const isXsUp = useMediaQuery(theme.breakpoints.between('xs', 'sm'));
   const isSmUp = useMediaQuery(theme.breakpoints.only('sm'));
-  const [isAddDeploymentDataDialogOpen, setIsAddDeploymentDataDialogOpen] =
-    React.useState(false);
 
   useAzureAuth();
-
-  React.useEffect(() => {
-    setHeight(window.innerHeight);
-    dispatch({
-      type: ActionType.CLOSE_CURRENT_RETRO,
-    });
-  }, []);
-
-  React.useEffect(() => {
-    sessionStorage.removeItem('BoardContext');
-    sessionStorage.removeItem('GlobalContext');
-    sessionStorage.removeItem('retroname');
-    sessionStorage.removeItem('showManual');
-    localStorage.removeItem('selectedTemplate');
-    localStorage.removeItem('tempSelectedTemplateData');
-  }, []);
-
-  // Function to add deployment data
-  const handleAddDeploymentData = async (
-    deploymentDate: Dayjs | null,
-    notificationDate: Dayjs | null
-  ) => {
-    if (deploymentDate && notificationDate) {
-      dispatch({
-        type: ActionType.SET_LOADING,
-        payload: { loadingFlag: true },
-      });
-      await addDeploymentData(deploymentDate, notificationDate).then(
-        res => {
-          dispatch({
-            type: ActionType.SET_LOADING,
-            payload: { loadingFlag: false },
-          });
-          dispatch({
-            type: ActionType.SET_SNACK_MESSAGE,
-            payload: {
-              snackMessage: {
-                snackMessageType: 'success',
-                message: res.message,
-              },
-            },
-          });
-        },
-        err => {
-          console.log('err', err);
-          dispatch({
-            type: ActionType.SET_LOADING,
-            payload: { loadingFlag: false },
-          });
-          dispatch({
-            type: ActionType.SET_SNACK_MESSAGE,
-            payload: {
-              snackMessage: {
-                snackMessageType: 'error',
-                message: 'Error while submitting the deployment data!',
-              },
-            },
-          });
-        }
-      );
-    }
-  };
-
-  const handleAddDeploymentDataOpen = () => {
-    setIsAddDeploymentDataDialogOpen(true);
-  };
-
-  const handleAddDeploymentDataClose = () => {
-    setIsAddDeploymentDataDialogOpen(false);
-  };
-
-  // Function to join existing retro
   const joinRetro = async (): Promise<RetroType | undefined> => {
     let foundRetro = await retro.getByHumanId(humanId);
     if (humanId === '') {
@@ -160,7 +103,6 @@ export function LandingPage() {
     }
   };
 
-  // Function to navigate on create new retro page
   function CreateNewRetro() {
     dispatch({
       type: ActionType.SET_RETRO_CREATE,
@@ -170,11 +112,24 @@ export function LandingPage() {
     navigate('/createretro/');
   }
 
+  React.useEffect(() => {
+    setHeight(window.innerHeight);
+    dispatch({
+      type: ActionType.CLOSE_CURRENT_RETRO,
+    });
+  }, []);
+  React.useEffect(() => {
+    sessionStorage.removeItem('BoardContext');
+    sessionStorage.removeItem('GlobalContext');
+    sessionStorage.removeItem('retroname');
+    sessionStorage.removeItem('showManual');
+    localStorage.removeItem('selectedTemplate');
+    localStorage.removeItem('tempSelectedTemplateData');
+  });
   return (
     <>
       {isXsUp ? (
         <Box height={height} sx={{ overflowY: 'auto' }}>
-           {/* <DeploymentPopUp /> */}
           <LandingLayout></LandingLayout>
           <Box
             sx={{
@@ -193,6 +148,7 @@ export function LandingPage() {
             >
               What BACI retro are you joining today?
             </Typography>
+
             <TextField
               autoFocus
               variant="standard"
@@ -234,7 +190,6 @@ export function LandingPage() {
         </Box>
       ) : (
         <Grid container spacing={0}>
-          {/* <DeploymentPopUp /> */}
           <Grid item xs={6}>
             <LandingLayout></LandingLayout>
           </Grid>
@@ -254,6 +209,7 @@ export function LandingPage() {
               <Typography variant="h2" color={commonStyles.primaryDark}>
                 What BACI retro are you joining today?
               </Typography>
+
               <TextField
                 autoFocus
                 variant="standard"
@@ -282,37 +238,22 @@ export function LandingPage() {
                 className="secondaryButton"
                 style={styles.signInMargin}
                 onClick={() => joinRetro()}
+                // onTouchStart={() => joinRetro()}
               >
                 <span className="secondaryButtonText">Go on..</span>
               </Button>
               <Button
-                className="newUserText"
+                style={styles.newUserText}
                 onClick={() => {
                   CreateNewRetro();
                 }}
               >
                 Create New Retro
               </Button>
-              {/* <Button
-                className="newUserText"
-                onClick={handleAddDeploymentDataOpen}
-              >
-                Add Deployment Data
-              </Button> */}
             </Grid>
           </Grid>
         </Grid>
       )}
-      <BootstrapDialog
-        open={isAddDeploymentDataDialogOpen}
-        onClose={handleAddDeploymentDataClose}
-        aria-labelledby="customized-dialog-title"
-      >
-        <AddDeploymentDataDialog
-          handleAddDeploymentDataClose={handleAddDeploymentDataClose}
-          handleAddDeploymentData={handleAddDeploymentData}
-        />
-      </BootstrapDialog>
     </>
   );
 }

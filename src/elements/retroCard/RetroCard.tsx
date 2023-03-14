@@ -371,6 +371,24 @@ export function RetroCard({
                       textAlign: 'left',
                       color: '#343434',
                     }}
+                    onClick={e => {
+                      // !ended &&
+                      //   !editing &&
+                      //   card.createdBy === global.user.id &&
+                      // setEditing(true);
+                      // console.log('e.detail', e.detail);
+                      // if (e.detail === 2) {
+                      //   setEditing(true);
+                      // }
+                      // !hideButtons ? e.stopPropagation() : null;
+                    }}
+                    onTouchStart={e => {
+                      // !ended &&
+                      //   !editing &&
+                      //   card.createdBy === global.user.id &&
+                      //   setEditing(true);
+                      // !hideButtons ? e.stopPropagation() : null;
+                    }}
                     sx={{
                       cursor:
                         card.createdBy === global.user.id &&
@@ -379,6 +397,14 @@ export function RetroCard({
                           ? 'text'
                           : '',
                     }}
+                    className={
+                      // card.createdBy === global.user.id &&
+                      // !ended &&
+                      // !hideButtons
+                      //   ? ''
+                      //   :
+                      ''
+                    }
                   >
                     {card.value}
                   </Typography>
@@ -482,6 +508,7 @@ export function RetroCard({
                       setEditing(true);
                       setAnchorEl(null);
                     }}
+                    
                   >
                     <svg
                       width="21"
@@ -499,6 +526,7 @@ export function RetroCard({
                         strokeLinejoin="round"
                       />
                     </svg>
+
                   </Button>
                 ) : null}
 
@@ -507,6 +535,23 @@ export function RetroCard({
                 !global.leaveRetro &&
                 (card.createdBy === global.user.id ||
                   global.user.userType == 2) ? (
+                  // <Button
+                  //   id="basic-button"
+                  //   aria-controls={open ? 'basic-menu' : undefined}
+                  //   aria-haspopup="true"
+                  //   aria-expanded={open ? 'true' : undefined}
+                  //   onClick={handleClick}
+                  //   color="primary"
+                  //   sx={{
+                  //     position: 'initial',
+                  //     padding: 0,
+                  //     minWidth: '32px',
+                  //     float: 'right',
+                  //   }}
+                  // >
+                  //   {/* <KeyboardArrowDownIcon /> */}
+                  //   <img src="/svgs/Dots.svg" />
+                  // </Button>
                   <Box
                     component="span"
                     sx={{
@@ -527,6 +572,7 @@ export function RetroCard({
                       }
                       MenuProps={{ elevation: 3 }}
                       ButtonProps={{ variant: undefined }}
+                      onClick={() => console.log('Clicked')}
                     />
                   </Box>
                 ) : null}
