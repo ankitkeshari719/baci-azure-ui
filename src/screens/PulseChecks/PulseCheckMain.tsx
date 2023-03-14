@@ -23,7 +23,7 @@ export default function PulseCheckMain() {
 
   return (
     <Box className="mainContainer">
-      <DeploymentPopUp />
+      {/* <DeploymentPopUp /> */}
       <Toolbar />
       {pulseCheck && pulseCheck.id === 'simple' && (
         <SimplePulseCheck pulseCheck={pulseCheck} />
