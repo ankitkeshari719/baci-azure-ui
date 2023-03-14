@@ -15,7 +15,7 @@ export function CreateRetroMain() {
   return (
     <>
       <Box className="mainContainer">
-        <DeploymentPopUp />
+        {/* <DeploymentPopUp /> */}
         <TopBar />
         {isRetroStart ? (
           <Grid
