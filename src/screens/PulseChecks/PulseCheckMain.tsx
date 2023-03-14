@@ -6,6 +6,7 @@ import { GlobalContext } from '../../contexts/GlobalContext';
 import SimplePulseCheck from './SimplePulseCheck';
 import BusinessAgility from './BusinessAgility';
 import PulseCheckTopbar from './PulseCheckTopbar';
+import { DeploymentPopUp } from '../Utils/Alerts/DeploymentPopUp';
 
 export default function PulseCheckMain() {
   const navigate = useNavigate();
@@ -22,6 +23,7 @@ export default function PulseCheckMain() {
 
   return (
     <Box className="mainContainer">
+      <DeploymentPopUp />
       <PulseCheckTopbar />
       {pulseCheck && pulseCheck.id === 'simple' && (
         <SimplePulseCheck pulseCheck={pulseCheck} />

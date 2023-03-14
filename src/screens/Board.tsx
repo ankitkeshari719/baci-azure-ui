@@ -20,6 +20,7 @@ import Toolbar from '../elements/Toolbar';
 import SubToolbar from '../elements/SubToolbar';
 import FirstTimeExperience from '../elements/FirstTimeExperience';
 import { styled } from '@mui/material/styles';
+import { DeploymentPopUp } from './Utils/Alerts/DeploymentPopUp';
 
 interface StyledTabsProps {
   children?: React.ReactNode;
@@ -340,7 +341,7 @@ export default function RetroBoard() {
         ) : (
           <FirstTimeExperience facilitator={false} isXsUp={false} />
         ))}
-
+      <DeploymentPopUp />
       <Grid xs={12} item>
         <Toolbar onFinishRetro={finishRetro}></Toolbar>
         {!isXsUp && <SubToolbar></SubToolbar>}

@@ -32,7 +32,7 @@ export function ShareParticipants() {
         whiteSpace="normal"
         className="firstDesignSprint"
       >
-        First Design Sprint
+        {global.currentRetro?.name}
       </Box>
       <Box
         sx={{ mt: 4 }}

@@ -25,6 +25,7 @@ import { UserTypeArray } from '../constants';
 import { BoardContext } from '../contexts/BoardContext';
 import theme from '../theme/theme';
 import { SocketContext } from '../contexts/SocketProvider';
+import { DeploymentPopUp } from './Utils/Alerts/DeploymentPopUp';
 const AVATAR_CHARACTER_LIMIT = 30;
 const styles = {
   avatarfield: {
@@ -100,7 +101,6 @@ export function AvatarNamePage() {
   React.useEffect(() => {
     setAvatarList(avatarName.sort(() => Math.random() - 0.5));
     setHeight(window.innerHeight);
-    
   }, []);
   useAzureAuth();
   const joinRetro = async (
@@ -206,10 +206,9 @@ export function AvatarNamePage() {
     setUserName(e);
   };
   React.useEffect(() => {
-  
-    socket.connect().on("connect",()=>{
-      console.log("----------- socket connected ------------")
-    })
+    socket.connect().on('connect', () => {
+      console.log('----------- socket connected ------------');
+    });
     if (
       !global.user.id ||
       global.user.id == undefined ||
@@ -291,6 +290,7 @@ export function AvatarNamePage() {
   };
   return (
     <Grid container spacing={0} style={{ overflowY: 'auto' }}>
+      <DeploymentPopUp />
       <Grid item xs={isXsUp ? 12 : 6}>
         <LandingLayout></LandingLayout>
       </Grid>

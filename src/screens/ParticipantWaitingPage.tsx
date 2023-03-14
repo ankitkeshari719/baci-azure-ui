@@ -11,6 +11,7 @@ import StartRetroButton from '../elements/StartRetroButton';
 import Toolbar from '../elements/Toolbar';
 import { GlobalContext } from '../contexts/GlobalContext';
 import theme from '../theme/theme';
+import { DeploymentPopUp } from './Utils/Alerts/DeploymentPopUp';
 
 const styles = {
   group90: {
@@ -53,6 +54,7 @@ export function ParticipantWaitingPage() {
   // });
   return (
     <Grid container>
+      <DeploymentPopUp />
       <Grid xs={12} item>
         <Toolbar />
       </Grid>

@@ -78,7 +78,6 @@ function BoardProvider(props: ComponentProps<any>) {
   const snapshotUnsubscriber = React.useRef<() => void>(() => {});
 
   function saveState(state: BoardState) {
-    // console.log(state,'imp');
     const value = stringifyDate.stringify({
       boardId: currentRetro?.id,
       history: history.current,
@@ -165,7 +164,6 @@ function BoardProvider(props: ComponentProps<any>) {
     actions.sort(actionSortFunction);
 
     actions.forEach(action => {
-      // console.log(action,"action")
       const existingActionIndex = history.current.findIndex(
         (a: { action: { id: string } }) => a.action.id === action.id
       );

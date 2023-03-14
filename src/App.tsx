@@ -13,21 +13,18 @@ import { GlobalProvider } from './contexts/GlobalContext';
 import { SocketProvider } from './contexts/SocketProvider';
 
 import { Offboarding } from './screens/Offboarding';
-import { LandingPage } from './screens/LandingPage';
 import { RetroDetails } from './screens/RetroDetails';
 import { ParticipantWaitingPage } from './screens/ParticipantWaitingPage';
-import { CreateNewRetro } from './screens/CreateRetroPage';
 import { AvatarNamePage } from './screens/AvatarNamePage';
 import { CreateRetroMain } from './screens/CreateRetro/CreateRetroMain';
 import { StartRetro } from './screens/StartRetro';
 import { Grid } from '@mui/material';
 import { PageNotFound } from './screens/PageNotFound';
 import Feedback from './screens/Feedback';
-import PulseCheck from './screens/PulseCheck';
-import ReportScreen from './screens/ReportScreen';
 import Board from './screens/Board';
 import PulseCheckMain from './screens/PulseChecks/PulseCheckMain';
 import SummaryReportMain from './screens/SummaryReports/SummaryReportMain';
+import { LandingPage } from './screens/Home/LandingPage';
 
 type AppProps = {
   instance: IPublicClientApplication;
@@ -59,10 +56,6 @@ export default function App({ instance }: AppProps) {
                           path="/createretro"
                           element={<CreateRetroMain></CreateRetroMain>}
                         />
-                        {/* <Route
-                          path="/createretrowithtemplate"
-                          element={<CreateRetroMain></CreateRetroMain>}
-                        /> */}
                         <Route
                           path="/join/:id"
                           element={<AvatarNamePage></AvatarNamePage>}
