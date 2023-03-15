@@ -173,8 +173,8 @@ export function LandingPage() {
   return (
     <>
       {isXsUp ? (
-        <Box height={height} sx={{ overflowY: 'auto' }}>
-           <DeploymentPopUp />
+        <Box sx={{ height: 'calc(100vh)', overflowY: 'auto' }}>
+          <DeploymentPopUp />
           <LandingLayout></LandingLayout>
           <Box
             sx={{
