@@ -11,20 +11,21 @@ import {
   useMediaQuery,
 } from '@mui/material';
 import * as React from 'react';
-import { LandingLayout } from './LandingLayout';
-import commonStyles from './../style.module.scss';
-import './../global.scss';
 import { useNavigate, useParams } from 'react-router-dom';
-import { Retro as RetroType } from '../types';
-import { useRetro } from '../helpers';
-import { ActionType, GlobalContext } from '../contexts/GlobalContext';
-import Avatar from '../elements/Avatar';
-import { avatarName } from '../constants/AvatarName';
-import { useAzureAuth } from '../msal/azureauth';
-import { UserTypeArray } from '../constants';
-import { BoardContext } from '../contexts/BoardContext';
-import theme from '../theme/theme';
-import { SocketContext } from '../contexts/SocketProvider';
+import { LandingLayout } from './../LandingLayout';
+import commonStyles from './../../style.module.scss';
+import './../../global.scss';
+import { Retro as RetroType } from '../../types';
+import { useRetro } from '../../helpers';
+import { ActionType, GlobalContext } from '../../contexts/GlobalContext';
+import Avatar from '../../elements/Avatar';
+import { avatarName } from '../../constants/AvatarName';
+import { useAzureAuth } from '../../msal/azureauth';
+import { UserTypeArray } from '../../constants';
+import { BoardContext } from '../../contexts/BoardContext';
+import theme from '../../theme/theme';
+import { SocketContext } from '../../contexts/SocketProvider';
+import { DeploymentPopUp } from './../Utils/Alerts/DeploymentPopUp';
 const AVATAR_CHARACTER_LIMIT = 30;
 const styles = {
   avatarfield: {
@@ -61,7 +62,7 @@ const styles = {
   },
 };
 
-export function AvatarNamePage() {
+export function JoinRetro() {
   const [global, dispatch] = React.useContext(GlobalContext);
   const {
     state: {
@@ -102,7 +103,6 @@ export function AvatarNamePage() {
     loadRetroDetails();
     setAvatarList(avatarName.sort(() => Math.random() - 0.5));
     setHeight(window.innerHeight);
-    
   }, []);
 
 
@@ -216,10 +216,9 @@ export function AvatarNamePage() {
     setUserName(e);
   };
   React.useEffect(() => {
-  
-    socket.connect().on("connect",()=>{
-      console.log("----------- socket connected ------------")
-    })
+    socket.connect().on('connect', () => {
+      console.log('----------- socket connected ------------');
+    });
     if (
       !global.user.id ||
       global.user.id == undefined ||
@@ -301,6 +300,7 @@ export function AvatarNamePage() {
   };
   return (
     <Grid container spacing={0} style={{ overflowY: 'auto' }}>
+      <DeploymentPopUp />
       <Grid item xs={isXsUp ? 12 : 6}>
         <LandingLayout></LandingLayout>
       </Grid>

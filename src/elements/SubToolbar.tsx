@@ -28,7 +28,6 @@ const SubToolbar = (props: any) => {
     state: { columns, users, retroName, lastStateUpdate, ended },
   } = React.useContext(BoardContext);
   const [global, dispatch] = React.useContext(GlobalContext);
-  // const classes = React.useStyles();
   const [selected, setSelected] = React.useState([]);
   const [userSelected, setUserSelected] = React.useState<string[]>([]);
   const [userNameIdArray, setUserNameIdArray] = React.useState<any[]>([]);
@@ -138,9 +137,6 @@ const SubToolbar = (props: any) => {
                 <Avatar
                   key={user.userId}
                   avatar={user.avatar}
-                  onClickAvatar={() => {
-                    console.log('click');
-                  }}
                   css={{
                     width: '40px',
                     height: '40px',
@@ -203,9 +199,7 @@ const SubToolbar = (props: any) => {
                   userSelected.length > 0 && userSelected.length < users.length
                 }
               />
-              <ListItemText
-                primary="Select All"
-              />
+              <ListItemText primary="Select All" />
             </MenuItem>
           )}
 
@@ -237,15 +231,12 @@ const SubToolbar = (props: any) => {
               )}
               <Avatar
                 avatar={user.avatar}
-                onClickAvatar={() => {
-                  console.log('click');
-                }}
                 css={{
                   width: '40px',
                   height: '40px',
                   marginLeft: '20px',
                   marginRight: '8px',
-                  border:'none'
+                  border: 'none',
                 }}
               />
               <Tooltip title={user.userNickname}>

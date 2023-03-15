@@ -2,6 +2,7 @@ import { Action, Retro, User } from '../types';
 import { useSocket } from '../hooks/useSocket';
 import { DefaultEventsMap } from '@socket.io/component-emitter';
 import { Socket } from 'socket.io-client';
+import { Dayjs } from 'dayjs';
 
 import { API_URL } from '../constants/FeatureFlags';
 
@@ -58,6 +59,7 @@ export const getRetroByHumanId = async (
 
   return result;
 };
+
 export const getRetroActions = async (
   id: string,
   userId: string,
@@ -136,6 +138,41 @@ export const addFeedback = async (
     });
   return id;
 };
+
+export const addDeploymentData = async (
+  deploymentDate: Dayjs | null,
+  notificationDate: Dayjs | null
+): Promise<{ id: any; message: string }> => {
+  let id = '';
+  let message = '';
+  const requestOptions = {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ deploymentDate, notificationDate }),
+  };
+  await fetch(API_URL + '/addDeploymentData', requestOptions)
+    .then(response => response.json())
+    .then(data => {
+      id = data.id;
+      message = data.message;
+    });
+  return { id: id, message: message };
+};
+
+export const getDeploymentData = async (): Promise<any> => {
+  let deploymentData;
+  const requestOptions = {
+    method: 'GET',
+  };
+  await fetch(API_URL + '/getDeploymentData', requestOptions)
+    .then(response => response.json())
+    .then(data => {
+      deploymentData = data;
+    });
+
+  return deploymentData;
+};
+
 /* 
 export const onSnapshotRetroActions = (socket: Socket<DefaultEventsMap, DefaultEventsMap>,id: string, userId: string, fromTimestamp: number | undefined, callback: (([]) => void)): () => void => {
         const unsubscribe = socket.on('newMessage',(snapshot: { retroId: string; action: any; }[]) => {

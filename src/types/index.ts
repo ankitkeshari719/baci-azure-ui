@@ -22,6 +22,17 @@ export class User {
   userType: number = 0;
 }
 
+export interface UserType {
+  userId: string;
+  userNickname: string;
+  avatar: string;
+  feedback: FeedbackEntry[];
+  pulseCheckQuestions: PulseCheckEntry[];
+  checked: boolean;
+  isFacilitator: boolean;
+  isMobile: boolean;
+}
+
 export class SnackMessageClass {
   snackMessageType: AlertColor = 'success';
   message: string = '';

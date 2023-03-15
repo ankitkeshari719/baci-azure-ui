@@ -35,8 +35,9 @@ export const useRetro = () => {
         name: 'Retro',
         ...(retro ? retro : {}),
         humanId,
-        joinUrl: `${window.location.protocol}//${window.location.hostname}${window.location.port ? ':' + window.location.port : ''
-          }/join/${humanId}`,
+        joinUrl: `${window.location.protocol}//${window.location.hostname}${
+          window.location.port ? ':' + window.location.port : ''
+        }/join/${humanId}`,
       } as Retro;
 
       const id = await createRetro(currentRetro, state.user);
@@ -77,7 +78,7 @@ export const useRetro = () => {
       selectedAvatar: string,
       userType: number,
       selectedPulseCheck: pulseCheckInterface | null,
-      selectedTemplate: any,
+      selectedTemplate: any
     ): Promise<Retro> => {
       const humanId = (
         '' +
@@ -88,23 +89,23 @@ export const useRetro = () => {
         name: 'Retro',
         ...(retro ? retro : {}),
         humanId,
-        joinUrl: `${window.location.protocol}//${window.location.hostname}${window.location.port ? ':' + window.location.port : ''
-          }/join/${humanId}`,
+        joinUrl: `${window.location.protocol}//${window.location.hostname}${
+          window.location.port ? ':' + window.location.port : ''
+        }/join/${humanId}`,
       } as Retro;
 
       const id = await createRetro(currentRetro, state.user);
       const retrievedRetro = await getRetro(id);
-      console.log("------------- setting retro details in index -------------", retro);
-      socket.connect().on("connect", () => {
-
+      console.log(
+        '------------- setting retro details in index -------------',
+        retro
+      );
+      socket.connect().on('connect', () => {
         dispatch({
           type: ActionType.SET_CURRENT_RETRO,
           payload: { retro: retrievedRetro },
         });
-  
-        
-
-      })
+      });
 
       const action: Action = {
         id: shortid.generate(),
@@ -113,8 +114,9 @@ export const useRetro = () => {
           retroName: retro?.name,
           retroTimeframe,
           retroGoal,
-          joinUrl: `${window.location.protocol}//${window.location.hostname}${window.location.port ? ':' + window.location.port : ''
-            }/join/${humanId}`,
+          joinUrl: `${window.location.protocol}//${window.location.hostname}${
+            window.location.port ? ':' + window.location.port : ''
+          }/join/${humanId}`,
           creatorId: state.currentRetro?.creatorId,
           userId: state.user.id,
           humanId: humanId,
@@ -130,16 +132,21 @@ export const useRetro = () => {
         sourceActionTimestamp: 0,
         version: BOARD_STATE_MACHINE_VERSION,
       };
-      await addRetroAction(id, action);
-      return retrievedRetro;
-      
 
+      await addRetroAction(id, action);
       
+      sessionStorage.setItem(
+        'lastRetroName',
+        JSON.stringify(retrievedRetro.name)
+      );
+      return retrievedRetro;
     },
+
     getById: async (id: string): Promise<Retro | undefined> => {
       const retro = await getRetro(id);
       return retro;
     },
+
     getByHumanId: async (id: string): Promise<Retro | undefined> => {
       const retro = await getRetroByHumanId(id);
       return retro;
