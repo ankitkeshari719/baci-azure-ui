@@ -23,9 +23,9 @@ const MenuProps = {
   },
 };
 
-const SubToolbar = (props: any) => {
+const SubToolbar = () => {
   const {
-    state: { columns, users, retroName, lastStateUpdate, ended },
+    state: { users, ended },
   } = React.useContext(BoardContext);
   const [global, dispatch] = React.useContext(GlobalContext);
   const [selected, setSelected] = React.useState([]);
@@ -38,16 +38,33 @@ const SubToolbar = (props: any) => {
   );
   const open = Boolean(anchorEl);
   const [showSelect, setShowSelect] = React.useState(false);
-  const id = open ? 'simple-popover' : undefined;
   const [openUserSelect, setOpenUserSelect] = React.useState<boolean>(false);
   const [outsideClick, setOutSideClick] = React.useState<boolean>(false);
-  const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
-    setAnchorEl(event.currentTarget);
-  };
 
-  const handleClose = () => {
-    setAnchorEl(null);
-  };
+  useEffect(() => {
+    setUserSelected(getValueForAll().split(','));
+  }, [!openUserSelect && users]);
+
+  useEffect(() => {
+    if (userSelected.length === 0) {
+      setUserNameIdArray([]);
+    } else {
+      const selectedUsers: any = [];
+      userSelected.forEach(id => {
+        const index = id.split('@');
+
+        selectedUsers.push(users[+index[1]]);
+      });
+      setUserNameIdArray(() => selectedUsers);
+    }
+  }, [userSelected]);
+
+  useEffect(() => {
+    dispatch({
+      type: ActionType.SET_USER_SELECTED,
+      payload: { usersSelected: userNameIdArray },
+    });
+  }, [userNameIdArray]);
 
   const handleChange = (event: SelectChangeEvent<typeof userSelected>) => {
     const {
@@ -65,28 +82,6 @@ const SubToolbar = (props: any) => {
     );
   };
 
-  useEffect(() => {
-    setUserSelected(getValueForAll().split(','));
-  }, [!openUserSelect && users]);
-  useEffect(() => {
-    if (userSelected.length === 0) {
-      setUserNameIdArray([]);
-    } else {
-      const selectedUsers: any = [];
-      userSelected.forEach(id => {
-        const index = id.split('@');
-
-        selectedUsers.push(users[+index[1]]);
-      });
-      setUserNameIdArray(value => selectedUsers);
-    }
-  }, [userSelected]);
-  useEffect(() => {
-    dispatch({
-      type: ActionType.SET_USER_SELECTED,
-      payload: { usersSelected: userNameIdArray },
-    });
-  }, [userNameIdArray]);
   const getValueForAll = (): string => {
     var userVal: string = '';
     users?.forEach((user: any, index) => {
@@ -95,6 +90,7 @@ const SubToolbar = (props: any) => {
     });
     return userVal;
   };
+
   return (
     <Box
       sx={{
@@ -151,7 +147,6 @@ const SubToolbar = (props: any) => {
               )
           )}
         </>
-
         <Select
           sx={{
             fieldset: {
@@ -164,7 +159,7 @@ const SubToolbar = (props: any) => {
           labelId="demo-multiple-checkbox-label"
           id="demo-multiple-checkbox"
           multiple
-          onClick={(event: any) => {
+          onClick={() => {
             setOpenUserSelect(true);
           }}
           value={userSelected}
@@ -178,7 +173,7 @@ const SubToolbar = (props: any) => {
               label="Tag"
             />
           }
-          renderValue={(selected: any) => {
+          renderValue={() => {
             return (
               <>
                 {global.user.userType == 2 ? (
