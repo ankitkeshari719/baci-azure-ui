@@ -40,7 +40,10 @@ const Toolbar = (props: any) => {
     state: { retroName, retroDuration, ended, users },
     commitAction,
   } = React.useContext(BoardContext);
-  const reloadPage = () => { window.location.reload();navigate(`/`);};
+  const reloadPage = () => {
+    window.location.reload();
+    navigate(`/`);
+  };
   const showFinishRetroButton =
     !location.pathname.includes('pulsecheck') &&
     !location.pathname.includes('report') &&
@@ -434,17 +437,27 @@ const Toolbar = (props: any) => {
         {showSummaryButton &&
           !location.pathname.includes('report') &&
           user.userType === 2 && (
-            <ContainedButton
-              id="view-summary"
-              name="VIEW SUMMARY"
-              onClick={() => navigate('/report/' + currentRetro?.id)}
-              style={{
-                minWidth: '150px !important',
-                height: '40px !important',
-                width: '150px !important',
-                marginRight: '16px',
-              }}
-            />
+            <>
+              <Typography
+                color={commonStyles.secondaryMain}
+                fontSize="24px"
+                fontWeight="500"
+                mr="15px"
+              >
+                Retro Finished
+              </Typography>
+              <ContainedButton
+                id="view-summary"
+                name="VIEW SUMMARY"
+                onClick={() => navigate('/report/' + currentRetro?.id)}
+                style={{
+                  minWidth: '150px !important',
+                  height: '40px !important',
+                  width: '150px !important',
+                  marginRight: '16px',
+                }}
+              />x
+            </>
           )}
         <LeaveRetroDialog
           open={leaveDiaOpen}
@@ -528,7 +541,7 @@ const Toolbar = (props: any) => {
             </Button>
           </DialogActions>
         </Dialog>
-        {location.pathname.includes('report') && (
+        {location.pathname.includes('report') && ended && (
           <>
             <Typography
               color={commonStyles.secondaryMain}
