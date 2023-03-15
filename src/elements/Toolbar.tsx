@@ -40,7 +40,7 @@ const Toolbar = (props: any) => {
     state: { retroName, retroDuration, ended, users },
     commitAction,
   } = React.useContext(BoardContext);
-
+  const reloadPage = () => { window.location.reload();navigate(`/`);};
   const showFinishRetroButton =
     !location.pathname.includes('pulsecheck') &&
     !location.pathname.includes('report') &&
@@ -213,6 +213,7 @@ const Toolbar = (props: any) => {
                   width: isXsUp ? '53px' : '82px',
                   height: isXsUp ? '18px' : '28px',
                 }}
+                onClick={reloadPage}
               />
             </Link>
           </>
@@ -225,6 +226,7 @@ const Toolbar = (props: any) => {
                 width: isXsUp ? '53px' : '82px',
                 height: isXsUp ? '18px' : '28px',
               }}
+              onClick={reloadPage}
             />
           </Link>
         )}
