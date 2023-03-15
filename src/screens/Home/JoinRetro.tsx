@@ -98,21 +98,19 @@ export function JoinRetro() {
   const isXsUp = useMediaQuery(theme.breakpoints.between('xs', 'sm'));
   const [openAvatarDialog, setOpenAvatarDialog] = React.useState(false);
   const [height, setHeight] = React.useState(0);
-  React.useEffect( () => {
-    
+  React.useEffect(() => {
     loadRetroDetails();
     setAvatarList(avatarName.sort(() => Math.random() - 0.5));
     setHeight(window.innerHeight);
   }, []);
 
-
-  const loadRetroDetails =async()=>{
+  const loadRetroDetails = async () => {
     let foundRetro = await retro.getByHumanId(humanId);
     dispatch({
       type: ActionType.SET_CURRENT_RETRO,
       payload: { retro: foundRetro },
     });
-  }
+  };
   useAzureAuth();
   const joinRetro = async (
     retrunBool: boolean
@@ -299,7 +297,11 @@ export function JoinRetro() {
     }
   };
   return (
-    <Grid container spacing={0} style={{ overflowY: 'auto' }}>
+    <Grid
+      container
+      spacing={0}
+      style={{ height: 'calc(100vh)', overflowY: 'auto' }}
+    >
       <DeploymentPopUp />
       <Grid item xs={isXsUp ? 12 : 6}>
         <LandingLayout></LandingLayout>
