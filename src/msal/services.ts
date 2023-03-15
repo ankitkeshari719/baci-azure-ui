@@ -63,6 +63,7 @@ export const getRetroByHumanId = async (
 export const getRetroActions = async (
   id: string,
   userId: string,
+  userType: number,
   fromTimestamp?: number
 ): Promise<Action[]> => {
   let snapshot: any[] = [];

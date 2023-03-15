@@ -91,7 +91,7 @@ export default function FeedbackPopup(props: {
     await commitAction(
       actionName as BoardActionType,
       { parameters, userId: global.user.id },
-      true
+      false
     );
   };
   const submitFeedback = async () => {
@@ -196,7 +196,15 @@ export default function FeedbackPopup(props: {
           <Typography className="identityWillbeConfidentialText">
             Your identity will be confidential
           </Typography>
-          <Box sx={{display: 'flex', justifyContent: 'center', alignItems: 'center', width: '100%', marginTop: !isXsUp ? '20px' : '10px'}}>
+          <Box
+            sx={{
+              display: 'flex',
+              justifyContent: 'center',
+              alignItems: 'center',
+              width: '100%',
+              marginTop: !isXsUp ? '20px' : '10px',
+            }}
+          >
             <BorderLinearProgress
               variant="determinate"
               value={barvalue}
@@ -216,7 +224,13 @@ export default function FeedbackPopup(props: {
               overflowX: 'hidden',
             }}
           >
-            <Box sx={{display: 'flex', flexDirection : 'column', alignItems: 'center'}}>
+            <Box
+              sx={{
+                display: 'flex',
+                flexDirection: 'column',
+                alignItems: 'center',
+              }}
+            >
               <Box>
                 <Typography
                   variant={!isXsUp ? 'h4' : 'h5'}
@@ -242,7 +256,6 @@ export default function FeedbackPopup(props: {
                     sx={{
                       color: FEEDBACK_QUESTIONS_COLORS[index],
                       minWidth: 0,
-                     
                     }}
                     onClick={() => {
                       qs[index][1](i);
@@ -263,7 +276,7 @@ export default function FeedbackPopup(props: {
                 sx={{
                   width: '100%',
                   display: 'flex',
-                  justifyContent:(index >= 1 )? 'space-between' : 'flex-end',
+                  justifyContent: index >= 1 ? 'space-between' : 'flex-end',
                 }}
                 m="20px"
               >
@@ -291,13 +304,9 @@ export default function FeedbackPopup(props: {
                 sx={{
                   width: '100%',
                   display: 'flex',
-                  justifyContent:(index >= 1 )? 'space-between' : 'flex-end',
+                  justifyContent: index >= 1 ? 'space-between' : 'flex-end',
                   alignItems: 'center',
-                  flexDirection: !(
-                    index >= 1
-                  ) 
-                    ? 'row'
-                    : 'row-reverse',
+                  flexDirection: !(index >= 1) ? 'row' : 'row-reverse',
                 }}
               >
                 {!(index === FEEDBACK_QUESTIONS_COLORS.length - 1) ? (

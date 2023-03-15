@@ -77,6 +77,99 @@ function BoardProvider(props: ComponentProps<any>) {
   const lastActionId = React.useRef('');
   const snapshotUnsubscriber = React.useRef<() => void>(() => {});
 
+  // Check weather the socket is connected or not
+  React.useEffect(() => {
+    socket.on('close', () => {
+      console.log('------- socket disconnected -------');
+      setError('error : Socket disconnected');
+    });
+    socket.on('connect_error', () => {
+      console.log('------- socket error -------');
+      setError('error : Socket disconnected');
+    });
+    socket.on('disconnect', () => {
+      console.log('------- socket disconnected -------');
+      setState({ ...state, disconnected: true });
+      setError('error : Socket disconnected');
+    });
+    // }
+  }, [currentRetro?.id, socket]);
+
+  React.useEffect(() => {
+    snapshotUnsubscriber?.current();
+    if (currentRetro?.id) {
+      let loadedState = false;
+      if (state.retroId === '' && loadState()) {
+        loadedState = true;
+        setState({ ...state });
+      } else {
+        clearState();
+        state.retroId = currentRetro?.id;
+      }
+
+      getRetroActions(
+        currentRetro?.id as string,
+        user.id,
+        user.userType,
+        lastActionTimestamp.current
+      ).then(actions => {
+        if (actions.length === 0 && !loadedState) {
+          setState({ ...initialBoardState(currentRetro?.id), loading: false });
+        }
+        if (actions.length !== 0) {
+          const newState = processActions(actions);
+          if (newState) {
+            setState(newState);
+          }
+        }
+        socket.emit('retro', currentRetro?.id);
+        socket.on(
+          'newMessage',
+          (snapshot: { retroId: string; action: any }[]) => {
+            const results = [] as any[];
+            snapshot.forEach((change: { retroId: string; action: any }) => {
+              if (
+                change.retroId === currentRetro?.id &&
+                (change.action.sourceActionTimestamp >=
+                  lastActionTimestamp.current ===
+                undefined
+                  ? 0
+                  : lastActionTimestamp.current)
+              ) {
+                const data = change.action;
+                if (
+                  !data.onlyVisibleBy ||
+                  data.onlyVisibleBy.includes(user.id)
+                ) {
+                  results.push(data);
+                }
+              }
+              // }
+            });
+            actions = results;
+            if (actions.length !== 0) {
+              processActions(actions);
+            }
+          }
+        );
+
+        /* snapshotUnsubscriber.current = onSnapshotRetroActions(
+          currentRetro?.id as string,
+          user.id,
+          lastActionTimestamp.current,
+          actions => {
+            console.log("processing action",actions)
+            if (actions.length !== 0) {
+              processActions(actions);
+            }
+          }
+        );  */
+      });
+    } else {
+      clearState();
+    }
+  }, [currentRetro?.id]);
+
   function saveState(state: BoardState) {
     const value = stringifyDate.stringify({
       boardId: currentRetro?.id,
@@ -244,8 +337,6 @@ function BoardProvider(props: ComponentProps<any>) {
           stateSnapshots.current = stateSnapshots.current.slice(-MAX_SNAPSHOTS);
         }
       }
-
-      // newState.loading = false;
       if (action.timestamp) {
         lastActionTimestamp.current = action.timestamp;
       }
@@ -256,101 +347,6 @@ function BoardProvider(props: ComponentProps<any>) {
     setState(newState);
     return newState;
   };
-
-  React.useEffect(() => {
-    socket.on('close', () => {
-      console.log('------- socket disconnected -------');
-
-      setError('error : Socket disconnected');
-    });
-    socket.on('connect_error', () => {
-      console.log('------- socket error -------');
-      setError('error : Socket disconnected');
-    });
-    socket.on('disconnect', () => {
-      console.log('------- socket disconnected -------');
-      setState({ ...state, disconnected: true });
-      setError('error : Socket disconnected');
-    });
-    // }
-  }, [currentRetro?.id, socket]);
-
-  React.useEffect(() => {
-    snapshotUnsubscriber?.current();
-    if (currentRetro?.id) {
-      let loadedState = false;
-      if (state.retroId === '' && loadState()) {
-        loadedState = true;
-
-        setState({ ...state });
-      } else {
-        clearState();
-        state.retroId = currentRetro?.id;
-
-        // state.creatorId=currentRetro?.creatorId;
-      }
-
-      getRetroActions(
-        currentRetro?.id as string,
-        user.id,
-        lastActionTimestamp.current
-      ).then(actions => {
-        if (actions.length === 0 && !loadedState) {
-          setState({ ...initialBoardState(currentRetro?.id), loading: false });
-        }
-        if (actions.length !== 0) {
-          const newState = processActions(actions);
-          if (newState) {
-            setState(newState);
-          }
-        }
-        socket.emit('retro', currentRetro?.id);
-        socket.on(
-          'newMessage',
-          (snapshot: { retroId: string; action: any }[]) => {
-            const results = [] as any[];
-            snapshot.forEach((change: { retroId: string; action: any }) => {
-              if (
-                change.retroId === currentRetro?.id &&
-                (change.action.sourceActionTimestamp >=
-                  lastActionTimestamp.current ===
-                undefined
-                  ? 0
-                  : lastActionTimestamp.current)
-              ) {
-                const data = change.action;
-                if (
-                  !data.onlyVisibleBy ||
-                  data.onlyVisibleBy.includes(user.id)
-                ) {
-                  results.push(data);
-                }
-              }
-              // }
-            });
-            actions = results;
-            if (actions.length !== 0) {
-              processActions(actions);
-            }
-          }
-        );
-
-        /* snapshotUnsubscriber.current = onSnapshotRetroActions(
-          currentRetro?.id as string,
-          user.id,
-          lastActionTimestamp.current,
-          actions => {
-            console.log("processing action",actions)
-            if (actions.length !== 0) {
-              processActions(actions);
-            }
-          }
-        );  */
-      });
-    } else {
-      clearState();
-    }
-  }, [currentRetro?.id]);
 
   return (
     <BoardContext.Provider value={{ state, commitAction }}>
@@ -364,9 +360,6 @@ function BoardProvider(props: ComponentProps<any>) {
           </DialogContent>
         </Dialog>
       ) : null}
-      {/* <Dialog open={true}>
-        <DialogContent>
-          <Grid container justifyContent="center"> */}
       {global.loadingFlag && (
         <Box
           sx={{
@@ -383,10 +376,6 @@ function BoardProvider(props: ComponentProps<any>) {
           <CircularProgress />
         </Box>
       )}
-
-      {/* </Grid>
-        </DialogContent>
-      </Dialog> */}
       {props.children}
     </BoardContext.Provider>
   );
