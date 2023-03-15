@@ -310,11 +310,6 @@ function BoardProvider(props: ComponentProps<any>) {
           (snapshot: { retroId: string; action: any }[]) => {
             const results = [] as any[];
             snapshot.forEach((change: { retroId: string; action: any }) => {
-              // console.log("change",change)
-              // if(change?.action?.actionName==="updateRetroDetails"){
-
-              // }
-              // if ((change.type === "modified" || change.type === "added") && !change.doc.metadata.hasPendingWrites) {
               if (
                 change.retroId === currentRetro?.id &&
                 (change.action.sourceActionTimestamp >=

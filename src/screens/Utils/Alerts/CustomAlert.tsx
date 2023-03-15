@@ -68,8 +68,6 @@ export function CustomAlert({ handleAlertClose, deploymentDate }: Props) {
   const [isMobile, setIsMobile] = React.useState<boolean>(
     window.innerWidth < 700
   );
-  console.log('deploymentDate:: ', deploymentDate);
-
   return isMobile ? (
     <Alert
       severity="info"

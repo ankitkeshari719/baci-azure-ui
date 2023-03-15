@@ -60,15 +60,6 @@ export function DeploymentPopUp() {
       },
       err => {
         console.log('err', err);
-        dispatch({
-          type: ActionType.SET_SNACK_MESSAGE,
-          payload: {
-            snackMessage: {
-              snackMessageType: 'error',
-              message: 'Error while getting the deployment data!',
-            },
-          },
-        });
       }
     );
   };
@@ -87,7 +78,10 @@ export function DeploymentPopUp() {
         isCurrentDateBefore &&
         isCurrentDateAfter && (
           <Grid item xs={12}>
-            <CustomAlert handleAlertClose={handleAlertClose} deploymentDate={deploymentDate} />
+            <CustomAlert
+              handleAlertClose={handleAlertClose}
+              deploymentDate={deploymentDate}
+            />
           </Grid>
         )}
     </>
