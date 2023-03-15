@@ -174,7 +174,7 @@ export function LandingPage() {
     <>
       {isXsUp ? (
         <Box height={height} sx={{ overflowY: 'auto' }}>
-           {/* <DeploymentPopUp /> */}
+           <DeploymentPopUp />
           <LandingLayout></LandingLayout>
           <Box
             sx={{
@@ -234,7 +234,7 @@ export function LandingPage() {
         </Box>
       ) : (
         <Grid container spacing={0}>
-          {/* <DeploymentPopUp /> */}
+          <DeploymentPopUp />
           <Grid item xs={6}>
             <LandingLayout></LandingLayout>
           </Grid>

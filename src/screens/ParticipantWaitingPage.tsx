@@ -54,7 +54,7 @@ export function ParticipantWaitingPage() {
   // });
   return (
     <Grid container>
-      {/* <DeploymentPopUp /> */}
+      <DeploymentPopUp />
       <Grid xs={12} item>
         <Toolbar />
       </Grid>
