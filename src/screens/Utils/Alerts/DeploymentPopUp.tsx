@@ -1,9 +1,9 @@
 import * as React from 'react';
-import { Grid } from '@mui/material';
+import { Box } from '@mui/material';
 import './../../../global.scss';
 import './styles.scss';
 import dayjs, { Dayjs } from 'dayjs';
-import { ActionType, GlobalContext } from '../../../contexts/GlobalContext';
+import { GlobalContext } from '../../../contexts/GlobalContext';
 import { getDeploymentData } from '../../../msal/services';
 import { CustomAlert } from './CustomAlert';
 
@@ -77,12 +77,12 @@ export function DeploymentPopUp() {
         !isDeployed &&
         isCurrentDateBefore &&
         isCurrentDateAfter && (
-          <Grid item xs={12}>
+          <Box>
             <CustomAlert
               handleAlertClose={handleAlertClose}
               deploymentDate={deploymentDate}
             />
-          </Grid>
+          </Box>
         )}
     </>
   );

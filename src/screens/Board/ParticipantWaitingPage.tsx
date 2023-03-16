@@ -1,28 +1,13 @@
-import { Box, Grid, Paper, Typography, useMediaQuery } from '@mui/material';
+import { Box, Grid, Typography, useMediaQuery } from '@mui/material';
 import React from 'react';
-import ReactDOM from 'react-dom';
-import LandingImage from '../assets/img/landingimage.png';
-import BACILogo from '../assets/img/bacilogo.png';
-import commomStyles from './../style.module.scss';
-import commonStyles from './../style.module.scss';
-import gif from '../assets/img/participant_waiting.gif';
-import useLoadRetro from '../hooks/useLoadRetro';
-import StartRetroButton from '../elements/StartRetroButton';
-import Toolbar from '../elements/Toolbar';
-import { GlobalContext } from '../contexts/GlobalContext';
-import theme from '../theme/theme';
-import { DeploymentPopUp } from './Utils/Alerts/DeploymentPopUp';
-
-const styles = {
-  group90: {
-    width: '100%',
-    height: '100vh',
-    display: 'flex',
-    flexDirection: 'column',
-    justifyContent: 'center',
-    // margin: '112px 645px 362px 644px',
-  },
-};
+import commonStyles from './../../style.module.scss';
+import gif from '../../assets/img/participant_waiting.gif';
+import useLoadRetro from '../../hooks/useLoadRetro';
+import StartRetroButton from '../../elements/StartRetroButton';
+import Toolbar from '../../elements/Toolbar';
+import { GlobalContext } from '../../contexts/GlobalContext';
+import theme from '../../theme/theme';
+import { DeploymentPopUp } from '../Utils/Alerts/DeploymentPopUp';
 
 export function ParticipantWaitingPage() {
   const [global, dispatch] = React.useContext(GlobalContext);
@@ -34,69 +19,95 @@ export function ParticipantWaitingPage() {
   const [animateThird, setAnimateThird] = React.useState(false);
   const isXsUp = useMediaQuery(theme.breakpoints.between('xs', 'sm'));
   useLoadRetro();
-  // React.useEffect(() => {
-  //   let interval1 = setInterval(() => {
-  //     setAnimateFirst(false);
-  //     setAnimatesecond(true);
-  //     setAnimateThird(false);
-  //   }, 10000);
-
-  //   let interval2 = setInterval(() => {
-  //     setAnimateFirst(false);
-  //     setAnimatesecond(false);
-  //     setAnimateThird(true);
-  //   }, 10000);
-  //   let interval3 = setInterval(() => {
-  //     setAnimateFirst(true);
-  //     setAnimatesecond(false);
-  //     setAnimateThird(false);
-  //   }, 10000);
-  // });
   return (
     <Grid container>
-      <DeploymentPopUp />
-      <Grid xs={12} item>
-        <Toolbar />
-      </Grid>
-
       <Box
         style={{
           width: '100%',
-          height: '100vh',
+          height: 'calc(100vh)', 
+          overflowY: 'auto',
           display: 'flex',
           flexDirection: 'column',
           justifyContent: 'center',
-          // margin: '112px 645px 362px 644px',
         }}
       >
-        <Typography
-          variant={isXsUp ? 'h4' : 'h2'}
-          color={commonStyles.primaryDark}
-          className="alignCenter"
-          mb="8px"
+        <DeploymentPopUp />
+        <Grid xs={12} item>
+          <Toolbar />
+        </Grid>
+        {/* Welcome Text */}
+        <Grid
+          xs={12}
+          item
+          style={{
+            display: 'flex',
+            justifyContent: 'center',
+            alignContent: 'center',
+          }}
         >
-          Welcome to ‘{global?.currentRetro?.name}’ !
-        </Typography>
-        <Typography
-          color={commonStyles.primaryDark}
-          className="alignCenter"
-          variant={isXsUp ? 'h6' : 'h4'}
-          mb="52px"
+          <Typography
+            variant={isXsUp ? 'h4' : 'h2'}
+            color={commonStyles.primaryDark}
+          >
+            Welcome to ‘{global?.currentRetro?.name}’ !
+          </Typography>
+        </Grid>
+        {/* Lets go Text */}
+        <Grid
+          xs={12}
+          item
+          style={{
+            display: 'flex',
+            justifyContent: 'center',
+            alignContent: 'center',
+          }}
         >
-          Let’s go over last 2 weeks
-        </Typography>
-        <Typography
-          color={commonStyles.secondaryMain}
-          className="alignCenter"
-          variant={isXsUp ? 'h6' : 'h4'}
-          mb="32px"
+          <Typography
+            color={commonStyles.primaryDark}
+            variant={isXsUp ? 'h6' : 'h4'}
+          >
+            Let’s go over last 2 weeks
+          </Typography>
+        </Grid>
+        {/* Relax while facilitator starts the retro Text */}
+        <Grid
+          xs={12}
+          item
+          style={{
+            display: 'flex',
+            justifyContent: 'center',
+            alignContent: 'center',
+          }}
         >
-          Relax while facilitator starts the retro...
-        </Typography>
-        <Box sx={{ display: 'flex', justifyContent: 'center' }}>
+          <Typography
+            color={commonStyles.secondaryMain}
+            variant={isXsUp ? 'h6' : 'h4'}
+          >
+            Relax while facilitator starts the retro...
+          </Typography>
+        </Grid>
+        {/* Image */}
+        <Grid
+          xs={12}
+          item
+          style={{
+            display: 'flex',
+            justifyContent: 'center',
+            alignContent: 'center',
+          }}
+        >
           <img width={isXsUp ? '280px' : '500px'} src={gif}></img>
-        </Box>
-        {/* {animateFirst && !isXsUp && (
+        </Grid>
+      </Box>
+      {/* <Box
+        style={{
+          width: '100%',
+          display: 'flex',
+          flexDirection: 'column',
+          justifyContent: 'center',
+        }}
+      >
+        {animateFirst && !isXsUp && (
           <Box
             mt="16px"
             style={{
@@ -181,8 +192,8 @@ export function ParticipantWaitingPage() {
             </h4>
             <h4 style={{ color: commomStyles.primaryDark }}>Actions</h4>
           </Box>
-        )} */}
-      </Box>
+        )}
+      </Box> */}
       <StartRetroButton></StartRetroButton>
     </Grid>
   );
