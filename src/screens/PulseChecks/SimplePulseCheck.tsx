@@ -248,8 +248,6 @@ export default function SimplePulseCheck({ pulseCheck }: Props) {
           alignItems: 'center',
           justifyContent: 'center',
           padding: isXsUp ? '8px' : '56px',
-          overflowY: isXsUp ? 'scroll' : 'auto',
-          height: isXsUp ? 'calc(100vh - 192px)' : 'calc(100vh - 64px)',
         }}
       >
         {/* Text one */}
@@ -292,7 +290,7 @@ export default function SimplePulseCheck({ pulseCheck }: Props) {
               sx={{
                 display: 'flex',
                 justifyContent: 'center',
-                marginTop: isXsUp ? '16px' : '40px',
+                marginTop: isXsUp ? '16px' : '70px',
               }}
             >
               <span
@@ -320,7 +318,7 @@ export default function SimplePulseCheck({ pulseCheck }: Props) {
               display: 'flex',
               alignItems: 'center',
               flexDirection: isXsUp ? 'column' : 'row',
-              marginTop: isXsUp ? '16px' : '40px',
+              marginTop: isXsUp ? '16px' : '180px',
             }}
           >
             {pulseCheck &&
@@ -484,7 +482,7 @@ export default function SimplePulseCheck({ pulseCheck }: Props) {
             sx={{
               display: 'flex',
               justifyContent: 'center',
-              marginTop: isXsUp ? '16px' : '40px',
+              marginTop: isXsUp ? '16px' : '180px',
             }}
           >
             <ContainedButton
@@ -504,7 +502,7 @@ export default function SimplePulseCheck({ pulseCheck }: Props) {
               display: 'flex',
               justifyContent: 'center',
               cursor: 'pointer',
-              marginTop: isXsUp ? '24px' : '0px',
+              marginTop: isXsUp ? '24px' : '40px',
             }}
           >
             <Link className="infoLink" onClick={skipPulseCheck}>

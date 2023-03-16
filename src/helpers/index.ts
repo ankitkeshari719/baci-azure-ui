@@ -134,7 +134,7 @@ export const useRetro = () => {
       };
 
       await addRetroAction(id, action);
-      
+
       sessionStorage.setItem(
         'lastRetroName',
         JSON.stringify(retrievedRetro.name)

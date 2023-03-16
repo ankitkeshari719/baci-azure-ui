@@ -147,14 +147,6 @@ export const validateAction = (
     feedbackSubmitted?: boolean,
     isFeedbackSubmittedByFacilitator?:number
   ) => {
-    // if (
-    //   creatorId != '' &&
-    //   creatorId !== undefined &&
-    //   userId != '' &&
-    //   userId !== undefined
-    // )
-    //   return true;
-    // else return false;
     return true;
   };
 

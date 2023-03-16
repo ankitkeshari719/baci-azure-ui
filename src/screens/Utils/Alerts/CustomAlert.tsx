@@ -1,9 +1,10 @@
 import * as React from 'react';
 import MuiAlert, { AlertProps } from '@mui/material/Alert';
-import { Typography } from '@mui/material';
+import { Box, Typography } from '@mui/material';
 import * as Icons from 'heroicons-react';
 import './styles.scss';
-import { Dayjs } from 'dayjs';
+import dayjs, { Dayjs } from 'dayjs';
+import customParseFormat from 'dayjs/plugin/customParseFormat';
 
 const Alert = React.forwardRef<HTMLDivElement, AlertProps>(function Alert(
   props,
@@ -68,7 +69,9 @@ export function CustomAlert({ handleAlertClose, deploymentDate }: Props) {
   const [isMobile, setIsMobile] = React.useState<boolean>(
     window.innerWidth < 700
   );
-  console.log('deploymentDate:: ', deploymentDate);
+  dayjs.extend(customParseFormat);
+  const day = dayjs(deploymentDate).format('D MMMM YYYY');
+  const time = dayjs(deploymentDate).format('HH:mm A');
 
   return isMobile ? (
     <Alert
@@ -90,10 +93,17 @@ export function CustomAlert({ handleAlertClose, deploymentDate }: Props) {
       <Typography className="scheduledMaintenanceText" mt={1}>
         Scheduled Maintenance !
       </Typography>
-      <Typography className="noteText" mt={1}>
-        Please Note: BACI would be temporarily not accessible on 8th March 2023
-        at 11:30 pm ACT.
-      </Typography>
+      <Box mt={1}>
+        <Typography className="noteText" component="span">
+          Please Note: BACI would be temporarily not accessible on&nbsp;
+        </Typography>
+        <Typography className="noteText" component="span">
+          {day + ' at ' + time}
+        </Typography>
+        <Typography className="noteText" component="span">
+          &nbsp;ACT.
+        </Typography>
+      </Box>
     </Alert>
   ) : (
     <Alert
@@ -115,10 +125,17 @@ export function CustomAlert({ handleAlertClose, deploymentDate }: Props) {
       <Typography component="span" className="scheduledMaintenanceText" ml={2}>
         Scheduled Maintenance !
       </Typography>
-      <Typography component="span" className="noteText" ml={2}>
-        Please Note: BACI would be temporarily not accessible on 8th March 2023
-        at 11:30 pm ACT.
-      </Typography>
+      <Box ml={2}>
+        <Typography className="noteText" component="span">
+          Please Note: BACI would be temporarily not accessible on &nbsp;
+        </Typography>
+        <Typography className="noteText" component="span">
+          {day + ' at ' + time}
+        </Typography>
+        <Typography className="noteText" component="span">
+          &nbsp;ACT.
+        </Typography>
+      </Box>
     </Alert>
   );
 }
