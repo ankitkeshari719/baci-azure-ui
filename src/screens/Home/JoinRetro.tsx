@@ -306,7 +306,7 @@ export function JoinRetro() {
   return (
     <>
       {isXsUp ? (
-        <Box sx={{  height: 'calc(100vh)', overflowY: 'auto' }}>
+        <Box sx={{ height: 'calc(100vh)', overflowY: 'auto' }}>
           {/* <DeploymentPopUp /> */}
           <LandingLayout></LandingLayout>
           <Box
@@ -315,7 +315,7 @@ export function JoinRetro() {
               alignItems: 'center',
               justifyContent: 'center',
               flexDirection: 'column',
-              // height: 'calc(50vh)',
+              marginTop: '16px',
               overflowY: 'auto',
             }}
           >
