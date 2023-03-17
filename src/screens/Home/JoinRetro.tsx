@@ -315,11 +315,11 @@ export function JoinRetro() {
               alignItems: 'center',
               justifyContent: 'center',
               flexDirection: 'column',
-              height: height / 2 + 'px',
+              height: 'calc(50vh)',
               overflowY: 'auto',
             }}
           >
-             {/* Text 1 */}
+            {/* Text 1 */}
             <Typography
               variant="h3"
               color={commonStyles.primaryDark}
@@ -327,7 +327,7 @@ export function JoinRetro() {
             >
               Welcome to BACI
             </Typography>
-             {/* Text 2*/}
+            {/* Text 2*/}
             <Typography
               variant="h5"
               color={commonStyles.primaryDark}
