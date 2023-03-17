@@ -225,7 +225,6 @@ export function LandingPage() {
                 className="secondaryButton"
                 style={{ width: '100%' }}
                 onClick={() => joinRetro()}
-                //onTouchStart={() => joinRetro()}
               >
                 <span className="secondaryButtonText">Go on..</span>
               </Button>
