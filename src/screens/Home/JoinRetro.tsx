@@ -306,7 +306,7 @@ export function JoinRetro() {
   return (
     <>
       {isXsUp ? (
-        <Box sx={{ overflowY: 'auto' }}>
+        <Box sx={{ height: 'calc(100vh)', overflowY: 'auto' }}>
           {/* <DeploymentPopUp /> */}
           <LandingLayout></LandingLayout>
           <Box
@@ -315,11 +315,11 @@ export function JoinRetro() {
               alignItems: 'center',
               justifyContent: 'center',
               flexDirection: 'column',
-              height: height / 2 + 'px',
+              marginTop: '16px',
               overflowY: 'auto',
             }}
           >
-             {/* Text 1 */}
+            {/* Text 1 */}
             <Typography
               variant="h3"
               color={commonStyles.primaryDark}
@@ -327,7 +327,7 @@ export function JoinRetro() {
             >
               Welcome to BACI
             </Typography>
-             {/* Text 2*/}
+            {/* Text 2*/}
             <Typography
               variant="h5"
               color={commonStyles.primaryDark}
@@ -488,7 +488,10 @@ export function JoinRetro() {
           </Grid>
         </Grid>
       )}
-      <Dialog open={openAvatarDialog} sx={{ height: height - 100 }}>
+      <Dialog
+        open={openAvatarDialog}
+        sx={{ height: height / 2, overflowY: 'auto' }}
+      >
         <DialogTitle>
           <Typography>Select Avatar</Typography>
         </DialogTitle>
