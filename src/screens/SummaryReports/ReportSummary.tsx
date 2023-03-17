@@ -557,7 +557,6 @@ export const ReportSummary = React.forwardRef((props, ref) => {
   }, [lastStateUpdate]);
 
   React.useEffect(() => {
-    console.log('Window Width on this screen--> ', windowWidth);
     const longEnUSFormatter = new Intl.DateTimeFormat('en-US', {
       year: 'numeric',
       month: 'long',
