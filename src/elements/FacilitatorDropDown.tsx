@@ -135,27 +135,27 @@ const FacilitatorDropDown = ({ personName, onClickOfUser }: Props) => {
             )}
             MenuProps={MenuProps}
           >
-            {tempUsers.map(name => {
-              const imaSrc = '/avatars/animals/' + name.avatar + '.svg';
+            {tempUsers.map(user => {
+              const imaSrc = '/avatars/animals/' + user.avatar + '.svg';
               return (
                 <MenuItem
-                  key={name.userId}
-                  value={name.userId}
-                  onClick={event => onClickOfUser(event, name.userId)}
+                  key={user.userId}
+                  value={user.userId}
+                  onClick={event => onClickOfUser(event, user.userId)}
                   disabled={
-                    name.isMobile == true ||
-                    name.userId == global.user.id ||
-                    name.userId == global.currentRetro?.creatorId
+                    user.isMobile == true ||
+                    user.userId == global.user.id ||
+                    user.userId == global.currentRetro?.creatorId
                   }
                 >
                   <Checkbox
                     checked={
-                      name.isFacilitator ||
-                      name.userId == global.currentRetro?.creatorId
+                      user.isFacilitator ||
+                      user.userId == global.currentRetro?.creatorId
                     }
                     disabled={
-                      name.userId === global.user.id ||
-                      name.userId == global.currentRetro?.creatorId
+                      user.userId === global.user.id ||
+                      user.userId == global.currentRetro?.creatorId
                     }
                   />
                   <ListItemIcon>
@@ -170,7 +170,7 @@ const FacilitatorDropDown = ({ personName, onClickOfUser }: Props) => {
                   </ListItemIcon>
                   <ListItemText
                     primary={
-                      name.userId === global.user.id ? (
+                      user.userId === global.user.id ? (
                         <Typography
                           style={{
                             fontFamily: 'Poppins',
@@ -206,7 +206,7 @@ const FacilitatorDropDown = ({ personName, onClickOfUser }: Props) => {
                             maxWidth: '150px',
                           }}
                         >
-                          {name.userNickname}
+                          {user.userNickname}
                         </Typography>
                       )
                     }

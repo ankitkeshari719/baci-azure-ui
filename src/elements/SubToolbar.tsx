@@ -36,7 +36,6 @@ const SubToolbar = () => {
   const [anchorEl, setAnchorEl] = React.useState<HTMLButtonElement | null>(
     null
   );
-  const open = Boolean(anchorEl);
   const [showSelect, setShowSelect] = React.useState(false);
   const [openUserSelect, setOpenUserSelect] = React.useState<boolean>(false);
   const [outsideClick, setOutSideClick] = React.useState<boolean>(false);
