@@ -22,33 +22,49 @@ export function ParticipantWaitingPage() {
   return (
     <>
       {isXsUp ? (
-        <Box
-          sx={{
-            height: 'calc(100vh)',
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-            flexDirection: 'column',
-            overflowY: 'auto',
-          }}
-        >
+        <Grid container>
           {/* <DeploymentPopUp /> */}
-          <Toolbar />
-          {/* Welcome Text */}
-          <Typography variant="h4" color={commonStyles.primaryDark}>
-            Welcome to ‘{global?.currentRetro?.name}’ !
-          </Typography>
-          {/* Lets go Text */}
-          <Typography color={commonStyles.primaryDark} variant="h6">
-            Let’s go over last 2 weeks
-          </Typography>
-          {/* Relax facilitator Text */}
-          <Typography color={commonStyles.secondaryMain} variant="h6">
-            Relax while facilitator starts the retro...
-          </Typography>
-          {/* Image */}
-          <img width={'280px'} src={gif}></img>
-        </Box>
+          <Box sx={{ width: '100%', height: 'calc(100vh)', overflowY: 'auto' }}>
+            <Grid xs={12} item>
+              <Toolbar />
+            </Grid>
+            <Grid xs={12} item>
+              <Box
+                sx={{
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  flexDirection: 'column',
+                }}
+              >
+                {/* Welcome Text */}
+                <Typography variant="h4" color={commonStyles.primaryDark}>
+                  Welcome to ‘{global?.currentRetro?.name}’ !
+                </Typography>
+                {/* Lets go Text */}
+                <Typography
+                  color={commonStyles.primaryDark}
+                  variant="h6"
+                  sx={{ marginTop: '8px' }}
+                >
+                  Let’s go over last 2 weeks
+                </Typography>
+                {/* Relax facilitator Text */}
+                <Typography
+                  color={commonStyles.secondaryMain}
+                  variant="h6"
+                  sx={{ marginTop: '56px' }}
+                >
+                  Relax while facilitator starts the retro...
+                </Typography>
+                {/* Image */}
+                <Box sx={{ marginTop: '32px' }}>
+                  <img width={'280px'} src={gif}></img>
+                </Box>
+              </Box>
+            </Grid>
+          </Box>
+        </Grid>
       ) : (
         <Grid container>
           <Box
