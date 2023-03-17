@@ -179,10 +179,10 @@ export function LandingPage() {
           <Box
             sx={{
               display: 'flex',
-              flexDirection: 'column',
               alignItems: 'center',
               justifyContent: 'center',
-              height: height / 2 + 'px',
+              flexDirection: 'column',
+              marginTop: '16px',
               overflowY: 'auto',
             }}
           >
