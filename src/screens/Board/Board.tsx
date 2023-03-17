@@ -308,7 +308,7 @@ export default function RetroBoard() {
           <FirstTimeExperience facilitator={false} isXsUp={false} />
         ))}
       {/* Deployment PopUp */}
-      <DeploymentPopUp />
+      {/* <DeploymentPopUp /> */}
       {/* Toolbar */}
       <Grid xs={12} item>
         <Toolbar onFinishRetro={finishRetro}></Toolbar>
