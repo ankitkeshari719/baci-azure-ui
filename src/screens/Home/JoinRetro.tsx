@@ -98,48 +98,61 @@ export function JoinRetro() {
   const isXsUp = useMediaQuery(theme.breakpoints.between('xs', 'sm'));
   const [openAvatarDialog, setOpenAvatarDialog] = React.useState(false);
   const [height, setHeight] = React.useState(0);
-  React.useEffect(() => {
+
+  React.useEffect( () => {    
     loadRetroDetails();
     setAvatarList(avatarName.sort(() => Math.random() - 0.5));
     setHeight(window.innerHeight);
   }, []);
 
-  const loadRetroDetails = async () => {
-    let foundRetro = await retro.getByHumanId(humanId);
-    dispatch({
-      type: ActionType.SET_CURRENT_RETRO,
-      payload: { retro: foundRetro },
+  React.useEffect(() => {
+    socket.connect().on('connect', () => {
+      console.log('----------- socket connected ------------');
     });
-  };
-  useAzureAuth();
-  const joinRetro = async (
-    retrunBool: boolean
-  ): Promise<RetroType | undefined> => {
-    let foundRetro = await retro.getByHumanId(humanId);
+    if (
+      !global.user.id ||
+      global.user.id == undefined ||
+      global.user.id == null
+    ) {
+      useAzureAuth;
+    } else {
+    }
+    if (!global.currentRetro?.name) {
+      dispatch({
+        type: ActionType.SET_LOADING,
+        payload: { loadingFlag: true },
+      });
+      joinRetro(true).then(
+        res => {
+          dispatch({
+            type: ActionType.SET_LOADING,
+            payload: { loadingFlag: false },
+          });
 
-    if (humanId === '') {
-      setCodeError('Please enter access code');
+          navigatorFunction();
+        },
+        err => {
+          dispatch({
+            type: ActionType.SET_LOADING,
+            payload: { loadingFlag: false },
+          });
+        }
+      );
     } else {
-      setCodeError('');
+      navigatorFunction();
     }
-    if (!foundRetro) {
-      foundRetro = await retro.getById(humanId);
-    }
+  }, [users, global?.user?.id]);
+
+  const loadRetroDetails =async()=>{
+    let foundRetro = await retro.getByHumanId(humanId);
     dispatch({
       type: ActionType.SET_CURRENT_RETRO,
       payload: { retro: foundRetro },
     });
-    if (retrunBool) {
-      return;
-    }
-    if (foundRetro) {
-      setJoining(true);
-      setCaptureName(true);
-      return foundRetro;
-    } else {
-      setCodeError('Sorry, wrong code. Please try again');
-    }
-  };
+  }
+
+  useAzureAuth();
+
   const onClickAvatar = (avatarName: any) => {
     setAvatar(avatarName);
     setAvatarSelectionError('');
@@ -195,6 +208,7 @@ export function JoinRetro() {
       }
     }
   };
+
   const handleUsername = (e: string) => {
     setCodeWarning('');
     setCodeError('');
@@ -213,43 +227,6 @@ export function JoinRetro() {
 
     setUserName(e);
   };
-  React.useEffect(() => {
-    socket.connect().on('connect', () => {
-      console.log('----------- socket connected ------------');
-    });
-    if (
-      !global.user.id ||
-      global.user.id == undefined ||
-      global.user.id == null
-    ) {
-      useAzureAuth;
-    } else {
-    }
-    if (!global.currentRetro?.name) {
-      dispatch({
-        type: ActionType.SET_LOADING,
-        payload: { loadingFlag: true },
-      });
-      joinRetro(true).then(
-        res => {
-          dispatch({
-            type: ActionType.SET_LOADING,
-            payload: { loadingFlag: false },
-          });
-
-          navigatorFunction();
-        },
-        err => {
-          dispatch({
-            type: ActionType.SET_LOADING,
-            payload: { loadingFlag: false },
-          });
-        }
-      );
-    } else {
-      navigatorFunction();
-    }
-  }, [users, global?.user?.id]);
 
   const navigatorFunction = (): any => {
     if (
@@ -296,12 +273,38 @@ export function JoinRetro() {
       }
     }
   };
+
+  const joinRetro = async (
+    retrunBool: boolean
+  ): Promise<RetroType | undefined> => {
+    let foundRetro = await retro.getByHumanId(humanId);
+
+    if (humanId === '') {
+      setCodeError('Please enter access code');
+    } else {
+      setCodeError('');
+    }
+    if (!foundRetro) {
+      foundRetro = await retro.getById(humanId);
+    }
+    dispatch({
+      type: ActionType.SET_CURRENT_RETRO,
+      payload: { retro: foundRetro },
+    });
+    if (retrunBool) {
+      return;
+    }
+    if (foundRetro) {
+      setJoining(true);
+      setCaptureName(true);
+      return foundRetro;
+    } else {
+      setCodeError('Sorry, wrong code. Please try again');
+    }
+  };
+
   return (
-    <Grid
-      container
-      spacing={0}
-      style={{ height: 'calc(100vh)', overflowY: 'auto' }}
-    >
+    <Grid container spacing={0} style={{ overflowY: 'auto' }}>
       {/* <DeploymentPopUp /> */}
       <Grid item xs={isXsUp ? 12 : 6}>
         <LandingLayout></LandingLayout>
