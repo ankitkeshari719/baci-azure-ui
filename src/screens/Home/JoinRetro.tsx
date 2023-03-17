@@ -302,7 +302,7 @@ export function JoinRetro() {
       spacing={0}
       style={{ height: 'calc(100vh)', overflowY: 'auto' }}
     >
-      <DeploymentPopUp />
+      {/* <DeploymentPopUp /> */}
       <Grid item xs={isXsUp ? 12 : 6}>
         <LandingLayout></LandingLayout>
       </Grid>

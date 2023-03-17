@@ -31,7 +31,7 @@ export function ParticipantWaitingPage() {
           justifyContent: 'center',
         }}
       >
-        <DeploymentPopUp />
+        {/* <DeploymentPopUp /> */}
         <Grid xs={12} item>
           <Toolbar />
         </Grid>

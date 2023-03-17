@@ -30,7 +30,7 @@ export default function PulseCheckMain() {
         overflowY: isXsUp ? 'scroll' : 'auto',
       }}
     >
-      <DeploymentPopUp />
+      {/* <DeploymentPopUp /> */}
       <PulseCheckTopbar />
       {pulseCheck && pulseCheck.id === 'simple' && (
         <SimplePulseCheck pulseCheck={pulseCheck} />

@@ -248,6 +248,7 @@ export default function SimplePulseCheck({ pulseCheck }: Props) {
           alignItems: 'center',
           justifyContent: 'center',
           padding: isXsUp ? '8px' : '56px',
+          height: 'calc(100vh - 70px)'
         }}
       >
         {/* Text one */}
