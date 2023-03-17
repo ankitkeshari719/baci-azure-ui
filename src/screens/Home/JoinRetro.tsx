@@ -99,7 +99,7 @@ export function JoinRetro() {
   const [openAvatarDialog, setOpenAvatarDialog] = React.useState(false);
   const [height, setHeight] = React.useState(0);
 
-  React.useEffect( () => {    
+  React.useEffect(() => {
     loadRetroDetails();
     setAvatarList(avatarName.sort(() => Math.random() - 0.5));
     setHeight(window.innerHeight);
@@ -143,13 +143,13 @@ export function JoinRetro() {
     }
   }, [users, global?.user?.id]);
 
-  const loadRetroDetails =async()=>{
+  const loadRetroDetails = async () => {
     let foundRetro = await retro.getByHumanId(humanId);
     dispatch({
       type: ActionType.SET_CURRENT_RETRO,
       payload: { retro: foundRetro },
     });
-  }
+  };
 
   useAzureAuth();
 
@@ -304,75 +304,39 @@ export function JoinRetro() {
   };
 
   return (
-    <Grid container spacing={0} style={{ overflowY: 'auto' }}>
-      {/* <DeploymentPopUp /> */}
-      <Grid item xs={isXsUp ? 12 : 6}>
-        <LandingLayout></LandingLayout>
-      </Grid>
-      <Grid
-        item
-        xs={isXsUp ? 12 : 6}
-        display="flex"
-        justifyContent="center"
-        alignItems="center"
-      >
-        <Grid
-          item
-          container
-          marginRight={isXsUp ? '0px' : commonStyles.m_80}
-          marginLeft={isXsUp ? '0px' : commonStyles.m_80}
-          flexDirection="row"
-          sx={{
-            height: !isXsUp ? height : (height - 100) / 2,
-
-            width: isXsUp ? '90%' : '100%',
-          }}
-        >
+    <>
+      {isXsUp ? (
+        <Box sx={{ overflowY: 'auto' }}>
+          {/* <DeploymentPopUp /> */}
+          <LandingLayout></LandingLayout>
           <Box
             sx={{
               display: 'flex',
-              justifyContent: 'end',
+              alignItems: 'center',
+              justifyContent: 'center',
               flexDirection: 'column',
-              width: '100%',
+              height: height / 2 + 'px',
+              overflowY: 'auto',
             }}
           >
-            {!global.currentRetro?.creatorId ? (
-              <>
-                <Typography variant="h1" color={commonStyles.primaryDark}>
-                  Welcome to the BACI
-                </Typography>
-                <Typography
-                  variant="h3"
-                  color={commonStyles.primaryDark}
-                  mt="30px"
-                >
-                  Who you are in ‘{retroName}’?
-                </Typography>
-              </>
-            ) : !isXsUp ? (
-              <Typography variant="h3" color={commonStyles.primaryDark}>
-                Who you are in ‘{retroName}’?
-              </Typography>
-            ) : (
-              <>
-                <Typography
-                  variant="h3"
-                  color={commonStyles.primaryDark}
-                  className="alignCenter"
-                >
-                  Welcome to BACI
-                </Typography>
-                <Typography
-                  variant="h5"
-                  color={commonStyles.primaryDark}
-                  className="alignCenter"
-                >
-                  Pick Your Avatar
-                </Typography>
-              </>
-            )}
-
-            <FormControl sx={{ width: !isXsUp ? '322px' : '100%' }}>
+             {/* Text 1 */}
+            <Typography
+              variant="h3"
+              color={commonStyles.primaryDark}
+              className="alignCenter"
+            >
+              Welcome to BACI
+            </Typography>
+             {/* Text 2*/}
+            <Typography
+              variant="h5"
+              color={commonStyles.primaryDark}
+              className="alignCenter"
+            >
+              Pick Your Avatar
+            </Typography>
+            {/* Choose Text Field */}
+            <FormControl sx={{ width: '90%' }}>
               <TextField
                 id="standard-helperText"
                 label="Choose your name for this retro"
@@ -392,9 +356,93 @@ export function JoinRetro() {
                 </FormHelperText>
               )}
             </FormControl>
+            {/* Select Avatar */}
+            <Box mt="16px">
+              <Box display="flex">
+                {selectedAvatar && (
+                  <Avatar
+                    avatar={selectedAvatar}
+                    css={{
+                      width: '50px',
+                      height: '50px',
+                      borderRadius: '50%',
+                    }}
+                  ></Avatar>
+                )}
+                <Button onClick={() => setOpenAvatarDialog(true)}>
+                  <span className="primaryButtonText">Select Avatar</span>
+                </Button>
+              </Box>
+              {avatarSelectionError !== '' && (
+                <FormHelperText sx={{ color: 'red', marginLeft: '10px' }}>
+                  {avatarSelectionError}
+                </FormHelperText>
+              )}
+            </Box>
+            {/* Go to button */}
+            <Box mt="16px">
+              <Button
+                variant="outlined"
+                className="secondaryButton"
+                onClick={setName}
+              >
+                <span className="secondaryButtonText">Go on..</span>
+              </Button>
+            </Box>
           </Box>
-          {!isXsUp ? (
-            <Box>
+        </Box>
+      ) : (
+        <Grid container spacing={0} style={{ overflowY: 'auto' }}>
+          {/* <DeploymentPopUp /> */}
+          <Grid item xs={6}>
+            <LandingLayout></LandingLayout>
+          </Grid>
+          <Grid
+            item
+            xs={6}
+            display="flex"
+            justifyContent="start"
+            alignItems="center"
+          >
+            <Box sx={{ marginLeft: '80px' }}>
+              {!global.currentRetro?.creatorId ? (
+                <>
+                  <Typography variant="h1" color={commonStyles.primaryDark}>
+                    Welcome to the BACI
+                  </Typography>
+                  <Typography
+                    variant="h3"
+                    color={commonStyles.primaryDark}
+                    mt="30px"
+                  >
+                    Who you are in ‘{retroName}’?
+                  </Typography>
+                </>
+              ) : (
+                <Typography variant="h3" color={commonStyles.primaryDark}>
+                  Who you are in ‘{retroName}’?
+                </Typography>
+              )}
+              <FormControl sx={{ width: '322px' }}>
+                <TextField
+                  id="standard-helperText"
+                  label="Choose your name for this retro"
+                  variant="standard"
+                  sx={{ ...styles.avatarfield, marginTop: '32px' }}
+                  value={userName}
+                  onChange={e => handleUsername(e.currentTarget.value)}
+                  inputProps={{
+                    maxLength: AVATAR_CHARACTER_LIMIT,
+                  }}
+                  error={!!codeError}
+                  helperText={codeError}
+                />
+                {codeWarning !== ' ' && (
+                  <FormHelperText sx={{ color: 'orange' }}>
+                    {codeWarning}
+                  </FormHelperText>
+                )}
+              </FormControl>
               <Typography sx={styles.chooseAvatarText}>
                 Choose your avatar
               </Typography>
@@ -437,79 +485,46 @@ export function JoinRetro() {
                 <span className="secondaryButtonText">Go on..</span>
               </Button>
             </Box>
-          ) : (
-            <>
-              <Box mt="5%">
-                <Box display="flex">
-                  {selectedAvatar && (
-                    <Avatar
-                      avatar={selectedAvatar}
-                      css={{
-                        width: '50px',
-                        height: '50px',
-                        borderRadius: '50%',
-                      }}
-                    ></Avatar>
-                  )}
-                  <Button onClick={() => setOpenAvatarDialog(true)}>
-                    <span className="primaryButtonText">Select Avatar</span>
-                  </Button>
-                </Box>
-                {avatarSelectionError !== '' && (
-                  <FormHelperText sx={{ color: 'red', marginLeft: '10px' }}>
-                    {avatarSelectionError}
-                  </FormHelperText>
-                )}
-                <Button
-                  variant="outlined"
-                  className="secondaryButton"
-                  style={styles.goOnBtn}
-                  onClick={setName}
-                >
-                  <span className="secondaryButtonText">Go on..</span>
-                </Button>
-              </Box>
-              <Dialog open={openAvatarDialog} sx={{ height: height - 100 }}>
-                <DialogTitle>
-                  <Typography>Select Avatar</Typography>
-                </DialogTitle>
-                <Box
-                  sx={{
-                    width: '90%',
-                    padding: '16px',
-                    height: height / 2,
-                    display: 'flex',
-                    flexWrap: 'wrap',
-                    justifyContent: 'space-between',
-                    overflowY: 'scroll',
-                  }}
-                >
-                  {avatarList.map((avatar: any, index) => (
-                    <Avatar
-                      key={index}
-                      avatar={avatar}
-                      css={styles.avatarSvgXs}
-                      onClickAvatar={onClickAvatar}
-                      selectedAvatar={selectedAvatar}
-                    ></Avatar>
-                  ))}
-                </Box>
-                <Box display="flex" justifyContent="center" mb="10px">
-                  <Button
-                    variant="outlined"
-                    className="secondaryButton"
-                    onClick={() => setOpenAvatarDialog(false)}
-                    sx={{ width: '90%' }}
-                    disabled={selectedAvatar == ''}
-                  >
-                    <span className="secondaryButtonText">Select</span>
-                  </Button>
-                </Box>
-              </Dialog>
-            </>
-          )}
+          </Grid>
         </Grid>
-      </Grid>
-    </Grid>
+      )}
+      <Dialog open={openAvatarDialog} sx={{ height: height - 100 }}>
+        <DialogTitle>
+          <Typography>Select Avatar</Typography>
+        </DialogTitle>
+        <Box
+          sx={{
+            width: '90%',
+            padding: '16px',
+            height: height / 2,
+            display: 'flex',
+            flexWrap: 'wrap',
+            justifyContent: 'space-between',
+            overflowY: 'scroll',
+          }}
+        >
+          {avatarList.map((avatar: any, index) => (
+            <Avatar
+              key={index}
+              avatar={avatar}
+              css={styles.avatarSvgXs}
+              onClickAvatar={onClickAvatar}
+              selectedAvatar={selectedAvatar}
+            ></Avatar>
+          ))}
+        </Box>
+        <Box display="flex" justifyContent="center" mb="10px">
+          <Button
+            variant="outlined"
+            className="secondaryButton"
+            onClick={() => setOpenAvatarDialog(false)}
+            sx={{ width: '90%' }}
+            disabled={selectedAvatar == ''}
+          >
+            <span className="secondaryButtonText">Select</span>
+          </Button>
+        </Box>
+      </Dialog>
+    </>
   );
 }
