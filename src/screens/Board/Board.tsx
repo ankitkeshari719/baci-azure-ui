@@ -102,27 +102,26 @@ const ColumnContainer = ({
 };
 
 export default function RetroBoard() {
+  const navigate = useNavigate();
   const isXsUp = useMediaQuery(theme.breakpoints.only('xs'));
   const isSmUp = useMediaQuery(theme.breakpoints.only('sm'));
-  const navigate = useNavigate();
-
   const [global, dispatch] = React.useContext(GlobalContext);
   const {
     state: { lastStateUpdate, columns, users, ended },
     commitAction,
   } = React.useContext(BoardContext);
-  const { setConfirmAction } = React.useContext(ConfirmContext);
 
+  const [value, setValue] = React.useState(0);
+  const { setConfirmAction } = React.useContext(ConfirmContext);
   const [currentColumn, setCurrentColumn] = React.useState(0);
   const [showEditBox, setShowEditBox] = React.useState(false);
   const [justMyCards, setJustMyCards] = React.useState(false);
   const [showFeedback, setshowFeedback] = React.useState(false);
   const [islanded, setIsLanded] = React.useState(true);
   const [showRetroPanel, setShowRetroPanel] = React.useState(false);
+  const [showSharePanel, setShowSharePanel] = React.useState(false);
   const [showParticipantsPanel, setShowParticipantsPanel] =
     React.useState(false);
-  const [showSharePanel, setShowSharePanel] = React.useState(false);
-  const [value, setValue] = React.useState(0);
 
   useLoadRetro();
 
@@ -141,7 +140,6 @@ export default function RetroBoard() {
     }
   }, [ended]);
 
-  // Get processed columns
   const getProcessedColumns = () =>
     columns
       ? columns.map(
@@ -152,9 +150,11 @@ export default function RetroBoard() {
               groups: groups
                 .map(group => {
                   const cards = group.cards.filter(card =>
-                    global.usersSelected?.some((user, index) => {
-                      return user?.userId === card?.createdBy;
-                    })
+                    global.user?.userType !== 2
+                      ? card
+                      : global.usersSelected?.some(user => {
+                          return user?.userId === card?.createdBy;
+                        })
                   );
                   return {
                     ...group,
@@ -173,7 +173,6 @@ export default function RetroBoard() {
         )
       : [];
 
-  // Find total panels
   const totalPanels = columns
     ? global.expandColumn != -1
       ? 1
@@ -182,17 +181,6 @@ export default function RetroBoard() {
 
   const getColumns = () => {
     return columns;
-  };
-
-  function a11yProps(index: number) {
-    return {
-      id: `simple-tab-${index}`,
-      'aria-controls': `simple-tabpanel-${index}`,
-    };
-  }
-
-  const handleChange = (event: React.SyntheticEvent, newValue: number) => {
-    setValue(newValue);
   };
 
   const LeftContainer = ({ index }: { index: number }) =>
@@ -224,6 +212,17 @@ export default function RetroBoard() {
     ) : (
       <></>
     );
+
+  function a11yProps(index: number) {
+    return {
+      id: `simple-tab-${index}`,
+      'aria-controls': `simple-tabpanel-${index}`,
+    };
+  }
+
+  const handleChange = (event: React.SyntheticEvent, newValue: number) => {
+    setValue(newValue);
+  };
 
   const saveAndProcessAction = async (
     actionName: BoardActionType,
@@ -307,14 +306,11 @@ export default function RetroBoard() {
         ) : (
           <FirstTimeExperience facilitator={false} isXsUp={false} />
         ))}
-      {/* Deployment PopUp */}
-      {/* <DeploymentPopUp /> */}
-      {/* Toolbar */}
+      <DeploymentPopUp />
       <Grid xs={12} item>
         <Toolbar onFinishRetro={finishRetro}></Toolbar>
         {!isXsUp && <SubToolbar></SubToolbar>}
       </Grid>
-      {/* Main Container */}
       <Grid
         container
         spacing={0}
