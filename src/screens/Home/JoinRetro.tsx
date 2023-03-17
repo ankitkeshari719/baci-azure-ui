@@ -488,7 +488,10 @@ export function JoinRetro() {
           </Grid>
         </Grid>
       )}
-      <Dialog open={openAvatarDialog} sx={{ height: height - 100 }}>
+      <Dialog
+        open={openAvatarDialog}
+        sx={{ height: height / 2, overflowY: 'auto' }}
+      >
         <DialogTitle>
           <Typography>Select Avatar</Typography>
         </DialogTitle>
