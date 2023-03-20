@@ -31,14 +31,16 @@ export function ParticipantWaitingPage() {
             <Grid xs={12} item>
               <Box
                 sx={{
+                  height: 'calc(100vh - 100px)',
                   display: 'flex',
                   alignItems: 'center',
                   justifyContent: 'center',
                   flexDirection: 'column',
+                  margin: '8px',
                 }}
               >
                 {/* Welcome Text */}
-                <Typography variant="h4" color={commonStyles.primaryDark}>
+                <Typography variant="h6" color={commonStyles.primaryDark}>
                   Welcome to ‘{global?.currentRetro?.name}’ !
                 </Typography>
                 {/* Lets go Text */}
