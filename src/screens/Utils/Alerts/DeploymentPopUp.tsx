@@ -77,7 +77,7 @@ export function DeploymentPopUp() {
         !isDeployed &&
         isCurrentDateBefore &&
         isCurrentDateAfter && (
-          <Box>
+          <Box sx={{ width: '100%' }}>
             <CustomAlert
               handleAlertClose={handleAlertClose}
               deploymentDate={deploymentDate}
