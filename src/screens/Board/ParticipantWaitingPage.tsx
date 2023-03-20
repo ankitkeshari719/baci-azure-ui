@@ -23,7 +23,7 @@ export function ParticipantWaitingPage() {
     <>
       {isXsUp ? (
         <Grid container>
-          {/* <DeploymentPopUp /> */}
+          <DeploymentPopUp />
           <Box sx={{ width: '100%', height: 'calc(100vh)', overflowY: 'auto' }}>
             <Grid xs={12} item>
               <Toolbar />
@@ -64,6 +64,7 @@ export function ParticipantWaitingPage() {
               </Box>
             </Grid>
           </Box>
+          <StartRetroButton></StartRetroButton>
         </Grid>
       ) : (
         <Grid container>
@@ -77,7 +78,7 @@ export function ParticipantWaitingPage() {
               overflowY: 'auto',
             }}
           >
-            {/* <DeploymentPopUp /> */}
+            <DeploymentPopUp />
             <Grid xs={12} item>
               <Toolbar />
             </Grid>
@@ -136,107 +137,6 @@ export function ParticipantWaitingPage() {
               <img width={isXsUp ? '280px' : '500px'} src={gif}></img>
             </Grid>
           </Box>
-          {/* <Box
-            style={{
-              width: '100%',
-              display: 'flex',
-              flexDirection: 'column',
-              justifyContent: 'center',
-            }}
-          >
-            {animateFirst && !isXsUp && (
-              <Box
-                mt="16px"
-                style={{
-                  display: 'flex',
-                  flexDirection: 'row',
-                  justifyContent: 'center',
-                }}
-              >
-                <h4
-                  style={{
-                    color: commomStyles.primaryDark,
-                    marginRight: '86px',
-                  }}
-                >
-                  What went well
-                </h4>
-                <h4
-                  style={{
-                    color: commomStyles.primaryDark,
-                    opacity: '0.1',
-                    marginRight: '86px',
-                  }}
-                >
-                  What didn't went well
-                </h4>
-                <h4 style={{ color: commomStyles.primaryDark, opacity: '0.5' }}>
-                  Actions
-                </h4>
-              </Box>
-            )}
-            {animatesecond && !isXsUp && (
-              <Box
-                mt="16px"
-                style={{
-                  display: 'flex',
-                  flexDirection: 'row',
-                  justifyContent: 'center',
-                }}
-              >
-                <h4
-                  style={{
-                    color: commomStyles.primaryDark,
-                    marginRight: '86px',
-                    opacity: '0.5',
-                  }}
-                >
-                  What went well
-                </h4>
-                <h4
-                  style={{
-                    color: commomStyles.primaryDark,
-                    marginRight: '86px',
-                  }}
-                >
-                  What didn't went well
-                </h4>
-                <h4 style={{ color: commomStyles.primaryDark, opacity: '0.1' }}>
-                  Actions
-                </h4>
-              </Box>
-            )}
-            {animateThird && !isXsUp && (
-              <Box
-                mt="16px"
-                style={{
-                  display: 'flex',
-                  flexDirection: 'row',
-                  justifyContent: 'center',
-                }}
-              >
-                <h4
-                  style={{
-                    color: commomStyles.primaryDark,
-                    marginRight: '86px',
-                    opacity: '0.1',
-                  }}
-                >
-                  What went well
-                </h4>
-                <h4
-                  style={{
-                    color: commomStyles.primaryDark,
-                    opacity: '0.5',
-                    marginRight: '86px',
-                  }}
-                >
-                  What didn't went well
-                </h4>
-                <h4 style={{ color: commomStyles.primaryDark }}>Actions</h4>
-              </Box>
-            )}
-          </Box> */}
           <StartRetroButton></StartRetroButton>
         </Grid>
       )}

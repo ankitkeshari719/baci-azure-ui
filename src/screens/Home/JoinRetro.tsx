@@ -307,7 +307,7 @@ export function JoinRetro() {
     <>
       {isXsUp ? (
         <Box sx={{ height: 'calc(100vh)', overflowY: 'auto' }}>
-          {/* <DeploymentPopUp /> */}
+          <DeploymentPopUp />
           <LandingLayout></LandingLayout>
           <Box
             sx={{
@@ -393,7 +393,7 @@ export function JoinRetro() {
         </Box>
       ) : (
         <Grid container spacing={0} style={{ overflowY: 'auto' }}>
-          {/* <DeploymentPopUp /> */}
+          <DeploymentPopUp />
           <Grid item xs={6}>
             <LandingLayout></LandingLayout>
           </Grid>
