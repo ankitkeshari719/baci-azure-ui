@@ -174,7 +174,7 @@ export function LandingPage() {
     <>
       {isXsUp ? (
         <Box sx={{ height: 'calc(100vh)', overflowY: 'auto' }}>
-          {/* <DeploymentPopUp /> */}
+          <DeploymentPopUp />
           <LandingLayout></LandingLayout>
           <Box
             sx={{
@@ -186,6 +186,7 @@ export function LandingPage() {
               overflowY: 'auto',
             }}
           >
+            {/*  What BACI retro are you joining today text*/}
             <Typography
               variant="h3"
               color={commonStyles.primaryDark}
@@ -193,6 +194,7 @@ export function LandingPage() {
             >
               What BACI retro are you joining today?
             </Typography>
+            {/* Retro text field */}
             <TextField
               autoFocus
               variant="standard"
@@ -214,12 +216,14 @@ export function LandingPage() {
                 setCodeError('');
               }}
             />
+            {/* Error message */}
             {codeError !== '' && (
               <FormHelperText style={{ color: '#d32f2f', marginLeft: '5px' }}>
                 {codeError}
               </FormHelperText>
             )}
-            <Box style={{ width: '90%' }} pt="48px">
+            {/* Go On Button */}
+            <Box style={{ width: '90%', minWidth: '90%', marginTop: '48px' }}>
               <Button
                 variant="outlined"
                 className="secondaryButton"
@@ -233,7 +237,7 @@ export function LandingPage() {
         </Box>
       ) : (
         <Grid container spacing={0}>
-          {/* <DeploymentPopUp /> */}
+          <DeploymentPopUp />
           <Grid item xs={6}>
             <LandingLayout></LandingLayout>
           </Grid>

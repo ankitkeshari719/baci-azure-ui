@@ -307,7 +307,7 @@ export function JoinRetro() {
     <>
       {isXsUp ? (
         <Box sx={{ height: 'calc(100vh)', overflowY: 'auto' }}>
-          {/* <DeploymentPopUp /> */}
+          <DeploymentPopUp />
           <LandingLayout></LandingLayout>
           <Box
             sx={{
@@ -315,8 +315,7 @@ export function JoinRetro() {
               alignItems: 'center',
               justifyContent: 'center',
               flexDirection: 'column',
-              marginTop: '16px',
-              overflowY: 'auto',
+              margin: '16px',
             }}
           >
             {/* Text 1 */}
@@ -329,19 +328,22 @@ export function JoinRetro() {
             </Typography>
             {/* Text 2*/}
             <Typography
-              variant="h5"
+              variant="h6"
               color={commonStyles.primaryDark}
               className="alignCenter"
+              sx={{ marginTop: '8px' }}
             >
               Pick Your Avatar
             </Typography>
             {/* Choose Text Field */}
-            <FormControl sx={{ width: '90%' }}>
+            <FormControl
+              sx={{ width: '90%', minWidth: '90%', marginTop: '48px' }}
+            >
               <TextField
                 id="standard-helperText"
                 label="Choose your name for this retro"
                 variant="standard"
-                sx={{ ...styles.avatarfield, marginTop: '32px' }}
+                sx={{ ...styles.avatarfield }}
                 value={userName}
                 onChange={e => handleUsername(e.currentTarget.value)}
                 inputProps={{
@@ -379,11 +381,12 @@ export function JoinRetro() {
                 </FormHelperText>
               )}
             </Box>
-            {/* Go to button */}
-            <Box mt="16px">
+            {/* Go On Button */}
+            <Box style={{ width: '90%', minWidth: '90%', marginTop: '32px' }}>
               <Button
                 variant="outlined"
                 className="secondaryButton"
+                style={{ width: '100%' }}
                 onClick={setName}
               >
                 <span className="secondaryButtonText">Go on..</span>
@@ -393,7 +396,7 @@ export function JoinRetro() {
         </Box>
       ) : (
         <Grid container spacing={0} style={{ overflowY: 'auto' }}>
-          {/* <DeploymentPopUp /> */}
+          <DeploymentPopUp />
           <Grid item xs={6}>
             <LandingLayout></LandingLayout>
           </Grid>
