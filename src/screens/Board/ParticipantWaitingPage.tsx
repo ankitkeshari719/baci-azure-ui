@@ -22,52 +22,81 @@ export function ParticipantWaitingPage() {
   return (
     <>
       {isXsUp ? (
-        <Grid container>
+        <Box
+          sx={{
+            height: 'calc(var(--app-height))',
+            overflowY: 'auto',
+          }}
+        >
           <DeploymentPopUp />
-          <Box sx={{ width: '100%', height: 'calc(100vh)', overflowY: 'auto' }}>
-            <Grid xs={12} item>
-              <Toolbar />
-            </Grid>
-            <Grid xs={12} item>
-              <Box
-                sx={{
-                  height: 'calc(100vh - 100px)',
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                  flexDirection: 'column',
-                  margin: '8px',
-                }}
-              >
-                {/* Welcome Text */}
-                <Typography variant="h6" color={commonStyles.primaryDark}>
-                  Welcome to ‘{global?.currentRetro?.name}’ !
-                </Typography>
-                {/* Lets go Text */}
-                <Typography
-                  color={commonStyles.primaryDark}
-                  variant="h6"
-                  sx={{ marginTop: '8px' }}
-                >
-                  Let’s go over last 2 weeks
-                </Typography>
-                {/* Relax facilitator Text */}
-                <Typography
-                  color={commonStyles.secondaryMain}
-                  variant="h6"
-                  sx={{ marginTop: '56px' }}
-                >
-                  Relax while facilitator starts the retro...
-                </Typography>
-                {/* Image */}
-                <Box sx={{ marginTop: '32px' }}>
-                  <img width={'280px'} src={gif}></img>
-                </Box>
-              </Box>
-            </Grid>
+          <Toolbar />
+          <Box
+            sx={{
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              flexDirection: 'column',
+              margin: '8px',
+            }}
+          >
+            {/* Welcome Text */}
+            <Typography
+              sx={{
+                fontFamily: 'Poppins',
+                fontStyle: 'normal',
+                fontWeight: 400,
+                fontSize: '20px',
+                lineHeight: '28px',
+                textAlign: 'center',
+                letterSpacing: '0.5px',
+                color: '#2C69A1',
+              }}
+            >
+              Welcome to ‘{global?.currentRetro?.name}’ !
+            </Typography>
+            {/* Lets go Text */}
+            <Typography
+              sx={{
+                fontFamily: 'Poppins',
+                fontStyle: 'normal',
+                fontWeight: 400,
+                fontSize: '16px',
+                lineHeight: '20px',
+                textAlign: 'center',
+                letterSpacing: '0.6px',
+                color: '#2C69A1',
+                marginTop: '8px',
+              }}
+            >
+              Let’s go over last 2 weeks
+            </Typography>
+            {/* Relax facilitator Text */}
+            <Typography
+              sx={{
+                fontFamily: 'Poppins',
+                fontStyle: 'normal',
+                fontWeight: 600,
+                fontSize: '16px',
+                lineHeight: '20px',
+                textAlign: 'center',
+                letterSpacing: '0.6px',
+                color: '#EE7538',
+                marginTop: '24px',
+              }}
+            >
+              Relax while facilitator starts the retro...
+            </Typography>
+            {/* Image */}
+            <Box sx={{ marginTop: '8px' }}>
+              <img
+                width={'280px'}
+                src={gif}
+                style={{ minWidth: '288px' }}
+              ></img>
+            </Box>
           </Box>
           <StartRetroButton></StartRetroButton>
-        </Grid>
+        </Box>
       ) : (
         <Grid container>
           <Box

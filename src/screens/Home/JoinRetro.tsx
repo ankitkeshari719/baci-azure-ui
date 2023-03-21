@@ -306,7 +306,7 @@ export function JoinRetro() {
   return (
     <>
       {isXsUp ? (
-        <Box sx={{ height: 'calc(100vh)', overflowY: 'auto' }}>
+        <Box sx={{ height: 'calc(var(--app-height))', overflowY: 'auto' }}>
           <DeploymentPopUp />
           <LandingLayout></LandingLayout>
           <Box
@@ -315,30 +315,52 @@ export function JoinRetro() {
               alignItems: 'center',
               justifyContent: 'center',
               flexDirection: 'column',
-              margin: '16px',
+              marginTop: '24px',
             }}
           >
             {/* Text 1 */}
             <Typography
-              variant="h3"
-              color={commonStyles.primaryDark}
-              className="alignCenter"
+              sx={{
+                fontFamily: 'Poppins',
+                fontStyle: 'normal',
+                fontWeight: 500,
+                fontSize: '24px',
+                lineHeight: '32px',
+                textAlign: 'center',
+                letterSpacing: '0.5px',
+                color: '#2C69A1',
+              }}
             >
               Welcome to BACI
             </Typography>
             {/* Text 2*/}
             <Typography
-              variant="h6"
-              color={commonStyles.primaryDark}
-              className="alignCenter"
-              sx={{ marginTop: '8px' }}
+              sx={{
+                fontFamily: 'Poppins',
+                fontStyle: 'normal',
+                fontWeight: 600,
+                fontSize: '18px',
+                lineHeight: '24px',
+                textAlign: 'center',
+                letterSpacing: '0.5px',
+                color: '#2C69A1',
+                marginTop: '8px',
+              }}
             >
               Pick Your Avatar
             </Typography>
+          </Box>
+          <Box
+            sx={{
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'flex-start',
+              flexDirection: 'column',
+              margin: '16px',
+            }}
+          >
             {/* Choose Text Field */}
-            <FormControl
-              sx={{ width: '90%', minWidth: '90%', marginTop: '48px' }}
-            >
+            <FormControl style={{ width: '100%', marginTop: '16px' }}>
               <TextField
                 id="standard-helperText"
                 label="Choose your name for this retro"
@@ -359,22 +381,20 @@ export function JoinRetro() {
               )}
             </FormControl>
             {/* Select Avatar */}
-            <Box mt="16px">
-              <Box display="flex">
-                {selectedAvatar && (
-                  <Avatar
-                    avatar={selectedAvatar}
-                    css={{
-                      width: '50px',
-                      height: '50px',
-                      borderRadius: '50%',
-                    }}
-                  ></Avatar>
-                )}
-                <Button onClick={() => setOpenAvatarDialog(true)}>
-                  <span className="primaryButtonText">Select Avatar</span>
-                </Button>
-              </Box>
+            <Box style={{ width: '100%', marginTop: '42px' }}>
+              {selectedAvatar && (
+                <Avatar
+                  avatar={selectedAvatar}
+                  css={{
+                    width: '50px',
+                    height: '50px',
+                    borderRadius: '50%',
+                  }}
+                ></Avatar>
+              )}
+              <Button onClick={() => setOpenAvatarDialog(true)}>
+                <span className="primaryButtonText">Select Avatar</span>
+              </Button>
               {avatarSelectionError !== '' && (
                 <FormHelperText sx={{ color: 'red', marginLeft: '10px' }}>
                   {avatarSelectionError}
@@ -382,16 +402,16 @@ export function JoinRetro() {
               )}
             </Box>
             {/* Go On Button */}
-            <Box style={{ width: '90%', minWidth: '90%', marginTop: '32px' }}>
-              <Button
-                variant="outlined"
-                className="secondaryButton"
-                style={{ width: '100%' }}
-                onClick={setName}
-              >
-                <span className="secondaryButtonText">Go on..</span>
-              </Button>
-            </Box>
+            <Button
+              variant="outlined"
+              className="secondaryButton"
+              style={{ width: '100%', marginTop: '54px' }}
+              onClick={setName}
+            >
+              <Typography component="span" className="secondaryButtonText">
+                Go on..
+              </Typography>
+            </Button>
           </Box>
         </Box>
       ) : (
