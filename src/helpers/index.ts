@@ -96,6 +96,10 @@ export const useRetro = () => {
 
       const id = await createRetro(currentRetro, state.user);
       const retrievedRetro = await getRetro(id);
+      sessionStorage.setItem(
+        'lastRetroName',
+        JSON.stringify(retrievedRetro.name)
+      );
       console.log(
         '------------- setting retro details in index -------------',
         retro
@@ -135,10 +139,6 @@ export const useRetro = () => {
 
       await addRetroAction(id, action);
 
-      sessionStorage.setItem(
-        'lastRetroName',
-        JSON.stringify(retrievedRetro.name)
-      );
       return retrievedRetro;
     },
 

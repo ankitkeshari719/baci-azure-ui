@@ -93,7 +93,12 @@ export function CustomAlert({ handleAlertClose, deploymentDate }: Props) {
       <Typography className="scheduledMaintenanceText" mt={1}>
         Scheduled Maintenance !
       </Typography>
-      <Box mt={1}>
+      <Box
+        mt={1}
+        sx={{
+         textAlign:'center'
+        }}
+      >
         <Typography className="noteText" component="span">
           Please Note: BACI would be temporarily not accessible on&nbsp;
         </Typography>
