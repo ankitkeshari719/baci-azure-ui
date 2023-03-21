@@ -345,7 +345,7 @@ export function CreateRetroWithTemplatePage({
         </Box>
       ) : (
         <Box component="div" whiteSpace="normal" className="createRetroText">
-          First Design Sprint is ready to start
+          Trial is ready to start
         </Box>
       )}
       <Box sx={{ mt: 4, minWidth: '100%' }}>
