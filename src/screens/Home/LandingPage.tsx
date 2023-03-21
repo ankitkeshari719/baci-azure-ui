@@ -311,12 +311,12 @@ export function LandingPage() {
               >
                 Create New Retro
               </Button>
-              {/* <Button
+              <Button
                 className="newUserText"
                 onClick={handleAddDeploymentDataOpen}
               >
                 Add Deployment Data
-              </Button> */}
+              </Button>
             </Grid>
           </Grid>
         </Grid>
