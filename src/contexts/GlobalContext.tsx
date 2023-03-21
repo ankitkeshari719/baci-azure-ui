@@ -21,7 +21,8 @@ export enum ActionType {
   SET_LEAVE_RETRO = 'setLeaveRetro',
   SET_FEEDBACK = 'setFeedback',
   CREATE_RETRO = 'createRetro',
-  SET_EMOJI_ID="setEmojiId"
+  SET_EMOJI_ID = 'setEmojiId',
+  SET_IS_MAINTENANCE_SCHEDULED = 'aetIsMaintenanceScheduled',
 }
 
 export class ReducerPayload {
@@ -39,7 +40,9 @@ export class ReducerPayload {
   leaveRetro?: boolean;
   feedbackSubmit?: boolean;
   isMobile?: boolean;
-  emojiId?:string;
+  emojiId?: string;
+  isMaintenanceScheduled?: boolean;
+  lastGlobalStateUpdate?: Date | undefined;
 }
 
 type ContextType = [
@@ -75,6 +78,7 @@ function GlobalProvider(props: ComponentProps<any>) {
     state: Global,
     action: { type: ActionType; payload?: ReducerPayload }
   ): Global {
+    let noMatch = false;
     switch (action.type) {
       case ActionType.SET_USER:
         if (action.payload?.user && action.payload?.user.id) {
@@ -142,11 +146,11 @@ function GlobalProvider(props: ComponentProps<any>) {
           ...state,
           leaveRetro: action.payload?.leaveRetro,
         });
-        case ActionType.SET_EMOJI_ID:
-          return saveState({
-            ...state,
-            emojiId:action.payload?.emojiId
-          })
+      case ActionType.SET_EMOJI_ID:
+        return saveState({
+          ...state,
+          emojiId: action.payload?.emojiId,
+        });
       case ActionType.SET_FEEDBACK:
         return saveState({
           ...state,
@@ -156,8 +160,23 @@ function GlobalProvider(props: ComponentProps<any>) {
         let tempState: any = new Global();
         tempState.user = { id: state.user.id };
         return saveState(tempState);
+      case ActionType.SET_IS_MAINTENANCE_SCHEDULED:
+        return saveState({
+          ...state,
+          isMaintenanceScheduled: action.payload?.isMaintenanceScheduled,
+        });
+      default:
+        noMatch = true;
+        break;
     }
-    return saveState({ ...state });
+    if (!noMatch) {
+      return saveState({
+        ...state,
+        lastGlobalStateUpdate: new Date(),
+      });
+    } else {
+      return saveState({ ...state });
+    }
   }
 
   const [state, dispatch] = React.useReducer(GlobalReducer, loadState());

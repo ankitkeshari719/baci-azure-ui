@@ -56,6 +56,13 @@ export class Global {
   leaveRetro?: boolean = false;
   feedbackSubmit?: boolean = false;
   emojiId?: string = '';
+  isMaintenanceScheduled?: boolean = false;
+  lastGlobalStateUpdate: Date | undefined = new Date();
+}
+
+export class LastRetroName {
+  lastRetroName?: string = undefined;
+  loadingFlag?: boolean = false;
 }
 
 export interface Card {
@@ -150,7 +157,7 @@ export class BoardState {
   template?: any;
   feedbackSubmitted?: boolean = false;
   isFeedbackSubmittedByFacilitator?: number = 0;
-  disconnected?:boolean=false;
+  disconnected?: boolean = false;
 
   constructor(retroId: string) {
     this.retroId = retroId;
