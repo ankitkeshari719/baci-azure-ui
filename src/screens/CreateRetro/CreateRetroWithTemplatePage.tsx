@@ -338,7 +338,13 @@ export function CreateRetroWithTemplatePage({
   };
 
   return (
-    <Box sx={{ width: '100%' }}>
+    <Box
+      sx={{
+        width: '100%',
+        overflowY: 'auto',
+        height: 'calc(var(--app-height))',
+      }}
+    >
       {!isRetroStart ? (
         <Box component="div" whiteSpace="normal" className="createRetroText">
           Create new BACI retro
