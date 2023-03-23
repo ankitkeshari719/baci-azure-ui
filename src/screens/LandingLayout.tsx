@@ -168,7 +168,7 @@ export function LandingLayout() {
           <Box
             sx={{
               position: 'absolute',
-              top: isMaintenanceAlertOpen ? '60px' : '0px',
+              top: isMaintenanceAlertOpen ? '80px' : '0px',
               zIndex: 1000,
             }}
           >
