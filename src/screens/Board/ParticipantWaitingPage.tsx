@@ -121,6 +121,7 @@ export function ParticipantWaitingPage() {
                 display: 'flex',
                 justifyContent: 'center',
                 alignContent: 'center',
+                marginTop: '16px'
               }}
             >
               <Typography variant="h2" color={commonStyles.primaryDark}>
