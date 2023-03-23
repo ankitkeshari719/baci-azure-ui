@@ -14,7 +14,10 @@ export function CreateRetroMain() {
 
   return (
     <>
-      <Box className="mainContainer">
+      <Box
+        className="mainContainer"
+        sx={{ overflowY: 'auto', height: 'calc(var(--app-height))' }}
+      >
         <DeploymentPopUp />
         <TopBar />
         {isRetroStart ? (

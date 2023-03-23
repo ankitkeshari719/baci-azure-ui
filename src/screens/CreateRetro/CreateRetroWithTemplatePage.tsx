@@ -341,8 +341,6 @@ export function CreateRetroWithTemplatePage({
     <Box
       sx={{
         width: '100%',
-        overflowY: 'auto',
-        height: 'calc(var(--app-height))',
       }}
     >
       {!isRetroStart ? (
