@@ -8,6 +8,7 @@ import commomStyles from './../style.module.scss';
 import theme from '../theme/theme';
 import { LazyLoadImage } from 'react-lazy-load-image-component';
 import { SocketContext } from '../contexts/SocketProvider';
+
 const styles = {
   mainDiv: {
     backgroundImage: `url(${LandingImage})`,
@@ -80,11 +81,30 @@ export function LandingLayout() {
   const isXsUp = useMediaQuery(theme.breakpoints.between('xs', 'sm'));
   const [height, setHeight] = React.useState('');
   const socket = React.useContext(SocketContext);
+  const [isMaintenanceAlertOpen, setIsMaintenanceAlertOpen] =
+    React.useState<boolean>(false);
+
   React.useEffect(() => {
     setHeight('48vh');
     console.log('-------- closing socket ----------');
     socket.close();
   }, []);
+
+  React.useEffect(() => {
+    const maintenanceScheduled_1 = sessionStorage.getItem(
+      'isMaintenanceScheduled'
+    );
+    const maintenanceScheduled_2 =
+      maintenanceScheduled_1 && JSON.parse(maintenanceScheduled_1);
+    const lastRetroName_1 = sessionStorage.getItem('lastRetroName');
+    const lastRetroName_2 = lastRetroName_1 && JSON.parse(lastRetroName_1);
+    if (maintenanceScheduled_2 && lastRetroName_2 != '') {
+      setIsMaintenanceAlertOpen(true);
+    } else {
+      setIsMaintenanceAlertOpen(true);
+    }
+  }, []);
+
   return (
     <>
       {isXsUp ? (
@@ -145,7 +165,13 @@ export function LandingLayout() {
             src={LandingImage}
             style={{ width: '100%', height: '100vh' }}
           ></img>
-          <Box sx={{ position: 'absolute', top: '0px', zIndex: 1000 }}>
+          <Box
+            sx={{
+              position: 'absolute',
+              top: isMaintenanceAlertOpen ? '60px' : '0px',
+              zIndex: 1000,
+            }}
+          >
             <Box>
               <img src={BACILogo} alt="Logo" style={styles.logoImage} />
             </Box>

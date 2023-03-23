@@ -8,7 +8,26 @@ const FirstTimeExperience = (props: any) => {
   const [showManual, setShowManual] = React.useState(
     sessionStorage.getItem('showManual')
   );
-  // const [isXsUp, setXsUp] = React.useState(props.isXsUp);
+  const [isMaintenanceAlertOpen, setIsMaintenanceAlertOpen] =
+    React.useState<boolean>(true);
+
+  React.useEffect(() => {
+    const maintenanceScheduled_1 = sessionStorage.getItem(
+      'isMaintenanceScheduled'
+    );
+    const lastRetroName_1 = sessionStorage.getItem('lastRetroName');
+    const maintenanceScheduled_2 =
+      maintenanceScheduled_1 && JSON.parse(maintenanceScheduled_1);
+    const lastRetroName_2 = lastRetroName_1 && JSON.parse(lastRetroName_1);
+    if (maintenanceScheduled_1 && lastRetroName_2 != '') {
+      setIsMaintenanceAlertOpen(true);
+    } else {
+      setIsMaintenanceAlertOpen(true);
+    }
+  }, []);
+
+  console.log('isMaintenanceAlertOpen::::::', isMaintenanceAlertOpen);
+
   React.useEffect(() => {
     if (
       showManual == undefined ||
@@ -18,15 +37,12 @@ const FirstTimeExperience = (props: any) => {
     } else if (showManual == '1') {
       showFinishInfo();
     }
-
-    //
   }, [showManual && props.facilitator == true]);
+
   React.useEffect(() => {
     if (showManual == undefined || showManual == null || showManual == '1') {
       if (props.facilitator === false) showLeaveInfo();
     }
-
-    //
   }, [isXsUp, showManual && props.facilitator == false]);
 
   const doneWithManual = () => {
@@ -52,13 +68,17 @@ const FirstTimeExperience = (props: any) => {
         d.style.left =
           elem.getBoundingClientRect().x -
           elem.getBoundingClientRect().width / 2 +
-          5 +
+          25 +
           'px';
-        d.style.top =
-          elem.getBoundingClientRect().y -
-          elem.getBoundingClientRect().width / 2 -
-          5 +
-          'px';
+        d.style.top = isMaintenanceAlertOpen
+          ? elem.getBoundingClientRect().y -
+            elem.getBoundingClientRect().width / 2 +
+            10 +
+            'px'
+          : elem.getBoundingClientRect().y -
+            elem.getBoundingClientRect().width / 2 -
+            0 +
+            'px';
         if (publishPaper != null && publishPaper != undefined) {
           publishPaper.style.display = 'flex';
           publishPaper.style.top =
@@ -91,11 +111,15 @@ const FirstTimeExperience = (props: any) => {
       if (d != null && d !== undefined) {
         d.style.position = 'absolute';
 
-        d.style.left = leaveRetro.getBoundingClientRect().x - 10 + 'px';
-        d.style.top =
-          leaveRetro.getBoundingClientRect().y -
-          leaveRetro.getBoundingClientRect().width / 2 +
-          'px';
+        d.style.left = leaveRetro.getBoundingClientRect().x - 5 + 'px';
+        d.style.top = isMaintenanceAlertOpen
+          ? leaveRetro.getBoundingClientRect().y -
+            leaveRetro.getBoundingClientRect().width / 2 +
+            10 +
+            'px'
+          : leaveRetro.getBoundingClientRect().y -
+            leaveRetro.getBoundingClientRect().width / 2 +
+            'px';
         d.style.width = leaveRetro.getBoundingClientRect().width + 'px';
         d.style.height = leaveRetro.getBoundingClientRect().width + 'px';
         d.style.padding = '10px';
@@ -135,11 +159,15 @@ const FirstTimeExperience = (props: any) => {
       if (d != null && d !== undefined) {
         d.style.position = 'absolute';
 
-        d.style.left = finishRetro.getBoundingClientRect().x - 10 + 'px';
-        d.style.top =
-          finishRetro.getBoundingClientRect().y -
-          finishRetro.getBoundingClientRect().width / 2 +
-          'px';
+        d.style.left = finishRetro.getBoundingClientRect().x - 5 + 'px';
+        d.style.top = isMaintenanceAlertOpen
+          ? finishRetro.getBoundingClientRect().y -
+            finishRetro.getBoundingClientRect().width / 2 +
+            10 +
+            'px'
+          : finishRetro.getBoundingClientRect().y -
+            finishRetro.getBoundingClientRect().width / 2 +
+            'px';
         d.style.width = finishRetro.getBoundingClientRect().width + 'px';
         d.style.height = finishRetro.getBoundingClientRect().width + 'px';
         d.style.padding = '10px';
@@ -163,6 +191,7 @@ const FirstTimeExperience = (props: any) => {
     <div>
       {showManual != '2' && (
         <>
+          {/* Circle */}
           <Box
             sx={{
               zIndex: '10000',
