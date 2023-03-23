@@ -73,7 +73,7 @@ const FirstTimeExperience = (props: any) => {
         d.style.top = isMaintenanceAlertOpen
           ? elem.getBoundingClientRect().y -
             elem.getBoundingClientRect().width / 2 +
-            10 +
+            30 +
             'px'
           : elem.getBoundingClientRect().y -
             elem.getBoundingClientRect().width / 2 -
@@ -115,7 +115,7 @@ const FirstTimeExperience = (props: any) => {
         d.style.top = isMaintenanceAlertOpen
           ? leaveRetro.getBoundingClientRect().y -
             leaveRetro.getBoundingClientRect().width / 2 +
-            10 +
+            30 +
             'px'
           : leaveRetro.getBoundingClientRect().y -
             leaveRetro.getBoundingClientRect().width / 2 +
