@@ -26,8 +26,6 @@ const FirstTimeExperience = (props: any) => {
     }
   }, []);
 
-  console.log('isMaintenanceAlertOpen::::::', isMaintenanceAlertOpen);
-
   React.useEffect(() => {
     if (
       showManual == undefined ||
