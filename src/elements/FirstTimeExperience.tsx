@@ -31,15 +31,28 @@ const FirstTimeExperience = (props: any) => {
       showManual == undefined ||
       (showManual == null && props.facilitator == true)
     ) {
+      setTimeout(function () {
+        showPublishInfo();
+        //your code to be executed after 1 second
+      }, 2000);
       showPublishInfo();
     } else if (showManual == '1') {
+      setTimeout(function () {
+        showFinishInfo()
+        //your code to be executed after 1 second
+      }, 2000);
       showFinishInfo();
     }
   }, [showManual && props.facilitator == true]);
 
   React.useEffect(() => {
     if (showManual == undefined || showManual == null || showManual == '1') {
-      if (props.facilitator === false) showLeaveInfo();
+      if (props.facilitator === false) {
+        setTimeout(function () {
+          showLeaveInfo()
+          //your code to be executed after 1 second
+        }, 2000);
+        showLeaveInfo();}
     }
   }, [isXsUp, showManual && props.facilitator == false]);
 
