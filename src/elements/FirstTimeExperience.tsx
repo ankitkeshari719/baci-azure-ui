@@ -14,29 +14,48 @@ const FirstTimeExperience = (props: any) => {
       showManual == undefined ||
       (showManual == null && props.facilitator == true)
     ) {
+      setTimeout(function() {
+        showPublishInfo()
+        //your code to be executed after 1 second
+      }, 2000);
       showPublishInfo();
     } else if (showManual == '1') {
+       setTimeout(function() {
+        showFinishInfo()
+        //your code to be executed after 1 second
+      }, 2000);
       showFinishInfo();
     }
 
     //
+    console.log(showManual, "showManual", props.facilitator)
   }, [showManual && props.facilitator == true]);
   React.useEffect(() => {
     if (showManual == undefined || showManual == null || showManual == '1') {
-      if (props.facilitator === false) showLeaveInfo();
+      if (props.facilitator === false) {
+        setTimeout(function() {
+          showLeaveInfo()
+          //your code to be executed after 1 second
+        }, 2000);
+        showLeaveInfo();}
     }
 
     //
   }, [isXsUp, showManual && props.facilitator == false]);
 
   const doneWithManual = () => {
+    
     setShowManual('2');
     sessionStorage.setItem('showManual', '2');
   };
 
   const showPublishInfo = () => {
+
     let elem = document.getElementById('publish0');
+    console.log(elem);
+
     if (elem != null && elem != undefined) {
+      console.log("showPublishInfo")
       var d = document.getElementById('publishDiv');
       var publishPaper = document.getElementById('publishPaper');
       var finishRetroPaper = document.getElementById('finishRetroPaper');
@@ -103,20 +122,20 @@ const FirstTimeExperience = (props: any) => {
           leaveRetroPaper.style.display = 'flex';
           leaveRetroPaper.style.top = isXsUp
             ? leaveRetro.getBoundingClientRect().y +
-              leaveRetro.getBoundingClientRect().width / 1.5 +
-              'px'
+            leaveRetro.getBoundingClientRect().width / 1.5 +
+            'px'
             : leaveRetro.getBoundingClientRect().y +
-              leaveRetro.getBoundingClientRect().width / 2 +
-              'px';
+            leaveRetro.getBoundingClientRect().width / 2 +
+            'px';
           leaveRetroPaper.style.left = isXsUp
             ? leaveRetro.getBoundingClientRect().x -
-              leaveRetroPaper.getBoundingClientRect().width / 1.5 +
-              10 +
-              'px'
+            leaveRetroPaper.getBoundingClientRect().width / 1.5 +
+            10 +
+            'px'
             : leaveRetro.getBoundingClientRect().x -
-              leaveRetroPaper.getBoundingClientRect().width +
-              10 +
-              'px';
+            leaveRetroPaper.getBoundingClientRect().width +
+            10 +
+            'px';
         }
       }
     }
@@ -234,7 +253,7 @@ const FirstTimeExperience = (props: any) => {
                     width: '100px',
                   }}
                   onClick={showFinishInfo}
-                  // onTouchStart={showFinishInfo}
+                // onTouchStart={showFinishInfo}
                 >
                   Next
                 </Button>
@@ -245,7 +264,7 @@ const FirstTimeExperience = (props: any) => {
                     cursor: 'pointer',
                   }}
                   onClick={doneWithManual}
-                  // onTouchStart={doneWithManual}
+                // onTouchStart={doneWithManual}
                 >
                   Skip Intro
                 </Typography>
@@ -296,7 +315,7 @@ const FirstTimeExperience = (props: any) => {
                     cursor: 'pointer',
                   }}
                   onClick={showPublishInfo}
-                  // onTouchStart={showPublishInfo}
+                // onTouchStart={showPublishInfo}
                 >
                   Back
                 </Typography>
@@ -309,7 +328,7 @@ const FirstTimeExperience = (props: any) => {
                     width: '100px',
                   }}
                   onClick={doneWithManual}
-                  // onTouchStart={doneWithManual}
+                // onTouchStart={doneWithManual}
                 >
                   Done
                 </Button>
@@ -357,7 +376,7 @@ const FirstTimeExperience = (props: any) => {
                 width: '100px',
               }}
               onClick={doneWithManual}
-              // onTouchStart={doneWithManual}
+            // onTouchStart={doneWithManual}
             >
               GOT IT
             </Button>
