@@ -5,6 +5,10 @@ import * as Icons from 'heroicons-react';
 import './styles.scss';
 import dayjs, { Dayjs } from 'dayjs';
 import customParseFormat from 'dayjs/plugin/customParseFormat';
+import utc from 'dayjs/plugin/utc';
+import tz from 'dayjs/plugin/timezone';
+import advanced from 'dayjs/plugin/advancedFormat';
+import moment from 'moment-timezone';
 
 const Alert = React.forwardRef<HTMLDivElement, AlertProps>(function Alert(
   props,
@@ -69,9 +73,24 @@ export function CustomAlert({ handleAlertClose, deploymentDate }: Props) {
   const [isMobile, setIsMobile] = React.useState<boolean>(
     window.innerWidth < 700
   );
+
   dayjs.extend(customParseFormat);
-  const day = dayjs(deploymentDate).format('D MMMM YYYY');
-  const time = dayjs(deploymentDate).format('HH:mm A');
+  dayjs.extend(tz);
+  dayjs.extend(utc);
+  dayjs.extend(advanced);
+
+  const userTimeZone = dayjs.tz.guess();
+
+  console.log(dayjs(deploymentDate).tz(userTimeZone).format('DD/MM/YYYY z'));
+
+  dayjs.utc(deploymentDate).tz(userTimeZone);
+  const date = dayjs(deploymentDate)
+    .tz(userTimeZone)
+    .format('Do MMMM YYYY [at] HH:mm A Z');
+
+  const myTimezoneDay = moment
+    .tz(deploymentDate, userTimeZone)
+    .format('Do MMMM YYYY [at] HH:mm A Z');
 
   return isMobile ? (
     <Alert
@@ -96,17 +115,14 @@ export function CustomAlert({ handleAlertClose, deploymentDate }: Props) {
       <Box
         mt={1}
         sx={{
-         textAlign:'center'
+          textAlign: 'center',
         }}
       >
         <Typography className="noteText" component="span">
           Please Note: BACI will be temporarily unavailable on&nbsp;
         </Typography>
         <Typography className="noteText" component="span">
-          {day + ' at ' + time}
-        </Typography>
-        <Typography className="noteText" component="span">
-          &nbsp;AEST.
+          {date}
         </Typography>
       </Box>
     </Alert>
@@ -135,10 +151,7 @@ export function CustomAlert({ handleAlertClose, deploymentDate }: Props) {
           Please Note: BACI will be temporarily unavailable on&nbsp;
         </Typography>
         <Typography className="noteText" component="span">
-          {day + ' at ' + time}
-        </Typography>
-        <Typography className="noteText" component="span">
-          &nbsp;AEST.
+          {date}
         </Typography>
       </Box>
     </Alert>
