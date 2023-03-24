@@ -74,23 +74,23 @@ export function CustomAlert({ handleAlertClose, deploymentDate }: Props) {
     window.innerWidth < 700
   );
 
-  dayjs.extend(utc);
-  dayjs.extend(tz);
   dayjs.extend(customParseFormat);
+  dayjs.extend(tz);
+  dayjs.extend(utc);
   dayjs.extend(advanced);
 
-  const timeZone = dayjs.tz.guess();
-  dayjs.utc(deploymentDate).tz(timeZone);
-  const myTimezoneDay = moment
-    .tz(deploymentDate, timeZone)
-    .format('D MMMM YYYY');
-  const myTimezoneTime = moment
-    .tz(deploymentDate, timeZone)
-    .format('HH:mm A z');
+  const userTimeZone = dayjs.tz.guess();
 
-  const day = dayjs(deploymentDate).format('D MMMM YYYY');
-  const time = dayjs(deploymentDate).format('HH:mm A');
-  const timezone = dayjs(deploymentDate).format('z');
+  console.log(dayjs(deploymentDate).tz(userTimeZone).format('DD/MM/YYYY z'));
+
+  dayjs.utc(deploymentDate).tz(userTimeZone);
+  const date = dayjs(deploymentDate)
+    .tz(userTimeZone)
+    .format('Do MMMM YYYY [at] HH:mm A Z');
+
+  const myTimezoneDay = moment
+    .tz(deploymentDate, userTimeZone)
+    .format('Do MMMM YYYY [at] HH:mm A Z');
 
   return isMobile ? (
     <Alert
@@ -122,7 +122,7 @@ export function CustomAlert({ handleAlertClose, deploymentDate }: Props) {
           Please Note: BACI will be temporarily unavailable on&nbsp;
         </Typography>
         <Typography className="noteText" component="span">
-          {day + ' at ' + time + ' ' + timezone}
+          {date}
         </Typography>
       </Box>
     </Alert>
@@ -151,7 +151,7 @@ export function CustomAlert({ handleAlertClose, deploymentDate }: Props) {
           Please Note: BACI will be temporarily unavailable on&nbsp;
         </Typography>
         <Typography className="noteText" component="span">
-          {day + ' at ' + time + ' ' + timezone}
+          {date}
         </Typography>
       </Box>
     </Alert>
