@@ -100,13 +100,13 @@ export function CustomAlert({ handleAlertClose, deploymentDate }: Props) {
         }}
       >
         <Typography className="noteText" component="span">
-          Please Note: BACI would be temporarily not accessible on&nbsp;
+          Please Note: BACI will be temporarily unavailable on&nbsp;
         </Typography>
         <Typography className="noteText" component="span">
           {day + ' at ' + time}
         </Typography>
         <Typography className="noteText" component="span">
-          &nbsp;ACT.
+          &nbsp;AEST.
         </Typography>
       </Box>
     </Alert>
@@ -132,13 +132,13 @@ export function CustomAlert({ handleAlertClose, deploymentDate }: Props) {
       </Typography>
       <Box ml={2}>
         <Typography className="noteText" component="span">
-          Please Note: BACI would be temporarily not accessible on &nbsp;
+          Please Note: BACI will be temporarily unavailable on&nbsp;
         </Typography>
         <Typography className="noteText" component="span">
           {day + ' at ' + time}
         </Typography>
         <Typography className="noteText" component="span">
-          &nbsp;ACT.
+          &nbsp;AEST.
         </Typography>
       </Box>
     </Alert>
