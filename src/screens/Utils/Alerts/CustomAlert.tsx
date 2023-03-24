@@ -5,6 +5,10 @@ import * as Icons from 'heroicons-react';
 import './styles.scss';
 import dayjs, { Dayjs } from 'dayjs';
 import customParseFormat from 'dayjs/plugin/customParseFormat';
+import utc from 'dayjs/plugin/utc';
+import tz from 'dayjs/plugin/timezone';
+import advanced from 'dayjs/plugin/advancedFormat';
+import moment from 'moment-timezone';
 
 const Alert = React.forwardRef<HTMLDivElement, AlertProps>(function Alert(
   props,
@@ -69,9 +73,24 @@ export function CustomAlert({ handleAlertClose, deploymentDate }: Props) {
   const [isMobile, setIsMobile] = React.useState<boolean>(
     window.innerWidth < 700
   );
+
+  dayjs.extend(utc);
+  dayjs.extend(tz);
   dayjs.extend(customParseFormat);
+  dayjs.extend(advanced);
+
+  const timeZone = dayjs.tz.guess();
+  dayjs.utc(deploymentDate).tz(timeZone);
+  const myTimezoneDay = moment
+    .tz(deploymentDate, timeZone)
+    .format('D MMMM YYYY');
+  const myTimezoneTime = moment
+    .tz(deploymentDate, timeZone)
+    .format('HH:mm A z');
+
   const day = dayjs(deploymentDate).format('D MMMM YYYY');
   const time = dayjs(deploymentDate).format('HH:mm A');
+  const timezone = dayjs(deploymentDate).format('z');
 
   return isMobile ? (
     <Alert
@@ -96,17 +115,14 @@ export function CustomAlert({ handleAlertClose, deploymentDate }: Props) {
       <Box
         mt={1}
         sx={{
-         textAlign:'center'
+          textAlign: 'center',
         }}
       >
         <Typography className="noteText" component="span">
           Please Note: BACI will be temporarily unavailable on&nbsp;
         </Typography>
         <Typography className="noteText" component="span">
-          {day + ' at ' + time}
-        </Typography>
-        <Typography className="noteText" component="span">
-          &nbsp;AEST.
+          {day + ' at ' + time + ' ' + timezone}
         </Typography>
       </Box>
     </Alert>
@@ -135,10 +151,7 @@ export function CustomAlert({ handleAlertClose, deploymentDate }: Props) {
           Please Note: BACI will be temporarily unavailable on&nbsp;
         </Typography>
         <Typography className="noteText" component="span">
-          {day + ' at ' + time}
-        </Typography>
-        <Typography className="noteText" component="span">
-          &nbsp;AEST.
+          {day + ' at ' + time + ' ' + timezone}
         </Typography>
       </Box>
     </Alert>
