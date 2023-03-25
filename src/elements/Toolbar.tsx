@@ -459,7 +459,6 @@ const Toolbar = (props: any) => {
                   marginRight: '16px',
                 }}
               />
-              x
             </>
           )}
         {/* Review Board Button*/}
