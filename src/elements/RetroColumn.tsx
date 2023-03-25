@@ -162,6 +162,7 @@ export function RetroColumn({
     })
     autoFocusCardId.current = cardId;
   };
+  
   const dispatchLoadingFlag = (flag: boolean) => {
     dispatch({
       type: ActionType.SET_LOADING,

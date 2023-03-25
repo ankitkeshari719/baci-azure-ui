@@ -1,31 +1,37 @@
 import { Box, Button, Grid, Tab, Tabs, useMediaQuery } from '@mui/material';
 import React, { useMemo } from 'react';
-import { UNGROUPED } from '../constants';
+import { UNGROUPED } from '../../constants';
 
 import ArrowBackIosIcon from '@mui/icons-material/ArrowBackIos';
 import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
 import { useNavigate } from 'react-router-dom';
 import shortid from 'shortid';
 import { sentence } from 'txtgen';
-import { BoardContext } from '../contexts/BoardContext';
-import { BoardActionType } from '../statemachine/BoardStateMachine';
-import { ConfirmContext } from '../contexts/ConfirmContext';
-import { ActionType, GlobalContext } from '../contexts/GlobalContext';
-import { FeedbackColumn } from '../elements/FeedbackColumn';
-import { RetroColumn } from '../elements/RetroColumn';
-import useLoadRetro from '../hooks/useLoadRetro';
-import theme from '../theme/theme';
-import FeedbackPopup from '../atoms/FeedbackPopup';
-import Toolbar from '../elements/Toolbar';
-import SubToolbar from '../elements/SubToolbar';
-import FirstTimeExperience from '../elements/FirstTimeExperience';
+import { BoardContext } from '../../contexts/BoardContext';
+import { BoardActionType } from '../../statemachine/BoardStateMachine';
+import { ConfirmContext } from '../../contexts/ConfirmContext';
+import { ActionType, GlobalContext } from '../../contexts/GlobalContext';
+import { FeedbackColumn } from '../../elements/FeedbackColumn';
+import { RetroColumn } from '../../elements/RetroColumn';
+import useLoadRetro from '../../hooks/useLoadRetro';
+import theme from '../../theme/theme';
+import FeedbackPopup from '../../atoms/FeedbackPopup';
+import Toolbar from '../../elements/Toolbar';
+import SubToolbar from '../../elements/SubToolbar';
+import FirstTimeExperience from '../../elements/FirstTimeExperience';
 import { styled } from '@mui/material/styles';
+import { DeploymentPopUp } from '../Utils/Alerts/DeploymentPopUp';
 
 interface StyledTabsProps {
   children?: React.ReactNode;
   value: number;
   color: string;
   onChange: (event: React.SyntheticEvent, newValue: number) => void;
+}
+
+interface StyledTabProps {
+  label: string;
+  color: string;
 }
 
 const StyledTabs = styled((props: StyledTabsProps) => (
@@ -49,11 +55,6 @@ const StyledTabs = styled((props: StyledTabsProps) => (
     backgroundColor: color,
   },
 }));
-
-interface StyledTabProps {
-  label: string;
-  color: string;
-}
 
 const StyledTab = styled((props: StyledTabProps) => (
   <Tab disableRipple {...props} />
@@ -101,43 +102,43 @@ const ColumnContainer = ({
 };
 
 export default function RetroBoard() {
+  const navigate = useNavigate();
   const isXsUp = useMediaQuery(theme.breakpoints.only('xs'));
   const isSmUp = useMediaQuery(theme.breakpoints.only('sm'));
-
-  const navigate = useNavigate();
-
   const [global, dispatch] = React.useContext(GlobalContext);
   const {
-    state: {
-      lastStateUpdate,
-      columns,
-      retroName,
-      users,
-      creatorId,
-      ended,
-      needsToShow,
-      retroStatus,
-    },
+    state: { lastStateUpdate, columns, users, ended },
     commitAction,
   } = React.useContext(BoardContext);
-  const { setConfirmAction } = React.useContext(ConfirmContext);
 
+  const [value, setValue] = React.useState(0);
+  const { setConfirmAction } = React.useContext(ConfirmContext);
   const [currentColumn, setCurrentColumn] = React.useState(0);
   const [showEditBox, setShowEditBox] = React.useState(false);
   const [justMyCards, setJustMyCards] = React.useState(false);
   const [showFeedback, setshowFeedback] = React.useState(false);
   const [islanded, setIsLanded] = React.useState(true);
-
   const [showRetroPanel, setShowRetroPanel] = React.useState(false);
+  const [showSharePanel, setShowSharePanel] = React.useState(false);
   const [showParticipantsPanel, setShowParticipantsPanel] =
     React.useState(false);
-  const [showSharePanel, setShowSharePanel] = React.useState(false);
 
   useLoadRetro();
 
-  const isMatch = (element: any, index: number, array: any): boolean => {
-    return true;
-  };
+  React.useEffect(() => {
+    if (ended || global.leaveRetro) {
+      if (global.user.userType !== 2) {
+        const currentUser = users?.filter(
+          card => card.userId === global?.user.id
+        );
+        if (currentUser?.length == 1 && currentUser[0].feedback.length == 0) {
+          setshowFeedback(true);
+        }
+      } else {
+        setshowFeedback(false);
+      }
+    }
+  }, [ended]);
 
   const getProcessedColumns = () =>
     columns
@@ -149,9 +150,9 @@ export default function RetroBoard() {
               groups: groups
                 .map(group => {
                   const cards = group.cards.filter(card =>
-                    global.user?.id !== global.currentRetro?.creatorId
+                    global.user?.userType !== 2
                       ? card
-                      : global.usersSelected?.some((user, index) => {
+                      : global.usersSelected?.some(user => {
                           return user?.userId === card?.createdBy;
                         })
                   );
@@ -172,17 +173,15 @@ export default function RetroBoard() {
         )
       : [];
 
-  const closeAllPanels = () => {
-    setShowRetroPanel(false);
-    setShowParticipantsPanel(false);
-    setShowSharePanel(false);
-  };
-
   const totalPanels = columns
     ? global.expandColumn != -1
       ? 1
       : columns.length
     : 0;
+
+  const getColumns = () => {
+    return columns;
+  };
 
   const LeftContainer = ({ index }: { index: number }) =>
     isSmUp && currentColumn === index ? (
@@ -213,6 +212,17 @@ export default function RetroBoard() {
     ) : (
       <></>
     );
+
+  function a11yProps(index: number) {
+    return {
+      id: `simple-tab-${index}`,
+      'aria-controls': `simple-tabpanel-${index}`,
+    };
+  }
+
+  const handleChange = (event: React.SyntheticEvent, newValue: number) => {
+    setValue(newValue);
+  };
 
   const saveAndProcessAction = async (
     actionName: BoardActionType,
@@ -274,50 +284,6 @@ export default function RetroBoard() {
     }
   };
 
-  const create10Cards = async () => {
-    setIsLanded(false);
-    for (let i = 0; i < 10; i++) {
-      const column = Math.floor(Math.random() * columns.length);
-      const group = Math.floor(Math.random() * columns[column].groups.length);
-      await saveAndProcessAction(BoardActionType.ADD_NEW_CARD, {
-        groupId: columns[column].groups[group].id,
-        id: shortid.generate(),
-        value: sentence(),
-      });
-    }
-  };
-
-  React.useEffect(() => {
-    if (ended || global.leaveRetro) {
-      if (global.user.userType !== 2) {
-        const currentUser = users?.filter(
-          card => card.userId === global?.user.id
-        );
-        if (currentUser?.length == 1 && currentUser[0].feedback.length == 0) {
-          setshowFeedback(true);
-        }
-      } else {
-        setshowFeedback(false);
-      }
-    }
-  }, [ended]);
-
-  const getColumns = () => {
-    return columns;
-  };
-
-  function a11yProps(index: number) {
-    return {
-      id: `simple-tab-${index}`,
-      'aria-controls': `simple-tabpanel-${index}`,
-    };
-  }
-  const [value, setValue] = React.useState(0);
-
-  const handleChange = (event: React.SyntheticEvent, newValue: number) => {
-    setValue(newValue);
-  };
-
   return (
     <Box
       style={{
@@ -340,7 +306,7 @@ export default function RetroBoard() {
         ) : (
           <FirstTimeExperience facilitator={false} isXsUp={false} />
         ))}
-
+      <DeploymentPopUp />
       <Grid xs={12} item>
         <Toolbar onFinishRetro={finishRetro}></Toolbar>
         {!isXsUp && <SubToolbar></SubToolbar>}

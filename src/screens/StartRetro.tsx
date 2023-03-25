@@ -35,6 +35,7 @@ import Toolbar from '../elements/Toolbar';
 import useLoadRetro from '../hooks/useLoadRetro';
 import { EmailShareButton, WhatsappShareButton } from 'react-share';
 import theme from '../theme/theme';
+import { DeploymentPopUp } from './Utils/Alerts/DeploymentPopUp';
 const styles = {
   frame101: {
     marginTop: '48px',
@@ -193,6 +194,7 @@ export function StartRetro() {
   };
   return (
     <Grid container spacing={0}>
+      <DeploymentPopUp />
       <Grid xs={12} item>
         <Toolbar></Toolbar>
       </Grid>

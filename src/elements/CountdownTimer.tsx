@@ -102,7 +102,6 @@ export function CountdownTimer({
   const previousExpired = React.useRef(false);
   const isXsUp = useMediaQuery(theme.breakpoints.only('xs'));
 
-
   //
   const [anchorEl, setAnchorEl] = React.useState<HTMLButtonElement | null>(
     null
@@ -233,15 +232,13 @@ export function CountdownTimer({
                 countdownFrom === -1 && !countdownPaused && !countdownExpired
                   ? 'white'
                   : '#EE7538',
-              borderRadius: '50px',
+              borderRadius: '50%',
               height: '25px',
               minWidth: 0,
               color:
                 countdownFrom === -1 && !countdownPaused && !countdownExpired
                   ? '#4E4E4E'
                   : 'white',
-              padding: '5px',
-              // border: '1px solid #159ADD',
               '&:hover': {
                 background:
                   countdownFrom === -1 && !countdownPaused && !countdownExpired
@@ -251,7 +248,6 @@ export function CountdownTimer({
                   countdownFrom === -1 && !countdownPaused && !countdownExpired
                     ? 'white'
                     : '#4E4E4E',
-                // border: '1px solid #159ADD',
               },
             }}
           >
@@ -259,9 +255,9 @@ export function CountdownTimer({
           </Box>
         </Button>
       )}
-      {countdownFrom === -1 && !countdownPaused && !countdownExpired ? (
-        <></>
-      ) : countdownExpired ? (
+      {countdownFrom === -1 &&
+      !countdownPaused &&
+      !countdownExpired ? null : countdownExpired ? (
         <Typography
           sx={{
             display: 'flex',
@@ -304,7 +300,6 @@ export function CountdownTimer({
           />
         </Box>
       )}
-
       {/* <Draggable> */}
       <Popover
         id={id}

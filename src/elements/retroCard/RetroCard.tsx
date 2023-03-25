@@ -371,24 +371,6 @@ export function RetroCard({
                       textAlign: 'left',
                       color: '#343434',
                     }}
-                    onClick={e => {
-                      // !ended &&
-                      //   !editing &&
-                      //   card.createdBy === global.user.id &&
-                      // setEditing(true);
-                      // console.log('e.detail', e.detail);
-                      // if (e.detail === 2) {
-                      //   setEditing(true);
-                      // }
-                      // !hideButtons ? e.stopPropagation() : null;
-                    }}
-                    onTouchStart={e => {
-                      // !ended &&
-                      //   !editing &&
-                      //   card.createdBy === global.user.id &&
-                      //   setEditing(true);
-                      // !hideButtons ? e.stopPropagation() : null;
-                    }}
                     sx={{
                       cursor:
                         card.createdBy === global.user.id &&
@@ -397,14 +379,6 @@ export function RetroCard({
                           ? 'text'
                           : '',
                     }}
-                    className={
-                      // card.createdBy === global.user.id &&
-                      // !ended &&
-                      // !hideButtons
-                      //   ? ''
-                      //   :
-                      ''
-                    }
                   >
                     {card.value}
                   </Typography>
@@ -435,14 +409,6 @@ export function RetroCard({
                       : addReactToCard(card.id);
                     e.stopPropagation();
                   }}
-                  // onTouchStart={e => {
-                  //   !ended
-                  //     ? userReacted
-                  //       ? removeReactFromCard(card.id)
-                  //       : addReactToCard(card.id)
-                  //     : null;
-                  //   e.stopPropagation();
-                  // }}
                 >
                   {userReacted ? (
                     <svg
@@ -508,7 +474,6 @@ export function RetroCard({
                       setEditing(true);
                       setAnchorEl(null);
                     }}
-                    
                   >
                     <svg
                       width="21"
@@ -526,7 +491,6 @@ export function RetroCard({
                         strokeLinejoin="round"
                       />
                     </svg>
-
                   </Button>
                 ) : null}
 
@@ -535,23 +499,6 @@ export function RetroCard({
                 !global.leaveRetro &&
                 (card.createdBy === global.user.id ||
                   global.user.userType == 2) ? (
-                  // <Button
-                  //   id="basic-button"
-                  //   aria-controls={open ? 'basic-menu' : undefined}
-                  //   aria-haspopup="true"
-                  //   aria-expanded={open ? 'true' : undefined}
-                  //   onClick={handleClick}
-                  //   color="primary"
-                  //   sx={{
-                  //     position: 'initial',
-                  //     padding: 0,
-                  //     minWidth: '32px',
-                  //     float: 'right',
-                  //   }}
-                  // >
-                  //   {/* <KeyboardArrowDownIcon /> */}
-                  //   <img src="/svgs/Dots.svg" />
-                  // </Button>
                   <Box
                     component="span"
                     sx={{
@@ -572,7 +519,6 @@ export function RetroCard({
                       }
                       MenuProps={{ elevation: 3 }}
                       ButtonProps={{ variant: undefined }}
-                      onClick={() => console.log('Clicked')}
                     />
                   </Box>
                 ) : null}
@@ -600,10 +546,6 @@ export function RetroCard({
                       deleteCard(card.id);
                       e.stopPropagation();
                     }}
-                    // onTouchStart={e => {
-                    //   deleteCard(card.id);
-                    //   e.stopPropagation();
-                    // }}
                   >
                     <ListItemIcon>
                       <DeleteForever fontSize="small" />
@@ -619,27 +561,13 @@ export function RetroCard({
                     <ListItemText>Move card</ListItemText>
                   </MenuItem>
                 )}
-                {/* <Button onClick={handleClick1}>
-                <ListItemText>Move card</ListItemText>
-              </Button> */}
-                {/* <Menu
-                anchorEl={anchorEl1}
-                open={open1}
-                onClose={() => setAnchorEl1(null)}
-              > */}
                 {cardIsGrouped ? (
-                  <MenuItem
-                    onClick={() => handleMove(ungroupedGroupId)}
-                    // onTouchStart={() => handleMove(ungroupedGroupId)}
-                  >
+                  <MenuItem onClick={() => handleMove(ungroupedGroupId)}>
                     <ListItemIcon></ListItemIcon>
                     <ListItemText>out of Grouping</ListItemText>
                   </MenuItem>
                 ) : null}
-                <MenuItem
-                  onClick={() => handleMove()}
-                  // onTouchStart={() => handleMove()}
-                >
+                <MenuItem onClick={() => handleMove()}>
                   <ListItemIcon></ListItemIcon>
                   <ListItemText>to New Grouping</ListItemText>
                 </MenuItem>
@@ -652,7 +580,6 @@ export function RetroCard({
                     <MenuItem
                       key={group.id}
                       onClick={() => handleMove(group.id)}
-                      // onTouchStart={() => handleMove(group.id)}
                     >
                       <ListItemIcon />
                       <ListItemText>
@@ -667,7 +594,6 @@ export function RetroCard({
               sx={{
                 display: 'flex',
                 justifyContent: 'space-between',
-                // padding: 0,
                 marginTop: '10px',
                 paddingLeft: '16px',
                 paddingRight: '16px',
@@ -698,12 +624,7 @@ export function RetroCard({
                     cancelEdit();
                     e.stopPropagation();
                   }}
-                  // onTouchStart={e => {
-                  //   cancelEdit();
-                  //   e.stopPropagation();
-                  // }}
                 >
-                  {/* <CloseIcon sx={{ height: '20px', color: 'black' }} /> */}
                   CLOSE
                 </Button>
                 <Button
@@ -717,12 +638,7 @@ export function RetroCard({
                     submit(value);
                     e.stopPropagation();
                   }}
-                  // onTouchStart={e => {
-                  //   submit(value);
-                  //   e.stopPropagation();
-                  // }}
                 >
-                  {/* <CheckIcon sx={{ height: '20px', color: 'black' }} /> */}
                   SAVE
                 </Button>
               </Box>

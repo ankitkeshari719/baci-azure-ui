@@ -1,14 +1,17 @@
 import * as React from 'react';
-import { Box } from '@mui/material';
+import { Box, useMediaQuery } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
 import { BoardContext } from '../../contexts/BoardContext';
 import { GlobalContext } from '../../contexts/GlobalContext';
 import SimplePulseCheck from './SimplePulseCheck';
 import BusinessAgility from './BusinessAgility';
-import Toolbar from '../../elements/Toolbar';
+import PulseCheckTopbar from './PulseCheckTopbar';
+import { DeploymentPopUp } from '../Utils/Alerts/DeploymentPopUp';
+import theme from '../../theme/theme';
 
 export default function PulseCheckMain() {
   const navigate = useNavigate();
+  const isXsUp = useMediaQuery(theme.breakpoints.between('xs', 'sm'));
   const [{ currentRetro }] = React.useContext(GlobalContext);
   const {
     state: { retroId, pulseCheck },
@@ -21,11 +24,19 @@ export default function PulseCheckMain() {
   }, []);
 
   return (
-    <Box className="mainContainer">
-      <Toolbar />
-      {pulseCheck && pulseCheck.id === 'simple' && <SimplePulseCheck pulseCheck={pulseCheck}/>}
+    <Box
+      className="mainContainer"
+      sx={{
+        overflowY: isXsUp ? 'scroll' : 'auto',
+      }}
+    >
+      <DeploymentPopUp />
+      <PulseCheckTopbar />
+      {pulseCheck && pulseCheck.id === 'simple' && (
+        <SimplePulseCheck pulseCheck={pulseCheck} />
+      )}
       {pulseCheck && pulseCheck.id === 'business_agility' && (
-        <BusinessAgility pulseCheck={pulseCheck}/>
+        <BusinessAgility pulseCheck={pulseCheck} />
       )}
     </Box>
   );

@@ -3,6 +3,7 @@ import { Box, Grid } from '@mui/material';
 import { CreateRetroWithTemplatePage } from './CreateRetroWithTemplatePage';
 import { TopBar } from './TopBar';
 import { ShareParticipants } from './shareParticipants';
+import { DeploymentPopUp } from '../Utils/Alerts/DeploymentPopUp';
 
 export function CreateRetroMain() {
   const [isRetroStart, setIsRetroStart] = React.useState<boolean>(false);
@@ -13,7 +14,8 @@ export function CreateRetroMain() {
 
   return (
     <>
-      <Box className="mainContainer">
+      <Box className="mainContainer" sx={{ overflowY: 'auto' }}>
+        <DeploymentPopUp />
         <TopBar />
         {isRetroStart ? (
           <Grid

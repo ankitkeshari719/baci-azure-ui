@@ -47,7 +47,6 @@ import sadMask from '../../assets/img/sad_mask.png';
 import neutralMask from '../../assets/img/Neutral_Mask.png';
 import { BoardActionType } from '../../statemachine/BoardStateMachine';
 import { FeedbackSubmitDialog } from './FeedbackSubmitDialog';
-import DevelopAction from './DevelopAction';
 import DidNotWentWell from './DidNotWentWell';
 import WhatWentWell from './WhatWentWellCoulmn';
 import PulseCheckSection from './PulseCheckSection';
@@ -558,7 +557,6 @@ export const ReportSummary = React.forwardRef((props, ref) => {
   }, [lastStateUpdate]);
 
   React.useEffect(() => {
-    console.log('Window Width on this screen--> ', windowWidth);
     const longEnUSFormatter = new Intl.DateTimeFormat('en-US', {
       year: 'numeric',
       month: 'long',
@@ -701,7 +699,7 @@ export const ReportSummary = React.forwardRef((props, ref) => {
         style={{
           display: 'flex',
           flexDirection: 'column',
-          height: '100%',
+          height: '95%',
           overflowY: 'auto',
           backgroundColor: '#F5F5F5',
           paddingLeft: isXsUp
