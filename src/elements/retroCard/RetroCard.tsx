@@ -52,6 +52,7 @@ export function RetroCard({
   hideButtons,
   moveCard,
   animate,
+  isPrintPage,
 }: {
   card: RetroCardType;
   currentGroupId: string;
@@ -60,6 +61,7 @@ export function RetroCard({
   hideButtons: boolean;
   moveCard: (cardId: string, toGroup: string, toIndex: number) => void;
   animate: boolean;
+  isPrintPage: boolean;
 }) {
   const [global, dispatch] = React.useContext(GlobalContext);
   const {
@@ -299,11 +301,23 @@ export function RetroCard({
             }}
           >
             <Box sx={{ display: 'flex', flexDirection: 'row' }}>
-              <Avatar
-                onClickAvatar={() => {}}
-                avatar={card.avatar}
-                css={{ width: '40px', height: '40px', border: 'none' }}
-              />
+              {!isPrintPage ? (
+                <Avatar
+                  onClickAvatar={() => {}}
+                  avatar={card.avatar}
+                  css={{ width: '40px', height: '40px', border: 'none' }}
+                />
+              ) : (
+                <img
+                  className="avatar"
+                  style={{
+                    width: '40px',
+                    height: '40px',
+                    border: 'none',
+                  }}
+                  src={'/avatars/animals/' + card.avatar + '.svg'}
+                />
+              )}
 
               <Box
                 component="span"
@@ -467,7 +481,8 @@ export function RetroCard({
                 {card.createdBy === global.user.id &&
                 !hideButtons &&
                 !ended &&
-                !global.leaveRetro ? (
+                !global.leaveRetro &&
+                !isPrintPage ? (
                   <Button
                     sx={{ minWidth: '0px', position: 'initial' }}
                     onClick={e => {
@@ -498,7 +513,8 @@ export function RetroCard({
                 !ended &&
                 !global.leaveRetro &&
                 (card.createdBy === global.user.id ||
-                  global.user.userType == 2) ? (
+                  global.user.userType == 2) &&
+                !isPrintPage ? (
                   <Box
                     component="span"
                     sx={{

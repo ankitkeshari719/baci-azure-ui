@@ -1,10 +1,7 @@
 import {
-  Box,
   Button,
   Card,
-  CardActions,
   Grid,
-  styled,
   TextField,
   Typography,
 } from '@mui/material';
@@ -12,18 +9,13 @@ import { BoardContext } from '../contexts/BoardContext';
 import { BoardActionType } from '../statemachine/BoardStateMachine';
 import { CardGroup, Column } from '../types';
 
-import { ThumbUpOffAlt } from '@mui/icons-material';
-import CloseFullscreenIcon from '@mui/icons-material/CloseFullscreen';
-import OpenInFullIcon from '@mui/icons-material/OpenInFull';
 import DeleteIcon from '@mui/icons-material/Delete';
 import React from 'react';
 import { UNGROUPED } from '../constants';
 import { ConfirmContext } from '../contexts/ConfirmContext';
 import { ActionType, GlobalContext } from '../contexts/GlobalContext';
-import { flexbox } from '@mui/system';
 import {
   DraggableProvided,
-  DraggableProvidedDraggableProps,
 } from 'react-beautiful-dnd';
 import { XMarkIcon, CheckIcon } from '@heroicons/react/24/solid';
 
@@ -37,6 +29,7 @@ export function RetroCardGroup({
   provided,
   onCollapse,
   onDispatchLoading,
+  isPrintPage,
 }: {
   admin: boolean;
   group: CardGroup;
@@ -47,6 +40,7 @@ export function RetroCardGroup({
   provided: DraggableProvided;
   onCollapse: (value: any) => void;
   onDispatchLoading: (value: any) => void;
+  isPrintPage: boolean;
 }) {
   const [global, dispatch] = React.useContext(GlobalContext);
 
@@ -394,7 +388,7 @@ export function RetroCardGroup({
                     </Typography>
                   </Grid>
                 )}
-                {!location.pathname.includes('report') && (
+                {!location.pathname.includes('report') && !isPrintPage &&  (
                   <Grid
                     item
                     sx={{
@@ -415,7 +409,6 @@ export function RetroCardGroup({
             </Grid>
           </div>
         ) : null}
-
         {showCollapse &&
         group.cards.length === 0 &&
         group.name !== UNGROUPED ? (
@@ -442,8 +435,6 @@ export function RetroCardGroup({
         ) : (
           children
         )}
-
-        {/* bottom side of grouping */}
       </Card>
     </>
   );

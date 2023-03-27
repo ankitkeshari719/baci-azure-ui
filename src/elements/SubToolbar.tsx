@@ -1,5 +1,5 @@
 import { Box } from '@material-ui/core';
-import { Tooltip, Typography } from '@mui/material';
+import { Grid, Tooltip, Typography } from '@mui/material';
 import React, { useEffect } from 'react';
 import { BoardContext } from '../contexts/BoardContext';
 import OutlinedInput from '@mui/material/OutlinedInput';
@@ -11,6 +11,8 @@ import Avatar from './Avatar';
 import { CountdownTimer } from './CountdownTimer';
 import { ActionType, GlobalContext } from '../contexts/GlobalContext';
 import commonStyles from './../style.module.scss';
+import { OutlinedButton } from '../components';
+import ReactToPrint from 'react-to-print';
 
 const ITEM_HEIGHT = 48;
 const ITEM_PADDING_TOP = 8;
@@ -23,7 +25,11 @@ const MenuProps = {
   },
 };
 
-const SubToolbar = () => {
+type Props = {
+  componentRef: any;
+};
+
+const SubToolbar = ({ componentRef }: Props) => {
   const {
     state: { users, ended },
   } = React.useContext(BoardContext);
@@ -94,64 +100,173 @@ const SubToolbar = () => {
   };
 
   return (
-    <Box
-      sx={{
-        display: 'flex',
-        flexDirection: 'row',
-        alignItems: 'center',
-        height: '60px',
-        paddingLeft: '56px',
-        paddingRight: '56px',
-        marginTop: '10px',
-        width: 'calc(100%-112px)',
-      }}
-    >
-      <Box sx={{ display: 'flex', marginRight: '15px', alignItems: 'center' }}>
-        {/* PARTICIPANTS text */}
-        <Box
+    <>
+      <Grid
+        container
+        item
+        xs={12}
+        md={12}
+        lg={12}
+        sx={{
+          display: 'flex',
+          flexDirection: 'row',
+          alignItems: 'center',
+          height: '60px',
+          paddingLeft: '56px',
+          paddingRight: '14px',
+          marginTop: '10px',
+        }}
+      >
+        <Grid
+          item
+          lg={8}
+          xs={6}
           sx={{
-            color: '#808080',
-            fontSize: '28px',
-            fontWeight: '400',
-            flexDirection: 'row',
             display: 'flex',
-            marginRight: '10px',
+            justifyContent: 'flex-start',
             alignItems: 'center',
+            flexDirection: 'row',
           }}
         >
-          <Typography>
-            {users?.length < 9 ? '0' + users?.length : users?.length}
-          </Typography>
-          <Typography
-            sx={{ fontSize: '14px', fontWeight: '500', marginLeft: '4px' }}
+          {/* PARTICIPANTS text */}
+          <Box
+            sx={{
+              color: '#808080',
+              fontSize: '28px',
+              fontWeight: '400',
+              flexDirection: 'row',
+              display: 'flex',
+              marginRight: '10px',
+              alignItems: 'center',
+            }}
           >
-            PARTICIPANTS
-          </Typography>
-        </Box>
-        {/* Users Avatar */}
-        {users?.map(
-          (user, index) =>
-            index < 4 && (
-              <Avatar
-                key={user.userId}
-                avatar={user.avatar}
-                css={{
-                  width: '40px',
-                  height: '40px',
-                  marginLeft: '0',
-                  marginRight: '-8px',
-                  border:
-                    userSelected.indexOf(user.userId) > -1
-                      ? `3px solid` + commonStyles.PrimaryMain
-                      : '3px solid transparent',
+            <Typography>
+              {users?.length < 9 ? '0' + users?.length : users?.length}
+            </Typography>
+            <Typography
+              sx={{ fontSize: '14px', fontWeight: '500', marginLeft: '4px' }}
+            >
+              PARTICIPANTS
+            </Typography>
+          </Box>
+          {/* Users Avatar */}
+          {users?.map(
+            (user, index) =>
+              index < 4 && (
+                <Avatar
+                  key={user.userId}
+                  avatar={user.avatar}
+                  css={{
+                    width: '40px',
+                    height: '40px',
+                    marginLeft: '0',
+                    marginRight: '-8px',
+                    border:
+                      userSelected.indexOf(user.userId) > -1
+                        ? `3px solid` + commonStyles.PrimaryMain
+                        : '3px solid transparent',
+                  }}
+                />
+              )
+          )}
+          {/* User Selector */}
+          {global.user.userType == 2 && !ended ? (
+            // Facilitator View User Selector Panel
+            <>
+              <Select
+                sx={{
+                  fieldset: {
+                    border: 'none',
+                    div: { padding: 0 },
+                    opacity: 1,
+                  },
                 }}
-              />
-            )
-        )}
-        {/* User Selector */}
-        {global.user.userType == 2 && !ended ? (
-          // Facilitator View User Selector Panel
-          <>
+                inputProps={{ style: { width: '20px', padding: 0 } }}
+                labelId="Facilitator-label"
+                id="Facilitator-checkbox"
+                multiple
+                onClick={() => {
+                  setOpenUserSelector(true);
+                }}
+                value={userSelected}
+                onChange={event => {
+                  handleChange(event);
+                }}
+                IconComponent={() => <></>}
+                input={
+                  <OutlinedInput
+                    inputProps={{ padding: 0, width: '20px' }}
+                    label="Tag"
+                  />
+                }
+                renderValue={() => {
+                  return <img src="/svgs/Subtract.svg"></img>;
+                }}
+                MenuProps={MenuProps}
+              >
+                <MenuItem value="all">
+                  <Checkbox
+                    checked={isAllSelected}
+                    indeterminate={
+                      userSelected.length > 0 &&
+                      userSelected.length < users.length
+                    }
+                  />
+                  <ListItemText primary="Select All" />
+                </MenuItem>
+                {/* Horizontal Line */}
+                <hr
+                  style={{
+                    width: '100%',
+                    color: '#E3E3E3',
+                    border: '1px solid #E3E3E3',
+                  }}
+                ></hr>
+                {users.map((user, index) => {
+                  return (
+                    <MenuItem
+                      sx={{
+                        hover: '',
+                        cursor: '',
+                        background: '',
+                      }}
+                      id="item"
+                      key={user.userId + index}
+                      value={user.userId}
+                    >
+                      <Checkbox
+                        checked={userSelected.indexOf(user.userId) > -1}
+                      />
+                      <Avatar
+                        avatar={user.avatar}
+                        css={{
+                          width: '40px',
+                          height: '40px',
+                          marginLeft: '20px',
+                          marginRight: '8px',
+                          border: 'none',
+                        }}
+                      />
+                      <Tooltip title={user.userNickname}>
+                        <ListItemText
+                          sx={{
+                            '&& .MuiListItemText-primary': {
+                              minWidth: '100px',
+                              overflow: 'hidden',
+                              textOverflow: 'ellipsis',
+                            },
+                          }}
+                          primary={user.userNickname}
+                        />
+                      </Tooltip>
+                    </MenuItem>
+                  );
+                })}
+              </Select>
+              <img style={{ marginLeft: '15px' }} src="/svgs/Line 13.svg"></img>
+            </>
+          ) : (
+            // Participant View User Selector Panel
             <Select
               sx={{
                 fieldset: {
@@ -161,16 +276,13 @@ const SubToolbar = () => {
                 },
               }}
               inputProps={{ style: { width: '20px', padding: 0 } }}
-              labelId="Facilitator-label"
-              id="Facilitator-checkbox"
+              labelId="participant-user-panel"
+              id="participant-user-panel"
               multiple
               onClick={() => {
                 setOpenUserSelector(true);
               }}
               value={userSelected}
-              onChange={event => {
-                handleChange(event);
-              }}
               IconComponent={() => <></>}
               input={
                 <OutlinedInput
@@ -179,144 +291,82 @@ const SubToolbar = () => {
                 />
               }
               renderValue={() => {
-                return <img src="/svgs/Subtract.svg"></img>;
+                return <img src="/svgs/Down.svg"></img>;
               }}
               MenuProps={MenuProps}
             >
-              <MenuItem value="all">
-                <Checkbox
-                  checked={isAllSelected}
-                  indeterminate={
-                    userSelected.length > 0 &&
-                    userSelected.length < users.length
-                  }
-                />
-                <ListItemText primary="Select All" />
-              </MenuItem>
-              {/* Horizontal Line */}
-              <hr
-                style={{
-                  width: '100%',
-                  color: '#E3E3E3',
-                  border: '1px solid #E3E3E3',
-                }}
-              ></hr>
-              {users.map((user, index) => {
-                return (
-                  <MenuItem
-                    sx={{
-                      hover: '',
-                      cursor: '',
-                      background: '',
-                    }}
-                    id="item"
-                    key={user.userId + index}
-                    value={user.userId}
-                  >
-                    <Checkbox
-                      checked={userSelected.indexOf(user.userId) > -1}
-                    />
-                    <Avatar
-                      avatar={user.avatar}
-                      css={{
-                        width: '40px',
-                        height: '40px',
-                        marginLeft: '20px',
-                        marginRight: '8px',
-                        border: 'none',
-                      }}
-                    />
-                    <Tooltip title={user.userNickname}>
-                      <ListItemText
-                        sx={{
-                          '&& .MuiListItemText-primary': {
-                            minWidth: '100px',
-                            overflow: 'hidden',
-                            textOverflow: 'ellipsis',
-                          },
-                        }}
-                        primary={user.userNickname}
-                      />
-                    </Tooltip>
-                  </MenuItem>
-                );
-              })}
-            </Select>
-            <img style={{ marginLeft: '15px' }} src="/svgs/Line 13.svg"></img>
-          </>
-        ) : (
-          // Participant View User Selector Panel
-          <Select
-            sx={{
-              fieldset: {
-                border: 'none',
-                div: { padding: 0 },
-                opacity: 1,
-              },
-            }}
-            inputProps={{ style: { width: '20px', padding: 0 } }}
-            labelId="participant-user-panel"
-            id="participant-user-panel"
-            multiple
-            onClick={() => {
-              setOpenUserSelector(true);
-            }}
-            value={userSelected}
-            IconComponent={() => <></>}
-            input={
-              <OutlinedInput
-                inputProps={{ padding: 0, width: '20px' }}
-                label="Tag"
-              />
-            }
-            renderValue={() => {
-              return <img src="/svgs/Down.svg"></img>;
-            }}
-            MenuProps={MenuProps}
-          >
-            {users.map((user, index) => (
-              <MenuItem
-                id="item"
-                sx={{
-                  hover: 'none!important',
-                  cursor: 'text',
-                  background: 'white!important',
-                }}
-                key={user.userId + index + 'participant'}
-                value={user.userId}
-              >
-                <Avatar
-                  avatar={user.avatar}
-                  css={{
-                    width: '40px',
-                    height: '40px',
-                    marginLeft: '20px',
-                    marginRight: '8px',
-                    border: 'none',
+              {users.map((user, index) => (
+                <MenuItem
+                  id="item"
+                  sx={{
+                    hover: 'none!important',
+                    cursor: 'text',
+                    background: 'white!important',
                   }}
-                />
-                <Tooltip title={user.userNickname}>
-                  <ListItemText
-                    sx={{
-                      '&& .MuiListItemText-primary': {
-                        minWidth: '100px',
-                        overflow: 'hidden',
-                        textOverflow: 'ellipsis',
-                      },
+                  key={user.userId + index + 'participant'}
+                  value={user.userId}
+                >
+                  <Avatar
+                    avatar={user.avatar}
+                    css={{
+                      width: '40px',
+                      height: '40px',
+                      marginLeft: '20px',
+                      marginRight: '8px',
+                      border: 'none',
                     }}
-                    primary={user.userNickname}
                   />
-                </Tooltip>
-              </MenuItem>
-            ))}
-          </Select>
-        )}
-      </Box>
-      {/* Count Down Timer */}
-      {!ended && (
-        <CountdownTimer color={'#2B9FDE'} bold={true}></CountdownTimer>
-      )}
-    </Box>
+                  <Tooltip title={user.userNickname}>
+                    <ListItemText
+                      sx={{
+                        '&& .MuiListItemText-primary': {
+                          minWidth: '100px',
+                          overflow: 'hidden',
+                          textOverflow: 'ellipsis',
+                        },
+                      }}
+                      primary={user.userNickname}
+                    />
+                  </Tooltip>
+                </MenuItem>
+              ))}
+            </Select>
+          )}
+          {/* Count Down Timer */}
+          {!ended && (
+            <CountdownTimer color={'#2B9FDE'} bold={true}></CountdownTimer>
+          )}
+        </Grid>
+        {/* Download PDF Button */}
+        <Grid
+          item
+          lg={4}
+          xs={6}
+          sx={{
+            display: 'flex',
+            justifyContent: 'flex-end',
+            alignItems: 'center',
+          }}
+        >
+          <ReactToPrint
+            trigger={() => (
+              <OutlinedButton
+                id="downloadBoardPdf"
+                name="Download Pdf"
+                onClick={handleChange}
+                style={{
+                  minWidth: '150px !important',
+                  width: '150px !important',
+                  height: '40px !important',
+                  marginRight: '40px',
+                }}
+              />
+            )}
+            content={() => componentRef.current}
+          />
+        </Grid>
+      </Grid>
+    </>
   );
 };
 
