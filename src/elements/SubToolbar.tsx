@@ -113,7 +113,7 @@ const SubToolbar = ({ componentRef }: Props) => {
           alignItems: 'center',
           height: '60px',
           paddingLeft: '56px',
-          paddingRight: '14px',
+          paddingRight: '56px',
           marginTop: '10px',
         }}
       >
@@ -353,12 +353,11 @@ const SubToolbar = ({ componentRef }: Props) => {
               <OutlinedButton
                 id="downloadBoardPdf"
                 name="Download Pdf"
-                onClick={handleChange}
+                onClick={() => {}}
                 style={{
-                  minWidth: '150px !important',
-                  width: '150px !important',
+                  minWidth: '240px !important',
+                  width: '240px !important',
                   height: '40px !important',
-                  marginRight: '40px',
                 }}
               />
             )}

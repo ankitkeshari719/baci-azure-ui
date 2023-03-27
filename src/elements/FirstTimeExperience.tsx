@@ -34,13 +34,13 @@ const FirstTimeExperience = (props: any) => {
       setTimeout(function () {
         showPublishInfo();
         //your code to be executed after 1 second
-      }, 2000);
+      }, 500);
       showPublishInfo();
     } else if (showManual == '1') {
       setTimeout(function () {
         showFinishInfo()
         //your code to be executed after 1 second
-      }, 2000);
+      }, 500);
       showFinishInfo();
     }
   }, [showManual && props.facilitator == true]);
@@ -51,7 +51,7 @@ const FirstTimeExperience = (props: any) => {
         setTimeout(function () {
           showLeaveInfo()
           //your code to be executed after 1 second
-        }, 2000);
+        }, 500);
         showLeaveInfo();}
     }
   }, [isXsUp, showManual && props.facilitator == false]);
