@@ -513,7 +513,6 @@ export default function RetroBoard() {
       </Box>
       {/* Print Board HTML */}
       <Container
-        fluid
         style={{
           display: 'none',
           height: 'calc(var(--app-height))',
@@ -521,13 +520,7 @@ export default function RetroBoard() {
           backgroundColor: '#F5F5F5',
         }}
       >
-        <Box
-          ref={componentRef}
-          id="boardPrint"
-          style={{
-            height: '100%',
-          }}
-        >
+        <Box ref={componentRef} id="boardPrint">
           {/* Logo */}
           <Row>
             <Col
@@ -556,7 +549,7 @@ export default function RetroBoard() {
           {/* DATE and TIME TAKEN */}
           <Row style={{ marginTop: '16px' }}>
             <Col
-              xs="6"
+              xs="4"
               className="d-flex justify-content-start align-items-center"
             >
               <Typography className="textTypeOne">Date</Typography>
@@ -565,7 +558,7 @@ export default function RetroBoard() {
               </Typography>
             </Col>
             <Col
-              xs="6"
+              xs="8"
               className="d-flex justify-content-start align-items-center"
             >
               <Typography className="textTypeOne">Time Taken</Typography>
@@ -577,7 +570,7 @@ export default function RetroBoard() {
           {/* NO. OF PARTICIPANTS and FACILITATORS */}
           <Row style={{ marginTop: '16px' }}>
             <Col
-              xs="6"
+              xs="4"
               className="d-flex justify-content-start align-items-center"
             >
               <Typography className="textTypeOne">
@@ -588,7 +581,7 @@ export default function RetroBoard() {
               </Typography>
             </Col>
             <Col
-              xs="6"
+              xs="8"
               className="d-flex justify-content-start align-items-center"
             >
               <Typography className="textTypeOne">Facilitators</Typography>
@@ -597,6 +590,7 @@ export default function RetroBoard() {
               </Typography>
             </Col>
           </Row>
+          {/* Retro Column */}
           <div
             style={{ display: 'flex', flexDirection: 'column', width: '100%' }}
           >

@@ -1,11 +1,15 @@
 @media print {
-  html,
-  body {
-    border: 1px solid white;
-    page-break-after: avoid;
-    page-break-before: avoid;
-  }
-  body,
+//   #root {
+//     width: 100%;
+//   }
+//   html,
+//   body {
+//     height: 100%;
+//     border: 1px solid white;
+//     page-break-after: avoid;
+//     page-break-before: avoid;
+//   }
+  body
   #boardPrint {
     display: block !important;
     position: relative !important;
