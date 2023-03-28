@@ -887,6 +887,7 @@ export function PrintRetroColumn({
                       overflowY: 'auto',
                       userSelect: 'none',
                       flexGrow: 2,
+                      padding: '5px'
                     }}
                   >
                     <Grid
@@ -945,6 +946,7 @@ export function PrintRetroColumn({
                         overflowY: 'auto',
                         userSelect: 'none',
                         flexGrow: 2,
+                        padding: '5px'
                       }}
                     >
                       <DragDropContext onDragEnd={reorderNumbers}>
