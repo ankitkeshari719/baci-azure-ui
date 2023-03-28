@@ -17,7 +17,8 @@ const ColumnHeader = ({
   setColumnName,
   publishColumn,
   dispatch,
-  columnIndex
+  columnIndex,
+  isPrintPage
 }: {
   column: Column;
   columnId: string;
@@ -33,6 +34,7 @@ const ColumnHeader = ({
   publishColumn: (flag: boolean) => void;
   dispatch: any;
   columnIndex: number | undefined;
+  isPrintPage: boolean;
 }) => {
   const [showEdit, setShowEdit] = React.useState(false);
   const [enableSave, setEnableSave] = React.useState(false);
@@ -63,8 +65,6 @@ const ColumnHeader = ({
               >
                 {global.user.userType == 2 && (!ended || !global.leaveRetro) ? (
                   <>
-                    {' '}
-                    {/* {leftHeaderComponent} */}
                     <TextField
                       maxRows={2}
                       sx={{
@@ -98,7 +98,6 @@ const ColumnHeader = ({
                       onBlur={() => submitColumnName(columnName)}
                       onSubmit={() => submitColumnName(columnName)}
                     ></TextField>
-                    {/* {rightHeaderComponent} */}
                   </>
                 ) : (
                   <Typography
@@ -119,78 +118,77 @@ const ColumnHeader = ({
           </div>
         </Tooltip>
       </Grid>
-
-      <Grid
-        container
-        justifyContent="flex-end"
-        direction="row"
-        item
-        lg={4}
-        md={5}
-        xs={5}
-      >
-        {global.user.userType == 2 && (!ended || !global.leaveRetro) && (
-          <>
-            {column.publish ? (
-              <Typography style={{ color: '#808080' }}>Published</Typography>
-            ) : (
-              <Typography
-                id={'publish' + columnIndex}
-                onClick={() => {
-                  if (!ended) {
-                    publishColumn(true);
-                  }
-                }}
-                // onTouchStart={() => {
-                //   if (!ended) {
-                //     publishColumn(true);
-                //   }
-                // }}
-                sx={{
-                  color: '#159ADD',
-                  textDecorationLline: 'underline',
-                  cursor: !ended ? 'pointer' : 'auto',
-                  display: !ended ? 'flex' : 'none',
-                }}
-              >
-                Publish
-              </Typography>
+      {!isPrintPage && (
+        <>
+          <Grid
+            container
+            justifyContent="flex-end"
+            direction="row"
+            item
+            lg={4}
+            md={5}
+            xs={5}
+          >
+            {global.user.userType == 2 && (!ended || !global.leaveRetro) && (
+              <>
+                {column.publish ? (
+                  <Typography style={{ color: '#808080' }}>
+                    Published
+                  </Typography>
+                ) : (
+                  <Typography
+                    id={'publish' + columnIndex}
+                    onClick={() => {
+                      if (!ended) {
+                        publishColumn(true);
+                      }
+                    }}
+                    sx={{
+                      color: '#159ADD',
+                      textDecorationLline: 'underline',
+                      cursor: !ended ? 'pointer' : 'auto',
+                      display: !ended ? 'flex' : 'none',
+                    }}
+                  >
+                    Publish
+                  </Typography>
+                )}
+              </>
             )}
-          </>
-        )}
-
-        {global.expandColumn === -1 ? (
-          <img
-            onClick={() => {
-              dispatch({
-                type: ActionType.EXPAND_COLUMN,
-                payload: { expandColumn: +column.id },
-              });
-            }}
-            src="/svgs/Expand.svg"
-            style={{
-              width: '20px',
-              marginLeft: '15px',
-              cursor: 'pointer',
-            }}
-          />
-        ) : (
-          <img
-            onClick={() => {
-              dispatch({
-                type: ActionType.EXPAND_COLUMN,
-                payload: { expandColumn: -1 },
-              });
-            }}
-            src="/svgs/Shrink.svg"
-            style={{
-              width: '20px',
-              marginLeft: '15px',
-              cursor: 'pointer',
-            }}
-          />
-        )}
-      </Grid>
+            {global.expandColumn === -1 ? (
+              <img
+                onClick={() => {
+                  dispatch({
+                    type: ActionType.EXPAND_COLUMN,
+                    payload: { expandColumn: +column.id },
+                  });
+                }}
+                src="/svgs/Expand.svg"
+                style={{
+                  width: '20px',
+                  marginLeft: '15px',
+                  cursor: 'pointer',
+                }}
+              />
+            ) : (
+              <img
+                onClick={() => {
+                  dispatch({
+                    type: ActionType.EXPAND_COLUMN,
+                    payload: { expandColumn: -1 },
+                  });
+                }}
+                src="/svgs/Shrink.svg"
+                style={{
+                  width: '20px',
+                  marginLeft: '15px',
+                  cursor: 'pointer',
+                }}
+              />
+            )}
+          </Grid>
+        </>
+      )}
     </Grid>
   );
 };
