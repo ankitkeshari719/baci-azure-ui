@@ -338,32 +338,34 @@ const SubToolbar = ({ componentRef }: Props) => {
           )}
         </Grid>
         {/* Download PDF Button */}
-        <Grid
-          item
-          lg={4}
-          xs={6}
-          sx={{
-            display: 'flex',
-            justifyContent: 'flex-end',
-            alignItems: 'center',
-          }}
-        >
-          <ReactToPrint
-            trigger={() => (
-              <OutlinedButton
-                id="downloadBoardPdf"
-                name="Download Pdf"
-                onClick={() => {}}
-                style={{
-                  minWidth: '240px !important',
-                  width: '240px !important',
-                  height: '40px !important',
-                }}
-              />
-            )}
-            content={() => componentRef.current}
-          />
-        </Grid>
+        {global.user.userType == 2 && (
+          <Grid
+            item
+            lg={4}
+            xs={6}
+            sx={{
+              display: 'flex',
+              justifyContent: 'flex-end',
+              alignItems: 'center',
+            }}
+          >
+            <ReactToPrint
+              trigger={() => (
+                <OutlinedButton
+                  id="downloadBoardPdf"
+                  name="Download Pdf"
+                  onClick={() => {}}
+                  style={{
+                    minWidth: '240px !important',
+                    width: '240px !important',
+                    height: '40px !important',
+                  }}
+                />
+              )}
+              content={() => componentRef.current}
+            />
+          </Grid>
+        )}
       </Grid>
     </>
   );
