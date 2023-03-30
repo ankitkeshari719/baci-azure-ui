@@ -1,61 +1,89 @@
 import { Button, Paper, Typography, useMediaQuery } from '@mui/material';
 import { Box } from '@mui/system';
 import React from 'react';
+
+import { GlobalContext, ActionType} from '../contexts/GlobalContext';
 import theme from '../theme/theme';
 
 const FirstTimeExperience = (props: any) => {
+  
   const isXsUp = useMediaQuery(theme.breakpoints.only('xs'));
   const [showManual, setShowManual] = React.useState(
     sessionStorage.getItem('showManual')
   );
-  // const [isXsUp, setXsUp] = React.useState(props.isXsUp);
+  const [global, dispatch] = React.useContext(GlobalContext);
+  
+  const [isMaintenanceAlertOpen, setIsMaintenanceAlertOpen] =
+    React.useState<boolean>(true);
+
+  React.useEffect(() => {
+    const maintenanceScheduled_1 = sessionStorage.getItem(
+      'isMaintenanceScheduled'
+    );
+    const lastRetroName_1 = sessionStorage.getItem('lastRetroName');
+    const maintenanceScheduled_2 =
+      maintenanceScheduled_1 && JSON.parse(maintenanceScheduled_1);
+    const lastRetroName_2 = lastRetroName_1 && JSON.parse(lastRetroName_1);
+    if (maintenanceScheduled_1 && lastRetroName_2 != '') {
+      setIsMaintenanceAlertOpen(true);
+    } else {
+      setIsMaintenanceAlertOpen(true);
+    }
+  }, []);
+
   React.useEffect(() => {
     if (
       showManual == undefined ||
       (showManual == null && props.facilitator == true)
     ) {
-      setTimeout(function() {
-        showPublishInfo()
+      dispatch({
+        type: ActionType.SET_LOADING,
+        payload: { loadingFlag: true },
+      });
+      setTimeout(function () {
+        
+        showPublishInfo();
         //your code to be executed after 1 second
-      }, 2000);
+      }, 500);
       showPublishInfo();
     } else if (showManual == '1') {
-       setTimeout(function() {
+      dispatch({
+        type: ActionType.SET_LOADING,
+        payload: { loadingFlag: true },
+      });
+      setTimeout(function () {
+      
         showFinishInfo()
         //your code to be executed after 1 second
-      }, 2000);
+      }, 500);
       showFinishInfo();
     }
-
-    //
-    console.log(showManual, "showManual", props.facilitator)
   }, [showManual && props.facilitator == true]);
+
   React.useEffect(() => {
     if (showManual == undefined || showManual == null || showManual == '1') {
       if (props.facilitator === false) {
-        setTimeout(function() {
+        dispatch({
+          type: ActionType.SET_LOADING,
+          payload: { loadingFlag: true },
+        });
+        setTimeout(function () {
           showLeaveInfo()
           //your code to be executed after 1 second
-        }, 2000);
+        }, 500);
         showLeaveInfo();}
     }
-
-    //
   }, [isXsUp, showManual && props.facilitator == false]);
 
   const doneWithManual = () => {
-    
     setShowManual('2');
     sessionStorage.setItem('showManual', '2');
   };
 
   const showPublishInfo = () => {
-
+  
     let elem = document.getElementById('publish0');
-    console.log(elem);
-
     if (elem != null && elem != undefined) {
-      console.log("showPublishInfo")
       var d = document.getElementById('publishDiv');
       var publishPaper = document.getElementById('publishPaper');
       var finishRetroPaper = document.getElementById('finishRetroPaper');
@@ -71,13 +99,17 @@ const FirstTimeExperience = (props: any) => {
         d.style.left =
           elem.getBoundingClientRect().x -
           elem.getBoundingClientRect().width / 2 +
-          5 +
+          25 +
           'px';
-        d.style.top =
-          elem.getBoundingClientRect().y -
-          elem.getBoundingClientRect().width / 2 -
-          5 +
-          'px';
+        d.style.top = isMaintenanceAlertOpen
+          ? elem.getBoundingClientRect().y -
+            elem.getBoundingClientRect().width / 2 +
+            30 +
+            'px'
+          : elem.getBoundingClientRect().y -
+            elem.getBoundingClientRect().width / 2 -
+            0 +
+            'px';
         if (publishPaper != null && publishPaper != undefined) {
           publishPaper.style.display = 'flex';
           publishPaper.style.top =
@@ -89,6 +121,10 @@ const FirstTimeExperience = (props: any) => {
             elem.getBoundingClientRect().width +
             'px';
         }
+        dispatch({
+          type: ActionType.SET_LOADING,
+          payload: { loadingFlag: false },
+        });
       }
     }
   };
@@ -110,11 +146,15 @@ const FirstTimeExperience = (props: any) => {
       if (d != null && d !== undefined) {
         d.style.position = 'absolute';
 
-        d.style.left = leaveRetro.getBoundingClientRect().x - 10 + 'px';
-        d.style.top =
-          leaveRetro.getBoundingClientRect().y -
-          leaveRetro.getBoundingClientRect().width / 2 +
-          'px';
+        d.style.left = leaveRetro.getBoundingClientRect().x - 5 + 'px';
+        d.style.top = isMaintenanceAlertOpen
+          ? leaveRetro.getBoundingClientRect().y -
+            leaveRetro.getBoundingClientRect().width / 2 +
+            30 +
+            'px'
+          : leaveRetro.getBoundingClientRect().y -
+            leaveRetro.getBoundingClientRect().width / 2 +
+            'px';
         d.style.width = leaveRetro.getBoundingClientRect().width + 'px';
         d.style.height = leaveRetro.getBoundingClientRect().width + 'px';
         d.style.padding = '10px';
@@ -122,20 +162,20 @@ const FirstTimeExperience = (props: any) => {
           leaveRetroPaper.style.display = 'flex';
           leaveRetroPaper.style.top = isXsUp
             ? leaveRetro.getBoundingClientRect().y +
-            leaveRetro.getBoundingClientRect().width / 1.5 +
-            'px'
+              leaveRetro.getBoundingClientRect().width / 1.5 +
+              'px'
             : leaveRetro.getBoundingClientRect().y +
-            leaveRetro.getBoundingClientRect().width / 2 +
-            'px';
+              leaveRetro.getBoundingClientRect().width / 2 +
+              'px';
           leaveRetroPaper.style.left = isXsUp
             ? leaveRetro.getBoundingClientRect().x -
-            leaveRetroPaper.getBoundingClientRect().width / 1.5 +
-            10 +
-            'px'
+              leaveRetroPaper.getBoundingClientRect().width / 1.5 +
+              10 +
+              'px'
             : leaveRetro.getBoundingClientRect().x -
-            leaveRetroPaper.getBoundingClientRect().width +
-            10 +
-            'px';
+              leaveRetroPaper.getBoundingClientRect().width +
+              10 +
+              'px';
         }
       }
     }
@@ -154,11 +194,15 @@ const FirstTimeExperience = (props: any) => {
       if (d != null && d !== undefined) {
         d.style.position = 'absolute';
 
-        d.style.left = finishRetro.getBoundingClientRect().x - 10 + 'px';
-        d.style.top =
-          finishRetro.getBoundingClientRect().y -
-          finishRetro.getBoundingClientRect().width / 2 +
-          'px';
+        d.style.left = finishRetro.getBoundingClientRect().x - 5 + 'px';
+        d.style.top = isMaintenanceAlertOpen
+          ? finishRetro.getBoundingClientRect().y -
+            finishRetro.getBoundingClientRect().width / 2 +
+            10 +
+            'px'
+          : finishRetro.getBoundingClientRect().y -
+            finishRetro.getBoundingClientRect().width / 2 +
+            'px';
         d.style.width = finishRetro.getBoundingClientRect().width + 'px';
         d.style.height = finishRetro.getBoundingClientRect().width + 'px';
         d.style.padding = '10px';
@@ -182,6 +226,7 @@ const FirstTimeExperience = (props: any) => {
     <div>
       {showManual != '2' && (
         <>
+          {/* Circle */}
           <Box
             sx={{
               zIndex: '10000',
@@ -253,7 +298,7 @@ const FirstTimeExperience = (props: any) => {
                     width: '100px',
                   }}
                   onClick={showFinishInfo}
-                // onTouchStart={showFinishInfo}
+                  // onTouchStart={showFinishInfo}
                 >
                   Next
                 </Button>
@@ -264,7 +309,7 @@ const FirstTimeExperience = (props: any) => {
                     cursor: 'pointer',
                   }}
                   onClick={doneWithManual}
-                // onTouchStart={doneWithManual}
+                  // onTouchStart={doneWithManual}
                 >
                   Skip Intro
                 </Typography>
@@ -315,7 +360,7 @@ const FirstTimeExperience = (props: any) => {
                     cursor: 'pointer',
                   }}
                   onClick={showPublishInfo}
-                // onTouchStart={showPublishInfo}
+                  // onTouchStart={showPublishInfo}
                 >
                   Back
                 </Typography>
@@ -328,7 +373,7 @@ const FirstTimeExperience = (props: any) => {
                     width: '100px',
                   }}
                   onClick={doneWithManual}
-                // onTouchStart={doneWithManual}
+                  // onTouchStart={doneWithManual}
                 >
                   Done
                 </Button>
@@ -376,7 +421,7 @@ const FirstTimeExperience = (props: any) => {
                 width: '100px',
               }}
               onClick={doneWithManual}
-            // onTouchStart={doneWithManual}
+              // onTouchStart={doneWithManual}
             >
               GOT IT
             </Button>
