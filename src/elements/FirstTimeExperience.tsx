@@ -1,13 +1,18 @@
 import { Button, Paper, Typography, useMediaQuery } from '@mui/material';
 import { Box } from '@mui/system';
 import React from 'react';
+
+import { GlobalContext, ActionType} from '../contexts/GlobalContext';
 import theme from '../theme/theme';
 
 const FirstTimeExperience = (props: any) => {
+  
   const isXsUp = useMediaQuery(theme.breakpoints.only('xs'));
   const [showManual, setShowManual] = React.useState(
     sessionStorage.getItem('showManual')
   );
+  const [global, dispatch] = React.useContext(GlobalContext);
+  
   const [isMaintenanceAlertOpen, setIsMaintenanceAlertOpen] =
     React.useState<boolean>(true);
 
@@ -31,13 +36,23 @@ const FirstTimeExperience = (props: any) => {
       showManual == undefined ||
       (showManual == null && props.facilitator == true)
     ) {
+      dispatch({
+        type: ActionType.SET_LOADING,
+        payload: { loadingFlag: true },
+      });
       setTimeout(function () {
+        
         showPublishInfo();
         //your code to be executed after 1 second
       }, 500);
       showPublishInfo();
     } else if (showManual == '1') {
+      dispatch({
+        type: ActionType.SET_LOADING,
+        payload: { loadingFlag: true },
+      });
       setTimeout(function () {
+      
         showFinishInfo()
         //your code to be executed after 1 second
       }, 500);
@@ -48,6 +63,10 @@ const FirstTimeExperience = (props: any) => {
   React.useEffect(() => {
     if (showManual == undefined || showManual == null || showManual == '1') {
       if (props.facilitator === false) {
+        dispatch({
+          type: ActionType.SET_LOADING,
+          payload: { loadingFlag: true },
+        });
         setTimeout(function () {
           showLeaveInfo()
           //your code to be executed after 1 second
@@ -62,6 +81,7 @@ const FirstTimeExperience = (props: any) => {
   };
 
   const showPublishInfo = () => {
+  
     let elem = document.getElementById('publish0');
     if (elem != null && elem != undefined) {
       var d = document.getElementById('publishDiv');
@@ -101,6 +121,10 @@ const FirstTimeExperience = (props: any) => {
             elem.getBoundingClientRect().width +
             'px';
         }
+        dispatch({
+          type: ActionType.SET_LOADING,
+          payload: { loadingFlag: false },
+        });
       }
     }
   };
