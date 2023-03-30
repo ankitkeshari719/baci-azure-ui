@@ -179,6 +179,10 @@ const FirstTimeExperience = (props: any) => {
         }
       }
     }
+    dispatch({
+      type: ActionType.SET_LOADING,
+      payload: { loadingFlag: false },
+    });
   };
 
   const showFinishInfo = () => {
@@ -220,6 +224,10 @@ const FirstTimeExperience = (props: any) => {
         }
       }
     }
+    dispatch({
+      type: ActionType.SET_LOADING,
+      payload: { loadingFlag: false },
+    });
   };
 
   return (
@@ -406,7 +414,7 @@ const FirstTimeExperience = (props: any) => {
               fontWeight="600"
               align="center"
             >
-              Hit ‘Leave Retro’ once you are DONE!
+              Hit 'Leave Retro' once you are DONE!
             </Typography>
             <Typography align="center" pl="47" pr="47">
               You would be asked to submit the feedback
