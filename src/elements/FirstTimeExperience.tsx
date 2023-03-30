@@ -179,6 +179,10 @@ const FirstTimeExperience = (props: any) => {
         }
       }
     }
+    dispatch({
+      type: ActionType.SET_LOADING,
+      payload: { loadingFlag: false },
+    });
   };
 
   const showFinishInfo = () => {
@@ -220,6 +224,10 @@ const FirstTimeExperience = (props: any) => {
         }
       }
     }
+    dispatch({
+      type: ActionType.SET_LOADING,
+      payload: { loadingFlag: false },
+    });
   };
 
   return (
