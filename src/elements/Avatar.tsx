@@ -5,7 +5,7 @@ const Avatar = (props: any) => {
 
   if (
     window.location.pathname.includes('join') ||
-    window.location.pathname.includes('createretro') ||
+    window.location.pathname.includes('create') ||
     window.location.pathname.includes('createretrowithtemplate') ||
     window.location.pathname.includes('startRetro') ||
     window.location.pathname.includes('pulsecheck') ||
@@ -19,7 +19,7 @@ const Avatar = (props: any) => {
     <LazyLoadImage
       className={`${
         (window.location.pathname.includes('join') ||
-        window.location.pathname.includes('createretro') ||
+        window.location.pathname.includes('create') ||
           window.location.pathname.includes('createretrowithtemplate')) &&
         props.avatar == props.selectedAvatar
           ? 'selectedAvatar'

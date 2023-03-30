@@ -3,14 +3,16 @@ import { Button, Typography } from '@mui/material';
 import './styles.scss';
 
 type Props = {
+  id?: string;
   name: string;
   onClick: (...param: any) => void;
   style?: any;
 };
 
-export function OutlinedButton({ name, onClick, style }: Props) {
+export function OutlinedButton({ id, name, onClick, style }: Props) {
   return (
     <Button
+      id={id}
       variant="outlined"
       className="outlinedButton"
       onClick={onClick}

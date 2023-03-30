@@ -1,8 +1,14 @@
 import * as React from 'react';
 import MuiAlert, { AlertProps } from '@mui/material/Alert';
-import { Typography } from '@mui/material';
+import { Box, Typography } from '@mui/material';
 import * as Icons from 'heroicons-react';
 import './styles.scss';
+import dayjs, { Dayjs } from 'dayjs';
+import customParseFormat from 'dayjs/plugin/customParseFormat';
+import utc from 'dayjs/plugin/utc';
+import tz from 'dayjs/plugin/timezone';
+import advanced from 'dayjs/plugin/advancedFormat';
+import moment from 'moment-timezone';
 
 const Alert = React.forwardRef<HTMLDivElement, AlertProps>(function Alert(
   props,
@@ -60,12 +66,31 @@ const styles = {
 
 type Props = {
   handleAlertClose: () => void;
+  deploymentDate: Dayjs | null | undefined;
 };
 
-export function InfoAlert({ handleAlertClose }: Props) {
+export function CustomAlert({ handleAlertClose, deploymentDate }: Props) {
   const [isMobile, setIsMobile] = React.useState<boolean>(
     window.innerWidth < 700
   );
+
+  dayjs.extend(customParseFormat);
+  dayjs.extend(tz);
+  dayjs.extend(utc);
+  dayjs.extend(advanced);
+
+  const userTimeZone = dayjs.tz.guess();
+
+  console.log(dayjs(deploymentDate).tz(userTimeZone).format('DD/MM/YYYY z'));
+
+  dayjs.utc(deploymentDate).tz(userTimeZone);
+  const date = dayjs(deploymentDate)
+    .tz(userTimeZone)
+    .format('Do MMMM YYYY [at] HH:mm A Z');
+
+  const myTimezoneDay = moment
+    .tz(deploymentDate, userTimeZone)
+    .format('Do MMMM YYYY [at] HH:mm A Z');
 
   return isMobile ? (
     <Alert
@@ -87,10 +112,19 @@ export function InfoAlert({ handleAlertClose }: Props) {
       <Typography className="scheduledMaintenanceText" mt={1}>
         Scheduled Maintenance !
       </Typography>
-      <Typography className="noteText"  mt={1}>
-        Please Note: BACI would be temporarily not accessible on 8th March 2023
-        at 11:30 pm ACT.
-      </Typography>
+      <Box
+        mt={1}
+        sx={{
+          textAlign: 'center',
+        }}
+      >
+        <Typography className="noteText" component="span">
+          Please Note: BACI will be temporarily unavailable on&nbsp;
+        </Typography>
+        <Typography className="noteText" component="span">
+          {date}
+        </Typography>
+      </Box>
     </Alert>
   ) : (
     <Alert
@@ -112,10 +146,14 @@ export function InfoAlert({ handleAlertClose }: Props) {
       <Typography component="span" className="scheduledMaintenanceText" ml={2}>
         Scheduled Maintenance !
       </Typography>
-      <Typography component="span" className="noteText" ml={2}>
-        Please Note: BACI would be temporarily not accessible on 8th March 2023
-        at 11:30 pm ACT.
-      </Typography>
+      <Box ml={2}>
+        <Typography className="noteText" component="span">
+          Please Note: BACI will be temporarily unavailable on&nbsp;
+        </Typography>
+        <Typography className="noteText" component="span">
+          {date}
+        </Typography>
+      </Box>
     </Alert>
   );
 }

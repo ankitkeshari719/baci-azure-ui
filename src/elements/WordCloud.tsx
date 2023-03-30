@@ -1,7 +1,7 @@
 import { FunctionComponent, useEffect, useState } from 'react';
 
 import d3Cloud from 'd3-cloud';
-import { interpolateWarm, interpolateGreens} from 'd3-scale-chromatic';
+import { interpolateWarm, interpolateGreens } from 'd3-scale-chromatic';
 
 export interface Word {
   text: string;
@@ -16,9 +16,11 @@ export interface WordCloudProps {
 const WordCloud: FunctionComponent<WordCloudProps> = ({ data, showOn }) => {
   let cloudWords: d3Cloud.Word[] = [];
   const [cloud, setCloud] = useState(cloudWords);
-  let colorsGreen=['#48706A','#8AC269','#5D965B','#467E59','#C9E092'];
-  let colorOrange=['#73503C','#D9A86C','#591C16','#D9C0A3','#BF9169'];
+  let colorsGreen = ['#48706A', '#8AC269', '#5D965B', '#467E59', '#C9E092'];
+  let colorOrange = ['#73503C', '#D9A86C', '#591C16', '#D9C0A3', '#BF9169'];
   useEffect(() => {
+
+
     d3Cloud()
       .size([500, 250])
       .timeInterval(20)
@@ -32,7 +34,7 @@ const WordCloud: FunctionComponent<WordCloudProps> = ({ data, showOn }) => {
         // }
         return datum.size ? datum.size < 15 ? 18 : datum.size < 30 ? 15 : datum.size < 45 ? 12 : 8 : 16;
       })
-      .padding(4)
+      .padding(10)
       .rotate(() => 0)
       .text(datum => {
         return datum.text ?? '';
@@ -40,9 +42,9 @@ const WordCloud: FunctionComponent<WordCloudProps> = ({ data, showOn }) => {
       .on('end', words => setCloud(words))
       .start();
   }, [data]);
-function fillcolor(){
+  function fillcolor() {
 
-}
+  }
   return (
     <svg viewBox="0 0 500 250" width={'100%'} height={'100%'} >
       <g transform={`translate(${250},${125})`}>
@@ -54,7 +56,7 @@ function fillcolor(){
                 style={{
                   fontSize: word.size + 'px',
                   fontFamily: word.font,
-                  fill: showOn === 'whatWentWell'? colorsGreen[Math.floor(Math.random() * colorsGreen.length)]: colorOrange[Math.floor(Math.random() * colorOrange.length)],
+                  fill: showOn === 'whatWentWell' ? colorsGreen[Math.floor(Math.random() * colorsGreen.length)] : colorOrange[Math.floor(Math.random() * colorOrange.length)],
                   backgroundColor: 'yellow',
                   top: '5px',
                   right: '5px',

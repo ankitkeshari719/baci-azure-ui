@@ -338,14 +338,18 @@ export function CreateRetroWithTemplatePage({
   };
 
   return (
-    <Box sx={{ width: '100%' }}>
+    <Box
+      sx={{
+        width: '100%',
+      }}
+    >
       {!isRetroStart ? (
         <Box component="div" whiteSpace="normal" className="createRetroText">
           Create new BACI retro
         </Box>
       ) : (
         <Box component="div" whiteSpace="normal" className="createRetroText">
-          First Design Sprint is ready to start
+          {global.currentRetro?.name} is ready to start
         </Box>
       )}
       <Box sx={{ mt: 4, minWidth: '100%' }}>

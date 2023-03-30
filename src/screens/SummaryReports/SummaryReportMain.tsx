@@ -11,9 +11,9 @@ export default function SummaryReportMain() {
 
   return (
     <Box className="mainContainer">
-      {/* <DeploymentPopUp /> */}
+      <DeploymentPopUp />
       <Toolbar />
-      <ReportSummary ref={componentRef}  />
+      <ReportSummary ref={componentRef} />
     </Box>
   );
 }

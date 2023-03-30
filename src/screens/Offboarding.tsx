@@ -23,10 +23,11 @@ import React from 'react';
 import { addFeedback } from '../msal/services';
 import commonStyles from './../style.module.scss';
 import './../global.scss';
-import   successAnimation  from './../assets/img/success-animation.gif'
+import successAnimation from './../assets/img/success-animation.gif';
 import { useNavigate } from 'react-router-dom';
 import Toolbar from '../elements/Toolbar';
 import theme from '../theme/theme';
+import { DeploymentPopUp } from './Utils/Alerts/DeploymentPopUp';
 
 export function Offboarding() {
   const [global, dispatch] = useContext(GlobalContext);
@@ -59,15 +60,12 @@ export function Offboarding() {
 
   return (
     <>
-      <Box>
-        <Toolbar />
-      </Box>
       <CssBaseline />
       <Slide direction="up" in={!done} key="rate">
         <Box
           sx={{
             display: !done ? 'flex' : 'none',
-            height: 'var(--app-height)',
+            height: 'calc(var(--app-height))',
             padding: '60px',
             overflowY: 'scroll',
             flexDirection: 'column',
@@ -75,6 +73,8 @@ export function Offboarding() {
             alignItems: 'center',
           }}
         >
+          <DeploymentPopUp />
+          <Toolbar />
           <Typography
             sx={{
               textAlign: 'center',
@@ -207,7 +207,14 @@ export function Offboarding() {
         </Box>
       </Slide>
       <Slide direction="up" in={done} key="thank-you">
-        <Box sx={{ height: 'calc(100vh - 100px)', overflowY: 'auto' }}>
+        <Box
+          sx={{
+            height: isXsUp ? 'calc(var(--app-height))' : 'calc(100vh - 100px)',
+            overflowY: 'auto',
+          }}
+        >
+          <DeploymentPopUp />
+          <Toolbar />
           <Box
             sx={{
               display: 'flex',
@@ -216,8 +223,13 @@ export function Offboarding() {
               alignItems: 'center',
             }}
           >
-            <Box mt="40px"><img src={successAnimation} style={{width: '300px', height: '300px'}}></img></Box>
-            <Box mt="40px" className='alignCenter'>
+            <Box mt="40px">
+              <img
+                src={successAnimation}
+                style={{ width: '300px', height: '300px' }}
+              ></img>
+            </Box>
+            <Box mt="40px" className="alignCenter">
               <Typography variant="h4" color={commonStyles.PrimaryMain}>
                 Your feedback is submitted successfully!
               </Typography>
@@ -232,25 +244,34 @@ export function Offboarding() {
                 <span className="secondaryButtonText">Review board</span>
               </Button>
             </Box>
-            <Box mt="40px" sx={{ display: isXsUp ? 'block' :'inline-flex' }} className='alignCenter'>
-              <Typography variant={isXsUp ? 'h3': 'h1'} color={commonStyles.secondaryMain}>
+            <Box
+              mt="40px"
+              sx={{ display: isXsUp ? 'block' : 'inline-flex' }}
+              className="alignCenter"
+            >
+              <Typography
+                variant={isXsUp ? 'h3' : 'h1'}
+                color={commonStyles.secondaryMain}
+              >
                 Thank You for using{' '}
               </Typography>
               <Typography
                 mr="10px"
                 ml="10px"
-                variant={isXsUp ? 'h3': 'h1'}
+                variant={isXsUp ? 'h3' : 'h1'}
                 color={commonStyles.PrimaryMain}
               >
                 BACI
               </Typography>
-              <Typography variant={isXsUp ? 'h3': 'h1'} color={commonStyles.secondaryMain}>
+              <Typography
+                variant={isXsUp ? 'h3' : 'h1'}
+                color={commonStyles.secondaryMain}
+              >
                 Retros
               </Typography>
             </Box>
           </Box>
         </Box>
-      
       </Slide>
     </>
   );

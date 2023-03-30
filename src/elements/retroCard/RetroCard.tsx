@@ -52,6 +52,7 @@ export function RetroCard({
   hideButtons,
   moveCard,
   animate,
+  isPrintPage,
 }: {
   card: RetroCardType;
   currentGroupId: string;
@@ -60,6 +61,7 @@ export function RetroCard({
   hideButtons: boolean;
   moveCard: (cardId: string, toGroup: string, toIndex: number) => void;
   animate: boolean;
+  isPrintPage: boolean;
 }) {
   const [global, dispatch] = React.useContext(GlobalContext);
   const {
@@ -299,11 +301,23 @@ export function RetroCard({
             }}
           >
             <Box sx={{ display: 'flex', flexDirection: 'row' }}>
-              <Avatar
-                onClickAvatar={() => {}}
-                avatar={card.avatar}
-                css={{ width: '40px', height: '40px', border: 'none' }}
-              />
+              {!isPrintPage ? (
+                <Avatar
+                  onClickAvatar={() => {}}
+                  avatar={card.avatar}
+                  css={{ width: '40px', height: '40px', border: 'none' }}
+                />
+              ) : (
+                <img
+                  className="avatar"
+                  style={{
+                    width: '40px',
+                    height: '40px',
+                    border: 'none',
+                  }}
+                  src={'/avatars/animals/' + card.avatar + '.svg'}
+                />
+              )}
 
               <Box
                 component="span"
@@ -409,14 +423,6 @@ export function RetroCard({
                       : addReactToCard(card.id);
                     e.stopPropagation();
                   }}
-                  // onTouchStart={e => {
-                  //   !ended
-                  //     ? userReacted
-                  //       ? removeReactFromCard(card.id)
-                  //       : addReactToCard(card.id)
-                  //     : null;
-                  //   e.stopPropagation();
-                  // }}
                 >
                   {userReacted ? (
                     <svg
@@ -475,7 +481,8 @@ export function RetroCard({
                 {card.createdBy === global.user.id &&
                 !hideButtons &&
                 !ended &&
-                !global.leaveRetro ? (
+                !global.leaveRetro &&
+                !isPrintPage ? (
                   <Button
                     sx={{ minWidth: '0px', position: 'initial' }}
                     onClick={e => {
@@ -506,7 +513,8 @@ export function RetroCard({
                 !ended &&
                 !global.leaveRetro &&
                 (card.createdBy === global.user.id ||
-                  global.user.userType == 2) ? (
+                  global.user.userType == 2) &&
+                !isPrintPage ? (
                   <Box
                     component="span"
                     sx={{
@@ -554,10 +562,6 @@ export function RetroCard({
                       deleteCard(card.id);
                       e.stopPropagation();
                     }}
-                    // onTouchStart={e => {
-                    //   deleteCard(card.id);
-                    //   e.stopPropagation();
-                    // }}
                   >
                     <ListItemIcon>
                       <DeleteForever fontSize="small" />
@@ -573,27 +577,13 @@ export function RetroCard({
                     <ListItemText>Move card</ListItemText>
                   </MenuItem>
                 )}
-                {/* <Button onClick={handleClick1}>
-                <ListItemText>Move card</ListItemText>
-              </Button> */}
-                {/* <Menu
-                anchorEl={anchorEl1}
-                open={open1}
-                onClose={() => setAnchorEl1(null)}
-              > */}
                 {cardIsGrouped ? (
-                  <MenuItem
-                    onClick={() => handleMove(ungroupedGroupId)}
-                    // onTouchStart={() => handleMove(ungroupedGroupId)}
-                  >
+                  <MenuItem onClick={() => handleMove(ungroupedGroupId)}>
                     <ListItemIcon></ListItemIcon>
                     <ListItemText>out of Grouping</ListItemText>
                   </MenuItem>
                 ) : null}
-                <MenuItem
-                  onClick={() => handleMove()}
-                  // onTouchStart={() => handleMove()}
-                >
+                <MenuItem onClick={() => handleMove()}>
                   <ListItemIcon></ListItemIcon>
                   <ListItemText>to New Grouping</ListItemText>
                 </MenuItem>
@@ -606,7 +596,6 @@ export function RetroCard({
                     <MenuItem
                       key={group.id}
                       onClick={() => handleMove(group.id)}
-                      // onTouchStart={() => handleMove(group.id)}
                     >
                       <ListItemIcon />
                       <ListItemText>
@@ -621,7 +610,6 @@ export function RetroCard({
               sx={{
                 display: 'flex',
                 justifyContent: 'space-between',
-                // padding: 0,
                 marginTop: '10px',
                 paddingLeft: '16px',
                 paddingRight: '16px',
@@ -652,12 +640,7 @@ export function RetroCard({
                     cancelEdit();
                     e.stopPropagation();
                   }}
-                  // onTouchStart={e => {
-                  //   cancelEdit();
-                  //   e.stopPropagation();
-                  // }}
                 >
-                  {/* <CloseIcon sx={{ height: '20px', color: 'black' }} /> */}
                   CLOSE
                 </Button>
                 <Button
@@ -671,12 +654,7 @@ export function RetroCard({
                     submit(value);
                     e.stopPropagation();
                   }}
-                  // onTouchStart={e => {
-                  //   submit(value);
-                  //   e.stopPropagation();
-                  // }}
                 >
-                  {/* <CheckIcon sx={{ height: '20px', color: 'black' }} /> */}
                   SAVE
                 </Button>
               </Box>

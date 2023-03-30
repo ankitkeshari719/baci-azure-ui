@@ -40,7 +40,10 @@ const Toolbar = (props: any) => {
     state: { retroName, retroDuration, ended, users },
     commitAction,
   } = React.useContext(BoardContext);
-
+  const reloadPage = () => {
+    window.location.reload();
+    navigate(`/`);
+  };
   const showFinishRetroButton =
     !location.pathname.includes('pulsecheck') &&
     !location.pathname.includes('report') &&
@@ -213,6 +216,7 @@ const Toolbar = (props: any) => {
                   width: isXsUp ? '53px' : '82px',
                   height: isXsUp ? '18px' : '28px',
                 }}
+                onClick={reloadPage}
               />
             </Link>
           </>
@@ -225,10 +229,12 @@ const Toolbar = (props: any) => {
                 width: isXsUp ? '53px' : '82px',
                 height: isXsUp ? '18px' : '28px',
               }}
+              onClick={reloadPage}
             />
           </Link>
         )}
 
+        {/* Retro Name*/}
         {currentRetro?.name &&
           !location.pathname.includes('startRetro') &&
           !location.pathname.includes('offboarding') &&
@@ -374,7 +380,7 @@ const Toolbar = (props: any) => {
               )}
             </Box>
           )}
-
+        {/* Finish Button*/}
         <Box component="span" sx={{ flex: '1 1 auto' }}></Box>
         {showFinishRetroButton && !ended && (
           <>
@@ -429,104 +435,34 @@ const Toolbar = (props: any) => {
             )}
           </>
         )}
+        {/* Summary Report Button*/}
         {showSummaryButton &&
           !location.pathname.includes('report') &&
           user.userType === 2 && (
-            <ContainedButton
-              id="view-summary"
-              name="VIEW SUMMARY"
-              onClick={() => navigate('/report/' + currentRetro?.id)}
-              style={{
-                minWidth: '150px !important',
-                height: '40px !important',
-                width: '150px !important',
-                marginRight: '16px',
-              }}
-            />
-          )}
-        <LeaveRetroDialog
-          open={leaveDiaOpen}
-          onClose={(value: any) => {
-            if (value) props.onFinishRetro();
-            setLeaveDiaOpen(false);
-          }}
-        />
-        <Dialog
-          open={openDialog}
-          onClose={() => setOpenDialog(false)}
-          aria-labelledby="alert-dialog-title"
-          aria-describedby="alert-dialog-description"
-        >
-          <div
-            style={{
-              display: 'flex',
-              width: '100%',
-              justifyContent: 'center',
-              marginTop: '15px',
-            }}
-          >
-            <span
-              style={{
-                background: 'url(/svgs/Finish.svg)',
-                width: '288px',
-                height: '209px',
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-              }}
-            >
-              <span
-                style={{
-                  paddingTop: '100px',
-                  color: commonStyles.secondaryMain,
-                  fontSize: '28px',
-                }}
+            <>
+              <Typography
+                color={commonStyles.secondaryMain}
+                fontSize="24px"
+                fontWeight="500"
+                mr="15px"
               >
-                Finish Retro ?
-              </span>
-            </span>
-          </div>
-          <DialogContent>
-            <span
-              style={{
-                color: '#343434',
-                fontSize: '20px',
-                width: '488px',
-                display: 'flex',
-                flexDirection: 'column',
-                alignItems: 'center',
-              }}
-            >
-              <span> This will end retro for all participants.</span>
-              <span> All participants will see feedback screen.</span>
-            </span>
-          </DialogContent>
-          <DialogActions style={{ display: 'flex', flexDirection: 'column' }}>
-            <Button
-              sx={{ borderRadius: '24px', fontSize: '16px', marginTop: '15px' }}
-              onClick={() => {
-                props.onFinishRetro(), setOpenDialog(false);
-              }}
-              variant="contained"
-              autoFocus
-            >
-              END RETRO AND VIEW SUMMARY
-            </Button>
-            <Button
-              sx={{
-                borderRadius: '24px',
-                fontSize: '16px',
-                marginTop: '15px',
-                marginBottom: '15px',
-              }}
-              variant="outlined"
-              onClick={() => setOpenDialog(false)}
-            >
-              CONTINUE WITH RETRO
-            </Button>
-          </DialogActions>
-        </Dialog>
-        {location.pathname.includes('report') && (
+                Retro Finished
+              </Typography>
+              <ContainedButton
+                id="view-summary"
+                name="VIEW SUMMARY"
+                onClick={() => navigate('/report/' + currentRetro?.id)}
+                style={{
+                  minWidth: '150px !important',
+                  height: '40px !important',
+                  width: '150px !important',
+                  marginRight: '16px',
+                }}
+              />
+            </>
+          )}
+        {/* Review Board Button*/}
+        {location.pathname.includes('report') && ended && (
           <>
             <Typography
               color={commonStyles.secondaryMain}
@@ -673,6 +609,90 @@ const Toolbar = (props: any) => {
           <CountdownTimer color={'#2B9FDE'} bold={true}></CountdownTimer>
         )}
       </Box>
+      {/* Finish Retro Dialog */}
+      <Dialog
+        open={openDialog}
+        onClose={() => setOpenDialog(false)}
+        aria-labelledby="alert-dialog-title"
+        aria-describedby="alert-dialog-description"
+      >
+        <div
+          style={{
+            display: 'flex',
+            width: '100%',
+            justifyContent: 'center',
+            marginTop: '15px',
+          }}
+        >
+          <span
+            style={{
+              background: 'url(/svgs/Finish.svg)',
+              width: '288px',
+              height: '209px',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+            }}
+          >
+            <span
+              style={{
+                paddingTop: '100px',
+                color: commonStyles.secondaryMain,
+                fontSize: '28px',
+              }}
+            >
+              Finish Retro ?
+            </span>
+          </span>
+        </div>
+        <DialogContent>
+          <span
+            style={{
+              color: '#343434',
+              fontSize: '20px',
+              width: '488px',
+              display: 'flex',
+              flexDirection: 'column',
+              alignItems: 'center',
+            }}
+          >
+            <span> This will end retro for all participants.</span>
+            <span> All participants will see feedback screen.</span>
+          </span>
+        </DialogContent>
+        <DialogActions style={{ display: 'flex', flexDirection: 'column' }}>
+          <Button
+            sx={{ borderRadius: '24px', fontSize: '16px', marginTop: '15px' }}
+            onClick={() => {
+              props.onFinishRetro(), setOpenDialog(false);
+            }}
+            variant="contained"
+            autoFocus
+          >
+            END RETRO AND VIEW SUMMARY
+          </Button>
+          <Button
+            sx={{
+              borderRadius: '24px',
+              fontSize: '16px',
+              marginTop: '15px',
+              marginBottom: '15px',
+            }}
+            variant="outlined"
+            onClick={() => setOpenDialog(false)}
+          >
+            CONTINUE WITH RETRO
+          </Button>
+        </DialogActions>
+      </Dialog>
+      {/* Leave Retro Dialog */}
+      <LeaveRetroDialog
+        open={leaveDiaOpen}
+        onClose={(value: any) => {
+          if (value) props.onFinishRetro();
+          setLeaveDiaOpen(false);
+        }}
+      />
     </Box>
   );
 };

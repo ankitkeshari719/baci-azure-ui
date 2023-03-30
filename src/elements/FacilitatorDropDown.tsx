@@ -95,21 +95,29 @@ const FacilitatorDropDown = ({ personName, onClickOfUser }: Props) => {
             value={personName}
             renderValue={selected => {
               var valueToBeDisplayed = '';
-              users.forEach(element => {
-                if (element.userId == global.user.id) {
+              let selectedUsers: UserType[] = [];
+              users.forEach(user => {
+                selected.forEach(select => {
+                  if (user.userId == select) {
+                    selectedUsers.push(user);
+                  }
+                });
+              });
+              selectedUsers.forEach(user => {
+                if (user.userId === global.user.id) {
                   if (valueToBeDisplayed == '') {
                     valueToBeDisplayed = 'You';
                   } else {
                     valueToBeDisplayed = valueToBeDisplayed + ', ' + 'You';
                   }
-                } else if (element.isFacilitator) {
+                } else {
                   if (valueToBeDisplayed == '') {
-                    valueToBeDisplayed = element.userNickname;
+                    valueToBeDisplayed = user.userNickname;
                   } else {
                     valueToBeDisplayed =
                       valueToBeDisplayed +
                       ', ' +
-                      element.userNickname.split(' ')[0];
+                      user.userNickname.split(' ')[0];
                   }
                 }
               });
@@ -127,25 +135,28 @@ const FacilitatorDropDown = ({ personName, onClickOfUser }: Props) => {
             )}
             MenuProps={MenuProps}
           >
-            {tempUsers.map(name => {
-              const imaSrc = '/avatars/animals/' + name.avatar + '.svg';
+            {tempUsers.map(user => {
+              const imaSrc = '/avatars/animals/' + user.avatar + '.svg';
               return (
                 <MenuItem
-                  key={name.userId}
-                  value={name.userId}
-                  onClick={event => onClickOfUser(event, name.userId)}
+                  key={user.userId}
+                  value={user.userId}
+                  onClick={event => onClickOfUser(event, user.userId)}
                   disabled={
-                    name.isMobile == true ||
-                    name.userId == global.user.id ||
-                    name.userId == global.currentRetro?.creatorId
+                    user.isMobile == true ||
+                    user.userId == global.user.id ||
+                    user.userId == global.currentRetro?.creatorId
                   }
                 >
                   <Checkbox
                     checked={
-                      name.isFacilitator ||
-                      name.userId == global.currentRetro?.creatorId
+                      user.isFacilitator ||
+                      user.userId == global.currentRetro?.creatorId
                     }
-                    disabled={name.userId === global.user.id}
+                    disabled={
+                      user.userId === global.user.id ||
+                      user.userId == global.currentRetro?.creatorId
+                    }
                   />
                   <ListItemIcon>
                     <LazyLoadImage
@@ -159,7 +170,7 @@ const FacilitatorDropDown = ({ personName, onClickOfUser }: Props) => {
                   </ListItemIcon>
                   <ListItemText
                     primary={
-                      name.userId === global.user.id ? (
+                      user.userId === global.user.id ? (
                         <Typography
                           style={{
                             fontFamily: 'Poppins',
@@ -195,7 +206,7 @@ const FacilitatorDropDown = ({ personName, onClickOfUser }: Props) => {
                             maxWidth: '150px',
                           }}
                         >
-                          {name.userNickname}
+                          {user.userNickname}
                         </Typography>
                       )
                     }

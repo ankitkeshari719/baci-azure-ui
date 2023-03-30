@@ -75,7 +75,7 @@ export function CustomizeTemplateDialog({
         id="customized-dialog-title"
         onClose={handleIsChangeDialogClose}
       ></BootstrapDialogTitle>
-      <DialogContent 
+      <DialogContent
         sx={{
           display: 'flex',
           flexDirection: 'column',

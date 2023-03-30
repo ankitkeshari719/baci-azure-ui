@@ -2,9 +2,9 @@ import { Action, Retro, User } from '../types';
 import { useSocket } from '../hooks/useSocket';
 import { DefaultEventsMap } from '@socket.io/component-emitter';
 import { Socket } from 'socket.io-client';
+import { Dayjs } from 'dayjs';
 
 import { API_URL } from '../constants/FeatureFlags';
-import { Dayjs } from 'dayjs';
 
 export const createRetro = async (
   retro: Omit<Retro, 'id'>,
@@ -63,8 +63,8 @@ export const getRetroByHumanId = async (
 export const getRetroActions = async (
   id: string,
   userId: string,
-  userType: any,
-  fromTimestamp?: number,
+  userType: number,
+  fromTimestamp?: number
 ): Promise<Action[]> => {
   let snapshot: any[] = [];
   const results: any[] = [];

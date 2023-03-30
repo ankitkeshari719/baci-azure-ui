@@ -1,11 +1,11 @@
 import * as React from 'react';
-import { Grid } from '@mui/material';
+import { Box } from '@mui/material';
 import './../../../global.scss';
 import './styles.scss';
 import dayjs, { Dayjs } from 'dayjs';
-import { ActionType, GlobalContext } from '../../../contexts/GlobalContext';
+import { GlobalContext } from '../../../contexts/GlobalContext';
 import { getDeploymentData } from '../../../msal/services';
-import { InfoAlert } from './CustomAlert';
+import { CustomAlert } from './CustomAlert';
 
 export function DeploymentPopUp() {
   const [global, dispatch] = React.useContext(GlobalContext);
@@ -60,15 +60,6 @@ export function DeploymentPopUp() {
       },
       err => {
         console.log('err', err);
-        dispatch({
-          type: ActionType.SET_SNACK_MESSAGE,
-          payload: {
-            snackMessage: {
-              snackMessageType: 'error',
-              message: 'Error while getting the deployment data!',
-            },
-          },
-        });
       }
     );
   };
@@ -86,9 +77,12 @@ export function DeploymentPopUp() {
         !isDeployed &&
         isCurrentDateBefore &&
         isCurrentDateAfter && (
-          <Grid item xs={12}>
-            <InfoAlert handleAlertClose={handleAlertClose} />
-          </Grid>
+          <Box sx={{ width: '100%' }}>
+            <CustomAlert
+              handleAlertClose={handleAlertClose}
+              deploymentDate={deploymentDate}
+            />
+          </Box>
         )}
     </>
   );
