@@ -68,7 +68,7 @@ export default function ErrorMobileDialog(props?: any) {
             }}
             PaperProps={{
               sx: {
-                minWidth:'250px',
+                minWidth: '250px',
                 minHeight: '150px',
                 background: '#FBBC05 !important',
                 borderRadius: '10px',
@@ -109,7 +109,7 @@ export default function ErrorMobileDialog(props?: any) {
                   display: 'flex',
                   justifyContent: 'center',
                   alignItems: 'center',
-                  marginTop: '16px'
+                  marginTop: '16px',
                 }}
               >
                 <Col
@@ -134,7 +134,7 @@ export default function ErrorMobileDialog(props?: any) {
                   display: 'flex',
                   justifyContent: 'center',
                   alignItems: 'center',
-                  marginTop: '16px'
+                  marginTop: '16px',
                 }}
               >
                 <Col
@@ -158,22 +158,104 @@ export default function ErrorMobileDialog(props?: any) {
           </Dialog>
         </>
       ) : (
-        <Dialog open={true}>
-          <DialogTitle>There has been an error</DialogTitle>
+        <Dialog
+          open={true}
+          sx={{
+            '& .MuiDialog-container': {
+              display: 'flex',
+              justifyContent: 'center',
+              alignItems: 'flex-start',
+            },
+          }}
+          PaperProps={{
+            sx: {
+              minWidth: '250px',
+              minHeight: '150px',
+              background: '#FBBC05 !important',
+              borderRadius: '10px',
+              border: '1px solid #EDC707',
+              m: 0,
+              top: 78,
+              left: 0,
+              padding: '8px 12px',
+            },
+          }}
+        >
           <DialogContent>
-            <Grid container justifyContent="center">
-              <Typography>Please try again later</Typography>
-            </Grid>
-          </DialogContent>
-          <DialogActions>
-            <Button
-              onClick={() => location.reload()}
-              // onTouchStart={() => location.reload()}
-              autoFocus
+            <Row
+              style={{
+                display: 'flex',
+                justifyContent: 'center',
+                alignItems: 'center',
+              }}
             >
-              Reload
-            </Button>
-          </DialogActions>
+              <Col
+                xs="12"
+                style={{
+                  display: 'flex',
+                  justifyContent: 'center',
+                }}
+              >
+                <Box>
+                  <img
+                    src="/images/Vector.png"
+                    alt="Logo"
+                    style={{ width: '21px', height: '21px' }}
+                  />
+                </Box>
+              </Col>
+            </Row>
+            <Row
+              style={{
+                display: 'flex',
+                justifyContent: 'center',
+                alignItems: 'center',
+                marginTop: '16px',
+              }}
+            >
+              <Col
+                xs="12"
+                style={{
+                  display: 'flex',
+                  justifyContent: 'center',
+                }}
+              >
+                <Box>
+                  <Typography style={styles.textOne}>
+                    There has been an error
+                  </Typography>
+                  <Typography style={styles.textTwo}>
+                    Please try again later
+                  </Typography>
+                </Box>
+              </Col>
+            </Row>
+            <Row
+              style={{
+                display: 'flex',
+                justifyContent: 'center',
+                alignItems: 'center',
+                marginTop: '16px',
+              }}
+            >
+              <Col
+                xs="12"
+                style={{
+                  display: 'flex',
+                  justifyContent: 'center',
+                }}
+              >
+                <Box>
+                  <Typography
+                    style={styles.reloadButton}
+                    onClick={() => location.reload()}
+                  >
+                    Reload Page
+                  </Typography>
+                </Box>
+              </Col>
+            </Row>
+          </DialogContent>
         </Dialog>
       )}
     </>

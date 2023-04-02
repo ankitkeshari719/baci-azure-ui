@@ -140,22 +140,86 @@ export default function ErrorDialog(props?: any) {
           </Dialog>
         </>
       ) : (
-        <Dialog open={true}>
-          <DialogTitle>There has been an error</DialogTitle>
+        <Dialog
+          open={true}
+          sx={{
+            '& .MuiDialog-container': {
+              display: 'flex',
+              justifyContent: 'center',
+              alignItems: 'flex-start',
+            },
+          }}
+          PaperProps={{
+            sx: {
+              minWidth: window.innerWidth / 2,
+              minHeight: '64px',
+              background: '#FBBC05 !important',
+              borderRadius: '10px',
+              border: '1px solid #EDC707',
+              m: 0,
+              top: 78,
+              left: 0,
+              padding: '8px 12px',
+            },
+          }}
+        >
           <DialogContent>
-            <Grid container justifyContent="center">
-              <Typography>Please try again later</Typography>
-            </Grid>
-          </DialogContent>
-          <DialogActions>
-            <Button
-              onClick={() => location.reload()}
-              // onTouchStart={() => location.reload()}
-              autoFocus
+            <Row
+              style={{
+                display: 'flex',
+                justifyContent: 'center',
+                alignItems: 'center',
+              }}
             >
-              Reload
-            </Button>
-          </DialogActions>
+              <Col
+                xs="1"
+                style={{
+                  display: 'flex',
+                  justifyContent: 'end',
+                }}
+              >
+                <Box>
+                  <img
+                    src="/images/Vector.png"
+                    alt="Logo"
+                    style={{ width: '21px', height: '21px' }}
+                  />
+                </Box>
+              </Col>
+              <Col
+                xs="8"
+                style={{
+                  display: 'flex',
+                  justifyContent: 'start',
+                }}
+              >
+                <Box>
+                  <Typography style={styles.textOne}>
+                    There has been an error
+                  </Typography>
+                  <Typography style={styles.textTwo}>
+                    Please try again later
+                  </Typography>
+                </Box>
+              </Col>
+              <Col
+                xs="3"
+                style={{
+                  display: 'flex',
+                  justifyContent: 'end',
+                }}
+              >
+                <Box>
+                  <Typography
+                    style={styles.reloadButton}
+                    onClick={() => location.reload()}
+                  >
+                    Reload Page
+                  </Typography>
+                </Box>
+              </Col>
+            </Row>
+          </DialogContent>
         </Dialog>
       )}
     </>
