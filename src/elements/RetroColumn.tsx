@@ -10,6 +10,7 @@ import { ActionType, GlobalContext } from '../contexts/GlobalContext';
 import { RetroCard } from './retroCard/RetroCard';
 import theme from '../theme/theme';
 import { RetroCardGroup } from './RetroCardGroup';
+import Masonry from '@mui/lab/Masonry';
 import {
   DragDropContext,
   Draggable as Drag,
@@ -431,9 +432,9 @@ export function RetroColumn({
                 if (
                   targetSelectedMergeCard.current == null ||
                   targetSelectedMergeCard.current !=
-                    cardGroups[targetMergeCardCopy.current[0]].cards[
-                      targetMergeCardCopy.current[1]
-                    ].id
+                  cardGroups[targetMergeCardCopy.current[0]].cards[
+                    targetMergeCardCopy.current[1]
+                  ].id
                 ) {
                   targetSelectedMergeCard.current =
                     cardGroups[targetMergeCardCopy.current[0]].cards[
@@ -566,12 +567,10 @@ export function RetroColumn({
       )}px`;
     }
 
-    (surroundDiv.current as HTMLDivElement).style.height = `${
-      Math.abs(t - y) + h
-    }px`;
-    (surroundDiv.current as HTMLDivElement).style.width = `${
-      Math.abs(l - x) + w
-    }px`;
+    (surroundDiv.current as HTMLDivElement).style.height = `${Math.abs(t - y) + h
+      }px`;
+    (surroundDiv.current as HTMLDivElement).style.width = `${Math.abs(l - x) + w
+      }px`;
     (surroundDiv.current as HTMLDivElement).style.zIndex = `1000`;
   };
 
@@ -608,29 +607,29 @@ export function RetroColumn({
         if (selectedCard.current[1] !== 0) {
           (
             landingZones[selectedCard.current[0]][
-              selectedCard.current[1]
+            selectedCard.current[1]
             ] as HTMLDivElement
           ).style.display = 'inline';
         }
         if (targetLanding.current !== null) {
           (
             landingZones[targetLanding.current[0]][
-              targetLanding.current[1]
+            targetLanding.current[1]
             ] as HTMLDivElement
           ).style.background = 'none';
           (
             landingZones[targetLanding.current[0]][
-              targetLanding.current[1]
+            targetLanding.current[1]
             ] as HTMLDivElement
           ).style.backgroundColor = 'transparent';
           (
             landingZones[targetLanding.current[0]][
-              targetLanding.current[1]
+            targetLanding.current[1]
             ] as HTMLDivElement
           ).style.padding = '0';
           (
             landingZones[targetLanding.current[0]][
-              targetLanding.current[1]
+            targetLanding.current[1]
             ] as HTMLDivElement
           ).style.border = 'none';
         }
@@ -693,7 +692,7 @@ export function RetroColumn({
               actionRef.current = '';
               (
                 cardRefs[targetForReorderToLastCard.current[0]][
-                  targetForReorderToLastCard.current[1]
+                targetForReorderToLastCard.current[1]
                 ] as HTMLDivElement
               ).style.border = 'none';
             }
@@ -793,8 +792,8 @@ export function RetroColumn({
           height: noHeightLimit
             ? 'auto'
             : isXsUp
-            ? 'calc(var(--app-height) - 115px)'
-            : 'calc(var(--app-height) - 160px)',
+              ? 'calc(var(--app-height) - 115px)'
+              : 'calc(var(--app-height) - 160px)',
           borderRadius: '8px',
           border:
             isXsUp || location.pathname.includes('report')
@@ -858,7 +857,7 @@ export function RetroColumn({
                   <Box
                     sx={{
                       display: 'flex',
-                      width: 'calc(100%-20px)',
+                      width: 'calc(80%-20px)',
                       paddingLeft: '10px',
                       paddingRight: '10px',
 
@@ -871,7 +870,7 @@ export function RetroColumn({
                       flexGrow: 2,
                     }}
                   >
-                    <Grid
+                    {/* <Grid
                       container
                       columnSpacing={'20px'}
                       direction="row"
@@ -880,17 +879,25 @@ export function RetroColumn({
                           ? 'space-between'
                           : 'flex-start'
                       }
-                    >
-                      {cardGroups.map((group, i) => (
-                        <React.Fragment key={i}>
+                    > */}
+
+                    {cardGroups.map((group, i) => (
+                      <React.Fragment key={i}>
+                        <Masonry columns={{
+                          xs: 1, sm: global?.expandColumn === -1 ? 2 : 4,
+                          md: global?.expandColumn === -1 ? 2 : 4,
+                          lg: global?.expandColumn === -1 ? 2 : 6
+                        }}
+                          sx={{ marginBottom: "8px" }}>
                           {group.cards.map((card: RetroCardType, j: number) => (
                             <React.Fragment key={j}>
+
                               {card.createdBy === global.user.id && (
                                 <Grid
-                                  item
-                                  lg={global?.expandColumn !== -1 ? 2 : 6}
-                                  md={global?.expandColumn !== -1 ? 2 : 4}
-                                  xs={12}
+                                  // item
+                                  // lg={global?.expandColumn !== -1 ? 2 : 6}
+                                  // md={global?.expandColumn !== -1 ? 2 : 4}
+                                  // xs={12}
                                   sx={{ marginBottom: '20px' }}
                                   key={j + '0'}
                                 >
@@ -906,17 +913,20 @@ export function RetroColumn({
                                   />
                                 </Grid>
                               )}
+
                             </React.Fragment>
                           ))}
-                        </React.Fragment>
-                      ))}
-                    </Grid>
-                    <span
+                        </Masonry>
+                      </React.Fragment>
+                    ))}
+
+                    {/* </Grid> */}
+                    {/* <span
                       ref={surroundDiv}
                       style={{
                         display: 'none',
                       }}
-                    ></span>
+                    ></span> */}
                   </Box>
                 ) : (
                   <div
@@ -967,6 +977,7 @@ export function RetroColumn({
                                                 : 'none',
                                           }}
                                         >
+
                                           <RetroCardGroup
                                             admin={global.user.userType == 2}
                                             group={group}
@@ -989,10 +1000,11 @@ export function RetroColumn({
                                             }}
                                             isPrintPage={false}
                                           >
+
                                             {group.name === UNGROUPED ||
-                                            !groupCollapsed[i] ||
-                                            expandAllGroups ? (
-                                              <div
+                                              !groupCollapsed[i] ||
+                                              expandAllGroups ? (
+                                              <Box
                                                 style={{
                                                   display: 'flex',
                                                   flexWrap: 'wrap',
@@ -1011,61 +1023,61 @@ export function RetroColumn({
                                                     padding: '0',
                                                   }}
                                                 ></span>
-                                                {group.cards.map(
-                                                  (
-                                                    card: RetroCardType,
-                                                    j: number
-                                                  ) =>
+                                                <Masonry columns={{
+                                                  xs: 1,
+                                                  sm: global?.expandColumn === -1 ? 2 : 4,
+                                                  md: global?.expandColumn === -1 ? 2 : 4,
+                                                  lg: global?.expandColumn === -1 ? 2 : 6
+                                                }}>
+                                                  {group.cards.map((card: RetroCardType, j: number) =>
                                                     (card.createdBy ===
                                                       global.user.id ||
                                                       global.user.userType ==
-                                                        2 ||
+                                                      2 ||
                                                       column.publish) && (
-                                                      <React.Fragment
-                                                        key={card.id}
-                                                      >
+
+
+                                                      <React.Fragment key={card.id}>
                                                         {group.name ===
                                                           UNGROUPED ||
-                                                        j <
+                                                          j <
                                                           (groupCollapsed[i]
                                                             ? 2
                                                             : group.cards
-                                                                .length) ? (
-                                                          <>
+                                                              .length) ? (
+                                                          <Box>
+
                                                             <Grid
-                                                              item
-                                                              lg={
-                                                                global?.expandColumn !==
-                                                                -1
-                                                                  ? 2
-                                                                  : !location.pathname.includes(
-                                                                      'report'
-                                                                    )
-                                                                  ? 6
-                                                                  : 4
-                                                              }
-                                                              md={
-                                                                global?.expandColumn !==
-                                                                -1
-                                                                  ? 2
-                                                                  : !location.pathname.includes(
-                                                                      'report'
-                                                                    )
-                                                                  ? 6
-                                                                  : 4
-                                                              }
-                                                              xs={12}
+                                                              // item
+                                                              // lg={
+                                                              //   global?.expandColumn !==
+                                                              //     -1
+                                                              //     ? 2
+                                                              //     : !location.pathname.includes(
+                                                              //       'report'
+                                                              //     )
+                                                              //       ? 6
+                                                              //       : 4
+                                                              // }
+                                                              // md={
+                                                              //   global?.expandColumn !==
+                                                              //     -1
+                                                              //     ? 2
+                                                              //     : !location.pathname.includes(
+                                                              //       'report'
+                                                              //     )
+                                                              //       ? 6
+                                                              //       : 4
+                                                              // }
+                                                              // xs={12}
                                                               ref={e =>
                                                                 cardRefCollector(
                                                                   e as HTMLDivElement,
                                                                   i,
                                                                   j,
-                                                                  card
-                                                                )
+                                                                  card)
                                                               }
-                                                              style={{
-                                                                padding: '10px',
-                                                              }}
+                                                              style={{ padding: '10px', }}
                                                             >
                                                               <Draggable
                                                                 nodeRef={
@@ -1081,9 +1093,9 @@ export function RetroColumn({
                                                                   global.leaveRetro ||
                                                                   (card.locked &&
                                                                     card.lockedBy !==
-                                                                      global
-                                                                        .user
-                                                                        .id)
+                                                                    global
+                                                                      .user
+                                                                      .id)
                                                                 }
                                                                 onStart={(
                                                                   event,
@@ -1128,7 +1140,7 @@ export function RetroColumn({
                                                                   className={
                                                                     global.user
                                                                       .userType ==
-                                                                    2
+                                                                      2
                                                                       ? 'handle'
                                                                       : ''
                                                                   }
@@ -1162,6 +1174,7 @@ export function RetroColumn({
                                                                 </span>
                                                               </Draggable>
                                                             </Grid>
+
                                                             <span
                                                               ref={e => {
                                                                 landingZones[i][
@@ -1175,16 +1188,21 @@ export function RetroColumn({
                                                                 padding: '0',
                                                               }}
                                                             ></span>
-                                                          </>
+                                                          </Box>
                                                         ) : null}
                                                       </React.Fragment>
+
                                                     )
-                                                )}
-                                              </div>
+                                                  )}
+                                                </Masonry>
+
+
+                                              </Box>
                                             ) : (
                                               <></>
                                             )}
                                           </RetroCardGroup>
+
                                         </Grid>
                                       </div>
                                     )}
@@ -1228,8 +1246,8 @@ export function RetroColumn({
           height: noHeightLimit
             ? 'auto'
             : isXsUp
-            ? 'calc(var(--app-height) - 165px)'
-            : 'calc(var(--app-height) - 150px)',
+              ? 'calc(var(--app-height) - 165px)'
+              : 'calc(var(--app-height) - 150px)',
         }}
         onMouseOver={() => {
           setMouseOver(true);
@@ -1373,9 +1391,9 @@ export function RetroColumn({
                                           isPrintPage={false}
                                         >
                                           {group.name === UNGROUPED ||
-                                          !groupCollapsed[i] ||
-                                          group.cards.length < 1 ||
-                                          expandAllGroups ? (
+                                            !groupCollapsed[i] ||
+                                            group.cards.length < 1 ||
+                                            expandAllGroups ? (
                                             <div
                                               style={{
                                                 display: 'flex',
@@ -1409,11 +1427,11 @@ export function RetroColumn({
                                                     >
                                                       {group.name ===
                                                         UNGROUPED ||
-                                                      j <
+                                                        j <
                                                         (groupCollapsed[i]
                                                           ? 1
                                                           : group.cards
-                                                              .length) ? (
+                                                            .length) ? (
                                                         <>
                                                           <Grid
                                                             item
@@ -1443,8 +1461,8 @@ export function RetroColumn({
                                                                 global.leaveRetro ||
                                                                 (card.locked &&
                                                                   card.lockedBy !==
-                                                                    global.user
-                                                                      .id)
+                                                                  global.user
+                                                                    .id)
                                                               }
                                                               onStart={(
                                                                 event,
@@ -1489,7 +1507,7 @@ export function RetroColumn({
                                                                 className={
                                                                   global.user
                                                                     .userType ==
-                                                                  2
+                                                                    2
                                                                     ? 'handle'
                                                                     : ''
                                                                 }
@@ -1520,9 +1538,9 @@ export function RetroColumn({
                                                             </Draggable>
                                                             <div
                                                               ref={ref =>
-                                                                (placeholderRefs[
-                                                                  i
-                                                                ][j] = ref)
+                                                              (placeholderRefs[
+                                                                i
+                                                              ][j] = ref)
                                                               }
                                                             ></div>
                                                           </Grid>
