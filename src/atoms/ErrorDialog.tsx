@@ -5,6 +5,7 @@ import {
   DialogActions,
   DialogContent,
   DialogTitle,
+  Divider,
   Grid,
   Typography,
 } from '@mui/material';
@@ -70,7 +71,7 @@ export default function ErrorDialog(props?: any) {
               sx: {
                 minWidth: window.innerWidth / 2,
                 minHeight: '64px',
-                background: '#FBBC05 !important',
+                background: '#FFF8E6 !important',
                 borderRadius: '10px',
                 border: '1px solid #EDC707',
                 m: 0,
@@ -104,10 +105,31 @@ export default function ErrorDialog(props?: any) {
                   </Box>
                 </Col>
                 <Col
-                  xs="8"
+                  xs="1"
+                  style={{
+                    display: 'flex',
+                    justifyContent: 'end',
+                  }}
+                >
+                  <Divider orientation="vertical" variant="middle" flexItem sx={{
+                    width: '48px !important',
+                    height: ' 0px !important',
+                    border: '0.5px solid #CCCCCC !important',
+                    transform: 'rotate(90deg) !important',
+                    flex: 'none !important',
+                    order: '2 !important',
+                    alignSelf: 'stretch !important',
+                    flexGrow: '0 !important',
+                    zIndex: '2 !important',
+                  }} />
+                </Col>
+                <Col
+                  xs="7"
                   style={{
                     display: 'flex',
                     justifyContent: 'start',
+                    padding: '0px',
+                    margin: '0px'
                   }}
                 >
                   <Box>
@@ -153,7 +175,7 @@ export default function ErrorDialog(props?: any) {
             sx: {
               minWidth: window.innerWidth / 2,
               minHeight: '64px',
-              background: '#FBBC05 !important',
+              background: '#FFF8E6 !important',
               borderRadius: '10px',
               border: '1px solid #EDC707',
               m: 0,
