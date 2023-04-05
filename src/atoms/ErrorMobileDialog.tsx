@@ -70,7 +70,7 @@ export default function ErrorMobileDialog(props?: any) {
               sx: {
                 minWidth: '250px',
                 minHeight: '150px',
-                background: '#FBBC05 !important',
+                background: '#FFF8E6 !important',
                 borderRadius: '10px',
                 border: '1px solid #EDC707',
                 m: 0,
@@ -171,7 +171,7 @@ export default function ErrorMobileDialog(props?: any) {
             sx: {
               minWidth: '250px',
               minHeight: '150px',
-              background: '#FBBC05 !important',
+              background: '#FFF8E6 !important',
               borderRadius: '10px',
               border: '1px solid #EDC707',
               m: 0,
