@@ -338,7 +338,7 @@ const SubToolbar = ({ componentRef }: Props) => {
           )}
         </Grid>
         {/* Download PDF Button */}
-        {global.user.userType == 2 && (
+        {global.user.userType == 2 && ended &&  (
           <Grid
             item
             lg={4}
@@ -356,8 +356,8 @@ const SubToolbar = ({ componentRef }: Props) => {
                   name="Download Pdf"
                   onClick={() => {}}
                   style={{
-                    minWidth: '240px !important',
-                    width: '240px !important',
+                    minWidth: '172px !important',
+                    width: '172px !important',
                     height: '40px !important',
                   }}
                 />
