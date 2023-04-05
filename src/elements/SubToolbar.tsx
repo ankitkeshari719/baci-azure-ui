@@ -338,7 +338,7 @@ const SubToolbar = ({ componentRef }: Props) => {
           )}
         </Grid>
         {/* Download PDF Button */}
-        {global.user.userType == 2 && (
+        {global.user.userType == 2 && ended &&  (
           <Grid
             item
             lg={4}
