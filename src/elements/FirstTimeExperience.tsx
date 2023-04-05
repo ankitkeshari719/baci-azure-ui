@@ -92,19 +92,19 @@ const FirstTimeExperience = (props: any) => {
       if (d != null && d !== undefined) {
         d.style.position = 'absolute';
 
-        d.style.width = elem.getBoundingClientRect().width + 10 + 'px';
-        d.style.height = elem.getBoundingClientRect().width + 10 + 'px';
+        d.style.width = elem.getBoundingClientRect().width + 20 + 'px';
+        d.style.height = elem.getBoundingClientRect().width + 20 + 'px';
         d.style.padding = '10px';
 
         d.style.left =
           elem.getBoundingClientRect().x -
           elem.getBoundingClientRect().width / 2 +
-          25 +
+          15 +
           'px';
         d.style.top = isMaintenanceAlertOpen
           ? elem.getBoundingClientRect().y -
             elem.getBoundingClientRect().width / 2 +
-            30 +
+            10 +
             'px'
           : elem.getBoundingClientRect().y -
             elem.getBoundingClientRect().width / 2 -
@@ -280,7 +280,7 @@ const FirstTimeExperience = (props: any) => {
               1/2
             </Typography>
             <Typography align="center" pl="47" pr="47">
-              Participants see their own cards only until you click ‘Publish’.
+              Participants see their own cards only until you click 'Publish'.
               Participants will then see all cards, grouping and will be able to
               vote
             </Typography>
@@ -414,7 +414,7 @@ const FirstTimeExperience = (props: any) => {
               fontWeight="600"
               align="center"
             >
-              Hit ‘Leave Retro’ once you are DONE!
+              Hit 'Leave Retro' once you are DONE!
             </Typography>
             <Typography align="center" pl="47" pr="47">
               You would be asked to submit the feedback
