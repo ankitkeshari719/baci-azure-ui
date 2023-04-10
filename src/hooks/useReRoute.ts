@@ -14,9 +14,6 @@ export default function useReRoute() {
     const navigate = useNavigate();
     const { id } = useParams();
     const uuid = localStorage.getItem('uuid');
-    const { error, setError } = React.useContext(ErrorContext);
-    const [global, dispatch] = React.useContext(GlobalContext);
-    const isXsUp = useMediaQuery(theme.breakpoints.only('xs'));
     const {
         state: { retroId, users, ended, loading, retroStarted },
         commitAction,
