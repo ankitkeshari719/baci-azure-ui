@@ -1,6 +1,7 @@
 import React from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { BoardContext } from '../contexts/BoardContext';
+import { getRetro } from '../msal/services';
 
 export default function useReRoute() {
   const navigate = useNavigate();
@@ -11,15 +12,26 @@ export default function useReRoute() {
     commitAction,
   } = React.useContext(BoardContext);
 
+  const test = async () => {
+    if (id) {
+      const retrievedRetro = await getRetro(id);
+      console.log('retrievedRetro::: ', retrievedRetro);
+    }
+  };
+
+  React.useEffect(() => {
+    test();
+  }, [id]);
+
   React.useEffect(() => {
     const found = users.some(el => el.userId === uuid);
-    // console.log('users:::', users);
-    // console.log('uuid:::', uuid);
-    // console.log('ended:::', ended);
-    // console.log('found:::', found);
+    console.log('users:::', users);
+    console.log('uuid:::', uuid);
+    console.log('ended:::', ended);
+    console.log('found:::', found);
 
     if (
-      uuid === null &&
+      (uuid === null || uuid === undefined) &&
       (window.location.pathname.includes('pulsecheck') ||
         window.location.pathname.includes('report'))
     ) {
