@@ -13,7 +13,7 @@ export function RetroIsFinished() {
     }
 
     return (
-        <Grid container className='mainContainer' >
+        <Grid container className='main' >
             <img src={animation} style={{ height: 'calc(100vh - 300px)' }}></img>
             <Typography className="firstText">Retro is Finished</Typography>
             <Typography className="secondText" mt={3}>Could not find the page you are looking for!</Typography>
