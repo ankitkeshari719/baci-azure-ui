@@ -37,6 +37,7 @@ import moment from 'moment';
 import { PrintRetroColumn } from './PrintRetroColumn';
 import ReactToPrint from 'react-to-print';
 import { OutlinedButton } from '../../components';
+import useReRoute from '../../hooks/useReRoute';
 
 interface StyledTabsProps {
   children?: React.ReactNode;
@@ -165,6 +166,9 @@ export default function RetroBoard() {
     React.useState(false);
 
   let componentRef = React.useRef(null);
+
+  // Re-Routing rules added
+  useReRoute();
 
   useLoadRetro();
 

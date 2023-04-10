@@ -1,6 +1,6 @@
-import commonStyles from './../style.module.scss';
-import './../global.scss';
-import animation from '../assets/img/wild-card-404.gif';
+import commonStyles from './../../style.module.scss';
+import './../../global.scss';
+import animation from '../../assets/img/wild-card-404.gif';
 import { Button, Grid, Typography } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
 export function PageNotFound() {
@@ -17,7 +17,6 @@ export function PageNotFound() {
               variant="outlined"
               className="secondaryButton"
               onClick={() => goToLanding()}
-            //   onTouchStart={() => goToLanding()}
             >
               <span className="secondaryButtonText">Go back to Home</span>
             </Button>

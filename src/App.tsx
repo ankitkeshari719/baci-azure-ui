@@ -18,13 +18,14 @@ import { ParticipantWaitingPage } from './screens/Board/ParticipantWaitingPage';
 import { CreateRetroMain } from './screens/CreateRetro/CreateRetroMain';
 import { StartRetro } from './screens/StartRetro';
 import { Grid } from '@mui/material';
-import { PageNotFound } from './screens/PageNotFound';
+import { PageNotFound } from './screens/Others/PageNotFound';
 import Feedback from './screens/Feedback';
 import Board from './screens/Board/Board';
 import PulseCheckMain from './screens/PulseChecks/PulseCheckMain';
 import SummaryReportMain from './screens/SummaryReports/SummaryReportMain';
 import { LandingPage } from './screens/Home/LandingPage';
 import { JoinRetro } from './screens/Home/JoinRetro';
+import { RetroIsFinished } from './screens/Others/RetroIsFinished';
 
 type AppProps = {
   instance: IPublicClientApplication;
@@ -89,6 +90,10 @@ export default function App({ instance }: AppProps) {
                         <Route
                           path="/report/:id"
                           element={<SummaryReportMain />}
+                        />
+                        <Route
+                          path="/retroisfinished"
+                          element={<RetroIsFinished></RetroIsFinished>}
                         />
                         <Route
                           path="*"
