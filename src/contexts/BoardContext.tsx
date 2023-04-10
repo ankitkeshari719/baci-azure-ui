@@ -158,7 +158,6 @@ function BoardProvider(props: ComponentProps<any>) {
           user.id,
           lastActionTimestamp.current,
           actions => {
-            console.log("processing action",actions)
             if (actions.length !== 0) {
               processActions(actions);
             }

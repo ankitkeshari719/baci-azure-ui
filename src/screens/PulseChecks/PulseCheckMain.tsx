@@ -8,6 +8,7 @@ import BusinessAgility from './BusinessAgility';
 import PulseCheckTopbar from './PulseCheckTopbar';
 import { DeploymentPopUp } from '../Utils/Alerts/DeploymentPopUp';
 import theme from '../../theme/theme';
+import useReRoute from '../../hooks/useReRoute';
 
 export default function PulseCheckMain() {
   const navigate = useNavigate();
@@ -16,6 +17,9 @@ export default function PulseCheckMain() {
   const {
     state: { retroId, pulseCheck },
   } = React.useContext(BoardContext);
+
+  // Re-Routing rules added
+  useReRoute();
 
   React.useEffect(() => {
     if (pulseCheck && pulseCheck.id === 'pulse_check_not_req') {
