@@ -68,12 +68,9 @@ export function JoinRetro() {
   const {
     state: {
       users,
-      creatorId,
       retroId,
       retroStarted,
       ended,
-      needsToShow,
-      retroStatus,
       retroName,
     },
     commitAction,
@@ -100,7 +97,10 @@ export function JoinRetro() {
   const [openAvatarDialog, setOpenAvatarDialog] = React.useState(false);
   const [height, setHeight] = React.useState(0);
   
+  // Re-Routing rules added
   useReRoute();
+  
+  useAzureAuth();
 
   React.useEffect(() => {
     loadRetroDetails();
@@ -153,9 +153,6 @@ export function JoinRetro() {
       payload: { retro: foundRetro },
     });
   };
-
-  useAzureAuth();
-
 
   const onClickAvatar = (avatarName: any) => {
     setAvatar(avatarName);

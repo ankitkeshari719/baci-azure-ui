@@ -8,6 +8,7 @@ import Toolbar from '../../elements/Toolbar';
 import { GlobalContext } from '../../contexts/GlobalContext';
 import theme from '../../theme/theme';
 import { DeploymentPopUp } from '../Utils/Alerts/DeploymentPopUp';
+import useReRoute from '../../hooks/useReRoute';
 
 export function ParticipantWaitingPage() {
   const [global, dispatch] = React.useContext(GlobalContext);
@@ -18,7 +19,12 @@ export function ParticipantWaitingPage() {
   const [animatesecond, setAnimatesecond] = React.useState(false);
   const [animateThird, setAnimateThird] = React.useState(false);
   const isXsUp = useMediaQuery(theme.breakpoints.between('xs', 'sm'));
+
+  // Re-Routing rules added
+  useReRoute();
+
   useLoadRetro();
+
   return (
     <>
       {isXsUp ? (
@@ -121,7 +127,7 @@ export function ParticipantWaitingPage() {
                 display: 'flex',
                 justifyContent: 'center',
                 alignContent: 'center',
-                marginTop: '16px'
+                marginTop: '16px',
               }}
             >
               <Typography variant="h2" color={commonStyles.primaryDark}>

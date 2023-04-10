@@ -5,9 +5,13 @@ import './styles.scss';
 import Toolbar from '../../elements/Toolbar';
 import { ReportSummary } from './ReportSummary';
 import { DeploymentPopUp } from '../Utils/Alerts/DeploymentPopUp';
+import useReRoute from '../../hooks/useReRoute';
 
 export default function SummaryReportMain() {
   const componentRef = React.createRef<HTMLDivElement>();
+  
+  // Re-Routing rules added
+  useReRoute();
 
   return (
     <Box className="mainContainer">
