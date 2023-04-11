@@ -405,3 +405,8 @@ export const pulseChecksData: pulseCheckInterface[] = [
     valueDescription: [],
   },
 ];
+
+export const PORTRAIT_PRIMARY = 'portrait-primary';
+export const PORTRAIT_SECONDARY = 'portrait-secondary';
+export const LANDSCAPE_PRIMARY = 'landscape-primary';
+export const LANDSCAPE_SECONDARY = 'landscape-secondary';
