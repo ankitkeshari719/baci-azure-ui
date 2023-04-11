@@ -32,16 +32,7 @@ export default function useReRoute() {
 
     if (
       (uuid === null || uuid === undefined) &&
-      (window.location.pathname.includes('pulsecheck') ||
-        window.location.pathname.includes('report'))
-    ) {
-      navigate(`/retroisfinished`);
-    }
-
-    if (
-      (uuid != null || uuid != undefined) &&
-      users.length === 0 &&
-      window.location.pathname.includes('report')
+      window.location.pathname.includes('pulsecheck')
     ) {
       navigate(`/retroisfinished`);
     }
