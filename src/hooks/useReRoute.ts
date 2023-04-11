@@ -39,6 +39,14 @@ export default function useReRoute() {
     }
 
     if (
+      (uuid != null || uuid != undefined) &&
+      users.length === 0 &&
+      window.location.pathname.includes('report')
+    ) {
+      navigate(`/retroisfinished`);
+    }
+
+    if (
       (window.location.pathname.includes('join') ||
         window.location.pathname.includes('waiting') ||
         window.location.pathname.includes('pulsecheck') ||
