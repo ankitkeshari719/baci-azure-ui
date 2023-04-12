@@ -917,7 +917,7 @@ export function RetroColumn({
                                     marginBottom: '20px',
                                     marginLeft: global?.expandColumn === -1 ? 0 : '10px',
                                     marginRight: global?.expandColumn === -1 ? 0 : '10px',
-                                    width: global?.expandColumn === -1 ? card.value.length < 60 ? '49.5%' : '100%' :
+                                    width: isXsUp ? '100%' : global?.expandColumn === -1 ? card.value.length < 60 ? '49.5%' : '100%' :
                                       isLgUp ? card.value.length < 60 ? '25%' : '50%' : card.value.length < 60 ? 'calc( 16.66% - 20px)' : 'calc(33.33% - 20px)',
 
                                     // minWidth: isXsUp ? '100%' : global?.expandColumn === -1 ? '48.5%' : !isLgUp ? "16.66%" : "25%", maxWidth: global?.expandColumn === -1 ? 'calc(100%-20px)' : !isLgUp ? "33.33%" : "calc(50%)"
@@ -1091,7 +1091,7 @@ export function RetroColumn({
                                                             : group.cards
                                                               .length) ? (
                                                           <Box sx={{
-                                                            width: global?.expandColumn === -1 ? card.value.length < 60 ? '49.5%' : '100%' :
+                                                            width:isXsUp ? '100%' : global?.expandColumn === -1 ? card.value.length < 60 ? '49.5%' : '100%' :
                                                               isLgUp ? card.value.length < 60 ? '25%' : '50%' : card.value.length < 60 ? '16.66%' : '33.33%'
                                                             ,
                                                             // minWidth: isXsUp ? '100%' : global?.expandColumn === -1 ? '48%' : !isLgUp ? "16.66%" : "25%", maxWidth: global?.expandColumn === -1 ? 'calc(100% )' : !isLgUp ? "33.33%" : "calc(50%)"
