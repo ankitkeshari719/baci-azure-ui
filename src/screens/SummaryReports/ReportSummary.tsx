@@ -51,6 +51,7 @@ import DidNotWentWell from './DidNotWentWell';
 import WhatWentWell from './WhatWentWellCoulmn';
 import PulseCheckSection from './PulseCheckSection';
 import DevelopActionRedesign from './DevelopActionRedesign';
+import useLoadRetro from '../../hooks/useLoadRetro';
 
 ChartJS.register(
   CategoryScale,
@@ -186,7 +187,7 @@ export const ReportSummary = React.forwardRef((props, ref) => {
   const [isActionCopied, setIsActionCopied] = React.useState(false);
 
   const windowWidth = React.useRef(window.innerWidth);
-
+  useLoadRetro()
   React.useEffect(() => {
     const wentWellCardValues = [] as string[];
     const didNotWentWellCardValues = [] as string[];
