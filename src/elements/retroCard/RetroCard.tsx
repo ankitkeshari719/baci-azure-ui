@@ -53,6 +53,7 @@ export function RetroCard({
   moveCard,
   animate,
   isPrintPage,
+  width
 }: {
   card: RetroCardType;
   currentGroupId: string;
@@ -62,6 +63,7 @@ export function RetroCard({
   moveCard: (cardId: string, toGroup: string, toIndex: number) => void;
   animate: boolean;
   isPrintPage: boolean;
+  width?:number;
 }) {
   const [global, dispatch] = React.useContext(GlobalContext);
   const {
@@ -77,7 +79,18 @@ export function RetroCard({
   const open = Boolean(anchorEl);
   const open1 = Boolean(anchorEl1);
   const editFieldRef = React.useRef<HTMLInputElement>(null);
+  const [sectionWidth, setSectionWidth] = React.useState<number>(300)
+  const [sectionHalfWidth, setSectionHalfWidth] = React.useState<number>(180)
 
+
+  React.useEffect(() => {
+    const section = document.getElementById("section0")
+    console.log(section && section.offsetWidth, "log")
+    if (section != null) {
+      setSectionWidth(section.offsetWidth)
+      setSectionHalfWidth(section.offsetWidth / 2 - 28)
+    }
+  }, [])
   React.useEffect(() => {
     if (editing) {
       const end = editFieldRef.current?.value.length || 0;
@@ -286,13 +299,17 @@ export function RetroCard({
             border: '1px solid ' + Color(cardColour).darken(0.1),
             borderRadius: '8px',
             boxShadow: '-2px 5px 9px -4px rgba(0,0,0,0.74)',
-
+display:'flex',
+flexDirection:'column',
             width: '100%',
+            // minWidth: "40%!important",
+            // maxWidth: { sectionWidth } + "px",
             animation: animate ? `${bumpAnimation} 300ms ease` : 'none',
             '&:hover': {
               background: editing ? 'transparant' : cardColourHover,
             },
           }}
+         
           className="cardStyle"
         >
           <CardContent
@@ -303,7 +320,7 @@ export function RetroCard({
             <Box sx={{ display: 'flex', flexDirection: 'row' }}>
               {!isPrintPage ? (
                 <Avatar
-                  onClickAvatar={() => {}}
+                  onClickAvatar={() => { }}
                   avatar={card.avatar}
                   css={{ width: '40px', height: '40px', border: 'none' }}
                 />
@@ -388,8 +405,8 @@ export function RetroCard({
                     sx={{
                       cursor:
                         card.createdBy === global.user.id &&
-                        !ended &&
-                        !hideButtons
+                          !ended &&
+                          !hideButtons
                           ? 'text'
                           : '',
                     }}
@@ -479,10 +496,10 @@ export function RetroCard({
                 sx={{ display: 'flex', alignItems: 'center' }}
               >
                 {card.createdBy === global.user.id &&
-                !hideButtons &&
-                !ended &&
-                !global.leaveRetro &&
-                !isPrintPage ? (
+                  !hideButtons &&
+                  !ended &&
+                  !global.leaveRetro &&
+                  !isPrintPage ? (
                   <Button
                     sx={{ minWidth: '0px', position: 'initial' }}
                     onClick={e => {
@@ -510,11 +527,11 @@ export function RetroCard({
                 ) : null}
 
                 {!hideButtons &&
-                !ended &&
-                !global.leaveRetro &&
-                (card.createdBy === global.user.id ||
-                  global.user.userType == 2) &&
-                !isPrintPage ? (
+                  !ended &&
+                  !global.leaveRetro &&
+                  (card.createdBy === global.user.id ||
+                    global.user.userType == 2) &&
+                  !isPrintPage ? (
                   <Box
                     component="span"
                     sx={{
@@ -529,9 +546,9 @@ export function RetroCard({
                         global.user.userType == 2
                           ? menuItemsData
                           : {
-                              label: menuItemsData.label,
-                              items: [menuItemsData.items[0]],
-                            }
+                            label: menuItemsData.label,
+                            items: [menuItemsData.items[0]],
+                          }
                       }
                       MenuProps={{ elevation: 3 }}
                       ButtonProps={{ variant: undefined }}
