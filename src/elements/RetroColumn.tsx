@@ -88,6 +88,7 @@ export function RetroColumn({
   const autoFocusCardId = React.useRef<string | undefined>(undefined);
 
   const isXsUp = useMediaQuery(theme.breakpoints.only('xs'));
+  const isLgUp = useMediaQuery(theme.breakpoints.only('lg'))
 
   const groupRefs = cardGroups.map(
     cardGroup => null
@@ -784,10 +785,16 @@ export function RetroColumn({
       column.groups.splice(result.destination.index, 0, group);
     }
   };
-
+  const getWidth = (): number => {
+    const a = document.getElementById("section0")
+    if (a != null && a.offsetWidth != undefined)
+      return a.offsetWidth
+    else return 180
+  }
   if (!location.pathname.includes('report')) {
     return (
       <ColumnComponent
+        id={"section" + column.id}
         sx={{
           height: noHeightLimit
             ? 'auto'
@@ -882,13 +889,20 @@ export function RetroColumn({
                     > */}
 
                     {cardGroups.map((group, i) => (
-                      <React.Fragment key={i}>
-                        <Masonry columns={{
-                          xs: 1, sm: global?.expandColumn === -1 ? 2 : 4,
-                          md: global?.expandColumn === -1 ? 2 : 4,
-                          lg: global?.expandColumn === -1 ? 2 : 6
+                      <React.Fragment key={i} >
+                        {/* <Masonry columns={{
+                          // xs: 1, sm: global?.expandColumn === -1 ? 2 : 4,
+                          // md: global?.expandColumn === -1 ? 2 : 4,
+                          // lg: global?.expandColumn === -1 ? 2 : 6
                         }}
-                          sx={{ marginBottom: "8px" }}>
+                          sx={{ marginBottom: "8px" }}> */}
+                        <Grid style={{
+                          display: 'flex',
+                          flexWrap: 'wrap',
+                          justifyContent: global?.expandColumn === -1 ? 'space-between' : 'left',
+
+                          // minHeight: '100px',
+                        }}>
                           {group.cards.map((card: RetroCardType, j: number) => (
                             <React.Fragment key={j}>
 
@@ -898,7 +912,16 @@ export function RetroColumn({
                                   // lg={global?.expandColumn !== -1 ? 2 : 6}
                                   // md={global?.expandColumn !== -1 ? 2 : 4}
                                   // xs={12}
-                                  sx={{ marginBottom: '20px' }}
+                                  // sx={{ marginBottom: '20px' }}
+                                  sx={{
+                                    marginBottom: '20px',
+                                    marginLeft: global?.expandColumn === -1 ? 0 : '10px',
+                                    marginRight: global?.expandColumn === -1 ? 0 : '10px',
+                                    width: isXsUp ? '100%' : global?.expandColumn === -1 ? card.value.length < 60 ? '49.5%' : '100%' :
+                                      isLgUp ? card.value.length < 60 ? '25%' : '50%' : card.value.length < 60 ? 'calc( 16.66% - 20px)' : 'calc(33.33% - 20px)',
+
+                                    // minWidth: isXsUp ? '100%' : global?.expandColumn === -1 ? '48.5%' : !isLgUp ? "16.66%" : "25%", maxWidth: global?.expandColumn === -1 ? 'calc(100%-20px)' : !isLgUp ? "33.33%" : "calc(50%)"
+                                  }}
                                   key={j + '0'}
                                 >
                                   <RetroCard
@@ -916,7 +939,8 @@ export function RetroColumn({
 
                             </React.Fragment>
                           ))}
-                        </Masonry>
+                        </Grid>
+                        {/* </Masonry> */}
                       </React.Fragment>
                     ))}
 
@@ -1023,12 +1047,33 @@ export function RetroColumn({
                                                     padding: '0',
                                                   }}
                                                 ></span>
-                                                <Masonry columns={{
-                                                  xs: 1,
-                                                  sm: global?.expandColumn === -1 ? 2 : 4,
-                                                  md: global?.expandColumn === -1 ? 2 : 4,
-                                                  lg: global?.expandColumn === -1 ? 2 : 6
-                                                }}>
+                                                <Grid
+                                                  sx={{
+                                                    display: 'flex',
+                                                    flexDirection: 'row',
+                                                    flexWrap: 'wrap',
+                                                    justifyContent: global?.expandColumn === -1 ? 'space-between' : "left",
+                                                    width: "100%"
+
+                                                    // display: "grid",
+                                                    // gap: "10px",
+                                                    // gridTemplateColumns: {
+                                                    //   xs: 'auto', sm: global?.expandColumn === -1 ? "auto auto" : "auto auto auto auto",
+                                                    //   lg: global?.expandColumn === -1 ? "auto auto" : "auto auto auto auto auto auto"
+                                                    // }
+                                                    // ,
+                                                    // gridTemplateRows: "masonry"
+                                                  }}
+
+
+                                                // columns={{
+
+                                                //   // xs: 1,
+                                                //   // sm: global?.expandColumn === -1 ? 2 : 4,
+                                                //   // md: global?.expandColumn === -1 ? 2 : 4,
+                                                //   // lg: global?.expandColumn === -1 ? 2 : 6
+                                                // }}
+                                                >
                                                   {group.cards.map((card: RetroCardType, j: number) =>
                                                     (card.createdBy ===
                                                       global.user.id ||
@@ -1045,7 +1090,12 @@ export function RetroColumn({
                                                             ? 2
                                                             : group.cards
                                                               .length) ? (
-                                                          <Box>
+                                                          <Box sx={{
+                                                            width:isXsUp ? '100%' : global?.expandColumn === -1 ? card.value.length < 60 ? '49.5%' : '100%' :
+                                                              isLgUp ? card.value.length < 60 ? '25%' : '50%' : card.value.length < 60 ? '16.66%' : '33.33%'
+                                                            ,
+                                                            // minWidth: isXsUp ? '100%' : global?.expandColumn === -1 ? '48%' : !isLgUp ? "16.66%" : "25%", maxWidth: global?.expandColumn === -1 ? 'calc(100% )' : !isLgUp ? "33.33%" : "calc(50%)"
+                                                          }}>
 
                                                             <Grid
                                                               // item
@@ -1077,7 +1127,7 @@ export function RetroColumn({
                                                                   j,
                                                                   card)
                                                               }
-                                                              style={{ padding: '10px', }}
+                                                              style={{ padding: '10px' }}
                                                             >
                                                               <Draggable
                                                                 nodeRef={
@@ -1146,8 +1196,11 @@ export function RetroColumn({
                                                                   }
                                                                   id={i + ''}
                                                                   ref={nodeRef}
+                                                                // style={{display:'flex',width:'100%',minWidth:'100%',maxWidth:'400px'}}
                                                                 >
+
                                                                   <RetroCard
+
                                                                     moveCard={
                                                                       moveCard
                                                                     }
@@ -1170,7 +1223,10 @@ export function RetroColumn({
                                                                     isPrintPage={
                                                                       false
                                                                     }
+
                                                                   />
+
+
                                                                 </span>
                                                               </Draggable>
                                                             </Grid>
@@ -1194,7 +1250,7 @@ export function RetroColumn({
 
                                                     )
                                                   )}
-                                                </Masonry>
+                                                </Grid>
 
 
                                               </Box>
