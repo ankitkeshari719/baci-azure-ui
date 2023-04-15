@@ -73,7 +73,7 @@ export const getRetroActions = async (
   };
   await fetch(
     API_URL +
-      `/getRetroActions?id=${id}&userId=${userId}&fromTimestamp=${fromTimestamp}`,
+    `/getRetroActions?id=${id}&userId=${userId}&fromTimestamp=${fromTimestamp}`,
     requestOptions
   )
     .then(response => response.json())
@@ -173,6 +173,27 @@ export const getDeploymentData = async (): Promise<any> => {
 
   return deploymentData;
 };
+
+
+
+export const groupSuggestion = async (
+  retroId: string,
+  column: any
+): Promise<string> => {
+  let groupData = '';
+  const requestOptions = {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({column:column}),
+  };
+  await fetch(API_URL + '/groupSuggestion', requestOptions)
+    .then(response => response.json())
+    .then(data => {
+      groupData = data;
+    });
+  return groupData;
+};
+
 
 /* 
 export const onSnapshotRetroActions = (socket: Socket<DefaultEventsMap, DefaultEventsMap>,id: string, userId: string, fromTimestamp: number | undefined, callback: (([]) => void)): () => void => {

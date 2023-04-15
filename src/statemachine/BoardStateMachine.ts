@@ -6,7 +6,7 @@ import {
   FeedbackEntry,
   PulseCheckEntry,
 } from '../types';
-
+import shortid from 'shortid';
 import { UNGROUPED } from '../constants';
 // import { GlobalContext } from '../contexts/GlobalContext';
 import React from 'react';
@@ -48,6 +48,7 @@ export enum BoardActionType {
   PUBLISH_COLUMN = 'publishColumn',
   LOCK_COLUMN = 'lockColumn',
   SET_FACILITATOR = 'setFacilitator',
+  GROUP_SUGGESTION = "groupSuggestion"
 }
 
 export const BOARD_STATE_MACHINE_VERSION = 1;
@@ -145,7 +146,7 @@ export const validateAction = (
     pulseCheck?: any,
     template?: any,
     feedbackSubmitted?: boolean,
-    isFeedbackSubmittedByFacilitator?:number
+    isFeedbackSubmittedByFacilitator?: number
   ) => {
     return true;
   };
@@ -570,6 +571,8 @@ export const validateAction = (
       return canSubmitFeedback(parameters.feedback, userId);
     case BoardActionType.END_RETRO:
       return canEndRetro(parameters.undo, userId);
+    case BoardActionType.GROUP_SUGGESTION:
+      return true;
     case BoardActionType.SET_FACILITATOR:
       return true;
     // case BoardActionType.SET_LOADING:
@@ -667,7 +670,7 @@ export const processAction = (
     pulseCheck?: any,
     template?: any,
     feedbackSubmitted?: boolean,
-    isFeedbackSubmittedByFacilitator?:number
+    isFeedbackSubmittedByFacilitator?: number
   ) => {
     if (retroName !== undefined && retroName !== '') {
       state.retroName = retroName;
@@ -712,22 +715,120 @@ export const processAction = (
     columnId: string,
     groupId: string,
     order: number,
-    userId: string
+    userId: string,
+    cards?: any[],
+    name?: string,
+    suggested?: boolean
   ) => {
+    console.log("userId", userId)
     const columnIndex = columns.findIndex(column => column.id === columnId);
     if (columnIndex !== -1 && !findGroup(groupId).group) {
       const column = columns[columnIndex];
       column.groups.unshift({
         id: groupId,
-        name: '', //'Group ' + column.groups.length,
+        name: name ? name : '', //'Group ' + column.groups.length,
+        cards: cards ? cards : [],
+        order,
+        reactions: [],
+        createdBy: userId,
+        locked: false,
+        lastUpdatedBy: userId,
+        suggested: suggested ? suggested : false
+      });
+    }
+  };
+
+
+
+
+  const createGroupAsSuggested = (
+    columnId: string,
+    groupSugg: any[],
+    groupIdArray: string[],
+    order: number,
+    userId: string
+  ) => {
+    const groupSuggestionOutput = groupSugg;
+    console.log("groupSugg", groupSugg)
+    groupSuggestionOutput.forEach((groupObj: any, groupIndex: number) => {
+
+      const groupId1 = groupIdArray[groupIndex];
+      const columnIndex: number = columns.findIndex(column => column.id === columnId);
+      const column: Column = columns[columnIndex];
+      console.log("mainUserId", userId)
+      const newGroup: CardGroup = {
+        id: groupId1,
+        name: groupObj.groupName, //'Group ' + column.groups.length,
         cards: [],
         order,
         reactions: [],
         createdBy: userId,
         locked: false,
         lastUpdatedBy: userId,
+        suggested: true,
+      }
+
+      groupObj.cards.forEach((cardObj: any, toIndex: number) => {
+        const cardId = cardObj.id
+        const { card, group, index } = findCard(cardId);
+        if (
+          card &&
+          !(card.locked && card.lockedBy !== userId) &&
+          group &&
+          !(group.id === groupId1 && index === toIndex)
+        ) {
+
+
+          // findGroup(toGroup);
+          if (newGroup) {
+            console.log("newgroup pushing card", card)
+            const cardsList = newGroup.cards;
+            group.cards.splice(index as number, 1);
+            cardsList.splice(
+              toIndex -
+              (group.id === newGroup.id && (index as number) < toIndex
+                ? 1
+                : 0),
+              0,
+              card
+            );
+            card.lastUpdatedBy = userId;
+          }
+        }
+
+
+
       });
-    }
+
+
+
+
+
+      if (columnIndex !== -1 && !findGroup(groupId1).group) {
+        createGroup(columnId,
+          groupId1,
+          order,
+          userId,
+          newGroup.cards,
+          newGroup.name,
+          true)
+      }
+      return false;
+
+
+
+    });
+
+
+
+
+
+
+
+
+
+
+
   };
 
   const addNewCard = (
@@ -774,9 +875,9 @@ export const processAction = (
         group.cards.splice(index as number, 1);
         cardsList.splice(
           toIndex -
-            (group.id === targetGroup.id && (index as number) < toIndex
-              ? 1
-              : 0),
+          (group.id === targetGroup.id && (index as number) < toIndex
+            ? 1
+            : 0),
           0,
           card
         );
@@ -962,8 +1063,9 @@ export const processAction = (
   };
 
   const setGroupName = (groupId: string, name: string, userId: string) => {
+
     const { group } = findGroup(groupId);
-    if (group && !(group.locked && group.lockedBy !== userId)) {
+    if (group) {
       group.name = name;
       group.lastUpdatedBy = userId;
     }
@@ -1279,6 +1381,14 @@ export const processAction = (
     case BoardActionType.SET_FACILITATOR:
       setFacilitator(parameters.userIdFac);
       break;
+    case BoardActionType.GROUP_SUGGESTION:
+      createGroupAsSuggested(parameters.columnId,
+
+        parameters.groupSugg,
+        parameters.groupIdArray,
+        parameters.order,
+        userId);
+      break;
     default:
       noMatch = true;
       break;
@@ -1288,3 +1398,7 @@ export const processAction = (
     state.lastStateUpdate = new Date();
   }
 };
+
+
+
+

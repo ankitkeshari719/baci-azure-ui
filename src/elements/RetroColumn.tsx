@@ -1,7 +1,7 @@
 import { Box, Grid, styled, useMediaQuery } from '@mui/material';
 import React, { ReactElement, useMemo } from 'react';
 import Draggable, { DraggableData, DraggableEvent } from 'react-draggable';
-import { UNGROUPED } from '../constants';
+import { UNGROUPED, SUGGESTEDGROUP } from '../constants';
 import { BoardContext } from '../contexts/BoardContext';
 import { BoardActionType } from '../statemachine/BoardStateMachine';
 import { Card, Card as RetroCardType, CardGroup, Column } from '../types';
@@ -11,6 +11,7 @@ import { RetroCard } from './retroCard/RetroCard';
 import theme from '../theme/theme';
 import { RetroCardGroup } from './RetroCardGroup';
 import Masonry from '@mui/lab/Masonry';
+
 import {
   DragDropContext,
   Draggable as Drag,
@@ -18,6 +19,7 @@ import {
 } from 'react-beautiful-dnd';
 import ColumnHeader from './ColumnHeader';
 import RetroColumnBottom from './RetroColumnBottom';
+import { groupSuggestion } from '../msal/services';
 
 const ColumnComponent = styled('div')({
   height: 'calc(var(--app-height) - 160px)',
@@ -185,6 +187,23 @@ export function RetroColumn({
       }
     );
   };
+  const createGroupAsSuggested = async (groupSuggestion: any, groupIdArray: string[]) => {
+
+    dispatchLoadingFlag(true);
+    await saveAndProcessAction(BoardActionType.GROUP_SUGGESTION, {
+      columnId,
+      groupSugg: groupSuggestion,
+      groupIdArray,
+      order: 0,
+    }).then(
+      res => {
+        dispatchLoadingFlag(false);
+      },
+      err => {
+        dispatchLoadingFlag(false);
+      }
+    );
+  }
 
   const reorderCards = async (
     cardId: string,
@@ -791,6 +810,70 @@ export function RetroColumn({
       return a.offsetWidth
     else return 180
   }
+
+  const setGroupName = async (groupId: string, name: string) => {
+    await saveAndProcessAction(BoardActionType.SET_GROUP_NAME, {
+      groupId,
+      name,
+    });
+  };
+
+
+
+  const getGroupSuggestion = async () => {
+    let ungroupCards: any[] = [];
+    column.groups.forEach(group => {
+      if (group.name == UNGROUPED) {
+        ungroupCards = group.cards
+      }
+    })
+    dispatchLoadingFlag(true);
+    await groupSuggestion(columnId, ungroupCards).then((res: any) => {
+
+      console.log(res.response)
+      const data = res.response
+      if (data) {
+        const groupIdArray: string[] = []
+
+        data.forEach((group: any) => {
+          groupIdArray.push(shortid.generate())
+        })
+        createGroupAsSuggested(data, groupIdArray)
+
+
+        // data.forEach(async (element: any) => {
+        //   console.log(element)
+        //   const groupId = shortid.generate();
+        //   await createGroup(groupId).then( (res) => {
+        //      setGroupName(groupId, element.category)
+
+        //     element.sentences.forEach(async (card: any,index:number) => {
+        //       console.log(card)
+        //       moveCard(card.id, groupId, index);
+        //     });
+
+        //     // await moveCard(cardId2, groupId, 1);
+        //     // autoFocusCardId.current = cardId1;
+        //   });
+        // })
+
+
+      }
+      else {
+        dispatchLoadingFlag(false);
+      }
+
+    }, error => {
+      dispatchLoadingFlag(false);
+    })
+    // const groupId = shortid.generate();
+    // await createGroup(groupId);
+    // await moveCard(cardId1, groupId, 0);
+    // await moveCard(cardId2, groupId, 1);
+    // autoFocusCardId.current = cardId1;
+
+
+  }
   if (!location.pathname.includes('report')) {
     return (
       <ColumnComponent
@@ -854,7 +937,9 @@ export function RetroColumn({
                 dispatch={dispatch}
                 columnIndex={columnIndex}
                 isPrintPage={false}
+                getGroupSuggestion={getGroupSuggestion}
               />
+              {/* <button onClick={getGroupSuggestion}>vishal</button> */}
             </div>
           )}
           {useMemo(
@@ -1091,7 +1176,7 @@ export function RetroColumn({
                                                             : group.cards
                                                               .length) ? (
                                                           <Box sx={{
-                                                            width:isXsUp ? '100%' : global?.expandColumn === -1 ? card.value.length < 60 ? '49.5%' : '100%' :
+                                                            width: isXsUp ? '100%' : global?.expandColumn === -1 ? card.value.length < 60 ? '49.5%' : '100%' :
                                                               isLgUp ? card.value.length < 60 ? '25%' : '50%' : card.value.length < 60 ? '16.66%' : '33.33%'
                                                             ,
                                                             // minWidth: isXsUp ? '100%' : global?.expandColumn === -1 ? '48%' : !isLgUp ? "16.66%" : "25%", maxWidth: global?.expandColumn === -1 ? 'calc(100% )' : !isLgUp ? "33.33%" : "calc(50%)"

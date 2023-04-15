@@ -87,6 +87,7 @@ export interface CardGroup {
   lastUpdatedBy?: string;
   locked: boolean;
   lockedBy?: string;
+  suggested?:boolean
 }
 
 export interface Column {
