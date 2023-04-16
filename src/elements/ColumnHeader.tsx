@@ -1,6 +1,6 @@
 import { Switch } from '@material-ui/core';
 import { FormControlLabel, FormGroup, Grid, TextField, ThemeProvider, Tooltip, Typography } from '@mui/material';
-import React from 'react';
+import React, { useEffect } from 'react';
 import { ActionType } from '../contexts/GlobalContext';
 import theme from '../theme/theme';
 import { Column } from '../types';
@@ -22,7 +22,9 @@ const ColumnHeader = ({
   dispatch,
   columnIndex,
   isPrintPage,
-  getGroupSuggestion
+  getGroupSuggestion,
+  deleteUnconfirmedGroups,
+  retryGroupSuggestion,
 }: {
   column: Column;
   columnId: string;
@@ -40,10 +42,32 @@ const ColumnHeader = ({
   columnIndex: number | undefined;
   isPrintPage: boolean;
   getGroupSuggestion: () => void;
+  deleteUnconfirmedGroups: () => void;
+  retryGroupSuggestion:()=>void;
 }) => {
   const [showEdit, setShowEdit] = React.useState(false);
   const [enableSave, setEnableSave] = React.useState(false);
+  const [groupSuggestion, setGroupSuggestion] = React.useState(false);
+  const [disableGroupSuggestion, setDisableGroupSuggestion] = React.useState(true);
 
+  useEffect(() => {
+    setGroupSuggestion(false)
+    setDisableGroupSuggestion(true)
+    column.groups.forEach(element => {
+      if (element.suggested) {
+        setGroupSuggestion(true)
+        console.log(groupSuggestion, "groupSuggestion")
+      }
+      if (element.name == UNGROUPED) {
+        if (element.cards.length > 2) {
+          setDisableGroupSuggestion(false)
+        }
+        else {
+          setDisableGroupSuggestion(true)
+        }
+      }
+    });
+  }, [column])
   return (
     <Grid
       container
@@ -144,17 +168,28 @@ const ColumnHeader = ({
                     <FormGroup sx={{ display: 'flex', flexDirection: 'row' }}>
 
                       <FormControlLabel disabled control={<Switch color="secondary" />} label="Show keywords" />
-                      <FormControlLabel  disabled={(column.groups.find(group => group.name === UNGROUPED))?.cards.length==1}  sx={{ color: theme.palette.primary.dark }} 
-                      control={<Switch color="primary" onChange={(value) => {
-                        if (value.target.checked) {
-                          getGroupSuggestion()
+                      <Tooltip title={!groupSuggestion && disableGroupSuggestion ? "Need more then 3 or more then 3 ungrouped cards" : ''}>
+                        <FormControlLabel disabled={!groupSuggestion && disableGroupSuggestion} sx={{ color: theme.palette.primary.dark }} checked={groupSuggestion}
+                          control={<Switch color="primary" onChange={(value) => {
+                            if (value.target.checked) {
+                              getGroupSuggestion()
 
-                        }
-                      }} />} label="Suggest Grouping" />
+                            }
+                            else {
+                              console.log("deleteUnconfirmedGroups")
+                              deleteUnconfirmedGroups()
+                            }
+                          }} />} label="Suggest Grouping" /></Tooltip>
 
                     </FormGroup>
-                    <Tooltip title="Resuggest grouping">
-                      <RefreshIcon sx={{ color: theme.palette.primary.dark, marginRight: '15px', cursor: 'pointer' }} /></Tooltip>
+                    {groupSuggestion && !disableGroupSuggestion&&<Tooltip title="Resuggest grouping">
+                      <RefreshIcon sx={{ color: theme.palette.primary.dark, marginRight: '15px', cursor: 'pointer' }}
+                        onClick={
+                          retryGroupSuggestion
+                        }
+                      />
+
+                    </Tooltip>}
                   </ThemeProvider>
                 }
 

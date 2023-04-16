@@ -18,7 +18,7 @@ import {
   DraggableProvided,
 } from 'react-beautiful-dnd';
 import { XMarkIcon, CheckIcon } from '@heroicons/react/24/solid';
-
+import { OutlinedButton } from '../components/OutlinedButton';
 export function RetroCardGroup({
   admin,
   group,
@@ -106,6 +106,22 @@ export function RetroCardGroup({
       name,
     });
   };
+
+  const confirmGroup = async (groupId: string) => {
+    dispatch({
+      type: ActionType.SET_LOADING,
+      payload: { loadingFlag: true },
+    });
+    await saveAndProcessAction(BoardActionType.CONFIRM_GROUP, {
+      groupId,
+    
+    });
+    dispatch({
+      type: ActionType.SET_LOADING,
+      payload: { loadingFlag: false },
+    });
+  };
+  
   const addReactToGroup = async (groupId: string, react: string) => {
     dispatch({
       type: ActionType.SET_LOADING,
@@ -172,15 +188,17 @@ export function RetroCardGroup({
     <>
       <Card
         variant="outlined"
+    
         sx={{
           margin: '0',
           borderRadius: 0,
-          background: group.name !== UNGROUPED ? groupColour : 'none',
+          background: group.suggested ? 'none' : group.name !== UNGROUPED ? groupColour : 'none',
           optacity: 0.1,
           border: 'none',
           marginBottom: 0,
           paddingBottom: '5px',
           width: '100%',
+          
         }}
       >
         {group.name !== UNGROUPED ? (
@@ -224,7 +242,7 @@ export function RetroCardGroup({
                           // paddingLeft: '12px!important',
                           width:
                             global.expandColumn != -1 ||
-                            location.pathname.includes('report')
+                              location.pathname.includes('report')
                               ? '200px'
                               : '100%',
                           // width: (nameSet ? name.length : 14) + 3 + 'ch',
@@ -253,22 +271,22 @@ export function RetroCardGroup({
                         InputProps={{
                           readOnly: ended,
                         }}
-                        // onFocus={async event => {
-                        //   if (admin) {
-                        //     setNameSet(true);
-                        //     await lockGroup(group.id, true);
-                        //   }
-                        // }}
-                        // onBlur={async () => {
-                        //   if (admin) {
-                        //     lockGroup(group.id, false);
-                        //     if (!name) {
-                        //       setNameSet(false);
-                        //     } else {
-                        //       await setGroupName(group.id, name);
-                        //     }
-                        //   }
-                        // }}
+                      // onFocus={async event => {
+                      //   if (admin) {
+                      //     setNameSet(true);
+                      //     await lockGroup(group.id, true);
+                      //   }
+                      // }}
+                      // onBlur={async () => {
+                      //   if (admin) {
+                      //     lockGroup(group.id, false);
+                      //     if (!name) {
+                      //       setNameSet(false);
+                      //     } else {
+                      //       await setGroupName(group.id, name);
+                      //     }
+                      //   }
+                      // }}
                       />
                     </Grid>
                     <XMarkIcon
@@ -300,7 +318,7 @@ export function RetroCardGroup({
                 ) : (
                   <Typography
                     sx={{
-                      color: nameSet ? groupFontColour : '#8D858A',
+                      color: nameSet ?group.suggested?'#343434' : groupFontColour : '#8D858A',
                       whiteSpace: 'nowrap',
                       width: '100%',
                       overflow: 'hidden',
@@ -323,14 +341,14 @@ export function RetroCardGroup({
                 item
                 lg={
                   global?.expandColumn !== -1 ||
-                  location.pathname.includes('report')
-                    ? 1
+                    location.pathname.includes('report')
+                    ? 2.5
                     : 3
                 }
                 md={
                   global?.expandColumn !== -1 ||
-                  location.pathname.includes('report')
-                    ? 1.5
+                    location.pathname.includes('report')
+                    ? 3
                     : 4
                 }
                 xs={4}
@@ -339,79 +357,102 @@ export function RetroCardGroup({
                 alignItems="center"
                 justifyContent="space-between"
               >
-                <Grid
-                  style={{
-                    fontWeight: '600',
-                    padding: 0,
-                    color: nameSet ? groupFontColour : '#8D858A',
-                  }}
-                >
-                  {'( ' + group.cards.length + ' )'}
-                </Grid>
-                {group.name !== UNGROUPED && (
+                {group.suggested && (global?.expandColumn == -1 ||
+                  !location.pathname.includes('report')) ? <Grid>
+                    <Button
+
+
+                      className='containedButton'
+                      sx={{ borderRadius: '0px!important', color: 'white!important' }}
+                      onClick={()=>confirmGroup(group.id)}
+
+                    >
+
+                      Confirm Group
+
+                    </Button>
+                    
+                    </Grid>
+                  :<Grid></Grid>  
+                  }
+
+                <Grid item lg={global?.expandColumn == -1?12:4} container flexDirection="row" justifyContent="space-between">
                   <Grid
-                    item
-                    display="flex"
-                    flexDirection="row"
-                    alignSelf="center"
                     style={{
-                      cursor: !ended && !global.leaveRetro ? 'pointer' : 'auto',
+                      fontWeight: '600',
+                      padding: 0,
+                      color: nameSet ? groupFontColour : '#8D858A',
                     }}
-                    onClick={() =>
-                      !ended && !global.leaveRetro
-                        ? userReacted
-                          ? addReactToGroup(group.id, '')
-                          : addReactToGroup(group.id, '👍')
-                        : null
-                    }
                   >
-                    {userReacted ? (
-                      <img src="/svgs/StarGold.svg" />
-                    ) : (
-                      <>
-                        {ended || global.leaveRetro ? (
-                          <img src="/svgs/StarDisabled.svg" />
-                        ) : (
-                          <img src="/svgs/StarEnabled.svg" />
-                        )}
-                      </>
-                    )}
-                    <Typography
-                      color="#FBBC05"
+                    {'( ' + group.cards.length + ' )'}
+                  </Grid>
+                  {group.name !== UNGROUPED && (
+
+
+                    <Grid
+                      item
+                      display="flex"
+                      flexDirection="row"
+                      alignSelf="center"
                       style={{
-                        fontSize: '1rem',
-                        marginLeft: '6px',
-                        marginTop: '1px',
+                        cursor: !ended && !global.leaveRetro ? 'pointer' : 'auto',
+                      }}
+                      onClick={() =>
+                        !ended && !global.leaveRetro
+                          ? userReacted
+                            ? addReactToGroup(group.id, '')
+                            : addReactToGroup(group.id, '👍')
+                          : null
+                      }
+                    >
+                      {userReacted ? (
+                        <img src="/svgs/StarGold.svg" />
+                      ) : (
+                        <>
+                          {ended || global.leaveRetro ? (
+                            <img src="/svgs/StarDisabled.svg" />
+                          ) : (
+                            <img src="/svgs/StarEnabled.svg" />
+                          )}
+                        </>
+                      )}
+                      <Typography
+                        color="#FBBC05"
+                        style={{
+                          fontSize: '1rem',
+                          marginLeft: '6px',
+                          marginTop: '1px',
+                        }}
+                      >
+                        {group.reactions?.length ? group.reactions?.length : ''}
+                      </Typography>
+                    </Grid>
+                  )}
+                  {!location.pathname.includes('report') && !isPrintPage && (
+                    <Grid
+                      item
+                      sx={{
+                        cursor: 'pointer',
+                      }}
+                      onClick={event => {
+                        onCollapse(event);
                       }}
                     >
-                      {group.reactions?.length ? group.reactions?.length : ''}
-                    </Typography>
-                  </Grid>
-                )}
-                {!location.pathname.includes('report') && !isPrintPage &&  (
-                  <Grid
-                    item
-                    sx={{
-                      cursor: 'pointer',
-                    }}
-                    onClick={event => {
-                      onCollapse(event);
-                    }}
-                  >
-                    {showCollapse ? (
-                      <img src="/svgs/Down.svg" />
-                    ) : (
-                      <img src="/svgs/Up.svg" />
-                    )}
-                  </Grid>
-                )}
+                      {showCollapse ? (
+                        <img src="/svgs/Down.svg" />
+                      ) : (
+                        <img src="/svgs/Up.svg" />
+                      )}
+                    </Grid>
+                  )}
+                </Grid>
               </Grid>
             </Grid>
           </div>
         ) : null}
         {showCollapse &&
-        group.cards.length === 0 &&
-        group.name !== UNGROUPED ? (
+          group.cards.length === 0 &&
+          group.name !== UNGROUPED ? (
           <Grid container direction="row" justifyContent="center">
             <Grid
               item

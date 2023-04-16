@@ -190,6 +190,14 @@ export function RetroColumn({
   const createGroupAsSuggested = async (groupSuggestion: any, groupIdArray: string[]) => {
 
     dispatchLoadingFlag(true);
+
+    // const a = createGroupAsSuggested1(columnId,
+    //   groupSuggestion,
+    //   groupIdArray,
+    //   0,
+    //   global.user.id
+    // )
+    // dispatchLoadingFlag(false);
     await saveAndProcessAction(BoardActionType.GROUP_SUGGESTION, {
       columnId,
       groupSugg: groupSuggestion,
@@ -818,6 +826,11 @@ export function RetroColumn({
     });
   };
 
+  const deleteUnconfirmedGroup = async (groupIdArray: string[]) => {
+    await saveAndProcessAction(BoardActionType.DELETE_UNCONFIRMED_GROUPS, {
+      groupIdArray
+    });
+  };
 
 
   const getGroupSuggestion = async () => {
@@ -831,49 +844,69 @@ export function RetroColumn({
     await groupSuggestion(columnId, ungroupCards).then((res: any) => {
 
       console.log(res.response)
+      
       const data = res.response
       if (data) {
         const groupIdArray: string[] = []
 
         data.forEach((group: any) => {
           groupIdArray.push(shortid.generate())
+          createGroup
         })
         createGroupAsSuggested(data, groupIdArray)
 
 
-        // data.forEach(async (element: any) => {
-        //   console.log(element)
-        //   const groupId = shortid.generate();
-        //   await createGroup(groupId).then( (res) => {
-        //      setGroupName(groupId, element.category)
-
-        //     element.sentences.forEach(async (card: any,index:number) => {
-        //       console.log(card)
-        //       moveCard(card.id, groupId, index);
-        //     });
-
-        //     // await moveCard(cardId2, groupId, 1);
-        //     // autoFocusCardId.current = cardId1;
-        //   });
-        // })
-
-
       }
       else {
+        alert("Please try again")
         dispatchLoadingFlag(false);
       }
 
     }, error => {
       dispatchLoadingFlag(false);
     })
-    // const groupId = shortid.generate();
-    // await createGroup(groupId);
-    // await moveCard(cardId1, groupId, 0);
-    // await moveCard(cardId2, groupId, 1);
-    // autoFocusCardId.current = cardId1;
+
 
 
   }
+
+
+
+  const deleteUnconfirmedGroups = async () => {
+    dispatchLoadingFlag(true);
+    const groupIdArray: string[] = []
+    column.groups.forEach(group => {
+      if (group.suggested) {
+        groupIdArray.push(group.id)
+      }
+    })
+
+    await deleteUnconfirmedGroup(groupIdArray).then((res)=>{
+      dispatchLoadingFlag(false);
+      console.log("called")
+    },error=>{
+      dispatchLoadingFlag(false);
+    })
+    dispatchLoadingFlag(false);
+  }
+
+  const retryGroupSuggestion =async ()=>{
+
+      getGroupSuggestion().then(res1=>{
+
+      }) 
+  
+  }
+
+
+
+
+
+
+
+
+
+
   if (!location.pathname.includes('report')) {
     return (
       <ColumnComponent
@@ -938,6 +971,8 @@ export function RetroColumn({
                 columnIndex={columnIndex}
                 isPrintPage={false}
                 getGroupSuggestion={getGroupSuggestion}
+                deleteUnconfirmedGroups={deleteUnconfirmedGroups}
+                retryGroupSuggestion={retryGroupSuggestion}
               />
               {/* <button onClick={getGroupSuggestion}>vishal</button> */}
             </div>
@@ -1052,10 +1087,13 @@ export function RetroColumn({
                           <div
                             {...provided.droppableProps}
                             ref={provided.innerRef}
+
                           >
+                            {/* <Masonry columns={2}> */}
                             {column.groups.map(
                               (group, i) =>
                                 true && (
+                                  // <Box key={i + "box"} sx={{ width: '500px' }}>
                                   <Drag
                                     key={group.id}
                                     draggableId={group.id.toString()}
@@ -1066,24 +1104,29 @@ export function RetroColumn({
                                       <div
                                         ref={provided.innerRef}
                                         {...provided.draggableProps}
+
                                       >
                                         <span
                                           {...provided.dragHandleProps}
                                         ></span>
                                         <Grid
-                                          container
+                                          // container
+
                                           lg={12}
                                           item
                                           key={group.id}
                                           ref={e => (groupRefs[i] = e)}
-                                          style={{
+
+                                          sx={{
                                             marginBottom: '10px',
-                                            padding: '3px',
-                                            borderRadius: 0,
-                                            background:
+                                            // padding: '3px',
+
+
+                                            background: group.suggested ? '#F5F5F5' :
                                               group.name !== UNGROUPED
                                                 ? groupColour
                                                 : 'none',
+                                            optacity: 0.1,
                                           }}
                                         >
 
@@ -1348,9 +1391,11 @@ export function RetroColumn({
                                       </div>
                                     )}
                                   </Drag>
+                                  // </Box>
                                 )
                             )}
                             {provided.placeholder}
+                            {/* </Masonry> */}
                           </div>
                         )}
                       </Droppable>

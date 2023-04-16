@@ -48,7 +48,9 @@ export enum BoardActionType {
   PUBLISH_COLUMN = 'publishColumn',
   LOCK_COLUMN = 'lockColumn',
   SET_FACILITATOR = 'setFacilitator',
-  GROUP_SUGGESTION = "groupSuggestion"
+  GROUP_SUGGESTION = "groupSuggestion",
+  CONFIRM_GROUP = "confirmGroup",
+  DELETE_UNCONFIRMED_GROUPS = 'deleteUnconfirmedGroups'
 }
 
 export const BOARD_STATE_MACHINE_VERSION = 1;
@@ -342,6 +344,19 @@ export const validateAction = (
     return false;
   };
 
+  const isConfirmGroupValid = (
+    groupId: string,
+    userId: string
+  ): boolean => {
+    const { group } = findGroup(groupId);
+    if (group && !(group.locked && group.lockedBy !== userId)) {
+      return true;
+    }
+    return false;
+  };
+
+
+
   const isDeleteGroupValid = (groupId: string, userId: string): boolean => {
     const { column, group, index } = findGroup(groupId);
     if (
@@ -356,6 +371,31 @@ export const validateAction = (
       }
     }
     return false;
+  };
+
+
+  const isDeleteUnconfirmedGroupValid = (groupIdArray: string[], userId: string): boolean => {
+    var initialValue: boolean = true;
+    groupIdArray.forEach(groupId => {
+      const { column, group, index } = findGroup(groupId);
+      if (
+        column &&
+        group &&
+        index !== undefined &&
+        !(group.locked && group.lockedBy !== userId)
+      ) {
+        const groupUngrouped = column?.groups.find(g => g.name === UNGROUPED);
+        if (groupUngrouped) {
+          initialValue = initialValue && true;
+        }
+      }
+      else
+      initialValue = initialValue && false;
+
+    });
+    console.log(initialValue,"InitialValue")
+    return initialValue
+
   };
 
   const canJoinRetro = (userNickname: string, userId: string): boolean => {
@@ -529,8 +569,12 @@ export const validateAction = (
       return isLockGroupValid(parameters.groupId, parameters.lock, userId);
     case BoardActionType.SET_GROUP_NAME:
       return isSetGroupNameValid(parameters.groupId, parameters.name, userId);
+    case BoardActionType.CONFIRM_GROUP:
+      return isConfirmGroupValid(parameters.groupId, userId);
     case BoardActionType.DELETE_GROUP:
       return isDeleteGroupValid(parameters.groupId, userId);
+    case BoardActionType.DELETE_UNCONFIRMED_GROUPS:
+      return isDeleteUnconfirmedGroupValid(parameters.groupIdArray, userId);
     case BoardActionType.JOIN_RETRO:
       return canJoinRetro(parameters.userNickname, userId);
     case BoardActionType.START_TIMER:
@@ -716,24 +760,25 @@ export const processAction = (
     groupId: string,
     order: number,
     userId: string,
-    cards?: any[],
-    name?: string,
-    suggested?: boolean
+    cards: Card[],
+    name: string,
+    suggested: boolean
   ) => {
-    console.log("userId", userId)
+
+
     const columnIndex = columns.findIndex(column => column.id === columnId);
     if (columnIndex !== -1 && !findGroup(groupId).group) {
       const column = columns[columnIndex];
       column.groups.unshift({
         id: groupId,
         name: name ? name : '', //'Group ' + column.groups.length,
-        cards: cards ? cards : [],
+        cards: cards,
         order,
         reactions: [],
         createdBy: userId,
         locked: false,
         lastUpdatedBy: userId,
-        suggested: suggested ? suggested : false
+        suggested: suggested
       });
     }
   };
@@ -749,44 +794,30 @@ export const processAction = (
     userId: string
   ) => {
     const groupSuggestionOutput = groupSugg;
-    console.log("groupSugg", groupSugg)
-    groupSuggestionOutput.forEach((groupObj: any, groupIndex: number) => {
+    console.log("groupSugg", groupSugg);
 
-      const groupId1 = groupIdArray[groupIndex];
-      const columnIndex: number = columns.findIndex(column => column.id === columnId);
-      const column: Column = columns[columnIndex];
-      console.log("mainUserId", userId)
-      const newGroup: CardGroup = {
-        id: groupId1,
-        name: groupObj.groupName, //'Group ' + column.groups.length,
-        cards: [],
-        order,
-        reactions: [],
-        createdBy: userId,
-        locked: false,
-        lastUpdatedBy: userId,
-        suggested: true,
-      }
+    groupSuggestionOutput.forEach((element, index1) => {
 
-      groupObj.cards.forEach((cardObj: any, toIndex: number) => {
-        const cardId = cardObj.id
-        const { card, group, index } = findCard(cardId);
+
+
+      createGroup(columnId, groupIdArray[index1], order, userId, [], element.groupName, true)
+
+      element.cards.forEach((card1: any, toIndex: number) => {
+
+        const { card, group, index } = findCard(card1.id);
         if (
           card &&
           !(card.locked && card.lockedBy !== userId) &&
           group &&
-          !(group.id === groupId1 && index === toIndex)
+          !(group.id === groupIdArray[index1] && index === toIndex)
         ) {
-
-
-          // findGroup(toGroup);
-          if (newGroup) {
-            console.log("newgroup pushing card", card)
-            const cardsList = newGroup.cards;
+          const { group: targetGroup } = findGroup(groupIdArray[index1]);
+          if (targetGroup) {
+            const cardsList = targetGroup.cards;
             group.cards.splice(index as number, 1);
             cardsList.splice(
               toIndex -
-              (group.id === newGroup.id && (index as number) < toIndex
+              (group.id === targetGroup.id && (index as number) < toIndex
                 ? 1
                 : 0),
               0,
@@ -796,38 +827,8 @@ export const processAction = (
           }
         }
 
-
-
       });
-
-
-
-
-
-      if (columnIndex !== -1 && !findGroup(groupId1).group) {
-        createGroup(columnId,
-          groupId1,
-          order,
-          userId,
-          newGroup.cards,
-          newGroup.name,
-          true)
-      }
-      return false;
-
-
-
     });
-
-
-
-
-
-
-
-
-
-
 
   };
 
@@ -1070,6 +1071,14 @@ export const processAction = (
       group.lastUpdatedBy = userId;
     }
   };
+  const confirmGroup = (groupId: string, userId: string) => {
+
+    const { group } = findGroup(groupId);
+    if (group) {
+      group.suggested = false;
+      group.lastUpdatedBy = userId;
+    }
+  };
 
   const deleteGroup = (groupId: string, userId: string) => {
     const { column, group, index } = findGroup(groupId);
@@ -1086,6 +1095,27 @@ export const processAction = (
       }
     }
   };
+
+  const deleteUnconfirmedGroups = (groupIdArray: string[], userId: string) => {
+
+    groupIdArray.forEach(groupId => {
+      const { column, group, index } = findGroup(groupId);
+      if (
+        column &&
+        group &&
+        index !== undefined &&
+        !(group.locked && group.lockedBy !== userId)
+      ) {
+        const groupUngrouped = column?.groups.find(g => g.name === UNGROUPED);
+        if (groupUngrouped) {
+          groupUngrouped.cards = [...groupUngrouped.cards, ...group.cards];
+          column.groups.splice(index, 1);
+        }
+      }
+    });
+
+  };
+
 
   const joinRetro = (
     userNickname: string,
@@ -1260,11 +1290,13 @@ export const processAction = (
       );
       break;
     case BoardActionType.CREATE_GROUP:
+
       createGroup(
         parameters.columnId,
         parameters.groupId,
         parameters.order,
-        userId
+        userId,
+        [], "", false
       );
       break;
     case BoardActionType.ADD_NEW_CARD:
@@ -1324,8 +1356,14 @@ export const processAction = (
     case BoardActionType.SET_GROUP_NAME:
       setGroupName(parameters.groupId, parameters.name, userId);
       break;
+    case BoardActionType.CONFIRM_GROUP:
+      confirmGroup(parameters.groupId, userId);
+      break;
     case BoardActionType.DELETE_GROUP:
       deleteGroup(parameters.groupId, userId);
+      break;
+    case BoardActionType.DELETE_UNCONFIRMED_GROUPS:
+      deleteUnconfirmedGroups(parameters.groupIdArray, userId);
       break;
     case BoardActionType.JOIN_RETRO:
       joinRetro(
