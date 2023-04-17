@@ -1,8 +1,11 @@
-import { Grid, TextField, Tooltip, Typography } from '@mui/material';
-import React from 'react';
+import { Switch } from '@material-ui/core';
+import { FormControlLabel, FormGroup, Grid, TextField, ThemeProvider, Tooltip, Typography } from '@mui/material';
+import React, { useEffect } from 'react';
 import { ActionType } from '../contexts/GlobalContext';
+import theme from '../theme/theme';
 import { Column } from '../types';
-
+import RefreshIcon from '@mui/icons-material/Refresh';
+import { UNGROUPED } from '../constants';
 const ColumnHeader = ({
   column,
   columnId,
@@ -18,7 +21,10 @@ const ColumnHeader = ({
   publishColumn,
   dispatch,
   columnIndex,
-  isPrintPage
+  isPrintPage,
+  getGroupSuggestion,
+  deleteUnconfirmedGroups,
+  retryGroupSuggestion,
 }: {
   column: Column;
   columnId: string;
@@ -35,10 +41,33 @@ const ColumnHeader = ({
   dispatch: any;
   columnIndex: number | undefined;
   isPrintPage: boolean;
+  getGroupSuggestion: () => void;
+  deleteUnconfirmedGroups: () => void;
+  retryGroupSuggestion:()=>void;
 }) => {
   const [showEdit, setShowEdit] = React.useState(false);
   const [enableSave, setEnableSave] = React.useState(false);
+  const [groupSuggestion, setGroupSuggestion] = React.useState(false);
+  const [disableGroupSuggestion, setDisableGroupSuggestion] = React.useState(true);
 
+  useEffect(() => {
+    setGroupSuggestion(false)
+    setDisableGroupSuggestion(true)
+    column.groups.forEach(element => {
+      if (element.suggested) {
+        setGroupSuggestion(true)
+        console.log(groupSuggestion, "groupSuggestion")
+      }
+      if (element.name == UNGROUPED) {
+        if (element.cards.length > 2) {
+          setDisableGroupSuggestion(false)
+        }
+        else {
+          setDisableGroupSuggestion(true)
+        }
+      }
+    });
+  }, [column])
   return (
     <Grid
       container
@@ -49,7 +78,7 @@ const ColumnHeader = ({
       md={12}
       lg={12}
     >
-      <Grid item lg={8} md={6} xs={6}>
+      <Grid item lg={global.expandColumn === -1 ? 8 : 6} md={global.expandColumn === -1 ? 6 : 4} xs={6}>
         <Tooltip title={columnName}>
           <div>
             {!noHeader && (
@@ -124,13 +153,46 @@ const ColumnHeader = ({
             container
             justifyContent="flex-end"
             direction="row"
+            alignItems="center"
             item
-            lg={4}
-            md={5}
+            lg={global.expandColumn === -1 ? 4 : 6}
+            md={global.expandColumn === -1 ? 5 : 8}
             xs={5}
           >
             {global.user.userType == 2 && (!ended || !global.leaveRetro) && (
+
+
               <>
+                {global.expandColumn !== -1 &&
+                  <ThemeProvider theme={theme}>
+                    <FormGroup sx={{ display: 'flex', flexDirection: 'row' }}>
+
+                      <FormControlLabel disabled control={<Switch color="secondary" />} label="Show keywords" />
+                      <Tooltip title={!groupSuggestion && disableGroupSuggestion ? "Need more then 3 or more then 3 ungrouped cards" : ''}>
+                        <FormControlLabel disabled={!groupSuggestion && disableGroupSuggestion} sx={{ color: theme.palette.primary.dark }} checked={groupSuggestion}
+                          control={<Switch color="primary" onChange={(value) => {
+                            if (value.target.checked) {
+                              getGroupSuggestion()
+
+                            }
+                            else {
+                              console.log("deleteUnconfirmedGroups")
+                              deleteUnconfirmedGroups()
+                            }
+                          }} />} label="Suggest Grouping" /></Tooltip>
+
+                    </FormGroup>
+                    {groupSuggestion && !disableGroupSuggestion&&<Tooltip title="Resuggest grouping">
+                      <RefreshIcon sx={{ color: theme.palette.primary.dark, marginRight: '15px', cursor: 'pointer' }}
+                        onClick={
+                          retryGroupSuggestion
+                        }
+                      />
+
+                    </Tooltip>}
+                  </ThemeProvider>
+                }
+
                 {column.publish ? (
                   <Typography style={{ color: '#808080' }}>
                     Published

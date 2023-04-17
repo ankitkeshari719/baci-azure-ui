@@ -1,7 +1,7 @@
 import { Box, Grid, styled, useMediaQuery } from '@mui/material';
 import React, { ReactElement, useMemo } from 'react';
 import Draggable, { DraggableData, DraggableEvent } from 'react-draggable';
-import { UNGROUPED } from '../constants';
+import { UNGROUPED, SUGGESTEDGROUP } from '../constants';
 import { BoardContext } from '../contexts/BoardContext';
 import { BoardActionType } from '../statemachine/BoardStateMachine';
 import { Card, Card as RetroCardType, CardGroup, Column } from '../types';
@@ -11,6 +11,7 @@ import { RetroCard } from './retroCard/RetroCard';
 import theme from '../theme/theme';
 import { RetroCardGroup } from './RetroCardGroup';
 import Masonry from '@mui/lab/Masonry';
+
 import {
   DragDropContext,
   Draggable as Drag,
@@ -18,6 +19,7 @@ import {
 } from 'react-beautiful-dnd';
 import ColumnHeader from './ColumnHeader';
 import RetroColumnBottom from './RetroColumnBottom';
+import { groupSuggestion } from '../msal/services';
 
 const ColumnComponent = styled('div')({
   height: 'calc(var(--app-height) - 160px)',
@@ -185,6 +187,31 @@ export function RetroColumn({
       }
     );
   };
+  const createGroupAsSuggested = async (groupSuggestion: any, groupIdArray: string[]) => {
+
+    dispatchLoadingFlag(true);
+
+    // const a = createGroupAsSuggested1(columnId,
+    //   groupSuggestion,
+    //   groupIdArray,
+    //   0,
+    //   global.user.id
+    // )
+    // dispatchLoadingFlag(false);
+    await saveAndProcessAction(BoardActionType.GROUP_SUGGESTION, {
+      columnId,
+      groupSugg: groupSuggestion,
+      groupIdArray,
+      order: 0,
+    }).then(
+      res => {
+        dispatchLoadingFlag(false);
+      },
+      err => {
+        dispatchLoadingFlag(false);
+      }
+    );
+  }
 
   const reorderCards = async (
     cardId: string,
@@ -791,6 +818,95 @@ export function RetroColumn({
       return a.offsetWidth
     else return 180
   }
+
+  const setGroupName = async (groupId: string, name: string) => {
+    await saveAndProcessAction(BoardActionType.SET_GROUP_NAME, {
+      groupId,
+      name,
+    });
+  };
+
+  const deleteUnconfirmedGroup = async (groupIdArray: string[]) => {
+    await saveAndProcessAction(BoardActionType.DELETE_UNCONFIRMED_GROUPS, {
+      groupIdArray
+    });
+  };
+
+
+  const getGroupSuggestion = async () => {
+    let ungroupCards: any[] = [];
+    column.groups.forEach(group => {
+      if (group.name == UNGROUPED) {
+        ungroupCards = group.cards
+      }
+    })
+    dispatchLoadingFlag(true);
+    await groupSuggestion(columnId, ungroupCards).then((res: any) => {
+
+      console.log(res.response)
+      
+      const data = res.response
+      if (data) {
+        const groupIdArray: string[] = []
+
+        data.forEach((group: any) => {
+          groupIdArray.push(shortid.generate())
+          createGroup
+        })
+        createGroupAsSuggested(data, groupIdArray)
+
+
+      }
+      else {
+        alert("Please try again")
+        dispatchLoadingFlag(false);
+      }
+
+    }, error => {
+      dispatchLoadingFlag(false);
+    })
+
+
+
+  }
+
+
+
+  const deleteUnconfirmedGroups = async () => {
+    dispatchLoadingFlag(true);
+    const groupIdArray: string[] = []
+    column.groups.forEach(group => {
+      if (group.suggested) {
+        groupIdArray.push(group.id)
+      }
+    })
+
+    await deleteUnconfirmedGroup(groupIdArray).then((res)=>{
+      dispatchLoadingFlag(false);
+      console.log("called")
+    },error=>{
+      dispatchLoadingFlag(false);
+    })
+    dispatchLoadingFlag(false);
+  }
+
+  const retryGroupSuggestion =async ()=>{
+
+      getGroupSuggestion().then(res1=>{
+
+      }) 
+  
+  }
+
+
+
+
+
+
+
+
+
+
   if (!location.pathname.includes('report')) {
     return (
       <ColumnComponent
@@ -854,7 +970,11 @@ export function RetroColumn({
                 dispatch={dispatch}
                 columnIndex={columnIndex}
                 isPrintPage={false}
+                getGroupSuggestion={getGroupSuggestion}
+                deleteUnconfirmedGroups={deleteUnconfirmedGroups}
+                retryGroupSuggestion={retryGroupSuggestion}
               />
+              {/* <button onClick={getGroupSuggestion}>vishal</button> */}
             </div>
           )}
           {useMemo(
@@ -967,10 +1087,13 @@ export function RetroColumn({
                           <div
                             {...provided.droppableProps}
                             ref={provided.innerRef}
+
                           >
+                            {/* <Masonry columns={2}> */}
                             {column.groups.map(
                               (group, i) =>
                                 true && (
+                                  // <Box key={i + "box"} sx={{ width: '500px' }}>
                                   <Drag
                                     key={group.id}
                                     draggableId={group.id.toString()}
@@ -981,24 +1104,29 @@ export function RetroColumn({
                                       <div
                                         ref={provided.innerRef}
                                         {...provided.draggableProps}
+
                                       >
                                         <span
                                           {...provided.dragHandleProps}
                                         ></span>
                                         <Grid
-                                          container
+                                          // container
+
                                           lg={12}
                                           item
                                           key={group.id}
                                           ref={e => (groupRefs[i] = e)}
-                                          style={{
+
+                                          sx={{
                                             marginBottom: '10px',
-                                            padding: '3px',
-                                            borderRadius: 0,
-                                            background:
+                                            // padding: '3px',
+
+
+                                            background: group.suggested ? '#F5F5F5' :
                                               group.name !== UNGROUPED
                                                 ? groupColour
                                                 : 'none',
+                                            optacity: 0.1,
                                           }}
                                         >
 
@@ -1091,7 +1219,7 @@ export function RetroColumn({
                                                             : group.cards
                                                               .length) ? (
                                                           <Box sx={{
-                                                            width:isXsUp ? '100%' : global?.expandColumn === -1 ? card.value.length < 60 ? '49.5%' : '100%' :
+                                                            width: isXsUp ? '100%' : global?.expandColumn === -1 ? card.value.length < 60 ? '49.5%' : '100%' :
                                                               isLgUp ? card.value.length < 60 ? '25%' : '50%' : card.value.length < 60 ? '16.66%' : '33.33%'
                                                             ,
                                                             // minWidth: isXsUp ? '100%' : global?.expandColumn === -1 ? '48%' : !isLgUp ? "16.66%" : "25%", maxWidth: global?.expandColumn === -1 ? 'calc(100% )' : !isLgUp ? "33.33%" : "calc(50%)"
@@ -1263,9 +1391,11 @@ export function RetroColumn({
                                       </div>
                                     )}
                                   </Drag>
+                                  // </Box>
                                 )
                             )}
                             {provided.placeholder}
+                            {/* </Masonry> */}
                           </div>
                         )}
                       </Droppable>

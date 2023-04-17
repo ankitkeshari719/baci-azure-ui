@@ -1,6 +1,7 @@
 // export const productName = 'Team Coach';
 // export const productWebsite = 'http://www.retroland.com';
 export const UNGROUPED = 'Ungrouped';
+export const SUGGESTEDGROUP='SuggestedGroup'
 // export const API_URL = 'http://localhost:5010';
 
 import StarIcon from '@mui/icons-material/Star';
