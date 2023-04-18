@@ -166,10 +166,11 @@ const ColumnHeader = ({
               <>
                 {global.expandColumn !== -1 &&!ended&&
                 
-                  <Grid>
+                  <Grid sx={{display:'flex',alignItems:'center'}}>
                     <FormGroup sx={{ display: 'flex', flexDirection: 'row' }}>
 
-                    <Tooltip title="Coming soon">
+                    <Tooltip title="Coming soon
+                    ">
                     <FormControlLabel disabled control={<Switch color="secondary" />} label="Show keywords" />
                     </Tooltip>
                       <Tooltip title={!groupSuggestion && disableGroupSuggestion ? "Need more than 2 ungrouped cards" : ''}>
