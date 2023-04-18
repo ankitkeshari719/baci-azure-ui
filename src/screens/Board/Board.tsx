@@ -219,34 +219,34 @@ export default function RetroBoard() {
   const getProcessedColumns = () =>
     columns
       ? columns.map(
-          column => {
-            const groups = [...column.groups];
-            return {
-              ...column,
-              groups: groups
-                .map(group => {
-                  const cards = group.cards.filter(card =>
-                    global.user?.userType !== 2
-                      ? card
-                      : global.usersSelected?.some(user => {
-                          return user?.userId === card?.createdBy;
-                        })
-                  );
-                  return {
-                    ...group,
-                    cards,
-                  };
-                })
-                .filter(
-                  group =>
-                    !justMyCards ||
-                    group.name === UNGROUPED ||
-                    group.cards.length !== 0
-                ),
-            };
-          }
-          // }
-        )
+        column => {
+          const groups = [...column.groups];
+          return {
+            ...column,
+            groups: groups
+              .map(group => {
+                const cards = group.cards.filter(card =>
+                  global.user?.userType !== 2
+                    ? card
+                    : global.usersSelected?.some(user => {
+                      return user?.userId === card?.createdBy;
+                    })
+                );
+                return {
+                  ...group,
+                  cards,
+                };
+              })
+              .filter(
+                group =>
+                  !justMyCards ||
+                  group.name === UNGROUPED ||
+                  group.cards.length !== 0
+              ),
+          };
+        }
+        // }
+      )
       : [];
 
   const totalPanels = columns
@@ -309,7 +309,11 @@ export default function RetroBoard() {
       userId: global.user.id,
     });
   };
-
+  const deleteUnconfirmedGroup = async (groupIdArray: string[]) => {
+    await saveAndProcessAction(BoardActionType.DELETE_UNCONFIRMED_GROUPS, {
+      groupIdArray
+    });
+  };
   // Finish Retro
   const finishRetro = () => {
     if (global.user.userType == 2) {
@@ -319,6 +323,24 @@ export default function RetroBoard() {
         type: ActionType.SET_LOADING,
         payload: { loadingFlag: true },
       });
+
+
+      //remove unconfirmed groups from array;
+        const groupIdArray: string[] = [];
+
+        columns.forEach(column => {
+
+          const groupIdArray:string[] = []
+          column.groups.forEach(group => {
+            if (group.suggested) {
+              groupIdArray.push(group.id)
+            }
+          })
+
+           deleteUnconfirmedGroup(groupIdArray)
+
+        });
+
 
       sessionStorage.removeItem('pulseCheckState');
 
@@ -461,42 +483,42 @@ export default function RetroBoard() {
                             (global.expandColumn == -1 ||
                               (column &&
                                 +column.id == global.expandColumn)))) && (
-                          <ColumnContainer
-                            totalPanels={totalPanels}
-                            key={index + '1'}
-                          >
-                            {!!column ? (
-                              <>
-                                <RetroColumn
+                            <ColumnContainer
+                              totalPanels={totalPanels}
+                              key={index + '1'}
+                            >
+                              {!!column ? (
+                                <>
+                                  <RetroColumn
+                                    leftHeaderComponent={
+                                      <LeftContainer index={index} />
+                                    }
+                                    rightHeaderComponent={
+                                      <RightContainer index={index} />
+                                    }
+                                    column={column}
+                                    columnId={column.id}
+                                    noHeader={false}
+                                    showEditBox={showEditBox}
+                                    setShowEditBox={setShowEditBox}
+                                    setIslanded={setIsLanded}
+                                    cardGroups={column.groups}
+                                    columnIndex={index}
+                                  />
+                                </>
+                              ) : (
+                                <FeedbackColumn
+                                  noHeader={isXsUp}
                                   leftHeaderComponent={
                                     <LeftContainer index={index} />
                                   }
                                   rightHeaderComponent={
                                     <RightContainer index={index} />
                                   }
-                                  column={column}
-                                  columnId={column.id}
-                                  noHeader={false}
-                                  showEditBox={showEditBox}
-                                  setShowEditBox={setShowEditBox}
-                                  setIslanded={setIsLanded}
-                                  cardGroups={column.groups}
-                                  columnIndex={index}
                                 />
-                              </>
-                            ) : (
-                              <FeedbackColumn
-                                noHeader={isXsUp}
-                                leftHeaderComponent={
-                                  <LeftContainer index={index} />
-                                }
-                                rightHeaderComponent={
-                                  <RightContainer index={index} />
-                                }
-                              />
-                            )}
-                          </ColumnContainer>
-                        )}
+                              )}
+                            </ColumnContainer>
+                          )}
                       </React.Fragment>
                     );
                   }),
@@ -611,32 +633,32 @@ export default function RetroBoard() {
                           (global.expandColumn == -1 ||
                             (column &&
                               +column.id == global.expandColumn)))) && (
-                        <PrintColumnContainer
-                          totalPanels={totalPanels}
-                          key={index + '1'}
-                        >
-                          {!!column && (
-                            <>
-                              <PrintRetroColumn
-                                leftHeaderComponent={
-                                  <LeftContainer index={index} />
-                                }
-                                rightHeaderComponent={
-                                  <RightContainer index={index} />
-                                }
-                                column={column}
-                                columnId={column.id}
-                                noHeader={false}
-                                showEditBox={showEditBox}
-                                setShowEditBox={setShowEditBox}
-                                setIslanded={setIsLanded}
-                                cardGroups={column.groups}
-                                columnIndex={index}
-                              />
-                            </>
-                          )}
-                        </PrintColumnContainer>
-                      )}
+                          <PrintColumnContainer
+                            totalPanels={totalPanels}
+                            key={index + '1'}
+                          >
+                            {!!column && (
+                              <>
+                                <PrintRetroColumn
+                                  leftHeaderComponent={
+                                    <LeftContainer index={index} />
+                                  }
+                                  rightHeaderComponent={
+                                    <RightContainer index={index} />
+                                  }
+                                  column={column}
+                                  columnId={column.id}
+                                  noHeader={false}
+                                  showEditBox={showEditBox}
+                                  setShowEditBox={setShowEditBox}
+                                  setIslanded={setIsLanded}
+                                  cardGroups={column.groups}
+                                  columnIndex={index}
+                                />
+                              </>
+                            )}
+                          </PrintColumnContainer>
+                        )}
                     </React.Fragment>
                   );
                 }),

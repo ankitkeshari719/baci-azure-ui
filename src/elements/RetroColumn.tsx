@@ -844,7 +844,7 @@ export function RetroColumn({
     await groupSuggestion(columnId, ungroupCards).then((res: any) => {
 
       console.log(res.response)
-      
+
       const data = res.response
       if (data) {
         const groupIdArray: string[] = []
@@ -881,28 +881,51 @@ export function RetroColumn({
       }
     })
 
-    await deleteUnconfirmedGroup(groupIdArray).then((res)=>{
+    await deleteUnconfirmedGroup(groupIdArray).then((res) => {
       dispatchLoadingFlag(false);
       console.log("called")
-    },error=>{
+    }, error => {
       dispatchLoadingFlag(false);
     })
     dispatchLoadingFlag(false);
   }
 
-  const retryGroupSuggestion =async ()=>{
+  const retryGroupSuggestion = async () => {
 
-      getGroupSuggestion().then(res1=>{
+    getGroupSuggestion().then(res1 => {
 
-      }) 
-  
+    })
+
   }
 
 
 
 
 
+  const parseColumnDepending = () => {
+    if (global.user.userType != 2 || column.publish) {
 
+      const unGroup: any = [];
+      const group = column.groups.find(group => group.name === UNGROUPED) ? column.groups.find(group => group.name === UNGROUPED) : null
+
+      column.groups.forEach(element => {
+        if (element.name !== UNGROUPED) {
+          element.cards.forEach(card => {
+
+           group&&group.cards.push(card);
+          });
+        }
+
+
+      });
+      if (group)
+        unGroup.push(group)
+      return unGroup ? unGroup : [];
+
+    }
+    else return column.groups
+
+  }
 
 
 
@@ -1008,7 +1031,7 @@ export function RetroColumn({
                       }
                     > */}
 
-                    {cardGroups.map((group, i) => (
+                    {parseColumnDepending().map((group: CardGroup, i: number) => (
                       <React.Fragment key={i} >
                         {/* <Masonry columns={{
                           // xs: 1, sm: global?.expandColumn === -1 ? 2 : 4,

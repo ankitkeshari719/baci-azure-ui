@@ -101,6 +101,7 @@ export interface Column {
   groups: CardGroup[];
   lastUpdatedBy?: string;
   publish: boolean;
+  showSuggestion:boolean;
 }
 
 export interface PulseCheckEntry {

@@ -1,5 +1,5 @@
-import { Switch } from '@material-ui/core';
-import { FormControlLabel, FormGroup, Grid, TextField, ThemeProvider, Tooltip, Typography } from '@mui/material';
+
+import { FormControlLabel, FormGroup, Grid, Switch, TextField, ThemeProvider, Tooltip, Typography } from '@mui/material';
 import React, { useEffect } from 'react';
 import { ActionType } from '../contexts/GlobalContext';
 import theme from '../theme/theme';
@@ -77,6 +77,7 @@ const ColumnHeader = ({
       xs={12}
       md={12}
       lg={12}
+
     >
       <Grid item lg={global.expandColumn === -1 ? 8 : 6} md={global.expandColumn === -1 ? 6 : 4} xs={6}>
         <Tooltip title={columnName}>
@@ -148,7 +149,7 @@ const ColumnHeader = ({
         </Tooltip>
       </Grid>
       {!isPrintPage && (
-        <>
+    
           <Grid
             container
             justifyContent="flex-end"
@@ -163,12 +164,15 @@ const ColumnHeader = ({
 
 
               <>
-                {global.expandColumn !== -1 &&
-                  <ThemeProvider theme={theme}>
+                {global.expandColumn !== -1 &&!ended&&
+                
+                  <Grid>
                     <FormGroup sx={{ display: 'flex', flexDirection: 'row' }}>
 
-                      <FormControlLabel disabled control={<Switch color="secondary" />} label="Show keywords" />
-                      <Tooltip title={!groupSuggestion && disableGroupSuggestion ? "Need more then 3 or more then 3 ungrouped cards" : ''}>
+                    <Tooltip title="Coming soon">
+                    <FormControlLabel disabled control={<Switch color="secondary" />} label="Show keywords" />
+                    </Tooltip>
+                      <Tooltip title={!groupSuggestion && disableGroupSuggestion ? "Need more than 2 ungrouped cards" : ''}>
                         <FormControlLabel disabled={!groupSuggestion && disableGroupSuggestion} sx={{ color: theme.palette.primary.dark }} checked={groupSuggestion}
                           control={<Switch color="primary" onChange={(value) => {
                             if (value.target.checked) {
@@ -179,7 +183,8 @@ const ColumnHeader = ({
                               console.log("deleteUnconfirmedGroups")
                               deleteUnconfirmedGroups()
                             }
-                          }} />} label="Suggest Grouping" /></Tooltip>
+                          }} />} label="Suggest Grouping" />
+                          </Tooltip>
 
                     </FormGroup>
                     {groupSuggestion && !disableGroupSuggestion&&<Tooltip title="Resuggest grouping">
@@ -190,7 +195,8 @@ const ColumnHeader = ({
                       />
 
                     </Tooltip>}
-                  </ThemeProvider>
+                    </Grid>
+                
                 }
 
                 {column.publish ? (
@@ -249,7 +255,7 @@ const ColumnHeader = ({
               />
             )}
           </Grid>
-        </>
+       
       )}
     </Grid>
   );
