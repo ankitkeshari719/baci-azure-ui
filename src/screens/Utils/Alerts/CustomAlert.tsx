@@ -8,7 +8,6 @@ import customParseFormat from 'dayjs/plugin/customParseFormat';
 import utc from 'dayjs/plugin/utc';
 import tz from 'dayjs/plugin/timezone';
 import advanced from 'dayjs/plugin/advancedFormat';
-import moment from 'moment-timezone';
 
 const Alert = React.forwardRef<HTMLDivElement, AlertProps>(function Alert(
   props,
@@ -79,18 +78,22 @@ export function CustomAlert({ handleAlertClose, deploymentDate }: Props) {
   dayjs.extend(utc);
   dayjs.extend(advanced);
 
-  const userTimeZone = dayjs.tz.guess();
+  const timeZoneDiff = dayjs(deploymentDate).format('Z');
+  const checkSymbol = timeZoneDiff.substring(0, 1);
+  const checkDigit = timeZoneDiff.substring(1, 3);
 
-  console.log(dayjs(deploymentDate).tz(userTimeZone).format('DD/MM/YYYY z'));
-
-  dayjs.utc(deploymentDate).tz(userTimeZone);
-  const date = dayjs(deploymentDate)
-    .tz(userTimeZone)
-    .format('Do MMMM YYYY [at] HH:mm A Z');
-
-  const myTimezoneDay = moment
-    .tz(deploymentDate, userTimeZone)
-    .format('Do MMMM YYYY [at] HH:mm A Z');
+  let date;
+  if (checkSymbol === '+') {
+    date = dayjs(deploymentDate)
+      .subtract(+checkDigit, 'hours')
+      .tz('Australia/Queensland')
+      .format('Do MMMM YYYY [at] hh:mm A Z');
+  } else if (checkSymbol === '-') {
+    date = dayjs(deploymentDate)
+      .add(+checkDigit, 'hours')
+      .tz('Australia/Queensland')
+      .format('Do MMMM YYYY [at] hh:mm A Z');
+  }
 
   return isMobile ? (
     <Alert
@@ -119,7 +122,8 @@ export function CustomAlert({ handleAlertClose, deploymentDate }: Props) {
         }}
       >
         <Typography className="noteText" component="span">
-          Please Note: BACI will be temporarily unavailable on&nbsp;
+          Please Note: BACI will be temporarily unavailable (Australian Eastern
+          Standard Time) on&nbsp;
         </Typography>
         <Typography className="noteText" component="span">
           {date}
@@ -148,7 +152,8 @@ export function CustomAlert({ handleAlertClose, deploymentDate }: Props) {
       </Typography>
       <Box ml={2}>
         <Typography className="noteText" component="span">
-          Please Note: BACI will be temporarily unavailable on&nbsp;
+          Please Note: BACI will be temporarily unavailable (Australian Eastern
+          Standard Time) on&nbsp;
         </Typography>
         <Typography className="noteText" component="span">
           {date}
