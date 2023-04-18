@@ -163,12 +163,12 @@ const ColumnHeader = ({
 
 
               <>
-                {global.expandColumn !== -1 &&
+                {global.expandColumn !== -1 &&!ended&&
                   <ThemeProvider theme={theme}>
                     <FormGroup sx={{ display: 'flex', flexDirection: 'row' }}>
 
                       <FormControlLabel disabled control={<Switch color="secondary" />} label="Show keywords" />
-                      <Tooltip title={!groupSuggestion && disableGroupSuggestion ? "Need more then 3 or more then 3 ungrouped cards" : ''}>
+                      <Tooltip title={!groupSuggestion && disableGroupSuggestion ? "Need more than 2 ungrouped cards" : ''}>
                         <FormControlLabel disabled={!groupSuggestion && disableGroupSuggestion} sx={{ color: theme.palette.primary.dark }} checked={groupSuggestion}
                           control={<Switch color="primary" onChange={(value) => {
                             if (value.target.checked) {

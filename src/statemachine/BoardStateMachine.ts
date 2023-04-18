@@ -390,10 +390,10 @@ export const validateAction = (
         }
       }
       else
-      initialValue = initialValue && false;
+        initialValue = initialValue && false;
 
     });
-    console.log(initialValue,"InitialValue")
+
     return initialValue
 
   };
@@ -794,7 +794,7 @@ export const processAction = (
     userId: string
   ) => {
     const groupSuggestionOutput = groupSugg;
-    console.log("groupSugg", groupSugg);
+
 
     groupSuggestionOutput.forEach((element, index1) => {
 

@@ -114,14 +114,14 @@ export function RetroCardGroup({
     });
     await saveAndProcessAction(BoardActionType.CONFIRM_GROUP, {
       groupId,
-    
+
     });
     dispatch({
       type: ActionType.SET_LOADING,
       payload: { loadingFlag: false },
     });
   };
-  
+
   const addReactToGroup = async (groupId: string, react: string) => {
     dispatch({
       type: ActionType.SET_LOADING,
@@ -188,7 +188,7 @@ export function RetroCardGroup({
     <>
       <Card
         variant="outlined"
-    
+
         sx={{
           margin: '0',
           borderRadius: 0,
@@ -198,7 +198,7 @@ export function RetroCardGroup({
           marginBottom: 0,
           paddingBottom: '5px',
           width: '100%',
-          
+
         }}
       >
         {group.name !== UNGROUPED ? (
@@ -318,7 +318,7 @@ export function RetroCardGroup({
                 ) : (
                   <Typography
                     sx={{
-                      color: nameSet ?group.suggested?'#343434' : groupFontColour : '#8D858A',
+                      color: nameSet ? group.suggested ? '#343434' : groupFontColour : '#8D858A',
                       whiteSpace: 'nowrap',
                       width: '100%',
                       overflow: 'hidden',
@@ -357,26 +357,26 @@ export function RetroCardGroup({
                 alignItems="center"
                 justifyContent="space-between"
               >
-                {group.suggested && (global?.expandColumn == -1 ||
+                {group.suggested && global?.expandColumn !== -1 && global.user.userType === 2 && (
                   !location.pathname.includes('report')) ? <Grid>
-                    <Button
+                  <Button
 
 
-                      className='containedButton'
-                      sx={{ borderRadius: '0px!important', color: 'white!important' }}
-                      onClick={()=>confirmGroup(group.id)}
+                    className='containedButton'
+                    sx={{ borderRadius: '0px!important', color: 'white!important' }}
+                    onClick={() => confirmGroup(group.id)}
 
-                    >
+                  >
 
-                      Confirm Group
+                    Confirm Group
 
-                    </Button>
-                    
-                    </Grid>
-                  :<Grid></Grid>  
-                  }
+                  </Button>
 
-                <Grid item lg={global?.expandColumn == -1?12:4} container flexDirection="row" justifyContent="space-between">
+                </Grid>
+                  : <Grid></Grid>
+                }
+
+                <Grid item lg={global?.expandColumn == -1 ? 12 : 4} container flexDirection="row" justifyContent="space-between">
                   <Grid
                     style={{
                       fontWeight: '600',
