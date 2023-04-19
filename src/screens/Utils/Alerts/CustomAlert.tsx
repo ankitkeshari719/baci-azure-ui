@@ -83,16 +83,17 @@ export function CustomAlert({ handleAlertClose, deploymentDate }: Props) {
   const checkDigit = timeZoneDiff.substring(1, 3);
 
   let date;
+ 
   if (checkSymbol === '+') {
     date = dayjs(deploymentDate)
       .subtract(+checkDigit, 'hours')
-      .tz('Australia/Queensland')
-      .format('Do MMMM YYYY [at] hh:mm A Z');
+      // .tz('Australia/Queensland')
+      .format('Do MMMM YYYY [at] hh:mm A');
   } else if (checkSymbol === '-') {
     date = dayjs(deploymentDate)
       .add(+checkDigit, 'hours')
-      .tz('Australia/Queensland')
-      .format('Do MMMM YYYY [at] hh:mm A Z');
+      // .tz('Australia/Queensland')
+      .format('Do MMMM YYYY [at] hh:mm A');
   }
 
   return isMobile ? (
