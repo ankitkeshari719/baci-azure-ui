@@ -26,6 +26,7 @@ import SummaryReportMain from './screens/SummaryReports/SummaryReportMain';
 import { LandingPage } from './screens/Home/LandingPage';
 import { JoinRetro } from './screens/Home/JoinRetro';
 import { RetroIsFinished } from './screens/Others/RetroIsFinished';
+import ActionMainContainer from './screens/ManageActions/ActionMainContainer';
 
 type AppProps = {
   instance: IPublicClientApplication;
@@ -82,7 +83,7 @@ export default function App({ instance }: AppProps) {
                           />
                           <Route
                             path=":id/pulsecheck"
-                            element={<PulseCheckMain />}
+                            element={<ActionMainContainer />}
                           />
                           <Route path=":id/feedback" element={<Feedback />} />
                           <Route path=":id" element={<Board />} />

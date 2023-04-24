@@ -53,7 +53,6 @@
 
 .AddActionContainer {
   width: 100%;
-  height: 48px;
   display: flex;
   flex-direction: row;
   align-items: center;
@@ -92,4 +91,19 @@
   order: 3 !important;
   flex-grow: 0 !important;
   z-index: 3 !important;
+}
+
+.emojiPickerIconContainer {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  padding: 12px;
+  gap: 10px;
+  width: 40px;
+  height: 40px;
+  border-radius: 24px;
+  flex: none;
+  order: 0;
+  flex-grow: 0;
 }

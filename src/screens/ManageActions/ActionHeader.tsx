@@ -14,7 +14,7 @@ export default function ActionHeader({ allActions }: Props) {
   return (
     <Box className="actionHeaderContainer">
       <Box className="actionHeader">
-        <Row noGutters={true} style={{ width: '100%', margin: '0px' }}>
+        <Row style={{ width: '100%', margin: '0px' }}>
           <Col
             xs="6"
             className="d-flex justify-content-start align-items-center p-0"

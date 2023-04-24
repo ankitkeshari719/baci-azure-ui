@@ -20,6 +20,7 @@ export default function ActionMainContainer() {
   const [global, dispatch] = React.useContext(GlobalContext);
 
   const [allActions, setAllActions] = React.useState<ActionInterface[]>([]);
+  const [addedActionValue, setAddActionValue] = React.useState<string>('');
 
   React.useEffect(() => {
     setAllActions([...actionsData.actions]);
@@ -42,13 +43,22 @@ export default function ActionMainContainer() {
       value: value,
       createdBy: global.user.id,
       avatar: global.user.avatar,
-    });
+    }).then(
+      res => {
+        setAddActionValue('');
+      },
+      err => {}
+    );
   };
 
   return (
     <Box className="actionsContainer" sx={{ height: 'var(--app-height)' }}>
       <ActionHeader allActions={allActions} />
-      <AddAction addAction={addAction} />
+      <AddAction
+        addAction={addAction}
+        addedActionValue={addedActionValue}
+        setAddActionValue={setAddActionValue}
+      />
       {allActions.length > 0 ? (
         <ActionsList allActions={allActions} />
       ) : (
