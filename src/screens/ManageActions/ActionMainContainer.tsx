@@ -13,15 +13,7 @@ import AddAction from './AddAction';
 
 export default function ActionMainContainer() {
   const {
-    state: {
-      startedDate,
-      endedDate,
-      lastStateUpdate,
-      columns,
-      users,
-      ended,
-      actionsData,
-    },
+    state: { actionsData },
     commitAction,
   } = React.useContext(BoardContext);
   const [global, dispatch] = React.useContext(GlobalContext);
@@ -55,7 +47,7 @@ export default function ActionMainContainer() {
   return (
     <Box className="actionsContainer" sx={{ height: 'var(--app-height)' }}>
       <ActionHeader allActions={allActions} />
-      <AddAction addAction={addAction}/>
+      <AddAction addAction={addAction} />
       <ActionsList allActions={allActions}></ActionsList>
     </Box>
   );
