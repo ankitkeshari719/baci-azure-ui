@@ -10,6 +10,7 @@ import ActionsList from './ActionsList';
 import { Box } from '@mui/material';
 import ActionHeader from './ActionHeader';
 import AddAction from './AddAction';
+import ZeroActions from './ZeroActions';
 
 export default function ActionMainContainer() {
   const {
@@ -48,7 +49,11 @@ export default function ActionMainContainer() {
     <Box className="actionsContainer" sx={{ height: 'var(--app-height)' }}>
       <ActionHeader allActions={allActions} />
       <AddAction addAction={addAction} />
-      <ActionsList allActions={allActions}></ActionsList>
+      {allActions.length > 0 ? (
+        <ActionsList allActions={allActions} />
+      ) : (
+        <ZeroActions />
+      )}
     </Box>
   );
 }
