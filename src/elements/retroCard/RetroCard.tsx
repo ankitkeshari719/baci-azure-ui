@@ -85,7 +85,6 @@ export function RetroCard({
 
   React.useEffect(() => {
     const section = document.getElementById("section0")
-    console.log(section && section.offsetWidth, "log")
     if (section != null) {
       setSectionWidth(section.offsetWidth)
       setSectionHalfWidth(section.offsetWidth / 2 - 28)

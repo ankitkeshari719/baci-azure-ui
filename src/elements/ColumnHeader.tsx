@@ -56,7 +56,6 @@ const ColumnHeader = ({
     column.groups.forEach(element => {
       if (element.suggested) {
         setGroupSuggestion(true)
-        console.log(groupSuggestion, "groupSuggestion")
       }
       if (element.name == UNGROUPED) {
         if (element.cards.length > 2) {
@@ -181,7 +180,6 @@ const ColumnHeader = ({
 
                             }
                             else {
-                              console.log("deleteUnconfirmedGroups")
                               deleteUnconfirmedGroups()
                             }
                           }} />} label="Suggest Grouping" />

@@ -15,7 +15,6 @@ export default function useReRoute() {
   const test = async () => {
     if (id) {
       const retrievedRetro = await getRetro(id);
-      console.log('retrievedRetro::: ', retrievedRetro);
     }
   };
 
@@ -25,11 +24,6 @@ export default function useReRoute() {
 
   React.useEffect(() => {
     const found = users.some(el => el.userId === uuid);
-    console.log('users:::', users);
-    console.log('uuid:::', uuid);
-    console.log('ended:::', ended);
-    console.log('found:::', found);
-
     if (
       (uuid === null || uuid === undefined) &&
       window.location.pathname.includes('pulsecheck')

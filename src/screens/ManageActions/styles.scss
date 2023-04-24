@@ -1,0 +1,56 @@
+.actionsContainer {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  padding: 0px;
+  isolation: isolate;
+  position: absolute;
+  width: 562px;
+  max-width: 562px;
+  background: #ffffff;
+  border: 1px solid #8a38f5;
+  border-radius: 8px;
+}
+
+.actionHeaderContainer {
+  width: 100%;
+  height: 48px;
+  background: #8a38f5;
+  opacity: 0.1;
+  flex: none;
+  order: 0;
+  flex-grow: 0;
+  z-index: 0;
+}
+
+.actionHeader {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  padding: 4px 12px;
+  gap: 12px;
+  isolation: isolate;
+  position: absolute;
+  height: 48px;
+  border-radius: 8px 8px 0px 0px;
+}
+
+.totalActions {
+  font-family: 'Poppins' !important;
+  font-style: normal !important;
+  font-weight: 600 !important;
+  font-size: 16px !important;
+  line-height: 20px !important;
+  display: flex !important;
+  align-items: center !important;
+  letter-spacing: 0.6px !important;
+  color: red !important;
+}
+
+.AddActionContainer {
+  width: 100%;
+  height: 48px;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+}
