@@ -4,9 +4,6 @@ export const UNGROUPED = 'Ungrouped';
 export const SUGGESTEDGROUP='SuggestedGroup'
 // export const API_URL = 'http://localhost:5010';
 
-import StarIcon from '@mui/icons-material/Star';
-import StarBorderOutlinedIcon from '@mui/icons-material/StarBorderOutlined';
-import { Icon } from '@mui/material';
 import * as Icons from 'heroicons-react';
 import { FEATURE_FLAGS_SET } from './FeatureFlags';
 

@@ -42,7 +42,10 @@ export default function ActionMainContainer() {
       id: id,
       value: value,
       createdBy: global.user.id,
-      avatar: global.user.avatar,
+      assigneeId:'',
+      assigneeName: '',
+      assigneeAvatar:'',
+
     }).then(
       res => {
         setAddActionValue('');

@@ -1277,14 +1277,26 @@ export const processAction = (
     id: string,
     value: string,
     createdBy: string,
-    avatar: string,
+    assigneeId: string,
+    assigneeName: string,
+    assigneeAvatar: string
   ) => {
-    console.log('data::', id, value, createdBy, avatar);
+    console.log(
+      'data::',
+      id,
+      value,
+      createdBy,
+      assigneeId,
+      assigneeName,
+      assigneeAvatar
+    );
     const newAction = {
       id,
       value,
       createdBy,
-      avatar,
+      assigneeId,
+      assigneeName,
+      assigneeAvatar,
     };
     actionsData.actions.push(newAction);
   };
@@ -1324,7 +1336,9 @@ export const processAction = (
         parameters.id,
         parameters.value,
         parameters.createdBy,
-        parameters.avatar
+        parameters.assigneeId,
+        parameters.assigneeName,
+        parameters.assigneeAvatar
       );
       break;
     case BoardActionType.ADD_NEW_CARD:

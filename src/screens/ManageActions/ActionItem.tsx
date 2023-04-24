@@ -1,4 +1,5 @@
 import './styles.scss';
+import * as Icons from 'heroicons-react';
 
 import { ActionInterface } from '../../types';
 import { ListItemIcon, ListItemText } from '@material-ui/core';
@@ -34,16 +35,23 @@ export default function ActionItem({ action }: Props) {
         <ListItemText id={labelId} primary={action.value} />
       </ListItemButton>
       <ListItemAvatar>
-        <Avatar
-          avatar={action?.avatar}
-          onClickAvatar={() => {}}
-          css={{
-            width: '40px',
-            height: '40px',
-            borderRadius: '50%',
-            border: 'none',
-          }}
-        ></Avatar>
+        {action?.assigneeAvatar === '' ||
+        action.assigneeAvatar === undefined ? (
+          <Icons.UserCircle
+            style={{ color: '#CCCCCC', width: '32px', height: '32px' }}
+          />
+        ) : (
+          <Avatar
+            avatar={action?.assigneeAvatar}
+            onClickAvatar={() => {}}
+            css={{
+              width: '40px',
+              height: '40px',
+              borderRadius: '50%',
+              border: 'none',
+            }}
+          ></Avatar>
+        )}
       </ListItemAvatar>
     </ListItem>
   );

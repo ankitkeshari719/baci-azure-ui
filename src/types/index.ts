@@ -86,10 +86,11 @@ export interface ActionInterface{
   createdBy?: string;
   lastUpdatedBy?: string;
   editCount?: number;
-  avatar: string;
   columnId?: string;
   columnName?: string;
-  assigneeName?: string;
+  assigneeId: string;
+  assigneeName: string;
+  assigneeAvatar: string;
 }
 export interface Actions {
   order: number;
