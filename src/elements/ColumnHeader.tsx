@@ -164,7 +164,7 @@ const ColumnHeader = ({
 
 
               <>
-                {/* {global.expandColumn !== -1 &&!ended&&
+                {false && global.expandColumn !== -1 &&!ended&&
                 
                   <Grid sx={{display:'flex',alignItems:'center'}}>
                     <FormGroup sx={{ display: 'flex', flexDirection: 'row' }}>
@@ -221,7 +221,7 @@ const ColumnHeader = ({
                   >
                     Publish
                   </Typography>
-                )} */}
+                )}
               </>
             )}
             {global.expandColumn === -1 ? (
