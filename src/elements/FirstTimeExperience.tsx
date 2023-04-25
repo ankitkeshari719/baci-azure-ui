@@ -1,13 +1,18 @@
 import { Button, Paper, Typography, useMediaQuery } from '@mui/material';
 import { Box } from '@mui/system';
 import React from 'react';
+
+import { GlobalContext, ActionType} from '../contexts/GlobalContext';
 import theme from '../theme/theme';
 
 const FirstTimeExperience = (props: any) => {
+  
   const isXsUp = useMediaQuery(theme.breakpoints.only('xs'));
   const [showManual, setShowManual] = React.useState(
     sessionStorage.getItem('showManual')
   );
+  const [global, dispatch] = React.useContext(GlobalContext);
+  
   const [isMaintenanceAlertOpen, setIsMaintenanceAlertOpen] =
     React.useState<boolean>(true);
 
@@ -31,16 +36,26 @@ const FirstTimeExperience = (props: any) => {
       showManual == undefined ||
       (showManual == null && props.facilitator == true)
     ) {
+      dispatch({
+        type: ActionType.SET_LOADING,
+        payload: { loadingFlag: true },
+      });
       setTimeout(function () {
+        
         showPublishInfo();
         //your code to be executed after 1 second
-      }, 2000);
+      }, 500);
       showPublishInfo();
     } else if (showManual == '1') {
+      dispatch({
+        type: ActionType.SET_LOADING,
+        payload: { loadingFlag: true },
+      });
       setTimeout(function () {
+      
         showFinishInfo()
         //your code to be executed after 1 second
-      }, 2000);
+      }, 500);
       showFinishInfo();
     }
   }, [showManual && props.facilitator == true]);
@@ -48,10 +63,14 @@ const FirstTimeExperience = (props: any) => {
   React.useEffect(() => {
     if (showManual == undefined || showManual == null || showManual == '1') {
       if (props.facilitator === false) {
+        dispatch({
+          type: ActionType.SET_LOADING,
+          payload: { loadingFlag: true },
+        });
         setTimeout(function () {
           showLeaveInfo()
           //your code to be executed after 1 second
-        }, 2000);
+        }, 500);
         showLeaveInfo();}
     }
   }, [isXsUp, showManual && props.facilitator == false]);
@@ -62,6 +81,7 @@ const FirstTimeExperience = (props: any) => {
   };
 
   const showPublishInfo = () => {
+  
     let elem = document.getElementById('publish0');
     if (elem != null && elem != undefined) {
       var d = document.getElementById('publishDiv');
@@ -72,19 +92,19 @@ const FirstTimeExperience = (props: any) => {
       if (d != null && d !== undefined) {
         d.style.position = 'absolute';
 
-        d.style.width = elem.getBoundingClientRect().width + 10 + 'px';
-        d.style.height = elem.getBoundingClientRect().width + 10 + 'px';
+        d.style.width = elem.getBoundingClientRect().width + 20 + 'px';
+        d.style.height = elem.getBoundingClientRect().width + 20 + 'px';
         d.style.padding = '10px';
 
         d.style.left =
           elem.getBoundingClientRect().x -
           elem.getBoundingClientRect().width / 2 +
-          25 +
+          15 +
           'px';
         d.style.top = isMaintenanceAlertOpen
           ? elem.getBoundingClientRect().y -
             elem.getBoundingClientRect().width / 2 +
-            30 +
+            10 +
             'px'
           : elem.getBoundingClientRect().y -
             elem.getBoundingClientRect().width / 2 -
@@ -101,6 +121,10 @@ const FirstTimeExperience = (props: any) => {
             elem.getBoundingClientRect().width +
             'px';
         }
+        dispatch({
+          type: ActionType.SET_LOADING,
+          payload: { loadingFlag: false },
+        });
       }
     }
   };
@@ -155,6 +179,10 @@ const FirstTimeExperience = (props: any) => {
         }
       }
     }
+    dispatch({
+      type: ActionType.SET_LOADING,
+      payload: { loadingFlag: false },
+    });
   };
 
   const showFinishInfo = () => {
@@ -196,6 +224,10 @@ const FirstTimeExperience = (props: any) => {
         }
       }
     }
+    dispatch({
+      type: ActionType.SET_LOADING,
+      payload: { loadingFlag: false },
+    });
   };
 
   return (
@@ -248,7 +280,7 @@ const FirstTimeExperience = (props: any) => {
               1/2
             </Typography>
             <Typography align="center" pl="47" pr="47">
-              Participants see their own cards only until you click ‘Publish’.
+              Participants see their own cards only until you click 'Publish'.
               Participants will then see all cards, grouping and will be able to
               vote
             </Typography>
@@ -382,7 +414,7 @@ const FirstTimeExperience = (props: any) => {
               fontWeight="600"
               align="center"
             >
-              Hit ‘Leave Retro’ once you are DONE!
+              Hit 'Leave Retro' once you are DONE!
             </Typography>
             <Typography align="center" pl="47" pr="47">
               You would be asked to submit the feedback

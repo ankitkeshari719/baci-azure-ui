@@ -83,7 +83,7 @@ export function CustomAlert({ handleAlertClose, deploymentDate }: Props) {
   const checkDigit = timeZoneDiff.substring(1, 3);
 
   let date;
- 
+  
   if (checkSymbol === '+') {
     date = dayjs(deploymentDate)
       .subtract(+checkDigit, 'hours')

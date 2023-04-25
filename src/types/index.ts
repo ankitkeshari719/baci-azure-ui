@@ -87,6 +87,7 @@ export interface CardGroup {
   lastUpdatedBy?: string;
   locked: boolean;
   lockedBy?: string;
+  suggested?:boolean
 }
 
 export interface Column {
@@ -100,6 +101,7 @@ export interface Column {
   groups: CardGroup[];
   lastUpdatedBy?: string;
   publish: boolean;
+  showSuggestion:boolean;
 }
 
 export interface PulseCheckEntry {

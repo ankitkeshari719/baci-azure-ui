@@ -26,6 +26,7 @@ import { BoardContext } from '../../contexts/BoardContext';
 import theme from '../../theme/theme';
 import { SocketContext } from '../../contexts/SocketProvider';
 import { DeploymentPopUp } from './../Utils/Alerts/DeploymentPopUp';
+import useReRoute from '../../hooks/useReRoute';
 const AVATAR_CHARACTER_LIMIT = 30;
 const styles = {
   avatarfield: {
@@ -67,12 +68,9 @@ export function JoinRetro() {
   const {
     state: {
       users,
-      creatorId,
       retroId,
       retroStarted,
       ended,
-      needsToShow,
-      retroStatus,
       retroName,
     },
     commitAction,
@@ -98,6 +96,11 @@ export function JoinRetro() {
   const isXsUp = useMediaQuery(theme.breakpoints.between('xs', 'sm'));
   const [openAvatarDialog, setOpenAvatarDialog] = React.useState(false);
   const [height, setHeight] = React.useState(0);
+  
+  // Re-Routing rules added
+  useReRoute();
+  
+  useAzureAuth();
 
   React.useEffect(() => {
     loadRetroDetails();
@@ -150,8 +153,6 @@ export function JoinRetro() {
       payload: { retro: foundRetro },
     });
   };
-
-  useAzureAuth();
 
   const onClickAvatar = (avatarName: any) => {
     setAvatar(avatarName);

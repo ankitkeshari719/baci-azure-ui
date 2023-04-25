@@ -5,7 +5,6 @@ import {
   DialogActions,
   DialogContent,
   DialogTitle,
-  Divider,
   Grid,
   Typography,
 } from '@mui/material';
@@ -49,7 +48,7 @@ const styles = {
   },
 };
 
-export default function ErrorDialog(props?: any) {
+export default function ErrorMobileDialog(props?: any) {
   React.useEffect(() => {
     console.log('error', props.error);
   }, []);
@@ -69,8 +68,8 @@ export default function ErrorDialog(props?: any) {
             }}
             PaperProps={{
               sx: {
-                minWidth: window.innerWidth / 2,
-                minHeight: '64px',
+                minWidth: '250px',
+                minHeight: '150px',
                 background: '#FFF8E6 !important',
                 borderRadius: '10px',
                 border: '1px solid #EDC707',
@@ -90,10 +89,10 @@ export default function ErrorDialog(props?: any) {
                 }}
               >
                 <Col
-                  xs="1"
+                  xs="12"
                   style={{
                     display: 'flex',
-                    justifyContent: 'end',
+                    justifyContent: 'center',
                   }}
                 >
                   <Box>
@@ -104,32 +103,20 @@ export default function ErrorDialog(props?: any) {
                     />
                   </Box>
                 </Col>
+              </Row>
+              <Row
+                style={{
+                  display: 'flex',
+                  justifyContent: 'center',
+                  alignItems: 'center',
+                  marginTop: '16px',
+                }}
+              >
                 <Col
-                  xs="1"
+                  xs="12"
                   style={{
                     display: 'flex',
-                    justifyContent: 'end',
-                  }}
-                >
-                  <Divider orientation="vertical" variant="middle" flexItem sx={{
-                    width: '48px !important',
-                    height: ' 0px !important',
-                    border: '0.5px solid #CCCCCC !important',
-                    transform: 'rotate(90deg) !important',
-                    flex: 'none !important',
-                    order: '2 !important',
-                    alignSelf: 'stretch !important',
-                    flexGrow: '0 !important',
-                    zIndex: '2 !important',
-                  }} />
-                </Col>
-                <Col
-                  xs="7"
-                  style={{
-                    display: 'flex',
-                    justifyContent: 'start',
-                    padding: '0px',
-                    margin: '0px'
+                    justifyContent: 'center',
                   }}
                 >
                   <Box>
@@ -141,11 +128,20 @@ export default function ErrorDialog(props?: any) {
                     </Typography>
                   </Box>
                 </Col>
+              </Row>
+              <Row
+                style={{
+                  display: 'flex',
+                  justifyContent: 'center',
+                  alignItems: 'center',
+                  marginTop: '16px',
+                }}
+              >
                 <Col
-                  xs="3"
+                  xs="12"
                   style={{
                     display: 'flex',
-                    justifyContent: 'end',
+                    justifyContent: 'center',
                   }}
                 >
                   <Box>
@@ -173,8 +169,8 @@ export default function ErrorDialog(props?: any) {
           }}
           PaperProps={{
             sx: {
-              minWidth: window.innerWidth / 2,
-              minHeight: '64px',
+              minWidth: '250px',
+              minHeight: '150px',
               background: '#FFF8E6 !important',
               borderRadius: '10px',
               border: '1px solid #EDC707',
@@ -194,10 +190,10 @@ export default function ErrorDialog(props?: any) {
               }}
             >
               <Col
-                xs="1"
+                xs="12"
                 style={{
                   display: 'flex',
-                  justifyContent: 'end',
+                  justifyContent: 'center',
                 }}
               >
                 <Box>
@@ -208,11 +204,20 @@ export default function ErrorDialog(props?: any) {
                   />
                 </Box>
               </Col>
+            </Row>
+            <Row
+              style={{
+                display: 'flex',
+                justifyContent: 'center',
+                alignItems: 'center',
+                marginTop: '16px',
+              }}
+            >
               <Col
-                xs="8"
+                xs="12"
                 style={{
                   display: 'flex',
-                  justifyContent: 'start',
+                  justifyContent: 'center',
                 }}
               >
                 <Box>
@@ -224,11 +229,20 @@ export default function ErrorDialog(props?: any) {
                   </Typography>
                 </Box>
               </Col>
+            </Row>
+            <Row
+              style={{
+                display: 'flex',
+                justifyContent: 'center',
+                alignItems: 'center',
+                marginTop: '16px',
+              }}
+            >
               <Col
-                xs="3"
+                xs="12"
                 style={{
                   display: 'flex',
-                  justifyContent: 'end',
+                  justifyContent: 'center',
                 }}
               >
                 <Box>
