@@ -19,7 +19,7 @@ import {
 } from 'react-beautiful-dnd';
 import ColumnHeader from './ColumnHeader';
 import RetroColumnBottom from './RetroColumnBottom';
-import { groupSuggestion } from '../msal/services';
+import { groupSuggestion, keywordExtraction } from '../msal/services';
 
 const ColumnComponent = styled('div')({
   height: 'calc(var(--app-height) - 160px)',
@@ -872,6 +872,64 @@ export function RetroColumn({
 
 
 
+  const getKeywordExtraction = async () => {
+    let ungroupCards: any[] = [];
+    console.log(column, "column")
+    column.groups.forEach(group => {
+      // if (group.name == UNGROUPED) {
+      group.cards.forEach(element => {
+        ungroupCards.push(element)
+      });
+
+      // }
+    })
+    console.log(ungroupCards, "ungroupCards")
+    // dispatchLoadingFlag(true);
+    await keywordExtraction(columnId, ungroupCards).then(async (res: any) => {
+
+      console.log(res.response)
+
+
+
+      await saveAndProcessAction(BoardActionType.ADD_KEYWORDS, {
+
+        suggestedkeywordCards: res.response
+      }).then(
+        res => {
+          dispatchLoadingFlag(false);
+        },
+        err => {
+          dispatchLoadingFlag(false);
+        }
+      );
+
+
+      // const data = res.response
+      // if (data) {
+      //   const groupIdArray: string[] = []
+
+      //   data.forEach((group: any) => {
+      //     groupIdArray.push(shortid.generate())
+      //     createGroup
+      //   })
+      //   createGroupAsSuggested(data, groupIdArray)
+
+
+      // }
+      // else {
+      //   alert("Please try again")
+      //   dispatchLoadingFlag(false);
+      // }
+
+    }, error => {
+      dispatchLoadingFlag(false);
+    })
+
+
+
+  }
+
+
   const deleteUnconfirmedGroups = async () => {
     dispatchLoadingFlag(true);
     const groupIdArray: string[] = []
@@ -912,7 +970,7 @@ export function RetroColumn({
         if (element.name !== UNGROUPED) {
           element.cards.forEach(card => {
 
-           group&&group.cards.push(card);
+            group && group.cards.push(card);
           });
         }
 
@@ -996,6 +1054,7 @@ export function RetroColumn({
                 getGroupSuggestion={getGroupSuggestion}
                 deleteUnconfirmedGroups={deleteUnconfirmedGroups}
                 retryGroupSuggestion={retryGroupSuggestion}
+                keywordExtraction={getKeywordExtraction}
               />
               {/* <button onClick={getGroupSuggestion}>vishal</button> */}
             </div>
