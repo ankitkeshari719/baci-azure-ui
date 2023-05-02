@@ -100,6 +100,10 @@ export const useRetro = () => {
         'lastRetroName',
         JSON.stringify(retrievedRetro.name)
       );
+      sessionStorage.setItem(
+        'retroNameForPrivacyDialog',
+        JSON.stringify(retrievedRetro.name)
+      );
       console.log(
         '------------- setting retro details in index -------------',
         retro
