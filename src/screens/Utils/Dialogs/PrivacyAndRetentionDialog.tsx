@@ -56,71 +56,138 @@ export function PrivacyAndRetentionDialog() {
   };
 
   return (
-    <Dialog
-      open={isPrivacyDialogOpen}
-      onClose={handlePrivacyDialogClose}
-      aria-labelledby="Privacy-and-Data-Retention-dialog"
-      sx={{
-        '& .MuiDialog-container': {
-          display: 'flex',
-          justifyContent: 'center',
-          alignItems: 'center',
-        },
-      }}
-      PaperProps={{
-        sx: {
-          background: '#FFFFFF !important',
-          borderRadius: '20px',
-          boxShadow: '0px 1px 10px rgba(0, 0, 0, 0.15)',
-          padding: '8px 12px',
-        },
-      }}
-    >
-      <Box
-        sx={{
-          width: '512px',
-          height: '278px',
-          minWidth: '512px',
-          minHeight: '278px',
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'center',
-        }}
-      >
-        <DialogContent
+    <>
+      {isMobile ? (
+        <Dialog
+          open={isPrivacyDialogOpen}
+          onClose={handlePrivacyDialogClose}
+          aria-labelledby="Privacy-and-Data-Retention-dialog"
           sx={{
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-            flexDirection: 'column',
-            paddingLeft: '16px',
-            paddingRight: '16px',
+            '& .MuiDialog-container': {
+              display: 'flex',
+              justifyContent: 'center',
+              alignItems: 'center',
+            },
+          }}
+          PaperProps={{
+            sx: {
+              background: '#FFFFFF !important',
+              borderRadius: '20px',
+              boxShadow: '0px 1px 10px rgba(0, 0, 0, 0.15)',
+              padding: '8px 12px',
+              margin:'0px'
+            },
           }}
         >
-          <Typography className="privacyDialogTitle">
-            Privacy & Data Retention
-          </Typography>
-          <Typography
-            className="privacyDialogDescription"
-            style={{ marginTop: '24px' }}
+          <Box
+            sx={{
+              width: '100%',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+            }}
           >
-            You are in control of your data. Data stored are encrypted for upto
-            90 days to retrieve your retro reports.
-          </Typography>
-          <Box style={{ marginTop: '48px' }}>
-            <ContainedButton
-              name="OK"
-              onClick={handlePrivacyDialogClose}
-              style={{
-                minWidth: '225px !important',
-                height: '44px !important',
-                textTransform: 'uppercase !important',
-                marginLeft: '50px !important',
+            <DialogContent
+              sx={{
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                flexDirection: 'column',
+                paddingLeft: '16px',
+                paddingRight: '16px',
               }}
-            />
+            >
+              <Typography className="privacyDialogTitle">
+                Privacy & Data Retention
+              </Typography>
+              <Typography
+                className="privacyDialogDescription"
+                style={{ marginTop: '24px' }}
+              >
+                You are in control of your data. Data stored are encrypted for
+                upto 90 days to retrieve your retro reports.
+              </Typography>
+              <Box style={{ marginTop: '48px' }}>
+                <ContainedButton
+                  name="OK"
+                  onClick={handlePrivacyDialogClose}
+                  style={{
+                    minWidth: '225px !important',
+                    height: '44px !important',
+                    textTransform: 'uppercase !important',
+                  }}
+                />
+              </Box>
+            </DialogContent>
           </Box>
-        </DialogContent>
-      </Box>
-    </Dialog>
+        </Dialog>
+      ) : (
+        <Dialog
+          open={isPrivacyDialogOpen}
+          onClose={handlePrivacyDialogClose}
+          aria-labelledby="Privacy-and-Data-Retention-dialog"
+          sx={{
+            '& .MuiDialog-container': {
+              display: 'flex',
+              justifyContent: 'center',
+              alignItems: 'center',
+            },
+          }}
+          PaperProps={{
+            sx: {
+              background: '#FFFFFF !important',
+              borderRadius: '20px',
+              boxShadow: '0px 1px 10px rgba(0, 0, 0, 0.15)',
+              padding: '8px 12px',
+            },
+          }}
+        >
+          <Box
+            sx={{
+              width: '512px',
+              height: '278px',
+              minWidth: '512px',
+              minHeight: '278px',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+            }}
+          >
+            <DialogContent
+              sx={{
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                flexDirection: 'column',
+                paddingLeft: '16px',
+                paddingRight: '16px',
+              }}
+            >
+              <Typography className="privacyDialogTitle">
+                Privacy & Data Retention
+              </Typography>
+              <Typography
+                className="privacyDialogDescription"
+                style={{ marginTop: '24px' }}
+              >
+                You are in control of your data. Data stored are encrypted for
+                upto 90 days to retrieve your retro reports.
+              </Typography>
+              <Box style={{ marginTop: '48px' }}>
+                <ContainedButton
+                  name="OK"
+                  onClick={handlePrivacyDialogClose}
+                  style={{
+                    minWidth: '225px !important',
+                    height: '44px !important',
+                    textTransform: 'uppercase !important',
+                  }}
+                />
+              </Box>
+            </DialogContent>
+          </Box>
+        </Dialog>
+      )}
+    </>
   );
 }
