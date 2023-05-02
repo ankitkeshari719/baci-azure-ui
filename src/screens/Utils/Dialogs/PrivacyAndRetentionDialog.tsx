@@ -60,7 +60,6 @@ export function PrivacyAndRetentionDialog() {
       {isMobile ? (
         <Dialog
           open={isPrivacyDialogOpen}
-          onClose={handlePrivacyDialogClose}
           aria-labelledby="Privacy-and-Data-Retention-dialog"
           sx={{
             '& .MuiDialog-container': {
@@ -75,7 +74,7 @@ export function PrivacyAndRetentionDialog() {
               borderRadius: '20px',
               boxShadow: '0px 1px 10px rgba(0, 0, 0, 0.15)',
               padding: '8px 12px',
-              margin:'0px'
+              margin: '0px',
             },
           }}
         >
@@ -124,7 +123,6 @@ export function PrivacyAndRetentionDialog() {
       ) : (
         <Dialog
           open={isPrivacyDialogOpen}
-          onClose={handlePrivacyDialogClose}
           aria-labelledby="Privacy-and-Data-Retention-dialog"
           sx={{
             '& .MuiDialog-container': {
