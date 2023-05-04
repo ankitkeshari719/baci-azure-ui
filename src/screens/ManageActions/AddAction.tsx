@@ -8,12 +8,12 @@ import SendIcon from '@mui/icons-material/Send';
 
 const TextFieldNoBorderWrapper = styled('div')({
   '.MuiInputBase-multiline': {
-    paddingLeft: '10px',
-    paddingRight: '10px',
+    paddingLeft: '8px',
+    paddingRight: '8px',
   },
+  display: 'flex',
   alignItems: 'center',
   position: 'initial',
-  display: 'flex',
   maxWidth: '135px',
   fieldset: {
     border: 'none',
@@ -64,8 +64,8 @@ export default function AddAction({
           flexDirection: 'row',
           background: 'white',
           borderBottom: isTextFieldFocused
-            ? '1px solid #4E4E4E !important '
-            : '1px solid #E3E3E3',
+            ? '1px solid #4E4E4E !important'
+            : '1px solid #E3E3E3 !important',
           padding: '4px 0px',
           gap: '8px',
           ...(false ? { position: 'fixed', height: '8rem' } : {}),
@@ -93,6 +93,7 @@ export default function AddAction({
             flexDirection: 'column',
           }}
         >
+          {/* Text Field */}
           <TextField
             id="actionTextField"
             fullWidth
@@ -122,6 +123,17 @@ export default function AddAction({
               style: {
                 padding: 0,
               },
+              sx: {
+                '&::placeholder': {
+                  fontFamily: 'Poppins',
+                  fontStyle: 'italic',
+                  color: '#CCCCCC',
+                  fontWeight: 400,
+                  fontSize: '16px',
+                  lineHeight: '20px',
+                  letterSpacing: '0.4px',
+                },
+              },
             }}
             sx={{
               padding: 0,
@@ -129,9 +141,9 @@ export default function AddAction({
               div: { padding: 0, position: 'initial' },
               position: 'initial',
               textarea: {
+                fontFamily: 'Poppins',
                 fontStyle: 'normal',
                 color: '#343434',
-                fontFamily: 'Poppins',
                 fontWeight: 400,
                 fontSize: '16px',
                 lineHeight: '22px',
@@ -139,6 +151,7 @@ export default function AddAction({
               },
             }}
           ></TextField>
+          {/* Limitation */}
           {addedActionValue &&
           addedActionValue.length >= MAX_CARD_TEXT_LENGTH - 20 ? (
             <Typography
@@ -153,6 +166,7 @@ export default function AddAction({
             </Typography>
           ) : null}
         </TextFieldNoBorderWrapper>
+        {/* Send Icon */}
         <div
           style={{
             display: 'flex',
