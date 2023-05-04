@@ -32,7 +32,20 @@ export default function ActionItem({ action }: Props) {
             inputProps={{ 'aria-labelledby': labelId }}
           />
         </ListItemIcon>
-        <ListItemText id={labelId} primary={action.value} />
+        <ListItemText
+          id={labelId}
+          primary={action.value}
+          style={{
+            fontFamily: 'Poppins',
+            fontStyle: 'normal',
+            fontWeight: 400,
+            fontSize: '16px',
+            lineHeight: '22px',
+            letterSpacing: '0.2px',
+            color: '#343434',
+            wordWrap: 'break-word',
+          }}
+        />
       </ListItemButton>
       <ListItemAvatar>
         {action?.assigneeAvatar === '' ||
