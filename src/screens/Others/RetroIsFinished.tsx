@@ -7,7 +7,7 @@ import './styles.scss';
 import { ContainedButton } from '../../components';
 import theme from '../../theme/theme';
 import useScreenOrientation from '../../hooks/useScreenOrientation';
-import BACILogo from '../../assets/img/bacilogo.png';
+import BACILogo from '../../assets/img/bacilogobeta.svg';
 import {
   LANDSCAPE_PRIMARY,
   LANDSCAPE_SECONDARY,

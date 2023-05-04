@@ -32,7 +32,7 @@ import FirstTimeExperience from '../../elements/FirstTimeExperience';
 import { styled } from '@mui/material/styles';
 import { DeploymentPopUp } from '../Utils/Alerts/DeploymentPopUp';
 import { Col, Container, Row } from 'react-bootstrap';
-import BACILogo from '../../assets/img/bacilogo.png';
+import BACILogo from '../../assets/img/bacilogobeta.svg';
 import moment from 'moment';
 import { PrintRetroColumn } from './PrintRetroColumn';
 import ReactToPrint from 'react-to-print';

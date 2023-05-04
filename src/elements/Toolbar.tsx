@@ -16,7 +16,7 @@ import {
 import React from 'react';
 import { ActionType, GlobalContext } from '../contexts/GlobalContext';
 import Avatar from './Avatar';
-import BACILogo from '../assets/img/bacilogo.png';
+import BACILogo from '../assets/img/bacilogobeta.svg';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { BoardContext } from '../contexts/BoardContext';
 import { BoardActionType } from '../statemachine/BoardStateMachine';
