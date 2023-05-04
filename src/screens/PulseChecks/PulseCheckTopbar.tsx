@@ -11,7 +11,7 @@ import {
   useMediaQuery,
 } from '@mui/material';
 import React from 'react';
-import BACILogo from '../../assets/img/bacilogo.png';
+import BACILogo from '../../assets/img/bacilogobeta.svg';
 import { BoardContext } from '../../contexts/BoardContext';
 import { GlobalContext } from '../../contexts/GlobalContext';
 import { BoardActionType } from '../../statemachine/BoardStateMachine';
