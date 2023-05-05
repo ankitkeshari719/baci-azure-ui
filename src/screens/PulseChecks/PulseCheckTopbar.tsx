@@ -95,8 +95,8 @@ const PulseCheckTopbar = (props: any) => {
             src={BACILogo}
             alt="Logo"
             style={{
-              width: isXsUp ? '53px' : '82px',
-              height: isXsUp ? '18px' : '28px',
+              width: isXsUp ? '53px' : '108px',
+              height: isXsUp ? '18px' : '48px',
             }}
           />
         </Link>
