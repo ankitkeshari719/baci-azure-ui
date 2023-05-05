@@ -974,7 +974,8 @@ export function RetroColumn({
                 paddingRight: '15px',
                 marginBottom: '25px',
                 background: groupColour,
-                borderRadius: '8px',
+                borderRadius: '8px 8px 0px 0px',
+                height: "48px"
               }}
             >
               <ColumnHeader
