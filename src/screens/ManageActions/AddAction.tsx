@@ -81,6 +81,7 @@ width=  actionComponent.getBoundingClientRect().height +  actionComponent.getBou
             : '1px solid #E3E3E3 !important',
           padding: '4px 0px',
           gap: '8px',
+          boxSizing: "border-box",
           ...(false ? { position: 'fixed', height: '8rem' } : {}),
         }}
       >
