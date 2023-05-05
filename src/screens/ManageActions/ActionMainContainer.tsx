@@ -1,16 +1,17 @@
 import * as React from 'react';
 import shortid from 'shortid';
 import './styles.scss';
-
+import { Box, Grid, styled, useMediaQuery } from '@mui/material';
 import { BoardContext } from '../../contexts/BoardContext';
 import { GlobalContext } from '../../contexts/GlobalContext';
 import { BoardActionType } from '../../statemachine/BoardStateMachine';
 import { ActionInterface } from '../../types';
 import ActionsList from './ActionsList';
-import { Box } from '@mui/material';
+
 import ActionHeader from './ActionHeader';
 import AddAction from './AddAction';
 import ZeroActions from './ZeroActions';
+import theme from '../../theme/theme';
 
 export default function ActionMainContainer() {
   const {
@@ -22,6 +23,7 @@ export default function ActionMainContainer() {
   const [allActions, setAllActions] = React.useState<ActionInterface[]>([]);
   const [addedActionValue, setAddActionValue] = React.useState<string>('');
 
+  const isXsUp = useMediaQuery(theme.breakpoints.only('xs'));
   React.useEffect(() => {
     setAllActions([...actionsData.actions]);
   }, [actionsData]);
@@ -55,8 +57,12 @@ export default function ActionMainContainer() {
   };
 
   return (
-    <Box className="actionsContainer" sx={{ height: 'var(--app-height)' }}>
-      <ActionHeader allActions={allActions} />
+    <Box className="actionsContainer" sx={{  height: false
+      ? 'auto'
+      : isXsUp
+        ? 'calc(var(--app-height) - 115px)'
+        : 'calc(var(--app-height) - 160px)' }}>
+      <ActionHeader global={global} allActions={allActions} dispatch={dispatch} />
       <AddAction
         addAction={addAction}
         addedActionValue={addedActionValue}
