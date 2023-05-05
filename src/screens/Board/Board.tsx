@@ -553,7 +553,7 @@ export default function RetroBoard() {
               xs="12"
               className="d-flex justify-content-start align-items-center"
             >
-              <img src={BACILogo} alt="Logo" className="logo" />
+              <img src={BACILogo} alt="Logo" className="logo" height='48px' width='108px'/>
             </Col>
           </Row>
           {/* Divider */}

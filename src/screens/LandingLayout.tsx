@@ -129,6 +129,8 @@ export function LandingLayout() {
               <LazyLoadImage
                 style={styles.logoImageXs}
                 alt="logo"
+                height='48px'
+                width='108px'
                 // height='50px'
                 src={BACILogo} // use normal <img> attributes as props
                 // width={image.width}

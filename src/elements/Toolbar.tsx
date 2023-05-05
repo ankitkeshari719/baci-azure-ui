@@ -213,8 +213,8 @@ const Toolbar = (props: any) => {
                 src={BACILogo}
                 alt="Logo"
                 style={{
-                  width: isXsUp ? '53px' : '82px',
-                  height: isXsUp ? '18px' : '28px',
+                  width: isXsUp ? '53px' : '108px',
+                  height: isXsUp ? '18px' : '48px',
                 }}
                 onClick={reloadPage}
               />
@@ -226,8 +226,8 @@ const Toolbar = (props: any) => {
               src={BACILogo}
               alt="Logo"
               style={{
-                width: isXsUp ? '53px' : '82px',
-                height: isXsUp ? '18px' : '28px',
+                width: isXsUp ? '53px' : '108px',
+                height: isXsUp ? '18px' : '48px',
               }}
               onClick={reloadPage}
             />
