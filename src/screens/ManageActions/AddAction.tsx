@@ -49,13 +49,26 @@ export default function AddAction({
 
   // Function to toggle the Emoji Picker
   const handleToOpenEmojiPicker = () => {
+    console.log(isEmojiPickerOpen,"isEmojiPickerOpen")
     setIsEmojiPickerOpen(!isEmojiPickerOpen);
   };
+
+const getTheTopCoordinates=():string=>{
+const actionComponent = document.getElementById("actionIndex");
+var width=0;
+if(actionComponent!=undefined&&actionComponent!=null){
+width=  actionComponent.getBoundingClientRect().height +  actionComponent.getBoundingClientRect().y
+}
+
+  
+  return width!=0?width+"px":"270px"
+}
 
   return (
     <Box className="AddActionContainer">
       {/* Text Field to add action */}
       <Box
+        id="actionIndex"
         style={{
           width: '100%',
           display: 'flex',
@@ -153,7 +166,7 @@ export default function AddAction({
           ></TextField>
           {/* Limitation */}
           {addedActionValue &&
-          addedActionValue.length >= MAX_CARD_TEXT_LENGTH - 20 ? (
+            addedActionValue.length >= MAX_CARD_TEXT_LENGTH - 20 ? (
             <Typography
               style={{
                 fontSize: '0.75rem',
@@ -188,9 +201,9 @@ export default function AddAction({
               style={{
                 color:
                   addedActionValue.length === 0 ||
-                  !addedActionValue ||
-                  addedActionValue.replace(/[\r\n]/gm, '').replace(/ /g, '')
-                    .length === 0
+                    !addedActionValue ||
+                    addedActionValue.replace(/[\r\n]/gm, '').replace(/ /g, '')
+                      .length === 0
                     ? '#CCCCCC'
                     : '#4E4E4E',
               }}
@@ -200,15 +213,20 @@ export default function AddAction({
       </Box>
       {/* Emoji Picker */}
       <Grid
+
         style={{
-          width: '100%',
-          display: isEmojiPickerOpen ? 'flex' : 'none',
+          width:
+            document.getElementById("actionIndex") != null
+              ? document
+                .getElementById("actionIndex")
+                ?.getBoundingClientRect().width + 'px'
+              : '33px',
+          zIndex: 2,
           position: 'absolute',
-          zIndex: 3,
-          top: '93px',
+          top: getTheTopCoordinates()
         }}
       >
-        <EmojiPicker
+       {isEmojiPickerOpen&& <EmojiPicker
           onEmojiClick={(event, emojiObject) => {
             setAddActionValue(addedActionValue + emojiObject.emoji);
             setIsTextFieldFocused(true);
@@ -216,7 +234,7 @@ export default function AddAction({
             handleToOpenEmojiPicker();
           }}
           pickerStyle={{ width: '100%' }}
-        />
+        />}
       </Grid>
     </Box>
   );

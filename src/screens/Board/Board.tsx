@@ -483,31 +483,50 @@ export default function RetroBoard() {
                           (!isXsUp &&
                             (global.expandColumn == -1 ||
                               (column &&
-                                +column.id == global.expandColumn )))) && (
+                                +column.id == global.expandColumn)))) && (
                             <ColumnContainer
                               totalPanels={1}
                               key={index + '1'}
                             >
                               {!!column ? (
                                 <>
-                                  {column.id != '2' && global.expandColumn != 10 ?
-                                   <RetroColumn
-                                    leftHeaderComponent={
-                                      <LeftContainer index={index} />
-                                    }
-                                    rightHeaderComponent={
-                                      <RightContainer index={index} />
-                                    }
-                                    column={column}
-                                    columnId={column.id}
-                                    noHeader={false}
-                                    showEditBox={showEditBox}
-                                    setShowEditBox={setShowEditBox}
-                                    setIslanded={setIsLanded}
-                                    cardGroups={column.groups}
-                                    columnIndex={index}
-                                  /> : column.id == '2' && <ActionMainContainer />}
-                                </>
+                                  {getProcessedColumns().length == 3 ?
+                                    <>
+                                      {column.id != '2' && global.expandColumn != 10 ?
+                                        <RetroColumn
+                                          leftHeaderComponent={
+                                            <LeftContainer index={index} />
+                                          }
+                                          rightHeaderComponent={
+                                            <RightContainer index={index} />
+                                          }
+                                          column={column}
+                                          columnId={column.id}
+                                          noHeader={false}
+                                          showEditBox={showEditBox}
+                                          setShowEditBox={setShowEditBox}
+                                          setIslanded={setIsLanded}
+                                          cardGroups={column.groups}
+                                          columnIndex={index}
+                                        /> : column.id == '2' && <ActionMainContainer />}
+                                    </> :
+                                    <RetroColumn
+                                      leftHeaderComponent={
+                                        <LeftContainer index={index} />
+                                      }
+                                      rightHeaderComponent={
+                                        <RightContainer index={index} />
+                                      }
+                                      column={column}
+                                      columnId={column.id}
+                                      noHeader={false}
+                                      showEditBox={showEditBox}
+                                      setShowEditBox={setShowEditBox}
+                                      setIslanded={setIsLanded}
+                                      cardGroups={column.groups}
+                                      columnIndex={index}
+                                    />}</>
+
                               ) : (
                                 <FeedbackColumn
                                   noHeader={isXsUp}
