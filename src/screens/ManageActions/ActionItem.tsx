@@ -30,6 +30,22 @@ export default function ActionItem({ action }: Props) {
             tabIndex={-1}
             disableRipple
             inputProps={{ 'aria-labelledby': labelId }}
+            icon={
+              <img
+                src="/svgs/CircleUnchecked.svg"
+                alt="Logo"
+                style={{ width: '24px', height: '24px' }}
+              />
+            }
+            checkedIcon={
+              <Icons.CheckCircle
+                size={24}
+                color="#159ADD"
+                style={{
+                  cursor: 'pointer',
+                }}
+              />
+            }
           />
         </ListItemIcon>
         <ListItemText
