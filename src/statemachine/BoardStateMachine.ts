@@ -47,6 +47,7 @@ export enum BoardActionType {
   LOCK_COLUMN = 'lockColumn',
   SET_FACILITATOR = 'setFacilitator',
   GROUP_SUGGESTION = 'groupSuggestion',
+  ADD_KEYWORDS="showKeywords",
   CONFIRM_GROUP = 'confirmGroup',
   DELETE_UNCONFIRMED_GROUPS = 'deleteUnconfirmedGroups',
   Add_NEW_ACTION = 'addAction',
