@@ -1281,15 +1281,6 @@ export const processAction = (
     assigneeName: string,
     assigneeAvatar: string
   ) => {
-    console.log(
-      'data::',
-      id,
-      value,
-      createdBy,
-      assigneeId,
-      assigneeName,
-      assigneeAvatar
-    );
     const newAction = {
       id,
       value,

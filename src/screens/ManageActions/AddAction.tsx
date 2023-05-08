@@ -49,7 +49,6 @@ export default function AddAction({
 
   // Function to toggle the Emoji Picker
   const handleToOpenEmojiPicker = () => {
-    console.log(isEmojiPickerOpen,"isEmojiPickerOpen")
     setIsEmojiPickerOpen(!isEmojiPickerOpen);
   };
 
@@ -214,7 +213,6 @@ width=  actionComponent.getBoundingClientRect().height +  actionComponent.getBou
       </Box>
       {/* Emoji Picker */}
       <Grid
-
         style={{
           width:
             document.getElementById("actionIndex") != null
@@ -222,7 +220,7 @@ width=  actionComponent.getBoundingClientRect().height +  actionComponent.getBou
                 .getElementById("actionIndex")
                 ?.getBoundingClientRect().width + 'px'
               : '33px',
-          zIndex: 2,
+          zIndex: 3,
           position: 'absolute',
           top: getTheTopCoordinates()
         }}
