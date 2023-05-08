@@ -492,7 +492,7 @@ export default function RetroBoard() {
                                 <>
                                   {getProcessedColumns().length == 3 ?
                                     <>
-                                      {column.id != '2' && global.expandColumn != 10 ?
+                                      {(column.id != '2'||true) && global.expandColumn != 10 ?
                                         <RetroColumn
                                           leftHeaderComponent={
                                             <LeftContainer index={index} />
