@@ -25,6 +25,7 @@ const ColumnHeader = ({
   getGroupSuggestion,
   deleteUnconfirmedGroups,
   retryGroupSuggestion,
+  keywordExtraction,
 }: {
   column: Column;
   columnId: string;
@@ -43,7 +44,8 @@ const ColumnHeader = ({
   isPrintPage: boolean;
   getGroupSuggestion: () => void;
   deleteUnconfirmedGroups: () => void;
-  retryGroupSuggestion:()=>void;
+  retryGroupSuggestion: () => void;
+  keywordExtraction: () => void;
 }) => {
   const [showEdit, setShowEdit] = React.useState(false);
   const [enableSave, setEnableSave] = React.useState(false);
@@ -149,114 +151,125 @@ const ColumnHeader = ({
         </Tooltip>
       </Grid>
       {!isPrintPage && (
-    
-          <Grid
-            container
-            justifyContent="flex-end"
-            direction="row"
-            alignItems="center"
-            item
-            lg={global.expandColumn === -1 ? 4 : 6}
-            md={global.expandColumn === -1 ? 5 : 8}
-            xs={5}
-          >
-            {global.user.userType == 2 && (!ended || !global.leaveRetro) && (
+
+        <Grid
+          container
+          justifyContent="flex-end"
+          direction="row"
+          alignItems="center"
+          item
+          lg={global.expandColumn === -1 ? 4 : 6}
+          md={global.expandColumn === -1 ? 5 : 8}
+          xs={5}
+        >
+          {global.user.userType == 2 && (!ended || !global.leaveRetro) && (
 
 
-              <>
-                {global.expandColumn !== -1 &&!ended&&
-                
-                  <Grid sx={{display:'flex',alignItems:'center'}}>
-                    <FormGroup sx={{ display: 'flex', flexDirection: 'row' }}>
+            <>
+              {global.expandColumn !== -1 && !ended &&
+
+                <Grid sx={{ display: 'flex', alignItems: 'center' }}>
+                  <FormGroup sx={{ display: 'flex', flexDirection: 'row' }}>
 
                     <Tooltip title="Coming soon
                     ">
-                    <FormControlLabel disabled control={<Switch color="secondary" />} label="Show keywords" />
-                    </Tooltip>
-                      <Tooltip title={!groupSuggestion && disableGroupSuggestion ? "Need more than 2 ungrouped cards" : ''}>
-                        <FormControlLabel disabled={!groupSuggestion && disableGroupSuggestion} sx={{ color: theme.palette.primary.dark }} checked={groupSuggestion}
-                          control={<Switch color="primary" onChange={(value) => {
+                      <FormControlLabel
+
+
+                        control={<Switch color="secondary"
+                          onChange={(value) => {
                             if (value.target.checked) {
-                              getGroupSuggestion()
+                              keywordExtraction()
 
                             }
-                            else {
-                              console.log("deleteUnconfirmedGroups")
-                              deleteUnconfirmedGroups()
-                            }
-                          }} />} label="Suggest Grouping" />
-                          </Tooltip>
 
-                    </FormGroup>
-                    {groupSuggestion && !disableGroupSuggestion&&<Tooltip title="Resuggest grouping">
-                      <RefreshIcon sx={{ color: theme.palette.primary.dark, marginRight: '15px', cursor: 'pointer' }}
-                        onClick={
-                          retryGroupSuggestion
-                        }
-                      />
+                          }}
+                        />} label="Show keywords" />
+                    </Tooltip>
+                    <Tooltip title={!groupSuggestion && disableGroupSuggestion ? "Need more than 2 ungrouped cards" : ''}>
+                      <FormControlLabel disabled={!groupSuggestion && disableGroupSuggestion} sx={{ color: theme.palette.primary.dark }} checked={groupSuggestion}
+                        control={<Switch color="primary" onChange={(value) => {
+                          if (value.target.checked) {
+                            getGroupSuggestion()
 
-                    </Tooltip>}
-                    </Grid>
-                
-                }
+                          }
+                          else {
+                            console.log("deleteUnconfirmedGroups")
+                            deleteUnconfirmedGroups()
+                          }
+                        }} />} label="Suggest Grouping" />
+                    </Tooltip>
 
-                {column.publish ? (
-                  <Typography style={{ color: '#808080' }}>
-                    Published
-                  </Typography>
-                ) : (
-                  <Typography
-                    id={'publish' + columnIndex}
-                    onClick={() => {
-                      if (!ended) {
-                        publishColumn(true);
+                  </FormGroup>
+                  {groupSuggestion && !disableGroupSuggestion && <Tooltip title="Resuggest grouping">
+                    <RefreshIcon sx={{ color: theme.palette.primary.dark, marginRight: '15px', cursor: 'pointer' }}
+                      onClick={
+                        retryGroupSuggestion
                       }
-                    }}
-                    sx={{
-                      color: '#159ADD',
-                      textDecorationLline: 'underline',
-                      cursor: !ended ? 'pointer' : 'auto',
-                      display: !ended ? 'flex' : 'none',
-                    }}
-                  >
-                    Publish
-                  </Typography>
-                )}
-              </>
-            )}
-            {global.expandColumn === -1 ? (
-              <img
-                onClick={() => {
-                  dispatch({
-                    type: ActionType.EXPAND_COLUMN,
-                    payload: { expandColumn: +column.id },
-                  });
-                }}
-                src="/svgs/Expand.svg"
-                style={{
-                  width: '20px',
-                  marginLeft: '15px',
-                  cursor: 'pointer',
-                }}
-              />
-            ) : (
-              <img
-                onClick={() => {
-                  dispatch({
-                    type: ActionType.EXPAND_COLUMN,
-                    payload: { expandColumn: -1 },
-                  });
-                }}
-                src="/svgs/Shrink.svg"
-                style={{
-                  width: '20px',
-                  marginLeft: '15px',
-                  cursor: 'pointer',
-                }}
-              />
-            )}
-          </Grid>
-       
+                    />
+
+                  </Tooltip>}
+                </Grid>
+
+              }
+
+              {column.publish ? (
+                <Typography style={{ color: '#808080' }}>
+                  Published
+                </Typography>
+              ) : (
+                <Typography
+                  id={'publish' + columnIndex}
+                  onClick={() => {
+                    if (!ended) {
+                      publishColumn(true);
+                    }
+                  }}
+                  sx={{
+                    color: '#159ADD',
+                    textDecorationLline: 'underline',
+                    cursor: !ended ? 'pointer' : 'auto',
+                    display: !ended ? 'flex' : 'none',
+                  }}
+                >
+                  Publish
+                </Typography>
+              )}
+            </>
+          )}
+          {global.expandColumn === -1 ? (
+            <img
+              onClick={() => {
+                dispatch({
+                  type: ActionType.EXPAND_COLUMN,
+                  payload: { expandColumn: +column.id },
+                });
+              }}
+              src="/svgs/Expand.svg"
+              style={{
+                width: '20px',
+                marginLeft: '15px',
+                cursor: 'pointer',
+              }}
+            />
+          ) : (
+            <img
+              onClick={() => {
+                dispatch({
+                  type: ActionType.EXPAND_COLUMN,
+                  payload: { expandColumn: -1 },
+                });
+              }}
+              src="/svgs/Shrink.svg"
+              style={{
+                width: '20px',
+                marginLeft: '15px',
+                cursor: 'pointer',
+              }}
+            />
+          )}
+        </Grid>
+
       )}
     </Grid>
   );
