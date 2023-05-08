@@ -175,8 +175,9 @@ const ColumnHeader = ({
                     ">
                       <FormControlLabel
 
-
+                        disabled
                         control={<Switch color="secondary"
+
                           onChange={(value) => {
                             if (value.target.checked) {
                               keywordExtraction()
