@@ -38,6 +38,7 @@ import { PrintRetroColumn } from './PrintRetroColumn';
 import ReactToPrint from 'react-to-print';
 import { OutlinedButton } from '../../components';
 import useReRoute from '../../hooks/useReRoute';
+import ActionMainContainer from '../ManageActions/ActionMainContainer';
 
 interface StyledTabsProps {
   children?: React.ReactNode;
@@ -326,20 +327,20 @@ export default function RetroBoard() {
 
 
       //remove unconfirmed groups from array;
-        const groupIdArray: string[] = [];
+      const groupIdArray: string[] = [];
 
-        columns.forEach(column => {
+      columns.forEach(column => {
 
-          const groupIdArray:string[] = []
-          column.groups.forEach(group => {
-            if (group.suggested) {
-              groupIdArray.push(group.id)
-            }
-          })
+        const groupIdArray: string[] = []
+        column.groups.forEach(group => {
+          if (group.suggested) {
+            groupIdArray.push(group.id)
+          }
+        })
 
-           deleteUnconfirmedGroup(groupIdArray)
+        deleteUnconfirmedGroup(groupIdArray)
 
-        });
+      });
 
 
       sessionStorage.removeItem('pulseCheckState');
@@ -484,28 +485,48 @@ export default function RetroBoard() {
                               (column &&
                                 +column.id == global.expandColumn)))) && (
                             <ColumnContainer
-                              totalPanels={totalPanels}
+                              totalPanels={1}
                               key={index + '1'}
                             >
                               {!!column ? (
                                 <>
-                                  <RetroColumn
-                                    leftHeaderComponent={
-                                      <LeftContainer index={index} />
-                                    }
-                                    rightHeaderComponent={
-                                      <RightContainer index={index} />
-                                    }
-                                    column={column}
-                                    columnId={column.id}
-                                    noHeader={false}
-                                    showEditBox={showEditBox}
-                                    setShowEditBox={setShowEditBox}
-                                    setIslanded={setIsLanded}
-                                    cardGroups={column.groups}
-                                    columnIndex={index}
-                                  />
-                                </>
+                                  {getProcessedColumns().length == 3 ?
+                                    <>
+                                      {column.id != '2' && global.expandColumn != 10 ?
+                                        <RetroColumn
+                                          leftHeaderComponent={
+                                            <LeftContainer index={index} />
+                                          }
+                                          rightHeaderComponent={
+                                            <RightContainer index={index} />
+                                          }
+                                          column={column}
+                                          columnId={column.id}
+                                          noHeader={false}
+                                          showEditBox={showEditBox}
+                                          setShowEditBox={setShowEditBox}
+                                          setIslanded={setIsLanded}
+                                          cardGroups={column.groups}
+                                          columnIndex={index}
+                                        /> : column.id == '2' && <ActionMainContainer />}
+                                    </> :
+                                    <RetroColumn
+                                      leftHeaderComponent={
+                                        <LeftContainer index={index} />
+                                      }
+                                      rightHeaderComponent={
+                                        <RightContainer index={index} />
+                                      }
+                                      column={column}
+                                      columnId={column.id}
+                                      noHeader={false}
+                                      showEditBox={showEditBox}
+                                      setShowEditBox={setShowEditBox}
+                                      setIslanded={setIsLanded}
+                                      cardGroups={column.groups}
+                                      columnIndex={index}
+                                    />}</>
+
                               ) : (
                                 <FeedbackColumn
                                   noHeader={isXsUp}

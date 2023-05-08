@@ -842,9 +842,6 @@ export function RetroColumn({
     })
     dispatchLoadingFlag(true);
     await groupSuggestion(columnId, ungroupCards).then((res: any) => {
-
-      console.log(res.response)
-
       const data = res.response
       if (data) {
         const groupIdArray: string[] = []
@@ -883,7 +880,6 @@ export function RetroColumn({
 
     await deleteUnconfirmedGroup(groupIdArray).then((res) => {
       dispatchLoadingFlag(false);
-      console.log("called")
     }, error => {
       dispatchLoadingFlag(false);
     })
@@ -974,7 +970,8 @@ export function RetroColumn({
                 paddingRight: '15px',
                 marginBottom: '25px',
                 background: groupColour,
-                borderRadius: '8px',
+                borderRadius: '8px 8px 0px 0px',
+                height: "48px"
               }}
             >
               <ColumnHeader

@@ -1,3 +1,4 @@
+import React from 'react';
 import {
   BoardState,
   Card,
@@ -6,10 +7,7 @@ import {
   FeedbackEntry,
   PulseCheckEntry,
 } from '../types';
-import shortid from 'shortid';
 import { UNGROUPED } from '../constants';
-// import { GlobalContext } from '../contexts/GlobalContext';
-import React from 'react';
 
 export enum BoardActionType {
   RESET_RETRO = 'resetRetro',
@@ -48,9 +46,12 @@ export enum BoardActionType {
   PUBLISH_COLUMN = 'publishColumn',
   LOCK_COLUMN = 'lockColumn',
   SET_FACILITATOR = 'setFacilitator',
-  GROUP_SUGGESTION = "groupSuggestion",
-  CONFIRM_GROUP = "confirmGroup",
-  DELETE_UNCONFIRMED_GROUPS = 'deleteUnconfirmedGroups'
+  GROUP_SUGGESTION = 'groupSuggestion',
+  CONFIRM_GROUP = 'confirmGroup',
+  DELETE_UNCONFIRMED_GROUPS = 'deleteUnconfirmedGroups',
+  Add_NEW_ACTION = 'addAction',
+  REMOVE_ACTION = 'removeAction',
+  UPDATE_ACTION = 'updateAction',
 }
 
 export const BOARD_STATE_MACHINE_VERSION = 1;
@@ -164,6 +165,15 @@ export const validateAction = (
       return true;
     }
     return false;
+  };
+
+  const isAddNewActionValid = (
+    id: string,
+    value: string,
+    createdBy: string,
+    userId: string
+  ): boolean => {
+    return true;
   };
 
   const isAddNewCardValid = (
@@ -344,18 +354,13 @@ export const validateAction = (
     return false;
   };
 
-  const isConfirmGroupValid = (
-    groupId: string,
-    userId: string
-  ): boolean => {
+  const isConfirmGroupValid = (groupId: string, userId: string): boolean => {
     const { group } = findGroup(groupId);
     if (group && !(group.locked && group.lockedBy !== userId)) {
       return true;
     }
     return false;
   };
-
-
 
   const isDeleteGroupValid = (groupId: string, userId: string): boolean => {
     const { column, group, index } = findGroup(groupId);
@@ -373,8 +378,10 @@ export const validateAction = (
     return false;
   };
 
-
-  const isDeleteUnconfirmedGroupValid = (groupIdArray: string[], userId: string): boolean => {
+  const isDeleteUnconfirmedGroupValid = (
+    groupIdArray: string[],
+    userId: string
+  ): boolean => {
     var initialValue: boolean = true;
     groupIdArray.forEach(groupId => {
       const { column, group, index } = findGroup(groupId);
@@ -388,14 +395,10 @@ export const validateAction = (
         if (groupUngrouped) {
           initialValue = initialValue && true;
         }
-      }
-      else
-        initialValue = initialValue && false;
-
+      } else initialValue = initialValue && false;
     });
 
-    return initialValue
-
+    return initialValue;
   };
 
   const canJoinRetro = (userNickname: string, userId: string): boolean => {
@@ -514,6 +517,13 @@ export const validateAction = (
         parameters.columnId,
         parameters.groupId,
         parameters.order,
+        userId
+      );
+    case BoardActionType.Add_NEW_ACTION:
+      return isAddNewActionValid(
+        parameters.id,
+        parameters.value,
+        parameters.createdBy,
         userId
       );
     case BoardActionType.ADD_NEW_CARD:
@@ -636,6 +646,7 @@ export const processAction = (
   avatar?: string
 ): void => {
   const {
+    actionsData,
     columns,
     users,
     countdownDuration,
@@ -764,8 +775,6 @@ export const processAction = (
     name: string,
     suggested: boolean
   ) => {
-
-
     const columnIndex = columns.findIndex(column => column.id === columnId);
     if (columnIndex !== -1 && !findGroup(groupId).group) {
       const column = columns[columnIndex];
@@ -778,13 +787,10 @@ export const processAction = (
         createdBy: userId,
         locked: false,
         lastUpdatedBy: userId,
-        suggested: suggested
+        suggested: suggested,
       });
     }
   };
-
-
-
 
   const createGroupAsSuggested = (
     columnId: string,
@@ -795,15 +801,18 @@ export const processAction = (
   ) => {
     const groupSuggestionOutput = groupSugg;
 
-
     groupSuggestionOutput.forEach((element, index1) => {
-
-
-
-      createGroup(columnId, groupIdArray[index1], order, userId, [], element.groupName, true)
+      createGroup(
+        columnId,
+        groupIdArray[index1],
+        order,
+        userId,
+        [],
+        element.groupName,
+        true
+      );
 
       element.cards.forEach((card1: any, toIndex: number) => {
-
         const { card, group, index } = findCard(card1.id);
         if (
           card &&
@@ -817,19 +826,17 @@ export const processAction = (
             group.cards.splice(index as number, 1);
             cardsList.splice(
               toIndex -
-              (group.id === targetGroup.id && (index as number) < toIndex
-                ? 1
-                : 0),
+                (group.id === targetGroup.id && (index as number) < toIndex
+                  ? 1
+                  : 0),
               0,
               card
             );
             card.lastUpdatedBy = userId;
           }
         }
-
       });
     });
-
   };
 
   const addNewCard = (
@@ -876,9 +883,9 @@ export const processAction = (
         group.cards.splice(index as number, 1);
         cardsList.splice(
           toIndex -
-          (group.id === targetGroup.id && (index as number) < toIndex
-            ? 1
-            : 0),
+            (group.id === targetGroup.id && (index as number) < toIndex
+              ? 1
+              : 0),
           0,
           card
         );
@@ -1064,15 +1071,14 @@ export const processAction = (
   };
 
   const setGroupName = (groupId: string, name: string, userId: string) => {
-
     const { group } = findGroup(groupId);
     if (group) {
       group.name = name;
       group.lastUpdatedBy = userId;
     }
   };
-  const confirmGroup = (groupId: string, userId: string) => {
 
+  const confirmGroup = (groupId: string, userId: string) => {
     const { group } = findGroup(groupId);
     if (group) {
       group.suggested = false;
@@ -1097,7 +1103,6 @@ export const processAction = (
   };
 
   const deleteUnconfirmedGroups = (groupIdArray: string[], userId: string) => {
-
     groupIdArray.forEach(groupId => {
       const { column, group, index } = findGroup(groupId);
       if (
@@ -1113,9 +1118,7 @@ export const processAction = (
         }
       }
     });
-
   };
-
 
   const joinRetro = (
     userNickname: string,
@@ -1270,6 +1273,25 @@ export const processAction = (
     // state.users
   };
 
+  const addAction = (
+    id: string,
+    value: string,
+    createdBy: string,
+    assigneeId: string,
+    assigneeName: string,
+    assigneeAvatar: string
+  ) => {
+    const newAction = {
+      id,
+      value,
+      createdBy,
+      assigneeId,
+      assigneeName,
+      assigneeAvatar,
+    };
+    actionsData.actions.push(newAction);
+  };
+
   let noMatch = false;
 
   switch (actionName) {
@@ -1290,13 +1312,24 @@ export const processAction = (
       );
       break;
     case BoardActionType.CREATE_GROUP:
-
       createGroup(
         parameters.columnId,
         parameters.groupId,
         parameters.order,
         userId,
-        [], "", false
+        [],
+        '',
+        false
+      );
+      break;
+    case BoardActionType.Add_NEW_ACTION:
+      addAction(
+        parameters.id,
+        parameters.value,
+        parameters.createdBy,
+        parameters.assigneeId,
+        parameters.assigneeName,
+        parameters.assigneeAvatar
       );
       break;
     case BoardActionType.ADD_NEW_CARD:
@@ -1420,12 +1453,14 @@ export const processAction = (
       setFacilitator(parameters.userIdFac);
       break;
     case BoardActionType.GROUP_SUGGESTION:
-      createGroupAsSuggested(parameters.columnId,
+      createGroupAsSuggested(
+        parameters.columnId,
 
         parameters.groupSugg,
         parameters.groupIdArray,
         parameters.order,
-        userId);
+        userId
+      );
       break;
     default:
       noMatch = true;
@@ -1436,7 +1471,3 @@ export const processAction = (
     state.lastStateUpdate = new Date();
   }
 };
-
-
-
-

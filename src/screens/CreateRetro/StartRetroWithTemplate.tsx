@@ -14,7 +14,7 @@ export function StartRetroWithTemplate() {
     state: { retroId, retroStarted },
     commitAction,
   } = React.useContext(BoardContext);
-  const [isTimeInputDialog, setIsTimeInputDialog] = React.useState(false);
+  const [isTimeInputDialog, setIsTimeInputDialog] = React.useState<boolean>(false);
   const [selectedValue, setSelectedValue] = React.useState(60);
 
   React.useEffect(() => {

@@ -77,6 +77,26 @@ export interface Card {
   avatar: string;
 }
 
+export interface ActionInterface{
+  id: string;
+  value: string;
+  reacts?: any[];
+  locked?: boolean;
+  lockedBy?: string;
+  createdBy?: string;
+  lastUpdatedBy?: string;
+  editCount?: number;
+  columnId?: string;
+  columnName?: string;
+  assigneeId: string;
+  assigneeName: string;
+  assigneeAvatar: string;
+}
+export interface Actions {
+  order: number;
+  actions: ActionInterface[];
+}
+
 export interface CardGroup {
   id: string;
   name: string;
@@ -87,7 +107,7 @@ export interface CardGroup {
   lastUpdatedBy?: string;
   locked: boolean;
   lockedBy?: string;
-  suggested?:boolean
+  suggested?: boolean;
 }
 
 export interface Column {
@@ -101,7 +121,7 @@ export interface Column {
   groups: CardGroup[];
   lastUpdatedBy?: string;
   publish: boolean;
-  showSuggestion:boolean;
+  showSuggestion: boolean;
 }
 
 export interface PulseCheckEntry {
@@ -121,9 +141,9 @@ export interface FeedbackEntry {
 
 export class BoardState {
   retroId: string = '';
-  // publishColumn: any[] = [];
   loading: boolean = true;
   columns: Column[] = [];
+  actionsData: Actions = { order: 0, actions: [] };
   creatorId: string = '';
   users: {
     userId: string;
@@ -160,7 +180,6 @@ export class BoardState {
   feedbackSubmitted?: boolean = false;
   isFeedbackSubmittedByFacilitator?: number = 0;
   disconnected?: boolean = false;
-
   constructor(retroId: string) {
     this.retroId = retroId;
   }

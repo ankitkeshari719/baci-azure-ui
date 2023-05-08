@@ -116,7 +116,7 @@ const RetroColumnBottom = ({
                   focusTextBox();
                 }
               }}
-            ></img>
+            />
           )}
           <TextFieldNoBorderWrapper
             sx={{
