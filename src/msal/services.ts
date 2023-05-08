@@ -194,6 +194,24 @@ export const groupSuggestion = async (
   return groupData;
 };
 
+export const keywordExtraction = async (
+  retroId: string,
+  column: any
+): Promise<string> => {
+  let groupData = '';
+  const requestOptions = {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({column:column}),
+  };
+  await fetch(API_URL + '/keywordExtraction', requestOptions)
+    .then(response => response.json())
+    .then(data => {
+      groupData = data;
+    });
+  return groupData;
+};
+
 
 /* 
 export const onSnapshotRetroActions = (socket: Socket<DefaultEventsMap, DefaultEventsMap>,id: string, userId: string, fromTimestamp: number | undefined, callback: (([]) => void)): () => void => {
