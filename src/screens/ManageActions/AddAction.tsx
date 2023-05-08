@@ -75,9 +75,7 @@ width=  actionComponent.getBoundingClientRect().height +  actionComponent.getBou
           justifyContent: 'center',
           flexDirection: 'row',
           background: 'white',
-          borderBottom: isTextFieldFocused
-            ? '1px solid #4E4E4E !important'
-            : '1px solid #E3E3E3 !important',
+          borderBottom: '1px solid #E3E3E3',
           padding: '4px 0px',
           gap: '8px',
           boxSizing: "border-box",
