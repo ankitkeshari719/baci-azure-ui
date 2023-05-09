@@ -19,11 +19,12 @@ export default function ActionMainContainer() {
     commitAction,
   } = React.useContext(BoardContext);
   const [global, dispatch] = React.useContext(GlobalContext);
-
   const [allActions, setAllActions] = React.useState<ActionInterface[]>([]);
   const [addedActionValue, setAddActionValue] = React.useState<string>('');
-
   const isXsUp = useMediaQuery(theme.breakpoints.only('xs'));
+  const [isTextFieldFocused, setIsTextFieldFocused] =
+    React.useState<boolean>(false);
+
   React.useEffect(() => {
     setAllActions([...actionsData.actions]);
   }, [actionsData]);
@@ -44,29 +45,40 @@ export default function ActionMainContainer() {
       id: id,
       value: value,
       createdBy: global.user.id,
-      assigneeId:'',
+      assigneeId: '',
       assigneeName: '',
-      assigneeAvatar:'',
-
+      assigneeAvatar: '',
     }).then(
       res => {
         setAddActionValue('');
+        setIsTextFieldFocused(false);
       },
       err => {}
     );
   };
 
   return (
-    <Box className="actionsContainer" sx={{  height: false
-      ? 'auto'
-      : isXsUp
-        ? 'calc(var(--app-height) - 115px)'
-        : 'calc(var(--app-height) - 160px)' }}>
-      <ActionHeader global={global} allActions={allActions} dispatch={dispatch} />
+    <Box
+      className="actionsContainer"
+      sx={{
+        height: false
+          ? 'auto'
+          : isXsUp
+          ? 'calc(var(--app-height) - 115px)'
+          : 'calc(var(--app-height) - 160px)',
+      }}
+    >
+      <ActionHeader
+        global={global}
+        allActions={allActions}
+        dispatch={dispatch}
+      />
       <AddAction
         addAction={addAction}
         addedActionValue={addedActionValue}
         setAddActionValue={setAddActionValue}
+        isTextFieldFocused={isTextFieldFocused}
+        setIsTextFieldFocused={setIsTextFieldFocused}
       />
       {allActions.length > 0 ? (
         <ActionsList allActions={allActions} />
