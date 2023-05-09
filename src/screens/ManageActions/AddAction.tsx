@@ -78,25 +78,30 @@ export default function AddAction({
           background: 'white',
           borderBottom: '1px solid #E3E3E3',
           padding: '4px 0px',
-          gap: '8px',
           boxSizing: 'border-box',
+          gap: '8px',
           ...(false ? { position: 'fixed', height: '8rem' } : {}),
         }}
       >
-        <Box className="emojiPickerIconContainer">
-          <img
-            src="/images/Emoji.png"
-            style={{
-              height: '24px',
-              width: '24px',
-              cursor: 'pointer',
-            }}
-            onClick={() => {
-              focusTextBox();
-              handleToOpenEmojiPicker();
-            }}
-          />
-        </Box>
+        {/* Emoji Picker Icon */}
+        {isTextFieldFocused ? (
+          <Box className="emojiPickerIconContainer">
+            <img
+              src="/images/Emoji.png"
+              style={{
+                height: '24px',
+                width: '24px',
+                cursor: 'pointer',
+              }}
+              onClick={() => {
+                focusTextBox();
+                handleToOpenEmojiPicker();
+              }}
+            />
+          </Box>
+        ) : (
+          <Box className="emojiPickerIconContainer"></Box>
+        )}
         <TextFieldNoBorderWrapper
           sx={{
             color: '#343434',
@@ -110,7 +115,6 @@ export default function AddAction({
             id="actionTextField"
             fullWidth
             multiline
-            autoFocus
             placeholder="Type new action here"
             value={addedActionValue}
             onChange={e => setAddActionValue(e.currentTarget.value)}
@@ -179,16 +183,10 @@ export default function AddAction({
           ) : null}
         </TextFieldNoBorderWrapper>
         {/* Send Icon */}
-        <div
-          style={{
-            display: 'flex',
-            justifyContent: 'flex-end',
-            flexDirection: 'column',
-          }}
-        >
+        <Box className="sendIconContainer">
           <Button
-            style={{ position: 'initial' }}
             sx={{
+              minWidth: '40px',
               ':hover': { background: '#F0F0F0' },
             }}
             disabled={
@@ -211,7 +209,7 @@ export default function AddAction({
               }}
             ></SendIcon>
           </Button>
-        </div>
+        </Box>
       </Box>
       {/* Emoji Picker */}
       <Grid
