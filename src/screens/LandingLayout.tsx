@@ -3,7 +3,7 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import LandingImage from '../assets/img/landing_img.png';
 import LandingMobileImage from '../assets/img/Mobile_home_Image.png';
-import BACILogo from '../assets/img/bacilogo.png';
+import BACILogo from '../assets/img/bacilogobeta.svg';
 import commomStyles from './../style.module.scss';
 import theme from '../theme/theme';
 import { LazyLoadImage } from 'react-lazy-load-image-component';
@@ -129,7 +129,9 @@ export function LandingLayout() {
               <LazyLoadImage
                 style={styles.logoImageXs}
                 alt="logo"
-                // height={image.height}
+                height='48px'
+                width='108px'
+                // height='50px'
                 src={BACILogo} // use normal <img> attributes as props
                 // width={image.width}
               />

@@ -47,6 +47,7 @@ export enum BoardActionType {
   LOCK_COLUMN = 'lockColumn',
   SET_FACILITATOR = 'setFacilitator',
   GROUP_SUGGESTION = 'groupSuggestion',
+  ADD_KEYWORDS="showKeywords",
   CONFIRM_GROUP = 'confirmGroup',
   DELETE_UNCONFIRMED_GROUPS = 'deleteUnconfirmedGroups',
   Add_NEW_ACTION = 'addAction',
@@ -635,6 +636,8 @@ export const validateAction = (
       return true;
     case BoardActionType.SET_FACILITATOR:
       return true;
+    case BoardActionType.ADD_KEYWORDS:
+      return true;
     // case BoardActionType.SET_LOADING:
     //   return true;
     default:
@@ -865,6 +868,7 @@ export const processAction = (
           lastUpdatedBy: userId,
           editCount: 0,
           avatar: avatar,
+          keywords: []
         });
       }
     }
@@ -1002,6 +1006,18 @@ export const processAction = (
     }
   };
 
+  const addKeywordsToCard = (suggestedkeywordCards: Card[], userId: string) => {
+    suggestedkeywordCards.forEach(element => {
+      const { card } = findCard(element.id);
+      console.log(card, "card");
+      if (card) {
+        card.keywords = element.keywords;
+
+        card.lastUpdatedBy = userId;
+      }
+    });
+
+  };
   const addReactToGroup = (react: string, groupId: string, userId: string) => {
     const { group } = findGroup(groupId);
     if (group && userId) {
@@ -1484,7 +1500,9 @@ export const processAction = (
     case BoardActionType.UPDATE_ACTION:
       updateAction(parameters.id, parameters.value);
       break;
-
+    case BoardActionType.ADD_KEYWORDS:
+      addKeywordsToCard(parameters.suggestedkeywordCards, userId)
+      break;
     default:
       noMatch = true;
       break;

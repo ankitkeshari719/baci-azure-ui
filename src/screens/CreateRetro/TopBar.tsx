@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { AppBar, Box, Toolbar, useMediaQuery } from '@mui/material';
 import theme from '../../theme/theme';
-import BACILogo from '../../assets/img/bacilogo.png';
+import BACILogo from '../../assets/img/bacilogobeta.svg';
 import Link from '@mui/material/Link';
 
 export function TopBar() {
@@ -16,8 +16,8 @@ export function TopBar() {
           <Box
             component="img"
             sx={{
-              width: isXsUp ? '60px' : '82px',
-              height: isXsUp ? '24px' : '28px',
+              width: isXsUp ? '60px' : '108px',
+              height: isXsUp ? '24px' : '48px',
             }}
             alt="Logo"
             src={BACILogo}

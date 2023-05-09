@@ -11,7 +11,7 @@ import {
   useMediaQuery,
 } from '@mui/material';
 import React from 'react';
-import BACILogo from '../../assets/img/bacilogo.png';
+import BACILogo from '../../assets/img/bacilogobeta.svg';
 import { BoardContext } from '../../contexts/BoardContext';
 import { GlobalContext } from '../../contexts/GlobalContext';
 import { BoardActionType } from '../../statemachine/BoardStateMachine';
@@ -95,8 +95,8 @@ const PulseCheckTopbar = (props: any) => {
             src={BACILogo}
             alt="Logo"
             style={{
-              width: isXsUp ? '53px' : '82px',
-              height: isXsUp ? '18px' : '28px',
+              width: isXsUp ? '53px' : '108px',
+              height: isXsUp ? '18px' : '48px',
             }}
           />
         </Link>

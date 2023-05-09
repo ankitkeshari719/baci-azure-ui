@@ -32,7 +32,7 @@ import FirstTimeExperience from '../../elements/FirstTimeExperience';
 import { styled } from '@mui/material/styles';
 import { DeploymentPopUp } from '../Utils/Alerts/DeploymentPopUp';
 import { Col, Container, Row } from 'react-bootstrap';
-import BACILogo from '../../assets/img/bacilogo.png';
+import BACILogo from '../../assets/img/bacilogobeta.svg';
 import moment from 'moment';
 import { PrintRetroColumn } from './PrintRetroColumn';
 import ReactToPrint from 'react-to-print';
@@ -574,7 +574,7 @@ export default function RetroBoard() {
               xs="12"
               className="d-flex justify-content-start align-items-center"
             >
-              <img src={BACILogo} alt="Logo" className="logo" />
+              <img src={BACILogo} alt="Logo" className="logo" height='48px' width='108px'/>
             </Col>
           </Row>
           {/* Divider */}
