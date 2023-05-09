@@ -26,7 +26,11 @@ export default function ActionMainContainer() {
     React.useState<boolean>(false);
 
   React.useEffect(() => {
-    setAllActions([...actionsData.actions]);
+    let tempActions = actionsData.actions.map(action => {
+      action.checked = false;
+      return action;
+    });
+    setAllActions([...tempActions]);
   }, [actionsData]);
 
   const saveAndProcessAction = async (
@@ -39,6 +43,7 @@ export default function ActionMainContainer() {
     });
   };
 
+  // Function to call API on adding the new action
   const addAction = async (value: string) => {
     const id = shortid.generate();
     await saveAndProcessAction(BoardActionType.Add_NEW_ACTION, {
@@ -55,6 +60,17 @@ export default function ActionMainContainer() {
       },
       err => {}
     );
+  };
+
+  // Check/Uncheck the action item
+  const handleToggleAction = (actionId: string) => {
+    const newAction = actionsData.actions.map(action => {
+      if (action.id === actionId) {
+        return { ...action, checked: !action.checked };
+      }
+      return action;
+    });
+    setAllActions([...newAction]);
   };
 
   return (
@@ -81,7 +97,10 @@ export default function ActionMainContainer() {
         setIsTextFieldFocused={setIsTextFieldFocused}
       />
       {allActions.length > 0 ? (
-        <ActionsList allActions={allActions} />
+        <ActionsList
+          allActions={allActions}
+          handleToggleAction={handleToggleAction}
+        />
       ) : (
         <ZeroActions />
       )}

@@ -7,14 +7,22 @@ import { Box, List } from '@mui/material';
 
 type Props = {
   allActions: ActionInterface[];
+  handleToggleAction: (actionId: string) => void;
 };
 
-export default function ActionsList({ allActions }: Props) {
+export default function ActionsList({ allActions, handleToggleAction }: Props) {
+  console.log('allActions:::',allActions);
   return (
     <Box sx={{ width: '100%', height: 'var(--app-height)', overflowY: 'auto' }}>
       <List sx={{ width: '100%', bgcolor: 'background.paper' }}>
         {allActions.map(action => {
-          return <ActionItem action={action} />;
+          return (
+            <ActionItem
+              action={action}
+              key={action.id}
+              handleToggleAction={handleToggleAction}
+            />
+          );
         })}
       </List>
     </Box>
