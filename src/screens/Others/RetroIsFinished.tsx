@@ -7,7 +7,7 @@ import './styles.scss';
 import { ContainedButton } from '../../components';
 import theme from '../../theme/theme';
 import useScreenOrientation from '../../hooks/useScreenOrientation';
-import BACILogo from '../../assets/img/bacilogo.png';
+import BACILogo from '../../assets/img/bacilogobeta.svg';
 import {
   LANDSCAPE_PRIMARY,
   LANDSCAPE_SECONDARY,
@@ -69,8 +69,8 @@ export function RetroIsFinished() {
               src={BACILogo}
               alt="Logo"
               style={{
-                width: isXsUp ? '53px' : '82px',
-                height: isXsUp ? '18px' : '28px',
+                width: isXsUp ? '53px' : '108px',
+                height: isXsUp ? '18px' : '48px',
               }}
               onClick={reloadPage}
             />

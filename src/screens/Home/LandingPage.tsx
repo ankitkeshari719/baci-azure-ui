@@ -25,6 +25,7 @@ import { ActionType, GlobalContext } from '../../contexts/GlobalContext';
 import { addDeploymentData } from '../../msal/services';
 import { AddDeploymentDataDialog } from '../Utils/Dialogs/AddDeploymentDataDialog';
 import { DeploymentPopUp } from '../Utils/Alerts/DeploymentPopUp';
+import { PrivacyAndRetentionDialog } from '../Utils/Dialogs/PrivacyAndRetentionDialog';
 
 const BootstrapDialog = styled(Dialog)(({ theme }) => ({
   '& .MuiDialogContent-root': {
@@ -331,6 +332,7 @@ export function LandingPage() {
           handleAddDeploymentData={handleAddDeploymentData}
         />
       </BootstrapDialog>
+      <PrivacyAndRetentionDialog />
     </>
   );
 }

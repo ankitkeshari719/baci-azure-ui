@@ -75,6 +75,7 @@ export interface Card {
   lastUpdatedBy?: string;
   editCount: number;
   avatar: string;
+  keywords:string[];
 }
 
 export interface ActionInterface{

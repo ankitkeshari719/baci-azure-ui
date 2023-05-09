@@ -27,6 +27,7 @@ import theme from '../../theme/theme';
 import { SocketContext } from '../../contexts/SocketProvider';
 import { DeploymentPopUp } from './../Utils/Alerts/DeploymentPopUp';
 import useReRoute from '../../hooks/useReRoute';
+import { PrivacyAndRetentionDialog } from '../Utils/Dialogs/PrivacyAndRetentionDialog';
 const AVATAR_CHARACTER_LIMIT = 30;
 const styles = {
   avatarfield: {
@@ -552,6 +553,7 @@ export function JoinRetro() {
           </Button>
         </Box>
       </Dialog>
+      <PrivacyAndRetentionDialog />
     </>
   );
 }
