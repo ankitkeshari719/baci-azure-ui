@@ -88,7 +88,7 @@ export default function ActionItem({ action, handleToggleAction }: Props) {
 
   return (
     <>
-      {global.user.id === action.createdBy && (
+      {(global.user.id === action.createdBy || global.user.userType == 2) && (
         <ListItem key={labelId} style={{ padding: '8px 12px' }}>
           {/* <Box className="reorderIconContainer"></Box> */}
           <ListItemIcon
