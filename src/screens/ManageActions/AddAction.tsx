@@ -27,15 +27,17 @@ type Props = {
   addAction: (value: string) => void;
   addedActionValue: string;
   setAddActionValue: (value: string) => void;
+  isTextFieldFocused: boolean;
+  setIsTextFieldFocused: (value: boolean) => void;
 };
 
 export default function AddAction({
   addAction,
   addedActionValue,
   setAddActionValue,
+  isTextFieldFocused,
+  setIsTextFieldFocused,
 }: Props) {
-  const [isTextFieldFocused, setIsTextFieldFocused] =
-    React.useState<boolean>(false);
   const [isEmojiPickerOpen, setIsEmojiPickerOpen] =
     React.useState<boolean>(false);
 
@@ -166,7 +168,7 @@ export default function AddAction({
                 letterSpacing: '0.2px',
               },
             }}
-          ></TextField>
+          />
           {/* Limitation */}
           {addedActionValue &&
           addedActionValue.length >= MAX_CARD_TEXT_LENGTH - 20 ? (

@@ -19,13 +19,18 @@ export default function ActionMainContainer() {
     commitAction,
   } = React.useContext(BoardContext);
   const [global, dispatch] = React.useContext(GlobalContext);
-
   const [allActions, setAllActions] = React.useState<ActionInterface[]>([]);
   const [addedActionValue, setAddActionValue] = React.useState<string>('');
-
   const isXsUp = useMediaQuery(theme.breakpoints.only('xs'));
+  const [isTextFieldFocused, setIsTextFieldFocused] =
+    React.useState<boolean>(false);
+
   React.useEffect(() => {
-    setAllActions([...actionsData.actions]);
+    let tempActions = actionsData.actions.map(action => {
+      action.checked = false;
+      return action;
+    });
+    setAllActions([...tempActions]);
   }, [actionsData]);
 
   const saveAndProcessAction = async (
@@ -38,38 +43,64 @@ export default function ActionMainContainer() {
     });
   };
 
+  // Function to call API on adding the new action
   const addAction = async (value: string) => {
     const id = shortid.generate();
     await saveAndProcessAction(BoardActionType.Add_NEW_ACTION, {
       id: id,
       value: value,
       createdBy: global.user.id,
-      assigneeId:'',
+      assigneeId: '',
       assigneeName: '',
-      assigneeAvatar:'',
-
+      assigneeAvatar: '',
     }).then(
       res => {
         setAddActionValue('');
+        setIsTextFieldFocused(false);
       },
       err => {}
     );
   };
 
+  // Check/Uncheck the action item
+  const handleToggleAction = (actionId: string) => {
+    const newAction = actionsData.actions.map(action => {
+      if (action.id === actionId) {
+        return { ...action, checked: !action.checked };
+      }
+      return action;
+    });
+    setAllActions([...newAction]);
+  };
+
   return (
-    <Box className="actionsContainer" sx={{  height: false
-      ? 'auto'
-      : isXsUp
-        ? 'calc(var(--app-height) - 115px)'
-        : 'calc(var(--app-height) - 160px)' }}>
-      <ActionHeader global={global} allActions={allActions} dispatch={dispatch} />
+    <Box
+      className="actionsContainer"
+      sx={{
+        height: false
+          ? 'auto'
+          : isXsUp
+          ? 'calc(var(--app-height) - 115px)'
+          : 'calc(var(--app-height) - 160px)',
+      }}
+    >
+      <ActionHeader
+        global={global}
+        allActions={allActions}
+        dispatch={dispatch}
+      />
       <AddAction
         addAction={addAction}
         addedActionValue={addedActionValue}
         setAddActionValue={setAddActionValue}
+        isTextFieldFocused={isTextFieldFocused}
+        setIsTextFieldFocused={setIsTextFieldFocused}
       />
       {allActions.length > 0 ? (
-        <ActionsList allActions={allActions} />
+        <ActionsList
+          allActions={allActions}
+          handleToggleAction={handleToggleAction}
+        />
       ) : (
         <ZeroActions />
       )}

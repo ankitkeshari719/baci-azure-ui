@@ -21,9 +21,10 @@ import { MAX_CARD_TEXT_LENGTH } from '../../constants';
 
 type Props = {
   action: ActionInterface;
+  handleToggleAction: (actionId: string) => void;
 };
 
-export default function ActionItem({ action }: Props) {
+export default function ActionItem({ action, handleToggleAction }: Props) {
   const {
     state: {},
     commitAction,
@@ -34,20 +35,22 @@ export default function ActionItem({ action }: Props) {
   const [isMouseHover, setIsMouseHover] = React.useState<boolean>(false);
   const [isEditActionClick, setIsEditActionClick] =
     React.useState<boolean>(false);
-
   const [selectedAction, setSelectedAction] = React.useState<ActionInterface>();
   const [editActionValue, setEditActionValue] = React.useState<
     string | undefined
   >(selectedAction?.value);
 
+  // Handle Mover Enter on List Item to show the edit pencil
   const handleMouseEnter = () => {
     setIsMouseHover(true);
   };
 
+  // Handle Mover Leave on List Item to show the edit pencil
   const handleMouseLeave = () => {
     setIsMouseHover(false);
   };
 
+  // function to handle the click of edit icon
   const openEditActionOption = (action: ActionInterface) => {
     setIsEditActionClick(true);
     setSelectedAction(action);
@@ -64,7 +67,8 @@ export default function ActionItem({ action }: Props) {
     });
   };
 
-  const saveEditData = async (editActionValue: string | undefined) => {
+  // function to call API on saving the existing action
+  const saveEditAction = async (editActionValue: string | undefined) => {
     await saveAndProcessAction(BoardActionType.UPDATE_ACTION, {
       id: selectedAction?.id,
       value: editActionValue,
@@ -76,19 +80,25 @@ export default function ActionItem({ action }: Props) {
     );
   };
 
+  // function to discard the edit data
   const cancelEditedData = () => {
     setEditActionValue(action.value);
     setIsEditActionClick(false);
   };
 
   return (
-    <ListItem key={labelId}>
+    <ListItem key={labelId} style={{ padding: '8px 12px' }}>
+      {/* <Box className="reorderIconContainer"></Box> */}
       <ListItemIcon
         style={{
           display: 'flex',
           alignItems: 'center',
           justifyContent: 'center',
+          width: '40px',
+          height: '40px',
+          minWidth: '40px',
         }}
+        onClick={() => handleToggleAction(action.id)}
       >
         <Checkbox
           edge="start"
@@ -120,6 +130,7 @@ export default function ActionItem({ action }: Props) {
           dense
           onMouseEnter={handleMouseEnter}
           onMouseLeave={handleMouseLeave}
+          style={{ maxWidth: '350px' }}
         >
           <ListItemText
             id={labelId}
@@ -141,6 +152,8 @@ export default function ActionItem({ action }: Props) {
                 color: '#CCCCCC',
                 width: '20px',
                 height: '20px',
+                minWidth: '20px',
+                minHeight: '20px',
                 cursor: 'pointer',
               }}
               onClick={() => openEditActionOption(action)}
@@ -181,7 +194,7 @@ export default function ActionItem({ action }: Props) {
                   removedSpaces &&
                   removedSpaces.length !== 0
                 ) {
-                  saveEditData(editActionValue);
+                  saveEditAction(editActionValue);
                   (e.target as HTMLInputElement).blur();
                 }
               }}
@@ -230,7 +243,7 @@ export default function ActionItem({ action }: Props) {
                 Cancel
               </Button>
               <Button
-                onClick={() => saveEditData(editActionValue)}
+                onClick={() => saveEditAction(editActionValue)}
                 sx={{
                   fontFamily: 'Poppins',
                   fontStyle: 'normal',
