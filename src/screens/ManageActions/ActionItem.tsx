@@ -146,6 +146,8 @@ export default function ActionItem({ action }: Props) {
                 color: '#CCCCCC',
                 width: '20px',
                 height: '20px',
+                minWidth: '20px',
+                minHeight: '20px',
                 cursor: 'pointer',
               }}
               onClick={() => openEditActionOption(action)}
