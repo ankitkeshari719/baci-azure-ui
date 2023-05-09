@@ -137,3 +137,20 @@
   flex-grow: 0;
   z-index: 1;
 }
+
+.showOtherActionLink {
+  font-family: 'Poppins';
+  font-style: normal;
+  font-weight: 400;
+  font-size: 16px;
+  line-height: 22px;
+  display: flex;
+  align-items: center;
+  letter-spacing: 0.2px;
+  text-decoration-line: underline;
+  color: #0000ee;
+  flex: none;
+  order: 0;
+  flex-grow: 0;
+  cursor: pointer;
+}
