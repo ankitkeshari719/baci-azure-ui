@@ -82,12 +82,16 @@ export default function ActionItem({ action }: Props) {
   };
 
   return (
-    <ListItem key={labelId}>
+    <ListItem key={labelId} style={{ padding: '8px 12px' }}>
+      {/* <Box className="reorderIconContainer"></Box> */}
       <ListItemIcon
         style={{
           display: 'flex',
           alignItems: 'center',
           justifyContent: 'center',
+          width: '40px',
+          height: '40px',
+          minWidth: '40px',
         }}
       >
         <Checkbox
@@ -120,6 +124,7 @@ export default function ActionItem({ action }: Props) {
           dense
           onMouseEnter={handleMouseEnter}
           onMouseLeave={handleMouseLeave}
+          style={{ maxWidth: '350px' }}
         >
           <ListItemText
             id={labelId}
