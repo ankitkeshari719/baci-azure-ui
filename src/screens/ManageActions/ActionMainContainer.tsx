@@ -131,7 +131,7 @@ export default function ActionMainContainer() {
           )}
         </>
       ) : (
-        <ZeroActions />
+        <ZeroActions height="var(--app-height)" />
       )}
     </Box>
   );

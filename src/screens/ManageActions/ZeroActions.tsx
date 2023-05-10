@@ -4,24 +4,26 @@ import './styles.scss';
 import { Box } from '@mui/material';
 import { Typography } from '@material-ui/core';
 
-export default function ZeroActions() {
+type Props = {
+  height: string;
+};
+
+export default function ZeroActions({ height }: Props) {
   return (
     <Box
       sx={{
         width: '100%',
-        height: 'var(--app-height)',
+        height: { height },
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'center',
-        flexDirection:'column'
+        flexDirection: 'column',
       }}
     >
       <Typography component="div" className="zeroActionTextOne">
         Actions Speak!
       </Typography>
-      <Typography  className="zeroActionTextTwo">
-        Add them here...
-      </Typography>
+      <Typography className="zeroActionTextTwo">Add them here...</Typography>
     </Box>
   );
 }
