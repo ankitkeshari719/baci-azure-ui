@@ -5,15 +5,26 @@ import { Typography, Box } from '@material-ui/core';
 import { ActionInterface } from '../../types';
 import { ActionType } from '../../contexts/GlobalContext';
 import * as Icons from 'heroicons-react';
-import { IconButton, InputAdornment, TextField } from '@mui/material';
+import {
+  FormControl,
+  IconButton,
+  InputAdornment,
+  MenuItem,
+  Select,
+  SelectChangeEvent,
+  TextField,
+} from '@mui/material';
 import { MAX_CARD_TEXT_LENGTH } from '../../constants';
+import { NONE, VOTES_ASC, VOTES_DSC, VALUE_ASC, VALUE_DSC } from './const';
 
 type Props = {
   allActions: ActionInterface[];
   global: any;
   dispatch: any;
-  handleSearchQueryOnChange: (value: string) => void;
   searchQuery: string;
+  sortedBy: string;
+  handleSearchQueryOnChange: (value: string) => void;
+  handleSortedByChange: (event: SelectChangeEvent) => void;
 };
 
 export default function ActionHeader({
@@ -21,6 +32,8 @@ export default function ActionHeader({
   global,
   dispatch,
   searchQuery,
+  sortedBy,
+  handleSortedByChange,
   handleSearchQueryOnChange,
 }: Props) {
   const [isSearchEnable, setIsSearchEnable] = React.useState<boolean>(false);
@@ -135,6 +148,35 @@ export default function ActionHeader({
               />
             </Box>
           )}
+          {/* Sort Box */}
+          <Box
+            style={{
+              display: 'flex',
+              justifyContent: 'center',
+              alignContent: 'center',
+              flexDirection: 'row',
+            }}
+          >
+            <Typography className="sortByText">Sort By: </Typography>
+            <FormControl sx={{ m: 1, minWidth: 80 }}>
+              <Select
+                labelId="demo-simple-select-autowidth-label"
+                id="demo-simple-select-autowidth"
+                value={sortedBy}
+                onChange={handleSortedByChange}
+                autoWidth
+                label="Age"
+              >
+                <MenuItem value={NONE}>
+                  <em>None</em>
+                </MenuItem>
+                <MenuItem value={VOTES_ASC}>VOTES_ASC</MenuItem>
+                <MenuItem value={VOTES_DSC}>VOTES_DSC</MenuItem>
+                <MenuItem value={VALUE_ASC}>VALUE_ASC</MenuItem>
+                <MenuItem value={VALUE_DSC}>VALUE_DSC</MenuItem>
+              </Select>
+            </FormControl>
+          </Box>
           {/* Expand Icon */}
           {global.expandColumn === -1 ? (
             <img

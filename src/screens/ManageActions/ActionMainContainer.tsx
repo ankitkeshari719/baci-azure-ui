@@ -1,7 +1,13 @@
 import * as React from 'react';
 import shortid from 'shortid';
 import './styles.scss';
-import { Box, Grid, styled, useMediaQuery } from '@mui/material';
+import {
+  Box,
+  Grid,
+  SelectChangeEvent,
+  styled,
+  useMediaQuery,
+} from '@mui/material';
 import { BoardContext } from '../../contexts/BoardContext';
 import { GlobalContext } from '../../contexts/GlobalContext';
 import { BoardActionType } from '../../statemachine/BoardStateMachine';
@@ -13,6 +19,7 @@ import AddAction from './AddAction';
 import ZeroActions from './ZeroActions';
 import theme from '../../theme/theme';
 import ActionsListParticipant from './ActionsListParticipant';
+import { NONE, VALUE_ASC, VALUE_DSC } from './const';
 
 export default function ActionMainContainer() {
   const {
@@ -35,6 +42,7 @@ export default function ActionMainContainer() {
     ActionInterface[]
   >([]);
   const [searchQuery, setSearchQuery] = React.useState<string>('');
+  const [sortedBy, setSortedBy] = React.useState<string>(NONE);
 
   React.useEffect(() => {
     let tempActions = actionsData.actions.map(action => {
@@ -92,7 +100,7 @@ export default function ActionMainContainer() {
       if (value === '') return [...allActions];
       return action.value.toLowerCase().includes(value.toLowerCase());
     });
-    
+
     const tempCurrentUserActions = results.filter(
       action => action.createdBy === global.user.id
     );
@@ -105,6 +113,21 @@ export default function ActionMainContainer() {
     setAllActionsTemp(results);
     setCurrentUserActions([...tempCurrentUserActions]);
     setOthersUserActions([...tempOthersUserActions]);
+  };
+
+  const handleSortedByChange = (event: SelectChangeEvent) => {
+    setSortedBy(event.target.value);
+    switch (event.target.value) {
+      case NONE:
+        setAllActionsTemp(allActions);
+        break;
+      case VALUE_ASC:
+        stringASCENDING();
+        break;
+      case VALUE_DSC:
+        stringDESCENDING();
+        break;
+    }
   };
 
   // Check/Uncheck the action item
@@ -122,15 +145,14 @@ export default function ActionMainContainer() {
     const strAscending = [...allActions].sort((a, b) =>
       a.value > b.value ? 1 : -1
     );
-    setAllActions(strAscending);
-    console.log(strAscending);
+    setAllActionsTemp(strAscending);
   };
 
   const stringDESCENDING = () => {
     const strDescending = [...allActions].sort((a, b) =>
       a.value > b.value ? -1 : 1
     );
-    setAllActions(strDescending);
+    setAllActionsTemp(strDescending);
   };
 
   // const numericASCENDING = () => {
@@ -163,7 +185,9 @@ export default function ActionMainContainer() {
         allActions={allActions}
         dispatch={dispatch}
         searchQuery={searchQuery}
+        sortedBy={sortedBy}
         handleSearchQueryOnChange={handleSearchQueryOnChange}
+        handleSortedByChange={handleSortedByChange}
       />
       <AddAction
         addAction={addAction}
