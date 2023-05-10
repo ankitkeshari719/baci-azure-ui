@@ -21,7 +21,9 @@ export default function ActionMainContainer() {
   } = React.useContext(BoardContext);
   const [global, dispatch] = React.useContext(GlobalContext);
   const [allActions, setAllActions] = React.useState<ActionInterface[]>([]);
-  const [allActionsTemp, setAllActionsTemp] = React.useState<ActionInterface[]>([]);
+  const [allActionsTemp, setAllActionsTemp] = React.useState<ActionInterface[]>(
+    []
+  );
   const [addedActionValue, setAddActionValue] = React.useState<string>('');
   const isXsUp = useMediaQuery(theme.breakpoints.only('xs'));
   const [isTextFieldFocused, setIsTextFieldFocused] =
@@ -40,7 +42,7 @@ export default function ActionMainContainer() {
       return action;
     });
     setAllActions([...tempActions]);
-    setAllActionsTemp([...tempActions])
+    setAllActionsTemp([...tempActions]);
   }, [actionsData]);
 
   React.useEffect(() => {
@@ -84,6 +86,27 @@ export default function ActionMainContainer() {
     );
   };
 
+  // Search Functionality
+  const handleSearchQueryOnChange = (value: string) => {
+    const results = [...allActions].filter(action => {
+      if (value === '') return [...allActions];
+      return action.value.toLowerCase().includes(value.toLowerCase());
+    });
+    
+    const tempCurrentUserActions = results.filter(
+      action => action.createdBy === global.user.id
+    );
+
+    const tempOthersUserActions = results.filter(
+      action => action.createdBy != global.user.id
+    );
+
+    setSearchQuery(value);
+    setAllActionsTemp(results);
+    setCurrentUserActions([...tempCurrentUserActions]);
+    setOthersUserActions([...tempOthersUserActions]);
+  };
+
   // Check/Uncheck the action item
   const handleToggleAction = (actionId: string) => {
     const newAction = actionsData.actions.map(action => {
@@ -93,16 +116,6 @@ export default function ActionMainContainer() {
       return action;
     });
     setAllActions([...newAction]);
-  };
-
-  // Search Functionality
-  const handleSearchQueryOnChange = (value: string) => {
-    const results = [...allActions].filter(action => {
-      if (value === '') return [...allActions];
-      return action.value.toLowerCase().includes(value.toLowerCase());
-    });
-    setSearchQuery(value);
-    setAllActions(results);
   };
 
   const stringASCENDING = () => {
@@ -163,7 +176,7 @@ export default function ActionMainContainer() {
         <>
           {global.user.userType == 2 ? (
             <ActionsListFacilitator
-              allActions={allActions}
+              allActions={allActionsTemp}
               handleToggleAction={handleToggleAction}
             />
           ) : (

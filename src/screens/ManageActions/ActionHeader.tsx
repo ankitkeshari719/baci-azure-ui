@@ -25,8 +25,8 @@ export default function ActionHeader({
 }: Props) {
   const [isSearchEnable, setIsSearchEnable] = React.useState<boolean>(false);
 
-  const test = () => {
-    setIsSearchEnable(true);
+  const showSearchField = () => {
+    setIsSearchEnable(!isSearchEnable);
   };
 
   return (
@@ -60,9 +60,9 @@ export default function ActionHeader({
               }}
               sx={{
                 height: '40px',
-                display:'flex',
-                flexDirection:'row',
-                alignItems:'center',
+                display: 'flex',
+                flexDirection: 'row',
+                alignItems: 'center',
                 padding: '12px',
                 background: '#FFFFFF',
                 border: '1px solid #159ADD',
@@ -88,11 +88,10 @@ export default function ActionHeader({
                     <IconButton>
                       <Icons.Search
                         size={20}
-                        color="#676767"
+                        color="#CCCCCC"
                         style={{
                           cursor: 'pointer',
                         }}
-                        onClick={test}
                       />
                     </IconButton>
                   </InputAdornment>
@@ -106,7 +105,7 @@ export default function ActionHeader({
                         style={{
                           cursor: 'pointer',
                         }}
-                        onClick={test}
+                        onClick={showSearchField}
                       />
                     </IconButton>
                   </InputAdornment>
@@ -124,16 +123,18 @@ export default function ActionHeader({
           style={{ flexDirection: 'row' }}
         >
           {/* Search Icon */}
-          <Box className="searchBoxContainer">
-            <Icons.Search
-              size={24}
-              color="#676767"
-              style={{
-                cursor: 'pointer',
-              }}
-              onClick={test}
-            />
-          </Box>
+          {!isSearchEnable && (
+            <Box className="searchBoxContainer">
+              <Icons.Search
+                size={24}
+                color="#676767"
+                style={{
+                  cursor: 'pointer',
+                }}
+                onClick={showSearchField}
+              />
+            </Box>
+          )}
           {/* Expand Icon */}
           {global.expandColumn === -1 ? (
             <img
