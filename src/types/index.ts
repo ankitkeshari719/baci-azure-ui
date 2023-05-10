@@ -75,10 +75,10 @@ export interface Card {
   lastUpdatedBy?: string;
   editCount: number;
   avatar: string;
-  keywords:string[];
+  keywords: string[];
 }
 
-export interface ActionInterface{
+export interface ActionInterface {
   id: string;
   value: string;
   reacts?: any[];
@@ -93,6 +93,7 @@ export interface ActionInterface{
   assigneeName: string;
   assigneeAvatar: string;
   checked?: boolean;
+  total_voted?: number | undefined;
 }
 export interface Actions {
   order: number;

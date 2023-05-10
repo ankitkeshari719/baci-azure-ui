@@ -21,6 +21,7 @@ export default function ActionMainContainer() {
   } = React.useContext(BoardContext);
   const [global, dispatch] = React.useContext(GlobalContext);
   const [allActions, setAllActions] = React.useState<ActionInterface[]>([]);
+  const [allActionsTemp, setAllActionsTemp] = React.useState<ActionInterface[]>([]);
   const [addedActionValue, setAddActionValue] = React.useState<string>('');
   const isXsUp = useMediaQuery(theme.breakpoints.only('xs'));
   const [isTextFieldFocused, setIsTextFieldFocused] =
@@ -31,6 +32,7 @@ export default function ActionMainContainer() {
   const [othersUserActions, setOthersUserActions] = React.useState<
     ActionInterface[]
   >([]);
+  const [searchQuery, setSearchQuery] = React.useState<string>('');
 
   React.useEffect(() => {
     let tempActions = actionsData.actions.map(action => {
@@ -38,6 +40,7 @@ export default function ActionMainContainer() {
       return action;
     });
     setAllActions([...tempActions]);
+    setAllActionsTemp([...tempActions])
   }, [actionsData]);
 
   React.useEffect(() => {
@@ -92,6 +95,45 @@ export default function ActionMainContainer() {
     setAllActions([...newAction]);
   };
 
+  // Search Functionality
+  const handleSearchQueryOnChange = (value: string) => {
+    const results = [...allActions].filter(action => {
+      if (value === '') return [...allActions];
+      return action.value.toLowerCase().includes(value.toLowerCase());
+    });
+    setSearchQuery(value);
+    setAllActions(results);
+  };
+
+  const stringASCENDING = () => {
+    const strAscending = [...allActions].sort((a, b) =>
+      a.value > b.value ? 1 : -1
+    );
+    setAllActions(strAscending);
+    console.log(strAscending);
+  };
+
+  const stringDESCENDING = () => {
+    const strDescending = [...allActions].sort((a, b) =>
+      a.value > b.value ? -1 : 1
+    );
+    setAllActions(strDescending);
+  };
+
+  // const numericASCENDING = () => {
+  //   const numAscending = [...allActions].sort(
+  //     (a, b) => a.total_voted - b.total_voted
+  //   );
+  //   setAllActions(numAscending);
+  // };
+
+  // const numericDESCENDING = () => {
+  //   const numDescending = [...allActions].sort(
+  //     (a, b) => b.total_voted - a.total_voted
+  //   );
+  //   setAllActions(numDescending);
+  // };
+
   return (
     <Box
       className="actionsContainer"
@@ -107,6 +149,8 @@ export default function ActionMainContainer() {
         global={global}
         allActions={allActions}
         dispatch={dispatch}
+        searchQuery={searchQuery}
+        handleSearchQueryOnChange={handleSearchQueryOnChange}
       />
       <AddAction
         addAction={addAction}
