@@ -130,7 +130,7 @@ export default function ActionItem({ action, handleToggleAction }: Props) {
           dense
           onMouseEnter={handleMouseEnter}
           onMouseLeave={handleMouseLeave}
-          style={{ maxWidth: '350px' }}
+          // style={{ maxWidth: '350px' }}
         >
           <ListItemText
             id={labelId}
