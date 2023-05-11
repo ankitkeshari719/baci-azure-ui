@@ -27,15 +27,17 @@ type Props = {
   addAction: (value: string) => void;
   addedActionValue: string;
   setAddActionValue: (value: string) => void;
+  isTextFieldFocused: boolean;
+  setIsTextFieldFocused: (value: boolean) => void;
 };
 
 export default function AddAction({
   addAction,
   addedActionValue,
   setAddActionValue,
+  isTextFieldFocused,
+  setIsTextFieldFocused,
 }: Props) {
-  const [isTextFieldFocused, setIsTextFieldFocused] =
-    React.useState<boolean>(false);
   const [isEmojiPickerOpen, setIsEmojiPickerOpen] =
     React.useState<boolean>(false);
 
@@ -52,16 +54,17 @@ export default function AddAction({
     setIsEmojiPickerOpen(!isEmojiPickerOpen);
   };
 
-const getTheTopCoordinates=():string=>{
-const actionComponent = document.getElementById("actionIndex");
-var width=0;
-if(actionComponent!=undefined&&actionComponent!=null){
-width=  actionComponent.getBoundingClientRect().height +  actionComponent.getBoundingClientRect().y
-}
+  const getTheTopCoordinates = (): string => {
+    const actionComponent = document.getElementById('actionIndex');
+    var width = 0;
+    if (actionComponent != undefined && actionComponent != null) {
+      width =
+        actionComponent.getBoundingClientRect().height +
+        actionComponent.getBoundingClientRect().y;
+    }
 
-  
-  return width!=0?width+"px":"270px"
-}
+    return width != 0 ? width + 'px' : '270px';
+  };
 
   return (
     <Box className="AddActionContainer">
@@ -77,25 +80,30 @@ width=  actionComponent.getBoundingClientRect().height +  actionComponent.getBou
           background: 'white',
           borderBottom: '1px solid #E3E3E3',
           padding: '4px 0px',
+          boxSizing: 'border-box',
           gap: '8px',
-          boxSizing: "border-box",
           ...(false ? { position: 'fixed', height: '8rem' } : {}),
         }}
       >
-        <Box className="emojiPickerIconContainer">
-          <img
-            src="/images/Emoji.png"
-            style={{
-              height: '24px',
-              width: '24px',
-              cursor: 'pointer',
-            }}
-            onClick={() => {
-              focusTextBox();
-              handleToOpenEmojiPicker();
-            }}
-          />
-        </Box>
+        {/* Emoji Picker Icon */}
+        {isTextFieldFocused ? (
+          <Box className="emojiPickerIconContainer">
+            <img
+              src="/images/Emoji.png"
+              style={{
+                height: '24px',
+                width: '24px',
+                cursor: 'pointer',
+              }}
+              onClick={() => {
+                focusTextBox();
+                handleToOpenEmojiPicker();
+              }}
+            />
+          </Box>
+        ) : (
+          <Box className="emojiPickerIconContainer"></Box>
+        )}
         <TextFieldNoBorderWrapper
           sx={{
             color: '#343434',
@@ -109,7 +117,6 @@ width=  actionComponent.getBoundingClientRect().height +  actionComponent.getBou
             id="actionTextField"
             fullWidth
             multiline
-            autoFocus
             placeholder="Type new action here"
             value={addedActionValue}
             onChange={e => setAddActionValue(e.currentTarget.value)}
@@ -161,10 +168,10 @@ width=  actionComponent.getBoundingClientRect().height +  actionComponent.getBou
                 letterSpacing: '0.2px',
               },
             }}
-          ></TextField>
+          />
           {/* Limitation */}
           {addedActionValue &&
-            addedActionValue.length >= MAX_CARD_TEXT_LENGTH - 20 ? (
+          addedActionValue.length >= MAX_CARD_TEXT_LENGTH - 20 ? (
             <Typography
               style={{
                 fontSize: '0.75rem',
@@ -178,15 +185,12 @@ width=  actionComponent.getBoundingClientRect().height +  actionComponent.getBou
           ) : null}
         </TextFieldNoBorderWrapper>
         {/* Send Icon */}
-        <div
-          style={{
-            display: 'flex',
-            justifyContent: 'flex-end',
-            flexDirection: 'column',
-          }}
-        >
+        <Box className="sendIconContainer">
           <Button
-            style={{ position: 'initial' }}
+            sx={{
+              minWidth: '40px',
+              ':hover': { background: '#F0F0F0' },
+            }}
             disabled={
               addedActionValue.length === 0 ||
               !addedActionValue ||
@@ -199,39 +203,40 @@ width=  actionComponent.getBoundingClientRect().height +  actionComponent.getBou
               style={{
                 color:
                   addedActionValue.length === 0 ||
-                    !addedActionValue ||
-                    addedActionValue.replace(/[\r\n]/gm, '').replace(/ /g, '')
-                      .length === 0
+                  !addedActionValue ||
+                  addedActionValue.replace(/[\r\n]/gm, '').replace(/ /g, '')
+                    .length === 0
                     ? '#CCCCCC'
                     : '#4E4E4E',
               }}
             ></SendIcon>
           </Button>
-        </div>
+        </Box>
       </Box>
       {/* Emoji Picker */}
       <Grid
         style={{
           width:
-            document.getElementById("actionIndex") != null
-              ? document
-                .getElementById("actionIndex")
-                ?.getBoundingClientRect().width + 'px'
+            document.getElementById('actionIndex') != null
+              ? document.getElementById('actionIndex')?.getBoundingClientRect()
+                  .width + 'px'
               : '33px',
           zIndex: 3,
           position: 'absolute',
-          top: getTheTopCoordinates()
+          top: getTheTopCoordinates(),
         }}
       >
-       {isEmojiPickerOpen&& <EmojiPicker
-          onEmojiClick={(event, emojiObject) => {
-            setAddActionValue(addedActionValue + emojiObject.emoji);
-            setIsTextFieldFocused(true);
-            focusTextBox();
-            handleToOpenEmojiPicker();
-          }}
-          pickerStyle={{ width: '100%' }}
-        />}
+        {isEmojiPickerOpen && (
+          <EmojiPicker
+            onEmojiClick={(event, emojiObject) => {
+              setAddActionValue(addedActionValue + emojiObject.emoji);
+              setIsTextFieldFocused(true);
+              focusTextBox();
+              handleToOpenEmojiPicker();
+            }}
+            pickerStyle={{ width: '100%' }}
+          />
+        )}
       </Grid>
     </Box>
   );

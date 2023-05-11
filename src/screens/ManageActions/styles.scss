@@ -5,7 +5,7 @@
   padding: 0px;
   // isolation: isolate;
   // position: absolute;
-  width: "100%";
+  width: 100%;
   background: #ffffff;
   border: 1px solid #8a38f5;
   border-radius: 8px;
@@ -106,4 +106,51 @@
   flex: none;
   order: 0;
   flex-grow: 0;
+}
+
+.sendIconContainer {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  padding: 12px;
+  gap: 10px;
+  width: 40px;
+  height: 40px;
+  border-radius: 6px;
+  flex: none;
+  order: 0;
+  flex-grow: 0;
+}
+
+.reorderIconContainer {
+  display: flex;
+  flex-direction: row;
+  align-items: flex-start;
+  padding: 8px 0px;
+  gap: 10px;
+  width: 24px;
+  height: 40px;
+  opacity: 0;
+  flex: none;
+  order: 1;
+  flex-grow: 0;
+  z-index: 1;
+}
+
+.showOtherActionLink {
+  font-family: 'Poppins';
+  font-style: normal;
+  font-weight: 400;
+  font-size: 16px;
+  line-height: 22px;
+  display: flex;
+  align-items: center;
+  letter-spacing: 0.2px;
+  text-decoration-line: underline;
+  color: #0000ee;
+  flex: none;
+  order: 0;
+  flex-grow: 0;
+  cursor: pointer;
 }
