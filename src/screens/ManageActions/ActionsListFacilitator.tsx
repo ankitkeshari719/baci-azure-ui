@@ -8,11 +8,13 @@ import { Box, List } from '@mui/material';
 type Props = {
   allActions: ActionInterface[];
   handleToggleAction: (actionId: string) => void;
+  addReact: (actionId: string, actionBy: string) => void;
 };
 
 export default function ActionsListFacilitator({
   allActions,
   handleToggleAction,
+  addReact,
 }: Props) {
   return (
     <Box sx={{ width: '100%', height: 'var(--app-height)', overflowY: 'auto' }}>
@@ -23,6 +25,7 @@ export default function ActionsListFacilitator({
               action={action}
               key={action.id}
               handleToggleAction={handleToggleAction}
+              addReact={addReact}
             />
           );
         })}

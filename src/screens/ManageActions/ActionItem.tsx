@@ -22,14 +22,19 @@ import { MAX_CARD_TEXT_LENGTH } from '../../constants';
 type Props = {
   action: ActionInterface;
   handleToggleAction: (actionId: string) => void;
+  addReact: (actionId: string, actionBy: string) => void;
 };
 
-export default function ActionItem({ action, handleToggleAction }: Props) {
+export default function ActionItem({
+  action,
+  handleToggleAction,
+  addReact,
+}: Props) {
   const {
     state: {},
     commitAction,
   } = React.useContext(BoardContext);
-  const [global,dispatch] = React.useContext(GlobalContext);
+  const [global, dispatch] = React.useContext(GlobalContext);
   const labelId = `action-label-${action.id}`;
 
   const [isMouseHover, setIsMouseHover] = React.useState<boolean>(false);
@@ -276,6 +281,17 @@ export default function ActionItem({ action, handleToggleAction }: Props) {
           </Box>
         </ListItemButton>
       )}
+      <ListItemIcon>
+        <Icons.StarOutline
+          onClick={() => addReact(action.id, global.user.id)}
+          style={{
+            color: '#FBBC05',
+            width: '24px',
+            height: '24px',
+            cursor: 'pointer',
+          }}
+        />
+      </ListItemIcon>
       <ListItemAvatar>
         {action?.assigneeAvatar === '' ||
         action.assigneeAvatar === undefined ? (

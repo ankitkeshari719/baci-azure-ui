@@ -3,6 +3,7 @@ import shortid from 'shortid';
 import './styles.scss';
 import {
   Box,
+  Button,
   Grid,
   SelectChangeEvent,
   styled,
@@ -112,7 +113,7 @@ export default function ActionMainContainer() {
       type: ActionType.SET_LOADING,
       payload: { loadingFlag: true },
     });
-    await saveAndProcessAction(BoardActionType.ADD_REACT_TO_CARD, {
+    await saveAndProcessAction(BoardActionType.ADD_REACT_TO_ACTION, {
       actionId: actionId,
       react: '👍',
     }).then(
@@ -240,12 +241,14 @@ export default function ActionMainContainer() {
             <ActionsListFacilitator
               allActions={allActionsTemp}
               handleToggleAction={handleToggleAction}
+              addReact={addReact}
             />
           ) : (
             <ActionsListParticipant
               currentUserActions={currentUserActions}
               othersUserActions={othersUserActions}
               handleToggleAction={handleToggleAction}
+              addReact={addReact}
             />
           )}
         </>

@@ -1062,7 +1062,6 @@ export const processAction = (
   const addKeywordsToCard = (suggestedkeywordCards: Card[], userId: string) => {
     suggestedkeywordCards.forEach(element => {
       const { card } = findCard(element.id);
-      console.log(card, 'card');
       if (card) {
         card.keywords = element.keywords;
 
@@ -1387,13 +1386,17 @@ export const processAction = (
     userId: string
   ) => {
     const { action } = findAction(actionId);
-    // if (card && !card.reacts.find(r => r.emoji === react && r.by === userId)) {
-    //   card.reacts.push({
-    //     emoji: react,
-    //     by: userId,
-    //   });
-    //   card.lastUpdatedBy = userId;
-    // }
+    if (
+      action &&
+      action.reacts &&
+      !action.reacts.find(r => r.emoji === react && r.by === userId)
+    ) {
+      action.reacts.push({
+        emoji: react,
+        by: userId,
+      });
+      action.lastUpdatedBy = userId;
+    }
   };
 
   let noMatch = false;
