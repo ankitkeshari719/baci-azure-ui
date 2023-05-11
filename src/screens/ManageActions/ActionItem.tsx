@@ -12,6 +12,7 @@ import {
   ListItemAvatar,
   ListItemButton,
   TextField,
+  Typography,
 } from '@mui/material';
 import Avatar from '../../elements/Avatar';
 import { BoardActionType } from '../../statemachine/BoardStateMachine';
@@ -219,6 +220,20 @@ export default function ActionItem({ action, handleToggleAction }: Props) {
                 },
               }}
             />
+            {/* Limitation */}
+            {editActionValue &&
+            editActionValue.length >= MAX_CARD_TEXT_LENGTH - 20 ? (
+              <Typography
+                style={{
+                  fontSize: '0.75rem',
+                  textAlign: 'right',
+                  whiteSpace: 'nowrap',
+                }}
+              >
+                Characters remaining:{' '}
+                {MAX_CARD_TEXT_LENGTH - editActionValue.length}
+              </Typography>
+            ) : null}
             <Box
               sx={{
                 width: '100%',
