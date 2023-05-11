@@ -20,7 +20,7 @@ import AddAction from './AddAction';
 import ZeroActions from './ZeroActions';
 import theme from '../../theme/theme';
 import ActionsListParticipant from './ActionsListParticipant';
-import { NONE, VALUE_ASC, VALUE_DSC } from './const';
+import { NONE, VALUE_ASC, VALUE_DSC, VOTES_ASC, VOTES_DSC } from './const';
 
 export default function ActionMainContainer() {
   const {
@@ -166,6 +166,12 @@ export default function ActionMainContainer() {
       case VALUE_DSC:
         stringDESCENDING();
         break;
+      case VOTES_ASC:
+        numericASCENDING();
+        break;
+      case VOTES_DSC:
+        numericDESCENDING();
+        break;
     }
   };
 
@@ -194,19 +200,19 @@ export default function ActionMainContainer() {
     setAllActionsTemp(strDescending);
   };
 
-  // const numericASCENDING = () => {
-  //   const numAscending = [...allActions].sort(
-  //     (a, b) => a.total_voted - b.total_voted
-  //   );
-  //   setAllActions(numAscending);
-  // };
+  const numericASCENDING = () => {
+    const numAscending = [...allActions].sort(
+      (a, b) => a.reacts?.length - b.reacts?.length
+    );
+    setAllActionsTemp(numAscending);
+  };
 
-  // const numericDESCENDING = () => {
-  //   const numDescending = [...allActions].sort(
-  //     (a, b) => b.total_voted - a.total_voted
-  //   );
-  //   setAllActions(numDescending);
-  // };
+  const numericDESCENDING = () => {
+    const numDescending = [...allActions].sort(
+      (a, b) => b.reacts?.length - a.reacts?.length
+    );
+    setAllActionsTemp(numDescending);
+  };
 
   return (
     <Box

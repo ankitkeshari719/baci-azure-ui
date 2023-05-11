@@ -12,6 +12,7 @@ import {
   ListItemAvatar,
   ListItemButton,
   TextField,
+  Typography,
 } from '@mui/material';
 import Avatar from '../../elements/Avatar';
 import { BoardActionType } from '../../statemachine/BoardStateMachine';
@@ -281,7 +282,14 @@ export default function ActionItem({
           </Box>
         </ListItemButton>
       )}
-      <ListItemIcon>
+      <Box
+        sx={{
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+          flexDirection: 'row',
+        }}
+      >
         <Icons.StarOutline
           onClick={() => addReact(action.id, global.user.id)}
           style={{
@@ -291,7 +299,11 @@ export default function ActionItem({
             cursor: 'pointer',
           }}
         />
-      </ListItemIcon>
+        <Typography className="totalReact" sx={{ marginLeft: '4px' }}>
+          {action.reacts?.length}
+        </Typography>
+      </Box>
+
       <ListItemAvatar>
         {action?.assigneeAvatar === '' ||
         action.assigneeAvatar === undefined ? (

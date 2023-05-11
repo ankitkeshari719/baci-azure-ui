@@ -85,7 +85,7 @@ export interface ActionInterface {
   assigneeId: string;
   assigneeName: string;
   assigneeAvatar: string;
-  reacts?: any[];
+  reacts: any[];
   locked?: boolean;
   lockedBy?: string;
   editCount?: number;
