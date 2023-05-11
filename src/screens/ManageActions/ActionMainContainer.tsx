@@ -9,7 +9,7 @@ import {
   useMediaQuery,
 } from '@mui/material';
 import { BoardContext } from '../../contexts/BoardContext';
-import { GlobalContext } from '../../contexts/GlobalContext';
+import { ActionType, GlobalContext } from '../../contexts/GlobalContext';
 import { BoardActionType } from '../../statemachine/BoardStateMachine';
 import { ActionInterface } from '../../types';
 import ActionsListFacilitator from './ActionsListFacilitator';
@@ -77,6 +77,10 @@ export default function ActionMainContainer() {
 
   // Function to call API on adding the new action
   const addAction = async (value: string) => {
+    dispatch({
+      type: ActionType.SET_LOADING,
+      payload: { loadingFlag: true },
+    });
     const id = shortid.generate();
     await saveAndProcessAction(BoardActionType.Add_NEW_ACTION, {
       id: id,
@@ -89,8 +93,41 @@ export default function ActionMainContainer() {
       res => {
         setAddActionValue('');
         setIsTextFieldFocused(false);
+        dispatch({
+          type: ActionType.SET_LOADING,
+          payload: { loadingFlag: false },
+        });
       },
-      err => {}
+      err => {
+        dispatch({
+          type: ActionType.SET_LOADING,
+          payload: { loadingFlag: false },
+        });
+      }
+    );
+  };
+
+  const addReact = async (actionId: string, actionBy: string) => {
+    dispatch({
+      type: ActionType.SET_LOADING,
+      payload: { loadingFlag: true },
+    });
+    await saveAndProcessAction(BoardActionType.ADD_REACT_TO_CARD, {
+      actionId: actionId,
+      react: '👍',
+    }).then(
+      res => {
+        dispatch({
+          type: ActionType.SET_LOADING,
+          payload: { loadingFlag: false },
+        });
+      },
+      err => {
+        dispatch({
+          type: ActionType.SET_LOADING,
+          payload: { loadingFlag: false },
+        });
+      }
     );
   };
 
@@ -115,6 +152,7 @@ export default function ActionMainContainer() {
     setOthersUserActions([...tempOthersUserActions]);
   };
 
+  // Sort Functionality
   const handleSortedByChange = (event: SelectChangeEvent) => {
     setSortedBy(event.target.value);
     switch (event.target.value) {

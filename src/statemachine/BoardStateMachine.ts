@@ -1,5 +1,6 @@
 import React from 'react';
 import {
+  ActionInterface,
   BoardState,
   Card,
   CardGroup,
@@ -47,12 +48,12 @@ export enum BoardActionType {
   LOCK_COLUMN = 'lockColumn',
   SET_FACILITATOR = 'setFacilitator',
   GROUP_SUGGESTION = 'groupSuggestion',
-  ADD_KEYWORDS="showKeywords",
+  ADD_KEYWORDS = 'showKeywords',
   CONFIRM_GROUP = 'confirmGroup',
   DELETE_UNCONFIRMED_GROUPS = 'deleteUnconfirmedGroups',
   Add_NEW_ACTION = 'addAction',
-  REMOVE_ACTION = 'removeAction',
   UPDATE_ACTION = 'updateAction',
+  ADD_REACT_TO_ACTION = 'addReactToAction',
 }
 
 export const BOARD_STATE_MACHINE_VERSION = 1;
@@ -66,6 +67,7 @@ export const validateAction = (
   version?: number
 ): boolean => {
   const {
+    actionsData,
     columns,
     users,
     countdownDuration,
@@ -166,19 +168,6 @@ export const validateAction = (
       return true;
     }
     return false;
-  };
-
-  const isAddNewActionValid = (
-    id: string,
-    value: string,
-    createdBy: string,
-    userId: string
-  ): boolean => {
-    return true;
-  };
-
-  const isUpdateExistingActionValid = (id: string, value: string): boolean => {
-    return true;
   };
 
   const isAddNewCardValid = (
@@ -502,6 +491,50 @@ export const validateAction = (
     // state.ended !== !undo;
   };
 
+  const isAddNewActionValid = (
+    id: string,
+    value: string,
+    createdBy: string,
+    userId: string
+  ): boolean => {
+    return true;
+  };
+
+  const isUpdateExistingActionValid = (id: string, value: string): boolean => {
+    return true;
+  };
+
+  const findAction = (
+    id: string
+  ): {
+    action?: ActionInterface;
+  } => {
+    for (const action of actionsData.actions) {
+      if (action.id === id) {
+        return {
+          action,
+        };
+      }
+    }
+    return {};
+  };
+
+  const isAddReactToActionValid = (
+    actionId: string,
+    react: string,
+    userId: string
+  ): boolean => {
+    const { action } = findAction(actionId);
+    if (
+      action &&
+      action.reacts &&
+      !action.reacts.find(r => r.emoji === react && r.by === userId)
+    ) {
+      return true;
+    }
+    return false;
+  };
+
   switch (actionName) {
     case BoardActionType.UPDATE_RETRO_DETAILS:
       return isUpdateRetroDetailsValid(
@@ -524,15 +557,6 @@ export const validateAction = (
         parameters.order,
         userId
       );
-    case BoardActionType.Add_NEW_ACTION:
-      return isAddNewActionValid(
-        parameters.id,
-        parameters.value,
-        parameters.createdBy,
-        userId
-      );
-    case BoardActionType.UPDATE_ACTION:
-      return isUpdateExistingActionValid(parameters.id, parameters.value);
     case BoardActionType.ADD_NEW_CARD:
       return isAddNewCardValid(
         parameters.groupId,
@@ -542,7 +566,6 @@ export const validateAction = (
       );
     case BoardActionType.START_RETRO:
       return true;
-
     case BoardActionType.DELETE_CARD:
       return isDeleteCardValid(parameters.cardId, userId);
     case BoardActionType.MOVE_CARD:
@@ -638,6 +661,21 @@ export const validateAction = (
       return true;
     case BoardActionType.ADD_KEYWORDS:
       return true;
+    case BoardActionType.Add_NEW_ACTION:
+      return isAddNewActionValid(
+        parameters.id,
+        parameters.value,
+        parameters.createdBy,
+        userId
+      );
+    case BoardActionType.UPDATE_ACTION:
+      return isUpdateExistingActionValid(parameters.id, parameters.value);
+    case BoardActionType.ADD_REACT_TO_ACTION:
+      return isAddReactToActionValid(
+        parameters.actionId,
+        parameters.react,
+        userId
+      );
     // case BoardActionType.SET_LOADING:
     //   return true;
     default:
@@ -868,7 +906,7 @@ export const processAction = (
           lastUpdatedBy: userId,
           editCount: 0,
           avatar: avatar,
-          keywords: []
+          keywords: [],
         });
       }
     }
@@ -1009,14 +1047,13 @@ export const processAction = (
   const addKeywordsToCard = (suggestedkeywordCards: Card[], userId: string) => {
     suggestedkeywordCards.forEach(element => {
       const { card } = findCard(element.id);
-      console.log(card, "card");
+      console.log(card, 'card');
       if (card) {
         card.keywords = element.keywords;
 
         card.lastUpdatedBy = userId;
       }
     });
-
   };
   const addReactToGroup = (react: string, groupId: string, userId: string) => {
     const { group } = findGroup(groupId);
@@ -1308,6 +1345,8 @@ export const processAction = (
       id,
       value,
       createdBy,
+      lastUpdatedBy: userId,
+      reacts: [],
       assigneeId,
       assigneeName,
       assigneeAvatar,
@@ -1325,6 +1364,17 @@ export const processAction = (
     });
 
     actionsData.actions = [...newAction];
+  };
+
+  const addReactToAction = (cardId: string, react: string, userId: string) => {
+    const { card } = findCard(cardId);
+    if (card && !card.reacts.find(r => r.emoji === react && r.by === userId)) {
+      card.reacts.push({
+        emoji: react,
+        by: userId,
+      });
+      card.lastUpdatedBy = userId;
+    }
   };
 
   let noMatch = false;
@@ -1500,8 +1550,11 @@ export const processAction = (
     case BoardActionType.UPDATE_ACTION:
       updateAction(parameters.id, parameters.value);
       break;
+    case BoardActionType.ADD_REACT_TO_ACTION:
+      addReactToCard(parameters.actionId, parameters.react, userId);
+      break;
     case BoardActionType.ADD_KEYWORDS:
-      addKeywordsToCard(parameters.suggestedkeywordCards, userId)
+      addKeywordsToCard(parameters.suggestedkeywordCards, userId);
       break;
     default:
       noMatch = true;

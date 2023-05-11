@@ -81,19 +81,18 @@ export interface Card {
 export interface ActionInterface {
   id: string;
   value: string;
-  reacts?: any[];
-  locked?: boolean;
-  lockedBy?: string;
   createdBy?: string;
-  lastUpdatedBy?: string;
-  editCount?: number;
-  columnId?: string;
-  columnName?: string;
   assigneeId: string;
   assigneeName: string;
   assigneeAvatar: string;
+  reacts?: any[];
+  locked?: boolean;
+  lockedBy?: string;
+  editCount?: number;
+  columnId?: string;
+  columnName?: string;
+  lastUpdatedBy?: string;
   checked?: boolean;
-  total_voted?: number | undefined;
 }
 export interface Actions {
   order: number;

@@ -166,6 +166,45 @@ export default function ActionHeader({
                 onChange={handleSortedByChange}
                 autoWidth
                 label="Age"
+                sx={{
+                  height: '40px',
+                  display: 'flex',
+                  flexDirection: 'row',
+                  alignItems: 'center',
+                  padding: '0px',
+                  background: 'rgba(0, 0, 0, 0)',
+                  border: 'none',
+                  boxShadow: 'none',
+                  '.MuiOutlinedInput-notchedOutline': {
+                    border: 0,
+                    ':hover': { border: 0 },
+                  },
+
+                  '&.MuiOutlinedInput-root:hover .MuiOutlinedInput-notchedOutline':
+                    {
+                      border: 0,
+                    },
+                  '&.MuiOutlinedInput-root.Mui-focused .MuiOutlinedInput-notchedOutline':
+                    {
+                      border: 0,
+                    },
+                  '.MuiOutlinedInput-input': {
+                    fontFamily: 'Poppins',
+                    fontStyle: 'normal',
+                    color: '#343434',
+                    fontWeight: 400,
+                    fontSize: '16px',
+                    lineHeight: '22px',
+                    letterSpacing: '0.2px',
+                  },
+                  borderRadius: '8px',
+                  color: '#343434',
+                  input: {
+                    padding: 0,
+                  },
+                  div: { padding: 0, position: 'initial', height: '100%' },
+                  position: 'initial',
+                }}
               >
                 <MenuItem value={NONE}>
                   <em>None</em>

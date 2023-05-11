@@ -16,7 +16,7 @@ import {
 import Avatar from '../../elements/Avatar';
 import { BoardActionType } from '../../statemachine/BoardStateMachine';
 import { BoardContext } from '../../contexts/BoardContext';
-import { GlobalContext } from '../../contexts/GlobalContext';
+import { ActionType, GlobalContext } from '../../contexts/GlobalContext';
 import { MAX_CARD_TEXT_LENGTH } from '../../constants';
 
 type Props = {
@@ -29,7 +29,7 @@ export default function ActionItem({ action, handleToggleAction }: Props) {
     state: {},
     commitAction,
   } = React.useContext(BoardContext);
-  const [global] = React.useContext(GlobalContext);
+  const [global,dispatch] = React.useContext(GlobalContext);
   const labelId = `action-label-${action.id}`;
 
   const [isMouseHover, setIsMouseHover] = React.useState<boolean>(false);
@@ -69,14 +69,27 @@ export default function ActionItem({ action, handleToggleAction }: Props) {
 
   // function to call API on saving the existing action
   const saveEditAction = async (editActionValue: string | undefined) => {
+    dispatch({
+      type: ActionType.SET_LOADING,
+      payload: { loadingFlag: true },
+    });
     await saveAndProcessAction(BoardActionType.UPDATE_ACTION, {
       id: selectedAction?.id,
       value: editActionValue,
     }).then(
       res => {
         setIsEditActionClick(false);
+        dispatch({
+          type: ActionType.SET_LOADING,
+          payload: { loadingFlag: false },
+        });
       },
-      err => {}
+      err => {
+        dispatch({
+          type: ActionType.SET_LOADING,
+          payload: { loadingFlag: false },
+        });
+      }
     );
   };
 
