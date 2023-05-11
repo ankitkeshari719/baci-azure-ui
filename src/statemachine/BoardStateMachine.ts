@@ -133,6 +133,21 @@ export const validateAction = (
     return {};
   };
 
+  const findAction = (
+    id: string
+  ): {
+    action?: ActionInterface;
+  } => {
+    for (const action of actionsData.actions) {
+      if (action.id === id) {
+        return {
+          action,
+        };
+      }
+    }
+    return {};
+  };
+
   const isFacilitator = (id: string): boolean => {
     if (state.creatorId === id) {
       return true;
@@ -504,21 +519,6 @@ export const validateAction = (
     return true;
   };
 
-  const findAction = (
-    id: string
-  ): {
-    action?: ActionInterface;
-  } => {
-    for (const action of actionsData.actions) {
-      if (action.id === id) {
-        return {
-          action,
-        };
-      }
-    }
-    return {};
-  };
-
   const isAddReactToActionValid = (
     actionId: string,
     react: string,
@@ -754,6 +754,21 @@ export const processAction = (
           column,
           columnIndex: columns.indexOf(column),
           index: column.groups.indexOf(group),
+        };
+      }
+    }
+    return {};
+  };
+
+  const findAction = (
+    id: string
+  ): {
+    action?: ActionInterface;
+  } => {
+    for (const action of actionsData.actions) {
+      if (action.id === id) {
+        return {
+          action,
         };
       }
     }
@@ -1366,15 +1381,19 @@ export const processAction = (
     actionsData.actions = [...newAction];
   };
 
-  const addReactToAction = (cardId: string, react: string, userId: string) => {
-    const { card } = findCard(cardId);
-    if (card && !card.reacts.find(r => r.emoji === react && r.by === userId)) {
-      card.reacts.push({
-        emoji: react,
-        by: userId,
-      });
-      card.lastUpdatedBy = userId;
-    }
+  const addReactToAction = (
+    actionId: string,
+    react: string,
+    userId: string
+  ) => {
+    const { action } = findAction(actionId);
+    // if (card && !card.reacts.find(r => r.emoji === react && r.by === userId)) {
+    //   card.reacts.push({
+    //     emoji: react,
+    //     by: userId,
+    //   });
+    //   card.lastUpdatedBy = userId;
+    // }
   };
 
   let noMatch = false;
@@ -1551,7 +1570,7 @@ export const processAction = (
       updateAction(parameters.id, parameters.value);
       break;
     case BoardActionType.ADD_REACT_TO_ACTION:
-      addReactToCard(parameters.actionId, parameters.react, userId);
+      addReactToAction(parameters.actionId, parameters.react, userId);
       break;
     case BoardActionType.ADD_KEYWORDS:
       addKeywordsToCard(parameters.suggestedkeywordCards, userId);
