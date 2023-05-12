@@ -26,6 +26,7 @@ const ColumnHeader = ({
   deleteUnconfirmedGroups,
   retryGroupSuggestion,
   keywordExtraction,
+  hideKeywords
 }: {
   column: Column;
   columnId: string;
@@ -46,28 +47,42 @@ const ColumnHeader = ({
   deleteUnconfirmedGroups: () => void;
   retryGroupSuggestion: () => void;
   keywordExtraction: () => void;
+  hideKeywords: () => void;
 }) => {
   const [showEdit, setShowEdit] = React.useState(false);
   const [enableSave, setEnableSave] = React.useState(false);
   const [groupSuggestion, setGroupSuggestion] = React.useState(false);
   const [disableGroupSuggestion, setDisableGroupSuggestion] = React.useState(true);
-
+  const [disableKeywordSuggestion, setDisabledKeywordSuggestion] = React.useState(true);
   useEffect(() => {
     setGroupSuggestion(false)
-    setDisableGroupSuggestion(true)
+    setDisableGroupSuggestion(true);
+    setDisabledKeywordSuggestion(true)
+    var tempKeywordGroupSuggestion = true;
+
+
+
     column.groups.forEach(element => {
       if (element.suggested) {
         setGroupSuggestion(true)
       }
+      if (element.cards.length > 0) {
+        tempKeywordGroupSuggestion = false;
+      }
       if (element.name == UNGROUPED) {
         if (element.cards.length > 2) {
           setDisableGroupSuggestion(false)
+          tempKeywordGroupSuggestion = false;
+
         }
         else {
           setDisableGroupSuggestion(true)
         }
       }
     });
+    setDisabledKeywordSuggestion(tempKeywordGroupSuggestion)
+
+
   }, [column])
   return (
     <Grid
@@ -170,17 +185,20 @@ const ColumnHeader = ({
                 <Grid sx={{ display: 'flex', alignItems: 'center' }}>
                   <FormGroup sx={{ display: 'flex', flexDirection: 'row' }}>
 
-                    <Tooltip title="Coming soon
-                    ">
+                    <Tooltip title={disableKeywordSuggestion && "Need at least one card "}>
                       <FormControlLabel
-
-                        // disabled
-                        control={<Switch color="secondary"
+                        checked={column.showKeywords ? column.showKeywords : false}
+                        sx={{ color: theme.palette.primary.dark }}
+                        disabled={disableKeywordSuggestion}
+                        control={<Switch color="primary"
 
                           onChange={(value) => {
                             if (value.target.checked) {
                               keywordExtraction()
 
+                            }
+                            else {
+                              hideKeywords()
                             }
 
                           }}

@@ -18,7 +18,7 @@ import { NestedDropdown } from 'mui-nested-menu';
 import { MAX_CARD_TEXT_LENGTH, UNGROUPED } from '../../constants';
 import { BoardContext } from '../../contexts/BoardContext';
 import { BoardActionType } from '../../statemachine/BoardStateMachine';
-import { Card as RetroCardType, CardGroup } from '../../types';
+import { Card as RetroCardType, CardGroup, Column } from '../../types';
 
 import DeleteForever from '@mui/icons-material/DeleteForever';
 import MoveDownIcon from '@mui/icons-material/MoveDown';
@@ -53,7 +53,8 @@ export function RetroCard({
   moveCard,
   animate,
   isPrintPage,
-  width
+  width,
+
 }: {
   card: RetroCardType;
   currentGroupId: string;
@@ -64,6 +65,7 @@ export function RetroCard({
   animate: boolean;
   isPrintPage: boolean;
   width?: number;
+
 }) {
   const [global, dispatch] = React.useContext(GlobalContext);
   const {
@@ -410,10 +412,10 @@ export function RetroCard({
                           : '',
                     }}
                   >
-                    {card.value.split(" ").map((text) => {
+                    {card.value.split(" ").map((text, index) => {
 
                       return (
-                        <Typography className={card.keywords.includes(text)?"textStyleBold":"textStyle"}  display={'inline'}>
+                        <Typography key={text + index} className={columns.find(column => column.id === columnId)?.showKeywords  && card.keywords.includes(text) ? "textStyleBold" : "textStyle"} display={'inline'}>
                           {text} </Typography>
                       )
 
