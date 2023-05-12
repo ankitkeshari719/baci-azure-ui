@@ -415,7 +415,7 @@ export function RetroCard({
                     {card.value.split(" ").map((text, index) => {
 
                       return (
-                        <Typography key={text + index} className={columns.find(column => column.id === columnId)?.showKeywords  && card.keywords.includes(text) ? "textStyleBold" : "textStyle"} display={'inline'}>
+                        <Typography key={text + index} className={columns.find(column => column.id === columnId)?.showKeywords && !ended && card.keywords.includes(text) ? "textStyleBold" : "textStyle"} display={'inline'}>
                           {text} </Typography>
                       )
 
