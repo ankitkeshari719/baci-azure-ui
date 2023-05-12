@@ -289,7 +289,26 @@ export function RetroCard({
       },
     ],
   };
+  const compareText = (text: string): boolean => {
+    var flag = false
+    card.keywords.forEach(element => {
+      const keyword = element.split(" ");
+      if (element.toLocaleLowerCase().replace(".","") == text.toLowerCase().replace(".","")) {
+        flag = true
+        return true
+      }
+      else
+        keyword.forEach(key => {
+          if (key.toLowerCase() == text.toLowerCase()) {
 
+            flag = true
+            return true
+          }
+        })
+
+    })
+    return flag
+  }
   return (
     <>
       {
@@ -416,9 +435,9 @@ export function RetroCard({
                     {card.value.split(" ").map((text, index) => {
 
                       return (
-                        <Typography 
-                        component={'span'}
-                        key={text + index} className={columns.find(column => column.id === columnId)?.showKeywords && !ended && card.keywords.includes(text) ? "textStyleBold" : "textStyle"} display={'inline'}>
+                        <Typography
+                          component={'span'}
+                          key={text + index} className={columns.find(column => column.id === columnId)?.showKeywords && !ended && compareText(text) ? "textStyleBold" : "textStyle"} display={'inline'}>
                           {text} </Typography>
                       )
 
