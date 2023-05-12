@@ -47,7 +47,7 @@ export enum BoardActionType {
   LOCK_COLUMN = 'lockColumn',
   SET_FACILITATOR = 'setFacilitator',
   GROUP_SUGGESTION = 'groupSuggestion',
-  ADD_KEYWORDS="showKeywords",
+  ADD_KEYWORDS = "showKeywords",
   CONFIRM_GROUP = 'confirmGroup',
   DELETE_UNCONFIRMED_GROUPS = 'deleteUnconfirmedGroups',
   Add_NEW_ACTION = 'addAction',
@@ -829,9 +829,9 @@ export const processAction = (
             group.cards.splice(index as number, 1);
             cardsList.splice(
               toIndex -
-                (group.id === targetGroup.id && (index as number) < toIndex
-                  ? 1
-                  : 0),
+              (group.id === targetGroup.id && (index as number) < toIndex
+                ? 1
+                : 0),
               0,
               card
             );
@@ -887,9 +887,9 @@ export const processAction = (
         group.cards.splice(index as number, 1);
         cardsList.splice(
           toIndex -
-            (group.id === targetGroup.id && (index as number) < toIndex
-              ? 1
-              : 0),
+          (group.id === targetGroup.id && (index as number) < toIndex
+            ? 1
+            : 0),
           0,
           card
         );
@@ -1001,9 +1001,11 @@ export const processAction = (
   };
 
   const addKeywordsToCard = (suggestedkeywordCards: Card[], userId: string) => {
+
     suggestedkeywordCards.forEach(element => {
+
       const { card } = findCard(element.id);
-      console.log(card, "card");
+
       if (card) {
         card.keywords = element.keywords;
 

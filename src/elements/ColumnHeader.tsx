@@ -174,7 +174,7 @@ const ColumnHeader = ({
                     ">
                       <FormControlLabel
 
-                        disabled
+                        // disabled
                         control={<Switch color="secondary"
 
                           onChange={(value) => {

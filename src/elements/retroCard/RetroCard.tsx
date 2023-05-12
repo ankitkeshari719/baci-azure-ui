@@ -63,7 +63,7 @@ export function RetroCard({
   moveCard: (cardId: string, toGroup: string, toIndex: number) => void;
   animate: boolean;
   isPrintPage: boolean;
-  width?:number;
+  width?: number;
 }) {
   const [global, dispatch] = React.useContext(GlobalContext);
   const {
@@ -298,8 +298,8 @@ export function RetroCard({
             border: '1px solid ' + Color(cardColour).darken(0.1),
             borderRadius: '8px',
             boxShadow: '-2px 5px 9px -4px rgba(0,0,0,0.74)',
-display:'flex',
-flexDirection:'column',
+            display: 'flex',
+            flexDirection: 'column',
             width: '100%',
             // minWidth: "40%!important",
             // maxWidth: { sectionWidth } + "px",
@@ -308,7 +308,7 @@ flexDirection:'column',
               background: editing ? 'transparant' : cardColourHover,
             },
           }}
-         
+
           className="cardStyle"
         >
           <CardContent
@@ -410,8 +410,18 @@ flexDirection:'column',
                           : '',
                     }}
                   >
-                    {card.value}
+                    {card.value.split(" ").map((text) => {
+
+                      return (
+                        <Typography className={card.keywords.includes(text)?"textStyleBold":"textStyle"}  display={'inline'}>
+                          {text} </Typography>
+                      )
+
+                    })}
                   </Typography>
+
+
+
                 )}
                 {!editing && card.editCount > 1 ? (
                   <Typography

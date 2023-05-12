@@ -884,7 +884,7 @@ export function RetroColumn({
     // dispatchLoadingFlag(true);
     await keywordExtraction(columnId, ungroupCards).then(async (res: any) => {
 
-      console.log(res.response)
+      console.log(res.response) 
 
 
 
