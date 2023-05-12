@@ -177,6 +177,10 @@ export const validateAction = (
     return true;
   };
 
+  const isUpdateExistingActionValid = (id: string, value: string): boolean => {
+    return true;
+  };
+
   const isAddNewCardValid = (
     groupId: string,
     id: string,
@@ -527,6 +531,8 @@ export const validateAction = (
         parameters.createdBy,
         userId
       );
+    case BoardActionType.UPDATE_ACTION:
+      return isUpdateExistingActionValid(parameters.id, parameters.value);
     case BoardActionType.ADD_NEW_CARD:
       return isAddNewCardValid(
         parameters.groupId,
@@ -1291,6 +1297,7 @@ export const processAction = (
     // state.users
   };
 
+  // Add new Action
   const addAction = (
     id: string,
     value: string,
@@ -1308,6 +1315,18 @@ export const processAction = (
       assigneeAvatar,
     };
     actionsData.actions.push(newAction);
+  };
+
+  // Update existing action
+  const updateAction = (id: string, value: string) => {
+    const newAction = actionsData.actions.map(action => {
+      if (action.id === id) {
+        return { ...action, value: value };
+      }
+      return action;
+    });
+
+    actionsData.actions = [...newAction];
   };
 
   let noMatch = false;
@@ -1338,16 +1357,6 @@ export const processAction = (
         [],
         '',
         false
-      );
-      break;
-    case BoardActionType.Add_NEW_ACTION:
-      addAction(
-        parameters.id,
-        parameters.value,
-        parameters.createdBy,
-        parameters.assigneeId,
-        parameters.assigneeName,
-        parameters.assigneeAvatar
       );
       break;
     case BoardActionType.ADD_NEW_CARD:
@@ -1479,6 +1488,19 @@ export const processAction = (
         parameters.order,
         userId
       );
+      break;
+    case BoardActionType.Add_NEW_ACTION:
+      addAction(
+        parameters.id,
+        parameters.value,
+        parameters.createdBy,
+        parameters.assigneeId,
+        parameters.assigneeName,
+        parameters.assigneeAvatar
+      );
+      break;
+    case BoardActionType.UPDATE_ACTION:
+      updateAction(parameters.id, parameters.value);
       break;
     case BoardActionType.ADD_KEYWORDS:
       addKeywordsToCard(parameters.suggestedkeywordCards, userId)

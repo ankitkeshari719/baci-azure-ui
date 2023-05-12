@@ -92,6 +92,7 @@ export interface ActionInterface{
   assigneeId: string;
   assigneeName: string;
   assigneeAvatar: string;
+  checked?: boolean;
 }
 export interface Actions {
   order: number;

@@ -181,6 +181,7 @@ const RetroColumnBottom = ({
                   fontSize: '0.75rem',
                   textAlign: 'right',
                   whiteSpace: 'nowrap',
+                  color: '#808080',
                 }}
               >
                 Characters remaining: {MAX_CARD_TEXT_LENGTH - value.length}
