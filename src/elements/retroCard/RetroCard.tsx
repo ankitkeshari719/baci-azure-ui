@@ -403,6 +403,7 @@ export function RetroCard({
                       textAlign: 'left',
                       color: '#343434',
                     }}
+                    component={'span'}
                     sx={{
                       cursor:
                         card.createdBy === global.user.id &&
@@ -415,7 +416,9 @@ export function RetroCard({
                     {card.value.split(" ").map((text, index) => {
 
                       return (
-                        <Typography key={text + index} className={columns.find(column => column.id === columnId)?.showKeywords && !ended && card.keywords.includes(text) ? "textStyleBold" : "textStyle"} display={'inline'}>
+                        <Typography 
+                        component={'span'}
+                        key={text + index} className={columns.find(column => column.id === columnId)?.showKeywords && !ended && card.keywords.includes(text) ? "textStyleBold" : "textStyle"} display={'inline'}>
                           {text} </Typography>
                       )
 

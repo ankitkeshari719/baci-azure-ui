@@ -59,16 +59,15 @@ const ColumnHeader = ({
     setDisableGroupSuggestion(true);
     setDisabledKeywordSuggestion(true)
     var tempKeywordGroupSuggestion = true;
-
+    var totalCards = 0;
 
 
     column.groups.forEach(element => {
+      totalCards = totalCards + element.cards.length
       if (element.suggested) {
         setGroupSuggestion(true)
       }
-      if (element.cards.length > 0) {
-        tempKeywordGroupSuggestion = false;
-      }
+
       if (element.name == UNGROUPED) {
         if (element.cards.length > 2) {
           setDisableGroupSuggestion(false)
@@ -80,7 +79,11 @@ const ColumnHeader = ({
         }
       }
     });
-    setDisabledKeywordSuggestion(tempKeywordGroupSuggestion)
+    console.log(totalCards)
+    if(totalCards>1){
+      setDisabledKeywordSuggestion(false)
+
+    }
 
 
   }, [column])
@@ -185,7 +188,7 @@ const ColumnHeader = ({
                 <Grid sx={{ display: 'flex', alignItems: 'center' }}>
                   <FormGroup sx={{ display: 'flex', flexDirection: 'row' }}>
 
-                    <Tooltip title={disableKeywordSuggestion && "Need at least one card "}>
+                    <Tooltip title={disableKeywordSuggestion && "Need at least two cards"}>
                       <FormControlLabel
                         checked={column.showKeywords ? column.showKeywords : false}
                         sx={{ color: theme.palette.primary.dark }}
