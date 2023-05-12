@@ -11,12 +11,14 @@ type Props = {
   currentUserActions: ActionInterface[];
   othersUserActions: ActionInterface[];
   handleToggleAction: (actionId: string) => void;
+  ended: boolean;
 };
 
 export default function ActionsListParticipant({
   currentUserActions,
   othersUserActions,
   handleToggleAction,
+  ended,
 }: Props) {
   const [showOtherAction, setShowOtherAction] = React.useState<boolean>(false);
   return (
@@ -74,7 +76,7 @@ export default function ActionsListParticipant({
           })}
         </List>
       )}
-      {currentUserActions.length == 0 && <ZeroActions height='85%' />}
+      {currentUserActions.length == 0 && <ZeroActions height="85%" />}
     </Box>
   );
 }

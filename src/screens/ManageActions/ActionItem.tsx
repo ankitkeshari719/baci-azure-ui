@@ -27,7 +27,7 @@ type Props = {
 
 export default function ActionItem({ action, handleToggleAction }: Props) {
   const {
-    state: {},
+    state: { ended },
     commitAction,
   } = React.useContext(BoardContext);
   const [global] = React.useContext(GlobalContext);
@@ -89,7 +89,7 @@ export default function ActionItem({ action, handleToggleAction }: Props) {
 
   return (
     <ListItem key={labelId} style={{ padding: '8px 12px' }}>
-      {/* <Box className="reorderIconContainer"></Box> */}
+      {/* Checkbox */}
       <ListItemIcon
         style={{
           display: 'flex',
@@ -125,13 +125,13 @@ export default function ActionItem({ action, handleToggleAction }: Props) {
           }
         />
       </ListItemIcon>
+      {/* Action Description and Edit Text Field */}
       {!isEditActionClick ? (
         <ListItemButton
           role={undefined}
           dense
           onMouseEnter={handleMouseEnter}
           onMouseLeave={handleMouseLeave}
-          // style={{ maxWidth: '350px' }}
         >
           <ListItemText
             id={labelId}
@@ -147,7 +147,8 @@ export default function ActionItem({ action, handleToggleAction }: Props) {
               wordWrap: 'break-word',
             }}
           />
-          {isMouseHover &&
+          {!ended &&
+            isMouseHover &&
             (global.user.userType == 2 ||
               global.user.id === action.createdBy) && (
               <Icons.PencilAltOutline
@@ -164,6 +165,7 @@ export default function ActionItem({ action, handleToggleAction }: Props) {
             )}
         </ListItemButton>
       ) : (
+        // Edit TextField
         <ListItemButton
           sx={{
             border: '1px solid #159ADD',
@@ -228,6 +230,7 @@ export default function ActionItem({ action, handleToggleAction }: Props) {
                   fontSize: '0.75rem',
                   textAlign: 'right',
                   whiteSpace: 'nowrap',
+                  color: '#808080',
                 }}
               >
                 Characters remaining:{' '}
@@ -278,6 +281,7 @@ export default function ActionItem({ action, handleToggleAction }: Props) {
           </Box>
         </ListItemButton>
       )}
+      {/* Avatar */}
       <ListItemAvatar>
         {action?.assigneeAvatar === '' ||
         action.assigneeAvatar === undefined ? (

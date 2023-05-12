@@ -16,7 +16,7 @@ import ActionsListParticipant from './ActionsListParticipant';
 
 export default function ActionMainContainer() {
   const {
-    state: { actionsData },
+    state: { actionsData, ended },
     commitAction,
   } = React.useContext(BoardContext);
   const [global, dispatch] = React.useContext(GlobalContext);
@@ -108,13 +108,16 @@ export default function ActionMainContainer() {
         allActions={allActions}
         dispatch={dispatch}
       />
-      <AddAction
-        addAction={addAction}
-        addedActionValue={addedActionValue}
-        setAddActionValue={setAddActionValue}
-        isTextFieldFocused={isTextFieldFocused}
-        setIsTextFieldFocused={setIsTextFieldFocused}
-      />
+      {!ended && (
+        <AddAction
+          addAction={addAction}
+          addedActionValue={addedActionValue}
+          setAddActionValue={setAddActionValue}
+          isTextFieldFocused={isTextFieldFocused}
+          setIsTextFieldFocused={setIsTextFieldFocused}
+        />
+      )}
+
       {allActions.length > 0 ? (
         <>
           {global.user.userType == 2 ? (
@@ -127,6 +130,7 @@ export default function ActionMainContainer() {
               currentUserActions={currentUserActions}
               othersUserActions={othersUserActions}
               handleToggleAction={handleToggleAction}
+              ended={ended}
             />
           )}
         </>
