@@ -79,7 +79,7 @@ const ColumnHeader = ({
         }
       }
     });
-    console.log(totalCards)
+
     if(totalCards>1){
       setDisabledKeywordSuggestion(false)
 
@@ -215,7 +215,7 @@ const ColumnHeader = ({
 
                           }
                           else {
-                            console.log("deleteUnconfirmedGroups")
+                  
                             deleteUnconfirmedGroups()
                           }
                         }} />} label="Suggest Grouping" />

@@ -291,22 +291,33 @@ export function RetroCard({
   };
   const compareText = (text: string): boolean => {
     var flag = false
-    card.keywords.forEach(element => {
+
+    // card.keywords.forEach(element => {
+    for (let i = 0; i < card.keywords.length; i++) {
+      const element = card.keywords[i]
       const keyword = element.split(" ");
-      if (element.toLocaleLowerCase().replace(".","") == text.toLowerCase().replace(".","")) {
+      if (element.toLocaleLowerCase().replace(".", "") == text.toLowerCase().replace(".", "")) {
         flag = true
+
         return true
+        break;
       }
       else
-        keyword.forEach(key => {
-          if (key.toLowerCase() == text.toLowerCase()) {
+        // keyword.forEach(key => {
+        for (let j = 0; j < keyword.length; j++) {
+          const key = keyword[j]
+    
+
+          if (key.toLowerCase().replace(".", "") == text.toLowerCase().replace(".", "")) {
 
             flag = true
             return true
+            break;
           }
-        })
+        }
 
-    })
+    }
+    
     return flag
   }
   return (
