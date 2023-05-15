@@ -275,6 +275,7 @@ export function RetroColumn({
     } else {
     }
   };
+  
 
   const submit = async (text: string) => {
     setIslanded(false);
@@ -870,6 +871,7 @@ export function RetroColumn({
 
 
   const getKeywordExtraction = async () => {
+    dispatchLoadingFlag(true)
     let ungroupCards: any[] = [];
     console.log(column, "column")
     column.groups.forEach(group => {
@@ -884,9 +886,14 @@ export function RetroColumn({
     // dispatchLoadingFlag(true);
     await keywordExtraction(columnId, ungroupCards).then(async (res: any) => {
 
-      console.log(res.response)
-
-
+      console.log(res.response) 
+   
+      await saveAndProcessAction(BoardActionType.UPDATE_KEYWORD_FLAG, {
+        columnId: column.id,
+        flag:true
+      }).then(res => {
+        dispatchLoadingFlag(false);
+      });
 
       await saveAndProcessAction(BoardActionType.ADD_KEYWORDS, {
 
@@ -899,25 +906,6 @@ export function RetroColumn({
           dispatchLoadingFlag(false);
         }
       );
-
-
-      // const data = res.response
-      // if (data) {
-      //   const groupIdArray: string[] = []
-
-      //   data.forEach((group: any) => {
-      //     groupIdArray.push(shortid.generate())
-      //     createGroup
-      //   })
-      //   createGroupAsSuggested(data, groupIdArray)
-
-
-      // }
-      // else {
-      //   alert("Please try again")
-      //   dispatchLoadingFlag(false);
-      // }
-
     }, error => {
       dispatchLoadingFlag(false);
     })
@@ -953,7 +941,17 @@ export function RetroColumn({
   }
 
 
-
+const hidekeywords =async()=>{
+  dispatchLoadingFlag(true)
+  await saveAndProcessAction(BoardActionType.UPDATE_KEYWORD_FLAG, {
+    columnId: column.id,
+    flag:false
+  }).then(res => {
+    dispatchLoadingFlag(false);
+  },err=>{
+    dispatchLoadingFlag(false); 
+  });
+}
 
 
   const parseColumnDepending = () => {
@@ -1052,6 +1050,7 @@ export function RetroColumn({
                 deleteUnconfirmedGroups={deleteUnconfirmedGroups}
                 retryGroupSuggestion={retryGroupSuggestion}
                 keywordExtraction={getKeywordExtraction}
+                hideKeywords={hidekeywords}
               />
               {/* <button onClick={getGroupSuggestion}>vishal</button> */}
             </div>

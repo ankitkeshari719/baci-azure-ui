@@ -17,20 +17,25 @@ import {
 import Avatar from '../../elements/Avatar';
 import { BoardActionType } from '../../statemachine/BoardStateMachine';
 import { BoardContext } from '../../contexts/BoardContext';
-import { GlobalContext } from '../../contexts/GlobalContext';
+import { ActionType, GlobalContext } from '../../contexts/GlobalContext';
 import { MAX_CARD_TEXT_LENGTH } from '../../constants';
 
 type Props = {
   action: ActionInterface;
   handleToggleAction: (actionId: string) => void;
+  addReact: (actionId: string, actionBy: string) => void;
 };
 
-export default function ActionItem({ action, handleToggleAction }: Props) {
+export default function ActionItem({
+  action,
+  handleToggleAction,
+  addReact,
+}: Props) {
   const {
     state: { ended },
     commitAction,
   } = React.useContext(BoardContext);
-  const [global] = React.useContext(GlobalContext);
+  const [global, dispatch] = React.useContext(GlobalContext);
   const labelId = `action-label-${action.id}`;
 
   const [isMouseHover, setIsMouseHover] = React.useState<boolean>(false);
@@ -70,14 +75,27 @@ export default function ActionItem({ action, handleToggleAction }: Props) {
 
   // function to call API on saving the existing action
   const saveEditAction = async (editActionValue: string | undefined) => {
+    dispatch({
+      type: ActionType.SET_LOADING,
+      payload: { loadingFlag: true },
+    });
     await saveAndProcessAction(BoardActionType.UPDATE_ACTION, {
       id: selectedAction?.id,
       value: editActionValue,
     }).then(
       res => {
         setIsEditActionClick(false);
+        dispatch({
+          type: ActionType.SET_LOADING,
+          payload: { loadingFlag: false },
+        });
       },
-      err => {}
+      err => {
+        dispatch({
+          type: ActionType.SET_LOADING,
+          payload: { loadingFlag: false },
+        });
+      }
     );
   };
 
@@ -281,6 +299,27 @@ export default function ActionItem({ action, handleToggleAction }: Props) {
           </Box>
         </ListItemButton>
       )}
+      <Box
+        sx={{
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+          flexDirection: 'row',
+        }}
+      >
+        <Icons.StarOutline
+          onClick={() => addReact(action.id, global.user.id)}
+          style={{
+            color: '#FBBC05',
+            width: '24px',
+            height: '24px',
+            cursor: 'pointer',
+          }}
+        />
+        <Typography className="totalReact" sx={{ marginLeft: '4px' }}>
+          {action.reacts?.length}
+        </Typography>
+      </Box>
       {/* Avatar */}
       <ListItemAvatar>
         {action?.assigneeAvatar === '' ||

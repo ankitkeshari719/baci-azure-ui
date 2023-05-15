@@ -11,6 +11,7 @@ type Props = {
   currentUserActions: ActionInterface[];
   othersUserActions: ActionInterface[];
   handleToggleAction: (actionId: string) => void;
+  addReact: (actionId: string, actionBy: string) => void;
   ended: boolean;
 };
 
@@ -18,6 +19,7 @@ export default function ActionsListParticipant({
   currentUserActions,
   othersUserActions,
   handleToggleAction,
+  addReact,
   ended,
 }: Props) {
   const [showOtherAction, setShowOtherAction] = React.useState<boolean>(false);
@@ -31,6 +33,7 @@ export default function ActionsListParticipant({
                 action={action}
                 key={action.id}
                 handleToggleAction={handleToggleAction}
+                addReact={addReact}
               />
             );
           })}
@@ -71,6 +74,7 @@ export default function ActionsListParticipant({
                 action={action}
                 key={action.id}
                 handleToggleAction={handleToggleAction}
+                addReact={addReact}
               />
             );
           })}

@@ -75,23 +75,23 @@ export interface Card {
   lastUpdatedBy?: string;
   editCount: number;
   avatar: string;
-  keywords:string[];
+  keywords: string[];
 }
 
-export interface ActionInterface{
+export interface ActionInterface {
   id: string;
   value: string;
-  reacts?: any[];
-  locked?: boolean;
-  lockedBy?: string;
   createdBy?: string;
-  lastUpdatedBy?: string;
-  editCount?: number;
-  columnId?: string;
-  columnName?: string;
   assigneeId: string;
   assigneeName: string;
   assigneeAvatar: string;
+  reacts: any[];
+  locked?: boolean;
+  lockedBy?: string;
+  editCount?: number;
+  columnId?: string;
+  columnName?: string;
+  lastUpdatedBy?: string;
   checked?: boolean;
 }
 export interface Actions {
@@ -124,6 +124,7 @@ export interface Column {
   lastUpdatedBy?: string;
   publish: boolean;
   showSuggestion: boolean;
+  showKeywords?:boolean;
 }
 
 export interface PulseCheckEntry {
