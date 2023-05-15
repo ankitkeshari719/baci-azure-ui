@@ -58,7 +58,12 @@ export default function ActionHeader({
 
   return (
     <>
-      <Box className="actionHeaderContainer">
+      <Box
+        className="actionHeaderContainer"
+        style={{
+          backgroundColor: isXsUp ? '#ffffff' : 'rgba(138, 56, 245, 0.1)',
+        }}
+      >
         <Box className="actionHeader">
           <Box className="d-flex justify-content-start align-items-center p-0">
             {isSearchEnable ? (
