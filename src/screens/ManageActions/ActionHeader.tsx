@@ -117,22 +117,23 @@ export default function ActionHeader({
                 }}
                 InputProps={{
                   startAdornment: (
-                    <InputAdornment position="start">
-                      <IconButton>
+                    <InputAdornment position="start" style={{ margin: '0px' }}>
+                      <IconButton
+                        sx={{ ':hover': { background: '#ffffff', cursor: 'unset' } }}
+                      >
                         <Icons.Search size={20} color="#CCCCCC" />
                       </IconButton>
                     </InputAdornment>
                   ),
                   endAdornment: (
                     <InputAdornment position="end">
-                      <IconButton>
+                      <IconButton onClick={cancelSearchField}>
                         <Icons.X
                           size={20}
                           color="#676767"
                           style={{
                             cursor: 'pointer',
                           }}
-                          onClick={cancelSearchField}
                         />
                       </IconButton>
                     </InputAdornment>
