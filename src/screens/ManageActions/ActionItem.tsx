@@ -32,7 +32,7 @@ export default function ActionItem({
   addReact,
 }: Props) {
   const {
-    state: {},
+    state: { ended },
     commitAction,
   } = React.useContext(BoardContext);
   const [global, dispatch] = React.useContext(GlobalContext);
@@ -107,7 +107,7 @@ export default function ActionItem({
 
   return (
     <ListItem key={labelId} style={{ padding: '8px 12px' }}>
-      {/* <Box className="reorderIconContainer"></Box> */}
+      {/* Checkbox */}
       <ListItemIcon
         style={{
           display: 'flex',
@@ -143,13 +143,13 @@ export default function ActionItem({
           }
         />
       </ListItemIcon>
+      {/* Action Description and Edit Text Field */}
       {!isEditActionClick ? (
         <ListItemButton
           role={undefined}
           dense
           onMouseEnter={handleMouseEnter}
           onMouseLeave={handleMouseLeave}
-          // style={{ maxWidth: '350px' }}
         >
           <ListItemText
             id={labelId}
@@ -165,7 +165,8 @@ export default function ActionItem({
               wordWrap: 'break-word',
             }}
           />
-          {isMouseHover &&
+          {!ended &&
+            isMouseHover &&
             (global.user.userType == 2 ||
               global.user.id === action.createdBy) && (
               <Icons.PencilAltOutline
@@ -182,6 +183,7 @@ export default function ActionItem({
             )}
         </ListItemButton>
       ) : (
+        // Edit TextField
         <ListItemButton
           sx={{
             border: '1px solid #159ADD',
@@ -238,6 +240,21 @@ export default function ActionItem({
                 },
               }}
             />
+            {/* Limitation */}
+            {editActionValue &&
+            editActionValue.length >= MAX_CARD_TEXT_LENGTH - 20 ? (
+              <Typography
+                style={{
+                  fontSize: '0.75rem',
+                  textAlign: 'right',
+                  whiteSpace: 'nowrap',
+                  color: '#808080',
+                }}
+              >
+                Characters remaining:{' '}
+                {MAX_CARD_TEXT_LENGTH - editActionValue.length}
+              </Typography>
+            ) : null}
             <Box
               sx={{
                 width: '100%',
@@ -303,7 +320,7 @@ export default function ActionItem({
           {action.reacts?.length}
         </Typography>
       </Box>
-
+      {/* Avatar */}
       <ListItemAvatar>
         {action?.assigneeAvatar === '' ||
         action.assigneeAvatar === undefined ? (

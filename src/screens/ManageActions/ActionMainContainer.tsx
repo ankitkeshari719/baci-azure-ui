@@ -24,7 +24,7 @@ import { NONE, VALUE_ASC, VALUE_DSC, VOTES_ASC, VOTES_DSC } from './const';
 
 export default function ActionMainContainer() {
   const {
-    state: { actionsData },
+    state: { actionsData, ended },
     commitAction,
   } = React.useContext(BoardContext);
   const [global, dispatch] = React.useContext(GlobalContext);
@@ -234,13 +234,16 @@ export default function ActionMainContainer() {
         handleSearchQueryOnChange={handleSearchQueryOnChange}
         handleSortedByChange={handleSortedByChange}
       />
-      <AddAction
-        addAction={addAction}
-        addedActionValue={addedActionValue}
-        setAddActionValue={setAddActionValue}
-        isTextFieldFocused={isTextFieldFocused}
-        setIsTextFieldFocused={setIsTextFieldFocused}
-      />
+      {!ended && (
+        <AddAction
+          addAction={addAction}
+          addedActionValue={addedActionValue}
+          setAddActionValue={setAddActionValue}
+          isTextFieldFocused={isTextFieldFocused}
+          setIsTextFieldFocused={setIsTextFieldFocused}
+        />
+      )}
+
       {allActions.length > 0 ? (
         <>
           {global.user.userType == 2 ? (
@@ -255,11 +258,12 @@ export default function ActionMainContainer() {
               othersUserActions={othersUserActions}
               handleToggleAction={handleToggleAction}
               addReact={addReact}
+              ended={ended}
             />
           )}
         </>
       ) : (
-        <ZeroActions />
+        <ZeroActions height="var(--app-height)" />
       )}
     </Box>
   );

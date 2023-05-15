@@ -18,7 +18,7 @@ import { NestedDropdown } from 'mui-nested-menu';
 import { MAX_CARD_TEXT_LENGTH, UNGROUPED } from '../../constants';
 import { BoardContext } from '../../contexts/BoardContext';
 import { BoardActionType } from '../../statemachine/BoardStateMachine';
-import { Card as RetroCardType, CardGroup } from '../../types';
+import { Card as RetroCardType, CardGroup, Column } from '../../types';
 
 import DeleteForever from '@mui/icons-material/DeleteForever';
 import MoveDownIcon from '@mui/icons-material/MoveDown';
@@ -53,7 +53,8 @@ export function RetroCard({
   moveCard,
   animate,
   isPrintPage,
-  width
+  width,
+
 }: {
   card: RetroCardType;
   currentGroupId: string;
@@ -63,7 +64,8 @@ export function RetroCard({
   moveCard: (cardId: string, toGroup: string, toIndex: number) => void;
   animate: boolean;
   isPrintPage: boolean;
-  width?:number;
+  width?: number;
+
 }) {
   const [global, dispatch] = React.useContext(GlobalContext);
   const {
@@ -287,7 +289,37 @@ export function RetroCard({
       },
     ],
   };
+  const compareText = (text: string): boolean => {
+    var flag = false
 
+    // card.keywords.forEach(element => {
+    for (let i = 0; i < card.keywords.length; i++) {
+      const element = card.keywords[i]
+      const keyword = element.split(" ");
+      if (element.toLocaleLowerCase().replace(".", "") == text.toLowerCase().replace(".", "")) {
+        flag = true
+
+        return true
+        break;
+      }
+      else
+        // keyword.forEach(key => {
+        for (let j = 0; j < keyword.length; j++) {
+          const key = keyword[j]
+    
+
+          if (key.toLowerCase().replace(".", "") == text.toLowerCase().replace(".", "")) {
+
+            flag = true
+            return true
+            break;
+          }
+        }
+
+    }
+    
+    return flag
+  }
   return (
     <>
       {
@@ -298,8 +330,8 @@ export function RetroCard({
             border: '1px solid ' + Color(cardColour).darken(0.1),
             borderRadius: '8px',
             boxShadow: '-2px 5px 9px -4px rgba(0,0,0,0.74)',
-display:'flex',
-flexDirection:'column',
+            display: 'flex',
+            flexDirection: 'column',
             width: '100%',
             // minWidth: "40%!important",
             // maxWidth: { sectionWidth } + "px",
@@ -308,7 +340,7 @@ flexDirection:'column',
               background: editing ? 'transparant' : cardColourHover,
             },
           }}
-         
+
           className="cardStyle"
         >
           <CardContent
@@ -401,6 +433,7 @@ flexDirection:'column',
                       textAlign: 'left',
                       color: '#343434',
                     }}
+                    component={'span'}
                     sx={{
                       cursor:
                         card.createdBy === global.user.id &&
@@ -410,8 +443,20 @@ flexDirection:'column',
                           : '',
                     }}
                   >
-                    {card.value}
+                    {card.value.split(" ").map((text, index) => {
+
+                      return (
+                        <Typography
+                          component={'span'}
+                          key={text + index} className={columns.find(column => column.id === columnId)?.showKeywords && !ended && compareText(text) ? "textStyleBold" : "textStyle"} display={'inline'}>
+                          {text} </Typography>
+                      )
+
+                    })}
                   </Typography>
+
+
+
                 )}
                 {!editing && card.editCount > 1 ? (
                   <Typography

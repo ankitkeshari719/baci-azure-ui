@@ -194,16 +194,17 @@ const Toolbar = (props: any) => {
     <Box sx={{ display: 'flex', flexDirection: 'column' }}>
       <Box
         sx={{
+          width: '100%',
+          height: '64px',
           display: 'flex',
           alignItems: 'center',
           flexDirection: 'row',
-          width: '100%',
+          gap: '8px',
           paddingLeft: isXsUp ? '16px' : '56px',
           paddingRight: isXsUp ? '16px' : '56px',
           paddingTop: isXsUp ? '14px' : 0,
           paddingBottom: isXsUp ? '14px' : 0,
           boxShadow: '0px 0px 2px rgba(0, 0, 0, 0.25)!important',
-          height: '64px',
         }}
       >
         {location.pathname.includes('report') ? (

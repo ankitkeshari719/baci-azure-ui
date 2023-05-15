@@ -124,6 +124,7 @@ export interface Column {
   lastUpdatedBy?: string;
   publish: boolean;
   showSuggestion: boolean;
+  showKeywords?:boolean;
 }
 
 export interface PulseCheckEntry {
