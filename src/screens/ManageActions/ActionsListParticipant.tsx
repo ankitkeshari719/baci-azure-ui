@@ -33,6 +33,7 @@ export default function ActionsListParticipant({
                 action={action}
                 key={action.id}
                 handleToggleAction={handleToggleAction}
+                addReact={addReact}
               />
             );
           })}
