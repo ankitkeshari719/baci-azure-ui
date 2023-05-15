@@ -207,8 +207,23 @@ const Toolbar = (props: any) => {
           boxShadow: '0px 0px 2px rgba(0, 0, 0, 0.25)!important',
         }}
       >
-        {location.pathname.includes('report') ? (
-          <>
+        {/* BACI Logo */}
+        <Box>
+          {location.pathname.includes('report') ? (
+            <>
+              <Link href="/">
+                <img
+                  src={BACILogo}
+                  alt="Logo"
+                  style={{
+                    width: isXsUp ? '53px' : '108px',
+                    height: isXsUp ? '18px' : '48px',
+                  }}
+                  onClick={reloadPage}
+                />
+              </Link>
+            </>
+          ) : (
             <Link href="/">
               <img
                 src={BACILogo}
@@ -220,21 +235,8 @@ const Toolbar = (props: any) => {
                 onClick={reloadPage}
               />
             </Link>
-          </>
-        ) : (
-          <Link href="/">
-            <img
-              src={BACILogo}
-              alt="Logo"
-              style={{
-                width: isXsUp ? '53px' : '108px',
-                height: isXsUp ? '18px' : '48px',
-              }}
-              onClick={reloadPage}
-            />
-          </Link>
-        )}
-
+          )}
+        </Box>
         {/* Retro Name*/}
         {currentRetro?.name &&
           !location.pathname.includes('startRetro') &&
@@ -246,10 +248,13 @@ const Toolbar = (props: any) => {
                 display: 'flex',
                 flexDirection: 'row',
                 alignItems: 'center',
-                width: 'calc(100% - 512px)',
+                justifyContent: 'center',
+                gap: '4px',
+                // width: 'calc(100% - 512px)',
               }}
             >
               {user.userType == 2 && !ended ? (
+                // Edit Retro name
                 <Tooltip title={localRetroName + ''}>
                   <TextField
                     fullWidth
@@ -258,7 +263,7 @@ const Toolbar = (props: any) => {
                       color: '#2C69A1',
                       width: isXsUp ? '150px' : '270px',
                       minWidth: isXsUp ? '150px' : '270px',
-                      marginLeft: isXsUp ? '10px' : '34px',
+                      marginLeft: isXsUp ? '10px' : '24px',
                       overflow: 'hidden !important',
                       textOverflow: 'ellipsis',
                       div: { padding: 0, position: 'initial' },
@@ -307,19 +312,19 @@ const Toolbar = (props: any) => {
                   />
                 </Tooltip>
               ) : (
+                // Retro Name
                 <Typography
                   noWrap
                   sx={{
-                    color: '#2C69A1',
-                    ag: 'H3',
-                    marginLeft: isXsUp ? '10px' : '34px',
-                    fontSize: isXsUp ? '16px!important' : '24px!important',
-
+                    display: 'inline-block',
                     minWidth: isXsUp ? '150px' : '250px',
                     maxWidth: isXsUp ? '150px' : '250px',
+                    color: '#2C69A1',
+                    ag: 'H3',
+                    marginLeft: isXsUp ? '10px' : '24px',
+                    fontSize: isXsUp ? '16px!important' : '24px!important',
                     overflow: 'hidden',
                     textOverflow: 'ellipsis',
-                    display: 'inline-block',
                   }}
                 >
                   {localRetroName}
@@ -327,7 +332,15 @@ const Toolbar = (props: any) => {
               )}
               {!isXsUp && (
                 <>
-                  <span style={{ width: '220px', display: 'flex' }}>
+                  {/* Code and Info of retro */}
+                  <Box
+                    sx={{
+                      width: '220px',
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                    }}
+                  >
                     <Typography
                       sx={{
                         fontSize: '20px',
@@ -363,10 +376,10 @@ const Toolbar = (props: any) => {
                         close={handleClose}
                       ></RetroDetails>
                     </Popover>
-                  </span>
-
+                  </Box>
+                  {/* Facilitator dropdown */}
                   {!ended ? (
-                    <>
+                    <Box>
                       {global.user.userType == 2 &&
                         !window.location.pathname.includes('pulsecheck') &&
                         !window.location.pathname.includes('feedback') && (
@@ -375,46 +388,31 @@ const Toolbar = (props: any) => {
                             onClickOfUser={onClickOfUser}
                           />
                         )}
-                    </>
+                    </Box>
                   ) : null}
                 </>
               )}
             </Box>
           )}
-        {/* Finish Button*/}
         <Box component="span" sx={{ flex: '1 1 auto' }}></Box>
-        {showFinishRetroButton && !ended && (
-          <>
-            {user.userType == 2 ? (
-              <>
-                <ContainedButton
-                  id="finishRetro"
-                  name="FINISH RETRO"
-                  onClick={() => setOpenDialog(true)}
-                  style={{
-                    minWidth: '150px !important',
-                    width: '150px !important',
-                    height: '40px !important',
-                    marginRight: '40px',
-                    display: isXsUp ? 'none' : 'block',
-                  }}
-                />
-                {showSessionEndMessage && (
-                  <SessionEndingMessage
-                    hideSessionEndingMessage={() => {
-                      setShowSessionEndMessage(false);
-                    }}
-                    isXsUp={isXsUp}
-                  />
-                )}
-              </>
-            ) : (
-              <>
-                {!leaveRetro && !isXsUp && (
+        <Box
+          sx={{
+            display: 'flex',
+            justifyContent: 'end',
+            alignItems: 'center',
+            flexDirection: 'row',
+            gap:'4px'
+          }}
+        >
+          {/* Finish Button*/}
+          {showFinishRetroButton && !ended && (
+            <>
+              {user.userType == 2 ? (
+                <>
                   <ContainedButton
-                    id="leaveRetro"
-                    name="LEAVE RETRO"
-                    onClick={() => setLeaveDiaOpen(true)}
+                    id="finishRetro"
+                    name="FINISH RETRO"
+                    onClick={() => setOpenDialog(true)}
                     style={{
                       minWidth: '150px !important',
                       width: '150px !important',
@@ -423,164 +421,202 @@ const Toolbar = (props: any) => {
                       display: isXsUp ? 'none' : 'block',
                     }}
                   />
-                )}
-                {showSessionEndMessage && (
-                  <SessionEndingMessage
-                    isXsUp={isXsUp}
-                    hideSessionEndingMessage={() => {
-                      setShowSessionEndMessage(false);
-                    }}
-                  />
-                )}
+                  {showSessionEndMessage && (
+                    <SessionEndingMessage
+                      hideSessionEndingMessage={() => {
+                        setShowSessionEndMessage(false);
+                      }}
+                      isXsUp={isXsUp}
+                    />
+                  )}
+                </>
+              ) : (
+                <>
+                  {!leaveRetro && !isXsUp && (
+                    <ContainedButton
+                      id="leaveRetro"
+                      name="LEAVE RETRO"
+                      onClick={() => setLeaveDiaOpen(true)}
+                      style={{
+                        minWidth: '150px !important',
+                        width: '150px !important',
+                        height: '40px !important',
+                        marginRight: '40px',
+                        display: isXsUp ? 'none' : 'block',
+                      }}
+                    />
+                  )}
+                  {showSessionEndMessage && (
+                    <SessionEndingMessage
+                      isXsUp={isXsUp}
+                      hideSessionEndingMessage={() => {
+                        setShowSessionEndMessage(false);
+                      }}
+                    />
+                  )}
+                </>
+              )}
+            </>
+          )}
+          {/*  Retro Finished && View Summary Report Button*/}
+          {showSummaryButton &&
+            !location.pathname.includes('report') &&
+            user.userType === 2 && (
+              <>
+                <Typography
+                  style={{
+                    color: '#EE7538',
+                    fontFamily: 'Poppins',
+                    fontStyle: 'normal',
+                    fontSize: '28px',
+                    fontWeight: '500',
+                    lineHeight: '38px',
+                    letterSpacing: '0.5px',
+                  }}
+                  mr="15px"
+                >
+                  Retro Finished
+                </Typography>
+                <ContainedButton
+                  id="view-summary"
+                  name="VIEW SUMMARY"
+                  onClick={() => navigate('/report/' + currentRetro?.id)}
+                  style={{
+                    minWidth: '150px !important',
+                    height: '40px !important',
+                    width: '150px !important',
+                    marginRight: '16px',
+                  }}
+                />
               </>
             )}
-          </>
-        )}
-        {/* Summary Report Button*/}
-        {showSummaryButton &&
-          !location.pathname.includes('report') &&
-          user.userType === 2 && (
+          {/* Review Board Button*/}
+          {location.pathname.includes('report') && ended && (
             <>
               <Typography
-                color={commonStyles.secondaryMain}
-                fontSize="24px"
-                fontWeight="500"
+                style={{
+                  color: '#EE7538',
+                  fontFamily: 'Poppins',
+                  fontStyle: 'normal',
+                  fontSize: '28px',
+                  fontWeight: '500',
+                  lineHeight: '38px',
+                  letterSpacing: '0.5px',
+                }}
                 mr="15px"
               >
                 Retro Finished
               </Typography>
               <ContainedButton
-                id="view-summary"
-                name="VIEW SUMMARY"
-                onClick={() => navigate('/report/' + currentRetro?.id)}
+                id="review-board"
+                name="REVIEW BOARD"
+                onClick={() => {
+                  navigate('/board/' + currentRetro?.id);
+                }}
                 style={{
                   minWidth: '150px !important',
-                  height: '40px !important',
                   width: '150px !important',
+                  height: '40px !important',
                   marginRight: '16px',
+                  position: 'initial',
                 }}
               />
             </>
           )}
-        {/* Review Board Button*/}
-        {location.pathname.includes('report') && ended && (
-          <>
-            <Typography
-              color={commonStyles.secondaryMain}
-              fontSize="28px"
-              fontWeight="500"
-              mr="15px"
-            >
-              Retro Finished
-            </Typography>
-            <ContainedButton
-              id="review-board"
-              name="REVIEW BOARD"
-              onClick={() => {
-                navigate('/board/' + currentRetro?.id);
-              }}
-              style={{
-                minWidth: '150px !important',
-                width: '150px !important',
-                height: '40px !important',
-                marginRight: '16px',
-                position: 'initial',
-              }}
-            />
-          </>
-        )}
-        {isXsUp ? (
-          <>
-            <Button
-              aria-describedby={id}
-              sx={{
-                borderRadius: '25%',
-                marginLeft: '15px',
-                position: 'initial',
-              }}
-              onClick={handleClick1}
-            >
-              <img src="/svgs/MobileMenu.svg" />
-            </Button>
-            <Menu
-              anchorEl={anchorE2}
-              id="account-menu"
-              open={openMenu}
-              onClose={() => setAnchorE2(null)}
-              onClick={() => setAnchorE2(null)}
-              PaperProps={{
-                elevation: 0,
-                sx: {
-                  overflow: 'visible',
-                  filter: 'drop-shadow(0px 2px 8px rgba(0,0,0,0.32))',
-                  mt: 1.5,
-                  '& .MuiAvatar-root': {
-                    width: 32,
-                    height: 32,
-                    ml: -0.5,
-                    mr: 1,
-                  },
-                  '&:before': {
-                    content: '""',
-                    display: 'block',
-                    position: 'absolute',
-                    top: 0,
-                    right: 14,
-                    width: 10,
-                    height: 10,
-                    bgcolor: 'background.paper',
-                    transform: 'translateY(-50%) rotate(45deg)',
-                    zIndex: 0,
-                  },
-                },
-              }}
-              transformOrigin={{ horizontal: 'right', vertical: 'top' }}
-              anchorOrigin={{ horizontal: 'right', vertical: 'bottom' }}
-            >
-              <MenuItem
-                sx={{ width: '250px', display: 'flex', flexDirection: 'row' }}
+          {isXsUp ? (
+            <>
+              <Button
+                aria-describedby={id}
+                sx={{
+                  borderRadius: '25%',
+                  marginLeft: '15px',
+                  position: 'initial',
+                }}
+                onClick={handleClick1}
               >
-                <Avatar
-                  avatar={user?.avatar}
-                  onClickAvatar={() => {}}
-                  css={{
-                    width: '44px',
-                    height: '44px',
-                    borderRadius: '50%',
-                  }}
-                ></Avatar>
-                <Typography
-                  sx={{
-                    textOverflow: 'ellipsis',
-                    overflow: 'hidden',
-                    maxWidth: '150px',
-                    width: '150px',
-                  }}
+                <img src="/svgs/MobileMenu.svg" />
+              </Button>
+              <Menu
+                anchorEl={anchorE2}
+                id="account-menu"
+                open={openMenu}
+                onClose={() => setAnchorE2(null)}
+                onClick={() => setAnchorE2(null)}
+                PaperProps={{
+                  elevation: 0,
+                  sx: {
+                    overflow: 'visible',
+                    filter: 'drop-shadow(0px 2px 8px rgba(0,0,0,0.32))',
+                    mt: 1.5,
+                    '& .MuiAvatar-root': {
+                      width: 32,
+                      height: 32,
+                      ml: -0.5,
+                      mr: 1,
+                    },
+                    '&:before': {
+                      content: '""',
+                      display: 'block',
+                      position: 'absolute',
+                      top: 0,
+                      right: 14,
+                      width: 10,
+                      height: 10,
+                      bgcolor: 'background.paper',
+                      transform: 'translateY(-50%) rotate(45deg)',
+                      zIndex: 0,
+                    },
+                  },
+                }}
+                transformOrigin={{ horizontal: 'right', vertical: 'top' }}
+                anchorOrigin={{ horizontal: 'right', vertical: 'bottom' }}
+              >
+                <MenuItem
+                  sx={{ width: '250px', display: 'flex', flexDirection: 'row' }}
                 >
-                  {user?.name}
-                </Typography>
-              </MenuItem>
-            </Menu>
-          </>
-        ) : (
-          <Tooltip title={user?.name + ''}>
-            <span>
-              {user?.avatar && (
-                <Avatar
-                  avatar={user?.avatar}
-                  onClickAvatar={() => {}}
-                  css={{
-                    width: '56px',
-                    height: '56px',
-                    borderRadius: '50%',
-                    border: 'none',
-                  }}
-                ></Avatar>
-              )}
-            </span>
-          </Tooltip>
-        )}
+                  <Avatar
+                    avatar={user?.avatar}
+                    onClickAvatar={() => {}}
+                    css={{
+                      width: '44px',
+                      height: '44px',
+                      borderRadius: '50%',
+                    }}
+                  ></Avatar>
+                  <Typography
+                    sx={{
+                      textOverflow: 'ellipsis',
+                      overflow: 'hidden',
+                      maxWidth: '150px',
+                      width: '150px',
+                    }}
+                  >
+                    {user?.name}
+                  </Typography>
+                </MenuItem>
+              </Menu>
+            </>
+          ) : (
+            <Tooltip title={user?.name + ''}>
+              <span>
+                {user?.avatar && (
+                  <Avatar
+                    avatar={user?.avatar}
+                    onClickAvatar={() => {}}
+                    css={{
+                      width: '56px',
+                      height: '56px',
+                      borderRadius: '50%',
+                      border: 'none',
+                    }}
+                  ></Avatar>
+                )}
+              </span>
+            </Tooltip>
+          )}
+        </Box>
       </Box>
+
       {/* Leave Retro Button */}
       <Box
         sx={{

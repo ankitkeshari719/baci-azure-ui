@@ -13,9 +13,11 @@ import {
   Select,
   SelectChangeEvent,
   TextField,
+  useMediaQuery,
 } from '@mui/material';
 import { MAX_CARD_TEXT_LENGTH } from '../../constants';
 import { NONE, VOTES_ASC, VOTES_DSC, VALUE_ASC, VALUE_DSC } from './const';
+import theme from '../../theme/theme';
 
 type Props = {
   allActions: ActionInterface[];
@@ -36,6 +38,7 @@ export default function ActionHeader({
   handleSortedByChange,
   handleSearchQueryOnChange,
 }: Props) {
+  const isXsUp = useMediaQuery(theme.breakpoints.between('xs', 'sm'));
   const [isSearchEnable, setIsSearchEnable] = React.useState<boolean>(false);
   const [isEnableDialogOpen, setIsEnableDialogOpen] =
     React.useState<boolean>(false);
@@ -46,6 +49,7 @@ export default function ActionHeader({
 
   const cancelSearchField = () => {
     setIsSearchEnable(false);
+    handleSearchQueryOnChange('');
   };
 
   const handleOpenEnableDialog = () => {
@@ -54,7 +58,12 @@ export default function ActionHeader({
 
   return (
     <>
-      <Box className="actionHeaderContainer">
+      <Box
+        className="actionHeaderContainer"
+        style={{
+          backgroundColor: isXsUp ? '#ffffff' : 'rgba(138, 56, 245, 0.1)',
+        }}
+      >
         <Box className="actionHeader">
           <Box className="d-flex justify-content-start align-items-center p-0">
             {isSearchEnable ? (
@@ -240,39 +249,41 @@ export default function ActionHeader({
               />
             </Box> */}
             {/* Expand Icon */}
-            <Box>
-              {global.expandColumn === -1 ? (
-                <img
-                  onClick={() => {
-                    dispatch({
-                      type: ActionType.EXPAND_COLUMN,
-                      payload: { expandColumn: 2 },
-                    });
-                  }}
-                  src="/svgs/Expand.svg"
-                  style={{
-                    width: '20px',
-                    marginLeft: '15px',
-                    cursor: 'pointer',
-                  }}
-                />
-              ) : (
-                <img
-                  onClick={() => {
-                    dispatch({
-                      type: ActionType.EXPAND_COLUMN,
-                      payload: { expandColumn: -1 },
-                    });
-                  }}
-                  src="/svgs/Shrink.svg"
-                  style={{
-                    width: '20px',
-                    marginLeft: '15px',
-                    cursor: 'pointer',
-                  }}
-                />
-              )}
-            </Box>
+            {!isXsUp && (
+              <Box>
+                {global.expandColumn === -1 ? (
+                  <img
+                    onClick={() => {
+                      dispatch({
+                        type: ActionType.EXPAND_COLUMN,
+                        payload: { expandColumn: 2 },
+                      });
+                    }}
+                    src="/svgs/Expand.svg"
+                    style={{
+                      width: '20px',
+                      marginLeft: '15px',
+                      cursor: 'pointer',
+                    }}
+                  />
+                ) : (
+                  <img
+                    onClick={() => {
+                      dispatch({
+                        type: ActionType.EXPAND_COLUMN,
+                        payload: { expandColumn: -1 },
+                      });
+                    }}
+                    src="/svgs/Shrink.svg"
+                    style={{
+                      width: '20px',
+                      marginLeft: '15px',
+                      cursor: 'pointer',
+                    }}
+                  />
+                )}
+              </Box>
+            )}
           </Box>
         </Box>
       </Box>
