@@ -41,7 +41,11 @@ export default function ActionHeader({
     React.useState<boolean>(false);
 
   const showSearchField = () => {
-    setIsSearchEnable(!isEnableDialogOpen);
+    setIsSearchEnable(true);
+  };
+
+  const cancelSearchField = () => {
+    setIsSearchEnable(false);
   };
 
   const handleOpenEnableDialog = () => {
@@ -106,13 +110,7 @@ export default function ActionHeader({
                   startAdornment: (
                     <InputAdornment position="start">
                       <IconButton>
-                        <Icons.Search
-                          size={20}
-                          color="#CCCCCC"
-                          style={{
-                            cursor: 'pointer',
-                          }}
-                        />
+                        <Icons.Search size={20} color="#CCCCCC" />
                       </IconButton>
                     </InputAdornment>
                   ),
@@ -125,7 +123,7 @@ export default function ActionHeader({
                           style={{
                             cursor: 'pointer',
                           }}
-                          onClick={showSearchField}
+                          onClick={cancelSearchField}
                         />
                       </IconButton>
                     </InputAdornment>
@@ -156,7 +154,7 @@ export default function ActionHeader({
               </Box>
             )}
             {/* Sort Box */}
-            <Box
+            {/* <Box
               style={{
                 display: 'flex',
                 justifyContent: 'center',
@@ -229,9 +227,9 @@ export default function ActionHeader({
                   <MenuItem value={VALUE_DSC}>VALUE_DSC</MenuItem>
                 </Select>
               </FormControl>
-            </Box>
+            </Box> */}
             {/* Ellipsis vertical */}
-            <Box className="searchBoxContainer">
+            {/* <Box className="searchBoxContainer">
               <Icons.DotsVertical
                 size={24}
                 color="#676767"
@@ -240,7 +238,7 @@ export default function ActionHeader({
                 }}
                 onClick={handleOpenEnableDialog}
               />
-            </Box>
+            </Box> */}
             {/* Expand Icon */}
             <Box>
               {global.expandColumn === -1 ? (
