@@ -24,7 +24,7 @@ import { NONE, VALUE_ASC, VALUE_DSC, VOTES_ASC, VOTES_DSC } from './const';
 
 export default function ActionMainContainer() {
   const {
-    state: { actionsData, ended },
+    state: { actionsData, ended, users },
     commitAction,
   } = React.useContext(BoardContext);
   const [global, dispatch] = React.useContext(GlobalContext);
@@ -44,6 +44,8 @@ export default function ActionMainContainer() {
   >([]);
   const [searchQuery, setSearchQuery] = React.useState<string>('');
   const [sortedBy, setSortedBy] = React.useState<string>(NONE);
+  const [isFeedbackSubmitted, setIsFeedbackSubmitted] =
+    React.useState<boolean>(false);
 
   React.useEffect(() => {
     let tempActions = actionsData.actions.map(action => {
@@ -65,6 +67,16 @@ export default function ActionMainContainer() {
     setCurrentUserActions([...tempCurrentUserActions]);
     setOthersUserActions([...tempOthersUserActions]);
   }, [allActions]);
+
+  React.useEffect(() => {
+    users.map(user => {
+      if (user.userId === global.user.id) {
+        if (user.feedback.length != 0) {
+          setIsFeedbackSubmitted(true);
+        }
+      }
+    });
+  }, [users]);
 
   const saveAndProcessAction = async (
     actionName: BoardActionType,
@@ -235,13 +247,26 @@ export default function ActionMainContainer() {
         handleSortedByChange={handleSortedByChange}
       />
       {!ended && (
-        <AddAction
-          addAction={addAction}
-          addedActionValue={addedActionValue}
-          setAddActionValue={setAddActionValue}
-          isTextFieldFocused={isTextFieldFocused}
-          setIsTextFieldFocused={setIsTextFieldFocused}
-        />
+        <>
+          {global.user.userType == 2 && (
+            <AddAction
+              addAction={addAction}
+              addedActionValue={addedActionValue}
+              setAddActionValue={setAddActionValue}
+              isTextFieldFocused={isTextFieldFocused}
+              setIsTextFieldFocused={setIsTextFieldFocused}
+            />
+          )}
+          {global.user.userType == 1 && !isFeedbackSubmitted && (
+            <AddAction
+              addAction={addAction}
+              addedActionValue={addedActionValue}
+              setAddActionValue={setAddActionValue}
+              isTextFieldFocused={isTextFieldFocused}
+              setIsTextFieldFocused={setIsTextFieldFocused}
+            />
+          )}
+        </>
       )}
 
       {allActions.length > 0 ? (
