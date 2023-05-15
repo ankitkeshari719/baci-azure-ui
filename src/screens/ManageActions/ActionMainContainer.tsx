@@ -276,6 +276,7 @@ export default function ActionMainContainer() {
               allActions={allActionsTemp}
               handleToggleAction={handleToggleAction}
               addReact={addReact}
+              isFeedbackSubmitted={isFeedbackSubmitted}
             />
           ) : (
             <ActionsListParticipant
@@ -284,6 +285,7 @@ export default function ActionMainContainer() {
               handleToggleAction={handleToggleAction}
               addReact={addReact}
               ended={ended}
+              isFeedbackSubmitted={isFeedbackSubmitted}
             />
           )}
         </>
