@@ -17,7 +17,7 @@ export default function ActionsListFacilitator({
   addReact,
 }: Props) {
   return (
-    <Box sx={{ width: '100%', height: 'var(--app-height)', overflowY: 'auto' }}>
+    <Box sx={{ width: '100%', height: 'var(--app-height)', overflowY: 'auto', borderRadius: '8px' }}>
       <List sx={{ width: '100%', bgcolor: 'background.paper' }}>
         {allActions.map(action => {
           return (

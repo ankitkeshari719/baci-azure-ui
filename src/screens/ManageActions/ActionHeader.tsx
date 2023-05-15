@@ -46,6 +46,7 @@ export default function ActionHeader({
 
   const cancelSearchField = () => {
     setIsSearchEnable(false);
+    handleSearchQueryOnChange('');
   };
 
   const handleOpenEnableDialog = () => {

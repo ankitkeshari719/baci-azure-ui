@@ -24,7 +24,7 @@ export default function ActionsListParticipant({
 }: Props) {
   const [showOtherAction, setShowOtherAction] = React.useState<boolean>(false);
   return (
-    <Box sx={{ width: '100%', height: 'var(--app-height)', overflowY: 'auto' }}>
+    <Box sx={{ width: '100%', height: 'var(--app-height)', overflowY: 'auto', borderRadius: '8px'  }}>
       {currentUserActions.length > 0 && (
         <List sx={{ width: '100%', bgcolor: 'background.paper' }}>
           {currentUserActions.map(action => {
