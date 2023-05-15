@@ -13,6 +13,7 @@ type Props = {
   handleToggleAction: (actionId: string) => void;
   addReact: (actionId: string, actionBy: string) => void;
   ended: boolean;
+  isFeedbackSubmitted: boolean;
 };
 
 export default function ActionsListParticipant({
@@ -21,10 +22,18 @@ export default function ActionsListParticipant({
   handleToggleAction,
   addReact,
   ended,
+  isFeedbackSubmitted,
 }: Props) {
   const [showOtherAction, setShowOtherAction] = React.useState<boolean>(false);
   return (
-    <Box sx={{ width: '100%', height: 'var(--app-height)', overflowY: 'auto', borderRadius: '8px'  }}>
+    <Box
+      sx={{
+        width: '100%',
+        height: 'var(--app-height)',
+        overflowY: 'auto',
+        borderRadius: '8px',
+      }}
+    >
       {currentUserActions.length > 0 && (
         <List sx={{ width: '100%', bgcolor: 'background.paper' }}>
           {currentUserActions.map(action => {
@@ -34,6 +43,7 @@ export default function ActionsListParticipant({
                 key={action.id}
                 handleToggleAction={handleToggleAction}
                 addReact={addReact}
+                isFeedbackSubmitted={isFeedbackSubmitted}
               />
             );
           })}
@@ -75,6 +85,7 @@ export default function ActionsListParticipant({
                 key={action.id}
                 handleToggleAction={handleToggleAction}
                 addReact={addReact}
+                isFeedbackSubmitted={isFeedbackSubmitted}
               />
             );
           })}

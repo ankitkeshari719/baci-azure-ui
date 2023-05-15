@@ -24,12 +24,14 @@ type Props = {
   action: ActionInterface;
   handleToggleAction: (actionId: string) => void;
   addReact: (actionId: string, actionBy: string) => void;
+  isFeedbackSubmitted: boolean;
 };
 
 export default function ActionItem({
   action,
   handleToggleAction,
   addReact,
+  isFeedbackSubmitted,
 }: Props) {
   const {
     state: { ended },
@@ -168,7 +170,8 @@ export default function ActionItem({
           {!ended &&
             isMouseHover &&
             (global.user.userType == 2 ||
-              global.user.id === action.createdBy) && (
+              (global.user.id === action.createdBy &&
+                !isFeedbackSubmitted)) && (
               <Icons.PencilAltOutline
                 style={{
                   color: '#CCCCCC',
