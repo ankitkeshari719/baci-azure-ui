@@ -65,7 +65,15 @@ export default function ActionHeader({
         }}
       >
         <Box className="actionHeader">
-          <Box className="d-flex justify-content-start align-items-center p-0">
+          <Box
+            className="d-flex justify-content-start align-items-center p-0 m-0"
+            style={{
+              flexDirection: 'row',
+              maxWidth: isXsUp ? '176px' : '220px',
+              minWidth: isXsUp ? '100px' : '180px',
+              maxHeight: '48px',
+            }}
+          >
             {isSearchEnable ? (
               <TextField
                 fullWidth
@@ -119,7 +127,9 @@ export default function ActionHeader({
                   startAdornment: (
                     <InputAdornment position="start" style={{ margin: '0px' }}>
                       <IconButton
-                        sx={{ ':hover': { background: '#ffffff', cursor: 'unset' } }}
+                        sx={{
+                          ':hover': { background: '#ffffff', cursor: 'unset' },
+                        }}
                       >
                         <Icons.Search size={20} color="#CCCCCC" />
                       </IconButton>
@@ -147,7 +157,7 @@ export default function ActionHeader({
             )}
           </Box>
           <Box
-            className="d-flex justify-content-center align-items-center"
+            className="d-flex justify-content-center align-items-center p-0 m-0"
             style={{ flexDirection: 'row' }}
           >
             {/* Search Icon */}
@@ -164,8 +174,9 @@ export default function ActionHeader({
               </Box>
             )}
             {/* Sort Box */}
-            {/* <Box
+            <Box
               style={{
+                maxHeight: '48px',
                 display: 'flex',
                 justifyContent: 'center',
                 alignContent: 'center',
@@ -180,6 +191,7 @@ export default function ActionHeader({
                   display: 'flex',
                   justifyContent: 'center',
                   alignContent: 'center',
+                  margin: '0px 0px 0px 8px',
                 }}
               >
                 <Select
@@ -231,13 +243,45 @@ export default function ActionHeader({
                   <MenuItem value={NONE}>
                     <em>None</em>
                   </MenuItem>
-                  <MenuItem value={VOTES_ASC}>VOTES_ASC</MenuItem>
-                  <MenuItem value={VOTES_DSC}>VOTES_DSC</MenuItem>
-                  <MenuItem value={VALUE_ASC}>VALUE_ASC</MenuItem>
-                  <MenuItem value={VALUE_DSC}>VALUE_DSC</MenuItem>
+                  <MenuItem value={VOTES_ASC}>
+                    VOTES{' '}
+                    <img
+                      src="/images/Ascending.png"
+                      style={{
+                        width: '20px',
+                      }}
+                    />
+                  </MenuItem>
+                  <MenuItem value={VOTES_DSC}>
+                    VOTES{' '}
+                    <img
+                      src="/images/Descending.png"
+                      style={{
+                        width: '20px',
+                      }}
+                    />
+                  </MenuItem>
+                  <MenuItem value={VALUE_ASC}>
+                    VALUE{' '}
+                    <img
+                      src="/images/Ascending.png"
+                      style={{
+                        width: '20px',
+                      }}
+                    />
+                  </MenuItem>
+                  <MenuItem value={VALUE_DSC}>
+                    VALUE{' '}
+                    <img
+                      src="/images/Descending.png"
+                      style={{
+                        width: '20px',
+                      }}
+                    />
+                  </MenuItem>
                 </Select>
               </FormControl>
-            </Box> */}
+            </Box>
             {/* Ellipsis vertical */}
             {/* <Box className="searchBoxContainer">
               <Icons.DotsVertical

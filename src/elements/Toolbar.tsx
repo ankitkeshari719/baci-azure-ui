@@ -208,22 +208,8 @@ const Toolbar = (props: any) => {
         }}
       >
         {/* BACI Logo */}
-        <Box>
-          {location.pathname.includes('report') ? (
-            <>
-              <Link href="/">
-                <img
-                  src={BACILogo}
-                  alt="Logo"
-                  style={{
-                    width: isXsUp ? '53px' : '108px',
-                    height: isXsUp ? '18px' : '48px',
-                  }}
-                  onClick={reloadPage}
-                />
-              </Link>
-            </>
-          ) : (
+        {location.pathname.includes('report') ? (
+          <>
             <Link href="/">
               <img
                 src={BACILogo}
@@ -235,8 +221,21 @@ const Toolbar = (props: any) => {
                 onClick={reloadPage}
               />
             </Link>
-          )}
-        </Box>
+          </>
+        ) : (
+          <Link href="/">
+            <img
+              src={BACILogo}
+              alt="Logo"
+              style={{
+                width: isXsUp ? '53px' : '108px',
+                height: isXsUp ? '18px' : '48px',
+              }}
+              onClick={reloadPage}
+            />
+          </Link>
+        )}
+
         {/* Retro Name*/}
         {currentRetro?.name &&
           !location.pathname.includes('startRetro') &&
@@ -250,7 +249,7 @@ const Toolbar = (props: any) => {
                 alignItems: 'center',
                 justifyContent: 'center',
                 gap: '4px',
-                // width: 'calc(100% - 512px)',
+                width: 'calc(100% - 512px)',
               }}
             >
               {user.userType == 2 && !ended ? (
@@ -263,7 +262,7 @@ const Toolbar = (props: any) => {
                       color: '#2C69A1',
                       width: isXsUp ? '150px' : '270px',
                       minWidth: isXsUp ? '150px' : '270px',
-                      marginLeft: isXsUp ? '10px' : '24px',
+                      marginLeft: isXsUp ? '10px' : '34px',
                       overflow: 'hidden !important',
                       textOverflow: 'ellipsis',
                       div: { padding: 0, position: 'initial' },
@@ -323,6 +322,7 @@ const Toolbar = (props: any) => {
                     ag: 'H3',
                     marginLeft: isXsUp ? '10px' : '24px',
                     fontSize: isXsUp ? '16px!important' : '24px!important',
+
                     overflow: 'hidden',
                     textOverflow: 'ellipsis',
                   }}
@@ -333,8 +333,8 @@ const Toolbar = (props: any) => {
               {!isXsUp && (
                 <>
                   {/* Code and Info of retro */}
-                  <Box
-                    sx={{
+                  <span
+                    style={{
                       width: '220px',
                       display: 'flex',
                       alignItems: 'center',
@@ -376,10 +376,10 @@ const Toolbar = (props: any) => {
                         close={handleClose}
                       ></RetroDetails>
                     </Popover>
-                  </Box>
+                  </span>
                   {/* Facilitator dropdown */}
                   {!ended ? (
-                    <Box>
+                    <>
                       {global.user.userType == 2 &&
                         !window.location.pathname.includes('pulsecheck') &&
                         !window.location.pathname.includes('feedback') && (
@@ -388,31 +388,46 @@ const Toolbar = (props: any) => {
                             onClickOfUser={onClickOfUser}
                           />
                         )}
-                    </Box>
+                    </>
                   ) : null}
                 </>
               )}
             </Box>
           )}
         <Box component="span" sx={{ flex: '1 1 auto' }}></Box>
-        <Box
-          sx={{
-            display: 'flex',
-            justifyContent: 'end',
-            alignItems: 'center',
-            flexDirection: 'row',
-            gap:'4px'
-          }}
-        >
-          {/* Finish Button*/}
-          {showFinishRetroButton && !ended && (
-            <>
-              {user.userType == 2 ? (
-                <>
+        {/* Finish Button*/}
+        {showFinishRetroButton && !ended && (
+          <>
+            {user.userType == 2 ? (
+              <>
+                <ContainedButton
+                  id="finishRetro"
+                  name="FINISH RETRO"
+                  onClick={() => setOpenDialog(true)}
+                  style={{
+                    minWidth: '150px !important',
+                    width: '150px !important',
+                    height: '40px !important',
+                    marginRight: '40px',
+                    display: isXsUp ? 'none' : 'block',
+                  }}
+                />
+                {showSessionEndMessage && (
+                  <SessionEndingMessage
+                    hideSessionEndingMessage={() => {
+                      setShowSessionEndMessage(false);
+                    }}
+                    isXsUp={isXsUp}
+                  />
+                )}
+              </>
+            ) : (
+              <>
+                {!leaveRetro && !isXsUp && (
                   <ContainedButton
-                    id="finishRetro"
-                    name="FINISH RETRO"
-                    onClick={() => setOpenDialog(true)}
+                    id="leaveRetro"
+                    name="LEAVE RETRO"
+                    onClick={() => setLeaveDiaOpen(true)}
                     style={{
                       minWidth: '150px !important',
                       width: '150px !important',
@@ -421,49 +436,25 @@ const Toolbar = (props: any) => {
                       display: isXsUp ? 'none' : 'block',
                     }}
                   />
-                  {showSessionEndMessage && (
-                    <SessionEndingMessage
-                      hideSessionEndingMessage={() => {
-                        setShowSessionEndMessage(false);
-                      }}
-                      isXsUp={isXsUp}
-                    />
-                  )}
-                </>
-              ) : (
-                <>
-                  {!leaveRetro && !isXsUp && (
-                    <ContainedButton
-                      id="leaveRetro"
-                      name="LEAVE RETRO"
-                      onClick={() => setLeaveDiaOpen(true)}
-                      style={{
-                        minWidth: '150px !important',
-                        width: '150px !important',
-                        height: '40px !important',
-                        marginRight: '40px',
-                        display: isXsUp ? 'none' : 'block',
-                      }}
-                    />
-                  )}
-                  {showSessionEndMessage && (
-                    <SessionEndingMessage
-                      isXsUp={isXsUp}
-                      hideSessionEndingMessage={() => {
-                        setShowSessionEndMessage(false);
-                      }}
-                    />
-                  )}
-                </>
-              )}
-            </>
-          )}
+                )}
+                {showSessionEndMessage && (
+                  <SessionEndingMessage
+                    isXsUp={isXsUp}
+                    hideSessionEndingMessage={() => {
+                      setShowSessionEndMessage(false);
+                    }}
+                  />
+                )}
+              </>
+            )}
+          </>
+        )}
           {/*  Retro Finished && View Summary Report Button*/}
-          {showSummaryButton &&
-            !location.pathname.includes('report') &&
-            user.userType === 2 && (
-              <>
-                <Typography
+        {showSummaryButton &&
+          !location.pathname.includes('report') &&
+          user.userType === 2 && (
+            <>
+              <Typography
                   style={{
                     color: '#EE7538',
                     fontFamily: 'Poppins',
@@ -473,27 +464,27 @@ const Toolbar = (props: any) => {
                     lineHeight: '38px',
                     letterSpacing: '0.5px',
                   }}
-                  mr="15px"
-                >
-                  Retro Finished
-                </Typography>
-                <ContainedButton
-                  id="view-summary"
-                  name="VIEW SUMMARY"
-                  onClick={() => navigate('/report/' + currentRetro?.id)}
-                  style={{
-                    minWidth: '150px !important',
-                    height: '40px !important',
-                    width: '150px !important',
-                    marginRight: '16px',
-                  }}
-                />
-              </>
-            )}
-          {/* Review Board Button*/}
-          {location.pathname.includes('report') && ended && (
-            <>
-              <Typography
+                mr="15px"
+              >
+                Retro Finished
+              </Typography>
+              <ContainedButton
+                id="view-summary"
+                name="VIEW SUMMARY"
+                onClick={() => navigate('/report/' + currentRetro?.id)}
+                style={{
+                  minWidth: '150px !important',
+                  height: '40px !important',
+                  width: '150px !important',
+                  marginRight: '16px',
+                }}
+              />
+            </>
+          )}
+        {/* Review Board Button*/}
+        {location.pathname.includes('report') && ended && (
+          <>
+            <Typography
                 style={{
                   color: '#EE7538',
                   fontFamily: 'Poppins',
@@ -503,120 +494,118 @@ const Toolbar = (props: any) => {
                   lineHeight: '38px',
                   letterSpacing: '0.5px',
                 }}
-                mr="15px"
-              >
-                Retro Finished
-              </Typography>
-              <ContainedButton
-                id="review-board"
-                name="REVIEW BOARD"
-                onClick={() => {
-                  navigate('/board/' + currentRetro?.id);
-                }}
-                style={{
-                  minWidth: '150px !important',
-                  width: '150px !important',
-                  height: '40px !important',
-                  marginRight: '16px',
-                  position: 'initial',
-                }}
-              />
-            </>
-          )}
-          {isXsUp ? (
-            <>
-              <Button
-                aria-describedby={id}
-                sx={{
-                  borderRadius: '25%',
-                  marginLeft: '15px',
-                  position: 'initial',
-                }}
-                onClick={handleClick1}
-              >
-                <img src="/svgs/MobileMenu.svg" />
-              </Button>
-              <Menu
-                anchorEl={anchorE2}
-                id="account-menu"
-                open={openMenu}
-                onClose={() => setAnchorE2(null)}
-                onClick={() => setAnchorE2(null)}
-                PaperProps={{
-                  elevation: 0,
-                  sx: {
-                    overflow: 'visible',
-                    filter: 'drop-shadow(0px 2px 8px rgba(0,0,0,0.32))',
-                    mt: 1.5,
-                    '& .MuiAvatar-root': {
-                      width: 32,
-                      height: 32,
-                      ml: -0.5,
-                      mr: 1,
-                    },
-                    '&:before': {
-                      content: '""',
-                      display: 'block',
-                      position: 'absolute',
-                      top: 0,
-                      right: 14,
-                      width: 10,
-                      height: 10,
-                      bgcolor: 'background.paper',
-                      transform: 'translateY(-50%) rotate(45deg)',
-                      zIndex: 0,
-                    },
+              mr="15px"
+            >
+              Retro Finished
+            </Typography>
+            <ContainedButton
+              id="review-board"
+              name="REVIEW BOARD"
+              onClick={() => {
+                navigate('/board/' + currentRetro?.id);
+              }}
+              style={{
+                minWidth: '150px !important',
+                width: '150px !important',
+                height: '40px !important',
+                marginRight: '16px',
+                position: 'initial',
+              }}
+            />
+          </>
+        )}
+        {isXsUp ? (
+          <>
+            <Button
+              aria-describedby={id}
+              sx={{
+                borderRadius: '25%',
+                marginLeft: '15px',
+                position: 'initial',
+              }}
+              onClick={handleClick1}
+            >
+              <img src="/svgs/MobileMenu.svg" />
+            </Button>
+            <Menu
+              anchorEl={anchorE2}
+              id="account-menu"
+              open={openMenu}
+              onClose={() => setAnchorE2(null)}
+              onClick={() => setAnchorE2(null)}
+              PaperProps={{
+                elevation: 0,
+                sx: {
+                  overflow: 'visible',
+                  filter: 'drop-shadow(0px 2px 8px rgba(0,0,0,0.32))',
+                  mt: 1.5,
+                  '& .MuiAvatar-root': {
+                    width: 32,
+                    height: 32,
+                    ml: -0.5,
+                    mr: 1,
                   },
-                }}
-                transformOrigin={{ horizontal: 'right', vertical: 'top' }}
-                anchorOrigin={{ horizontal: 'right', vertical: 'bottom' }}
+                  '&:before': {
+                    content: '""',
+                    display: 'block',
+                    position: 'absolute',
+                    top: 0,
+                    right: 14,
+                    width: 10,
+                    height: 10,
+                    bgcolor: 'background.paper',
+                    transform: 'translateY(-50%) rotate(45deg)',
+                    zIndex: 0,
+                  },
+                },
+              }}
+              transformOrigin={{ horizontal: 'right', vertical: 'top' }}
+              anchorOrigin={{ horizontal: 'right', vertical: 'bottom' }}
+            >
+              <MenuItem
+                sx={{ width: '250px', display: 'flex', flexDirection: 'row' }}
               >
-                <MenuItem
-                  sx={{ width: '250px', display: 'flex', flexDirection: 'row' }}
+                <Avatar
+                  avatar={user?.avatar}
+                  onClickAvatar={() => {}}
+                  css={{
+                    width: '44px',
+                    height: '44px',
+                    borderRadius: '50%',
+                  }}
+                ></Avatar>
+                <Typography
+                  sx={{
+                    textOverflow: 'ellipsis',
+                    overflow: 'hidden',
+                    maxWidth: '150px',
+                    width: '150px',
+                  }}
                 >
-                  <Avatar
-                    avatar={user?.avatar}
-                    onClickAvatar={() => {}}
-                    css={{
-                      width: '44px',
-                      height: '44px',
-                      borderRadius: '50%',
-                    }}
-                  ></Avatar>
-                  <Typography
-                    sx={{
-                      textOverflow: 'ellipsis',
-                      overflow: 'hidden',
-                      maxWidth: '150px',
-                      width: '150px',
-                    }}
-                  >
-                    {user?.name}
-                  </Typography>
-                </MenuItem>
-              </Menu>
-            </>
-          ) : (
-            <Tooltip title={user?.name + ''}>
-              <span>
-                {user?.avatar && (
-                  <Avatar
-                    avatar={user?.avatar}
-                    onClickAvatar={() => {}}
-                    css={{
-                      width: '56px',
-                      height: '56px',
-                      borderRadius: '50%',
-                      border: 'none',
-                    }}
-                  ></Avatar>
-                )}
-              </span>
-            </Tooltip>
-          )}
-        </Box>
+                  {user?.name}
+                </Typography>
+              </MenuItem>
+            </Menu>
+          </>
+        ) : (
+          <Tooltip title={user?.name + ''}>
+            <span>
+              {user?.avatar && (
+                <Avatar
+                  avatar={user?.avatar}
+                  onClickAvatar={() => {}}
+                  css={{
+                    width: '56px',
+                    height: '56px',
+                    borderRadius: '50%',
+                    border: 'none',
+                  }}
+                ></Avatar>
+              )}
+            </span>
+          </Tooltip>
+        )}
       </Box>
-
       {/* Leave Retro Button */}
       <Box
         sx={{
