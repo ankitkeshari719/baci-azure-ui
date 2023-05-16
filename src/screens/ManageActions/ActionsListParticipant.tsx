@@ -11,7 +11,8 @@ type Props = {
   currentUserActions: ActionInterface[];
   othersUserActions: ActionInterface[];
   handleToggleAction: (actionId: string) => void;
-  addReact: (actionId: string, actionBy: string) => void;
+  addReactToAction: (actionId: string, actionBy: string) => void;
+  removeReactFromAction: (actionId: string) => void;
   ended: boolean;
   isFeedbackSubmitted: boolean;
 };
@@ -20,9 +21,10 @@ export default function ActionsListParticipant({
   currentUserActions,
   othersUserActions,
   handleToggleAction,
-  addReact,
+  addReactToAction,
   ended,
   isFeedbackSubmitted,
+  removeReactFromAction,
 }: Props) {
   const [showOtherAction, setShowOtherAction] = React.useState<boolean>(false);
   return (
@@ -42,8 +44,9 @@ export default function ActionsListParticipant({
                 action={action}
                 key={action.id}
                 handleToggleAction={handleToggleAction}
-                addReact={addReact}
+                addReactToAction={addReactToAction}
                 isFeedbackSubmitted={isFeedbackSubmitted}
+                removeReactFromAction={removeReactFromAction}
               />
             );
           })}
@@ -84,8 +87,9 @@ export default function ActionsListParticipant({
                 action={action}
                 key={action.id}
                 handleToggleAction={handleToggleAction}
-                addReact={addReact}
+                addReactToAction={addReactToAction}
                 isFeedbackSubmitted={isFeedbackSubmitted}
+                removeReactFromAction={removeReactFromAction}
               />
             );
           })}

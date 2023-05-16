@@ -873,7 +873,6 @@ export function RetroColumn({
   const getKeywordExtraction = async () => {
     dispatchLoadingFlag(true)
     let ungroupCards: any[] = [];
-    console.log(column, "column")
     column.groups.forEach(group => {
       // if (group.name == UNGROUPED) {
       group.cards.forEach(element => {
@@ -882,12 +881,8 @@ export function RetroColumn({
 
       // }
     })
-    console.log(ungroupCards, "ungroupCards")
     // dispatchLoadingFlag(true);
-    await keywordExtraction(columnId, ungroupCards).then(async (res: any) => {
-
-      console.log(res.response) 
-   
+    await keywordExtraction(columnId, ungroupCards).then(async (res: any) => {   
       await saveAndProcessAction(BoardActionType.UPDATE_KEYWORD_FLAG, {
         columnId: column.id,
         flag:true
