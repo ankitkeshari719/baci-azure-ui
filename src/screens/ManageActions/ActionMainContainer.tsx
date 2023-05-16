@@ -120,13 +120,33 @@ export default function ActionMainContainer() {
     );
   };
 
-  const addReact = async (actionId: string, actionBy: string) => {
+  const addReactToAction = async (actionId: string, actionBy: string) => {
     dispatch({
       type: ActionType.SET_LOADING,
       payload: { loadingFlag: true },
     });
     await saveAndProcessAction(BoardActionType.ADD_REACT_TO_ACTION, {
       actionId: actionId,
+      react: '👍',
+    }).then(
+      res => {
+        dispatch({
+          type: ActionType.SET_LOADING,
+          payload: { loadingFlag: false },
+        });
+      },
+      err => {
+        dispatch({
+          type: ActionType.SET_LOADING,
+          payload: { loadingFlag: false },
+        });
+      }
+    );
+  };
+
+  const removeReactFromAction = async (actionId: string) => {
+    await saveAndProcessAction(BoardActionType.REMOVE_REACT_FROM_ACTION, {
+      actionId,
       react: '👍',
     }).then(
       res => {
@@ -275,17 +295,19 @@ export default function ActionMainContainer() {
             <ActionsListFacilitator
               allActions={allActionsTemp}
               handleToggleAction={handleToggleAction}
-              addReact={addReact}
+              addReactToAction={addReactToAction}
               isFeedbackSubmitted={isFeedbackSubmitted}
+              removeReactFromAction={removeReactFromAction}
             />
           ) : (
             <ActionsListParticipant
               currentUserActions={currentUserActions}
               othersUserActions={othersUserActions}
               handleToggleAction={handleToggleAction}
-              addReact={addReact}
+              addReactToAction={addReactToAction}
               ended={ended}
               isFeedbackSubmitted={isFeedbackSubmitted}
+              removeReactFromAction={removeReactFromAction}
             />
           )}
         </>

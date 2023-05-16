@@ -54,7 +54,8 @@ export enum BoardActionType {
   Add_NEW_ACTION = 'addAction',
   UPDATE_ACTION = 'updateAction',
   ADD_REACT_TO_ACTION = 'addReactToAction',
-  UPDATE_KEYWORD_FLAG = "updateKeywordFlag"
+  UPDATE_KEYWORD_FLAG = 'updateKeywordFlag',
+  REMOVE_REACT_FROM_ACTION = 'removeReactFromAction',
 }
 
 export const BOARD_STATE_MACHINE_VERSION = 1;
@@ -536,6 +537,22 @@ export const validateAction = (
     return false;
   };
 
+  const isRemoveReactFromActionValid = (
+    actionId: string,
+    react: string,
+    userId: string
+  ): boolean => {
+    const { action } = findAction(actionId);
+    if (
+      action &&
+      action.reacts &&
+      action.reacts.find(r => r.emoji === react && r.by === userId)
+    ) {
+      return true;
+    }
+    return false;
+  };
+
   switch (actionName) {
     case BoardActionType.UPDATE_RETRO_DETAILS:
       return isUpdateRetroDetailsValid(
@@ -675,6 +692,12 @@ export const validateAction = (
       return isUpdateExistingActionValid(parameters.id, parameters.value);
     case BoardActionType.ADD_REACT_TO_ACTION:
       return isAddReactToActionValid(
+        parameters.actionId,
+        parameters.react,
+        userId
+      );
+    case BoardActionType.REMOVE_REACT_FROM_ACTION:
+      return isRemoveReactFromActionValid(
         parameters.actionId,
         parameters.react,
         userId
@@ -891,9 +914,9 @@ export const processAction = (
             group.cards.splice(index as number, 1);
             cardsList.splice(
               toIndex -
-              (group.id === targetGroup.id && (index as number) < toIndex
-                ? 1
-                : 0),
+                (group.id === targetGroup.id && (index as number) < toIndex
+                  ? 1
+                  : 0),
               0,
               card
             );
@@ -949,9 +972,9 @@ export const processAction = (
         group.cards.splice(index as number, 1);
         cardsList.splice(
           toIndex -
-          (group.id === targetGroup.id && (index as number) < toIndex
-            ? 1
-            : 0),
+            (group.id === targetGroup.id && (index as number) < toIndex
+              ? 1
+              : 0),
           0,
           card
         );
@@ -1063,16 +1086,15 @@ export const processAction = (
   };
 
   const addKeywordsToCard = (suggestedkeywordCards: Card[], userId: string) => {
+    suggestedkeywordCards &&
+      suggestedkeywordCards.forEach(element => {
+        const { card } = findCard(element.id);
+        if (card) {
+          card.keywords = element.keywords;
 
-    suggestedkeywordCards&&suggestedkeywordCards.forEach(element => {
-
-      const { card } = findCard(element.id);
-      if (card) {
-        card.keywords = element.keywords;
-
-        card.lastUpdatedBy = userId;
-      }
-    });
+          card.lastUpdatedBy = userId;
+        }
+      });
   };
   const addReactToGroup = (react: string, groupId: string, userId: string) => {
     const { group } = findGroup(groupId);
@@ -1404,6 +1426,25 @@ export const processAction = (
     }
   };
 
+  const removeReactFromAction = (
+    actionId: string,
+    react: string,
+    userId: string
+  ) => {
+    const { action } = findAction(actionId);
+    if (
+      action &&
+      action.reacts &&
+      action.reacts.find(r => r.emoji === react && r.by === userId)
+    ) {
+      const index = action.reacts.findIndex(
+        r => r.emoji === react && r.by === userId
+      );
+      action.reacts.splice(index, 1);
+      action.lastUpdatedBy = userId;
+    }
+  };
+
   let noMatch = false;
 
   const updateKeywordFlag = (columnId: any, flag: boolean) => {
@@ -1411,7 +1452,7 @@ export const processAction = (
     if (column) {
       column.showKeywords = flag;
     }
-  }
+  };
 
   switch (actionName) {
     case BoardActionType.UPDATE_RETRO_DETAILS:
@@ -1587,11 +1628,14 @@ export const processAction = (
     case BoardActionType.ADD_REACT_TO_ACTION:
       addReactToAction(parameters.actionId, parameters.react, userId);
       break;
+    case BoardActionType.REMOVE_REACT_FROM_ACTION:
+      removeReactFromAction(parameters.actionId, parameters.react, userId);
+      break;
     case BoardActionType.ADD_KEYWORDS:
       addKeywordsToCard(parameters.suggestedkeywordCards, userId);
       break;
     case BoardActionType.UPDATE_KEYWORD_FLAG:
-      updateKeywordFlag(parameters.columnId, parameters.flag)
+      updateKeywordFlag(parameters.columnId, parameters.flag);
       break;
     default:
       noMatch = true;
