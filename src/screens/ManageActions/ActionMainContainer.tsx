@@ -381,7 +381,32 @@ export default function ActionMainContainer() {
           )}
         </>
       ) : (
-        <ZeroActions height="var(--app-height)" />
+        <>
+          {global.user.userType === 1 && (
+            <>
+              {!actionsData.isAddActionEnableToParticipant ? (
+                <ZeroActions
+                  height="var(--app-height)"
+                  zeroActionText_One=""
+                  zeroActionText_Two="Let Facilitator add them here"
+                />
+              ) : (
+                <ZeroActions
+                  height="var(--app-height)"
+                  zeroActionText_One="Actions Speak!"
+                  zeroActionText_Two="Add them here..."
+                />
+              )}
+            </>
+          )}
+          {global.user.userType === 2 && (
+            <ZeroActions
+              height="var(--app-height)"
+              zeroActionText_One="Actions Speak!"
+              zeroActionText_Two="Add them here..."
+            />
+          )}
+        </>
       )}
     </Box>
   );

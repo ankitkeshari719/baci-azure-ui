@@ -28,7 +28,7 @@ export default function ActionsListParticipant({
   isFeedbackSubmitted,
   removeReactFromAction,
   isAddActionEnableToParticipant,
-  isVotingEnableToParticipant
+  isVotingEnableToParticipant,
 }: Props) {
   const [showOtherAction, setShowOtherAction] = React.useState<boolean>(false);
   return (
@@ -103,7 +103,13 @@ export default function ActionsListParticipant({
           })}
         </List>
       )}
-      {currentUserActions.length == 0 && <ZeroActions height="85%" />}
+      {currentUserActions.length == 0 && (
+        <ZeroActions
+          height="85%"
+          zeroActionText_One="zeroActionText_One"
+          zeroActionText_Two="zeroActionText_Two"
+        />
+      )}
     </Box>
   );
 }
