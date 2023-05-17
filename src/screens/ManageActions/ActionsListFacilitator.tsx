@@ -10,7 +10,8 @@ type Props = {
   handleToggleAction: (actionId: string) => void;
   addReactToAction: (actionId: string, actionBy: string) => void;
   removeReactFromAction: (actionId: string) => void;
-
+  isAddActionEnableToParticipant: boolean | undefined;
+  isVotingEnableToParticipant: boolean | undefined;
   isFeedbackSubmitted: boolean;
 };
 
@@ -20,6 +21,8 @@ export default function ActionsListFacilitator({
   addReactToAction,
   isFeedbackSubmitted,
   removeReactFromAction,
+  isAddActionEnableToParticipant,
+  isVotingEnableToParticipant
 }: Props) {
   return (
     <Box
@@ -40,6 +43,8 @@ export default function ActionsListFacilitator({
               addReactToAction={addReactToAction}
               isFeedbackSubmitted={isFeedbackSubmitted}
               removeReactFromAction={removeReactFromAction}
+              isAddActionEnableToParticipant={isAddActionEnableToParticipant}
+              isVotingEnableToParticipant={isVotingEnableToParticipant}
             />
           );
         })}

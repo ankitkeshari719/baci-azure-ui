@@ -145,10 +145,63 @@ export default function ActionMainContainer() {
   };
 
   const removeReactFromAction = async (actionId: string) => {
+    dispatch({
+      type: ActionType.SET_LOADING,
+      payload: { loadingFlag: true },
+    });
     await saveAndProcessAction(BoardActionType.REMOVE_REACT_FROM_ACTION, {
       actionId,
       react: '👍',
     }).then(
+      res => {
+        dispatch({
+          type: ActionType.SET_LOADING,
+          payload: { loadingFlag: false },
+        });
+      },
+      err => {
+        dispatch({
+          type: ActionType.SET_LOADING,
+          payload: { loadingFlag: false },
+        });
+      }
+    );
+  };
+
+  const enableVotingToParticipant = async (value: boolean) => {
+    dispatch({
+      type: ActionType.SET_LOADING,
+      payload: { loadingFlag: true },
+    });
+    await saveAndProcessAction(BoardActionType.ENABLE_VOTING_TO_PARTICIPANT, {
+      value,
+    }).then(
+      res => {
+        dispatch({
+          type: ActionType.SET_LOADING,
+          payload: { loadingFlag: false },
+        });
+      },
+      err => {
+        dispatch({
+          type: ActionType.SET_LOADING,
+          payload: { loadingFlag: false },
+        });
+      }
+    );
+  };
+
+  const enableAddActionToParticipant = async (value: boolean) => {
+    dispatch({
+      type: ActionType.SET_LOADING,
+      payload: { loadingFlag: true },
+    });
+    await saveAndProcessAction(
+      BoardActionType.ENABLE_ADD_ACTIONS_TO_PARTICIPANT,
+      {
+        value,
+      }
+    ).then(
       res => {
         dispatch({
           type: ActionType.SET_LOADING,
@@ -265,6 +318,8 @@ export default function ActionMainContainer() {
         sortedBy={sortedBy}
         handleSearchQueryOnChange={handleSearchQueryOnChange}
         handleSortedByChange={handleSortedByChange}
+        enableVotingToParticipant={enableVotingToParticipant}
+        enableAddActionToParticipant={enableAddActionToParticipant}
       />
       {!ended && (
         <>
@@ -277,15 +332,17 @@ export default function ActionMainContainer() {
               setIsTextFieldFocused={setIsTextFieldFocused}
             />
           )}
-          {global.user.userType == 1 && !isFeedbackSubmitted && (
-            <AddAction
-              addAction={addAction}
-              addedActionValue={addedActionValue}
-              setAddActionValue={setAddActionValue}
-              isTextFieldFocused={isTextFieldFocused}
-              setIsTextFieldFocused={setIsTextFieldFocused}
-            />
-          )}
+          {global.user.userType == 1 &&
+            !isFeedbackSubmitted &&
+            actionsData.isAddActionEnableToParticipant && (
+              <AddAction
+                addAction={addAction}
+                addedActionValue={addedActionValue}
+                setAddActionValue={setAddActionValue}
+                isTextFieldFocused={isTextFieldFocused}
+                setIsTextFieldFocused={setIsTextFieldFocused}
+              />
+            )}
         </>
       )}
 
@@ -298,6 +355,12 @@ export default function ActionMainContainer() {
               addReactToAction={addReactToAction}
               isFeedbackSubmitted={isFeedbackSubmitted}
               removeReactFromAction={removeReactFromAction}
+              isAddActionEnableToParticipant={
+                actionsData.isAddActionEnableToParticipant
+              }
+              isVotingEnableToParticipant={
+                actionsData.isVotingEnableToParticipant
+              }
             />
           ) : (
             <ActionsListParticipant
@@ -308,6 +371,12 @@ export default function ActionMainContainer() {
               ended={ended}
               isFeedbackSubmitted={isFeedbackSubmitted}
               removeReactFromAction={removeReactFromAction}
+              isAddActionEnableToParticipant={
+                actionsData.isAddActionEnableToParticipant
+              }
+              isVotingEnableToParticipant={
+                actionsData.isVotingEnableToParticipant
+              }
             />
           )}
         </>

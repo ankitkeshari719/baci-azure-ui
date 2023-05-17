@@ -6,12 +6,17 @@ import { ActionInterface } from '../../types';
 import { ActionType } from '../../contexts/GlobalContext';
 import * as Icons from 'heroicons-react';
 import {
+  Button,
   FormControl,
   IconButton,
   InputAdornment,
+  ListItemIcon,
+  ListItemText,
+  Menu,
   MenuItem,
   Select,
   SelectChangeEvent,
+  Switch,
   TextField,
   useMediaQuery,
 } from '@mui/material';
@@ -27,6 +32,8 @@ type Props = {
   sortedBy: string;
   handleSearchQueryOnChange: (value: string) => void;
   handleSortedByChange: (event: SelectChangeEvent) => void;
+  enableVotingToParticipant: (value: boolean) => void;
+  enableAddActionToParticipant: (value: boolean) => void;
 };
 
 export default function ActionHeader({
@@ -37,23 +44,50 @@ export default function ActionHeader({
   sortedBy,
   handleSortedByChange,
   handleSearchQueryOnChange,
+  enableVotingToParticipant,
+  enableAddActionToParticipant,
 }: Props) {
   const isXsUp = useMediaQuery(theme.breakpoints.between('xs', 'sm'));
   const [isSearchEnable, setIsSearchEnable] = React.useState<boolean>(false);
-  const [isEnableDialogOpen, setIsEnableDialogOpen] =
+  const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
+  const open = Boolean(anchorEl);
+  const [enableVoting, setEnableVoting] = React.useState<boolean>(false);
+  const [enableActionToParticipant, setEnableActionToParticipant] =
     React.useState<boolean>(false);
 
+  // Function to show the search bar
   const showSearchField = () => {
     setIsSearchEnable(true);
   };
 
+  // Function to close the search bar
   const cancelSearchField = () => {
     setIsSearchEnable(false);
     handleSearchQueryOnChange('');
   };
 
-  const handleOpenEnableDialog = () => {
-    setIsEnableDialogOpen(true);
+  // Function to show the Enable Menu bar
+  const openEnableMenu = (event: React.MouseEvent<HTMLButtonElement>) => {
+    setAnchorEl(event.currentTarget);
+  };
+
+  // Function to close the Enable Menu bar
+  const closeEnableMenu = () => {
+    setAnchorEl(null);
+  };
+
+  // Function to Enable/Disable the Voting
+  const handleEnableVoting = (event: React.ChangeEvent<HTMLInputElement>) => {
+    enableVotingToParticipant(event.target.checked);
+    setEnableVoting(event.target.checked);
+  };
+
+  // Function to Enable/Disable the Participants Can Add Actions Functionality
+  const handleEnableActionToParticipant = (
+    event: React.ChangeEvent<HTMLInputElement>
+  ) => {
+    enableAddActionToParticipant(event.target.checked);
+    setEnableActionToParticipant(event.target.checked);
   };
 
   return (
@@ -174,7 +208,7 @@ export default function ActionHeader({
               </Box>
             )}
             {/* Sort Box */}
-            {/* <Box
+            <Box
               style={{
                 maxHeight: '48px',
                 display: 'flex',
@@ -281,18 +315,115 @@ export default function ActionHeader({
                   </MenuItem>
                 </Select>
               </FormControl>
-            </Box> */}
+            </Box>
             {/* Ellipsis vertical */}
-            {/* <Box className="searchBoxContainer">
-              <Icons.DotsVertical
-                size={24}
-                color="#676767"
-                style={{
-                  cursor: 'pointer',
+            {global.user.userType === 2 && (
+              <Box
+                sx={{
+                  width: '24px',
+                  height: '48px',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
                 }}
-                onClick={handleOpenEnableDialog}
-              />
-            </Box> */}
+              >
+                <Button
+                  id="basic-button"
+                  aria-controls={open ? 'basic-menu' : undefined}
+                  aria-haspopup="true"
+                  aria-expanded={open ? 'true' : undefined}
+                  onClick={openEnableMenu}
+                  sx={{
+                    width: '40px',
+                    height: '32px',
+                    minWidth: '40px',
+                    border: 'none',
+                    borderRadius: '0px',
+                    ':hover': {
+                      background: '#CCCCCC',
+                      cursor: 'unset',
+                      borderRadius: '0px',
+                    },
+                  }}
+                >
+                  <Icons.DotsVertical
+                    size={24}
+                    color="#676767"
+                    style={{
+                      cursor: 'pointer',
+                    }}
+                  />
+                </Button>
+                <Menu
+                  id="basic-menu"
+                  anchorEl={anchorEl}
+                  open={open}
+                  onClose={closeEnableMenu}
+                  MenuListProps={{
+                    'aria-labelledby': 'basic-button',
+                  }}
+                  PaperProps={{
+                    elevation: 0,
+                    sx: {
+                      border: '1px solid #cccccc',
+                      boxShadow: '0px 1px 10px rgba(0, 0, 0, 0.15)',
+                      borderRadius: '10px',
+                      background: '#ffffff',
+                      overflow: 'visible',
+                      '&:before': {
+                        content: '""',
+                        display: 'block',
+                        position: 'absolute',
+                        top: 0,
+                        right: 14,
+                        width: 10,
+                        height: 10,
+                        bgcolor: 'background.paper',
+                        transform: 'translateY(-50%) rotate(45deg)',
+                        zIndex: 0,
+                      },
+                    },
+                  }}
+                  transformOrigin={{ horizontal: 'right', vertical: 'top' }}
+                  anchorOrigin={{ horizontal: 'right', vertical: 'bottom' }}
+                >
+                  <MenuItem>
+                    <ListItemIcon>
+                      <Icons.StarOutline
+                        size={24}
+                        color="#676767"
+                        style={{
+                          cursor: 'unset',
+                        }}
+                      />
+                    </ListItemIcon>
+                    <ListItemText>Enable Voting</ListItemText>
+                    <Switch
+                      checked={enableVoting}
+                      onChange={handleEnableVoting}
+                      inputProps={{ 'aria-label': 'controlled' }}
+                    />
+                  </MenuItem>
+                  <MenuItem>
+                    <ListItemIcon>
+                      <Icons.StarOutline
+                        size={24}
+                        color="#676767"
+                        style={{
+                          cursor: 'unset',
+                        }}
+                      />
+                    </ListItemIcon>
+                    <ListItemText>Participants Can Add Actions</ListItemText>
+                    <Switch
+                      checked={enableActionToParticipant}
+                      onChange={handleEnableActionToParticipant}
+                      inputProps={{ 'aria-label': 'controlled' }}
+                    />
+                  </MenuItem>
+                </Menu>
+              </Box>
+            )}
             {/* Expand Icon */}
             {!isXsUp && (
               <Box>

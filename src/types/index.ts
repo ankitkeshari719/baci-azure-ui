@@ -97,6 +97,8 @@ export interface ActionInterface {
 export interface Actions {
   order: number;
   actions: ActionInterface[];
+  isVotingEnableToParticipant?: boolean;
+  isAddActionEnableToParticipant?: boolean;
 }
 
 export interface CardGroup {
@@ -124,7 +126,7 @@ export interface Column {
   lastUpdatedBy?: string;
   publish: boolean;
   showSuggestion: boolean;
-  showKeywords?:boolean;
+  showKeywords?: boolean;
 }
 
 export interface PulseCheckEntry {
@@ -146,7 +148,12 @@ export class BoardState {
   retroId: string = '';
   loading: boolean = true;
   columns: Column[] = [];
-  actionsData: Actions = { order: 0, actions: [] };
+  actionsData: Actions = {
+    order: 0,
+    actions: [],
+    isVotingEnableToParticipant: false,
+    isAddActionEnableToParticipant: false,
+  };
   creatorId: string = '';
   users: {
     userId: string;

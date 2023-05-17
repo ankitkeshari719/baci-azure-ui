@@ -56,6 +56,8 @@ export enum BoardActionType {
   ADD_REACT_TO_ACTION = 'addReactToAction',
   UPDATE_KEYWORD_FLAG = 'updateKeywordFlag',
   REMOVE_REACT_FROM_ACTION = 'removeReactFromAction',
+  ENABLE_VOTING_TO_PARTICIPANT = 'EnableVotingToParticipant',
+  ENABLE_ADD_ACTIONS_TO_PARTICIPANT = 'EnableAddActionToParticipant',
 }
 
 export const BOARD_STATE_MACHINE_VERSION = 1;
@@ -702,6 +704,10 @@ export const validateAction = (
         parameters.react,
         userId
       );
+    case BoardActionType.ENABLE_VOTING_TO_PARTICIPANT:
+      return true;
+    case BoardActionType.ENABLE_ADD_ACTIONS_TO_PARTICIPANT:
+      return true;
     // case BoardActionType.SET_LOADING:
     //   return true;
     default:
@@ -1445,7 +1451,13 @@ export const processAction = (
     }
   };
 
-  let noMatch = false;
+  const enableVotingToParticipant = (value: boolean) => {
+    actionsData.isVotingEnableToParticipant = value;
+  };
+
+  const enableAddActionToParticipant = (value: boolean) => {
+    actionsData.isAddActionEnableToParticipant = value;
+  };
 
   const updateKeywordFlag = (columnId: any, flag: boolean) => {
     const column = findColumn(columnId);
@@ -1453,6 +1465,8 @@ export const processAction = (
       column.showKeywords = flag;
     }
   };
+
+  let noMatch = false;
 
   switch (actionName) {
     case BoardActionType.UPDATE_RETRO_DETAILS:
@@ -1631,12 +1645,19 @@ export const processAction = (
     case BoardActionType.REMOVE_REACT_FROM_ACTION:
       removeReactFromAction(parameters.actionId, parameters.react, userId);
       break;
+    case BoardActionType.ENABLE_VOTING_TO_PARTICIPANT:
+      enableVotingToParticipant(parameters.value);
+      break;
+    case BoardActionType.ENABLE_ADD_ACTIONS_TO_PARTICIPANT:
+      enableAddActionToParticipant(parameters.value);
+      break;
     case BoardActionType.ADD_KEYWORDS:
       addKeywordsToCard(parameters.suggestedkeywordCards, userId);
       break;
     case BoardActionType.UPDATE_KEYWORD_FLAG:
       updateKeywordFlag(parameters.columnId, parameters.flag);
       break;
+
     default:
       noMatch = true;
       break;
