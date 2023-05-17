@@ -146,7 +146,6 @@ export default function ActionHeader({
                     padding: 0,
                   },
                   div: { padding: 0, position: 'initial', height: '100%' },
-                  position: 'initial',
                   textarea: {
                     fontFamily: 'Poppins',
                     fontStyle: 'normal',
