@@ -102,10 +102,15 @@ export default function ActionHeader({
           <Box
             className="d-flex justify-content-start align-items-center p-0 m-0"
             style={{
+              width: '50%',
               flexDirection: 'row',
-              maxWidth: isXsUp ? '176px' : '220px',
               minWidth: isXsUp ? '100px' : '180px',
               maxHeight: '48px',
+              maxWidth: isXsUp
+                ? '176px'
+                : global.expandColumn === -1
+                ? '220px'
+                : '50%',
             }}
           >
             {isSearchEnable ? (
@@ -216,7 +221,20 @@ export default function ActionHeader({
                 flexDirection: 'row',
               }}
             >
-              <Typography className="sortByText">Sort By: </Typography>
+              <Typography
+                className="sortByText"
+                style={{
+                  fontFamily: 'Poppins',
+                  fontStyle: 'normal',
+                  color: '#343434',
+                  fontWeight: 400,
+                  fontSize: '16px',
+                  lineHeight: '22px',
+                  letterSpacing: '0.2px',
+                }}
+              >
+                Sort By:{' '}
+              </Typography>
               <FormControl
                 sx={{
                   m: 1,
