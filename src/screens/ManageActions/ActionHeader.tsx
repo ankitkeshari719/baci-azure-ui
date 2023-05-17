@@ -174,7 +174,7 @@ export default function ActionHeader({
               </Box>
             )}
             {/* Sort Box */}
-            <Box
+            {/* <Box
               style={{
                 maxHeight: '48px',
                 display: 'flex',
@@ -281,7 +281,7 @@ export default function ActionHeader({
                   </MenuItem>
                 </Select>
               </FormControl>
-            </Box>
+            </Box> */}
             {/* Ellipsis vertical */}
             {/* <Box className="searchBoxContainer">
               <Icons.DotsVertical
