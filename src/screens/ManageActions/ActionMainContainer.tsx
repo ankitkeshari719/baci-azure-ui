@@ -349,35 +349,55 @@ export default function ActionMainContainer() {
       {allActions.length > 0 ? (
         <>
           {global.user.userType == 2 ? (
-            <ActionsListFacilitator
-              allActions={allActionsTemp}
-              handleToggleAction={handleToggleAction}
-              addReactToAction={addReactToAction}
-              isFeedbackSubmitted={isFeedbackSubmitted}
-              removeReactFromAction={removeReactFromAction}
-              isAddActionEnableToParticipant={
-                actionsData.isAddActionEnableToParticipant
-              }
-              isVotingEnableToParticipant={
-                actionsData.isVotingEnableToParticipant
-              }
-            />
+            <>
+              {searchQuery.length > 0 && allActionsTemp.length === 0 ? (
+                <ZeroActions
+                  height="var(--app-height)"
+                  zeroActionText_One=""
+                  zeroActionText_Two="No Action found..."
+                />
+              ) : (
+                <ActionsListFacilitator
+                  allActions={allActionsTemp}
+                  handleToggleAction={handleToggleAction}
+                  addReactToAction={addReactToAction}
+                  isFeedbackSubmitted={isFeedbackSubmitted}
+                  removeReactFromAction={removeReactFromAction}
+                  isAddActionEnableToParticipant={
+                    actionsData.isAddActionEnableToParticipant
+                  }
+                  isVotingEnableToParticipant={
+                    actionsData.isVotingEnableToParticipant
+                  }
+                />
+              )}
+            </>
           ) : (
-            <ActionsListParticipant
-              currentUserActions={currentUserActions}
-              othersUserActions={othersUserActions}
-              handleToggleAction={handleToggleAction}
-              addReactToAction={addReactToAction}
-              ended={ended}
-              isFeedbackSubmitted={isFeedbackSubmitted}
-              removeReactFromAction={removeReactFromAction}
-              isAddActionEnableToParticipant={
-                actionsData.isAddActionEnableToParticipant
-              }
-              isVotingEnableToParticipant={
-                actionsData.isVotingEnableToParticipant
-              }
-            />
+            <>
+              {searchQuery.length > 0 && allActionsTemp.length === 0 ? (
+                <ZeroActions
+                  height="var(--app-height)"
+                  zeroActionText_One=""
+                  zeroActionText_Two="No Action found..."
+                />
+              ) : (
+                <ActionsListParticipant
+                  currentUserActions={currentUserActions}
+                  othersUserActions={othersUserActions}
+                  handleToggleAction={handleToggleAction}
+                  addReactToAction={addReactToAction}
+                  ended={ended}
+                  isFeedbackSubmitted={isFeedbackSubmitted}
+                  removeReactFromAction={removeReactFromAction}
+                  isAddActionEnableToParticipant={
+                    actionsData.isAddActionEnableToParticipant
+                  }
+                  isVotingEnableToParticipant={
+                    actionsData.isVotingEnableToParticipant
+                  }
+                />
+              )}
+            </>
           )}
         </>
       ) : (
