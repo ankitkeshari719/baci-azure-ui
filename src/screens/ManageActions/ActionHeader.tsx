@@ -99,118 +99,129 @@ export default function ActionHeader({
         }}
       >
         <Box className="actionHeader">
-          <Box
-            className="d-flex justify-content-start align-items-center p-0 m-0"
-            style={{
-              width: '50%',
-              flexDirection: 'row',
-              minWidth: isXsUp ? '100px' : '180px',
-              maxHeight: '48px',
-              maxWidth: isXsUp
-                ? '176px'
-                : global.expandColumn === -1
-                ? '220px'
-                : '50%',
-            }}
-          >
-            {isSearchEnable ? (
-              <TextField
-                fullWidth
-                multiline
-                autoFocus
-                placeholder="Search..."
-                value={searchQuery}
-                onChange={e => handleSearchQueryOnChange(e.currentTarget.value)}
-                inputProps={{
-                  maxLength: MAX_CARD_TEXT_LENGTH,
-                  style: {
-                    padding: 0,
-                  },
-                  sx: {
-                    '&::placeholder': {
+          <Box style={{ display: 'flex', flexDirection: 'row' }}>
+            <Box
+              className="d-flex justify-content-start align-items-center p-0 m-0"
+              style={{
+                width: '100%',
+                maxHeight: '48px',
+                minWidth: isXsUp ? '100px' : '180px',
+                maxWidth: isXsUp
+                  ? '176px'
+                  : global.expandColumn === -1
+                  ? '220px'
+                  : '50%',
+              }}
+            >
+              {isSearchEnable ? (
+                <TextField
+                  fullWidth
+                  multiline
+                  autoFocus
+                  placeholder="Search..."
+                  value={searchQuery}
+                  onChange={e =>
+                    handleSearchQueryOnChange(e.currentTarget.value)
+                  }
+                  inputProps={{
+                    maxLength: MAX_CARD_TEXT_LENGTH,
+                    style: {
+                      padding: 0,
+                    },
+                    sx: {
+                      '&::placeholder': {
+                        fontFamily: 'Poppins',
+                        fontStyle: 'italic',
+                        color: '#CCCCCC',
+                        fontWeight: 400,
+                        fontSize: '16px',
+                        lineHeight: '20px',
+                        letterSpacing: '0.4px',
+                      },
+                    },
+                  }}
+                  sx={{
+                    height: '40px',
+                    display: 'flex',
+                    flexDirection: 'row',
+                    alignItems: 'center',
+                    padding: '12px',
+                    background: '#FFFFFF',
+                    border: '1px solid #159ADD',
+                    borderRadius: '8px',
+                    input: {
+                      padding: 0,
+                    },
+                    div: { padding: 0, position: 'initial', height: '100%' },
+                    textarea: {
                       fontFamily: 'Poppins',
-                      fontStyle: 'italic',
-                      color: '#CCCCCC',
+                      fontStyle: 'normal',
+                      color: '#343434',
                       fontWeight: 400,
                       fontSize: '16px',
-                      lineHeight: '20px',
-                      letterSpacing: '0.4px',
+                      lineHeight: '22px',
+                      letterSpacing: '0.2px',
                     },
-                  },
-                }}
-                sx={{
-                  height: '40px',
-                  display: 'flex',
-                  flexDirection: 'row',
-                  alignItems: 'center',
-                  padding: '12px',
-                  background: '#FFFFFF',
-                  border: '1px solid #159ADD',
-                  borderRadius: '8px',
-                  input: {
-                    padding: 0,
-                  },
-                  div: { padding: 0, position: 'initial', height: '100%' },
-                  textarea: {
-                    fontFamily: 'Poppins',
-                    fontStyle: 'normal',
-                    color: '#343434',
-                    fontWeight: 400,
-                    fontSize: '16px',
-                    lineHeight: '22px',
-                    letterSpacing: '0.2px',
-                  },
-                }}
-                InputProps={{
-                  startAdornment: (
-                    <InputAdornment position="start" style={{ margin: '0px' }}>
-                      <IconButton
-                        sx={{
-                          ':hover': { background: '#ffffff', cursor: 'unset' },
-                        }}
+                  }}
+                  InputProps={{
+                    startAdornment: (
+                      <InputAdornment
+                        position="start"
+                        style={{ margin: '0px' }}
                       >
-                        <Icons.Search size={20} color="#CCCCCC" />
-                      </IconButton>
-                    </InputAdornment>
-                  ),
-                  endAdornment: (
-                    <InputAdornment position="end">
-                      <IconButton onClick={cancelSearchField}>
-                        <Icons.X
-                          size={20}
-                          color="#676767"
-                          style={{
-                            cursor: 'pointer',
+                        <IconButton
+                          sx={{
+                            ':hover': {
+                              background: '#ffffff',
+                              cursor: 'unset',
+                            },
                           }}
-                        />
-                      </IconButton>
-                    </InputAdornment>
-                  ),
-                }}
-              />
-            ) : (
-              <Typography component="span" className="totalActions">
-                {allActions.length} Actions
-              </Typography>
-            )}
+                        >
+                          <Icons.Search size={20} color="#CCCCCC" />
+                        </IconButton>
+                      </InputAdornment>
+                    ),
+                    endAdornment: (
+                      <InputAdornment position="end">
+                        <IconButton onClick={cancelSearchField}>
+                          <Icons.X
+                            size={20}
+                            color="#676767"
+                            style={{
+                              cursor: 'pointer',
+                            }}
+                          />
+                        </IconButton>
+                      </InputAdornment>
+                    ),
+                  }}
+                />
+              ) : (
+                <Typography component="span" className="totalActions">
+                  {allActions.length} Actions
+                </Typography>
+              )}
+            </Box>
+            {/* Search Icon */}
+            <Box className="d-flex justify-content-end align-items-center p-0 m-0">
+              {!isSearchEnable && (
+                <Box className="searchBoxContainer">
+                  <Icons.Search
+                    size={24}
+                    color="#676767"
+                    style={{
+                      cursor: 'pointer',
+                    }}
+                    onClick={showSearchField}
+                  />
+                </Box>
+              )}
+            </Box>
           </Box>
           <Box
             className="d-flex justify-content-center align-items-center p-0 m-0"
             style={{ flexDirection: 'row' }}
           >
-            {/* Search Icon */}
-            {!isSearchEnable && (
-              <Box className="searchBoxContainer">
-                <Icons.Search
-                  size={24}
-                  color="#676767"
-                  style={{
-                    cursor: 'pointer',
-                  }}
-                  onClick={showSearchField}
-                />
-              </Box>
-            )}
             {/* Sort Box */}
             <Box
               style={{
