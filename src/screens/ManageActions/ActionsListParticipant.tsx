@@ -106,8 +106,8 @@ export default function ActionsListParticipant({
       {currentUserActions.length == 0 && (
         <ZeroActions
           height="85%"
-          zeroActionText_One="zeroActionText_One"
-          zeroActionText_Two="zeroActionText_Two"
+          zeroActionText_One="Actions Speak!"
+          zeroActionText_Two="Add them here..."
         />
       )}
     </Box>
