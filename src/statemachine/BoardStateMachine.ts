@@ -55,7 +55,10 @@ export enum BoardActionType {
   UPDATE_ACTION = 'updateAction',
   ASSIGN_ACTION = 'assignAction',
   ADD_REACT_TO_ACTION = 'addReactToAction',
-  UPDATE_KEYWORD_FLAG = "updateKeywordFlag"
+  UPDATE_KEYWORD_FLAG = 'updateKeywordFlag',
+  REMOVE_REACT_FROM_ACTION = 'removeReactFromAction',
+  ENABLE_VOTING_TO_PARTICIPANT = 'EnableVotingToParticipant',
+  ENABLE_ADD_ACTIONS_TO_PARTICIPANT = 'EnableAddActionToParticipant',
 }
 
 export const BOARD_STATE_MACHINE_VERSION = 1;
@@ -545,6 +548,22 @@ export const validateAction = (
     return false;
   };
 
+  const isRemoveReactFromActionValid = (
+    actionId: string,
+    react: string,
+    userId: string
+  ): boolean => {
+    const { action } = findAction(actionId);
+    if (
+      action &&
+      action.reacts &&
+      action.reacts.find(r => r.emoji === react && r.by === userId)
+    ) {
+      return true;
+    }
+    return false;
+  };
+
   switch (actionName) {
     case BoardActionType.UPDATE_RETRO_DETAILS:
       return isUpdateRetroDetailsValid(
@@ -691,6 +710,16 @@ export const validateAction = (
         parameters.react,
         userId
       );
+    case BoardActionType.REMOVE_REACT_FROM_ACTION:
+      return isRemoveReactFromActionValid(
+        parameters.actionId,
+        parameters.react,
+        userId
+      );
+    case BoardActionType.ENABLE_VOTING_TO_PARTICIPANT:
+      return true;
+    case BoardActionType.ENABLE_ADD_ACTIONS_TO_PARTICIPANT:
+      return true;
     // case BoardActionType.SET_LOADING:
     //   return true;
     default:
@@ -1082,9 +1111,9 @@ export const processAction = (
       if (card) {
         card.keywords = element.keywords;
 
-        card.lastUpdatedBy = userId;
-      }
-    });
+          card.lastUpdatedBy = userId;
+        }
+      });
   };
   const addReactToGroup = (react: string, groupId: string, userId: string) => {
     const { group } = findGroup(groupId);
@@ -1416,26 +1445,56 @@ export const processAction = (
     }
   };
 
-const assignAction=(actionId:string,assigneeId:string)=>{
-const {action}=findAction(actionId)
-const assignTo=findUser(assigneeId)
+  const assignAction = (actionId: string, assigneeId: string) => {
+    const { action } = findAction(actionId)
+    const assignTo = findUser(assigneeId)
 
-if(action&&assignTo){
-  action.assigneeId=assignTo.userId;
-  action.assigneeAvatar=assignTo.avatar
-}
+    if (action && assignTo) {
+      action.assigneeId = assignTo.userId;
+      action.assigneeAvatar = assignTo.avatar
+    }
 
-}
+  }
 
 
   let noMatch = false;
+
+  const removeReactFromAction = (
+    actionId: string,
+    react: string,
+    userId: string
+  ) => {
+    const { action } = findAction(actionId);
+    if (
+      action &&
+      action.reacts &&
+      action.reacts.find(r => r.emoji === react && r.by === userId)
+    ) {
+      const index = action.reacts.findIndex(
+        r => r.emoji === react && r.by === userId
+      );
+      action.reacts.splice(index, 1);
+      action.lastUpdatedBy = userId;
+    }
+  };
+
+  const enableVotingToParticipant = (value: boolean) => {
+    actionsData.isVotingEnableToParticipant = value;
+  };
+
+  const enableAddActionToParticipant = (value: boolean) => {
+    actionsData.isAddActionEnableToParticipant = value;
+  };
+
 
   const updateKeywordFlag = (columnId: any, flag: boolean) => {
     const column = findColumn(columnId);
     if (column) {
       column.showKeywords = flag;
     }
-  }
+  };
+
+  // let noMatch = false;
 
   switch (actionName) {
     case BoardActionType.UPDATE_RETRO_DETAILS:
@@ -1614,12 +1673,22 @@ if(action&&assignTo){
     case BoardActionType.ADD_REACT_TO_ACTION:
       addReactToAction(parameters.actionId, parameters.react, userId);
       break;
+    case BoardActionType.REMOVE_REACT_FROM_ACTION:
+      removeReactFromAction(parameters.actionId, parameters.react, userId);
+      break;
+    case BoardActionType.ENABLE_VOTING_TO_PARTICIPANT:
+      enableVotingToParticipant(parameters.value);
+      break;
+    case BoardActionType.ENABLE_ADD_ACTIONS_TO_PARTICIPANT:
+      enableAddActionToParticipant(parameters.value);
+      break;
     case BoardActionType.ADD_KEYWORDS:
       addKeywordsToCard(parameters.suggestedkeywordCards, userId);
       break;
     case BoardActionType.UPDATE_KEYWORD_FLAG:
-      updateKeywordFlag(parameters.columnId, parameters.flag)
+      updateKeywordFlag(parameters.columnId, parameters.flag);
       break;
+
     default:
       noMatch = true;
       break;

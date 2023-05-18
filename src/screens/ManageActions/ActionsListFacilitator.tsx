@@ -8,15 +8,21 @@ import { Box, List } from '@mui/material';
 type Props = {
   allActions: ActionInterface[];
   handleToggleAction: (actionId: string) => void;
-  addReact: (actionId: string, actionBy: string) => void;
+  addReactToAction: (actionId: string, actionBy: string) => void;
+  removeReactFromAction: (actionId: string) => void;
+  isAddActionEnableToParticipant: boolean | undefined;
+  isVotingEnableToParticipant: boolean | undefined;
   isFeedbackSubmitted: boolean;
 };
 
 export default function ActionsListFacilitator({
   allActions,
   handleToggleAction,
-  addReact,
+  addReactToAction,
   isFeedbackSubmitted,
+  removeReactFromAction,
+  isAddActionEnableToParticipant,
+  isVotingEnableToParticipant
 }: Props) {
   return (
     <Box
@@ -34,8 +40,11 @@ export default function ActionsListFacilitator({
               action={action}
               key={action.id}
               handleToggleAction={handleToggleAction}
-              addReact={addReact}
+              addReactToAction={addReactToAction}
               isFeedbackSubmitted={isFeedbackSubmitted}
+              removeReactFromAction={removeReactFromAction}
+              isAddActionEnableToParticipant={isAddActionEnableToParticipant}
+              isVotingEnableToParticipant={isVotingEnableToParticipant}
             />
           );
         })}

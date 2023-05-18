@@ -6,9 +6,15 @@ import { Typography } from '@material-ui/core';
 
 type Props = {
   height: string;
+  zeroActionText_One: string;
+  zeroActionText_Two: string;
 };
 
-export default function ZeroActions({ height }: Props) {
+export default function ZeroActions({
+  height,
+  zeroActionText_One,
+  zeroActionText_Two,
+}: Props) {
   return (
     <Box
       sx={{
@@ -20,10 +26,14 @@ export default function ZeroActions({ height }: Props) {
         flexDirection: 'column',
       }}
     >
-      <Typography component="div" className="zeroActionTextOne">
-        Actions Speak!
+      {zeroActionText_One.length > 0 && (
+        <Typography component="div" className="zeroActionTextOne">
+          {zeroActionText_One}
+        </Typography>
+      )}
+      <Typography className="zeroActionTextTwo">
+        {zeroActionText_Two}
       </Typography>
-      <Typography className="zeroActionTextTwo">Add them here...</Typography>
     </Box>
   );
 }

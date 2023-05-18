@@ -141,7 +141,7 @@ export default function ActionMainContainer() {
     );
   };
 
-  const addReact = async (actionId: string, actionBy: string) => {
+  const addReactToAction = async (actionId: string, actionBy: string) => {
     dispatch({
       type: ActionType.SET_LOADING,
       payload: { loadingFlag: true },
@@ -150,6 +150,79 @@ export default function ActionMainContainer() {
       actionId: actionId,
       react: '👍',
     }).then(
+      res => {
+        dispatch({
+          type: ActionType.SET_LOADING,
+          payload: { loadingFlag: false },
+        });
+      },
+      err => {
+        dispatch({
+          type: ActionType.SET_LOADING,
+          payload: { loadingFlag: false },
+        });
+      }
+    );
+  };
+
+  const removeReactFromAction = async (actionId: string) => {
+    dispatch({
+      type: ActionType.SET_LOADING,
+      payload: { loadingFlag: true },
+    });
+    await saveAndProcessAction(BoardActionType.REMOVE_REACT_FROM_ACTION, {
+      actionId,
+      react: '👍',
+    }).then(
+      res => {
+        dispatch({
+          type: ActionType.SET_LOADING,
+          payload: { loadingFlag: false },
+        });
+      },
+      err => {
+        dispatch({
+          type: ActionType.SET_LOADING,
+          payload: { loadingFlag: false },
+        });
+      }
+    );
+  };
+
+  const enableVotingToParticipant = async (value: boolean) => {
+    dispatch({
+      type: ActionType.SET_LOADING,
+      payload: { loadingFlag: true },
+    });
+    await saveAndProcessAction(BoardActionType.ENABLE_VOTING_TO_PARTICIPANT, {
+      value,
+    }).then(
+      res => {
+        dispatch({
+          type: ActionType.SET_LOADING,
+          payload: { loadingFlag: false },
+        });
+      },
+      err => {
+        dispatch({
+          type: ActionType.SET_LOADING,
+          payload: { loadingFlag: false },
+        });
+      }
+    );
+  };
+
+  const enableAddActionToParticipant = async (value: boolean) => {
+    dispatch({
+      type: ActionType.SET_LOADING,
+      payload: { loadingFlag: true },
+    });
+    await saveAndProcessAction(
+      BoardActionType.ENABLE_ADD_ACTIONS_TO_PARTICIPANT,
+      {
+        value,
+      }
+    ).then(
       res => {
         dispatch({
           type: ActionType.SET_LOADING,
@@ -270,20 +343,25 @@ export default function ActionMainContainer() {
         sortedBy={sortedBy}
         handleSearchQueryOnChange={handleSearchQueryOnChange}
         handleSortedByChange={handleSortedByChange}
+        enableVotingToParticipant={enableVotingToParticipant}
+        enableAddActionToParticipant={enableAddActionToParticipant}
       />
       {!ended && (
         <>
+
           {selectedActionCount == 0 ? <>
             {global.user.userType == 2 && (
-              <AddAction
-                addAction={addAction}
-                addedActionValue={addedActionValue}
-                setAddActionValue={setAddActionValue}
-                isTextFieldFocused={isTextFieldFocused}
-                setIsTextFieldFocused={setIsTextFieldFocused}
-              />
-            )}
-            {global.user.userType == 1 && !isFeedbackSubmitted && (
+
+            <AddAction
+              addAction={addAction}
+              addedActionValue={addedActionValue}
+              setAddActionValue={setAddActionValue}
+              isTextFieldFocused={isTextFieldFocused}
+              setIsTextFieldFocused={setIsTextFieldFocused}
+            />
+          )}
+    
+            {global.user.userType == 1 && !isFeedbackSubmitted && actionsData.isAddActionEnableToParticipant &&  (
               <AddAction
                 addAction={addAction}
                 addedActionValue={addedActionValue}
@@ -300,25 +378,84 @@ export default function ActionMainContainer() {
       {allActions.length > 0 ? (
         <>
           {global.user.userType == 2 ? (
-            <ActionsListFacilitator
-              allActions={allActionsTemp}
-              handleToggleAction={handleToggleAction}
-              addReact={addReact}
-              isFeedbackSubmitted={isFeedbackSubmitted}
-            />
+            <>
+              {searchQuery.length > 0 && allActionsTemp.length === 0 ? (
+                <ZeroActions
+                  height="var(--app-height)"
+                  zeroActionText_One=""
+                  zeroActionText_Two="No Action found..."
+                />
+              ) : (
+                <ActionsListFacilitator
+                  allActions={allActionsTemp}
+                  handleToggleAction={handleToggleAction}
+                  addReactToAction={addReactToAction}
+                  isFeedbackSubmitted={isFeedbackSubmitted}
+                  removeReactFromAction={removeReactFromAction}
+                  isAddActionEnableToParticipant={
+                    actionsData.isAddActionEnableToParticipant
+                  }
+                  isVotingEnableToParticipant={
+                    actionsData.isVotingEnableToParticipant
+                  }
+                />
+              )}
+            </>
           ) : (
-            <ActionsListParticipant
-              currentUserActions={currentUserActions}
-              othersUserActions={othersUserActions}
-              handleToggleAction={handleToggleAction}
-              addReact={addReact}
-              ended={ended}
-              isFeedbackSubmitted={isFeedbackSubmitted}
-            />
+            <>
+              {searchQuery.length > 0 && allActionsTemp.length === 0 ? (
+                <ZeroActions
+                  height="var(--app-height)"
+                  zeroActionText_One=""
+                  zeroActionText_Two="No Action found..."
+                />
+              ) : (
+                <ActionsListParticipant
+                  currentUserActions={currentUserActions}
+                  othersUserActions={othersUserActions}
+                  handleToggleAction={handleToggleAction}
+                  addReactToAction={addReactToAction}
+                  ended={ended}
+                  isFeedbackSubmitted={isFeedbackSubmitted}
+                  removeReactFromAction={removeReactFromAction}
+                  isAddActionEnableToParticipant={
+                    actionsData.isAddActionEnableToParticipant
+                  }
+                  isVotingEnableToParticipant={
+                    actionsData.isVotingEnableToParticipant
+                  }
+                />
+              )}
+            </>
           )}
         </>
       ) : (
-        <ZeroActions height="var(--app-height)" />
+        <>
+          {global.user.userType === 1 && (
+            <>
+              {!actionsData.isAddActionEnableToParticipant ? (
+                <ZeroActions
+                  height="var(--app-height)"
+                  zeroActionText_One=""
+                  zeroActionText_Two="Let Facilitator add them here"
+                />
+              ) : (
+                <ZeroActions
+                  height="var(--app-height)"
+                  zeroActionText_One="Actions Speak!"
+                  zeroActionText_Two="Add them here..."
+                />
+              )}
+            </>
+          )}
+          {global.user.userType === 2 && (
+            <ZeroActions
+              height="var(--app-height)"
+              zeroActionText_One="Actions Speak!"
+              zeroActionText_Two="Add them here..."
+            />
+          )}
+        </>
       )}
     </Box>
   );
