@@ -53,9 +53,12 @@ export enum BoardActionType {
   DELETE_UNCONFIRMED_GROUPS = 'deleteUnconfirmedGroups',
   Add_NEW_ACTION = 'addAction',
   UPDATE_ACTION = 'updateAction',
+  ASSIGN_ACTION = 'assignAction',
   ADD_REACT_TO_ACTION = 'addReactToAction',
   UPDATE_KEYWORD_FLAG = 'updateKeywordFlag',
   REMOVE_REACT_FROM_ACTION = 'removeReactFromAction',
+  ENABLE_VOTING_TO_PARTICIPANT = 'EnableVotingToParticipant',
+  ENABLE_ADD_ACTIONS_TO_PARTICIPANT = 'EnableAddActionToParticipant',
 }
 
 export const BOARD_STATE_MACHINE_VERSION = 1;
@@ -521,6 +524,14 @@ export const validateAction = (
     return true;
   };
 
+  const isAssignActionValid = (id: string, value: string): boolean => {
+    const action = findAction(id)
+    if (action)
+      return true;
+    else return false;
+
+  }
+
   const isAddReactToActionValid = (
     actionId: string,
     react: string,
@@ -690,6 +701,9 @@ export const validateAction = (
       );
     case BoardActionType.UPDATE_ACTION:
       return isUpdateExistingActionValid(parameters.id, parameters.value);
+
+    case BoardActionType.ASSIGN_ACTION:
+      return isAssignActionValid(parameters.id, userId);
     case BoardActionType.ADD_REACT_TO_ACTION:
       return isAddReactToActionValid(
         parameters.actionId,
@@ -702,6 +716,10 @@ export const validateAction = (
         parameters.react,
         userId
       );
+    case BoardActionType.ENABLE_VOTING_TO_PARTICIPANT:
+      return true;
+    case BoardActionType.ENABLE_ADD_ACTIONS_TO_PARTICIPANT:
+      return true;
     // case BoardActionType.SET_LOADING:
     //   return true;
     default:
@@ -914,9 +932,9 @@ export const processAction = (
             group.cards.splice(index as number, 1);
             cardsList.splice(
               toIndex -
-                (group.id === targetGroup.id && (index as number) < toIndex
-                  ? 1
-                  : 0),
+              (group.id === targetGroup.id && (index as number) < toIndex
+                ? 1
+                : 0),
               0,
               card
             );
@@ -972,9 +990,9 @@ export const processAction = (
         group.cards.splice(index as number, 1);
         cardsList.splice(
           toIndex -
-            (group.id === targetGroup.id && (index as number) < toIndex
-              ? 1
-              : 0),
+          (group.id === targetGroup.id && (index as number) < toIndex
+            ? 1
+            : 0),
           0,
           card
         );
@@ -1086,11 +1104,12 @@ export const processAction = (
   };
 
   const addKeywordsToCard = (suggestedkeywordCards: Card[], userId: string) => {
-    suggestedkeywordCards &&
-      suggestedkeywordCards.forEach(element => {
-        const { card } = findCard(element.id);
-        if (card) {
-          card.keywords = element.keywords;
+
+    suggestedkeywordCards && suggestedkeywordCards.forEach(element => {
+
+      const { card } = findCard(element.id);
+      if (card) {
+        card.keywords = element.keywords;
 
           card.lastUpdatedBy = userId;
         }
@@ -1426,6 +1445,20 @@ export const processAction = (
     }
   };
 
+  const assignAction = (actionId: string, assigneeId: string) => {
+    const { action } = findAction(actionId)
+    const assignTo = findUser(assigneeId)
+
+    if (action && assignTo) {
+      action.assigneeId = assignTo.userId;
+      action.assigneeAvatar = assignTo.avatar
+    }
+
+  }
+
+
+  let noMatch = false;
+
   const removeReactFromAction = (
     actionId: string,
     react: string,
@@ -1445,7 +1478,14 @@ export const processAction = (
     }
   };
 
-  let noMatch = false;
+  const enableVotingToParticipant = (value: boolean) => {
+    actionsData.isVotingEnableToParticipant = value;
+  };
+
+  const enableAddActionToParticipant = (value: boolean) => {
+    actionsData.isAddActionEnableToParticipant = value;
+  };
+
 
   const updateKeywordFlag = (columnId: any, flag: boolean) => {
     const column = findColumn(columnId);
@@ -1453,6 +1493,8 @@ export const processAction = (
       column.showKeywords = flag;
     }
   };
+
+  // let noMatch = false;
 
   switch (actionName) {
     case BoardActionType.UPDATE_RETRO_DETAILS:
@@ -1625,11 +1667,20 @@ export const processAction = (
     case BoardActionType.UPDATE_ACTION:
       updateAction(parameters.id, parameters.value);
       break;
+    case BoardActionType.ASSIGN_ACTION:
+      assignAction(parameters.id, parameters.assigneeId);
+      break;
     case BoardActionType.ADD_REACT_TO_ACTION:
       addReactToAction(parameters.actionId, parameters.react, userId);
       break;
     case BoardActionType.REMOVE_REACT_FROM_ACTION:
       removeReactFromAction(parameters.actionId, parameters.react, userId);
+      break;
+    case BoardActionType.ENABLE_VOTING_TO_PARTICIPANT:
+      enableVotingToParticipant(parameters.value);
+      break;
+    case BoardActionType.ENABLE_ADD_ACTIONS_TO_PARTICIPANT:
+      enableAddActionToParticipant(parameters.value);
       break;
     case BoardActionType.ADD_KEYWORDS:
       addKeywordsToCard(parameters.suggestedkeywordCards, userId);
@@ -1637,6 +1688,7 @@ export const processAction = (
     case BoardActionType.UPDATE_KEYWORD_FLAG:
       updateKeywordFlag(parameters.columnId, parameters.flag);
       break;
+
     default:
       noMatch = true;
       break;

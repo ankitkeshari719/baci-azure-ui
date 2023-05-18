@@ -15,6 +15,8 @@ type Props = {
   removeReactFromAction: (actionId: string) => void;
   ended: boolean;
   isFeedbackSubmitted: boolean;
+  isAddActionEnableToParticipant: boolean | undefined;
+  isVotingEnableToParticipant: boolean | undefined;
 };
 
 export default function ActionsListParticipant({
@@ -25,6 +27,8 @@ export default function ActionsListParticipant({
   ended,
   isFeedbackSubmitted,
   removeReactFromAction,
+  isAddActionEnableToParticipant,
+  isVotingEnableToParticipant,
 }: Props) {
   const [showOtherAction, setShowOtherAction] = React.useState<boolean>(false);
   return (
@@ -47,6 +51,8 @@ export default function ActionsListParticipant({
                 addReactToAction={addReactToAction}
                 isFeedbackSubmitted={isFeedbackSubmitted}
                 removeReactFromAction={removeReactFromAction}
+                isAddActionEnableToParticipant={isAddActionEnableToParticipant}
+                isVotingEnableToParticipant={isVotingEnableToParticipant}
               />
             );
           })}
@@ -90,12 +96,20 @@ export default function ActionsListParticipant({
                 addReactToAction={addReactToAction}
                 isFeedbackSubmitted={isFeedbackSubmitted}
                 removeReactFromAction={removeReactFromAction}
+                isAddActionEnableToParticipant={isAddActionEnableToParticipant}
+                isVotingEnableToParticipant={isVotingEnableToParticipant}
               />
             );
           })}
         </List>
       )}
-      {currentUserActions.length == 0 && <ZeroActions height="85%" />}
+      {currentUserActions.length == 0 && (
+        <ZeroActions
+          height="85%"
+          zeroActionText_One="Actions Speak!"
+          zeroActionText_Two="Add them here..."
+        />
+      )}
     </Box>
   );
 }

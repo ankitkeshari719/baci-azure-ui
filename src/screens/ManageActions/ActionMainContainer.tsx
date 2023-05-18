@@ -21,6 +21,7 @@ import ZeroActions from './ZeroActions';
 import theme from '../../theme/theme';
 import ActionsListParticipant from './ActionsListParticipant';
 import { NONE, VALUE_ASC, VALUE_DSC, VOTES_ASC, VOTES_DSC } from './const';
+import ActionSubToolbar from './ActionSubToolbar';
 
 export default function ActionMainContainer() {
   const {
@@ -32,6 +33,7 @@ export default function ActionMainContainer() {
   const [allActionsTemp, setAllActionsTemp] = React.useState<ActionInterface[]>(
     []
   );
+  const [selectedActionCount, setSelectedActionCount] = React.useState<number>(0);
   const [addedActionValue, setAddActionValue] = React.useState<string>('');
   const isXsUp = useMediaQuery(theme.breakpoints.only('xs'));
   const [isTextFieldFocused, setIsTextFieldFocused] =
@@ -56,7 +58,23 @@ export default function ActionMainContainer() {
     setAllActionsTemp([...tempActions]);
   }, [actionsData]);
 
+
   React.useEffect(() => {
+
+    var tempSelectedActionCount = 0;
+
+    allActionsTemp && allActionsTemp.map((action) => {
+      if (action.checked) {
+        tempSelectedActionCount = tempSelectedActionCount + 1;
+      }
+    })
+    setSelectedActionCount(tempSelectedActionCount);
+
+  }, [allActionsTemp])
+
+  React.useEffect(() => {
+
+
     const tempCurrentUserActions = allActions.filter(
       action => action.createdBy === global.user.id
     );
@@ -67,6 +85,9 @@ export default function ActionMainContainer() {
     setCurrentUserActions([...tempCurrentUserActions]);
     setOthersUserActions([...tempOthersUserActions]);
   }, [allActions]);
+
+
+
 
   React.useEffect(() => {
     users.map(user => {
@@ -145,10 +166,63 @@ export default function ActionMainContainer() {
   };
 
   const removeReactFromAction = async (actionId: string) => {
+    dispatch({
+      type: ActionType.SET_LOADING,
+      payload: { loadingFlag: true },
+    });
     await saveAndProcessAction(BoardActionType.REMOVE_REACT_FROM_ACTION, {
       actionId,
       react: '👍',
     }).then(
+      res => {
+        dispatch({
+          type: ActionType.SET_LOADING,
+          payload: { loadingFlag: false },
+        });
+      },
+      err => {
+        dispatch({
+          type: ActionType.SET_LOADING,
+          payload: { loadingFlag: false },
+        });
+      }
+    );
+  };
+
+  const enableVotingToParticipant = async (value: boolean) => {
+    dispatch({
+      type: ActionType.SET_LOADING,
+      payload: { loadingFlag: true },
+    });
+    await saveAndProcessAction(BoardActionType.ENABLE_VOTING_TO_PARTICIPANT, {
+      value,
+    }).then(
+      res => {
+        dispatch({
+          type: ActionType.SET_LOADING,
+          payload: { loadingFlag: false },
+        });
+      },
+      err => {
+        dispatch({
+          type: ActionType.SET_LOADING,
+          payload: { loadingFlag: false },
+        });
+      }
+    );
+  };
+
+  const enableAddActionToParticipant = async (value: boolean) => {
+    dispatch({
+      type: ActionType.SET_LOADING,
+      payload: { loadingFlag: true },
+    });
+    await saveAndProcessAction(
+      BoardActionType.ENABLE_ADD_ACTIONS_TO_PARTICIPANT,
+      {
+        value,
+      }
+    ).then(
       res => {
         dispatch({
           type: ActionType.SET_LOADING,
@@ -209,13 +283,17 @@ export default function ActionMainContainer() {
 
   // Check/Uncheck the action item
   const handleToggleAction = (actionId: string) => {
-    const newAction = actionsData.actions.map(action => {
+
+
+    const newAction = allActionsTemp.map(action => {
       if (action.id === actionId) {
+        // console.log(action.id,)
         return { ...action, checked: !action.checked };
       }
       return action;
     });
-    setAllActions([...newAction]);
+    console.log(newAction, "newAction")
+    setAllActionsTemp([...newAction]);
   };
 
   const stringASCENDING = () => {
@@ -253,8 +331,8 @@ export default function ActionMainContainer() {
         height: false
           ? 'auto'
           : isXsUp
-          ? 'calc(var(--app-height) - 115px)'
-          : 'calc(var(--app-height) - 160px)',
+            ? 'calc(var(--app-height) - 115px)'
+            : 'calc(var(--app-height) - 160px)',
       }}
     >
       <ActionHeader
@@ -265,10 +343,15 @@ export default function ActionMainContainer() {
         sortedBy={sortedBy}
         handleSearchQueryOnChange={handleSearchQueryOnChange}
         handleSortedByChange={handleSortedByChange}
+        enableVotingToParticipant={enableVotingToParticipant}
+        enableAddActionToParticipant={enableAddActionToParticipant}
       />
       {!ended && (
         <>
-          {global.user.userType == 2 && (
+
+          {selectedActionCount == 0 ? <>
+            {global.user.userType == 2 && (
+
             <AddAction
               addAction={addAction}
               addedActionValue={addedActionValue}
@@ -277,42 +360,102 @@ export default function ActionMainContainer() {
               setIsTextFieldFocused={setIsTextFieldFocused}
             />
           )}
-          {global.user.userType == 1 && !isFeedbackSubmitted && (
-            <AddAction
-              addAction={addAction}
-              addedActionValue={addedActionValue}
-              setAddActionValue={setAddActionValue}
-              isTextFieldFocused={isTextFieldFocused}
-              setIsTextFieldFocused={setIsTextFieldFocused}
-            />
-          )}
+    
+            {global.user.userType == 1 && !isFeedbackSubmitted && actionsData.isAddActionEnableToParticipant &&  (
+              <AddAction
+                addAction={addAction}
+                addedActionValue={addedActionValue}
+                setAddActionValue={setAddActionValue}
+                isTextFieldFocused={isTextFieldFocused}
+                setIsTextFieldFocused={setIsTextFieldFocused}
+              />
+            )}
+          </> :
+            <ActionSubToolbar selectedActionCount={selectedActionCount} global={global} />}
         </>
       )}
 
       {allActions.length > 0 ? (
         <>
           {global.user.userType == 2 ? (
-            <ActionsListFacilitator
-              allActions={allActionsTemp}
-              handleToggleAction={handleToggleAction}
-              addReactToAction={addReactToAction}
-              isFeedbackSubmitted={isFeedbackSubmitted}
-              removeReactFromAction={removeReactFromAction}
-            />
+            <>
+              {searchQuery.length > 0 && allActionsTemp.length === 0 ? (
+                <ZeroActions
+                  height="var(--app-height)"
+                  zeroActionText_One=""
+                  zeroActionText_Two="No Action found..."
+                />
+              ) : (
+                <ActionsListFacilitator
+                  allActions={allActionsTemp}
+                  handleToggleAction={handleToggleAction}
+                  addReactToAction={addReactToAction}
+                  isFeedbackSubmitted={isFeedbackSubmitted}
+                  removeReactFromAction={removeReactFromAction}
+                  isAddActionEnableToParticipant={
+                    actionsData.isAddActionEnableToParticipant
+                  }
+                  isVotingEnableToParticipant={
+                    actionsData.isVotingEnableToParticipant
+                  }
+                />
+              )}
+            </>
           ) : (
-            <ActionsListParticipant
-              currentUserActions={currentUserActions}
-              othersUserActions={othersUserActions}
-              handleToggleAction={handleToggleAction}
-              addReactToAction={addReactToAction}
-              ended={ended}
-              isFeedbackSubmitted={isFeedbackSubmitted}
-              removeReactFromAction={removeReactFromAction}
-            />
+            <>
+              {searchQuery.length > 0 && allActionsTemp.length === 0 ? (
+                <ZeroActions
+                  height="var(--app-height)"
+                  zeroActionText_One=""
+                  zeroActionText_Two="No Action found..."
+                />
+              ) : (
+                <ActionsListParticipant
+                  currentUserActions={currentUserActions}
+                  othersUserActions={othersUserActions}
+                  handleToggleAction={handleToggleAction}
+                  addReactToAction={addReactToAction}
+                  ended={ended}
+                  isFeedbackSubmitted={isFeedbackSubmitted}
+                  removeReactFromAction={removeReactFromAction}
+                  isAddActionEnableToParticipant={
+                    actionsData.isAddActionEnableToParticipant
+                  }
+                  isVotingEnableToParticipant={
+                    actionsData.isVotingEnableToParticipant
+                  }
+                />
+              )}
+            </>
           )}
         </>
       ) : (
-        <ZeroActions height="var(--app-height)" />
+        <>
+          {global.user.userType === 1 && (
+            <>
+              {!actionsData.isAddActionEnableToParticipant ? (
+                <ZeroActions
+                  height="var(--app-height)"
+                  zeroActionText_One=""
+                  zeroActionText_Two="Let Facilitator add them here"
+                />
+              ) : (
+                <ZeroActions
+                  height="var(--app-height)"
+                  zeroActionText_One="Actions Speak!"
+                  zeroActionText_Two="Add them here..."
+                />
+              )}
+            </>
+          )}
+          {global.user.userType === 2 && (
+            <ZeroActions
+              height="var(--app-height)"
+              zeroActionText_One="Actions Speak!"
+              zeroActionText_Two="Add them here..."
+            />
+          )}
+        </>
       )}
     </Box>
   );
