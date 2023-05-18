@@ -196,3 +196,32 @@
   margin-left: 4px !important;
   margin-right: 8px !important;
 }
+
+
+.actionSubToolbarContainer {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  padding: 10px;
+  gap: 18px;
+  font-family: 'Poppins';
+  font-style: normal;
+  font-weight: 400;
+  font-size: 16px;
+  // justify-content: space-between;
+  width: calc(100% - 0px);
+}
+
+.menu-item {
+  color: #343434;
+  letter-spacing: 0.6px;
+  font-family: 'Poppins';
+  font-style: normal;
+  font-weight: 400;
+  font-size: 16px;
+}
+
+.menu-item:hover {
+  background-color: rgba(206, 239, 255, 0.3) !important;
+
+}

@@ -53,6 +53,7 @@ export enum BoardActionType {
   DELETE_UNCONFIRMED_GROUPS = 'deleteUnconfirmedGroups',
   Add_NEW_ACTION = 'addAction',
   UPDATE_ACTION = 'updateAction',
+  ASSIGN_ACTION = 'assignAction',
   ADD_REACT_TO_ACTION = 'addReactToAction',
   UPDATE_KEYWORD_FLAG = "updateKeywordFlag"
 }
@@ -520,6 +521,14 @@ export const validateAction = (
     return true;
   };
 
+  const isAssignActionValid = (id: string, value: string): boolean => {
+    const action = findAction(id)
+    if (action)
+      return true;
+    else return false;
+
+  }
+
   const isAddReactToActionValid = (
     actionId: string,
     react: string,
@@ -673,6 +682,9 @@ export const validateAction = (
       );
     case BoardActionType.UPDATE_ACTION:
       return isUpdateExistingActionValid(parameters.id, parameters.value);
+
+    case BoardActionType.ASSIGN_ACTION:
+      return isAssignActionValid(parameters.id, userId);
     case BoardActionType.ADD_REACT_TO_ACTION:
       return isAddReactToActionValid(
         parameters.actionId,
@@ -1064,7 +1076,7 @@ export const processAction = (
 
   const addKeywordsToCard = (suggestedkeywordCards: Card[], userId: string) => {
 
-    suggestedkeywordCards&&suggestedkeywordCards.forEach(element => {
+    suggestedkeywordCards && suggestedkeywordCards.forEach(element => {
 
       const { card } = findCard(element.id);
       if (card) {
@@ -1404,6 +1416,18 @@ export const processAction = (
     }
   };
 
+const assignAction=(actionId:string,assigneeId:string)=>{
+const {action}=findAction(actionId)
+const assignTo=findUser(assigneeId)
+
+if(action&&assignTo){
+  action.assigneeId=assignTo.userId;
+  action.assigneeAvatar=assignTo.avatar
+}
+
+}
+
+
   let noMatch = false;
 
   const updateKeywordFlag = (columnId: any, flag: boolean) => {
@@ -1583,6 +1607,9 @@ export const processAction = (
       break;
     case BoardActionType.UPDATE_ACTION:
       updateAction(parameters.id, parameters.value);
+      break;
+    case BoardActionType.ASSIGN_ACTION:
+      assignAction(parameters.id, parameters.assigneeId);
       break;
     case BoardActionType.ADD_REACT_TO_ACTION:
       addReactToAction(parameters.actionId, parameters.react, userId);

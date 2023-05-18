@@ -123,7 +123,7 @@ export default function ActionItem({
       >
         <Checkbox
           edge="start"
-          // checked={action.checked}
+          checked={action.checked}
           tabIndex={-1}
           disableRipple
           inputProps={{ 'aria-labelledby': labelId }}

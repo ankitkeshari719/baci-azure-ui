@@ -160,9 +160,10 @@ const FacilitatorDropDown = ({ personName, onClickOfUser }: Props) => {
                   />
                   <ListItemIcon>
                     <LazyLoadImage
+                      width='40px !important'
+                      height='40px !important'
                       style={{
-                        width: '40px !important',
-                        height: '40px !important',
+
                         borderRadius: '50%',
                       }}
                       src={imaSrc}
