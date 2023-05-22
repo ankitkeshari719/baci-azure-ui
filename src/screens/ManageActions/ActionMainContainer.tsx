@@ -437,7 +437,7 @@ export default function ActionMainContainer() {
                 <ZeroActions
                   height="var(--app-height)"
                   zeroActionText_One=""
-                  zeroActionText_Two="Let Facilitator add them here"
+                  zeroActionText_Two="Let Facilitator add actions here"
                 />
               ) : (
                 <ZeroActions

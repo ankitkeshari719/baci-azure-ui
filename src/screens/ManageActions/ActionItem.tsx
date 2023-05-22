@@ -294,6 +294,7 @@ export default function ActionItem({
                 Cancel
               </Button>
               <Button
+                disabled={editActionValue?.length === 0}
                 onClick={() => saveEditAction(editActionValue)}
                 sx={{
                   fontFamily: 'Poppins',
