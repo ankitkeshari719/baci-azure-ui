@@ -261,16 +261,16 @@ export default function ActionMainContainer() {
         setAllActionsTemp(allActions);
         break;
       case VALUE_ASC:
-        stringASCENDING();
-        break;
-      case VALUE_DSC:
-        stringDESCENDING();
-        break;
-      case VOTES_ASC:
         assigneeASCENDING();
         break;
-      case VOTES_DSC:
+      case VALUE_DSC:
         assigneeDESCENDING();
+        break;
+      case VOTES_ASC:
+        numericASCENDING();
+        break;
+      case VOTES_DSC:
+        numericDESCENDING();
         break;
     }
   };
@@ -279,27 +279,11 @@ export default function ActionMainContainer() {
   const handleToggleAction = (actionId: string) => {
     const newAction = allActionsTemp.map(action => {
       if (action.id === actionId) {
-        // console.log(action.id,)
         return { ...action, checked: !action.checked };
       }
       return action;
     });
-    console.log(newAction, 'newAction');
     setAllActionsTemp([...newAction]);
-  };
-
-  const stringASCENDING = () => {
-    const strAscending = [...allActions].sort((a, b) =>
-      a.value > b.value ? 1 : -1
-    );
-    setAllActionsTemp(strAscending);
-  };
-
-  const stringDESCENDING = () => {
-    const strDescending = [...allActions].sort((a, b) =>
-      a.value > b.value ? -1 : 1
-    );
-    setAllActionsTemp(strDescending);
   };
 
   const assigneeASCENDING = () => {
@@ -314,6 +298,20 @@ export default function ActionMainContainer() {
       a.assigneeName > b.assigneeName ? -1 : 1
     );
     setAllActionsTemp(strDescending);
+  };
+
+  const numericASCENDING = () => {
+    const numAscending = [...allActions].sort(
+      (a, b) => a.reacts?.length - b.reacts?.length
+    );
+    setAllActionsTemp(numAscending);
+  };
+
+  const numericDESCENDING = () => {
+    const numDescending = [...allActions].sort(
+      (a, b) => b.reacts?.length - a.reacts?.length
+    );
+    setAllActionsTemp(numDescending);
   };
 
   return (
