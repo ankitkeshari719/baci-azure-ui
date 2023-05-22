@@ -92,373 +92,743 @@ export default function ActionHeader({
 
   return (
     <>
-      <Box
-        className="actionHeaderContainer"
-        style={{
-          backgroundColor: isXsUp ? '#ffffff' : 'rgba(138, 56, 245, 0.1)',
-        }}
-      >
-        <Box className="actionHeader">
-          <Box style={{ display: 'flex', flexDirection: 'row' }}>
-            <Box
-              className="d-flex justify-content-start align-items-center p-0 m-0"
-              style={{
-                width: '100%',
-                maxHeight: '48px',
-                minWidth: isXsUp ? '100px' : '180px',
-                maxWidth: isXsUp
-                  ? '176px'
-                  : global.expandColumn === -1
-                  ? '220px'
-                  : '50%',
-              }}
-            >
-              {isSearchEnable ? (
-                <TextField
-                  fullWidth
-                  multiline
-                  autoFocus
-                  placeholder="Search..."
-                  value={searchQuery}
-                  onChange={e =>
-                    handleSearchQueryOnChange(e.currentTarget.value)
-                  }
-                  inputProps={{
-                    maxLength: MAX_CARD_TEXT_LENGTH,
-                    style: {
-                      padding: 0,
-                    },
-                    sx: {
-                      '&::placeholder': {
+      {global.expandColumn === -1 ? (
+        <Box
+          className="actionHeaderContainer"
+          style={{
+            backgroundColor: isXsUp ? '#ffffff' : 'rgba(138, 56, 245, 0.1)',
+          }}
+        >
+          <Box className="actionHeader">
+            <Box style={{ display: 'flex', flexDirection: 'row' }}>
+              <Box
+                className="d-flex justify-content-start align-items-center p-0 m-0"
+                style={{
+                  width: '100%',
+                  maxHeight: '48px',
+                  minWidth: isXsUp ? '100px' : '180px',
+                  maxWidth: isXsUp
+                    ? '176px'
+                    : global.expandColumn === -1
+                    ? '220px'
+                    : '50%',
+                }}
+              >
+                {isSearchEnable ? (
+                  <TextField
+                    fullWidth
+                    multiline
+                    autoFocus
+                    placeholder="Search..."
+                    value={searchQuery}
+                    onChange={e =>
+                      handleSearchQueryOnChange(e.currentTarget.value)
+                    }
+                    inputProps={{
+                      maxLength: MAX_CARD_TEXT_LENGTH,
+                      style: {
+                        padding: 0,
+                      },
+                      sx: {
+                        '&::placeholder': {
+                          fontFamily: 'Poppins',
+                          fontStyle: 'italic',
+                          color: '#CCCCCC',
+                          fontWeight: 400,
+                          fontSize: '16px',
+                          lineHeight: '20px',
+                          letterSpacing: '0.4px',
+                        },
+                      },
+                    }}
+                    sx={{
+                      height: '40px',
+                      display: 'flex',
+                      flexDirection: 'row',
+                      alignItems: 'center',
+                      padding: '12px',
+                      background: '#FFFFFF',
+                      border: '1px solid #159ADD',
+                      borderRadius: '8px',
+                      input: {
+                        padding: 0,
+                      },
+                      div: { padding: 0, position: 'initial', height: '100%' },
+                      textarea: {
                         fontFamily: 'Poppins',
-                        fontStyle: 'italic',
-                        color: '#CCCCCC',
+                        fontStyle: 'normal',
+                        color: '#343434',
                         fontWeight: 400,
                         fontSize: '16px',
-                        lineHeight: '20px',
-                        letterSpacing: '0.4px',
+                        lineHeight: '22px',
+                        letterSpacing: '0.2px',
                       },
-                    },
-                  }}
-                  sx={{
-                    height: '40px',
-                    display: 'flex',
-                    flexDirection: 'row',
-                    alignItems: 'center',
-                    padding: '12px',
-                    background: '#FFFFFF',
-                    border: '1px solid #159ADD',
-                    borderRadius: '8px',
-                    input: {
-                      padding: 0,
-                    },
-                    div: { padding: 0, position: 'initial', height: '100%' },
-                    textarea: {
-                      fontFamily: 'Poppins',
-                      fontStyle: 'normal',
-                      color: '#343434',
-                      fontWeight: 400,
-                      fontSize: '16px',
-                      lineHeight: '22px',
-                      letterSpacing: '0.2px',
-                    },
-                  }}
-                  InputProps={{
-                    startAdornment: (
-                      <InputAdornment
-                        position="start"
-                        style={{ margin: '0px' }}
-                      >
-                        <IconButton
-                          sx={{
-                            ':hover': {
-                              background: '#ffffff',
-                              cursor: 'unset',
-                            },
-                          }}
-                        >
-                          <Icons.Search size={20} color="#CCCCCC" />
-                        </IconButton>
-                      </InputAdornment>
-                    ),
-                    endAdornment: (
-                      <InputAdornment position="end">
-                        <IconButton onClick={cancelSearchField}>
-                          <Icons.X
-                            size={20}
-                            color="#676767"
-                            style={{
-                              cursor: 'pointer',
-                            }}
-                          />
-                        </IconButton>
-                      </InputAdornment>
-                    ),
-                  }}
-                />
-              ) : (
-                <Typography component="span" className="totalActions">
-                  {allActions.length} Actions
-                </Typography>
-              )}
-            </Box>
-            {/* Search Icon */}
-            <Box className="d-flex justify-content-end align-items-center p-0 m-0">
-              {!isSearchEnable && (
-                <Box className="searchBoxContainer">
-                  <Icons.Search
-                    size={24}
-                    color="#676767"
-                    style={{
-                      cursor: 'pointer',
                     }}
-                    onClick={showSearchField}
+                    InputProps={{
+                      startAdornment: (
+                        <InputAdornment
+                          position="start"
+                          style={{ margin: '0px' }}
+                        >
+                          <IconButton
+                            sx={{
+                              ':hover': {
+                                background: '#ffffff',
+                                cursor: 'unset',
+                              },
+                            }}
+                          >
+                            <Icons.Search size={20} color="#CCCCCC" />
+                          </IconButton>
+                        </InputAdornment>
+                      ),
+                      endAdornment: (
+                        <InputAdornment position="end">
+                          <IconButton onClick={cancelSearchField}>
+                            <Icons.X
+                              size={20}
+                              color="#676767"
+                              style={{
+                                cursor: 'pointer',
+                              }}
+                            />
+                          </IconButton>
+                        </InputAdornment>
+                      ),
+                    }}
                   />
+                ) : (
+                  <Typography component="span" className="totalActions">
+                    {allActions.length} Actions
+                  </Typography>
+                )}
+              </Box>
+              {/* Search Icon */}
+              <Box className="d-flex justify-content-end align-items-center p-0 m-0">
+                {!isSearchEnable && (
+                  <Box className="searchBoxContainer">
+                    <Icons.Search
+                      size={24}
+                      color="#676767"
+                      style={{
+                        cursor: 'pointer',
+                      }}
+                      onClick={showSearchField}
+                    />
+                  </Box>
+                )}
+              </Box>
+            </Box>
+            <Box
+              className="d-flex justify-content-center align-items-center p-0 m-0"
+              style={{ flexDirection: 'row', width: '100%' }}
+            >
+              {/* Sort Box */}
+              <Box
+                style={{
+                  maxHeight: '48px',
+                  display: 'flex',
+                  justifyContent: 'center',
+                  alignContent: 'center',
+                  flexDirection: 'row',
+                }}
+              >
+                <Typography
+                  className="sortByText"
+                  style={{
+                    fontFamily: 'Poppins',
+                    fontStyle: 'normal',
+                    color: '#343434',
+                    fontWeight: 400,
+                    fontSize: '16px',
+                    lineHeight: '22px',
+                    letterSpacing: '0.2px',
+                  }}
+                >
+                  Sort By:{' '}
+                </Typography>
+                <FormControl
+                  sx={{
+                    m: 1,
+                    minWidth: 80,
+                    display: 'flex',
+                    justifyContent: 'center',
+                    alignContent: 'center',
+                    margin: '0px 0px 0px 8px',
+                  }}
+                >
+                  <Select
+                    labelId="demo-simple-select-autowidth-label"
+                    id="demo-simple-select-autowidth"
+                    value={sortedBy}
+                    onChange={handleSortedByChange}
+                    autoWidth
+                    label="Age"
+                    sx={{
+                      height: '40px',
+                      display: 'flex',
+                      flexDirection: 'row',
+                      alignItems: 'center',
+                      padding: '0px',
+                      background: 'rgba(0, 0, 0, 0)',
+                      border: 'none',
+                      boxShadow: 'none',
+                      '.MuiOutlinedInput-notchedOutline': {
+                        border: 0,
+                        ':hover': { border: 0 },
+                      },
+
+                      '&.MuiOutlinedInput-root:hover .MuiOutlinedInput-notchedOutline':
+                        {
+                          border: 0,
+                        },
+                      '&.MuiOutlinedInput-root.Mui-focused .MuiOutlinedInput-notchedOutline':
+                        {
+                          border: 0,
+                        },
+                      '.MuiOutlinedInput-input': {
+                        fontFamily: 'Poppins',
+                        fontStyle: 'normal',
+                        color: '#343434',
+                        fontWeight: 400,
+                        fontSize: '16px',
+                        lineHeight: '22px',
+                        letterSpacing: '0.2px',
+                      },
+                      color: '#343434',
+                      input: {
+                        padding: 0,
+                      },
+                      div: { padding: 0, position: 'initial', height: '100%' },
+                      position: 'initial',
+                    }}
+                  >
+                    <MenuItem value={NONE}>
+                      <em>None</em>
+                    </MenuItem>
+                    <MenuItem value={VOTES_ASC}>VOTES High to Low</MenuItem>
+                    <MenuItem value={VOTES_DSC}>VOTES Low to High</MenuItem>
+                    <MenuItem value={VALUE_ASC}>Assignee: A - Z</MenuItem>
+                    <MenuItem value={VALUE_DSC}>Assignee: Z - A</MenuItem>
+                  </Select>
+                </FormControl>
+              </Box>
+              {/* Ellipsis vertical */}
+              {global.user.userType === 2 && (
+                <Box
+                  sx={{
+                    width: '24px',
+                    height: '48px',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                  }}
+                >
+                  <Button
+                    id="basic-button"
+                    aria-controls={open ? 'basic-menu' : undefined}
+                    aria-haspopup="true"
+                    aria-expanded={open ? 'true' : undefined}
+                    onClick={openEnableMenu}
+                    sx={{
+                      width: '40px',
+                      height: '32px',
+                      minWidth: '40px',
+                      border: 'none',
+                      borderRadius: '0px',
+                      ':hover': {
+                        background: '#CCCCCC',
+                        cursor: 'unset',
+                        borderRadius: '0px',
+                      },
+                    }}
+                  >
+                    <Icons.DotsVertical
+                      size={24}
+                      color="#676767"
+                      style={{
+                        cursor: 'pointer',
+                      }}
+                    />
+                  </Button>
+                  <Menu
+                    id="basic-menu"
+                    anchorEl={anchorEl}
+                    open={open}
+                    onClose={closeEnableMenu}
+                    MenuListProps={{
+                      'aria-labelledby': 'basic-button',
+                    }}
+                    PaperProps={{
+                      elevation: 0,
+                      sx: {
+                        border: '1px solid #cccccc',
+                        boxShadow: '0px 1px 10px rgba(0, 0, 0, 0.15)',
+                        borderRadius: '10px',
+                        background: '#ffffff',
+                        overflow: 'visible',
+                        '&:before': {
+                          content: '""',
+                          display: 'block',
+                          position: 'absolute',
+                          top: 0,
+                          right: 14,
+                          width: 10,
+                          height: 10,
+                          bgcolor: 'background.paper',
+                          transform: 'translateY(-50%) rotate(45deg)',
+                          zIndex: 0,
+                        },
+                      },
+                    }}
+                    transformOrigin={{ horizontal: 'right', vertical: 'top' }}
+                    anchorOrigin={{ horizontal: 'right', vertical: 'bottom' }}
+                  >
+                    <MenuItem>
+                      <ListItemIcon>
+                        <Icons.StarOutline
+                          size={24}
+                          color="#676767"
+                          style={{
+                            cursor: 'unset',
+                          }}
+                        />
+                      </ListItemIcon>
+                      <ListItemText>Enable Voting</ListItemText>
+                      <Switch
+                        checked={enableVoting}
+                        onChange={handleEnableVoting}
+                        inputProps={{ 'aria-label': 'controlled' }}
+                      />
+                    </MenuItem>
+                    <MenuItem>
+                      <ListItemIcon>
+                        <Icons.UserGroup
+                          size={24}
+                          color="#676767"
+                          style={{
+                            cursor: 'unset',
+                          }}
+                        />
+                      </ListItemIcon>
+                      <ListItemText>Participants Can Add Actions</ListItemText>
+                      <Switch
+                        checked={enableActionToParticipant}
+                        onChange={handleEnableActionToParticipant}
+                        inputProps={{ 'aria-label': 'controlled' }}
+                      />
+                    </MenuItem>
+                  </Menu>
+                </Box>
+              )}
+              {/* Expand Icon */}
+              {!isXsUp && (
+                <Box>
+                  {global.expandColumn === -1 ? (
+                    <img
+                      onClick={() => {
+                        dispatch({
+                          type: ActionType.EXPAND_COLUMN,
+                          payload: { expandColumn: 2 },
+                        });
+                      }}
+                      src="/svgs/Expand.svg"
+                      style={{
+                        width: '20px',
+                        marginLeft: '15px',
+                        cursor: 'pointer',
+                      }}
+                    />
+                  ) : (
+                    <img
+                      onClick={() => {
+                        dispatch({
+                          type: ActionType.EXPAND_COLUMN,
+                          payload: { expandColumn: -1 },
+                        });
+                      }}
+                      src="/svgs/Shrink.svg"
+                      style={{
+                        width: '20px',
+                        marginLeft: '15px',
+                        cursor: 'pointer',
+                      }}
+                    />
+                  )}
                 </Box>
               )}
             </Box>
           </Box>
-          <Box
-            className="d-flex justify-content-center align-items-center p-0 m-0"
-            style={{ flexDirection: 'row', width: '100%' }}
-          >
-            {/* Sort Box */}
-            <Box
-              style={{
-                maxHeight: '48px',
-                display: 'flex',
-                justifyContent: 'center',
-                alignContent: 'center',
-                flexDirection: 'row',
-              }}
-            >
-              <Typography
-                className="sortByText"
-                style={{
-                  fontFamily: 'Poppins',
-                  fontStyle: 'normal',
-                  color: '#343434',
-                  fontWeight: 400,
-                  fontSize: '16px',
-                  lineHeight: '22px',
-                  letterSpacing: '0.2px',
-                }}
-              >
-                Sort By:{' '}
-              </Typography>
-              <FormControl
-                sx={{
-                  m: 1,
-                  minWidth: 80,
-                  display: 'flex',
-                  justifyContent: 'center',
-                  alignContent: 'center',
-                  margin: '0px 0px 0px 8px',
-                }}
-              >
-                <Select
-                  labelId="demo-simple-select-autowidth-label"
-                  id="demo-simple-select-autowidth"
-                  value={sortedBy}
-                  onChange={handleSortedByChange}
-                  autoWidth
-                  label="Age"
-                  sx={{
-                    height: '40px',
-                    display: 'flex',
-                    flexDirection: 'row',
-                    alignItems: 'center',
-                    padding: '0px',
-                    background: 'rgba(0, 0, 0, 0)',
-                    border: 'none',
-                    boxShadow: 'none',
-                    '.MuiOutlinedInput-notchedOutline': {
-                      border: 0,
-                      ':hover': { border: 0 },
-                    },
-
-                    '&.MuiOutlinedInput-root:hover .MuiOutlinedInput-notchedOutline':
-                      {
-                        border: 0,
-                      },
-                    '&.MuiOutlinedInput-root.Mui-focused .MuiOutlinedInput-notchedOutline':
-                      {
-                        border: 0,
-                      },
-                    '.MuiOutlinedInput-input': {
-                      fontFamily: 'Poppins',
-                      fontStyle: 'normal',
-                      color: '#343434',
-                      fontWeight: 400,
-                      fontSize: '16px',
-                      lineHeight: '22px',
-                      letterSpacing: '0.2px',
-                    },
-                    color: '#343434',
-                    input: {
-                      padding: 0,
-                    },
-                    div: { padding: 0, position: 'initial', height: '100%' },
-                    position: 'initial',
-                  }}
-                >
-                  <MenuItem value={NONE}>
-                    <em>None</em>
-                  </MenuItem>
-                  <MenuItem value={VOTES_ASC}>VOTES High to Low</MenuItem>
-                  <MenuItem value={VOTES_DSC}>VOTES Low to High</MenuItem>
-                  <MenuItem value={VALUE_ASC}>Assignee: A - Z</MenuItem>
-                  <MenuItem value={VALUE_DSC}>Assignee: Z - A</MenuItem>
-                </Select>
-              </FormControl>
-            </Box>
-            {/* Ellipsis vertical */}
-            {global.user.userType === 2 && (
+        </Box>
+      ) : (
+        <Box
+          className="actionHeaderContainer"
+          style={{
+            backgroundColor: isXsUp ? '#ffffff' : 'rgba(138, 56, 245, 0.1)',
+          }}
+        >
+          <Box className="actionHeader">
+            <Box style={{ display: 'flex', flexDirection: 'row', width: '50%' }}>
               <Box
-                sx={{
-                  width: '24px',
-                  height: '48px',
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'center',
+                className="d-flex justify-content-start align-items-center p-0 m-0"
+                style={{
+                  width: '100%',
+                  maxHeight: '48px',
+                  minWidth: isXsUp ? '100px' : '180px',
+                  maxWidth: isXsUp
+                    ? '176px'
+                    : global.expandColumn === -1
+                    ? '220px'
+                    : '50%',
                 }}
               >
-                <Button
-                  id="basic-button"
-                  aria-controls={open ? 'basic-menu' : undefined}
-                  aria-haspopup="true"
-                  aria-expanded={open ? 'true' : undefined}
-                  onClick={openEnableMenu}
-                  sx={{
-                    width: '40px',
-                    height: '32px',
-                    minWidth: '40px',
-                    border: 'none',
-                    borderRadius: '0px',
-                    ':hover': {
-                      background: '#CCCCCC',
-                      cursor: 'unset',
-                      borderRadius: '0px',
-                    },
-                  }}
-                >
-                  <Icons.DotsVertical
-                    size={24}
-                    color="#676767"
-                    style={{
-                      cursor: 'pointer',
-                    }}
-                  />
-                </Button>
-                <Menu
-                  id="basic-menu"
-                  anchorEl={anchorEl}
-                  open={open}
-                  onClose={closeEnableMenu}
-                  MenuListProps={{
-                    'aria-labelledby': 'basic-button',
-                  }}
-                  PaperProps={{
-                    elevation: 0,
-                    sx: {
-                      border: '1px solid #cccccc',
-                      boxShadow: '0px 1px 10px rgba(0, 0, 0, 0.15)',
-                      borderRadius: '10px',
-                      background: '#ffffff',
-                      overflow: 'visible',
-                      '&:before': {
-                        content: '""',
-                        display: 'block',
-                        position: 'absolute',
-                        top: 0,
-                        right: 14,
-                        width: 10,
-                        height: 10,
-                        bgcolor: 'background.paper',
-                        transform: 'translateY(-50%) rotate(45deg)',
-                        zIndex: 0,
+                {isSearchEnable ? (
+                  <TextField
+                    fullWidth
+                    multiline
+                    autoFocus
+                    placeholder="Search..."
+                    value={searchQuery}
+                    onChange={e =>
+                      handleSearchQueryOnChange(e.currentTarget.value)
+                    }
+                    inputProps={{
+                      maxLength: MAX_CARD_TEXT_LENGTH,
+                      style: {
+                        padding: 0,
                       },
-                    },
-                  }}
-                  transformOrigin={{ horizontal: 'right', vertical: 'top' }}
-                  anchorOrigin={{ horizontal: 'right', vertical: 'bottom' }}
-                >
-                  <MenuItem>
-                    <ListItemIcon>
-                      <Icons.StarOutline
-                        size={24}
-                        color="#676767"
-                        style={{
-                          cursor: 'unset',
-                        }}
-                      />
-                    </ListItemIcon>
-                    <ListItemText>Enable Voting</ListItemText>
-                    <Switch
-                      checked={enableVoting}
-                      onChange={handleEnableVoting}
-                      inputProps={{ 'aria-label': 'controlled' }}
-                    />
-                  </MenuItem>
-                  <MenuItem>
-                    <ListItemIcon>
-                      <Icons.UserGroup
-                        size={24}
-                        color="#676767"
-                        style={{
-                          cursor: 'unset',
-                        }}
-                      />
-                    </ListItemIcon>
-                    <ListItemText>Participants Can Add Actions</ListItemText>
-                    <Switch
-                      checked={enableActionToParticipant}
-                      onChange={handleEnableActionToParticipant}
-                      inputProps={{ 'aria-label': 'controlled' }}
-                    />
-                  </MenuItem>
-                </Menu>
-              </Box>
-            )}
-            {/* Expand Icon */}
-            {!isXsUp && (
-              <Box>
-                {global.expandColumn === -1 ? (
-                  <img
-                    onClick={() => {
-                      dispatch({
-                        type: ActionType.EXPAND_COLUMN,
-                        payload: { expandColumn: 2 },
-                      });
+                      sx: {
+                        '&::placeholder': {
+                          fontFamily: 'Poppins',
+                          fontStyle: 'italic',
+                          color: '#CCCCCC',
+                          fontWeight: 400,
+                          fontSize: '16px',
+                          lineHeight: '20px',
+                          letterSpacing: '0.4px',
+                        },
+                      },
                     }}
-                    src="/svgs/Expand.svg"
-                    style={{
-                      width: '20px',
-                      marginLeft: '15px',
-                      cursor: 'pointer',
+                    sx={{
+                      height: '40px',
+                      display: 'flex',
+                      flexDirection: 'row',
+                      alignItems: 'center',
+                      padding: '12px',
+                      background: '#FFFFFF',
+                      border: '1px solid #159ADD',
+                      borderRadius: '8px',
+                      input: {
+                        padding: 0,
+                      },
+                      div: { padding: 0, position: 'initial', height: '100%' },
+                      textarea: {
+                        fontFamily: 'Poppins',
+                        fontStyle: 'normal',
+                        color: '#343434',
+                        fontWeight: 400,
+                        fontSize: '16px',
+                        lineHeight: '22px',
+                        letterSpacing: '0.2px',
+                      },
+                    }}
+                    InputProps={{
+                      startAdornment: (
+                        <InputAdornment
+                          position="start"
+                          style={{ margin: '0px' }}
+                        >
+                          <IconButton
+                            sx={{
+                              ':hover': {
+                                background: '#ffffff',
+                                cursor: 'unset',
+                              },
+                            }}
+                          >
+                            <Icons.Search size={20} color="#CCCCCC" />
+                          </IconButton>
+                        </InputAdornment>
+                      ),
+                      endAdornment: (
+                        <InputAdornment position="end">
+                          <IconButton onClick={cancelSearchField}>
+                            <Icons.X
+                              size={20}
+                              color="#676767"
+                              style={{
+                                cursor: 'pointer',
+                              }}
+                            />
+                          </IconButton>
+                        </InputAdornment>
+                      ),
                     }}
                   />
                 ) : (
-                  <img
-                    onClick={() => {
-                      dispatch({
-                        type: ActionType.EXPAND_COLUMN,
-                        payload: { expandColumn: -1 },
-                      });
-                    }}
-                    src="/svgs/Shrink.svg"
-                    style={{
-                      width: '20px',
-                      marginLeft: '15px',
-                      cursor: 'pointer',
-                    }}
-                  />
+                  <Typography component="span" className="totalActions">
+                    {allActions.length} Actions
+                  </Typography>
                 )}
               </Box>
-            )}
+            </Box>
+            <Box
+              className="d-flex justify-content-end align-items-center p-0 m-0"
+              style={{ flexDirection: 'row', width: '50%' }}
+            >
+              {/* Search Icon */}
+              <Box className="d-flex justify-content-end align-items-center p-0 m-0">
+                {!isSearchEnable && (
+                  <Box className="searchBoxContainer">
+                    <Icons.Search
+                      size={24}
+                      color="#676767"
+                      style={{
+                        cursor: 'pointer',
+                      }}
+                      onClick={showSearchField}
+                    />
+                  </Box>
+                )}
+              </Box>
+              {/* Sort Box */}
+              <Box
+                style={{
+                  maxHeight: '48px',
+                  display: 'flex',
+                  justifyContent: 'center',
+                  alignContent: 'center',
+                  flexDirection: 'row',
+                }}
+              >
+                <Typography
+                  className="sortByText"
+                  style={{
+                    fontFamily: 'Poppins',
+                    fontStyle: 'normal',
+                    color: '#343434',
+                    fontWeight: 400,
+                    fontSize: '16px',
+                    lineHeight: '22px',
+                    letterSpacing: '0.2px',
+                  }}
+                >
+                  Sort By:{' '}
+                </Typography>
+                <FormControl
+                  sx={{
+                    m: 1,
+                    minWidth: 80,
+                    display: 'flex',
+                    justifyContent: 'center',
+                    alignContent: 'center',
+                    margin: '0px 0px 0px 8px',
+                  }}
+                >
+                  <Select
+                    labelId="demo-simple-select-autowidth-label"
+                    id="demo-simple-select-autowidth"
+                    value={sortedBy}
+                    onChange={handleSortedByChange}
+                    autoWidth
+                    label="Age"
+                    sx={{
+                      height: '40px',
+                      display: 'flex',
+                      flexDirection: 'row',
+                      alignItems: 'center',
+                      padding: '0px',
+                      background: 'rgba(0, 0, 0, 0)',
+                      border: 'none',
+                      boxShadow: 'none',
+                      '.MuiOutlinedInput-notchedOutline': {
+                        border: 0,
+                        ':hover': { border: 0 },
+                      },
+
+                      '&.MuiOutlinedInput-root:hover .MuiOutlinedInput-notchedOutline':
+                        {
+                          border: 0,
+                        },
+                      '&.MuiOutlinedInput-root.Mui-focused .MuiOutlinedInput-notchedOutline':
+                        {
+                          border: 0,
+                        },
+                      '.MuiOutlinedInput-input': {
+                        fontFamily: 'Poppins',
+                        fontStyle: 'normal',
+                        color: '#343434',
+                        fontWeight: 400,
+                        fontSize: '16px',
+                        lineHeight: '22px',
+                        letterSpacing: '0.2px',
+                      },
+                      color: '#343434',
+                      input: {
+                        padding: 0,
+                      },
+                      div: { padding: 0, position: 'initial', height: '100%' },
+                      position: 'initial',
+                    }}
+                  >
+                    <MenuItem value={NONE}>
+                      <em>None</em>
+                    </MenuItem>
+                    <MenuItem value={VOTES_ASC}>VOTES High to Low</MenuItem>
+                    <MenuItem value={VOTES_DSC}>VOTES Low to High</MenuItem>
+                    <MenuItem value={VALUE_ASC}>Assignee: A - Z</MenuItem>
+                    <MenuItem value={VALUE_DSC}>Assignee: Z - A</MenuItem>
+                  </Select>
+                </FormControl>
+              </Box>
+              {/* Ellipsis vertical */}
+              {global.user.userType === 2 && (
+                <Box
+                  sx={{
+                    width: '24px',
+                    height: '48px',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                  }}
+                >
+                  <Button
+                    id="basic-button"
+                    aria-controls={open ? 'basic-menu' : undefined}
+                    aria-haspopup="true"
+                    aria-expanded={open ? 'true' : undefined}
+                    onClick={openEnableMenu}
+                    sx={{
+                      width: '40px',
+                      height: '32px',
+                      minWidth: '40px',
+                      border: 'none',
+                      borderRadius: '0px',
+                      ':hover': {
+                        background: '#CCCCCC',
+                        cursor: 'unset',
+                        borderRadius: '0px',
+                      },
+                    }}
+                  >
+                    <Icons.DotsVertical
+                      size={24}
+                      color="#676767"
+                      style={{
+                        cursor: 'pointer',
+                      }}
+                    />
+                  </Button>
+                  <Menu
+                    id="basic-menu"
+                    anchorEl={anchorEl}
+                    open={open}
+                    onClose={closeEnableMenu}
+                    MenuListProps={{
+                      'aria-labelledby': 'basic-button',
+                    }}
+                    PaperProps={{
+                      elevation: 0,
+                      sx: {
+                        border: '1px solid #cccccc',
+                        boxShadow: '0px 1px 10px rgba(0, 0, 0, 0.15)',
+                        borderRadius: '10px',
+                        background: '#ffffff',
+                        overflow: 'visible',
+                        '&:before': {
+                          content: '""',
+                          display: 'block',
+                          position: 'absolute',
+                          top: 0,
+                          right: 14,
+                          width: 10,
+                          height: 10,
+                          bgcolor: 'background.paper',
+                          transform: 'translateY(-50%) rotate(45deg)',
+                          zIndex: 0,
+                        },
+                      },
+                    }}
+                    transformOrigin={{ horizontal: 'right', vertical: 'top' }}
+                    anchorOrigin={{ horizontal: 'right', vertical: 'bottom' }}
+                  >
+                    <MenuItem>
+                      <ListItemIcon>
+                        <Icons.StarOutline
+                          size={24}
+                          color="#676767"
+                          style={{
+                            cursor: 'unset',
+                          }}
+                        />
+                      </ListItemIcon>
+                      <ListItemText>Enable Voting</ListItemText>
+                      <Switch
+                        checked={enableVoting}
+                        onChange={handleEnableVoting}
+                        inputProps={{ 'aria-label': 'controlled' }}
+                      />
+                    </MenuItem>
+                    <MenuItem>
+                      <ListItemIcon>
+                        <Icons.UserGroup
+                          size={24}
+                          color="#676767"
+                          style={{
+                            cursor: 'unset',
+                          }}
+                        />
+                      </ListItemIcon>
+                      <ListItemText>Participants Can Add Actions</ListItemText>
+                      <Switch
+                        checked={enableActionToParticipant}
+                        onChange={handleEnableActionToParticipant}
+                        inputProps={{ 'aria-label': 'controlled' }}
+                      />
+                    </MenuItem>
+                  </Menu>
+                </Box>
+              )}
+              {/* Expand Icon */}
+              {!isXsUp && (
+                <Box>
+                  {global.expandColumn === -1 ? (
+                    <img
+                      onClick={() => {
+                        dispatch({
+                          type: ActionType.EXPAND_COLUMN,
+                          payload: { expandColumn: 2 },
+                        });
+                      }}
+                      src="/svgs/Expand.svg"
+                      style={{
+                        width: '20px',
+                        marginLeft: '15px',
+                        cursor: 'pointer',
+                      }}
+                    />
+                  ) : (
+                    <img
+                      onClick={() => {
+                        dispatch({
+                          type: ActionType.EXPAND_COLUMN,
+                          payload: { expandColumn: -1 },
+                        });
+                      }}
+                      src="/svgs/Shrink.svg"
+                      style={{
+                        width: '20px',
+                        marginLeft: '15px',
+                        cursor: 'pointer',
+                      }}
+                    />
+                  )}
+                </Box>
+              )}
+            </Box>
           </Box>
         </Box>
-      </Box>
+      )}
     </>
   );
 }
