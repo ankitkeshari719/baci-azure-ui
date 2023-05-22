@@ -273,10 +273,10 @@ export default function ActionMainContainer() {
         setAllActionsTemp(allActions);
         break;
       case VALUE_ASC:
-        stringASCENDING();
+        assigneeASCENDING();
         break;
       case VALUE_DSC:
-        stringDESCENDING();
+        assigneeDESCENDING();
         break;
       case VOTES_ASC:
         numericASCENDING();
@@ -291,7 +291,6 @@ export default function ActionMainContainer() {
   const handleToggleAction = (actionId: string) => {
     const newAction = allActionsTemp.map(action => {
       if (action.id === actionId) {
-        // console.log(action.id,)
         return { ...action, checked: !action.checked };
       }
       return action;
@@ -300,16 +299,16 @@ export default function ActionMainContainer() {
     setAllActionsTemp([...newAction]);
   };
 
-  const stringASCENDING = () => {
+  const assigneeASCENDING = () => {
     const strAscending = [...allActions].sort((a, b) =>
-      a.value > b.value ? 1 : -1
+      a.assigneeName > b.assigneeName ? 1 : -1
     );
     setAllActionsTemp(strAscending);
   };
 
-  const stringDESCENDING = () => {
+  const assigneeDESCENDING = () => {
     const strDescending = [...allActions].sort((a, b) =>
-      a.value > b.value ? -1 : 1
+      a.assigneeName > b.assigneeName ? -1 : 1
     );
     setAllActionsTemp(strDescending);
   };
@@ -447,7 +446,7 @@ export default function ActionMainContainer() {
                 <ZeroActions
                   height="var(--app-height)"
                   zeroActionText_One=""
-                  zeroActionText_Two="Let Facilitator add them here"
+                  zeroActionText_Two="Let Facilitator add actions here"
                 />
               ) : (
                 <ZeroActions
