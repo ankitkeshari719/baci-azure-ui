@@ -434,7 +434,7 @@ export default function ActionHeader({
                   </MenuItem>
                   <MenuItem>
                     <ListItemIcon>
-                      <Icons.StarOutline
+                      <Icons.UserGroup
                         size={24}
                         color="#676767"
                         style={{
