@@ -305,42 +305,10 @@ export default function ActionHeader({
                   <MenuItem value={NONE}>
                     <em>None</em>
                   </MenuItem>
-                  <MenuItem value={VOTES_ASC}>
-                    VOTES{' '}
-                    <img
-                      src="/images/Ascending.png"
-                      style={{
-                        width: '20px',
-                      }}
-                    />
-                  </MenuItem>
-                  <MenuItem value={VOTES_DSC}>
-                    VOTES{' '}
-                    <img
-                      src="/images/Descending.png"
-                      style={{
-                        width: '20px',
-                      }}
-                    />
-                  </MenuItem>
-                  <MenuItem value={VALUE_ASC}>
-                    VALUE{' '}
-                    <img
-                      src="/images/Ascending.png"
-                      style={{
-                        width: '20px',
-                      }}
-                    />
-                  </MenuItem>
-                  <MenuItem value={VALUE_DSC}>
-                    VALUE{' '}
-                    <img
-                      src="/images/Descending.png"
-                      style={{
-                        width: '20px',
-                      }}
-                    />
-                  </MenuItem>
+                  <MenuItem value={VOTES_ASC}>VOTES High to Low</MenuItem>
+                  <MenuItem value={VOTES_DSC}>VOTES Low to High</MenuItem>
+                  <MenuItem value={VALUE_ASC}>Assignee: A - Z</MenuItem>
+                  <MenuItem value={VALUE_DSC}>Assignee: Z - A</MenuItem>
                 </Select>
               </FormControl>
             </Box>
