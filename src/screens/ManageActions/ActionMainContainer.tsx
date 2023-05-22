@@ -33,7 +33,8 @@ export default function ActionMainContainer() {
   const [allActionsTemp, setAllActionsTemp] = React.useState<ActionInterface[]>(
     []
   );
-  const [selectedActionCount, setSelectedActionCount] = React.useState<number>(0);
+  const [selectedActionCount, setSelectedActionCount] =
+    React.useState<number>(0);
   const [addedActionValue, setAddActionValue] = React.useState<string>('');
   const isXsUp = useMediaQuery(theme.breakpoints.only('xs'));
   const [isTextFieldFocused, setIsTextFieldFocused] =
@@ -58,23 +59,19 @@ export default function ActionMainContainer() {
     setAllActionsTemp([...tempActions]);
   }, [actionsData]);
 
-
   React.useEffect(() => {
-
     var tempSelectedActionCount = 0;
 
-    allActionsTemp && allActionsTemp.map((action) => {
-      if (action.checked) {
-        tempSelectedActionCount = tempSelectedActionCount + 1;
-      }
-    })
+    allActionsTemp &&
+      allActionsTemp.map(action => {
+        if (action.checked) {
+          tempSelectedActionCount = tempSelectedActionCount + 1;
+        }
+      });
     setSelectedActionCount(tempSelectedActionCount);
-
-  }, [allActionsTemp])
+  }, [allActionsTemp]);
 
   React.useEffect(() => {
-
-
     const tempCurrentUserActions = allActions.filter(
       action => action.createdBy === global.user.id
     );
@@ -85,9 +82,6 @@ export default function ActionMainContainer() {
     setCurrentUserActions([...tempCurrentUserActions]);
     setOthersUserActions([...tempOthersUserActions]);
   }, [allActions]);
-
-
-
 
   React.useEffect(() => {
     users.map(user => {
@@ -273,18 +267,16 @@ export default function ActionMainContainer() {
         stringDESCENDING();
         break;
       case VOTES_ASC:
-        numericASCENDING();
+        assigneeASCENDING();
         break;
       case VOTES_DSC:
-        numericDESCENDING();
+        assigneeDESCENDING();
         break;
     }
   };
 
   // Check/Uncheck the action item
   const handleToggleAction = (actionId: string) => {
-
-
     const newAction = allActionsTemp.map(action => {
       if (action.id === actionId) {
         // console.log(action.id,)
@@ -292,7 +284,7 @@ export default function ActionMainContainer() {
       }
       return action;
     });
-    console.log(newAction, "newAction")
+    console.log(newAction, 'newAction');
     setAllActionsTemp([...newAction]);
   };
 
@@ -310,18 +302,18 @@ export default function ActionMainContainer() {
     setAllActionsTemp(strDescending);
   };
 
-  const numericASCENDING = () => {
-    const numAscending = [...allActions].sort(
-      (a, b) => a.reacts?.length - b.reacts?.length
+  const assigneeASCENDING = () => {
+    const strAscending = [...allActions].sort((a, b) =>
+      a.assigneeName > b.assigneeName ? 1 : -1
     );
-    setAllActionsTemp(numAscending);
+    setAllActionsTemp(strAscending);
   };
 
-  const numericDESCENDING = () => {
-    const numDescending = [...allActions].sort(
-      (a, b) => b.reacts?.length - a.reacts?.length
+  const assigneeDESCENDING = () => {
+    const strDescending = [...allActions].sort((a, b) =>
+      a.assigneeName > b.assigneeName ? -1 : 1
     );
-    setAllActionsTemp(numDescending);
+    setAllActionsTemp(strDescending);
   };
 
   return (
@@ -331,8 +323,8 @@ export default function ActionMainContainer() {
         height: false
           ? 'auto'
           : isXsUp
-            ? 'calc(var(--app-height) - 115px)'
-            : 'calc(var(--app-height) - 160px)',
+          ? 'calc(var(--app-height) - 115px)'
+          : 'calc(var(--app-height) - 160px)',
       }}
     >
       <ActionHeader
@@ -348,30 +340,36 @@ export default function ActionMainContainer() {
       />
       {!ended && (
         <>
+          {selectedActionCount == 0 ? (
+            <>
+              {global.user.userType == 2 && (
+                <AddAction
+                  addAction={addAction}
+                  addedActionValue={addedActionValue}
+                  setAddActionValue={setAddActionValue}
+                  isTextFieldFocused={isTextFieldFocused}
+                  setIsTextFieldFocused={setIsTextFieldFocused}
+                />
+              )}
 
-          {selectedActionCount == 0 ? <>
-            {global.user.userType == 2 && (
-
-            <AddAction
-              addAction={addAction}
-              addedActionValue={addedActionValue}
-              setAddActionValue={setAddActionValue}
-              isTextFieldFocused={isTextFieldFocused}
-              setIsTextFieldFocused={setIsTextFieldFocused}
+              {global.user.userType == 1 &&
+                !isFeedbackSubmitted &&
+                actionsData.isAddActionEnableToParticipant && (
+                  <AddAction
+                    addAction={addAction}
+                    addedActionValue={addedActionValue}
+                    setAddActionValue={setAddActionValue}
+                    isTextFieldFocused={isTextFieldFocused}
+                    setIsTextFieldFocused={setIsTextFieldFocused}
+                  />
+                )}
+            </>
+          ) : (
+            <ActionSubToolbar
+              selectedActionCount={selectedActionCount}
+              global={global}
             />
           )}
-    
-            {global.user.userType == 1 && !isFeedbackSubmitted && actionsData.isAddActionEnableToParticipant &&  (
-              <AddAction
-                addAction={addAction}
-                addedActionValue={addedActionValue}
-                setAddActionValue={setAddActionValue}
-                isTextFieldFocused={isTextFieldFocused}
-                setIsTextFieldFocused={setIsTextFieldFocused}
-              />
-            )}
-          </> :
-            <ActionSubToolbar selectedActionCount={selectedActionCount} global={global} />}
         </>
       )}
 

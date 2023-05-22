@@ -306,8 +306,8 @@ export default function ActionHeader({
                     <MenuItem value={NONE}>
                       <em>None</em>
                     </MenuItem>
-                    <MenuItem value={VOTES_ASC}>VOTES High to Low</MenuItem>
-                    <MenuItem value={VOTES_DSC}>VOTES Low to High</MenuItem>
+                    <MenuItem value={VOTES_DSC}>VOTES High to Low</MenuItem>
+                    <MenuItem value={VOTES_ASC}>VOTES Low to High</MenuItem>
                     <MenuItem value={VALUE_ASC}>Assignee: A - Z</MenuItem>
                     <MenuItem value={VALUE_DSC}>Assignee: Z - A</MenuItem>
                   </Select>
@@ -468,7 +468,9 @@ export default function ActionHeader({
           }}
         >
           <Box className="actionHeader">
-            <Box style={{ display: 'flex', flexDirection: 'row', width: '50%' }}>
+            <Box
+              style={{ display: 'flex', flexDirection: 'row', width: '50%' }}
+            >
               <Box
                 className="d-flex justify-content-start align-items-center p-0 m-0"
                 style={{
@@ -674,8 +676,8 @@ export default function ActionHeader({
                     <MenuItem value={NONE}>
                       <em>None</em>
                     </MenuItem>
-                    <MenuItem value={VOTES_ASC}>VOTES High to Low</MenuItem>
-                    <MenuItem value={VOTES_DSC}>VOTES Low to High</MenuItem>
+                    <MenuItem value={VOTES_DSC}>VOTES High to Low</MenuItem>
+                    <MenuItem value={VOTES_ASC}>VOTES Low to High</MenuItem>
                     <MenuItem value={VALUE_ASC}>Assignee: A - Z</MenuItem>
                     <MenuItem value={VALUE_DSC}>Assignee: Z - A</MenuItem>
                   </Select>
