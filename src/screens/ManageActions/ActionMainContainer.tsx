@@ -39,14 +39,15 @@ export default function ActionMainContainer() {
   const isXsUp = useMediaQuery(theme.breakpoints.only('xs'));
   const [isTextFieldFocused, setIsTextFieldFocused] =
     React.useState<boolean>(false);
-  const [currentUserActions, setCurrentUserActions] = React.useState<
-    ActionInterface[]
-  >([]);
-  const [othersUserActions, setOthersUserActions] = React.useState<
-    ActionInterface[]
-  >([]);
+  // const [currentUserActions, setCurrentUserActions] = React.useState<
+  //   ActionInterface[]
+  // >([]);
+  // const [othersUserActions, setOthersUserActions] = React.useState<
+  //   ActionInterface[]
+  // >([]);
   const [searchQuery, setSearchQuery] = React.useState<string>('');
   const [sortedBy, setSortedBy] = React.useState<string>(NONE);
+  const [showUnassign, setShowUnassign] = React.useState<boolean>(false);
   const [isFeedbackSubmitted, setIsFeedbackSubmitted] =
     React.useState<boolean>(false);
 
@@ -61,39 +62,42 @@ export default function ActionMainContainer() {
 
   React.useEffect(() => {
     var tempSelectedActionCount = 0;
-    // currentUserActions={currentUserActions}
-    // othersUserActions={othersUserActions}
+    var tempShowUnassign = false;
     allActionsTemp &&
       allActionsTemp.map(action => {
-        othersUserActions.map(other => {
-          if (other.id == action.id) {
-            other.checked = action.checked;
-          }
-          currentUserActions.map(current => {
-            if (current.id == action.id) {
-              current.checked = action.checked;
-            }
-          });
-        });
+        // othersUserActions.map(other => {
+        //   if (other.id == action.id) {
+        //     other.checked = action.checked;
+        //   }
+        //   currentUserActions.map(current => {
+        //     if (current.id == action.id) {
+        //       current.checked = action.checked;
+        //     }
+        //   });
+        // });
 
         if (action.checked) {
           tempSelectedActionCount = tempSelectedActionCount + 1;
         }
+        if (action.assigneeId != '' && action.assigneeId != undefined) {
+          tempShowUnassign = true;
+        }
       });
+    setShowUnassign(tempShowUnassign);
     setSelectedActionCount(tempSelectedActionCount);
   }, [allActionsTemp]);
 
-  React.useEffect(() => {
-    const tempCurrentUserActions = allActions.filter(
-      action => action.createdBy === global.user.id
-    );
+  // React.useEffect(() => {
+  //   const tempCurrentUserActions = allActions.filter(
+  //     action => action.createdBy === global.user.id
+  //   );
 
-    const tempOthersUserActions = allActions.filter(
-      action => action.createdBy != global.user.id
-    );
-    setCurrentUserActions([...tempCurrentUserActions]);
-    setOthersUserActions([...tempOthersUserActions]);
-  }, [allActions]);
+  //   const tempOthersUserActions = allActions.filter(
+  //     action => action.createdBy != global.user.id
+  //   );
+  //   setCurrentUserActions([...tempCurrentUserActions]);
+  //   setOthersUserActions([...tempOthersUserActions]);
+  // }, [allActions]);
 
   React.useEffect(() => {
     users.map(user => {
@@ -115,6 +119,21 @@ export default function ActionMainContainer() {
     });
   };
 
+  const assignAction = async (ids: string[], assigneeId: string) => {
+    dispatch({
+      type: ActionType.SET_LOADING,
+      payload: { loadingFlag: true },
+    });
+    await saveAndProcessAction(BoardActionType.ASSIGN_ACTION, {
+      actionIds: ids,
+      assigneeId: assigneeId,
+    }).then(res => {
+      dispatch({
+        type: ActionType.SET_LOADING,
+        payload: { loadingFlag: false },
+      });
+    });
+  };
   // Function to call API on adding the new action
   const addAction = async (value: string) => {
     dispatch({
@@ -251,18 +270,18 @@ export default function ActionMainContainer() {
       return action.value.toLowerCase().includes(value.toLowerCase());
     });
 
-    const tempCurrentUserActions = results.filter(
-      action => action.createdBy === global.user.id
-    );
+    // const tempCurrentUserActions = results.filter(
+    //   action => action.createdBy === global.user.id
+    // );
 
-    const tempOthersUserActions = results.filter(
-      action => action.createdBy != global.user.id
-    );
+    // const tempOthersUserActions = results.filter(
+    //   action => action.createdBy != global.user.id
+    // );
 
     setSearchQuery(value);
     setAllActionsTemp(results);
-    setCurrentUserActions([...tempCurrentUserActions]);
-    setOthersUserActions([...tempOthersUserActions]);
+    // setCurrentUserActions([...tempCurrentUserActions]);
+    // setOthersUserActions([...tempOthersUserActions]);
   };
 
   // Sort Functionality
@@ -327,6 +346,18 @@ export default function ActionMainContainer() {
     setAllActionsTemp(numDescending);
   };
 
+const assignFunction =(id:string)=>{
+const ids:string[]=[];
+  allActionsTemp&&allActionsTemp.map((action)=>{
+    if(action.checked){
+      ids.push(action.id)
+    }
+  })
+  if(ids.length>0){
+    assignAction(ids,id)
+  }
+}
+
   return (
     <Box
       className="actionsContainer"
@@ -379,6 +410,8 @@ export default function ActionMainContainer() {
             <ActionSubToolbar
               selectedActionCount={selectedActionCount}
               global={global}
+              showUnassign={showUnassign}
+              assignFunction={assignFunction}
             />
           )}
         </>
@@ -420,11 +453,13 @@ export default function ActionMainContainer() {
                 />
               ) : (
                 <ActionsListParticipant
-                  currentUserActions={currentUserActions}
-                  othersUserActions={othersUserActions}
+                  // currentUserActions={currentUserActions}
+                  // othersUserActions={othersUserActions}
                   handleToggleAction={handleToggleAction}
                   addReactToAction={addReactToAction}
+                 user= {global.user}
                   ended={ended}
+                  allActions={allActionsTemp}
                   isFeedbackSubmitted={isFeedbackSubmitted}
                   removeReactFromAction={removeReactFromAction}
                   isAddActionEnableToParticipant={
