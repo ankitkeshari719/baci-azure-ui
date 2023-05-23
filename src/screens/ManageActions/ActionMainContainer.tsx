@@ -79,7 +79,7 @@ export default function ActionMainContainer() {
         if (action.checked) {
           tempSelectedActionCount = tempSelectedActionCount + 1;
         }
-        if (action.assigneeId != '' && action.assigneeId != undefined) {
+        if (action.assigneeId != '' && action.assigneeId != undefined&&action.checked) {
           tempShowUnassign = true;
         }
       });

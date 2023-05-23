@@ -28,6 +28,7 @@ type Props = {
   isFeedbackSubmitted: boolean;
   isAddActionEnableToParticipant: boolean | undefined;
   isVotingEnableToParticipant: boolean | undefined;
+  disabled: boolean;
 };
 
 export default function ActionItem({
@@ -38,6 +39,7 @@ export default function ActionItem({
   removeReactFromAction,
   isAddActionEnableToParticipant,
   isVotingEnableToParticipant,
+  disabled,
 }: Props) {
   const {
     state: { ended },
@@ -120,41 +122,44 @@ export default function ActionItem({
   return (
     <ListItem key={labelId} style={{ padding: '8px 12px' }}>
       {/* Checkbox */}
-      <ListItemIcon
-        style={{
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'center',
-          width: '40px',
-          height: '40px',
-          minWidth: '40px',
-        }}
-        onClick={() => handleToggleAction(action.id)}
-      >
-        <Checkbox
-          edge="start"
-          checked={action.checked}
-          tabIndex={-1}
-          disableRipple
-          inputProps={{ 'aria-labelledby': labelId }}
-          icon={
-            <img
-              src="/svgs/CircleUnchecked.svg"
-              alt="Logo"
-              style={{ width: '24px', height: '24px' }}
-            />
-          }
-          checkedIcon={
-            <Icons.CheckCircle
-              size={24}
-              color="#159ADD"
-              style={{
-                cursor: 'pointer',
-              }}
-            />
-          }
-        />
-      </ListItemIcon>
+      {!disabled && (
+        <ListItemIcon
+          style={{
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            width: '40px',
+            height: '40px',
+            minWidth: '40px',
+          }}
+          onClick={() => handleToggleAction(action.id)}
+        >
+          <Checkbox
+            edge="start"
+            checked={action.checked}
+            tabIndex={-1}
+            disableRipple
+            disabled
+            inputProps={{ 'aria-labelledby': labelId }}
+            icon={
+              <img
+                src="/svgs/CircleUnchecked.svg"
+                alt="Logo"
+                style={{ width: '24px', height: '24px' }}
+              />
+            }
+            checkedIcon={
+              <Icons.CheckCircle
+                size={24}
+                color="#159ADD"
+                style={{
+                  cursor: 'pointer',
+                }}
+              />
+            }
+          />
+        </ListItemIcon>
+      )}
       {/* Action Description and Edit Text Field */}
       {!isEditActionClick ? (
         <ListItemButton

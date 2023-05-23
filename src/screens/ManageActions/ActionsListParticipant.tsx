@@ -80,6 +80,8 @@ export default function ActionsListParticipant({
                 removeReactFromAction={removeReactFromAction}
                 isAddActionEnableToParticipant={isAddActionEnableToParticipant}
                 isVotingEnableToParticipant={isVotingEnableToParticipant}
+                disabled={false}
+
               />
             );
           })}
@@ -127,6 +129,7 @@ export default function ActionsListParticipant({
                 removeReactFromAction={removeReactFromAction}
                 isAddActionEnableToParticipant={isAddActionEnableToParticipant}
                 isVotingEnableToParticipant={isVotingEnableToParticipant}
+                disabled={true}
               />
             );
           })}

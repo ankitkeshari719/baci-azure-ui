@@ -45,6 +45,8 @@ export default function ActionsListFacilitator({
               removeReactFromAction={removeReactFromAction}
               isAddActionEnableToParticipant={isAddActionEnableToParticipant}
               isVotingEnableToParticipant={isVotingEnableToParticipant}
+              disabled={false}
+
             />
           );
         })}
