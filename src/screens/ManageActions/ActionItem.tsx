@@ -314,8 +314,7 @@ export default function ActionItem({
         </ListItemButton>
       )}
       {/* Voting to Action */}
-      {(global.user.userType === 2 ||
-        (global.user.userType === 1 && isVotingEnableToParticipant)) && (
+      {isVotingEnableToParticipant && (
         <Box
           sx={{
             display: 'flex',

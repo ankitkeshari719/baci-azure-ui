@@ -323,27 +323,93 @@ export default function ActionMainContainer() {
       a.assigneeName > b.assigneeName ? 1 : -1
     );
     setAllActionsTemp(strAscending);
+
+    const tempCurrentUserActions = allActions.filter(
+      action => action.createdBy === global.user.id
+    );
+
+    const tempOthersUserActions = allActions.filter(
+      action => action.createdBy != global.user.id
+    );
+    const currentStrAscending = [...tempCurrentUserActions].sort((a, b) =>
+      a.assigneeName > b.assigneeName ? 1 : -1
+    );
+    const otherStrAscending = [...tempOthersUserActions].sort((a, b) =>
+      a.assigneeName > b.assigneeName ? 1 : -1
+    );
+
+    // setCurrentUserActions([...currentStrAscending]);
+    // setOthersUserActions([...otherStrAscending]);
   };
 
   const assigneeDESCENDING = () => {
     const strDescending = [...allActions].sort((a, b) =>
       a.assigneeName > b.assigneeName ? -1 : 1
     );
+    const tempCurrentUserActions = allActions.filter(
+      action => action.createdBy === global.user.id
+    );
+
+    const tempOthersUserActions = allActions.filter(
+      action => action.createdBy != global.user.id
+    );
+    const currentStrAscending = [...tempCurrentUserActions].sort((a, b) =>
+      a.assigneeName > b.assigneeName ? -1 : 1
+    );
+    const otherStrAscending = [...tempOthersUserActions].sort((a, b) =>
+      a.assigneeName > b.assigneeName ? -1 : 1
+    );
+
     setAllActionsTemp(strDescending);
+    // setCurrentUserActions([...currentStrAscending]);
+    // setOthersUserActions([...otherStrAscending]);
   };
 
   const numericASCENDING = () => {
     const numAscending = [...allActions].sort(
       (a, b) => a.reacts?.length - b.reacts?.length
     );
+    const tempCurrentUserActions = allActions.filter(
+      action => action.createdBy === global.user.id
+    );
+
+    const tempOthersUserActions = allActions.filter(
+      action => action.createdBy != global.user.id
+    );
+    const currentNumAscending = [...tempCurrentUserActions].sort(
+      (a, b) => a.reacts?.length - b.reacts?.length
+    );
+    const otherNumAscending = [...tempOthersUserActions].sort(
+      (a, b) => a.reacts?.length - b.reacts?.length
+    );
+
     setAllActionsTemp(numAscending);
+    // setCurrentUserActions([...currentNumAscending]);
+    // setOthersUserActions([...otherNumAscending]);
   };
 
   const numericDESCENDING = () => {
     const numDescending = [...allActions].sort(
       (a, b) => b.reacts?.length - a.reacts?.length
     );
+
+    const tempCurrentUserActions = allActions.filter(
+      action => action.createdBy === global.user.id
+    );
+
+    const tempOthersUserActions = allActions.filter(
+      action => action.createdBy != global.user.id
+    );
+    const currentNumAscending = [...tempCurrentUserActions].sort(
+      (a, b) => b.reacts?.length - a.reacts?.length
+    );
+    const otherNumAscending = [...tempOthersUserActions].sort(
+      (a, b) => b.reacts?.length - a.reacts?.length
+    );
+
     setAllActionsTemp(numDescending);
+    // setCurrentUserActions([...currentNumAscending]);
+    // setOthersUserActions([...otherNumAscending]);
   };
 
 const assignFunction =(id:string)=>{
@@ -480,8 +546,8 @@ const ids:string[]=[];
               {!actionsData.isAddActionEnableToParticipant ? (
                 <ZeroActions
                   height="var(--app-height)"
-                  zeroActionText_One=""
-                  zeroActionText_Two="Let Facilitator add actions here"
+                  zeroActionText_One="Actions Speak!"
+                  zeroActionText_Two="Let Facilitator add them here..."
                 />
               ) : (
                 <ZeroActions
