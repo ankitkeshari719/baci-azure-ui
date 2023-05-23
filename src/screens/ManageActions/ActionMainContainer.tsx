@@ -61,9 +61,21 @@ export default function ActionMainContainer() {
 
   React.useEffect(() => {
     var tempSelectedActionCount = 0;
-
+    // currentUserActions={currentUserActions}
+    // othersUserActions={othersUserActions}
     allActionsTemp &&
       allActionsTemp.map(action => {
+        othersUserActions.map(other => {
+          if (other.id == action.id) {
+            other.checked = action.checked;
+          }
+          currentUserActions.map(current => {
+            if (current.id == action.id) {
+              current.checked = action.checked;
+            }
+          });
+        });
+
         if (action.checked) {
           tempSelectedActionCount = tempSelectedActionCount + 1;
         }
@@ -283,6 +295,7 @@ export default function ActionMainContainer() {
       }
       return action;
     });
+
     setAllActionsTemp([...newAction]);
   };
 
