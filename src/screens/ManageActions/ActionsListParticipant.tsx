@@ -40,6 +40,7 @@ export default function ActionsListParticipant({
         borderRadius: '8px',
       }}
     >
+      {/* current user actions */}
       {currentUserActions.length > 0 && (
         <List sx={{ width: '100%', bgcolor: 'background.paper' }}>
           {currentUserActions.map(action => {
@@ -58,6 +59,7 @@ export default function ActionsListParticipant({
           })}
         </List>
       )}
+      {/* How and hide message*/}
       {othersUserActions.length > 0 && (
         <Box
           sx={{
@@ -85,6 +87,7 @@ export default function ActionsListParticipant({
           )}
         </Box>
       )}
+      {/* Other Participant and facilitator actions */}
       {showOtherAction && othersUserActions.length > 0 && (
         <List sx={{ width: '100%', bgcolor: 'background.paper' }}>
           {othersUserActions.map(action => {
@@ -102,13 +105,6 @@ export default function ActionsListParticipant({
             );
           })}
         </List>
-      )}
-      {currentUserActions.length == 0 && (
-        <ZeroActions
-          height="85%"
-          zeroActionText_One="Actions Speak!"
-          zeroActionText_Two="Add them here..."
-        />
       )}
     </Box>
   );

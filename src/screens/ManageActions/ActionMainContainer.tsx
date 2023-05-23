@@ -445,8 +445,8 @@ export default function ActionMainContainer() {
               {!actionsData.isAddActionEnableToParticipant ? (
                 <ZeroActions
                   height="var(--app-height)"
-                  zeroActionText_One=""
-                  zeroActionText_Two="Let Facilitator add actions here"
+                  zeroActionText_One="Actions Speak!"
+                  zeroActionText_Two="Let Facilitator add them here..."
                 />
               ) : (
                 <ZeroActions
