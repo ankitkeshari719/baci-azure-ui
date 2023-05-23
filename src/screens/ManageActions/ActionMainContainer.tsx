@@ -12,7 +12,7 @@ import {
 import { BoardContext } from '../../contexts/BoardContext';
 import { ActionType, GlobalContext } from '../../contexts/GlobalContext';
 import { BoardActionType } from '../../statemachine/BoardStateMachine';
-import { ActionInterface } from '../../types';
+import { ActionInterface, DyanamicDialog } from '../../types';
 import ActionsListFacilitator from './ActionsListFacilitator';
 
 import ActionHeader from './ActionHeader';
@@ -22,6 +22,7 @@ import theme from '../../theme/theme';
 import ActionsListParticipant from './ActionsListParticipant';
 import { NONE, VALUE_ASC, VALUE_DSC, VOTES_ASC, VOTES_DSC } from './const';
 import ActionSubToolbar from './ActionSubToolbar';
+import DialogWithDyanamicData from '../Utils/Dialogs/DialogWithDyanamicData';
 
 export default function ActionMainContainer() {
   const {
@@ -33,6 +34,9 @@ export default function ActionMainContainer() {
   const [allActionsTemp, setAllActionsTemp] = React.useState<ActionInterface[]>(
     []
   );
+  const [open, setOpen] = React.useState<boolean>(false);
+
+  const [assigneeId, setAssigneeId] = React.useState<string>('');
   const [selectedActionCount, setSelectedActionCount] =
     React.useState<number>(0);
   const [addedActionValue, setAddActionValue] = React.useState<string>('');
@@ -79,7 +83,11 @@ export default function ActionMainContainer() {
         if (action.checked) {
           tempSelectedActionCount = tempSelectedActionCount + 1;
         }
-        if (action.assigneeId != '' && action.assigneeId != undefined&&action.checked) {
+        if (
+          action.assigneeId != '' &&
+          action.assigneeId != undefined &&
+          action.checked
+        ) {
           tempShowUnassign = true;
         }
       });
@@ -132,6 +140,14 @@ export default function ActionMainContainer() {
         type: ActionType.SET_LOADING,
         payload: { loadingFlag: false },
       });
+    });
+    setAssigneeId('');
+    setDialogObject({
+      open: false,
+      header: '',
+      content: '',
+      agreeLabel: '',
+      cancelLabel: '',
     });
   };
   // Function to call API on adding the new action
@@ -411,18 +427,55 @@ export default function ActionMainContainer() {
     // setCurrentUserActions([...currentNumAscending]);
     // setOthersUserActions([...otherNumAscending]);
   };
+  const [dialogObject, setDialogObject] = React.useState<DyanamicDialog>({
+    open: false,
+    header: '',
+    content: '',
+    agreeLabel: '',
+    cancelLabel: '',
+  });
+  const findUser = (userId: string) =>
+    users.find(user => user.userId === userId);
 
-const assignFunction =(id:string)=>{
-const ids:string[]=[];
-  allActionsTemp&&allActionsTemp.map((action)=>{
-    if(action.checked){
-      ids.push(action.id)
+  const assignFunction = (id: string) => {
+    setAssigneeId(id);
+    const header = selectedActionCount == 1 ? ' Action' : ' Actions';
+    const subcontent = selectedActionCount == 1 ? 'Selected action' : 'All selected actions';
+    const asignee = findUser(id);
+    const userName = asignee && asignee?.userNickname;
+    if (id != '') {
+      setDialogObject({
+        open: true,
+        header: 'Assign ' + selectedActionCount + header + '?',
+        content:
+        subcontent + ' will be assigned to ' + userName + '.',
+        agreeLabel: 'ASSIGN ' + selectedActionCount + header,
+        cancelLabel: 'CANCEL',
+      });
+      // setOpen(true)}
+    } else {
+      setDialogObject({
+        open: true,
+        header: 'Un-assign ' + selectedActionCount + header + '?',
+        content: subcontent + ' will be un-assigned.',
+        agreeLabel: 'UN-ASSIGN ' + selectedActionCount + header,
+        cancelLabel: 'CANCEL',
+      });
     }
-  })
-  if(ids.length>0){
-    assignAction(ids,id)
-  }
-}
+  };
+
+  const agreeToAssignFunction = () => {
+    const ids: string[] = [];
+    allActionsTemp &&
+      allActionsTemp.map(action => {
+        if (action.checked) {
+          ids.push(action.id);
+        }
+      });
+    if (ids.length > 0) {
+      assignAction(ids, assigneeId);
+    }
+  };
 
   return (
     <Box
@@ -523,7 +576,7 @@ const ids:string[]=[];
                   // othersUserActions={othersUserActions}
                   handleToggleAction={handleToggleAction}
                   addReactToAction={addReactToAction}
-                 user= {global.user}
+                  user={global.user}
                   ended={ended}
                   allActions={allActionsTemp}
                   isFeedbackSubmitted={isFeedbackSubmitted}
@@ -567,6 +620,25 @@ const ids:string[]=[];
           )}
         </>
       )}
+      <DialogWithDyanamicData
+        open={dialogObject.open}
+        header={dialogObject.header}
+        subtext={dialogObject.content}
+        agreeLabel={dialogObject.agreeLabel}
+        cancelLabel={dialogObject.cancelLabel}
+        handleClose={() => {
+          setDialogObject({
+            open: false,
+            header: '',
+            content: '',
+            agreeLabel: '',
+            cancelLabel: '',
+          });
+        }}
+        acceptClose={() => {
+          agreeToAssignFunction();
+        }}
+      />
     </Box>
   );
 }
