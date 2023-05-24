@@ -269,6 +269,14 @@ export default function ActionMainContainer() {
     switch (event.target.value) {
       case NONE:
         setAllActionsTemp(allActions);
+        const tempCurrentUserActions = allActions.filter(
+          action => action.createdBy === global.user.id
+        );
+        const tempOthersUserActions = allActions.filter(
+          action => action.createdBy != global.user.id
+        );
+        setCurrentUserActions([...tempCurrentUserActions]);
+        setOthersUserActions([...tempOthersUserActions]);
         break;
       case VALUE_ASC:
         assigneeASCENDING();
