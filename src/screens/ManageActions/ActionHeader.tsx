@@ -220,7 +220,7 @@ export default function ActionHeader({
               </Box>
             </Box>
             <Box
-              className="d-flex justify-content-center align-items-center p-0 m-0"
+              className="d-flex justify-content-end align-items-center p-0 m-0"
               style={{ flexDirection: 'row', width: '100%' }}
             >
               {/* Sort Box */}
