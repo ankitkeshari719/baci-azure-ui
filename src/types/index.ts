@@ -207,3 +207,11 @@ export interface Action {
   onlyVisibleBy?: string[];
   version: number;
 }
+export interface DyanamicDialog {
+  open:boolean;
+  header:string;
+  content:string;
+  cancelLabel:string;
+  agreeLabel:string;
+
+}

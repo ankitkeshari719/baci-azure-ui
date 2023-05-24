@@ -10,9 +10,14 @@ import './styles.scss';
 const ActionSubToolbar = ({
   selectedActionCount,
   global,
+  showUnassign,
+  assignFunction
 }: {
   selectedActionCount: number;
   global: any;
+  showUnassign: boolean;
+  assignFunction:(id:string)=>void;
+
 }) => {
   const {
     state: { actionsData, ended, users },
@@ -27,6 +32,13 @@ const ActionSubToolbar = ({
   const handleClose = () => {
     setAnchorEl(null);
   };
+  const handleAssign = (event: React.MouseEvent<HTMLElement>) => {
+
+    setAnchorEl(null);
+    const id:string=event.currentTarget.dataset.myValue?event.currentTarget.dataset.myValue:"";
+    assignFunction(id)
+
+  };
 
   return (
     <Box className="actionSubToolbarContainer">
@@ -37,7 +49,7 @@ const ActionSubToolbar = ({
         display="flex"
         sx={{ width: '220px', justifyContent: 'space-between' }}
       >
-        <ButtonWithIcon
+        {global.user.userType==2&&<ButtonWithIcon
           disabled={selectedActionCount == 0 ? true : false}
           aria-controls={open ? 'basic-menu' : undefined}
           id="assign-button"
@@ -46,7 +58,7 @@ const ActionSubToolbar = ({
           onClick={res => {
             handleClick(res);
           }}
-        />
+        />}
 
         <ButtonWithIcon
           disabled={false}
@@ -66,30 +78,32 @@ const ActionSubToolbar = ({
         onClose={handleClose}
         open={open}
       >
-        <MenuItem className="menu-item">
-          <LazyLoadImage
-            width="40px !important"
-            height="40px !important"
-            style={{
-              borderRadius: '50%',
-            }}
-            src={'/svgs/DefaultUser.svg'}
-          ></LazyLoadImage>
-          <Box
-            component="span"
-            sx={{
-              marginLeft: '8px',
-              fontFamily: 'Poppins',
-              fontStyle: 'normal',
-              fontWeight: 400,
-              fontSize: '16px',
-            }}
-          >
-            Un-assign
-          </Box>
-        </MenuItem>
+        {showUnassign && (
+          <MenuItem className="menu-item"  data-my-value={""} onClick={handleAssign} >
+            <LazyLoadImage
+              width="40px !important"
+              height="40px !important"
+              style={{
+                borderRadius: '50%',
+              }}
+              src={'/svgs/DefaultUser.svg'}
+            ></LazyLoadImage>
+            <Box
+              component="span"
+              sx={{
+                marginLeft: '8px',
+                fontFamily: 'Poppins',
+                fontStyle: 'normal',
+                fontWeight: 400,
+                fontSize: '16px',
+              }}
+            >
+              Un-assign
+            </Box>
+          </MenuItem>
+        )}
 
-        <MenuItem className="menu-item">
+        <MenuItem className="menu-item" onClick={handleAssign} data-my-value={global.user.id}>
           <LazyLoadImage
             width="40px !important"
             height="40px !important"
@@ -114,7 +128,7 @@ const ActionSubToolbar = ({
         {users.map(
           (user: any, index: number) =>
             global.user.id != user.userId && (
-              <MenuItem className="menu-item" key={'basic-menu' + index}>
+              <MenuItem className="menu-item" key={'basic-menu' + index} onClick={handleAssign} data-my-value={user.userId}>
                 <LazyLoadImage
                   width="40px !important"
                   height="40px !important"

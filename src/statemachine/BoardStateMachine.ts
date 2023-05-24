@@ -524,13 +524,16 @@ export const validateAction = (
     return true;
   };
 
-  const isAssignActionValid = (id: string, value: string): boolean => {
-    const action = findAction(id)
-    if (action)
-      return true;
-    else return false;
-
-  }
+  const isAssignActionValid = (
+    id: string[],
+    assigneeId: string,
+    value: string
+  ): boolean => {
+    // const action = findAction(id);
+    // if (action) return true;
+    // else return false;
+    return true;
+  };
 
   const isAddReactToActionValid = (
     actionId: string,
@@ -703,7 +706,7 @@ export const validateAction = (
       return isUpdateExistingActionValid(parameters.id, parameters.value);
 
     case BoardActionType.ASSIGN_ACTION:
-      return isAssignActionValid(parameters.id, userId);
+      return isAssignActionValid(parameters.actionIds, parameters.assigneeId, userId);
     case BoardActionType.ADD_REACT_TO_ACTION:
       return isAddReactToActionValid(
         parameters.actionId,
@@ -932,9 +935,9 @@ export const processAction = (
             group.cards.splice(index as number, 1);
             cardsList.splice(
               toIndex -
-              (group.id === targetGroup.id && (index as number) < toIndex
-                ? 1
-                : 0),
+                (group.id === targetGroup.id && (index as number) < toIndex
+                  ? 1
+                  : 0),
               0,
               card
             );
@@ -990,9 +993,9 @@ export const processAction = (
         group.cards.splice(index as number, 1);
         cardsList.splice(
           toIndex -
-          (group.id === targetGroup.id && (index as number) < toIndex
-            ? 1
-            : 0),
+            (group.id === targetGroup.id && (index as number) < toIndex
+              ? 1
+              : 0),
           0,
           card
         );
@@ -1104,12 +1107,11 @@ export const processAction = (
   };
 
   const addKeywordsToCard = (suggestedkeywordCards: Card[], userId: string) => {
-
-    suggestedkeywordCards && suggestedkeywordCards.forEach(element => {
-
-      const { card } = findCard(element.id);
-      if (card) {
-        card.keywords = element.keywords;
+    suggestedkeywordCards &&
+      suggestedkeywordCards.forEach(element => {
+        const { card } = findCard(element.id);
+        if (card) {
+          card.keywords = element.keywords;
 
           card.lastUpdatedBy = userId;
         }
@@ -1445,17 +1447,29 @@ export const processAction = (
     }
   };
 
-  const assignAction = (actionId: string, assigneeId: string) => {
-    const { action } = findAction(actionId)
-    const assignTo = findUser(assigneeId)
+  const assignAction = (
+    actionIds: string[],
+    assigneeId: string,
+    userId: string
+  ) => {
+ 
+    actionIds &&
+      actionIds.forEach(actionId => {
+        const { action } = findAction(actionId);
+        const assignTo = findUser(assigneeId);
 
-    if (action && assignTo) {
-      action.assigneeId = assignTo.userId;
-      action.assigneeAvatar = assignTo.avatar
-    }
-
-  }
-
+        if (action && assignTo) {
+          action.assigneeId = assignTo.userId;
+          action.assigneeAvatar = assignTo.avatar;
+          action.assigneeName = assignTo.userNickname;
+        }
+        else if(action &&!assignTo){
+          action.assigneeId = "";
+          action.assigneeAvatar = "";
+          action.assigneeName =""; 
+        }
+      });
+  };
 
   let noMatch = false;
 
@@ -1485,7 +1499,6 @@ export const processAction = (
   const enableAddActionToParticipant = (value: boolean) => {
     actionsData.isAddActionEnableToParticipant = value;
   };
-
 
   const updateKeywordFlag = (columnId: any, flag: boolean) => {
     const column = findColumn(columnId);
@@ -1668,7 +1681,7 @@ export const processAction = (
       updateAction(parameters.id, parameters.value);
       break;
     case BoardActionType.ASSIGN_ACTION:
-      assignAction(parameters.id, parameters.assigneeId);
+      assignAction(parameters.actionIds, parameters.assigneeId, userId);
       break;
     case BoardActionType.ADD_REACT_TO_ACTION:
       addReactToAction(parameters.actionId, parameters.react, userId);

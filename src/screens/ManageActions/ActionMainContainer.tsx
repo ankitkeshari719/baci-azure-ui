@@ -12,7 +12,7 @@ import {
 import { BoardContext } from '../../contexts/BoardContext';
 import { ActionType, GlobalContext } from '../../contexts/GlobalContext';
 import { BoardActionType } from '../../statemachine/BoardStateMachine';
-import { ActionInterface } from '../../types';
+import { ActionInterface, DyanamicDialog } from '../../types';
 import ActionsListFacilitator from './ActionsListFacilitator';
 
 import ActionHeader from './ActionHeader';
@@ -22,6 +22,7 @@ import theme from '../../theme/theme';
 import ActionsListParticipant from './ActionsListParticipant';
 import { NONE, VALUE_ASC, VALUE_DSC, VOTES_ASC, VOTES_DSC } from './const';
 import ActionSubToolbar from './ActionSubToolbar';
+import DialogWithDyanamicData from '../Utils/Dialogs/DialogWithDyanamicData';
 
 export default function ActionMainContainer() {
   const {
@@ -33,20 +34,18 @@ export default function ActionMainContainer() {
   const [allActionsTemp, setAllActionsTemp] = React.useState<ActionInterface[]>(
     []
   );
+  const [open, setOpen] = React.useState<boolean>(false);
+
+  const [assigneeId, setAssigneeId] = React.useState<string>('');
   const [selectedActionCount, setSelectedActionCount] =
     React.useState<number>(0);
   const [addedActionValue, setAddActionValue] = React.useState<string>('');
   const isXsUp = useMediaQuery(theme.breakpoints.only('xs'));
   const [isTextFieldFocused, setIsTextFieldFocused] =
     React.useState<boolean>(false);
-  const [currentUserActions, setCurrentUserActions] = React.useState<
-    ActionInterface[]
-  >([]);
-  const [othersUserActions, setOthersUserActions] = React.useState<
-    ActionInterface[]
-  >([]);
   const [searchQuery, setSearchQuery] = React.useState<string>('');
   const [sortedBy, setSortedBy] = React.useState<string>(NONE);
+  const [showUnassign, setShowUnassign] = React.useState<boolean>(false);
   const [isFeedbackSubmitted, setIsFeedbackSubmitted] =
     React.useState<boolean>(false);
 
@@ -61,37 +60,23 @@ export default function ActionMainContainer() {
 
   React.useEffect(() => {
     var tempSelectedActionCount = 0;
+    var tempShowUnassign = false;
     allActionsTemp &&
       allActionsTemp.map(action => {
-        othersUserActions.map(other => {
-          if (other.id == action.id) {
-            other.checked = action.checked;
-          }
-          currentUserActions.map(current => {
-            if (current.id == action.id) {
-              current.checked = action.checked;
-            }
-          });
-        });
-
         if (action.checked) {
           tempSelectedActionCount = tempSelectedActionCount + 1;
         }
+        if (
+          action.assigneeId != '' &&
+          action.assigneeId != undefined &&
+          action.checked
+        ) {
+          tempShowUnassign = true;
+        }
       });
+    setShowUnassign(tempShowUnassign);
     setSelectedActionCount(tempSelectedActionCount);
   }, [allActionsTemp]);
-
-  React.useEffect(() => {
-    const tempCurrentUserActions = allActions.filter(
-      action => action.createdBy === global.user.id
-    );
-
-    const tempOthersUserActions = allActions.filter(
-      action => action.createdBy != global.user.id
-    );
-    setCurrentUserActions([...tempCurrentUserActions]);
-    setOthersUserActions([...tempOthersUserActions]);
-  }, [allActions]);
 
   React.useEffect(() => {
     users.map(user => {
@@ -110,6 +95,30 @@ export default function ActionMainContainer() {
     await commitAction(actionName as BoardActionType, {
       parameters,
       userId: global.user.id,
+    });
+  };
+
+  const assignAction = async (ids: string[], assigneeId: string) => {
+    dispatch({
+      type: ActionType.SET_LOADING,
+      payload: { loadingFlag: true },
+    });
+    await saveAndProcessAction(BoardActionType.ASSIGN_ACTION, {
+      actionIds: ids,
+      assigneeId: assigneeId,
+    }).then(res => {
+      dispatch({
+        type: ActionType.SET_LOADING,
+        payload: { loadingFlag: false },
+      });
+    });
+    setAssigneeId('');
+    setDialogObject({
+      open: false,
+      header: '',
+      content: '',
+      agreeLabel: '',
+      cancelLabel: '',
     });
   };
 
@@ -249,18 +258,8 @@ export default function ActionMainContainer() {
       return action.value.toLowerCase().includes(value.toLowerCase());
     });
 
-    const tempCurrentUserActions = results.filter(
-      action => action.createdBy === global.user.id
-    );
-
-    const tempOthersUserActions = results.filter(
-      action => action.createdBy != global.user.id
-    );
-
     setSearchQuery(value);
     setAllActionsTemp(results);
-    setCurrentUserActions([...tempCurrentUserActions]);
-    setOthersUserActions([...tempOthersUserActions]);
   };
 
   // Sort Functionality
@@ -269,6 +268,12 @@ export default function ActionMainContainer() {
     switch (event.target.value) {
       case NONE:
         setAllActionsTemp(allActions);
+        const tempCurrentUserActions = allActions.filter(
+          action => action.createdBy === global.user.id
+        );
+        const tempOthersUserActions = allActions.filter(
+          action => action.createdBy != global.user.id
+        );
         break;
       case VALUE_ASC:
         assigneeASCENDING();
@@ -316,9 +321,6 @@ export default function ActionMainContainer() {
     const otherStrAscending = [...tempOthersUserActions].sort((a, b) =>
       a.assigneeName > b.assigneeName ? 1 : -1
     );
-
-    setCurrentUserActions([...currentStrAscending]);
-    setOthersUserActions([...otherStrAscending]);
   };
 
   const assigneeDESCENDING = () => {
@@ -340,8 +342,6 @@ export default function ActionMainContainer() {
     );
 
     setAllActionsTemp(strDescending);
-    setCurrentUserActions([...currentStrAscending]);
-    setOthersUserActions([...otherStrAscending]);
   };
 
   const numericASCENDING = () => {
@@ -363,8 +363,6 @@ export default function ActionMainContainer() {
     );
 
     setAllActionsTemp(numAscending);
-    setCurrentUserActions([...currentNumAscending]);
-    setOthersUserActions([...otherNumAscending]);
   };
 
   const numericDESCENDING = () => {
@@ -387,8 +385,54 @@ export default function ActionMainContainer() {
     );
 
     setAllActionsTemp(numDescending);
-    setCurrentUserActions([...currentNumAscending]);
-    setOthersUserActions([...otherNumAscending]);
+  };
+  const [dialogObject, setDialogObject] = React.useState<DyanamicDialog>({
+    open: false,
+    header: '',
+    content: '',
+    agreeLabel: '',
+    cancelLabel: '',
+  });
+  const findUser = (userId: string) =>
+    users.find(user => user.userId === userId);
+
+  const assignFunction = (id: string) => {
+    setAssigneeId(id);
+    const header = selectedActionCount == 1 ? ' Action' : ' Actions';
+    const subcontent =
+      selectedActionCount == 1 ? 'Selected action' : 'All selected actions';
+    const asignee = findUser(id);
+    const userName = asignee && asignee?.userNickname;
+    if (id != '') {
+      setDialogObject({
+        open: true,
+        header: 'Assign ' + selectedActionCount + header + '?',
+        content: subcontent + ' will be assigned to ' + userName + '.',
+        agreeLabel: 'ASSIGN ' + selectedActionCount + header,
+        cancelLabel: 'CANCEL',
+      });
+    } else {
+      setDialogObject({
+        open: true,
+        header: 'Un-assign ' + selectedActionCount + header + '?',
+        content: subcontent + ' will be un-assigned.',
+        agreeLabel: 'UN-ASSIGN ' + selectedActionCount + header,
+        cancelLabel: 'CANCEL',
+      });
+    }
+  };
+
+  const agreeToAssignFunction = () => {
+    const ids: string[] = [];
+    allActionsTemp &&
+      allActionsTemp.map(action => {
+        if (action.checked) {
+          ids.push(action.id);
+        }
+      });
+    if (ids.length > 0) {
+      assignAction(ids, assigneeId);
+    }
   };
 
   return (
@@ -443,6 +487,8 @@ export default function ActionMainContainer() {
             <ActionSubToolbar
               selectedActionCount={selectedActionCount}
               global={global}
+              showUnassign={showUnassign}
+              assignFunction={assignFunction}
             />
           )}
         </>
@@ -484,11 +530,13 @@ export default function ActionMainContainer() {
                 />
               ) : (
                 <ActionsListParticipant
-                  currentUserActions={currentUserActions}
-                  othersUserActions={othersUserActions}
+                  // currentUserActions={currentUserActions}
+                  // othersUserActions={othersUserActions}
                   handleToggleAction={handleToggleAction}
                   addReactToAction={addReactToAction}
+                  user={global.user}
                   ended={ended}
+                  allActions={allActionsTemp}
                   isFeedbackSubmitted={isFeedbackSubmitted}
                   removeReactFromAction={removeReactFromAction}
                   isAddActionEnableToParticipant={
@@ -530,6 +578,25 @@ export default function ActionMainContainer() {
           )}
         </>
       )}
+      <DialogWithDyanamicData
+        open={dialogObject.open}
+        header={dialogObject.header}
+        subtext={dialogObject.content}
+        agreeLabel={dialogObject.agreeLabel}
+        cancelLabel={dialogObject.cancelLabel}
+        handleClose={() => {
+          setDialogObject({
+            open: false,
+            header: '',
+            content: '',
+            agreeLabel: '',
+            cancelLabel: '',
+          });
+        }}
+        acceptClose={() => {
+          agreeToAssignFunction();
+        }}
+      />
     </Box>
   );
 }
