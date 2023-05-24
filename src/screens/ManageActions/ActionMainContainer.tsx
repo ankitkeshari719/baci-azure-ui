@@ -43,12 +43,6 @@ export default function ActionMainContainer() {
   const isXsUp = useMediaQuery(theme.breakpoints.only('xs'));
   const [isTextFieldFocused, setIsTextFieldFocused] =
     React.useState<boolean>(false);
-  // const [currentUserActions, setCurrentUserActions] = React.useState<
-  //   ActionInterface[]
-  // >([]);
-  // const [othersUserActions, setOthersUserActions] = React.useState<
-  //   ActionInterface[]
-  // >([]);
   const [searchQuery, setSearchQuery] = React.useState<string>('');
   const [sortedBy, setSortedBy] = React.useState<string>(NONE);
   const [showUnassign, setShowUnassign] = React.useState<boolean>(false);
@@ -69,17 +63,6 @@ export default function ActionMainContainer() {
     var tempShowUnassign = false;
     allActionsTemp &&
       allActionsTemp.map(action => {
-        // othersUserActions.map(other => {
-        //   if (other.id == action.id) {
-        //     other.checked = action.checked;
-        //   }
-        //   currentUserActions.map(current => {
-        //     if (current.id == action.id) {
-        //       current.checked = action.checked;
-        //     }
-        //   });
-        // });
-
         if (action.checked) {
           tempSelectedActionCount = tempSelectedActionCount + 1;
         }
@@ -94,18 +77,6 @@ export default function ActionMainContainer() {
     setShowUnassign(tempShowUnassign);
     setSelectedActionCount(tempSelectedActionCount);
   }, [allActionsTemp]);
-
-  // React.useEffect(() => {
-  //   const tempCurrentUserActions = allActions.filter(
-  //     action => action.createdBy === global.user.id
-  //   );
-
-  //   const tempOthersUserActions = allActions.filter(
-  //     action => action.createdBy != global.user.id
-  //   );
-  //   setCurrentUserActions([...tempCurrentUserActions]);
-  //   setOthersUserActions([...tempOthersUserActions]);
-  // }, [allActions]);
 
   React.useEffect(() => {
     users.map(user => {
@@ -150,6 +121,7 @@ export default function ActionMainContainer() {
       cancelLabel: '',
     });
   };
+
   // Function to call API on adding the new action
   const addAction = async (value: string) => {
     dispatch({
@@ -286,18 +258,8 @@ export default function ActionMainContainer() {
       return action.value.toLowerCase().includes(value.toLowerCase());
     });
 
-    // const tempCurrentUserActions = results.filter(
-    //   action => action.createdBy === global.user.id
-    // );
-
-    // const tempOthersUserActions = results.filter(
-    //   action => action.createdBy != global.user.id
-    // );
-
     setSearchQuery(value);
     setAllActionsTemp(results);
-    // setCurrentUserActions([...tempCurrentUserActions]);
-    // setOthersUserActions([...tempOthersUserActions]);
   };
 
   // Sort Functionality
@@ -312,8 +274,6 @@ export default function ActionMainContainer() {
         const tempOthersUserActions = allActions.filter(
           action => action.createdBy != global.user.id
         );
-        setCurrentUserActions([...tempCurrentUserActions]);
-        setOthersUserActions([...tempOthersUserActions]);
         break;
       case VALUE_ASC:
         assigneeASCENDING();
@@ -361,9 +321,6 @@ export default function ActionMainContainer() {
     const otherStrAscending = [...tempOthersUserActions].sort((a, b) =>
       a.assigneeName > b.assigneeName ? 1 : -1
     );
-
-    // setCurrentUserActions([...currentStrAscending]);
-    // setOthersUserActions([...otherStrAscending]);
   };
 
   const assigneeDESCENDING = () => {
@@ -385,8 +342,6 @@ export default function ActionMainContainer() {
     );
 
     setAllActionsTemp(strDescending);
-    // setCurrentUserActions([...currentStrAscending]);
-    // setOthersUserActions([...otherStrAscending]);
   };
 
   const numericASCENDING = () => {
@@ -408,8 +363,6 @@ export default function ActionMainContainer() {
     );
 
     setAllActionsTemp(numAscending);
-    // setCurrentUserActions([...currentNumAscending]);
-    // setOthersUserActions([...otherNumAscending]);
   };
 
   const numericDESCENDING = () => {
@@ -432,8 +385,6 @@ export default function ActionMainContainer() {
     );
 
     setAllActionsTemp(numDescending);
-    // setCurrentUserActions([...currentNumAscending]);
-    // setOthersUserActions([...otherNumAscending]);
   };
   const [dialogObject, setDialogObject] = React.useState<DyanamicDialog>({
     open: false,
@@ -448,19 +399,18 @@ export default function ActionMainContainer() {
   const assignFunction = (id: string) => {
     setAssigneeId(id);
     const header = selectedActionCount == 1 ? ' Action' : ' Actions';
-    const subcontent = selectedActionCount == 1 ? 'Selected action' : 'All selected actions';
+    const subcontent =
+      selectedActionCount == 1 ? 'Selected action' : 'All selected actions';
     const asignee = findUser(id);
     const userName = asignee && asignee?.userNickname;
     if (id != '') {
       setDialogObject({
         open: true,
         header: 'Assign ' + selectedActionCount + header + '?',
-        content:
-        subcontent + ' will be assigned to ' + userName + '.',
+        content: subcontent + ' will be assigned to ' + userName + '.',
         agreeLabel: 'ASSIGN ' + selectedActionCount + header,
         cancelLabel: 'CANCEL',
       });
-      // setOpen(true)}
     } else {
       setDialogObject({
         open: true,
