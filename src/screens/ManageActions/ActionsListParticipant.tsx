@@ -8,8 +8,8 @@ import { Typography } from '@material-ui/core';
 import ZeroActions from './ZeroActions';
 
 type Props = {
-  currentUserActions: ActionInterface[];
-  othersUserActions: ActionInterface[];
+  // currentUserActions: ActionInterface[];
+  // othersUserActions: ActionInterface[];
   handleToggleAction: (actionId: string) => void;
   addReactToAction: (actionId: string, actionBy: string) => void;
   removeReactFromAction: (actionId: string) => void;
@@ -17,11 +17,13 @@ type Props = {
   isFeedbackSubmitted: boolean;
   isAddActionEnableToParticipant: boolean | undefined;
   isVotingEnableToParticipant: boolean | undefined;
+  allActions: ActionInterface[];
+  user: any;
 };
 
 export default function ActionsListParticipant({
-  currentUserActions,
-  othersUserActions,
+  // currentUserActions,
+  // othersUserActions,
   handleToggleAction,
   addReactToAction,
   ended,
@@ -29,8 +31,32 @@ export default function ActionsListParticipant({
   removeReactFromAction,
   isAddActionEnableToParticipant,
   isVotingEnableToParticipant,
+  allActions,
+  user,
 }: Props) {
   const [showOtherAction, setShowOtherAction] = React.useState<boolean>(false);
+  const [currentUserActions, setCurrentUserActions] = React.useState<
+    ActionInterface[]
+  >([]);
+  const [othersUserActions, setOthersUserActions] = React.useState<
+    ActionInterface[]
+  >([]);
+
+  React.useEffect(() => {
+    const currentUserActionsTemp: ActionInterface[] = [];
+    const othersUserActionsTemp: ActionInterface[] = [];
+    allActions &&
+      allActions.map(action => {
+        if (action.createdBy == user.id) {
+          currentUserActionsTemp.push(action);
+        } else {
+          othersUserActionsTemp.push(action);
+        }
+      });
+    setCurrentUserActions(currentUserActionsTemp);
+    setOthersUserActions(othersUserActionsTemp);
+  }, [allActions]);
+
   return (
     <Box
       sx={{
@@ -54,6 +80,8 @@ export default function ActionsListParticipant({
                 removeReactFromAction={removeReactFromAction}
                 isAddActionEnableToParticipant={isAddActionEnableToParticipant}
                 isVotingEnableToParticipant={isVotingEnableToParticipant}
+                disabled={false}
+
               />
             );
           })}
@@ -101,6 +129,7 @@ export default function ActionsListParticipant({
                 removeReactFromAction={removeReactFromAction}
                 isAddActionEnableToParticipant={isAddActionEnableToParticipant}
                 isVotingEnableToParticipant={isVotingEnableToParticipant}
+                disabled={true}
               />
             );
           })}
