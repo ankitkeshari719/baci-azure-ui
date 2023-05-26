@@ -400,10 +400,11 @@ export default function ActionItem({
             avatar={action?.assigneeAvatar}
             onClickAvatar={() => {}}
             css={{
-              width: '40px',
-              height: '40px',
+              width: '27px',
+              height: '27px',
               borderRadius: '50%',
               border: 'none',
+              margin:'2px'
             }}
           ></Avatar>
         )}
