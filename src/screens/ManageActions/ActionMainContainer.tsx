@@ -435,6 +435,24 @@ export default function ActionMainContainer() {
     }
   };
 
+  const handleUnselect = () => {
+    dispatch({
+      type: ActionType.SET_LOADING,
+      payload: { loadingFlag: true },
+    });
+    const localAllActionsTemp = allActionsTemp;
+
+    localAllActionsTemp &&
+      localAllActionsTemp.map(action => {
+        action.checked = false;
+      });
+    setAllActionsTemp(localAllActionsTemp);
+    setSelectedActionCount(0);
+    dispatch({
+      type: ActionType.SET_LOADING,
+      payload: { loadingFlag: false },
+    });
+  };
   return (
     <Box
       className="actionsContainer"
@@ -489,6 +507,7 @@ export default function ActionMainContainer() {
               global={global}
               showUnassign={showUnassign}
               assignFunction={assignFunction}
+              handleUnselect={handleUnselect}
             />
           )}
         </>
