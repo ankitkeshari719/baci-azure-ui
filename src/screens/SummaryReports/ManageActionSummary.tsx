@@ -12,8 +12,8 @@ type Props = {
   users: any;
   topVotedManageActions: ActionInterface[];
   manageActionsLastVoted: ActionInterface[];
-  copyAllManageActions: () => void;
-  handleShowManageActions: () => void;
+  copyAllManageActions?: () => void;
+  handleShowManageActions?: () => void;
   showAllManageAction: boolean;
 };
 
@@ -130,8 +130,8 @@ export default function ManageActionSummary({
                           <Icons.UserCircle
                             style={{
                               color: '#CCCCCC',
-                              width: '32px',
-                              height: '32px',
+                              width: '40px',
+                              height: '40px',
                             }}
                           />
                         ) : (
@@ -213,8 +213,8 @@ export default function ManageActionSummary({
                             <Icons.UserCircle
                               style={{
                                 color: '#CCCCCC',
-                                width: '32px',
-                                height: '32px',
+                                width: '40px',
+                                height: '40px',
                               }}
                             />
                           ) : (
@@ -255,8 +255,8 @@ export default function ManageActionSummary({
                                 <Icons.UserCircle
                                   style={{
                                     color: '#CCCCCC',
-                                    width: '32px',
-                                    height: '32px',
+                                    width: '40px',
+                                    height: '40px',
                                   }}
                                 />
                               ) : (
@@ -338,8 +338,8 @@ export default function ManageActionSummary({
                       <Icons.UserCircle
                         style={{
                           color: '#CCCCCC',
-                          width: '32px',
-                          height: '32px',
+                          width: '40px',
+                          height: '40px',
                         }}
                       />
                     ) : (

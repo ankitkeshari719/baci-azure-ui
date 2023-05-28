@@ -11,6 +11,8 @@ import {
   ListItem,
   ListItemAvatar,
   ListItemButton,
+  Menu,
+  MenuItem,
   TextField,
   Typography,
 } from '@mui/material';
@@ -19,6 +21,7 @@ import { BoardActionType } from '../../statemachine/BoardStateMachine';
 import { BoardContext } from '../../contexts/BoardContext';
 import { ActionType, GlobalContext } from '../../contexts/GlobalContext';
 import { MAX_CARD_TEXT_LENGTH } from '../../constants';
+import { LazyLoadImage } from 'react-lazy-load-image-component';
 
 type Props = {
   action: ActionInterface;
@@ -59,6 +62,16 @@ export default function ActionItem({
   const userReacted = !!(action.reacts || []).find(
     r => r.by === global.user.id
   );
+
+  const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
+  const open = Boolean(anchorEl);
+
+  const handleClick = (event: React.MouseEvent<HTMLElement>) => {
+    setAnchorEl(event.currentTarget);
+  };
+  const handleClose = () => {
+    setAnchorEl(null);
+  };
 
   // Handle Mover Enter on List Item to show the edit pencil
   const handleMouseEnter = () => {
@@ -117,6 +130,11 @@ export default function ActionItem({
   const cancelEditedData = () => {
     setEditActionValue(action.value);
     setIsEditActionClick(false);
+  };
+
+  // Action Copy to clipboard
+  const copyManageActions = (action: ActionInterface) => {
+    navigator.clipboard.writeText(action.value);
   };
 
   return (
@@ -387,26 +405,142 @@ export default function ActionItem({
           </Button>
         </Box>
       )}
-
       {/* Avatar */}
       <ListItemAvatar>
         {action?.assigneeAvatar === '' ||
         action.assigneeAvatar === undefined ? (
-          <Icons.UserCircle
-            style={{ color: '#CCCCCC', width: '32px', height: '32px' }}
-          />
-        ) : (
-          <Avatar
-            avatar={action?.assigneeAvatar}
-            onClickAvatar={() => {}}
-            css={{
+          <LazyLoadImage
+            className="avatar"
+            style={{
               width: '40px',
               height: '40px',
               borderRadius: '50%',
               border: 'none',
             }}
-          ></Avatar>
+            src={'/avatars/animals/' + action?.assigneeAvatar + '.svg'}
+            onClick={handleClick}
+          ></LazyLoadImage>
+        ) : (
+          <LazyLoadImage
+            width="40px !important"
+            height="40px !important"
+            aria-controls={open ? 'basic-menu' : undefined}
+            aria-haspopup="true"
+            aria-expanded={open ? 'true' : undefined}
+            style={{
+              borderRadius: '50%',
+              border: 'none',
+            }}
+            src={'/avatars/animals/' + action?.assigneeAvatar + '.svg'}
+            onClick={handleClick}
+          ></LazyLoadImage>
         )}
+        <Menu
+          id="long-menu"
+          anchorEl={anchorEl}
+          open={open}
+          onClose={handleClose}
+          MenuListProps={{
+            'aria-labelledby': 'long-button',
+          }}
+          PaperProps={{
+            elevation: 0,
+            sx: {
+              border: '1px solid #cccccc',
+              boxShadow: '0px 1px 10px rgba(0, 0, 0, 0.15)',
+              borderRadius: '10px',
+              background: '#ffffff',
+              overflow: 'visible',
+              '&:before': {
+                content: '""',
+                display: 'block',
+                position: 'absolute',
+                top: 0,
+                right: 14,
+                width: 10,
+                height: 10,
+                bgcolor: 'background.paper',
+                transform: 'translateY(-50%) rotate(45deg)',
+                zIndex: 0,
+              },
+            },
+          }}
+          transformOrigin={{ horizontal: 'right', vertical: 'top' }}
+          anchorOrigin={{ horizontal: 'right', vertical: 'bottom' }}
+        >
+          {/* Edit Action Menu */}
+          <MenuItem
+            onClick={() => {
+              openEditActionOption(action);
+              handleClose();
+            }}
+          >
+            <ListItemIcon>
+              <Icons.Pencil
+                size={24}
+                color="#676767"
+                style={{
+                  cursor: 'unset',
+                }}
+              />
+            </ListItemIcon>
+            <ListItemText>Edit</ListItemText>
+          </MenuItem>
+          {/* Copy Action Menu */}
+          <MenuItem
+            onClick={() => {
+              copyManageActions(action);
+              handleClose();
+            }}
+          >
+            <ListItemIcon>
+              <Icons.DocumentDuplicateOutline
+                size={24}
+                color="#676767"
+                style={{
+                  cursor: 'unset',
+                }}
+              />
+            </ListItemIcon>
+            <ListItemText>Copy</ListItemText>
+          </MenuItem>
+          {/* Assign Action Menu */}
+          <MenuItem
+            onClick={() => {
+              copyManageActions(action);
+              handleClose();
+            }}
+          >
+            <ListItemIcon>
+              <Icons.UserCircle
+                size={24}
+                color="#676767"
+                style={{
+                  cursor: 'unset',
+                }}
+              />
+            </ListItemIcon>
+            <ListItemText>Assign</ListItemText>
+          </MenuItem>
+          {/* Remove Action Menu */}
+          <MenuItem
+            onClick={() => {
+              copyManageActions(action);
+              handleClose();
+            }}
+          >
+            <ListItemIcon>
+              <Icons.TrashOutline
+                size={24}
+                color="#EA4335"
+                style={{
+                  cursor: 'unset',
+                }}
+              />
+            </ListItemIcon>
+            <ListItemText style={{ color: '#EA4335' }}>Remove</ListItemText>
+          </MenuItem>
+        </Menu>
       </ListItemAvatar>
     </ListItem>
   );
