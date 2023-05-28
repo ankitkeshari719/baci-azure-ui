@@ -382,7 +382,7 @@ export default function ActionItem({
                 marginLeft: '6px',
               }}
             >
-              {action.reacts.length ? action.reacts.length : ''}
+              {action.reacts.length === 0 ? 0 : action.reacts.length}
             </Typography>
           </Button>
         </Box>

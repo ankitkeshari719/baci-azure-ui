@@ -306,8 +306,8 @@ export default function ActionHeader({
                     <MenuItem value={NONE}>
                       <em>None</em>
                     </MenuItem>
-                    <MenuItem value={VOTES_DSC}>VOTES High to Low</MenuItem>
-                    <MenuItem value={VOTES_ASC}>VOTES Low to High</MenuItem>
+                    <MenuItem value={VOTES_DSC}>VOTES: High to Low</MenuItem>
+                    <MenuItem value={VOTES_ASC}>VOTES: Low to High</MenuItem>
                     <MenuItem value={VALUE_ASC}>Assignee: A - Z</MenuItem>
                     <MenuItem value={VALUE_DSC}>Assignee: Z - A</MenuItem>
                   </Select>

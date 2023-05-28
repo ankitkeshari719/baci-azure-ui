@@ -52,6 +52,8 @@ import WhatWentWell from './WhatWentWellCoulmn';
 import PulseCheckSection from './PulseCheckSection';
 import DevelopActionRedesign from './DevelopActionRedesign';
 import useLoadRetro from '../../hooks/useLoadRetro';
+import { ActionInterface } from '../../types';
+import ManageActionSummary from './ManageActionSummary';
 
 ChartJS.register(
   CategoryScale,
@@ -90,6 +92,7 @@ export const ReportSummary = React.forwardRef((props, ref) => {
       users,
       feedbackSubmitted,
       isFeedbackSubmittedByFacilitator,
+      actionsData,
     },
     commitAction,
   } = React.useContext(BoardContext);
@@ -98,7 +101,6 @@ export const ReportSummary = React.forwardRef((props, ref) => {
 
   const [isWellCloudOpen, setIsWellCloudOpen] = React.useState(false);
   const [isNotWellCloudOpen, setIsNotWellCloudOpen] = React.useState(false);
-  const [isAllActionOpen, setIsAllAction] = React.useState(false);
   const [isViewParticipantsDialogOpen, setIsViewParticipantsDialogOpen] =
     React.useState(false);
   const [isFeedbackSubmitDialogOpen, setIsFeedbackSubmitDialogOpen] =
@@ -187,7 +189,48 @@ export const ReportSummary = React.forwardRef((props, ref) => {
   const [isActionCopied, setIsActionCopied] = React.useState(false);
 
   const windowWidth = React.useRef(window.innerWidth);
-  useLoadRetro()
+  useLoadRetro();
+
+  // Manage Actions Variables
+  const [manageActions, setManageActions] = React.useState<ActionInterface[]>(
+    []
+  );
+  const [topVotedManageActions, setTopVotedManageActions] = React.useState<
+    ActionInterface[]
+  >([]);
+  const [manageActionsTopVotedPrint_1, setManageActionsTopVotedPrint_1] =
+    React.useState<ActionInterface[]>([]);
+  const [manageActionsTopVotedPrint_2, setManageActionsTopVotedPrint_2] =
+    React.useState<ActionInterface[]>([]);
+  const [manageActionsLastVoted, setManageActionsLastVoted] = React.useState<
+    ActionInterface[]
+  >([]);
+  const [showAllManageAction, setShowAllManageAction] = React.useState(false);
+
+  // ---------------------------------------------- Manage Actions-----------------------------------------------------------
+  React.useEffect(() => {
+    let tempActions = actionsData.actions.map(action => {
+      return action;
+    });
+    const sortedManageActions = [...tempActions].sort(
+      (a, b) => a.reacts?.length - b.reacts?.length
+    );
+    setManageActions([...sortedManageActions]);
+    setTopVotedManageActions(
+      windowWidth.current <= 1500
+        ? sortedManageActions.slice(0, 3)
+        : sortedManageActions.slice(0, 4)
+    );
+    setManageActionsTopVotedPrint_1(sortedManageActions.slice(0, 2));
+    setManageActionsTopVotedPrint_2(sortedManageActions.slice(2, 4));
+
+    if (sortedManageActions.length > 4) {
+      setManageActionsLastVoted(
+        sortedManageActions.slice(4, sortedManageActions.length)
+      );
+    }
+  }, [actionsData]);
+
   React.useEffect(() => {
     const wentWellCardValues = [] as string[];
     const didNotWentWellCardValues = [] as string[];
@@ -574,8 +617,8 @@ export const ReportSummary = React.forwardRef((props, ref) => {
     setIsNotWellCloudOpen(!isNotWellCloudOpen);
   };
 
-  const handleIsActionCloudOpen = () => {
-    setIsAllAction(!isAllActionOpen);
+  const handleShowManageActions = () => {
+    setShowAllManageAction(!showAllManageAction);
   };
 
   const handleViewParticipantsDialogOpen = () => {
@@ -591,12 +634,11 @@ export const ReportSummary = React.forwardRef((props, ref) => {
   };
 
   // Copy to clipboard
-  const copyAllActions = () => {
-    const actionValues = actionCardData.map((actionCard: any) => {
+  const copyAllManageActions = () => {
+    const actionValues = manageActions.map((actionCard: any) => {
       return actionCard.value + '\r\n';
     });
-
-    navigator.clipboard.writeText(actionValues);
+    navigator.clipboard.writeText(actionValues.join());
     setIsActionCopied(true);
   };
 
@@ -869,6 +911,17 @@ export const ReportSummary = React.forwardRef((props, ref) => {
             questionTwoResponse={questionTwoResponse}
             questionThreeResponse={questionThreeResponse}
           />
+          {/* Manage Actions */}
+          <ManageActionSummary
+            manageActions={manageActions}
+            users={users}
+            topVotedManageActions={topVotedManageActions}
+            manageActionsLastVoted={manageActionsLastVoted}
+            copyAllManageActions={copyAllManageActions}
+            handleShowManageActions={handleShowManageActions}
+            showAllManageAction={showAllManageAction}
+          />
+
           {/* Column Section 1*/}
           {columns && columns[0] && columns[0].id === '0' ? (
             <WhatWentWell
@@ -897,23 +950,6 @@ export const ReportSummary = React.forwardRef((props, ref) => {
               }
               didNotWentWellTopVotedCardsPrint_2={
                 didNotWentWellTopVotedCardsPrint_2
-              }
-            />
-          ) : null}
-          {columns && columns[0] && columns[0].id === '2' ? (
-            <DevelopActionRedesign
-              actionColumnName={actionColumnName}
-              actionCreatedBy={actionCreatedBy}
-              users={users}
-              developeActionWords={developeActionWords}
-              handleIsActionCloudOpen={handleIsActionCloudOpen}
-              isAllActionOpen={isAllActionOpen}
-              actionTopVotedCards={actionTopVotedCards}
-              developeActionTopVotedCardsPrint_1={
-                developeActionTopVotedCardsPrint_1
-              }
-              developeActionTopVotedCardsPrint_2={
-                developeActionTopVotedCardsPrint_2
               }
             />
           ) : null}
@@ -949,23 +985,7 @@ export const ReportSummary = React.forwardRef((props, ref) => {
               }
             />
           ) : null}
-          {columns && columns[1] && columns[1].id === '2' ? (
-            <DevelopActionRedesign
-              actionColumnName={actionColumnName}
-              actionCreatedBy={actionCreatedBy}
-              users={users}
-              developeActionWords={developeActionWords}
-              handleIsActionCloudOpen={handleIsActionCloudOpen}
-              isAllActionOpen={isAllActionOpen}
-              actionTopVotedCards={actionTopVotedCards}
-              developeActionTopVotedCardsPrint_1={
-                developeActionTopVotedCardsPrint_1
-              }
-              developeActionTopVotedCardsPrint_2={
-                developeActionTopVotedCardsPrint_2
-              }
-            />
-          ) : null}
+
           {/* Column Section 3*/}
           {columns && columns[2] && columns[2].id === '0' ? (
             <WhatWentWell
@@ -994,23 +1014,6 @@ export const ReportSummary = React.forwardRef((props, ref) => {
               }
               didNotWentWellTopVotedCardsPrint_2={
                 didNotWentWellTopVotedCardsPrint_2
-              }
-            />
-          ) : null}
-          {columns && columns[2] && columns[2].id === '2' ? (
-            <DevelopActionRedesign
-              actionColumnName={actionColumnName}
-              actionCreatedBy={actionCreatedBy}
-              users={users}
-              developeActionWords={developeActionWords}
-              handleIsActionCloudOpen={handleIsActionCloudOpen}
-              isAllActionOpen={isAllActionOpen}
-              actionTopVotedCards={actionTopVotedCards}
-              developeActionTopVotedCardsPrint_1={
-                developeActionTopVotedCardsPrint_1
-              }
-              developeActionTopVotedCardsPrint_2={
-                developeActionTopVotedCardsPrint_2
               }
             />
           ) : null}
