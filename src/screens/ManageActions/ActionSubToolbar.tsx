@@ -12,13 +12,15 @@ const ActionSubToolbar = ({
   global,
   showUnassign,
   assignFunction,
-  handleUnselect
+  handleUnselect,
+  handleRemove
 }: {
   selectedActionCount: number;
   global: any;
   showUnassign: boolean;
   assignFunction: (id: string) => void;
   handleUnselect:()=>void;
+  handleRemove:()=>void;
 }) => {
   const {
     state: { actionsData, ended, users },
@@ -67,7 +69,7 @@ const ActionSubToolbar = ({
         <ButtonWithIcon
           disabled={false}
           id="remove"
-          onClick={res => {}}
+          onClick={handleRemove}
           label="REMOVE"
           iconPath="/svgs/Delete.svg"
         />

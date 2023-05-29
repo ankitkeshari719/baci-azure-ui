@@ -1149,12 +1149,21 @@ export const processAction = (
       group.cards.splice(index as number, 1);
     }
   };
-  const deleteAction =(actionId:string,userId:string)=>{
+  const deleteAction = (actionId: string, userId: string) => {
     // const {}
-  }
+
+    const action:any = findAction(actionId);
+
+    if (action) {const index = actionsData.actions.indexOf(action)
+    if(index){
+      actionsData.actions.splice(index as number, 1);
+    }
+    }
+  };
 
   const removeReactFromCard = (
     cardId: string,
+
     react: string,
     userId: string
   ) => {
