@@ -1,10 +1,9 @@
-import { Box, Button, Menu, MenuItem } from '@mui/material';
+import { Box, Menu, MenuItem } from '@mui/material';
 import React from 'react';
 import { LazyLoadImage } from 'react-lazy-load-image-component';
 import { ButtonWithIcon, TextButton } from '../../components';
 import { BoardContext } from '../../contexts/BoardContext';
-import { User } from '../../types';
-import { UserCircle } from 'heroicons-react';
+
 
 import './styles.scss';
 const ActionSubToolbar = ({
@@ -13,14 +12,14 @@ const ActionSubToolbar = ({
   showUnassign,
   assignFunction,
   handleUnselect,
-  handleRemove
+  handleRemove,
 }: {
   selectedActionCount: number;
   global: any;
   showUnassign: boolean;
   assignFunction: (id: string) => void;
-  handleUnselect:()=>void;
-  handleRemove:()=>void;
+  handleUnselect: () => void;
+  handleRemove: () => void;
 }) => {
   const {
     state: { actionsData, ended, users },
@@ -45,7 +44,6 @@ const ActionSubToolbar = ({
 
   return (
     <Box className="actionSubToolbarContainer">
-      {/* <Box display="flex" justifyContent="space-between"> */}
       {selectedActionCount}{' '}
       {selectedActionCount == 1 ? 'Action selected' : 'Actions selected'}
       <Box
@@ -59,13 +57,13 @@ const ActionSubToolbar = ({
             id="assign-button"
             label="ASSIGN"
             iconPath="/svgs/VectorAssign.svg"
-            style={{marginRight:'15px'}}
+            style={{ marginRight: '15px' }}
             onClick={res => {
               handleClick(res);
             }}
           />
         )}
-      
+
         <ButtonWithIcon
           disabled={false}
           id="remove"
@@ -112,7 +110,6 @@ const ActionSubToolbar = ({
             </Box>
           </MenuItem>
         )}
-
         <MenuItem
           className="menu-item"
           onClick={handleAssign}

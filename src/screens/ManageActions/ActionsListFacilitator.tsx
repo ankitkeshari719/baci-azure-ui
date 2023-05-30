@@ -13,6 +13,7 @@ type Props = {
   isAddActionEnableToParticipant: boolean | undefined;
   isVotingEnableToParticipant: boolean | undefined;
   isFeedbackSubmitted: boolean;
+  removeAction: (selectedActions: ActionInterface) => void;
 };
 
 export default function ActionsListFacilitator({
@@ -22,7 +23,8 @@ export default function ActionsListFacilitator({
   isFeedbackSubmitted,
   removeReactFromAction,
   isAddActionEnableToParticipant,
-  isVotingEnableToParticipant
+  isVotingEnableToParticipant,
+  removeAction,
 }: Props) {
   return (
     <Box
@@ -46,7 +48,7 @@ export default function ActionsListFacilitator({
               isAddActionEnableToParticipant={isAddActionEnableToParticipant}
               isVotingEnableToParticipant={isVotingEnableToParticipant}
               disabled={false}
-
+              removeAction={removeAction}
             />
           );
         })}
