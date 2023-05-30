@@ -309,7 +309,7 @@ export default function ActionMainContainer() {
     setRemoveActionList(localActionList);
     setDialogObject({
       open: true,
-      header: 'Remove ' + count + ' selected' + actionString,
+      header: 'Remove ' + count + ' Selected' + actionString,
       content: contentString,
       agreeLabel: agreeLabel,
       cancelLabel: 'CANCEL',
@@ -482,7 +482,7 @@ export default function ActionMainContainer() {
     if (id != '') {
       setDialogObject({
         open: true,
-        header: 'Assign ' + selectedActionCount + header + '?',
+        header: 'Assign ' + selectedActionCount +" Selected" + header + '?',
         content: subContent + ' will be assigned to ' + userName + '.',
         agreeLabel: 'ASSIGN ' + selectedActionCount + header,
         cancelLabel: 'CANCEL',
@@ -490,7 +490,7 @@ export default function ActionMainContainer() {
     } else {
       setDialogObject({
         open: true,
-        header: 'Un-assign ' + selectedActionCount + header + '?',
+        header: 'Un-assign ' + selectedActionCount+" Selected" + header + '?',
         content: subContent + ' will be un-assigned.',
         agreeLabel: 'UN-ASSIGN ' + selectedActionCount + header,
         cancelLabel: 'CANCEL',
