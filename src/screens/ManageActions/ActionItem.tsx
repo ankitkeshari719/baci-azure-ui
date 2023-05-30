@@ -32,7 +32,6 @@ type Props = {
   isVotingEnableToParticipant: boolean | undefined;
   disabled: boolean;
   removeAction: (selectedActions: ActionInterface) => void;
-
 };
 
 const ITEM_HEIGHT = 48;
@@ -46,7 +45,7 @@ export default function ActionItem({
   isAddActionEnableToParticipant,
   isVotingEnableToParticipant,
   disabled,
-  removeAction
+  removeAction,
 }: Props) {
   const {
     state: { ended, users },

@@ -243,6 +243,77 @@ export default function ActionMainContainer() {
     setAllActionsTemp(results);
   };
 
+  const removeAction = async (actionId: string) => {
+    dispatch({
+      type: ActionType.SET_LOADING,
+      payload: { loadingFlag: true },
+    });
+    await saveAndProcessAction(BoardActionType.DELETE_ACTION, {
+      actionId: actionId,
+    }).then(
+      res => {
+        dispatch({
+          type: ActionType.SET_LOADING,
+          payload: { loadingFlag: false },
+        });
+      },
+      err => {
+        dispatch({
+          type: ActionType.SET_LOADING,
+          payload: { loadingFlag: false },
+        });
+      }
+    );
+  };
+  const [removeActionList, setRemoveActionList] = React.useState<
+    ActionInterface[]
+  >([]);
+
+  const agreeToRemoveAction = () => {
+    setDialogObject({
+      open: false,
+      header: '',
+      content: '',
+      agreeLabel: '',
+      cancelLabel: '',
+    });
+
+    removeActionList.map(action => {
+      removeAction(action.id);
+    });
+
+    setRemoveActionList([]);
+  };
+
+  const handleRemove = () => {
+    const localActionList: ActionInterface[] = [];
+    var count = 0;
+
+    allActionsTemp.map(action => {
+      if (action.checked) {
+        // removeAction(action.id);
+        localActionList.push(action);
+        count = count + 1;
+      }
+    });
+    const actionString = count == 1 ? ' Action?' : ' Actions?';
+    const contentString =
+      count == 1
+        ? 'Selected action will be removed permanently.'
+        : 'All selected actions will be removed permanently.';
+    const agreeLabel =
+      count == 1 ? 'REMOVE ACTION' : 'REMOVE ' + count + ' ACTIONS';
+
+    setRemoveActionList(localActionList);
+    setDialogObject({
+      open: true,
+      header: 'Remove ' + count + ' selected' + actionString,
+      content: contentString,
+      agreeLabel: agreeLabel,
+      cancelLabel: 'CANCEL',
+    });
+  };
+
   // Sort Functionality
   const handleSortedByChange = (event: SelectChangeEvent) => {
     setSortedBy(event.target.value);
@@ -439,7 +510,7 @@ export default function ActionMainContainer() {
   };
 
   // Remove Action
-  const removeAction = async (selectedAction: ActionInterface) => {
+  const removeSelectedAction = async (selectedAction: ActionInterface) => {
     dispatch({
       type: ActionType.SET_LOADING,
       payload: { loadingFlag: true },
@@ -460,6 +531,25 @@ export default function ActionMainContainer() {
         });
       }
     );
+  };
+
+  const handleUnselect = () => {
+    dispatch({
+      type: ActionType.SET_LOADING,
+      payload: { loadingFlag: true },
+    });
+    const localAllActionsTemp = allActionsTemp;
+
+    localAllActionsTemp &&
+      localAllActionsTemp.map(action => {
+        action.checked = false;
+      });
+    setAllActionsTemp(localAllActionsTemp);
+    setSelectedActionCount(0);
+    dispatch({
+      type: ActionType.SET_LOADING,
+      payload: { loadingFlag: false },
+    });
   };
 
   return (
@@ -516,6 +606,8 @@ export default function ActionMainContainer() {
               global={global}
               showUnassign={showUnassign}
               assignFunction={assignFunction}
+              handleUnselect={handleUnselect}
+              handleRemove={handleRemove}
             />
           )}
         </>
@@ -544,7 +636,7 @@ export default function ActionMainContainer() {
                   isVotingEnableToParticipant={
                     actionsData.isVotingEnableToParticipant
                   }
-                  removeAction={removeAction}
+                  removeAction={removeSelectedAction}
                 />
               )}
             </>
@@ -571,7 +663,7 @@ export default function ActionMainContainer() {
                   isVotingEnableToParticipant={
                     actionsData.isVotingEnableToParticipant
                   }
-                  removeAction={removeAction}
+                  removeAction={removeSelectedAction}
                 />
               )}
             </>
@@ -612,6 +704,9 @@ export default function ActionMainContainer() {
         agreeLabel={dialogObject.agreeLabel}
         cancelLabel={dialogObject.cancelLabel}
         handleClose={() => {
+          if (dialogObject.agreeLabel.split(' ')[0] == 'REMOVE') {
+            setRemoveActionList([]);
+          }
           setDialogObject({
             open: false,
             header: '',
@@ -621,7 +716,9 @@ export default function ActionMainContainer() {
           });
         }}
         acceptClose={() => {
-          agreeToAssignFunction();
+          if (dialogObject.agreeLabel.split(' ')[0] == 'REMOVE') {
+            agreeToRemoveAction();
+          } else agreeToAssignFunction();
         }}
       />
     </Box>

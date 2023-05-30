@@ -16,7 +16,7 @@ export const TextButton = ({ label,
 
 ) => {
     return (
-        <Button variant="text">
+        <Button variant="text" onClick={onClick}>
             {label}
         </Button>
     );

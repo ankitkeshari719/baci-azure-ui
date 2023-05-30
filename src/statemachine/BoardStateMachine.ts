@@ -60,6 +60,7 @@ export enum BoardActionType {
   REMOVE_REACT_FROM_ACTION = 'removeReactFromAction',
   ENABLE_VOTING_TO_PARTICIPANT = 'EnableVotingToParticipant',
   ENABLE_ADD_ACTIONS_TO_PARTICIPANT = 'EnableAddActionToParticipant',
+  DELETE_ACTION = 'deleteAction',
 }
 
 export const BOARD_STATE_MACHINE_VERSION = 1;
@@ -733,6 +734,8 @@ export const validateAction = (
       return true;
     case BoardActionType.ENABLE_ADD_ACTIONS_TO_PARTICIPANT:
       return true;
+    case BoardActionType.DELETE_ACTION:
+      return true;
     // case BoardActionType.SET_LOADING:
     //   return true;
     default:
@@ -1152,9 +1155,22 @@ export const processAction = (
       group.cards.splice(index as number, 1);
     }
   };
+  const deleteAction = (actionId: string, userId: string) => {
+    // const {}
+
+    const action: any = findAction(actionId);
+
+    if (action) {
+      const index = actionsData.actions.indexOf(action);
+      if (index) {
+        actionsData.actions.splice(index as number, 1);
+      }
+    }
+  };
 
   const removeReactFromCard = (
     cardId: string,
+
     react: string,
     userId: string
   ) => {
@@ -1720,7 +1736,9 @@ export const processAction = (
     case BoardActionType.UPDATE_KEYWORD_FLAG:
       updateKeywordFlag(parameters.columnId, parameters.flag);
       break;
-
+    case BoardActionType.DELETE_ACTION:
+      deleteAction(parameters.actionId, userId);
+      break;
     default:
       noMatch = true;
       break;
