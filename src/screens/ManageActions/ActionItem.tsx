@@ -197,9 +197,9 @@ export default function ActionItem({
               display: 'flex',
               alignItems: 'center',
               justifyContent: 'center',
-              width: '40px',
-              height: '40px',
-              minWidth: '40px',
+              width: '32px',
+              height: '32px',
+              minWidth: '32px',
             }}
             onClick={() => handleToggleAction(action.id)}
           >
@@ -214,7 +214,7 @@ export default function ActionItem({
                 <img
                   src="/svgs/CircleUnchecked.svg"
                   alt="Logo"
-                  style={{ width: '24px', height: '24px' }}
+                  style={{ width: '32px', height: '32px' }}
                 />
               }
               checkedIcon={
@@ -463,8 +463,8 @@ export default function ActionItem({
             <LazyLoadImage
               className="avatar"
               style={{
-                width: '40px',
-                height: '40px',
+                width: '32px',
+                height: '32px',
                 borderRadius: '50%',
                 border: 'none',
               }}
@@ -473,8 +473,8 @@ export default function ActionItem({
             ></LazyLoadImage>
           ) : (
             <LazyLoadImage
-              width="40px !important"
-              height="40px !important"
+              width="32px !important"
+              height="32px !important"
               aria-controls={openMainMenu ? 'basic-menu' : undefined}
               aria-haspopup="true"
               aria-expanded={openMainMenu ? 'true' : undefined}
@@ -657,8 +657,8 @@ export default function ActionItem({
             onClick={handleAssign}
           >
             <LazyLoadImage
-              width="40px !important"
-              height="40px !important"
+              width="32px !important"
+              height="32px !important"
               style={{
                 borderRadius: '50%',
               }}
@@ -684,8 +684,8 @@ export default function ActionItem({
           data-my-value={global.user.id}
         >
           <LazyLoadImage
-            width="40px !important"
-            height="40px !important"
+            width="32px !important"
+            height="32px !important"
             style={{
               borderRadius: '50%',
             }}
@@ -714,8 +714,8 @@ export default function ActionItem({
                 data-my-value={user.userId}
               >
                 <LazyLoadImage
-                  width="40px !important"
-                  height="40px !important"
+                  width="32px !important"
+                  height="32px !important"
                   style={{
                     borderRadius: '50%',
                   }}

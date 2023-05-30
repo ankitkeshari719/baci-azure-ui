@@ -39,7 +39,9 @@ export default function ActionMainContainer() {
   const [showUnassign, setShowUnassign] = React.useState<boolean>(false);
   const [isFeedbackSubmitted, setIsFeedbackSubmitted] =
     React.useState<boolean>(false);
-
+ const [removeActionList, setRemoveActionList] = React.useState<
+    ActionInterface[]
+  >([]);
   const [dialogObject, setDialogObject] = React.useState<DyanamicDialog>({
     open: false,
     header: '',
@@ -47,10 +49,6 @@ export default function ActionMainContainer() {
     agreeLabel: '',
     cancelLabel: '',
   });
-
-  const [removeActionList, setRemoveActionList] = React.useState<
-    ActionInterface[]
-  >([]);
 
   React.useEffect(() => {
     let tempActions = actionsData.actions.map(action => {
@@ -291,7 +289,7 @@ export default function ActionMainContainer() {
 
     allActionsTemp.map(action => {
       if (action.checked) {
-        // removeAction(action.id);
+       
         localActionList.push(action);
         count = count + 1;
       }
@@ -307,7 +305,7 @@ export default function ActionMainContainer() {
     setRemoveActionList(localActionList);
     setDialogObject({
       open: true,
-      header: 'Remove ' + count + ' selected' + actionString,
+      header: 'Remove ' + count + ' Selected' + actionString,
       content: contentString,
       agreeLabel: agreeLabel,
       cancelLabel: 'CANCEL',
@@ -452,7 +450,7 @@ export default function ActionMainContainer() {
     if (id != '') {
       setDialogObject({
         open: true,
-        header: 'Assign ' + selectedActionCount + header + '?',
+        header: 'Assign ' + selectedActionCount +" Selected" + header + '?',
         content: subContent + ' will be assigned to ' + userName + '.',
         agreeLabel: 'ASSIGN ' + selectedActionCount + header,
         cancelLabel: 'CANCEL',
@@ -460,7 +458,7 @@ export default function ActionMainContainer() {
     } else {
       setDialogObject({
         open: true,
-        header: 'Un-assign ' + selectedActionCount + header + '?',
+        header: 'Un-assign ' + selectedActionCount+" Selected" + header + '?',
         content: subContent + ' will be un-assigned.',
         agreeLabel: 'UN-ASSIGN ' + selectedActionCount + header,
         cancelLabel: 'CANCEL',

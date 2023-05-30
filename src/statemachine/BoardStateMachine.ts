@@ -1156,15 +1156,12 @@ export const processAction = (
     }
   };
   const deleteAction = (actionId: string, userId: string) => {
-    // const {}
 
-    const action: any = findAction(actionId);
+    const { action }: any = findAction(actionId);
 
     if (action) {
       const index = actionsData.actions.indexOf(action);
-      if (index) {
-        actionsData.actions.splice(index as number, 1);
-      }
+      actionsData.actions.splice(index as number, 1);
     }
   };
 
