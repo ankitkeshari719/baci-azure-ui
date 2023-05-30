@@ -48,6 +48,16 @@ export default function ActionMainContainer() {
   const [showUnassign, setShowUnassign] = React.useState<boolean>(false);
   const [isFeedbackSubmitted, setIsFeedbackSubmitted] =
     React.useState<boolean>(false);
+    const [removeActionList, setRemoveActionList] = React.useState<
+    ActionInterface[]
+  >([]);
+  const [dialogObject, setDialogObject] = React.useState<DyanamicDialog>({
+    open: false,
+    header: '',
+    content: '',
+    agreeLabel: '',
+    cancelLabel: '',
+  });
 
   React.useEffect(() => {
     let tempActions = actionsData.actions.map(action => {
@@ -284,9 +294,7 @@ export default function ActionMainContainer() {
       }
     );
   };
-  const [removeActionList, setRemoveActionList] = React.useState<
-    ActionInterface[]
-  >([]);
+
 
   const agreeToRemoveAction = () => {
     setDialogObject({
@@ -296,7 +304,7 @@ export default function ActionMainContainer() {
       agreeLabel: '',
       cancelLabel: '',
     });
-    
+
     removeActionList.map(action => {
       removeAction(action.id);
     });
@@ -310,7 +318,7 @@ export default function ActionMainContainer() {
 
     allActionsTemp.map(action => {
       if (action.checked) {
-        // removeAction(action.id);
+       
         localActionList.push(action);
         count = count + 1;
       }
@@ -457,13 +465,7 @@ export default function ActionMainContainer() {
 
     setAllActionsTemp(numDescending);
   };
-  const [dialogObject, setDialogObject] = React.useState<DyanamicDialog>({
-    open: false,
-    header: '',
-    content: '',
-    agreeLabel: '',
-    cancelLabel: '',
-  });
+
   const findUser = (userId: string) =>
     users.find(user => user.userId === userId);
 
