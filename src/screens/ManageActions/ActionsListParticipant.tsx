@@ -5,7 +5,6 @@ import { ActionInterface } from '../../types';
 import ActionItem from './ActionItem';
 import { Box, List } from '@mui/material';
 import { Typography } from '@material-ui/core';
-import ZeroActions from './ZeroActions';
 
 type Props = {
   handleToggleAction: (actionId: string) => void;
@@ -18,6 +17,7 @@ type Props = {
   allActions: ActionInterface[];
   user: any;
   removeAction: (selectedActions: ActionInterface) => void;
+  assignAction: (ids: string[], assigneeId: string) => void;
 };
 
 export default function ActionsListParticipant({
@@ -31,6 +31,7 @@ export default function ActionsListParticipant({
   allActions,
   user,
   removeAction,
+  assignAction,
 }: Props) {
   const [showOtherAction, setShowOtherAction] = React.useState<boolean>(false);
   const [currentUserActions, setCurrentUserActions] = React.useState<
@@ -80,6 +81,7 @@ export default function ActionsListParticipant({
                 isVotingEnableToParticipant={isVotingEnableToParticipant}
                 disabled={false}
                 removeAction={removeAction}
+                assignAction={assignAction}
               />
             );
           })}
@@ -129,6 +131,7 @@ export default function ActionsListParticipant({
                 isVotingEnableToParticipant={isVotingEnableToParticipant}
                 disabled={true}
                 removeAction={removeAction}
+                assignAction={assignAction}
               />
             );
           })}

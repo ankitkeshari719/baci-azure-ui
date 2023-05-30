@@ -27,8 +27,6 @@ export default function ActionMainContainer() {
   const [allActionsTemp, setAllActionsTemp] = React.useState<ActionInterface[]>(
     []
   );
-  const [open, setOpen] = React.useState<boolean>(false);
-
   const [assigneeId, setAssigneeId] = React.useState<string>('');
   const [selectedActionCount, setSelectedActionCount] =
     React.useState<number>(0);
@@ -41,7 +39,7 @@ export default function ActionMainContainer() {
   const [showUnassign, setShowUnassign] = React.useState<boolean>(false);
   const [isFeedbackSubmitted, setIsFeedbackSubmitted] =
     React.useState<boolean>(false);
-    const [removeActionList, setRemoveActionList] = React.useState<
+ const [removeActionList, setRemoveActionList] = React.useState<
     ActionInterface[]
   >([]);
   const [dialogObject, setDialogObject] = React.useState<DyanamicDialog>({
@@ -51,8 +49,6 @@ export default function ActionMainContainer() {
     agreeLabel: '',
     cancelLabel: '',
   });
-
- 
 
   React.useEffect(() => {
     let tempActions = actionsData.actions.map(action => {
@@ -247,6 +243,7 @@ export default function ActionMainContainer() {
     setAllActionsTemp(results);
   };
 
+  // Function to remove particular action
   const removeAction = async (actionId: string) => {
     dispatch({
       type: ActionType.SET_LOADING,
@@ -269,7 +266,6 @@ export default function ActionMainContainer() {
       }
     );
   };
-
 
   const agreeToRemoveAction = () => {
     setDialogObject({
@@ -350,20 +346,6 @@ export default function ActionMainContainer() {
       a.assigneeName > b.assigneeName ? 1 : -1
     );
     setAllActionsTemp(strAscending);
-
-    const tempCurrentUserActions = allActions.filter(
-      action => action.createdBy === global.user.id
-    );
-
-    const tempOthersUserActions = allActions.filter(
-      action => action.createdBy != global.user.id
-    );
-    const currentStrAscending = [...tempCurrentUserActions].sort((a, b) =>
-      a.assigneeName > b.assigneeName ? 1 : -1
-    );
-    const otherStrAscending = [...tempOthersUserActions].sort((a, b) =>
-      a.assigneeName > b.assigneeName ? 1 : -1
-    );
   };
 
   // Sort Functionality:  Assignee DESCENDING
@@ -371,20 +353,6 @@ export default function ActionMainContainer() {
     const strDescending = [...allActions].sort((a, b) =>
       a.assigneeName > b.assigneeName ? -1 : 1
     );
-    const tempCurrentUserActions = allActions.filter(
-      action => action.createdBy === global.user.id
-    );
-
-    const tempOthersUserActions = allActions.filter(
-      action => action.createdBy != global.user.id
-    );
-    const currentStrAscending = [...tempCurrentUserActions].sort((a, b) =>
-      a.assigneeName > b.assigneeName ? -1 : 1
-    );
-    const otherStrAscending = [...tempOthersUserActions].sort((a, b) =>
-      a.assigneeName > b.assigneeName ? -1 : 1
-    );
-
     setAllActionsTemp(strDescending);
   };
 
@@ -639,6 +607,7 @@ export default function ActionMainContainer() {
                     actionsData.isVotingEnableToParticipant
                   }
                   removeAction={removeSelectedAction}
+                  assignAction={assignAction}
                 />
               )}
             </>
@@ -666,6 +635,8 @@ export default function ActionMainContainer() {
                     actionsData.isVotingEnableToParticipant
                   }
                   removeAction={removeSelectedAction}
+                  assignAction={assignAction}
+
                 />
               )}
             </>
