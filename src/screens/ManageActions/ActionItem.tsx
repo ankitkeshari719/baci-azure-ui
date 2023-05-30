@@ -417,7 +417,7 @@ export default function ActionItem({
               borderRadius: '50%',
               border: 'none',
             }}
-            src={'/avatars/animals/' + action?.assigneeAvatar + '.svg'}
+            src={'/svgs/DefaultUser.svg'}
             onClick={handleClick}
           ></LazyLoadImage>
         ) : (
