@@ -191,7 +191,6 @@
   margin-right: 8px !important;
 }
 
-
 .actionSubToolbarContainer {
   display: flex;
   flex-direction: row;
@@ -217,5 +216,15 @@
 
 .menu-item:hover {
   background-color: rgba(206, 239, 255, 0.3) !important;
+}
 
+.actionItemMenuText {
+  font-family: 'Poppins';
+  font-style: normal;
+  font-weight: 400;
+  font-size: 16px;
+  line-height: 20px;
+  display: flex;
+  align-items: center;
+  letter-spacing: 0.6px;
 }

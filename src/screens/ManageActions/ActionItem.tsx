@@ -528,14 +528,19 @@ export default function ActionItem({
             >
               <ListItemIcon>
                 <Icons.Pencil
-                  size={24}
+                  size={18}
                   color="#676767"
                   style={{
                     cursor: 'unset',
                   }}
                 />
               </ListItemIcon>
-              <ListItemText>Edit</ListItemText>
+              <ListItemText
+                className="actionItemMenuText"
+                style={{ color: '#343434' }}
+              >
+                Edit
+              </ListItemText>
             </MenuItem>
             {/* Copy Action Menu */}
             <MenuItem
@@ -546,14 +551,19 @@ export default function ActionItem({
             >
               <ListItemIcon>
                 <Icons.DocumentDuplicateOutline
-                  size={24}
+                  size={18}
                   color="#676767"
                   style={{
                     cursor: 'unset',
                   }}
                 />
               </ListItemIcon>
-              <ListItemText>Copy</ListItemText>
+              <ListItemText
+                className="actionItemMenuText"
+                style={{ color: '#343434' }}
+              >
+                Copy
+              </ListItemText>
             </MenuItem>
             {/* Assign Action Menu */}
             <MenuItem
@@ -564,15 +574,20 @@ export default function ActionItem({
               data-my-value={action.id}
             >
               <ListItemIcon>
-                <Icons.UserCircle
-                  size={24}
+                <Icons.UserCircleOutline
+                  size={18}
                   color="#676767"
                   style={{
                     cursor: 'unset',
                   }}
                 />
               </ListItemIcon>
-              <ListItemText>Assign</ListItemText>
+              <ListItemText
+                className="actionItemMenuText"
+                style={{ color: '#343434' }}
+              >
+                Assign
+              </ListItemText>
             </MenuItem>
             {/* Remove Action Menu */}
             <MenuItem
@@ -583,14 +598,19 @@ export default function ActionItem({
             >
               <ListItemIcon>
                 <Icons.TrashOutline
-                  size={24}
+                  size={18}
                   color="#EA4335"
                   style={{
                     cursor: 'unset',
                   }}
                 />
               </ListItemIcon>
-              <ListItemText style={{ color: '#EA4335' }}>Remove</ListItemText>
+              <ListItemText
+                className="actionItemMenuText"
+                style={{ color: '#EA4335' }}
+              >
+                Remove
+              </ListItemText>
             </MenuItem>
           </Menu>
         </ListItemAvatar>
