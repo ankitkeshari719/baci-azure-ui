@@ -14,6 +14,7 @@ type Props = {
   isVotingEnableToParticipant: boolean | undefined;
   isFeedbackSubmitted: boolean;
   removeAction: (selectedActions: ActionInterface) => void;
+  assignAction: (ids: string[], assigneeId: string) => void;
 };
 
 export default function ActionsListFacilitator({
@@ -25,6 +26,7 @@ export default function ActionsListFacilitator({
   isAddActionEnableToParticipant,
   isVotingEnableToParticipant,
   removeAction,
+  assignAction,
 }: Props) {
   return (
     <Box
@@ -49,6 +51,7 @@ export default function ActionsListFacilitator({
               isVotingEnableToParticipant={isVotingEnableToParticipant}
               disabled={false}
               removeAction={removeAction}
+              assignAction={assignAction}
             />
           );
         })}
