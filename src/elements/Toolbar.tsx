@@ -28,6 +28,8 @@ import theme from '../theme/theme';
 import { CountdownTimer } from './CountdownTimer';
 import FacilitatorDropDown from './FacilitatorDropDown';
 import { ContainedButton } from '../components/ContainedButton';
+import { ActionInterface } from '../types';
+import ManageActionSummary from '../screens/SummaryReports/ManageActionSummary';
 const Toolbar = (props: any) => {
   const isXsUp = useMediaQuery(theme.breakpoints.only('xs'));
   const navigate = useNavigate();
@@ -37,7 +39,7 @@ const Toolbar = (props: any) => {
     React.useContext(GlobalContext);
   const [global, dispatch] = React.useContext(GlobalContext);
   const {
-    state: { retroName, retroDuration, ended, users },
+    state: { retroName, retroDuration, ended, users, actionsData },
     commitAction,
   } = React.useContext(BoardContext);
   const reloadPage = () => {
@@ -70,6 +72,41 @@ const Toolbar = (props: any) => {
     React.useState(false);
   const id = open ? 'simple-popover' : undefined;
   const [showSummaryButton, setShowSummaryButton] = React.useState(false);
+
+  const windowWidth = React.useRef(window.innerWidth);
+
+  // Manage Actions Variables
+  const [manageActions, setManageActions] = React.useState<ActionInterface[]>(
+    []
+  );
+  const [topVotedManageActions, setTopVotedManageActions] = React.useState<
+    ActionInterface[]
+  >([]);
+
+  const [manageActionsLastVoted, setManageActionsLastVoted] = React.useState<
+    ActionInterface[]
+  >([]);
+  const [showAllManageAction, setShowAllManageAction] = React.useState(false);
+
+  React.useEffect(() => {
+    let tempActions = actionsData.actions.map(action => {
+      return action;
+    });
+    const sortedManageActions = [...tempActions].sort(
+      (a, b) => a.reacts?.length - b.reacts?.length
+    );
+    setManageActions([...sortedManageActions]);
+    setTopVotedManageActions(
+      windowWidth.current <= 1500
+        ? sortedManageActions.slice(0, 3)
+        : sortedManageActions.slice(0, 4)
+    );
+    if (sortedManageActions.length > 4) {
+      setManageActionsLastVoted(
+        sortedManageActions.slice(4, sortedManageActions.length)
+      );
+    }
+  }, [actionsData]);
 
   React.useEffect(() => {
     if (retroName && retroName !== '') setLocalRetroName(retroName);
@@ -449,21 +486,21 @@ const Toolbar = (props: any) => {
             )}
           </>
         )}
-          {/*  Retro Finished && View Summary Report Button*/}
+        {/*  Retro Finished && View Summary Report Button*/}
         {showSummaryButton &&
           !location.pathname.includes('report') &&
           user.userType === 2 && (
             <>
               <Typography
-                  style={{
-                    color: '#EE7538',
-                    fontFamily: 'Poppins',
-                    fontStyle: 'normal',
-                    fontSize: '28px',
-                    fontWeight: '500',
-                    lineHeight: '38px',
-                    letterSpacing: '0.5px',
-                  }}
+                style={{
+                  color: '#EE7538',
+                  fontFamily: 'Poppins',
+                  fontStyle: 'normal',
+                  fontSize: '28px',
+                  fontWeight: '500',
+                  lineHeight: '38px',
+                  letterSpacing: '0.5px',
+                }}
                 mr="15px"
               >
                 Retro Finished
@@ -485,15 +522,15 @@ const Toolbar = (props: any) => {
         {location.pathname.includes('report') && ended && (
           <>
             <Typography
-                style={{
-                  color: '#EE7538',
-                  fontFamily: 'Poppins',
-                  fontStyle: 'normal',
-                  fontSize: '28px',
-                  fontWeight: '500',
-                  lineHeight: '38px',
-                  letterSpacing: '0.5px',
-                }}
+              style={{
+                color: '#EE7538',
+                fontFamily: 'Poppins',
+                fontStyle: 'normal',
+                fontSize: '28px',
+                fontWeight: '500',
+                lineHeight: '38px',
+                letterSpacing: '0.5px',
+              }}
               mr="15px"
             >
               Retro Finished
@@ -685,6 +722,14 @@ const Toolbar = (props: any) => {
             <span> This will end retro for all participants.</span>
             <span> All participants will see feedback screen.</span>
           </span>
+          {/* Manage Actions */}
+          {/* <ManageActionSummary
+            manageActions={manageActions}
+            users={users}
+            topVotedManageActions={topVotedManageActions}
+            manageActionsLastVoted={manageActionsLastVoted}
+            showAllManageAction={showAllManageAction}
+          /> */}
         </DialogContent>
         <DialogActions style={{ display: 'flex', flexDirection: 'column' }}>
           <Button

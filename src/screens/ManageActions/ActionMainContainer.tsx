@@ -1,14 +1,7 @@
 import * as React from 'react';
 import shortid from 'shortid';
 import './styles.scss';
-import {
-  Box,
-  Button,
-  Grid,
-  SelectChangeEvent,
-  styled,
-  useMediaQuery,
-} from '@mui/material';
+import { Box, SelectChangeEvent, useMediaQuery } from '@mui/material';
 import { BoardContext } from '../../contexts/BoardContext';
 import { ActionType, GlobalContext } from '../../contexts/GlobalContext';
 import { BoardActionType } from '../../statemachine/BoardStateMachine';
@@ -48,6 +41,18 @@ export default function ActionMainContainer() {
   const [showUnassign, setShowUnassign] = React.useState<boolean>(false);
   const [isFeedbackSubmitted, setIsFeedbackSubmitted] =
     React.useState<boolean>(false);
+    const [removeActionList, setRemoveActionList] = React.useState<
+    ActionInterface[]
+  >([]);
+  const [dialogObject, setDialogObject] = React.useState<DyanamicDialog>({
+    open: false,
+    header: '',
+    content: '',
+    agreeLabel: '',
+    cancelLabel: '',
+  });
+
+ 
 
   React.useEffect(() => {
     let tempActions = actionsData.actions.map(action => {
@@ -98,30 +103,6 @@ export default function ActionMainContainer() {
     });
   };
 
-  const assignAction = async (ids: string[], assigneeId: string) => {
-    dispatch({
-      type: ActionType.SET_LOADING,
-      payload: { loadingFlag: true },
-    });
-    await saveAndProcessAction(BoardActionType.ASSIGN_ACTION, {
-      actionIds: ids,
-      assigneeId: assigneeId,
-    }).then(res => {
-      dispatch({
-        type: ActionType.SET_LOADING,
-        payload: { loadingFlag: false },
-      });
-    });
-    setAssigneeId('');
-    setDialogObject({
-      open: false,
-      header: '',
-      content: '',
-      agreeLabel: '',
-      cancelLabel: '',
-    });
-  };
-
   // Function to call API on adding the new action
   const addAction = async (value: string) => {
     dispatch({
@@ -154,6 +135,7 @@ export default function ActionMainContainer() {
     );
   };
 
+  // Function to call API on adding the new react
   const addReactToAction = async (actionId: string, actionBy: string) => {
     dispatch({
       type: ActionType.SET_LOADING,
@@ -178,6 +160,7 @@ export default function ActionMainContainer() {
     );
   };
 
+  // Function to call API on removing the new react
   const removeReactFromAction = async (actionId: string) => {
     dispatch({
       type: ActionType.SET_LOADING,
@@ -202,6 +185,7 @@ export default function ActionMainContainer() {
     );
   };
 
+  // Function to call API on enabling to voting participant functionality
   const enableVotingToParticipant = async (value: boolean) => {
     dispatch({
       type: ActionType.SET_LOADING,
@@ -225,6 +209,7 @@ export default function ActionMainContainer() {
     );
   };
 
+  // Function to call API on enabling to add action to participant functionality
   const enableAddActionToParticipant = async (value: boolean) => {
     dispatch({
       type: ActionType.SET_LOADING,
@@ -284,9 +269,7 @@ export default function ActionMainContainer() {
       }
     );
   };
-  const [removeActionList, setRemoveActionList] = React.useState<
-    ActionInterface[]
-  >([]);
+
 
   const agreeToRemoveAction = () => {
     setDialogObject({
@@ -296,7 +279,7 @@ export default function ActionMainContainer() {
       agreeLabel: '',
       cancelLabel: '',
     });
-    
+
     removeActionList.map(action => {
       removeAction(action.id);
     });
@@ -310,7 +293,7 @@ export default function ActionMainContainer() {
 
     allActionsTemp.map(action => {
       if (action.checked) {
-        // removeAction(action.id);
+       
         localActionList.push(action);
         count = count + 1;
       }
@@ -353,26 +336,15 @@ export default function ActionMainContainer() {
         assigneeDESCENDING();
         break;
       case VOTES_ASC:
-        numericASCENDING();
+        votesASCENDING();
         break;
       case VOTES_DSC:
-        numericDESCENDING();
+        votesDESCENDING();
         break;
     }
   };
 
-  // Check/Uncheck the action item
-  const handleToggleAction = (actionId: string) => {
-    const newAction = allActionsTemp.map(action => {
-      if (action.id === actionId) {
-        return { ...action, checked: !action.checked };
-      }
-      return action;
-    });
-
-    setAllActionsTemp([...newAction]);
-  };
-
+  // Sort Functionality:  Assignee ASCENDING
   const assigneeASCENDING = () => {
     const strAscending = [...allActions].sort((a, b) =>
       a.assigneeName > b.assigneeName ? 1 : -1
@@ -394,6 +366,7 @@ export default function ActionMainContainer() {
     );
   };
 
+  // Sort Functionality:  Assignee DESCENDING
   const assigneeDESCENDING = () => {
     const strDescending = [...allActions].sort((a, b) =>
       a.assigneeName > b.assigneeName ? -1 : 1
@@ -415,7 +388,8 @@ export default function ActionMainContainer() {
     setAllActionsTemp(strDescending);
   };
 
-  const numericASCENDING = () => {
+  // Sort Functionality:  Votes ASCENDING
+  const votesASCENDING = () => {
     const numAscending = [...allActions].sort(
       (a, b) => a.reacts?.length - b.reacts?.length
     );
@@ -436,7 +410,8 @@ export default function ActionMainContainer() {
     setAllActionsTemp(numAscending);
   };
 
-  const numericDESCENDING = () => {
+  // Sort Functionality:  Votes DESCENDING
+  const votesDESCENDING = () => {
     const numDescending = [...allActions].sort(
       (a, b) => b.reacts?.length - a.reacts?.length
     );
@@ -457,20 +432,50 @@ export default function ActionMainContainer() {
 
     setAllActionsTemp(numDescending);
   };
-  const [dialogObject, setDialogObject] = React.useState<DyanamicDialog>({
-    open: false,
-    header: '',
-    content: '',
-    agreeLabel: '',
-    cancelLabel: '',
-  });
+
+  // Check/Uncheck the action item
+  const handleToggleAction = (actionId: string) => {
+    const newAction = allActionsTemp.map(action => {
+      if (action.id === actionId) {
+        return { ...action, checked: !action.checked };
+      }
+      return action;
+    });
+
+    setAllActionsTemp([...newAction]);
+  };
+
+  const assignAction = async (ids: string[], assigneeId: string) => {
+    dispatch({
+      type: ActionType.SET_LOADING,
+      payload: { loadingFlag: true },
+    });
+    await saveAndProcessAction(BoardActionType.ASSIGN_ACTION, {
+      actionIds: ids,
+      assigneeId: assigneeId,
+    }).then(res => {
+      dispatch({
+        type: ActionType.SET_LOADING,
+        payload: { loadingFlag: false },
+      });
+    });
+    setAssigneeId('');
+    setDialogObject({
+      open: false,
+      header: '',
+      content: '',
+      agreeLabel: '',
+      cancelLabel: '',
+    });
+  };
+
   const findUser = (userId: string) =>
     users.find(user => user.userId === userId);
 
   const assignFunction = (id: string) => {
     setAssigneeId(id);
     const header = selectedActionCount == 1 ? ' Action' : ' Actions';
-    const subcontent =
+    const subContent =
       selectedActionCount == 1 ? 'Selected action' : 'All selected actions';
     const asignee = findUser(id);
     const userName = asignee && asignee?.userNickname;
@@ -478,7 +483,7 @@ export default function ActionMainContainer() {
       setDialogObject({
         open: true,
         header: 'Assign ' + selectedActionCount + header + '?',
-        content: subcontent + ' will be assigned to ' + userName + '.',
+        content: subContent + ' will be assigned to ' + userName + '.',
         agreeLabel: 'ASSIGN ' + selectedActionCount + header,
         cancelLabel: 'CANCEL',
       });
@@ -486,7 +491,7 @@ export default function ActionMainContainer() {
       setDialogObject({
         open: true,
         header: 'Un-assign ' + selectedActionCount + header + '?',
-        content: subcontent + ' will be un-assigned.',
+        content: subContent + ' will be un-assigned.',
         agreeLabel: 'UN-ASSIGN ' + selectedActionCount + header,
         cancelLabel: 'CANCEL',
       });
@@ -504,6 +509,30 @@ export default function ActionMainContainer() {
     if (ids.length > 0) {
       assignAction(ids, assigneeId);
     }
+  };
+
+  // Remove Action
+  const removeSelectedAction = async (selectedAction: ActionInterface) => {
+    dispatch({
+      type: ActionType.SET_LOADING,
+      payload: { loadingFlag: true },
+    });
+    await saveAndProcessAction(BoardActionType.REMOVE_ACTION, {
+      id: selectedAction?.id,
+    }).then(
+      res => {
+        dispatch({
+          type: ActionType.SET_LOADING,
+          payload: { loadingFlag: false },
+        });
+      },
+      err => {
+        dispatch({
+          type: ActionType.SET_LOADING,
+          payload: { loadingFlag: false },
+        });
+      }
+    );
   };
 
   const handleUnselect = () => {
@@ -524,6 +553,7 @@ export default function ActionMainContainer() {
       payload: { loadingFlag: false },
     });
   };
+
   return (
     <Box
       className="actionsContainer"
@@ -608,6 +638,7 @@ export default function ActionMainContainer() {
                   isVotingEnableToParticipant={
                     actionsData.isVotingEnableToParticipant
                   }
+                  removeAction={removeSelectedAction}
                 />
               )}
             </>
@@ -621,8 +652,6 @@ export default function ActionMainContainer() {
                 />
               ) : (
                 <ActionsListParticipant
-                  // currentUserActions={currentUserActions}
-                  // othersUserActions={othersUserActions}
                   handleToggleAction={handleToggleAction}
                   addReactToAction={addReactToAction}
                   user={global.user}
@@ -636,6 +665,7 @@ export default function ActionMainContainer() {
                   isVotingEnableToParticipant={
                     actionsData.isVotingEnableToParticipant
                   }
+                  removeAction={removeSelectedAction}
                 />
               )}
             </>
