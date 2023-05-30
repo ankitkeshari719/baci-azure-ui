@@ -55,6 +55,7 @@ export enum BoardActionType {
   UPDATE_ACTION = 'updateAction',
   ASSIGN_ACTION = 'assignAction',
   ADD_REACT_TO_ACTION = 'addReactToAction',
+  REMOVE_ACTION = 'removeAction',
   UPDATE_KEYWORD_FLAG = 'updateKeywordFlag',
   REMOVE_REACT_FROM_ACTION = 'removeReactFromAction',
   ENABLE_VOTING_TO_PARTICIPANT = 'EnableVotingToParticipant',
@@ -520,6 +521,10 @@ export const validateAction = (
     return true;
   };
 
+  const isRemoveActionValid = (id: string, userId: string): boolean => {
+    return true;
+  };
+
   const isUpdateExistingActionValid = (id: string, value: string): boolean => {
     return true;
   };
@@ -702,11 +707,16 @@ export const validateAction = (
         parameters.createdBy,
         userId
       );
+    case BoardActionType.REMOVE_ACTION:
+      return isRemoveActionValid(parameters.id, userId);
     case BoardActionType.UPDATE_ACTION:
       return isUpdateExistingActionValid(parameters.id, parameters.value);
-
     case BoardActionType.ASSIGN_ACTION:
-      return isAssignActionValid(parameters.actionIds, parameters.assigneeId, userId);
+      return isAssignActionValid(
+        parameters.actionIds,
+        parameters.assigneeId,
+        userId
+      );
     case BoardActionType.ADD_REACT_TO_ACTION:
       return isAddReactToActionValid(
         parameters.actionId,
@@ -1418,16 +1428,25 @@ export const processAction = (
 
   // Update existing action
   const updateAction = (id: string, value: string) => {
-    const newAction = actionsData.actions.map(action => {
+    const newActions = actionsData.actions.map(action => {
       if (action.id === id) {
         return { ...action, value: value };
       }
       return action;
     });
 
-    actionsData.actions = [...newAction];
+    actionsData.actions = [...newActions];
   };
 
+  // Remove existing action
+  const removeAction = (id: string) => {
+    var newActions = actionsData.actions.filter(x => {
+      return x.id != id;
+    });
+    actionsData.actions = [...newActions];
+  };
+
+  // Add React To Action
   const addReactToAction = (
     actionId: string,
     react: string,
@@ -1447,32 +1466,7 @@ export const processAction = (
     }
   };
 
-  const assignAction = (
-    actionIds: string[],
-    assigneeId: string,
-    userId: string
-  ) => {
- 
-    actionIds &&
-      actionIds.forEach(actionId => {
-        const { action } = findAction(actionId);
-        const assignTo = findUser(assigneeId);
-
-        if (action && assignTo) {
-          action.assigneeId = assignTo.userId;
-          action.assigneeAvatar = assignTo.avatar;
-          action.assigneeName = assignTo.userNickname;
-        }
-        else if(action &&!assignTo){
-          action.assigneeId = "";
-          action.assigneeAvatar = "";
-          action.assigneeName =""; 
-        }
-      });
-  };
-
-  let noMatch = false;
-
+  // Remove React To Action
   const removeReactFromAction = (
     actionId: string,
     react: string,
@@ -1507,7 +1501,29 @@ export const processAction = (
     }
   };
 
-  // let noMatch = false;
+  const assignAction = (
+    actionIds: string[],
+    assigneeId: string,
+    userId: string
+  ) => {
+    actionIds &&
+      actionIds.forEach(actionId => {
+        const { action } = findAction(actionId);
+        const assignTo = findUser(assigneeId);
+
+        if (action && assignTo) {
+          action.assigneeId = assignTo.userId;
+          action.assigneeAvatar = assignTo.avatar;
+          action.assigneeName = assignTo.userNickname;
+        } else if (action && !assignTo) {
+          action.assigneeId = '';
+          action.assigneeAvatar = '';
+          action.assigneeName = '';
+        }
+      });
+  };
+
+  let noMatch = false;
 
   switch (actionName) {
     case BoardActionType.UPDATE_RETRO_DETAILS:
@@ -1676,6 +1692,9 @@ export const processAction = (
         parameters.assigneeName,
         parameters.assigneeAvatar
       );
+      break;
+    case BoardActionType.REMOVE_ACTION:
+      removeAction(parameters.id);
       break;
     case BoardActionType.UPDATE_ACTION:
       updateAction(parameters.id, parameters.value);

@@ -33,7 +33,6 @@ const ActionSubToolbar = ({
     setAnchorEl(null);
   };
   const handleAssign = (event: React.MouseEvent<HTMLElement>) => {
-
     setAnchorEl(null);
     const id:string=event.currentTarget.dataset.myValue?event.currentTarget.dataset.myValue:"";
     assignFunction(id)
@@ -42,7 +41,6 @@ const ActionSubToolbar = ({
 
   return (
     <Box className="actionSubToolbarContainer">
-      {/* <Box display="flex" justifyContent="space-between"> */}
       {selectedActionCount}{' '}
       {selectedActionCount == 1 ? 'Action selected' : 'Actions selected'}
       <Box
@@ -102,7 +100,6 @@ const ActionSubToolbar = ({
             </Box>
           </MenuItem>
         )}
-
         <MenuItem className="menu-item" onClick={handleAssign} data-my-value={global.user.id}>
           <LazyLoadImage
             width="40px !important"

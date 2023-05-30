@@ -723,13 +723,13 @@ const Toolbar = (props: any) => {
             <span> All participants will see feedback screen.</span>
           </span>
           {/* Manage Actions */}
-          <ManageActionSummary
+          {/* <ManageActionSummary
             manageActions={manageActions}
             users={users}
             topVotedManageActions={topVotedManageActions}
             manageActionsLastVoted={manageActionsLastVoted}
             showAllManageAction={showAllManageAction}
-          />
+          /> */}
         </DialogContent>
         <DialogActions style={{ display: 'flex', flexDirection: 'column' }}>
           <Button
