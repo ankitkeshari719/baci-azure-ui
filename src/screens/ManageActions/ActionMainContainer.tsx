@@ -39,7 +39,7 @@ export default function ActionMainContainer() {
   const [showUnassign, setShowUnassign] = React.useState<boolean>(false);
   const [isFeedbackSubmitted, setIsFeedbackSubmitted] =
     React.useState<boolean>(false);
- const [removeActionList, setRemoveActionList] = React.useState<
+  const [removeActionList, setRemoveActionList] = React.useState<
     ActionInterface[]
   >([]);
   const [dialogObject, setDialogObject] = React.useState<DyanamicDialog>({
@@ -289,7 +289,6 @@ export default function ActionMainContainer() {
 
     allActionsTemp.map(action => {
       if (action.checked) {
-       
         localActionList.push(action);
         count = count + 1;
       }
@@ -342,17 +341,21 @@ export default function ActionMainContainer() {
 
   // Sort Functionality:  Assignee ASCENDING
   const assigneeASCENDING = () => {
-    const strAscending = [...allActions].sort((a, b) =>
-      a.assigneeName > b.assigneeName ? 1 : -1
-    );
+    const strAscending = [...allActions].sort((a, b) => {
+      const first = a.assigneeName.toLowerCase();
+      const second = b.assigneeName.toLowerCase();
+      return first > second ? 1 : -1;
+    });
     setAllActionsTemp(strAscending);
   };
 
   // Sort Functionality:  Assignee DESCENDING
   const assigneeDESCENDING = () => {
-    const strDescending = [...allActions].sort((a, b) =>
-      a.assigneeName > b.assigneeName ? -1 : 1
-    );
+    const strDescending = [...allActions].sort((a, b) => {
+      const first = a.assigneeName.toLowerCase();
+      const second = b.assigneeName.toLowerCase();
+      return first > second ? -1 : 1;
+    });
     setAllActionsTemp(strDescending);
   };
 
@@ -450,7 +453,7 @@ export default function ActionMainContainer() {
     if (id != '') {
       setDialogObject({
         open: true,
-        header: 'Assign ' + selectedActionCount +" Selected" + header + '?',
+        header: 'Assign ' + selectedActionCount + ' Selected' + header + '?',
         content: subContent + ' will be assigned to ' + userName + '.',
         agreeLabel: 'ASSIGN ' + selectedActionCount + header,
         cancelLabel: 'CANCEL',
@@ -458,7 +461,7 @@ export default function ActionMainContainer() {
     } else {
       setDialogObject({
         open: true,
-        header: 'Un-assign ' + selectedActionCount+" Selected" + header + '?',
+        header: 'Un-assign ' + selectedActionCount + ' Selected' + header + '?',
         content: subContent + ' will be un-assigned.',
         agreeLabel: 'UN-ASSIGN ' + selectedActionCount + header,
         cancelLabel: 'CANCEL',
@@ -636,7 +639,6 @@ export default function ActionMainContainer() {
                   }
                   removeAction={removeSelectedAction}
                   assignAction={assignAction}
-
                 />
               )}
             </>
