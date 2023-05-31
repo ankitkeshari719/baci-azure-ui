@@ -33,9 +33,8 @@ type Props = {
   disabled: boolean;
   removeAction: (selectedActions: ActionInterface) => void;
   assignAction: (ids: string[], assigneeId: string) => void;
+  isOtherParticipantAction?: boolean;
 };
-
-const ITEM_HEIGHT = 48;
 
 export default function ActionItem({
   action,
@@ -48,6 +47,7 @@ export default function ActionItem({
   disabled,
   removeAction,
   assignAction,
+  isOtherParticipantAction,
 }: Props) {
   const {
     state: { ended, users, actionsData },
@@ -84,7 +84,7 @@ export default function ActionItem({
 
   // For Main Menu
   const handleMainMenuClick = (event: React.MouseEvent<HTMLElement>) => {
-    if(ended){
+    if (ended || (global.user.userType === 1 && isOtherParticipantAction)) {
       return;
     }
     setMainAnchorEl(event.currentTarget);
@@ -569,29 +569,31 @@ export default function ActionItem({
               </ListItemText>
             </MenuItem>
             {/* Assign Action Menu */}
-            <MenuItem
-              aria-controls={open ? 'long-menu' : undefined}
-              aria-expanded={open ? 'true' : undefined}
-              aria-haspopup="true"
-              onClick={handleUsersMenuClick}
-              data-my-value={action.id}
-            >
-              <ListItemIcon>
-                <Icons.UserCircleOutline
-                  size={18}
-                  color="#676767"
-                  style={{
-                    cursor: 'unset',
-                  }}
-                />
-              </ListItemIcon>
-              <ListItemText
-                className="actionItemMenuText"
-                style={{ color: '#343434' }}
+            {global.user.userType === 2 && (
+              <MenuItem
+                aria-controls={open ? 'long-menu' : undefined}
+                aria-expanded={open ? 'true' : undefined}
+                aria-haspopup="true"
+                onClick={handleUsersMenuClick}
+                data-my-value={action.id}
               >
-                Assign
-              </ListItemText>
-            </MenuItem>
+                <ListItemIcon>
+                  <Icons.UserCircleOutline
+                    size={18}
+                    color="#676767"
+                    style={{
+                      cursor: 'unset',
+                    }}
+                  />
+                </ListItemIcon>
+                <ListItemText
+                  className="actionItemMenuText"
+                  style={{ color: '#343434' }}
+                >
+                  Assign
+                </ListItemText>
+              </MenuItem>
+            )}
             {/* Remove Action Menu */}
             <MenuItem
               onClick={() => {
