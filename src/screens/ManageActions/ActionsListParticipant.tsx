@@ -132,6 +132,7 @@ export default function ActionsListParticipant({
                 disabled={true}
                 removeAction={removeAction}
                 assignAction={assignAction}
+                isOtherParticipantAction={true}
               />
             );
           })}
