@@ -84,6 +84,9 @@ export default function ActionItem({
 
   // For Main Menu
   const handleMainMenuClick = (event: React.MouseEvent<HTMLElement>) => {
+    if(ended){
+      return;
+    }
     setMainAnchorEl(event.currentTarget);
   };
 
@@ -627,7 +630,6 @@ export default function ActionItem({
         PaperProps={{
           elevation: 0,
           sx: {
-            maxHeight: ITEM_HEIGHT * 4.5,
             border: '1px solid #cccccc',
             boxShadow: '0px 1px 10px rgba(0, 0, 0, 0.15)',
             borderRadius: '10px',
