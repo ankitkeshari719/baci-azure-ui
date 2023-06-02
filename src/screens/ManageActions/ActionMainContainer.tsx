@@ -216,6 +216,7 @@ export default function ActionMainContainer() {
     setAllActionsTemp(results);
   };
 
+  // Function to remove particular action
   const removeAction = async (actionId: string) => {
     setLoadingFlag(true);
     await saveAndProcessAction(BoardActionType.DELETE_ACTION, {
@@ -304,45 +305,21 @@ export default function ActionMainContainer() {
 
   // Sort Functionality:  Assignee ASCENDING
   const assigneeASCENDING = () => {
-    const strAscending = [...allActions].sort((a, b) =>
-      a.assigneeName > b.assigneeName ? 1 : -1
-    );
+    const strAscending = [...allActions].sort((a, b) => {
+      const first = a.assigneeName.toLowerCase();
+      const second = b.assigneeName.toLowerCase();
+      return first > second ? 1 : -1;
+    });
     setAllActionsTemp(strAscending);
-
-    const tempCurrentUserActions = allActions.filter(
-      action => action.createdBy === global.user.id
-    );
-
-    const tempOthersUserActions = allActions.filter(
-      action => action.createdBy != global.user.id
-    );
-    const currentStrAscending = [...tempCurrentUserActions].sort((a, b) =>
-      a.assigneeName > b.assigneeName ? 1 : -1
-    );
-    const otherStrAscending = [...tempOthersUserActions].sort((a, b) =>
-      a.assigneeName > b.assigneeName ? 1 : -1
-    );
   };
 
   // Sort Functionality:  Assignee DESCENDING
   const assigneeDESCENDING = () => {
-    const strDescending = [...allActions].sort((a, b) =>
-      a.assigneeName > b.assigneeName ? -1 : 1
-    );
-    const tempCurrentUserActions = allActions.filter(
-      action => action.createdBy === global.user.id
-    );
-
-    const tempOthersUserActions = allActions.filter(
-      action => action.createdBy != global.user.id
-    );
-    const currentStrAscending = [...tempCurrentUserActions].sort((a, b) =>
-      a.assigneeName > b.assigneeName ? -1 : 1
-    );
-    const otherStrAscending = [...tempOthersUserActions].sort((a, b) =>
-      a.assigneeName > b.assigneeName ? -1 : 1
-    );
-
+    const strDescending = [...allActions].sort((a, b) => {
+      const first = a.assigneeName.toLowerCase();
+      const second = b.assigneeName.toLowerCase();
+      return first > second ? -1 : 1;
+    });
     setAllActionsTemp(strDescending);
   };
 
@@ -623,6 +600,7 @@ export default function ActionMainContainer() {
                     actionsData.isVotingEnableToParticipant
                   }
                   removeAction={removeSelectedAction}
+                  assignAction={assignAction}
                 />
               )}
             </>
@@ -650,6 +628,7 @@ export default function ActionMainContainer() {
                     actionsData.isVotingEnableToParticipant
                   }
                   removeAction={removeSelectedAction}
+                  assignAction={assignAction}
                 />
               )}
             </>

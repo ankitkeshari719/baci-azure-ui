@@ -32,9 +32,9 @@ type Props = {
   isVotingEnableToParticipant: boolean | undefined;
   disabled: boolean;
   removeAction: (selectedActions: ActionInterface) => void;
+  assignAction: (ids: string[], assigneeId: string) => void;
+  isOtherParticipantAction?: boolean;
 };
-
-const ITEM_HEIGHT = 48;
 
 export default function ActionItem({
   action,
@@ -46,9 +46,11 @@ export default function ActionItem({
   isVotingEnableToParticipant,
   disabled,
   removeAction,
+  assignAction,
+  isOtherParticipantAction,
 }: Props) {
   const {
-    state: { ended, users },
+    state: { ended, users, actionsData },
     commitAction,
   } = React.useContext(BoardContext);
   const [global, dispatch] = React.useContext(GlobalContext);
@@ -75,19 +77,6 @@ export default function ActionItem({
 
   const [selectedActionForAssign, setSelectedActionForAssign] =
     React.useState<ActionInterface>();
-  const [assigneeId, setAssigneeId] = React.useState<string>('');
-
-  React.useEffect(() => {
-    var tempShowUnassign = false;
-    if (
-      action.assigneeId != '' &&
-      action.assigneeId != undefined &&
-      action.checked
-    ) {
-      tempShowUnassign = true;
-    }
-    setShowUnassign(tempShowUnassign);
-  }, [action]);
 
   const userReacted = !!(action.reacts || []).find(
     r => r.by === global.user.id
@@ -95,6 +84,9 @@ export default function ActionItem({
 
   // For Main Menu
   const handleMainMenuClick = (event: React.MouseEvent<HTMLElement>) => {
+    if (ended || (global.user.userType === 1 && isOtherParticipantAction)) {
+      return;
+    }
     setMainAnchorEl(event.currentTarget);
   };
 
@@ -104,17 +96,34 @@ export default function ActionItem({
 
   // For Users Menu
   const handleUsersMenuClick = (event: React.MouseEvent<HTMLElement>) => {
+    const id: string = event.currentTarget.dataset.myValue
+      ? event.currentTarget.dataset.myValue
+      : '';
+    const selectedAction = actionsData.actions.find(action => action.id === id);
+    var tempShowUnassign = false;
+    if (
+      selectedAction?.assigneeId != '' &&
+      selectedAction?.assigneeId != undefined
+    ) {
+      tempShowUnassign = true;
+    }
+    setSelectedActionForAssign(selectedAction);
+    setShowUnassign(tempShowUnassign);
     setAnchorEl(event.currentTarget);
   };
+
   const handleUsersMenuClose = () => {
     setAnchorEl(null);
   };
 
   const handleAssign = (event: React.MouseEvent<HTMLElement>) => {
     setAnchorEl(null);
-    const id: string = event.currentTarget.dataset.myValue
+    const participantId: string = event.currentTarget.dataset.myValue
       ? event.currentTarget.dataset.myValue
       : '';
+    selectedActionForAssign &&
+      assignAction([selectedActionForAssign.id], participantId);
+    handleMainMenuClose();
   };
 
   // Handle Mover Enter on List Item to show the edit pencil
@@ -522,14 +531,19 @@ export default function ActionItem({
             >
               <ListItemIcon>
                 <Icons.Pencil
-                  size={24}
+                  size={18}
                   color="#676767"
                   style={{
                     cursor: 'unset',
                   }}
                 />
               </ListItemIcon>
-              <ListItemText>Edit</ListItemText>
+              <ListItemText
+                className="actionItemMenuText"
+                style={{ color: '#343434' }}
+              >
+                Edit
+              </ListItemText>
             </MenuItem>
             {/* Copy Action Menu */}
             <MenuItem
@@ -540,33 +554,46 @@ export default function ActionItem({
             >
               <ListItemIcon>
                 <Icons.DocumentDuplicateOutline
-                  size={24}
+                  size={18}
                   color="#676767"
                   style={{
                     cursor: 'unset',
                   }}
                 />
               </ListItemIcon>
-              <ListItemText>Copy</ListItemText>
+              <ListItemText
+                className="actionItemMenuText"
+                style={{ color: '#343434' }}
+              >
+                Copy
+              </ListItemText>
             </MenuItem>
             {/* Assign Action Menu */}
-            <MenuItem
-              aria-controls={open ? 'long-menu' : undefined}
-              aria-expanded={open ? 'true' : undefined}
-              aria-haspopup="true"
-              onClick={handleUsersMenuClick}
-            >
-              <ListItemIcon>
-                <Icons.UserCircle
-                  size={24}
-                  color="#676767"
-                  style={{
-                    cursor: 'unset',
-                  }}
-                />
-              </ListItemIcon>
-              <ListItemText>Assign</ListItemText>
-            </MenuItem>
+            {global.user.userType === 2 && (
+              <MenuItem
+                aria-controls={open ? 'long-menu' : undefined}
+                aria-expanded={open ? 'true' : undefined}
+                aria-haspopup="true"
+                onClick={handleUsersMenuClick}
+                data-my-value={action.id}
+              >
+                <ListItemIcon>
+                  <Icons.UserCircleOutline
+                    size={18}
+                    color="#676767"
+                    style={{
+                      cursor: 'unset',
+                    }}
+                  />
+                </ListItemIcon>
+                <ListItemText
+                  className="actionItemMenuText"
+                  style={{ color: '#343434' }}
+                >
+                  Assign
+                </ListItemText>
+              </MenuItem>
+            )}
             {/* Remove Action Menu */}
             <MenuItem
               onClick={() => {
@@ -576,14 +603,19 @@ export default function ActionItem({
             >
               <ListItemIcon>
                 <Icons.TrashOutline
-                  size={24}
+                  size={18}
                   color="#EA4335"
                   style={{
                     cursor: 'unset',
                   }}
                 />
               </ListItemIcon>
-              <ListItemText style={{ color: '#EA4335' }}>Remove</ListItemText>
+              <ListItemText
+                className="actionItemMenuText"
+                style={{ color: '#EA4335' }}
+              >
+                Remove
+              </ListItemText>
             </MenuItem>
           </Menu>
         </ListItemAvatar>
@@ -598,11 +630,29 @@ export default function ActionItem({
         open={open}
         onClose={handleUsersMenuClose}
         PaperProps={{
-          style: {
-            maxHeight: ITEM_HEIGHT * 4.5,
-            width: '20ch',
+          elevation: 0,
+          sx: {
+            border: '1px solid #cccccc',
+            boxShadow: '0px 1px 10px rgba(0, 0, 0, 0.15)',
+            borderRadius: '10px',
+            background: '#ffffff',
+            overflow: 'visible',
+            '&:before': {
+              content: '""',
+              display: 'block',
+              position: 'absolute',
+              top: 0,
+              right: 14,
+              width: 10,
+              height: 10,
+              bgcolor: 'background.paper',
+              transform: 'translateY(-50%) rotate(45deg)',
+              zIndex: 0,
+            },
           },
         }}
+        transformOrigin={{ horizontal: 'right', vertical: 'top' }}
+        anchorOrigin={{ horizontal: 'left', vertical: 'bottom' }}
       >
         {showUnassign && (
           <MenuItem
