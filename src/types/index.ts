@@ -99,6 +99,8 @@ export interface Actions {
   actions: ActionInterface[];
   isVotingEnableToParticipant?: boolean;
   isAddActionEnableToParticipant?: boolean;
+  messageForParicipants?:string;
+  postMessageForParticipants?:boolean;
 }
 
 export interface CardGroup {
@@ -153,6 +155,8 @@ export class BoardState {
     actions: [],
     isVotingEnableToParticipant: false,
     isAddActionEnableToParticipant: false,
+    messageForParicipants:"",
+    postMessageForParticipants:false,
   };
   creatorId: string = '';
   users: {
