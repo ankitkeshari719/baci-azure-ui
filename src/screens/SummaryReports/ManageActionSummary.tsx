@@ -1,5 +1,5 @@
 import React from 'react';
-import { Box, Typography } from '@mui/material';
+import { Box, Tooltip, Typography } from '@mui/material';
 import { Row, Col } from 'react-bootstrap';
 import Avatar from '../../elements/Avatar';
 import { ActionInterface } from '../../types';
@@ -15,6 +15,8 @@ type Props = {
   copyAllManageActions?: () => void;
   handleShowManageActions?: () => void;
   showAllManageAction: boolean;
+  setIsCopied?: (isCopied: boolean) => void;
+  isCopied?: boolean;
 };
 
 export default function ManageActionSummary({
@@ -25,8 +27,16 @@ export default function ManageActionSummary({
   showAllManageAction,
   topVotedManageActions,
   manageActionsLastVoted,
+  setIsCopied,
+  isCopied,
 }: Props) {
   const windowWidth = React.useRef(window.innerWidth);
+
+  const handleTooltipClose = () => {
+    setTimeout(() => {
+      setIsCopied && setIsCopied(false);
+    }, 1500);
+  };
 
   return (
     <Box>
@@ -41,12 +51,20 @@ export default function ManageActionSummary({
             className="d-flex justify-content-end align-items-center"
             id="copy-to-clipboard"
           >
-            <Typography
-              className="viewParticipants"
-              onClick={copyAllManageActions}
+            <Tooltip
+              onClose={handleTooltipClose}
+              open={isCopied}
+              enterNextDelay={1500}
+              placement="top"
+              title="Link Copied!"
             >
-              Copy to Clipboard
-            </Typography>
+              <Typography
+                className="viewParticipants"
+                onClick={copyAllManageActions}
+              >
+                Copy to Clipboard
+              </Typography>
+            </Tooltip>
           </Col>
         )}
       </Row>
@@ -259,7 +277,7 @@ export default function ManageActionSummary({
                     );
                   }
                 )}
-                {manageActions.length > 4 && (
+                {manageActions.length > 3 && (
                   <Row style={{ marginTop: '16px' }}>
                     <Col
                       xs="12"
@@ -299,8 +317,8 @@ export default function ManageActionSummary({
                         sx={{ marginLeft: '8px' }}
                         onClick={handleShowManageActions}
                       >
-                        View More Comments from {users.length}&nbsp;
-                        Participants
+                        View {users.length} More{' '}
+                        {users.length - 3 === 1 ? 'Action' : 'Actions'}
                       </Typography>
                     </Col>
                   </Row>
@@ -351,8 +369,15 @@ export default function ManageActionSummary({
                     >
                       {action.reacts.length === 0 ? 0 : action.reacts.length}
                     </Typography>
-                    <Box sx={{ marginLeft: action?.assigneeAvatar === '' ||
-                            action.assigneeAvatar === undefined ? '12px' : '24px' }}>
+                    <Box
+                      sx={{
+                        marginLeft:
+                          action?.assigneeAvatar === '' ||
+                          action.assigneeAvatar === undefined
+                            ? '12px'
+                            : '24px',
+                      }}
+                    >
                       {action.assigneeAvatar === '' ||
                       action.assigneeAvatar === undefined ? (
                         <Icons.UserCircle

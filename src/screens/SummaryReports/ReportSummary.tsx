@@ -203,6 +203,7 @@ export const ReportSummary = React.forwardRef((props, ref) => {
     ActionInterface[]
   >([]);
   const [showAllManageAction, setShowAllManageAction] = React.useState(false);
+  const [isCopied, setIsCopied] = React.useState(false);
 
   // ---------------------------------------------- Manage Actions-----------------------------------------------------------
   React.useEffect(() => {
@@ -215,9 +216,9 @@ export const ReportSummary = React.forwardRef((props, ref) => {
     setManageActions([...sortedManageActions]);
     setTopVotedManageActions(sortedManageActions.slice(0, 3));
 
-    if (sortedManageActions.length > 4) {
+    if (sortedManageActions.length > 3) {
       setManageActionsLastVoted(
-        sortedManageActions.slice(4, sortedManageActions.length)
+        sortedManageActions.slice(3, sortedManageActions.length)
       );
     }
   }, [actionsData]);
@@ -631,6 +632,7 @@ export const ReportSummary = React.forwardRef((props, ref) => {
     });
     navigator.clipboard.writeText(actionValues.join());
     setIsActionCopied(true);
+    setIsCopied(true);
   };
 
   // On change the text field
@@ -911,6 +913,8 @@ export const ReportSummary = React.forwardRef((props, ref) => {
             copyAllManageActions={copyAllManageActions}
             handleShowManageActions={handleShowManageActions}
             showAllManageAction={showAllManageAction}
+            setIsCopied={setIsCopied}
+            isCopied={isCopied}
           />
 
           {/* Column Section 1*/}
