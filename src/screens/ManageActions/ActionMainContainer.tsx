@@ -16,6 +16,7 @@ import ActionsListParticipant from './ActionsListParticipant';
 import { NONE, VALUE_ASC, VALUE_DSC, VOTES_ASC, VOTES_DSC } from './const';
 import ActionSubToolbar from './ActionSubToolbar';
 import DialogWithDyanamicData from '../Utils/Dialogs/DialogWithDyanamicData';
+import MessageForParticipant from './MessageForParticipant';
 
 export default function ActionMainContainer() {
   const {
@@ -27,10 +28,15 @@ export default function ActionMainContainer() {
   const [allActionsTemp, setAllActionsTemp] = React.useState<ActionInterface[]>(
     []
   );
+  const [expandMessageForParticipant, setExpandMessageForParticipant] =
+    React.useState<boolean>(true);
+
   const [assigneeId, setAssigneeId] = React.useState<string>('');
   const [selectedActionCount, setSelectedActionCount] =
     React.useState<number>(0);
   const [addedActionValue, setAddActionValue] = React.useState<string>('');
+  const [messageForParticipant, setMessageForParticipant] =
+    React.useState<string>('');
   const isXsUp = useMediaQuery(theme.breakpoints.only('xs'));
   const [isTextFieldFocused, setIsTextFieldFocused] =
     React.useState<boolean>(false);
@@ -55,9 +61,21 @@ export default function ActionMainContainer() {
       action.checked = false;
       return action;
     });
+
+    setMessageForParticipant(
+      actionsData.messageForParicipants ? actionsData.messageForParicipants : ''
+    );
+    console.log(actionsData.messageForParicipants);
     setAllActions([...tempActions]);
     setAllActionsTemp([...tempActions]);
   }, [actionsData]);
+
+  const setLoadingFlag = (status: boolean) => {
+    dispatch({
+      type: ActionType.SET_LOADING,
+      payload: { loadingFlag: status },
+    });
+  };
 
   React.useEffect(() => {
     var tempSelectedActionCount = 0;
@@ -101,10 +119,7 @@ export default function ActionMainContainer() {
 
   // Function to call API on adding the new action
   const addAction = async (value: string) => {
-    dispatch({
-      type: ActionType.SET_LOADING,
-      payload: { loadingFlag: true },
-    });
+    setLoadingFlag(true);
     const id = shortid.generate();
     await saveAndProcessAction(BoardActionType.Add_NEW_ACTION, {
       id: id,
@@ -117,100 +132,64 @@ export default function ActionMainContainer() {
       res => {
         setAddActionValue('');
         setIsTextFieldFocused(false);
-        dispatch({
-          type: ActionType.SET_LOADING,
-          payload: { loadingFlag: false },
-        });
+        setLoadingFlag(false);
       },
       err => {
-        dispatch({
-          type: ActionType.SET_LOADING,
-          payload: { loadingFlag: false },
-        });
+        setLoadingFlag(false);
       }
     );
   };
 
   // Function to call API on adding the new react
   const addReactToAction = async (actionId: string, actionBy: string) => {
-    dispatch({
-      type: ActionType.SET_LOADING,
-      payload: { loadingFlag: true },
-    });
+    setLoadingFlag(true);
     await saveAndProcessAction(BoardActionType.ADD_REACT_TO_ACTION, {
       actionId: actionId,
       react: '👍',
     }).then(
       res => {
-        dispatch({
-          type: ActionType.SET_LOADING,
-          payload: { loadingFlag: false },
-        });
+        setLoadingFlag(false);
       },
       err => {
-        dispatch({
-          type: ActionType.SET_LOADING,
-          payload: { loadingFlag: false },
-        });
+        setLoadingFlag(false);
       }
     );
   };
 
   // Function to call API on removing the new react
   const removeReactFromAction = async (actionId: string) => {
-    dispatch({
-      type: ActionType.SET_LOADING,
-      payload: { loadingFlag: true },
-    });
+    setLoadingFlag(true);
     await saveAndProcessAction(BoardActionType.REMOVE_REACT_FROM_ACTION, {
       actionId,
       react: '👍',
     }).then(
       res => {
-        dispatch({
-          type: ActionType.SET_LOADING,
-          payload: { loadingFlag: false },
-        });
+        setLoadingFlag(false);
       },
       err => {
-        dispatch({
-          type: ActionType.SET_LOADING,
-          payload: { loadingFlag: false },
-        });
+        setLoadingFlag(false);
       }
     );
   };
 
   // Function to call API on enabling to voting participant functionality
   const enableVotingToParticipant = async (value: boolean) => {
-    dispatch({
-      type: ActionType.SET_LOADING,
-      payload: { loadingFlag: true },
-    });
+    setLoadingFlag(true);
     await saveAndProcessAction(BoardActionType.ENABLE_VOTING_TO_PARTICIPANT, {
       value,
     }).then(
       res => {
-        dispatch({
-          type: ActionType.SET_LOADING,
-          payload: { loadingFlag: false },
-        });
+        setLoadingFlag(false);
       },
       err => {
-        dispatch({
-          type: ActionType.SET_LOADING,
-          payload: { loadingFlag: false },
-        });
+        setLoadingFlag(false);
       }
     );
   };
 
   // Function to call API on enabling to add action to participant functionality
   const enableAddActionToParticipant = async (value: boolean) => {
-    dispatch({
-      type: ActionType.SET_LOADING,
-      payload: { loadingFlag: true },
-    });
+    setLoadingFlag(true);
     await saveAndProcessAction(
       BoardActionType.ENABLE_ADD_ACTIONS_TO_PARTICIPANT,
       {
@@ -218,16 +197,10 @@ export default function ActionMainContainer() {
       }
     ).then(
       res => {
-        dispatch({
-          type: ActionType.SET_LOADING,
-          payload: { loadingFlag: false },
-        });
+        setLoadingFlag(false);
       },
       err => {
-        dispatch({
-          type: ActionType.SET_LOADING,
-          payload: { loadingFlag: false },
-        });
+        setLoadingFlag(false);
       }
     );
   };
@@ -245,24 +218,15 @@ export default function ActionMainContainer() {
 
   // Function to remove particular action
   const removeAction = async (actionId: string) => {
-    dispatch({
-      type: ActionType.SET_LOADING,
-      payload: { loadingFlag: true },
-    });
+    setLoadingFlag(true);
     await saveAndProcessAction(BoardActionType.DELETE_ACTION, {
       actionId: actionId,
     }).then(
       res => {
-        dispatch({
-          type: ActionType.SET_LOADING,
-          payload: { loadingFlag: false },
-        });
+        setLoadingFlag(false);
       },
       err => {
-        dispatch({
-          type: ActionType.SET_LOADING,
-          payload: { loadingFlag: false },
-        });
+        setLoadingFlag(false);
       }
     );
   };
@@ -417,10 +381,7 @@ export default function ActionMainContainer() {
   };
 
   const assignAction = async (ids: string[], assigneeId: string) => {
-    dispatch({
-      type: ActionType.SET_LOADING,
-      payload: { loadingFlag: true },
-    });
+    setLoadingFlag(true);
     await saveAndProcessAction(BoardActionType.ASSIGN_ACTION, {
       actionIds: ids,
       assigneeId: assigneeId,
@@ -469,6 +430,35 @@ export default function ActionMainContainer() {
     }
   };
 
+  const postMessageForParticipantFlag = async (post: boolean) => {
+    console.log('messageForParticipant', messageForParticipant);
+    updateMessageForParticipant(messageForParticipant);
+    // await saveAndProcessAction(
+    //   BoardActionType.POST_MESSAGE_FOR_PARTICIPANTS_FLAG,
+    //   { post }
+    // ).then(res => {
+    //   console.log();
+    // });
+  };
+  const clearMessageForParticipant = async () => {
+    setMessageForParticipant('');
+    updateMessageForParticipant('');
+  };
+  const updateMessageForParticipant = async (message: string) => {
+    setLoadingFlag(true);
+    await saveAndProcessAction(
+      BoardActionType.UPDATE_MESSAGE_FOR_PARTICIPANTS,
+      { message }
+    ).then(
+      res => {
+        setLoadingFlag(false);
+        console.log();
+      },
+      error => {
+        setLoadingFlag(false);
+      }
+    );
+  };
   const agreeToAssignFunction = () => {
     const ids: string[] = [];
     allActionsTemp &&
@@ -484,33 +474,21 @@ export default function ActionMainContainer() {
 
   // Remove Action
   const removeSelectedAction = async (selectedAction: ActionInterface) => {
-    dispatch({
-      type: ActionType.SET_LOADING,
-      payload: { loadingFlag: true },
-    });
+    setLoadingFlag(true);
     await saveAndProcessAction(BoardActionType.REMOVE_ACTION, {
       id: selectedAction?.id,
     }).then(
       res => {
-        dispatch({
-          type: ActionType.SET_LOADING,
-          payload: { loadingFlag: false },
-        });
+        setLoadingFlag(false);
       },
       err => {
-        dispatch({
-          type: ActionType.SET_LOADING,
-          payload: { loadingFlag: false },
-        });
+        setLoadingFlag(false);
       }
     );
   };
 
   const handleUnselect = () => {
-    dispatch({
-      type: ActionType.SET_LOADING,
-      payload: { loadingFlag: true },
-    });
+    setLoadingFlag(true);
     const localAllActionsTemp = allActionsTemp;
 
     localAllActionsTemp &&
@@ -547,6 +525,18 @@ export default function ActionMainContainer() {
         enableVotingToParticipant={enableVotingToParticipant}
         enableAddActionToParticipant={enableAddActionToParticipant}
       />
+
+      <MessageForParticipant
+        expandMessageForParticipant={expandMessageForParticipant}
+        setExpandMessageForParticipant={setExpandMessageForParticipant}
+        messageForParticipant={messageForParticipant}
+        setMessageForParticipant={setMessageForParticipant}
+        postMessageForParticipant={postMessageForParticipantFlag}
+        actionsData={actionsData}
+        clearMessageForParticipant={clearMessageForParticipant}
+        userType={global.user.userType}
+      />
+
       {!ended && (
         <>
           {selectedActionCount == 0 ? (

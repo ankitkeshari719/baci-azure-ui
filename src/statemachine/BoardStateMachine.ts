@@ -61,6 +61,8 @@ export enum BoardActionType {
   ENABLE_VOTING_TO_PARTICIPANT = 'EnableVotingToParticipant',
   ENABLE_ADD_ACTIONS_TO_PARTICIPANT = 'EnableAddActionToParticipant',
   DELETE_ACTION = 'deleteAction',
+  POST_MESSAGE_FOR_PARTICIPANTS_FLAG = 'postMessageForParticipantsFlag',
+  UPDATE_MESSAGE_FOR_PARTICIPANTS = 'updateMessageForParticipant',
 }
 
 export const BOARD_STATE_MACHINE_VERSION = 1;
@@ -736,6 +738,10 @@ export const validateAction = (
       return true;
     case BoardActionType.DELETE_ACTION:
       return true;
+    case BoardActionType.POST_MESSAGE_FOR_PARTICIPANTS_FLAG:
+      return true;
+    case BoardActionType.UPDATE_MESSAGE_FOR_PARTICIPANTS:
+      return true;
     // case BoardActionType.SET_LOADING:
     //   return true;
     default:
@@ -1156,7 +1162,6 @@ export const processAction = (
     }
   };
   const deleteAction = (actionId: string, userId: string) => {
-
     const { action }: any = findAction(actionId);
 
     if (action) {
@@ -1535,6 +1540,17 @@ export const processAction = (
         }
       });
   };
+  const postMessageForParticipants = (post: boolean, userId: string) => {
+    if (state.actionsData.messageForParicipants != '') {
+      state.actionsData.postMessageForParticipants = post;
+    }
+  };
+  const updatePostMessageForParticipants = (
+    message: string,
+    userId: string
+  ) => {
+    state.actionsData.messageForParicipants = message;
+  };
 
   let noMatch = false;
 
@@ -1735,6 +1751,12 @@ export const processAction = (
       break;
     case BoardActionType.DELETE_ACTION:
       deleteAction(parameters.actionId, userId);
+      break;
+    case BoardActionType.POST_MESSAGE_FOR_PARTICIPANTS_FLAG:
+      postMessageForParticipants(parameters.post, userId);
+      break;
+    case BoardActionType.UPDATE_MESSAGE_FOR_PARTICIPANTS:
+      updatePostMessageForParticipants(parameters.message, userId);
       break;
     default:
       noMatch = true;
