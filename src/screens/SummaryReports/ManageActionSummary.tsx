@@ -1,5 +1,5 @@
 import React from 'react';
-import { Box, Typography } from '@mui/material';
+import { Box, Tooltip, Typography } from '@mui/material';
 import { Row, Col } from 'react-bootstrap';
 import Avatar from '../../elements/Avatar';
 import { ActionInterface } from '../../types';
@@ -15,6 +15,8 @@ type Props = {
   copyAllManageActions?: () => void;
   handleShowManageActions?: () => void;
   showAllManageAction: boolean;
+  setIsCopied?: (isCopied: boolean) => void;
+  isCopied?: boolean;
 };
 
 export default function ManageActionSummary({
@@ -25,8 +27,14 @@ export default function ManageActionSummary({
   showAllManageAction,
   topVotedManageActions,
   manageActionsLastVoted,
+  setIsCopied,
+  isCopied,
 }: Props) {
-  const windowWidth = React.useRef(window.innerWidth);
+  const handleTooltipClose = () => {
+    setTimeout(() => {
+      setIsCopied && setIsCopied(false);
+    }, 1500);
+  };
 
   return (
     <Box>
@@ -41,12 +49,20 @@ export default function ManageActionSummary({
             className="d-flex justify-content-end align-items-center"
             id="copy-to-clipboard"
           >
-            <Typography
-              className="viewParticipants"
-              onClick={copyAllManageActions}
+            <Tooltip
+              onClose={handleTooltipClose}
+              open={isCopied}
+              enterNextDelay={1500}
+              placement="top"
+              title="Text Copied!"
             >
-              Copy to Clipboard
-            </Typography>
+              <Typography
+                className="viewParticipants"
+                onClick={copyAllManageActions}
+              >
+                Copy to Clipboard
+              </Typography>
+            </Tooltip>
           </Col>
         )}
       </Row>
@@ -125,28 +141,37 @@ export default function ManageActionSummary({
                             ? 0
                             : action.reacts.length}
                         </Typography>
-                        {action?.assigneeAvatar === '' ||
-                        action.assigneeAvatar === undefined ? (
-                          <Icons.UserCircle
-                            style={{
-                              color: '#CCCCCC',
-                              width: '40px',
-                              height: '40px',
-                            }}
-                          />
-                        ) : (
-                          <Avatar
-                            avatar={action?.assigneeAvatar}
-                            onClickAvatar={() => {}}
-                            css={{
-                              width: '40px',
-                              height: '40px',
-                              borderRadius: '50%',
-                              border: 'none',
-                            }}
-                          ></Avatar>
-                        )}
-
+                        <Box
+                          sx={{
+                            marginLeft:
+                              action?.assigneeAvatar === '' ||
+                              action.assigneeAvatar === undefined
+                                ? '12px'
+                                : '24px',
+                          }}
+                        >
+                          {action?.assigneeAvatar === '' ||
+                          action.assigneeAvatar === undefined ? (
+                            <Icons.UserCircle
+                              style={{
+                                color: '#CCCCCC',
+                                width: '60px',
+                                height: '50px',
+                              }}
+                            />
+                          ) : (
+                            <Avatar
+                              avatar={action?.assigneeAvatar}
+                              onClickAvatar={() => {}}
+                              css={{
+                                width: '40px',
+                                height: '40px',
+                                borderRadius: '50%',
+                                border: 'none',
+                              }}
+                            ></Avatar>
+                          )}
+                        </Box>
                         <Typography
                           style={{ marginLeft: '12px' }}
                           className="actionValue"
@@ -208,27 +233,37 @@ export default function ManageActionSummary({
                               ? 0
                               : action.reacts.length}
                           </Typography>
-                          {action?.assigneeAvatar === '' ||
-                          action.assigneeAvatar === undefined ? (
-                            <Icons.UserCircle
-                              style={{
-                                color: '#CCCCCC',
-                                width: '40px',
-                                height: '40px',
-                              }}
-                            />
-                          ) : (
-                            <Avatar
-                              avatar={action?.assigneeAvatar}
-                              onClickAvatar={() => {}}
-                              css={{
-                                width: '40px',
-                                height: '40px',
-                                borderRadius: '50%',
-                                border: 'none',
-                              }}
-                            ></Avatar>
-                          )}
+                          <Box
+                            sx={{
+                              marginLeft:
+                                action?.assigneeAvatar === '' ||
+                                action.assigneeAvatar === undefined
+                                  ? '12px'
+                                  : '24px',
+                            }}
+                          >
+                            {action?.assigneeAvatar === '' ||
+                            action.assigneeAvatar === undefined ? (
+                              <Icons.UserCircle
+                                style={{
+                                  color: '#CCCCCC',
+                                  width: '60px',
+                                  height: '50px',
+                                }}
+                              />
+                            ) : (
+                              <Avatar
+                                avatar={action?.assigneeAvatar}
+                                onClickAvatar={() => {}}
+                                css={{
+                                  width: '40px',
+                                  height: '40px',
+                                  borderRadius: '50%',
+                                  border: 'none',
+                                }}
+                              ></Avatar>
+                            )}
+                          </Box>
                           <Typography
                             style={{ marginLeft: '12px' }}
                             className="actionValue"
@@ -240,11 +275,11 @@ export default function ManageActionSummary({
                     );
                   }
                 )}
-                {manageActions.length > 4 && (
+                {manageActions.length > 3 && (
                   <Row style={{ marginTop: '16px' }}>
                     <Col
                       xs="12"
-                      className="d-flex justify-content-start align-items-center"
+                      className="d-flex justify-content-start align-items-center m-0 p-0"
                     >
                       {manageActionsLastVoted.map(
                         (action: ActionInterface, index: number) => {
@@ -255,8 +290,8 @@ export default function ManageActionSummary({
                                 <Icons.UserCircle
                                   style={{
                                     color: '#CCCCCC',
-                                    width: '40px',
-                                    height: '40px',
+                                    width: '60px',
+                                    height: '50px',
                                   }}
                                 />
                               ) : (
@@ -280,8 +315,8 @@ export default function ManageActionSummary({
                         sx={{ marginLeft: '8px' }}
                         onClick={handleShowManageActions}
                       >
-                        View More Comments from {users.length}&nbsp;
-                        Participants
+                        View {users.length} More{' '}
+                        {users.length - 3 === 1 ? 'Action' : 'Actions'}
                       </Typography>
                     </Col>
                   </Row>
@@ -292,11 +327,10 @@ export default function ManageActionSummary({
           {/* Print Manage Action */}
           <Box
             sx={{ marginTop: '16px', display: 'none' }}
-            id="actions-column-print"
+            id="manage-actions-column"
           >
             {manageActions.map((action: ActionInterface, index: number) => {
               const labelId = `action-label-${action.id}`;
-
               return (
                 <Row
                   style={{ marginTop: index > 0 ? '16px' : '0px' }}
@@ -333,27 +367,41 @@ export default function ManageActionSummary({
                     >
                       {action.reacts.length === 0 ? 0 : action.reacts.length}
                     </Typography>
-                    {action.assigneeAvatar === '' ||
-                    action.assigneeAvatar === undefined ? (
-                      <Icons.UserCircle
-                        style={{
-                          color: '#CCCCCC',
-                          width: '40px',
-                          height: '40px',
-                        }}
-                      />
-                    ) : (
-                      <Avatar
-                        avatar={action?.assigneeAvatar}
-                        onClickAvatar={() => {}}
-                        css={{
-                          width: '40px',
-                          height: '40px',
-                          borderRadius: '50%',
-                          border: 'none',
-                        }}
-                      ></Avatar>
-                    )}
+                    <Box
+                      sx={{
+                        marginLeft:
+                          action?.assigneeAvatar === '' ||
+                          action.assigneeAvatar === undefined
+                            ? '12px'
+                            : '24px',
+                      }}
+                    >
+                      {action.assigneeAvatar === '' ||
+                      action.assigneeAvatar === undefined ? (
+                        <Icons.UserCircle
+                          style={{
+                            color: '#CCCCCC',
+                            width: '60px',
+                            height: '50px',
+                          }}
+                        />
+                      ) : (
+                        <img
+                          src={
+                            '/avatars/animals/' +
+                            action?.assigneeAvatar +
+                            '.svg'
+                          }
+                          className="avatar"
+                          style={{
+                            width: '40px',
+                            height: '40px',
+                            borderRadius: '50%',
+                            border: 'none',
+                          }}
+                        ></img>
+                      )}
+                    </Box>
                     <Typography
                       style={{ marginLeft: '12px' }}
                       className="actionValue"

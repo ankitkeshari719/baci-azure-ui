@@ -198,14 +198,12 @@ export const ReportSummary = React.forwardRef((props, ref) => {
   const [topVotedManageActions, setTopVotedManageActions] = React.useState<
     ActionInterface[]
   >([]);
-  const [manageActionsTopVotedPrint_1, setManageActionsTopVotedPrint_1] =
-    React.useState<ActionInterface[]>([]);
-  const [manageActionsTopVotedPrint_2, setManageActionsTopVotedPrint_2] =
-    React.useState<ActionInterface[]>([]);
+
   const [manageActionsLastVoted, setManageActionsLastVoted] = React.useState<
     ActionInterface[]
   >([]);
   const [showAllManageAction, setShowAllManageAction] = React.useState(false);
+  const [isCopied, setIsCopied] = React.useState(false);
 
   // ---------------------------------------------- Manage Actions-----------------------------------------------------------
   React.useEffect(() => {
@@ -213,20 +211,14 @@ export const ReportSummary = React.forwardRef((props, ref) => {
       return action;
     });
     const sortedManageActions = [...tempActions].sort(
-      (a, b) => a.reacts?.length - b.reacts?.length
+      (a, b) => b.reacts?.length - a.reacts?.length
     );
     setManageActions([...sortedManageActions]);
-    setTopVotedManageActions(
-      windowWidth.current <= 1500
-        ? sortedManageActions.slice(0, 3)
-        : sortedManageActions.slice(0, 4)
-    );
-    setManageActionsTopVotedPrint_1(sortedManageActions.slice(0, 2));
-    setManageActionsTopVotedPrint_2(sortedManageActions.slice(2, 4));
+    setTopVotedManageActions(sortedManageActions.slice(0, 3));
 
-    if (sortedManageActions.length > 4) {
+    if (sortedManageActions.length > 3) {
       setManageActionsLastVoted(
-        sortedManageActions.slice(4, sortedManageActions.length)
+        sortedManageActions.slice(3, sortedManageActions.length)
       );
     }
   }, [actionsData]);
@@ -640,6 +632,7 @@ export const ReportSummary = React.forwardRef((props, ref) => {
     });
     navigator.clipboard.writeText(actionValues.join());
     setIsActionCopied(true);
+    setIsCopied(true);
   };
 
   // On change the text field
@@ -920,6 +913,8 @@ export const ReportSummary = React.forwardRef((props, ref) => {
             copyAllManageActions={copyAllManageActions}
             handleShowManageActions={handleShowManageActions}
             showAllManageAction={showAllManageAction}
+            setIsCopied={setIsCopied}
+            isCopied={isCopied}
           />
 
           {/* Column Section 1*/}
