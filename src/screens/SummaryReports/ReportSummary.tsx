@@ -915,7 +915,6 @@ export const ReportSummary = React.forwardRef((props, ref) => {
             showAllManageAction={showAllManageAction}
             setIsCopied={setIsCopied}
             isCopied={isCopied}
-            isFinishedPage={false}
           />
 
           {/* Column Section 1*/}

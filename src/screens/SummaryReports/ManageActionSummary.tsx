@@ -17,7 +17,6 @@ type Props = {
   showAllManageAction: boolean;
   setIsCopied?: (isCopied: boolean) => void;
   isCopied?: boolean;
-  isFinishedPage?: boolean;
 };
 
 export default function ManageActionSummary({
@@ -30,7 +29,6 @@ export default function ManageActionSummary({
   manageActionsLastVoted,
   setIsCopied,
   isCopied,
-  isFinishedPage,
 }: Props) {
   const handleTooltipClose = () => {
     setTimeout(() => {
@@ -46,30 +44,26 @@ export default function ManageActionSummary({
           <Typography className="textTypeFour">Actions Identified</Typography>
         </Col>
         {manageActions.length === 0 ? null : (
-          <>
-            {!isFinishedPage && (
-              <Col
-                xs={{ span: 2, offset: 8 }}
-                className="d-flex justify-content-end align-items-center"
-                id="copy-to-clipboard"
+          <Col
+            xs={{ span: 2, offset: 8 }}
+            className="d-flex justify-content-end align-items-center"
+            id="copy-to-clipboard"
+          >
+            <Tooltip
+              onClose={handleTooltipClose}
+              open={isCopied}
+              enterNextDelay={1500}
+              placement="top"
+              title="Text Copied!"
+            >
+              <Typography
+                className="viewParticipants"
+                onClick={copyAllManageActions}
               >
-                <Tooltip
-                  onClose={handleTooltipClose}
-                  open={isCopied}
-                  enterNextDelay={1500}
-                  placement="top"
-                  title="text Copied!"
-                >
-                  <Typography
-                    className="viewParticipants"
-                    onClick={copyAllManageActions}
-                  >
-                    Copy to Clipboard
-                  </Typography>
-                </Tooltip>
-              </Col>
-            )}
-          </>
+                Copy to Clipboard
+              </Typography>
+            </Tooltip>
+          </Col>
         )}
       </Row>
       {/* Actions to be Taken Section 2*/}
