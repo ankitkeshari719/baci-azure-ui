@@ -32,6 +32,7 @@ import { ContainedButton } from '../components/ContainedButton';
 import { ActionInterface } from '../types';
 import { Row, Col } from 'react-bootstrap';
 import * as Icons from 'heroicons-react';
+import { LazyLoadImage } from 'react-lazy-load-image-component';
 
 const Toolbar = (props: any) => {
   const isXsUp = useMediaQuery(theme.breakpoints.only('xs'));
@@ -695,7 +696,7 @@ const Toolbar = (props: any) => {
                 fontSize: '28px',
               }}
             >
-              Finish Retro ?
+              End Retro ?
             </span>
           </span>
         </Box>
@@ -706,7 +707,7 @@ const Toolbar = (props: any) => {
             flexDirection: 'column',
             alignItems: 'center',
             justifyContent: 'center',
-            marginTop: '24px',
+            marginTop: '28px',
           }}
         >
           <span
@@ -737,11 +738,11 @@ const Toolbar = (props: any) => {
           style={{
             width: '100%',
             border: '1px dashed #EE7538',
-            marginTop: '24px',
+            marginTop: '28px',
           }}
         />
         {/* Manage Actions List */}
-        <DialogContent sx={{ marginTop: '24px' }}>
+        <DialogContent sx={{ padding: '28px 24px' }}>
           {manageActions.length === 0 ? (
             <Box className="d-flex justify-content-center align-items-center">
               <Typography
@@ -768,7 +769,7 @@ const Toolbar = (props: any) => {
                   Identified
                 </Typography>
               </Box>
-              <Box>
+              <Box sx={{ marginTop: '28px' }}>
                 {manageActions.map((action: ActionInterface, index: number) => {
                   const labelId = `action-label-${action.id}`;
                   return (
@@ -811,22 +812,20 @@ const Toolbar = (props: any) => {
                         </Typography>
                         <Box
                           sx={{
-                            marginLeft:
-                              action?.assigneeAvatar === '' ||
-                              action.assigneeAvatar === undefined
-                                ? '12px'
-                                : '24px',
+                            marginLeft: '24px',
                           }}
                         >
                           {action?.assigneeAvatar === '' ||
                           action.assigneeAvatar === undefined ? (
-                            <Icons.UserCircle
+                            <LazyLoadImage
+                              width="40px !important"
+                              height="40px !important"
                               style={{
-                                color: '#CCCCCC',
-                                width: '60px',
-                                height: '50px',
+                                borderRadius: '50%',
+                                border: 'none',
                               }}
-                            />
+                              src={'/svgs/DefaultUser.svg'}
+                            ></LazyLoadImage>
                           ) : (
                             <Avatar
                               avatar={action?.assigneeAvatar}
@@ -855,19 +854,20 @@ const Toolbar = (props: any) => {
           )}
         </DialogContent>
         {/* Divider */}
-        <Divider
-          color="#EE7538"
-          style={{
-            width: '100%',
-            border: '1px dashed #EE7538',
-            marginTop: '24px',
-          }}
-        />
+        {manageActions.length > 0 && (
+          <Divider
+            color="#EE7538"
+            style={{
+              width: '100%',
+              border: '1px dashed #EE7538',
+            }}
+          />
+        )}
         <DialogActions
           style={{
             display: 'flex',
             flexDirection: 'row',
-            marginTop: '24px',
+            marginTop: '28px',
           }}
         >
           <Button
