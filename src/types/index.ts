@@ -101,6 +101,8 @@ export interface Actions {
   isAddActionEnableToParticipant?: boolean;
   messageForParicipants?:string;
   postMessageForParticipants?:boolean;
+  backgroundColor?:string;
+  fontColor?:string;
 }
 
 export interface CardGroup {
@@ -157,6 +159,8 @@ export class BoardState {
     isAddActionEnableToParticipant: false,
     messageForParicipants:"",
     postMessageForParticipants:false,
+    backgroundColor:'rgba(138, 56, 245, 0.1)',
+    fontColor:'#8A38F5',
   };
   creatorId: string = '';
   users: {
