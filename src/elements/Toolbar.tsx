@@ -661,13 +661,21 @@ const Toolbar = (props: any) => {
         onClose={() => setOpenDialog(false)}
         aria-labelledby="alert-dialog-title"
         aria-describedby="alert-dialog-description"
+        PaperProps={{
+          sx: {
+            minHeight: '64px',
+            background: '#FFFFFF !important',
+            borderRadius: '10px',
+            border: '1px solid #EDC707',
+            padding: '24px',
+          },
+        }}
       >
-        <div
+        <Box
           style={{
             display: 'flex',
             width: '100%',
             justifyContent: 'center',
-            marginTop: '15px',
           }}
         >
           <span
@@ -690,52 +698,52 @@ const Toolbar = (props: any) => {
               Finish Retro ?
             </span>
           </span>
-        </div>
-        <DialogContent>
-          <Box
+        </Box>
+        {/* Two Lines */}
+        <Box
+          style={{
+            display: 'flex',
+            flexDirection: 'column',
+            alignItems: 'center',
+            justifyContent: 'center',
+            marginTop: '24px',
+          }}
+        >
+          <span
             style={{
-              display: 'flex',
-              flexDirection: 'column',
-              alignItems: 'center',
-              justifyContent: 'center',
+              color: '#343434',
+              fontSize: '20px',
+              width: '488px',
+              textAlign: 'center',
             }}
           >
-            <span
-              style={{
-                color: '#343434',
-                fontSize: '20px',
-                width: '488px',
-                textAlign: 'center',
-              }}
-            >
-              This will end retro for all participants.
-            </span>
-            <span
-              style={{
-                color: '#343434',
-                fontSize: '20px',
-                width: '488px',
-                textAlign: 'center',
-              }}
-            >
-              {' '}
-              All participants will see feedback screen.
-            </span>
-          </Box>
-          {/* Manage Actions */}
-          <Divider
-            color="#EE7538"
+            This will end retro for all participants.
+          </span>
+          <span
             style={{
-              width: '100%',
-              border: '1px dashed #EE7538',
-              marginTop: '24px',
+              color: '#343434',
+              fontSize: '20px',
+              width: '488px',
+              textAlign: 'center',
             }}
-          />
+          >
+            {' '}
+            All participants will see feedback screen.
+          </span>
+        </Box>
+        {/* Divider */}
+        <Divider
+          color="#EE7538"
+          style={{
+            width: '100%',
+            border: '1px dashed #EE7538',
+            marginTop: '24px',
+          }}
+        />
+        {/* Manage Actions List */}
+        <DialogContent sx={{ marginTop: '24px' }}>
           {manageActions.length === 0 ? (
-            <Box
-              sx={{ marginTop: '24px' }}
-              className="d-flex justify-content-center align-items-center"
-            >
+            <Box className="d-flex justify-content-center align-items-center">
               <Typography
                 sx={{
                   fontFamily: 'Poppins',
@@ -752,7 +760,7 @@ const Toolbar = (props: any) => {
               </Typography>
             </Box>
           ) : (
-            <Box sx={{ marginTop: '24px' }}>
+            <Box>
               <Box className="d-flex justify-content-center align-items-center">
                 <Typography className="textTypeFour">
                   {manageActions.length}
@@ -845,18 +853,35 @@ const Toolbar = (props: any) => {
               </Box>
             </Box>
           )}
-          <Divider
-            color="#EE7538"
-            style={{
-              width: '100%',
-              border: '1px dashed #EE7538',
-              marginTop: '24px',
-            }}
-          />
         </DialogContent>
-        <DialogActions style={{ display: 'flex', flexDirection: 'column' }}>
+        {/* Divider */}
+        <Divider
+          color="#EE7538"
+          style={{
+            width: '100%',
+            border: '1px dashed #EE7538',
+            marginTop: '24px',
+          }}
+        />
+        <DialogActions
+          style={{
+            display: 'flex',
+            flexDirection: 'row',
+            marginTop: '24px',
+          }}
+        >
           <Button
-            sx={{ borderRadius: '24px', fontSize: '16px', marginTop: '15px' }}
+            sx={{
+              fontFamily: 'Poppins',
+              fontStyle: 'normal',
+              fontWeight: 500,
+              fontSize: '16px',
+              lineHeight: '20px',
+              borderRadius: '24px',
+              textAlign: 'center',
+              letterSpacing: '0.4px',
+              color: '#FAFAFA',
+            }}
             onClick={() => {
               props.onFinishRetro(), setOpenDialog(false);
             }}
@@ -867,10 +892,15 @@ const Toolbar = (props: any) => {
           </Button>
           <Button
             sx={{
-              borderRadius: '24px',
+              fontFamily: 'Poppins',
+              fontStyle: 'normal',
+              fontWeight: 500,
               fontSize: '16px',
-              marginTop: '15px',
-              marginBottom: '15px',
+              lineHeight: '20px',
+              borderRadius: '24px',
+              textAlign: 'center',
+              letterSpacing: '0.4px',
+              color: '#159ADD',
             }}
             variant="outlined"
             onClick={() => setOpenDialog(false)}

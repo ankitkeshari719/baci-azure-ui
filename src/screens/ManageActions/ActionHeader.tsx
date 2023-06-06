@@ -2,7 +2,7 @@ import * as React from 'react';
 import './styles.scss';
 
 import { Typography, Box } from '@material-ui/core';
-import { ActionInterface } from '../../types';
+import { ActionInterface, Actions } from '../../types';
 import { ActionType } from '../../contexts/GlobalContext';
 import * as Icons from 'heroicons-react';
 import {
@@ -30,6 +30,7 @@ type Props = {
   dispatch: any;
   searchQuery: string;
   sortedBy: string;
+  actionsData:Actions;
   handleSearchQueryOnChange: (value: string) => void;
   handleSortedByChange: (event: SelectChangeEvent) => void;
   enableVotingToParticipant: (value: boolean) => void;
@@ -42,6 +43,7 @@ export default function ActionHeader({
   dispatch,
   searchQuery,
   sortedBy,
+  actionsData,
   handleSortedByChange,
   handleSearchQueryOnChange,
   enableVotingToParticipant,
@@ -96,7 +98,7 @@ export default function ActionHeader({
         <Box
           className="actionHeaderContainer"
           style={{
-            backgroundColor: isXsUp ? '#ffffff' : 'rgba(138, 56, 245, 0.1)',
+            backgroundColor: isXsUp ? '#ffffff' : actionsData.backgroundColor,
           }}
         >
           <Box className="actionHeader">
@@ -198,7 +200,7 @@ export default function ActionHeader({
                     }}
                   />
                 ) : (
-                  <Typography component="span" className="totalActions">
+                  <Typography component="span" className="totalActions" >
                     {allActions.length} Actions
                   </Typography>
                 )}
@@ -464,7 +466,7 @@ export default function ActionHeader({
         <Box
           className="actionHeaderContainer"
           style={{
-            backgroundColor: isXsUp ? '#ffffff' : 'rgba(138, 56, 245, 0.1)',
+            backgroundColor: isXsUp ? '#ffffff' : actionsData.backgroundColor,
           }}
         >
           <Box className="actionHeader">

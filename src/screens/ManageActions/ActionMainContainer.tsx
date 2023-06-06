@@ -29,7 +29,7 @@ export default function ActionMainContainer() {
     []
   );
   const [expandMessageForParticipant, setExpandMessageForParticipant] =
-    React.useState<boolean>(true);
+    React.useState<boolean>(false);
 
   const [assigneeId, setAssigneeId] = React.useState<string>('');
   const [selectedActionCount, setSelectedActionCount] =
@@ -513,6 +513,7 @@ export default function ActionMainContainer() {
           ? 'calc(var(--app-height) - 115px)'
           : 'calc(var(--app-height) - 160px)',
       }}
+      id="actionMainContainer"
     >
       <ActionHeader
         global={global}
@@ -520,6 +521,7 @@ export default function ActionMainContainer() {
         dispatch={dispatch}
         searchQuery={searchQuery}
         sortedBy={sortedBy}
+        actionsData={actionsData}
         handleSearchQueryOnChange={handleSearchQueryOnChange}
         handleSortedByChange={handleSortedByChange}
         enableVotingToParticipant={enableVotingToParticipant}
