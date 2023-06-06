@@ -854,9 +854,13 @@ const Toolbar = (props: any) => {
             }}
           />
         </DialogContent>
-        <DialogActions style={{ display: 'flex', flexDirection: 'column' }}>
+        <DialogActions style={{ display: 'flex', flexDirection: 'row' }}>
           <Button
-            sx={{ borderRadius: '24px', fontSize: '16px', marginTop: '15px' }}
+            sx={{
+              borderRadius: '24px',
+              fontSize: '16px',
+              marginBottom: '15px',
+            }}
             onClick={() => {
               props.onFinishRetro(), setOpenDialog(false);
             }}
@@ -869,7 +873,6 @@ const Toolbar = (props: any) => {
             sx={{
               borderRadius: '24px',
               fontSize: '16px',
-              marginTop: '15px',
               marginBottom: '15px',
             }}
             variant="outlined"
