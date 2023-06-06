@@ -507,7 +507,7 @@ export default function ActionMainContainer() {
     <Box
       className="actionsContainer"
       sx={{
-        height: false
+        height: false    
           ? 'auto'
           : isXsUp
           ? 'calc(var(--app-height) - 115px)'
