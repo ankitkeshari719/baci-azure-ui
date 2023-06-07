@@ -78,7 +78,7 @@ const styles = {
 };
 
 export function LandingLayout() {
-  const isXsUp = useMediaQuery(theme.breakpoints.between('xs', 'sm'));
+  const isXsUp = useMediaQuery('(max-width:800px)');
   const [height, setHeight] = React.useState('');
   const socket = React.useContext(SocketContext);
   const [isMaintenanceAlertOpen, setIsMaintenanceAlertOpen] =
@@ -86,6 +86,9 @@ export function LandingLayout() {
 
   React.useEffect(() => {
     setHeight('48vh');
+    const isPortrait = window.matchMedia('(orientation: portrait)').matches;
+
+    console.log(isPortrait);
     console.log('-------- closing socket ----------');
     socket.close();
   }, []);
@@ -105,10 +108,20 @@ export function LandingLayout() {
     }
   }, []);
 
+  React.useEffect(() => {
+    console.log(isXsUp);
+  }, [isXsUp]);
+
   return (
     <>
       {isXsUp ? (
-        <Box sx={{ position: 'relative' }}>
+        <Box
+          sx={{
+            position: 'relative',
+            display: 'flex',
+            flexDirection: 'column',
+          }}
+        >
           <img
             src={LandingMobileImage}
             style={{ width: '100%', height: height }}
@@ -129,8 +142,8 @@ export function LandingLayout() {
               <LazyLoadImage
                 style={styles.logoImageXs}
                 alt="logo"
-                height='48px'
-                width='108px'
+                height="48px"
+                width="108px"
                 // height='50px'
                 src={BACILogo} // use normal <img> attributes as props
                 // width={image.width}
@@ -163,51 +176,68 @@ export function LandingLayout() {
         </Box>
       ) : (
         <>
-          <img
-            src={LandingImage}
-            style={{ width: '100%', height: '100vh' }}
-          ></img>
           <Box
             sx={{
-              position: 'absolute',
-              top: isMaintenanceAlertOpen ? '80px' : '0px',
-              zIndex: 1000,
+              minHeight: '400px!important',
+              height: '100%',
+              display: 'flex',
+              position: 'relative',
             }}
           >
-            <Box>
-              <img src={BACILogo} alt="Logo" style={styles.logoImage} />
-            </Box>
-            <Box display="flex" mt="93px" ml="58px">
-              <Typography variant="h1" color={commomStyles.grey} mr="6px">
-                Reflect
-              </Typography>
-              <Typography
-                color={commomStyles.secondaryMain}
-                mr="6px"
-                ml="6px"
-                fontSize="32px"
-              >
-                {'\u002E'}
-              </Typography>
-              <Typography variant="h1" color={commomStyles.grey} mr="6px">
-                Gratitude
-              </Typography>
-              <Typography
-                color={commomStyles.secondaryMain}
-                mr="6px"
-                ml="6px"
-                fontSize="32px"
-              >
-                {'\u002E'}
-              </Typography>
-
-              <Typography
-                variant="h1"
-                color={commomStyles.secondaryMain}
-                mr="6px"
-              >
-                Action
-              </Typography>
+            <img
+              src={LandingImage}
+              style={{
+                width: '100%',
+                height: '100%',
+                minHeight: '400px!important',
+              }}
+            ></img>
+            <Box
+              sx={{
+                position: 'absolute',
+                top: isMaintenanceAlertOpen ? '80px' : '0px',
+                // zIndex: 1000,
+                // height: '400px',
+              }}
+            >
+              <Box>
+                <img src={BACILogo} alt="Logo" style={styles.logoImage} />
+              </Box>
+              <Box display="flex" flexDirection="column" mt="47px" ml="58px">
+                <Box display="flex">
+                  <Typography variant="h1" color={commomStyles.grey} mr="6px">
+                    Reflect
+                  </Typography>
+                  <Typography
+                    color={commomStyles.secondaryMain}
+                    mr="6px"
+                    ml="6px"
+                    fontSize="32px"
+                  >
+                    {'\u002E'}
+                  </Typography>
+                </Box>
+                <Box display="flex">
+                  <Typography variant="h1" color={commomStyles.grey} mr="6px">
+                    Gratitude
+                  </Typography>
+                  <Typography
+                    color={commomStyles.secondaryMain}
+                    mr="6px"
+                    ml="6px"
+                    fontSize="32px"
+                  >
+                    {'\u002E'}
+                  </Typography>
+                </Box>
+                <Typography
+                  variant="h1"
+                  color={commomStyles.secondaryMain}
+                  mr="6px"
+                >
+                  Action
+                </Typography>
+              </Box>
             </Box>
           </Box>
         </>
