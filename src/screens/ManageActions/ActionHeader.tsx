@@ -36,6 +36,7 @@ type Props = {
   handleSortedByChange: (event: SelectChangeEvent) => void;
   enableVotingToParticipant: (value: boolean) => void;
   enableAddActionToParticipant: (value: boolean) => void;
+  ended: boolean;
 };
 
 export default function ActionHeader({
@@ -49,6 +50,7 @@ export default function ActionHeader({
   handleSearchQueryOnChange,
   enableVotingToParticipant,
   enableAddActionToParticipant,
+  ended,
 }: Props) {
   const isXsUp = useMediaQuery(theme.breakpoints.between('xs', 'sm'));
   const [isSearchEnable, setIsSearchEnable] = React.useState<boolean>(false);
@@ -410,6 +412,7 @@ export default function ActionHeader({
                         checked={enableVoting}
                         onChange={handleEnableVoting}
                         inputProps={{ 'aria-label': 'controlled' }}
+                        disabled={ended}
                       />
                     </MenuItem>
                     <MenuItem>
@@ -427,6 +430,7 @@ export default function ActionHeader({
                         checked={enableActionToParticipant}
                         onChange={handleEnableActionToParticipant}
                         inputProps={{ 'aria-label': 'controlled' }}
+                        disabled={ended}
                       />
                     </MenuItem>
                   </Menu>
