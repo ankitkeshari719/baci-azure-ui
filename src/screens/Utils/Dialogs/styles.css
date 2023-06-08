@@ -1,0 +1,45 @@
+.dialogTitle {
+  font-family: "Poppins" !important;
+  font-style: normal !important;
+  font-weight: 400 !important;
+  font-size: 16px !important;
+  line-height: 20px !important;
+  letter-spacing: 0.6px !important;
+  color: #343434 !important;
+  flex: none !important;
+  order: 0 !important;
+  flex-grow: 0 !important;
+}
+
+.privacyDialogTitle {
+  font-family: "Poppins" !important;
+  font-style: normal !important;
+  font-weight: 500 !important;
+  font-size: 24px !important;
+  line-height: 32px !important;
+  letter-spacing: 0.5px !important;
+  color: #ee7538 !important;
+  text-align: center !important;
+}
+
+.privacyDialogDescription {
+  font-family: "Poppins" !important;
+  font-style: normal !important;
+  font-weight: 400 !important;
+  font-size: 16px !important;
+  line-height: 22px !important;
+  letter-spacing: 0.6px !important;
+  text-align: center !important;
+  color: #343434 !important;
+}
+
+.dialogContainer {
+  background-color: white;
+  padding: 64px 48px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  font-family: "Poppins!important";
+  font-style: normal;
+  letter-spacing: 0.5px;
+}/*# sourceMappingURL=styles.css.map */
