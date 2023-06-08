@@ -58,7 +58,8 @@ export function LandingPage() {
   const [codeError, setCodeError] = React.useState('');
   const [height, setHeight] = React.useState(0);
   const [global, dispatch] = React.useContext(GlobalContext);
-  const isXsUp = useMediaQuery(theme.breakpoints.between('xs', 'sm'));
+  // const isXsUp = useMediaQuery(theme.breakpoints.between('xs', 'sm'));
+  const isXsUp = useMediaQuery('(max-width:800px)');
   const isSmUp = useMediaQuery(theme.breakpoints.only('sm'));
   const [isAddDeploymentDataDialogOpen, setIsAddDeploymentDataDialogOpen] =
     React.useState(false);
@@ -252,9 +253,14 @@ export function LandingPage() {
           </Box>
         </Box>
       ) : (
-        <Grid container spacing={0}>
+        <Grid
+          container
+          spacing={0}
+          height="calc(var(--app-height))"
+          sx={{ overflowY: 'auto' }}
+        >
           <DeploymentPopUp />
-          <Grid item xs={6}>
+          <Grid item xs={6} height="calc(var(--app-height))">
             <LandingLayout></LandingLayout>
           </Grid>
           <Grid
@@ -263,6 +269,7 @@ export function LandingPage() {
             display="flex"
             justifyContent="center"
             alignItems="center"
+            minHeight="400px!important"
           >
             <Grid
               item
