@@ -526,6 +526,7 @@ export default function ActionMainContainer() {
         handleSortedByChange={handleSortedByChange}
         enableVotingToParticipant={enableVotingToParticipant}
         enableAddActionToParticipant={enableAddActionToParticipant}
+        ended={ended}
       />
 
       <MessageForParticipant
