@@ -194,7 +194,7 @@ export default function ActionItem({
     <>
       <ListItem key={labelId} style={{ padding: '8px 12px' }}>
         {/* Checkbox */}
-        {!disabled && (
+        {!disabled && !ended && !global.leaveRetro && (
           <ListItemIcon
             style={{
               display: 'flex',
@@ -208,7 +208,7 @@ export default function ActionItem({
           >
             <Checkbox
               edge="start"
-              checked={action.checked}
+              checked={!ended ? action.checked : false}
               tabIndex={-1}
               disableRipple
               disabled
@@ -254,7 +254,7 @@ export default function ActionItem({
                 wordWrap: 'break-word',
               }}
             />
-            {!ended &&
+            {!ended  &&
               isMouseHover &&
               (global.user.userType == 2 ||
                 (global.user.id === action.createdBy &&

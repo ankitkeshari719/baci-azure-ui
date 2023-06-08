@@ -281,7 +281,7 @@ export default function ManageActionSummary({
                       xs="12"
                       className="d-flex justify-content-start align-items-center m-0 p-0"
                     >
-                      {manageActionsLastVoted.map(
+                      {/* {manageActionsLastVoted.map(
                         (action: ActionInterface, index: number) => {
                           return (
                             <>
@@ -292,6 +292,8 @@ export default function ManageActionSummary({
                                     color: '#CCCCCC',
                                     width: '60px',
                                     height: '50px',
+                                    marginLeft: '0',
+                                    marginRight: '-8px',
                                   }}
                                 />
                               ) : (
@@ -303,20 +305,76 @@ export default function ManageActionSummary({
                                     height: '40px',
                                     borderRadius: '50%',
                                     border: 'none',
+                                    marginLeft: '0',
+                                    marginRight: '-8px',
                                   }}
                                 ></Avatar>
                               )}
                             </>
                           );
                         }
+                      )} */}
+                      {/* Users Avatar */}
+                      {manageActionsLastVoted?.map(
+                        (action: ActionInterface, index: number) => {
+                          return (
+                            <>
+                              {action.assigneeAvatar === '' ||
+                              action.assigneeAvatar === undefined ? (
+                                <Icons.UserCircle
+                                  style={{
+                                    color: '#CCCCCC',
+                                    width: '60px',
+                                    height: '50px',
+                                    marginLeft: index == 0 ? '0px' : '-10px',
+                                    marginRight:
+                                      index ===
+                                      manageActionsLastVoted.length - 1
+                                        ? '0px'
+                                        : '-20px',
+                                    border: '3px solid transparent',
+                                  }}
+                                />
+                              ) : (
+                                <Avatar
+                                  key={action.id}
+                                  avatar={action?.assigneeAvatar}
+                                  css={{
+                                    width: '40px',
+                                    height: '40px',
+                                    marginLeft: index == 0 ? '0px' : '-10px',
+                                    marginRight:
+                                      index ===
+                                      manageActionsLastVoted.length - 1
+                                        ? '0px'
+                                        : '-10px',
+                                    border: '3px solid transparent',
+                                  }}
+                                />
+                              )}
+                            </>
+                          );
+                        }
                       )}
                       <Typography
-                        className="viewWorldCould"
-                        sx={{ marginLeft: '8px' }}
+                        sx={{
+                          marginLeft: '8px',
+                          fontFamily: 'Poppins',
+                          fontStyle: 'normal !important',
+                          fontWeight: '500 !important',
+                          fontSize: '14px !important',
+                          lineHeight: '20px !important',
+                          display: 'flex !important',
+                          alignItems: 'center !important',
+                          textAlign: 'center !important',
+                          letterSpacing: '0.4px !important',
+                          color: '#159add !important',
+                          cursor: 'pointer !important',
+                        }}
                         onClick={handleShowManageActions}
                       >
-                        View {users.length} More{' '}
-                        {users.length - 3 === 1 ? 'Action' : 'Actions'}
+                        View {manageActions.length - 3} More{' '}
+                        {manageActions.length - 3 === 1 ? 'Action' : 'Actions'}
                       </Typography>
                     </Col>
                   </Row>

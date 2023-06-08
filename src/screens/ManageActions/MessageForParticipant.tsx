@@ -5,7 +5,7 @@ import {
   PencilSquareIcon,
   LightBulbIcon,
 } from '@heroicons/react/24/outline';
-import { OutlinedInput, Box, styled, Typography } from '@mui/material';
+import { OutlinedInput, Box, styled, Typography, Tooltip } from '@mui/material';
 import ButtonWithIconWithNoBorder from '../../components/ButtonWithIconWithNoBorder';
 import { Actions } from '../../types';
 import { MAX_CARD_TEXT_LENGTH } from '../../constants';
@@ -112,7 +112,7 @@ const MessageForParticipant = ({
                 <Box component="span">
                   <Box component="span" marginRight="12px">
                     {' '}
-                    Message for Participants
+                    Message for participants
                   </Box>
                   <Box component="span">
                     <InformationCircleIcon
@@ -129,8 +129,8 @@ const MessageForParticipant = ({
                     {actionsData.messageForParicipants != ''
                       ? actionsData.messageForParicipants ==
                         messageForParticipant
-                        ? 'Message Posted'
-                        : 'Updated Message Not Posted'
+                        ? 'Message posted'
+                        : 'Updated message not posted'
                       : 'No message posted'}
                   </Box>
                   <Box
@@ -167,17 +167,18 @@ const MessageForParticipant = ({
                       color={actionsData.fontColor}
                       fontWeight="500"
                     />{' '}
-                    <Typography
-                      whiteSpace="nowrap"
-                      marginLeft="8px"
-                      overflow="hidden"
-                      textOverflow="ellipsis"
-                      color={actionsData.fontColor}
-                      width={valueOfWidth}
-                     
-                    >
-                      {messageForParticipant}
-                    </Typography>
+                    <Tooltip title={messageForParticipant}>
+                      <Typography
+                        whiteSpace="nowrap"
+                        marginLeft="8px"
+                        overflow="hidden"
+                        textOverflow="ellipsis"
+                        color={actionsData.fontColor}
+                        width={valueOfWidth}
+                      >
+                        {messageForParticipant}
+                      </Typography>
+                    </Tooltip>
                   </Box>
                 )}
               </>
