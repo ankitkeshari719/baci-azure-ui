@@ -6,6 +6,7 @@ import { ActionInterface } from '../../types';
 import * as Icons from 'heroicons-react';
 import './styles.scss';
 import '../../global.scss';
+import { LazyLoadImage } from 'react-lazy-load-image-component';
 
 type Props = {
   manageActions: ActionInterface[];
@@ -321,20 +322,17 @@ export default function ManageActionSummary({
                             <>
                               {action.assigneeAvatar === '' ||
                               action.assigneeAvatar === undefined ? (
-                                <Icons.UserCircle
+                                <LazyLoadImage
+                                  width="40px !important"
+                                  height="40px !important"
                                   style={{
-                                    color: '#CCCCCC',
-                                    width: '60px',
-                                    height: '50px',
-                                    marginLeft: index == 0 ? '0px' : '-10px',
-                                    marginRight:
-                                      index ===
-                                      manageActionsLastVoted.length - 1
-                                        ? '0px'
-                                        : '-20px',
+                                    borderRadius: '50%',
                                     border: '3px solid transparent',
+                                    marginLeft: '0px',
+                                    marginRight: '-4px',
                                   }}
-                                />
+                                  src={'/svgs/DefaultUser.svg'}
+                                ></LazyLoadImage>
                               ) : (
                                 <Avatar
                                   key={action.id}
@@ -342,12 +340,8 @@ export default function ManageActionSummary({
                                   css={{
                                     width: '40px',
                                     height: '40px',
-                                    marginLeft: index == 0 ? '0px' : '-10px',
-                                    marginRight:
-                                      index ===
-                                      manageActionsLastVoted.length - 1
-                                        ? '0px'
-                                        : '-10px',
+                                    marginLeft: '0px',
+                                    marginRight: '-4px',
                                     border: '3px solid transparent',
                                   }}
                                 />
@@ -358,8 +352,8 @@ export default function ManageActionSummary({
                       )}
                       <Typography
                         sx={{
-                          marginLeft: '8px',
-                          fontFamily: 'Poppins',
+                          marginLeft: '8px !important',
+                          fontFamily: 'Poppins !important',
                           fontStyle: 'normal !important',
                           fontWeight: '500 !important',
                           fontSize: '14px !important',
