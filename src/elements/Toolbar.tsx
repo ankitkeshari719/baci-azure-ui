@@ -742,7 +742,7 @@ const Toolbar = (props: any) => {
           }}
         />
         {/* Manage Actions List */}
-        <DialogContent sx={{ padding: '28px 24px' }}>
+        <DialogContent sx={{ padding: '12px 24px', margin: '16px 0px' }}>
           {manageActions.length === 0 ? (
             <Box className="d-flex justify-content-center align-items-center">
               <Typography
