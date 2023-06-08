@@ -23,6 +23,7 @@ import {
 import { MAX_CARD_TEXT_LENGTH } from '../../constants';
 import { NONE, VOTES_ASC, VOTES_DSC, VALUE_ASC, VALUE_DSC } from './const';
 import theme from '../../theme/theme';
+import { BoardContext } from '../../contexts/BoardContext';
 
 type Props = {
   allActions: ActionInterface[];
@@ -30,11 +31,12 @@ type Props = {
   dispatch: any;
   searchQuery: string;
   sortedBy: string;
-  actionsData:Actions;
+  actionsData: Actions;
   handleSearchQueryOnChange: (value: string) => void;
   handleSortedByChange: (event: SelectChangeEvent) => void;
   enableVotingToParticipant: (value: boolean) => void;
   enableAddActionToParticipant: (value: boolean) => void;
+  ended: boolean;
 };
 
 export default function ActionHeader({
@@ -48,15 +50,24 @@ export default function ActionHeader({
   handleSearchQueryOnChange,
   enableVotingToParticipant,
   enableAddActionToParticipant,
+  ended,
 }: Props) {
   const isXsUp = useMediaQuery(theme.breakpoints.between('xs', 'sm'));
   const [isSearchEnable, setIsSearchEnable] = React.useState<boolean>(false);
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
   const open = Boolean(anchorEl);
-  const [enableVoting, setEnableVoting] = React.useState<boolean>(false);
+  const [enableVoting, setEnableVoting] = React.useState<boolean | undefined>(
+    actionsData.isVotingEnableToParticipant
+  );
   const [enableActionToParticipant, setEnableActionToParticipant] =
-    React.useState<boolean>(false);
+    React.useState<boolean | undefined>(
+      actionsData.isAddActionEnableToParticipant
+    );
 
+  React.useEffect(() => {
+    setEnableVoting(actionsData.isVotingEnableToParticipant);
+    setEnableActionToParticipant(actionsData.isAddActionEnableToParticipant);
+  }, [actionsData]);
   // Function to show the search bar
   const showSearchField = () => {
     setIsSearchEnable(true);
@@ -200,7 +211,7 @@ export default function ActionHeader({
                     }}
                   />
                 ) : (
-                  <Typography component="span" className="totalActions" >
+                  <Typography component="span" className="totalActions">
                     {allActions.length} Actions
                   </Typography>
                 )}
@@ -401,6 +412,7 @@ export default function ActionHeader({
                         checked={enableVoting}
                         onChange={handleEnableVoting}
                         inputProps={{ 'aria-label': 'controlled' }}
+                        disabled={ended}
                       />
                     </MenuItem>
                     <MenuItem>
@@ -418,6 +430,7 @@ export default function ActionHeader({
                         checked={enableActionToParticipant}
                         onChange={handleEnableActionToParticipant}
                         inputProps={{ 'aria-label': 'controlled' }}
+                        disabled={ended}
                       />
                     </MenuItem>
                   </Menu>
