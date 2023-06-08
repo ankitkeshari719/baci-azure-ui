@@ -2,11 +2,14 @@
   /* Card Shadow */
   box-shadow: 0px 0px 20px rgba(0, 0, 0, 0.15);
   border-radius: 8px;
-}/*# sourceMappingURL=RetroCard.css.map */
+}
 
-.textStyle{
-  font-weight: 400!important;
+.textStyle {
+  font-weight: 400 !important;
+  color: #4E4E4E;
 }
-.textStyleBold{
-  font-weight: 600!important;
-}
+
+.textStyleBold {
+  font-weight: 600 !important;
+  color: #EE7538;
+}/*# sourceMappingURL=RetroCard.css.map */
