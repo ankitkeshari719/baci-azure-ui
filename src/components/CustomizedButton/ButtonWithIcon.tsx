@@ -1,7 +1,6 @@
 import React from 'react';
-import { Button, Typography } from '@mui/material';
+import { Box, Button } from '@mui/material';
 import './styles.scss';
-import { Box } from '@mui/system';
 
 export const ButtonWithIcon = ({
   label,
@@ -29,10 +28,7 @@ export const ButtonWithIcon = ({
       style={style}
     >
       {iconPath && <img src={iconPath} />}
-
       <Box component="span">{label}</Box>
     </Button>
   );
 };
-
-// export default ButtonWithIcon;

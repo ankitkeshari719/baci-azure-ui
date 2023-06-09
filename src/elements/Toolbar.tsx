@@ -28,7 +28,7 @@ import LeaveRetroDialog from '../atoms/LeaveRetroDialog';
 import theme from '../theme/theme';
 import { CountdownTimer } from './CountdownTimer';
 import FacilitatorDropDown from './FacilitatorDropDown';
-import { ContainedButton } from '../components/ContainedButton';
+import { ContainedButton } from '../components/CustomizedButton/ContainedButton';
 import { ActionInterface } from '../types';
 import { Row, Col } from 'react-bootstrap';
 import * as Icons from 'heroicons-react';

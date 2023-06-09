@@ -1,4 +1,4 @@
-@import "./../style.module.scss";
+@import "./../../style.module.scss";
 
 .containedButton {
   display: flex !important;
@@ -64,26 +64,18 @@
 
 .buttonWithIcon {
   box-sizing: border-box !important;
-
-  /* Auto layout */
   display: flex !important;
   flex-direction: row !important;
   justify-content: center !important;
   align-items: center !important;
   padding: 4px 12px !important;
   gap: 8px !important;
-
   width: 104px !important;
   height: 28px !important;
-
-  /* Primary Main */
   border: 1px solid $PrimaryMain !important;
   background: white !important;
-  /* Button Shadow */
   filter: drop-shadow(0px 2px 4px rgba(0, 0, 0, 0.25)) !important;
   border-radius: 24px !important;
-
-  /* Inside auto layout */
   flex: none !important;
   order: 1 !important;
   flex-grow: 0 !important;

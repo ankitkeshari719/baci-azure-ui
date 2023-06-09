@@ -18,7 +18,7 @@ import {
   DraggableProvided,
 } from 'react-beautiful-dnd';
 import { XMarkIcon, CheckIcon } from '@heroicons/react/24/solid';
-import { OutlinedButton } from '../components/OutlinedButton';
+import { OutlinedButton } from '../components/CustomizedButton/OutlinedButton';
 export function RetroCardGroup({
   admin,
   group,

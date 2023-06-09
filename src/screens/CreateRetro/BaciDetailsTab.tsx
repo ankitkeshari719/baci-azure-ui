@@ -11,7 +11,7 @@ import {
 import '../../global.scss';
 import './styles.scss';
 import { RETRONAME_CHARACTER_LIMIT } from './const';
-import { ContainedButton } from '../../components/ContainedButton';
+import { ContainedButton } from '../../components/CustomizedButton/ContainedButton';
 
 const styles = {
   retroNameTextField: {
