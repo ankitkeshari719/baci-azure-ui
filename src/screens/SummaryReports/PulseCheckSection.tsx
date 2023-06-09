@@ -13,7 +13,7 @@ import {
   Tooltip,
   Legend,
 } from 'chart.js';
-import { Question } from '../../elements/PulseCheckChart';
+import { Question } from '../../components/Elements/PulseCheckChart';
 
 ChartJS.register(
   CategoryScale,

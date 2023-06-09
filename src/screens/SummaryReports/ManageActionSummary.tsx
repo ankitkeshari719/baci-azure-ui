@@ -1,7 +1,7 @@
 import React from 'react';
 import { Box, Tooltip, Typography } from '@mui/material';
 import { Row, Col } from 'react-bootstrap';
-import Avatar from '../../elements/Avatar';
+import Avatar from '../../components/Elements/Avatar';
 import { ActionInterface } from '../../types';
 import * as Icons from 'heroicons-react';
 import './styles.scss';

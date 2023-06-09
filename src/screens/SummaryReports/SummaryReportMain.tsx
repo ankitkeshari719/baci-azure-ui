@@ -2,7 +2,7 @@ import React from 'react';
 import { Box } from '@mui/material';
 import './styles.scss';
 
-import Toolbar from '../../elements/Toolbar';
+import Toolbar from '../../components/Elements/Toolbar';
 import { ReportSummary } from './ReportSummary';
 import { DeploymentPopUp } from '../Utils/Alerts/DeploymentPopUp';
 import useReRoute from '../../hooks/useReRoute';

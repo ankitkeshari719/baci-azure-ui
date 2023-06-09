@@ -13,7 +13,7 @@ import {
 import '../../global.scss';
 import './styles.scss';
 import { AVATAR_CHARACTER_LIMIT } from './const';
-import Avatar from '../../elements/Avatar';
+import Avatar from '../../components/Elements/Avatar';
 import { avatarName } from '../../constants/AvatarName';
 import { LazyLoadImage } from 'react-lazy-load-image-component';
 import { ContainedButton, OutlinedButton } from '../../components';

@@ -1,4 +1,4 @@
-import { ActionType, GlobalContext } from '../contexts/GlobalContext';
+import { ActionType, GlobalContext } from '../../contexts/GlobalContext';
 import {
   Box,
   Button,
@@ -15,11 +15,11 @@ import {
 } from '@mui/material';
 import React, { useMemo } from 'react';
 
-import { BoardContext } from '../contexts/BoardContext';
+import { BoardContext } from '../../contexts/BoardContext';
 import CheckIcon from '@mui/icons-material/Check';
 import CloseIcon from '@mui/icons-material/Close';
-import { UserAvatar } from '../atoms/UserAvatar';
-import theme from '../theme/theme';
+import { UserAvatar } from '../../atoms/UserAvatar';
+import theme from '../../theme/theme';
 
 export default function ParticipantsPanel({
   onClose,

@@ -1,4 +1,4 @@
-import { ActionType, GlobalContext } from '../contexts/GlobalContext';
+import { ActionType, GlobalContext } from '../../contexts/GlobalContext';
 import { Alert, Button, Snackbar } from '@mui/material';
 
 import CloseIcon from '@mui/icons-material/Close';

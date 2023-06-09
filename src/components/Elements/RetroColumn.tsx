@@ -1,14 +1,14 @@
 import { Box, Grid, styled, useMediaQuery } from '@mui/material';
 import React, { ReactElement, useMemo } from 'react';
 import Draggable, { DraggableData, DraggableEvent } from 'react-draggable';
-import { UNGROUPED, SUGGESTEDGROUP } from '../constants';
-import { BoardContext } from '../contexts/BoardContext';
-import { BoardActionType } from '../statemachine/BoardStateMachine';
-import { Card, Card as RetroCardType, CardGroup, Column } from '../types';
+import { UNGROUPED, SUGGESTEDGROUP } from '../../constants';
+import { BoardContext } from '../../contexts/BoardContext';
+import { BoardActionType } from '../../statemachine/BoardStateMachine';
+import { Card, Card as RetroCardType, CardGroup, Column } from '../../types';
 import shortid from 'shortid';
-import { ActionType, GlobalContext } from '../contexts/GlobalContext';
+import { ActionType, GlobalContext } from '../../contexts/GlobalContext';
 import { RetroCard } from './retroCard/RetroCard';
-import theme from '../theme/theme';
+import theme from '../../theme/theme';
 import { RetroCardGroup } from './RetroCardGroup';
 import Masonry from '@mui/lab/Masonry';
 
@@ -19,7 +19,7 @@ import {
 } from 'react-beautiful-dnd';
 import ColumnHeader from './ColumnHeader';
 import RetroColumnBottom from './RetroColumnBottom';
-import { groupSuggestion, keywordExtraction } from '../msal/services';
+import { groupSuggestion, keywordExtraction } from '../../msal/services';
 
 const ColumnComponent = styled('div')({
   height: 'calc(var(--app-height) - 160px)',
@@ -90,7 +90,7 @@ export function RetroColumn({
   const autoFocusCardId = React.useRef<string | undefined>(undefined);
 
   const isXsUp = useMediaQuery(theme.breakpoints.only('xs'));
-  const isLgUp = useMediaQuery(theme.breakpoints.only('lg'))
+  const isLgUp = useMediaQuery(theme.breakpoints.only('lg'));
 
   const groupRefs = cardGroups.map(
     cardGroup => null
@@ -187,8 +187,10 @@ export function RetroColumn({
       }
     );
   };
-  const createGroupAsSuggested = async (groupSuggestion: any, groupIdArray: string[]) => {
-
+  const createGroupAsSuggested = async (
+    groupSuggestion: any,
+    groupIdArray: string[]
+  ) => {
     dispatchLoadingFlag(true);
 
     // const a = createGroupAsSuggested1(columnId,
@@ -211,7 +213,7 @@ export function RetroColumn({
         dispatchLoadingFlag(false);
       }
     );
-  }
+  };
 
   const reorderCards = async (
     cardId: string,
@@ -275,7 +277,6 @@ export function RetroColumn({
     } else {
     }
   };
-  
 
   const submit = async (text: string) => {
     setIslanded(false);
@@ -461,9 +462,9 @@ export function RetroColumn({
                 if (
                   targetSelectedMergeCard.current == null ||
                   targetSelectedMergeCard.current !=
-                  cardGroups[targetMergeCardCopy.current[0]].cards[
-                    targetMergeCardCopy.current[1]
-                  ].id
+                    cardGroups[targetMergeCardCopy.current[0]].cards[
+                      targetMergeCardCopy.current[1]
+                    ].id
                 ) {
                   targetSelectedMergeCard.current =
                     cardGroups[targetMergeCardCopy.current[0]].cards[
@@ -596,10 +597,12 @@ export function RetroColumn({
       )}px`;
     }
 
-    (surroundDiv.current as HTMLDivElement).style.height = `${Math.abs(t - y) + h
-      }px`;
-    (surroundDiv.current as HTMLDivElement).style.width = `${Math.abs(l - x) + w
-      }px`;
+    (surroundDiv.current as HTMLDivElement).style.height = `${
+      Math.abs(t - y) + h
+    }px`;
+    (surroundDiv.current as HTMLDivElement).style.width = `${
+      Math.abs(l - x) + w
+    }px`;
     (surroundDiv.current as HTMLDivElement).style.zIndex = `1000`;
   };
 
@@ -636,29 +639,29 @@ export function RetroColumn({
         if (selectedCard.current[1] !== 0) {
           (
             landingZones[selectedCard.current[0]][
-            selectedCard.current[1]
+              selectedCard.current[1]
             ] as HTMLDivElement
           ).style.display = 'inline';
         }
         if (targetLanding.current !== null) {
           (
             landingZones[targetLanding.current[0]][
-            targetLanding.current[1]
+              targetLanding.current[1]
             ] as HTMLDivElement
           ).style.background = 'none';
           (
             landingZones[targetLanding.current[0]][
-            targetLanding.current[1]
+              targetLanding.current[1]
             ] as HTMLDivElement
           ).style.backgroundColor = 'transparent';
           (
             landingZones[targetLanding.current[0]][
-            targetLanding.current[1]
+              targetLanding.current[1]
             ] as HTMLDivElement
           ).style.padding = '0';
           (
             landingZones[targetLanding.current[0]][
-            targetLanding.current[1]
+              targetLanding.current[1]
             ] as HTMLDivElement
           ).style.border = 'none';
         }
@@ -721,7 +724,7 @@ export function RetroColumn({
               actionRef.current = '';
               (
                 cardRefs[targetForReorderToLastCard.current[0]][
-                targetForReorderToLastCard.current[1]
+                  targetForReorderToLastCard.current[1]
                 ] as HTMLDivElement
               ).style.border = 'none';
             }
@@ -814,11 +817,10 @@ export function RetroColumn({
     }
   };
   const getWidth = (): number => {
-    const a = document.getElementById("section0")
-    if (a != null && a.offsetWidth != undefined)
-      return a.offsetWidth
-    else return 180
-  }
+    const a = document.getElementById('section0');
+    if (a != null && a.offsetWidth != undefined) return a.offsetWidth;
+    else return 180;
+  };
 
   const setGroupName = async (groupId: string, name: string) => {
     await saveAndProcessAction(BoardActionType.SET_GROUP_NAME, {
@@ -829,164 +831,146 @@ export function RetroColumn({
 
   const deleteUnconfirmedGroup = async (groupIdArray: string[]) => {
     await saveAndProcessAction(BoardActionType.DELETE_UNCONFIRMED_GROUPS, {
-      groupIdArray
+      groupIdArray,
     });
   };
-
 
   const getGroupSuggestion = async () => {
     let ungroupCards: any[] = [];
     column.groups.forEach(group => {
       if (group.name == UNGROUPED) {
-        ungroupCards = group.cards
+        ungroupCards = group.cards;
       }
-    })
+    });
     dispatchLoadingFlag(true);
-    await groupSuggestion(columnId, ungroupCards).then((res: any) => {
-      const data = res.response
-      if (data) {
-        const groupIdArray: string[] = []
+    await groupSuggestion(columnId, ungroupCards).then(
+      (res: any) => {
+        const data = res.response;
+        if (data) {
+          const groupIdArray: string[] = [];
 
-        data.forEach((group: any) => {
-          groupIdArray.push(shortid.generate())
-          createGroup
-        })
-        createGroupAsSuggested(data, groupIdArray)
-
-
-      }
-      else {
-        alert("Please try again")
+          data.forEach((group: any) => {
+            groupIdArray.push(shortid.generate());
+            createGroup;
+          });
+          createGroupAsSuggested(data, groupIdArray);
+        } else {
+          alert('Please try again');
+          dispatchLoadingFlag(false);
+        }
+      },
+      error => {
         dispatchLoadingFlag(false);
       }
-
-    }, error => {
-      dispatchLoadingFlag(false);
-    })
-
-
-
-  }
-
-
+    );
+  };
 
   const getKeywordExtraction = async () => {
-    dispatchLoadingFlag(true)
+    dispatchLoadingFlag(true);
     let ungroupCards: any[] = [];
     column.groups.forEach(group => {
       // if (group.name == UNGROUPED) {
       group.cards.forEach(element => {
-        ungroupCards.push(element)
+        ungroupCards.push(element);
       });
 
       // }
-    })
+    });
     // dispatchLoadingFlag(true);
-    await keywordExtraction(columnId, ungroupCards).then(async (res: any) => {   
-      await saveAndProcessAction(BoardActionType.UPDATE_KEYWORD_FLAG, {
-        columnId: column.id,
-        flag:true
-      }).then(res => {
+    await keywordExtraction(columnId, ungroupCards).then(
+      async (res: any) => {
+        await saveAndProcessAction(BoardActionType.UPDATE_KEYWORD_FLAG, {
+          columnId: column.id,
+          flag: true,
+        }).then(res => {
+          dispatchLoadingFlag(false);
+        });
+
+        await saveAndProcessAction(BoardActionType.ADD_KEYWORDS, {
+          suggestedkeywordCards: res.response,
+        }).then(
+          res => {
+            dispatchLoadingFlag(false);
+          },
+          err => {
+            dispatchLoadingFlag(false);
+          }
+        );
+      },
+      error => {
         dispatchLoadingFlag(false);
-      });
-
-      await saveAndProcessAction(BoardActionType.ADD_KEYWORDS, {
-
-        suggestedkeywordCards: res.response
-      }).then(
-        res => {
-          dispatchLoadingFlag(false);
-        },
-        err => {
-          dispatchLoadingFlag(false);
-        }
-      );
-    }, error => {
-      dispatchLoadingFlag(false);
-    })
-
-
-
-  }
-
+      }
+    );
+  };
 
   const deleteUnconfirmedGroups = async () => {
     dispatchLoadingFlag(true);
-    const groupIdArray: string[] = []
+    const groupIdArray: string[] = [];
     column.groups.forEach(group => {
       if (group.suggested) {
-        groupIdArray.push(group.id)
+        groupIdArray.push(group.id);
       }
-    })
+    });
 
-    await deleteUnconfirmedGroup(groupIdArray).then((res) => {
-      dispatchLoadingFlag(false);
-    }, error => {
-      dispatchLoadingFlag(false);
-    })
+    await deleteUnconfirmedGroup(groupIdArray).then(
+      res => {
+        dispatchLoadingFlag(false);
+      },
+      error => {
+        dispatchLoadingFlag(false);
+      }
+    );
     dispatchLoadingFlag(false);
-  }
+  };
 
   const retryGroupSuggestion = async () => {
+    getGroupSuggestion().then(res1 => {});
+  };
 
-    getGroupSuggestion().then(res1 => {
-
-    })
-
-  }
-
-
-const hidekeywords =async()=>{
-  dispatchLoadingFlag(true)
-  await saveAndProcessAction(BoardActionType.UPDATE_KEYWORD_FLAG, {
-    columnId: column.id,
-    flag:false
-  }).then(res => {
-    dispatchLoadingFlag(false);
-  },err=>{
-    dispatchLoadingFlag(false); 
-  });
-}
-
+  const hidekeywords = async () => {
+    dispatchLoadingFlag(true);
+    await saveAndProcessAction(BoardActionType.UPDATE_KEYWORD_FLAG, {
+      columnId: column.id,
+      flag: false,
+    }).then(
+      res => {
+        dispatchLoadingFlag(false);
+      },
+      err => {
+        dispatchLoadingFlag(false);
+      }
+    );
+  };
 
   const parseColumnDepending = () => {
     if (global.user.userType != 2 || column.publish) {
-
       const unGroup: any = [];
-      const group = column.groups.find(group => group.name === UNGROUPED) ? column.groups.find(group => group.name === UNGROUPED) : null
+      const group = column.groups.find(group => group.name === UNGROUPED)
+        ? column.groups.find(group => group.name === UNGROUPED)
+        : null;
 
       column.groups.forEach(element => {
         if (element.name !== UNGROUPED) {
           element.cards.forEach(card => {
-
             group && group.cards.push(card);
           });
         }
-
-
       });
-      if (group)
-        unGroup.push(group)
+      if (group) unGroup.push(group);
       return unGroup ? unGroup : [];
-
-    }
-    else return column.groups
-
-  }
-
-
-
+    } else return column.groups;
+  };
 
   if (!location.pathname.includes('report')) {
     return (
       <ColumnComponent
-        id={"section" + column.id}
+        id={'section' + column.id}
         sx={{
           height: noHeightLimit
             ? 'auto'
             : isXsUp
-              ? 'calc(var(--app-height) - 115px)'
-              : 'calc(var(--app-height) - 160px)',
+            ? 'calc(var(--app-height) - 115px)'
+            : 'calc(var(--app-height) - 160px)',
           borderRadius: '8px',
           border:
             isXsUp || location.pathname.includes('report')
@@ -1022,7 +1006,7 @@ const hidekeywords =async()=>{
                 marginBottom: '25px',
                 background: groupColour,
                 borderRadius: '8px 8px 0px 0px',
-                height: "48px"
+                height: '48px',
               }}
             >
               <ColumnHeader
@@ -1047,7 +1031,6 @@ const hidekeywords =async()=>{
                 keywordExtraction={getKeywordExtraction}
                 hideKeywords={hidekeywords}
               />
-   
             </div>
           )}
           {useMemo(
@@ -1081,61 +1064,85 @@ const hidekeywords =async()=>{
                       }
                     > */}
 
-                    {parseColumnDepending().map((group: CardGroup, i: number) => (
-                      <React.Fragment key={i} >
-                        {/* <Masonry columns={{
+                    {parseColumnDepending().map(
+                      (group: CardGroup, i: number) => (
+                        <React.Fragment key={i}>
+                          {/* <Masonry columns={{
                           // xs: 1, sm: global?.expandColumn === -1 ? 2 : 4,
                           // md: global?.expandColumn === -1 ? 2 : 4,
                           // lg: global?.expandColumn === -1 ? 2 : 6
                         }}
                           sx={{ marginBottom: "8px" }}> */}
-                        <Grid style={{
-                          display: 'flex',
-                          flexWrap: 'wrap',
-                          justifyContent: global?.expandColumn === -1 ? 'space-between' : 'left',
+                          <Grid
+                            style={{
+                              display: 'flex',
+                              flexWrap: 'wrap',
+                              justifyContent:
+                                global?.expandColumn === -1
+                                  ? 'space-between'
+                                  : 'left',
 
-                          // minHeight: '100px',
-                        }}>
-                          {group.cards.map((card: RetroCardType, j: number) => (
-                            <React.Fragment key={j}>
+                              // minHeight: '100px',
+                            }}
+                          >
+                            {group.cards.map(
+                              (card: RetroCardType, j: number) => (
+                                <React.Fragment key={j}>
+                                  {card.createdBy === global.user.id && (
+                                    <Grid
+                                      // item
+                                      // lg={global?.expandColumn !== -1 ? 2 : 6}
+                                      // md={global?.expandColumn !== -1 ? 2 : 4}
+                                      // xs={12}
+                                      // sx={{ marginBottom: '20px' }}
+                                      sx={{
+                                        marginBottom: '20px',
+                                        marginLeft:
+                                          global?.expandColumn === -1
+                                            ? 0
+                                            : '10px',
+                                        marginRight:
+                                          global?.expandColumn === -1
+                                            ? 0
+                                            : '10px',
+                                        width: isXsUp
+                                          ? '100%'
+                                          : global?.expandColumn === -1
+                                          ? card.value.length < 60
+                                            ? '49.5%'
+                                            : '100%'
+                                          : isLgUp
+                                          ? card.value.length < 60
+                                            ? '25%'
+                                            : '50%'
+                                          : card.value.length < 60
+                                          ? 'calc( 16.66% - 20px)'
+                                          : 'calc(33.33% - 20px)',
 
-                              {card.createdBy === global.user.id && (
-                                <Grid
-                                  // item
-                                  // lg={global?.expandColumn !== -1 ? 2 : 6}
-                                  // md={global?.expandColumn !== -1 ? 2 : 4}
-                                  // xs={12}
-                                  // sx={{ marginBottom: '20px' }}
-                                  sx={{
-                                    marginBottom: '20px',
-                                    marginLeft: global?.expandColumn === -1 ? 0 : '10px',
-                                    marginRight: global?.expandColumn === -1 ? 0 : '10px',
-                                    width: isXsUp ? '100%' : global?.expandColumn === -1 ? card.value.length < 60 ? '49.5%' : '100%' :
-                                      isLgUp ? card.value.length < 60 ? '25%' : '50%' : card.value.length < 60 ? 'calc( 16.66% - 20px)' : 'calc(33.33% - 20px)',
-
-                                    // minWidth: isXsUp ? '100%' : global?.expandColumn === -1 ? '48.5%' : !isLgUp ? "16.66%" : "25%", maxWidth: global?.expandColumn === -1 ? 'calc(100%-20px)' : !isLgUp ? "33.33%" : "calc(50%)"
-                                  }}
-                                  key={j + '0'}
-                                >
-                                  <RetroCard
-                                    moveCard={moveCard}
-                                    card={card}
-                                    groups={cardGroups}
-                                    currentGroupId={group.id}
-                                    columnId={column.id}
-                                    hideButtons={false}
-                                    animate={true}
-                                    isPrintPage={false}
-                                  />
-                                </Grid>
-                              )}
-
-                            </React.Fragment>
-                          ))}
-                        </Grid>
-                        {/* </Masonry> */}
-                      </React.Fragment>
-                    ))}
+                                        // minWidth: isXsUp ? '100%' : global?.expandColumn === -1 ? '48.5%' : !isLgUp ? "16.66%" : "25%", maxWidth: global?.expandColumn === -1 ? 'calc(100%-20px)' : !isLgUp ? "33.33%" : "calc(50%)"
+                                      }}
+                                      key={j + '0'}
+                                    >
+                                      <RetroCard
+                                        moveCard={moveCard}
+                                        card={card}
+                                        groups={cardGroups}
+                                        currentGroupId={group.id}
+                                        columnId={column.id}
+                                        hideButtons={false}
+                                        animate={true}
+                                        isPrintPage={false}
+                                      />
+                                    </Grid>
+                                  )}
+                                </React.Fragment>
+                              )
+                            )}
+                          </Grid>
+                          {/* </Masonry> */}
+                        </React.Fragment>
+                      )
+                    )}
 
                     {/* </Grid> */}
                     {/* <span
@@ -1160,7 +1167,6 @@ const hidekeywords =async()=>{
                           <div
                             {...provided.droppableProps}
                             ref={provided.innerRef}
-
                           >
                             {/* <Masonry columns={2}> */}
                             {column.groups.map(
@@ -1177,7 +1183,6 @@ const hidekeywords =async()=>{
                                       <div
                                         ref={provided.innerRef}
                                         {...provided.draggableProps}
-
                                       >
                                         <span
                                           {...provided.dragHandleProps}
@@ -1189,20 +1194,18 @@ const hidekeywords =async()=>{
                                           item
                                           key={group.id}
                                           ref={e => (groupRefs[i] = e)}
-
                                           sx={{
                                             marginBottom: '10px',
                                             // padding: '3px',
 
-
-                                            background: group.suggested ? '#F5F5F5' :
-                                              group.name !== UNGROUPED
-                                                ? groupColour
-                                                : 'none',
+                                            background: group.suggested
+                                              ? '#F5F5F5'
+                                              : group.name !== UNGROUPED
+                                              ? groupColour
+                                              : 'none',
                                             optacity: 0.1,
                                           }}
                                         >
-
                                           <RetroCardGroup
                                             admin={global.user.userType == 2}
                                             group={group}
@@ -1225,10 +1228,9 @@ const hidekeywords =async()=>{
                                             }}
                                             isPrintPage={false}
                                           >
-
                                             {group.name === UNGROUPED ||
-                                              !groupCollapsed[i] ||
-                                              expandAllGroups ? (
+                                            !groupCollapsed[i] ||
+                                            expandAllGroups ? (
                                               <Box
                                                 style={{
                                                   display: 'flex',
@@ -1253,8 +1255,12 @@ const hidekeywords =async()=>{
                                                     display: 'flex',
                                                     flexDirection: 'row',
                                                     flexWrap: 'wrap',
-                                                    justifyContent: global?.expandColumn === -1 ? 'space-between' : "left",
-                                                    width: "100%"
+                                                    justifyContent:
+                                                      global?.expandColumn ===
+                                                      -1
+                                                        ? 'space-between'
+                                                        : 'left',
+                                                    width: '100%',
 
                                                     // display: "grid",
                                                     // gap: "10px",
@@ -1266,200 +1272,224 @@ const hidekeywords =async()=>{
                                                     // gridTemplateRows: "masonry"
                                                   }}
 
+                                                  // columns={{
 
-                                                // columns={{
-
-                                                //   // xs: 1,
-                                                //   // sm: global?.expandColumn === -1 ? 2 : 4,
-                                                //   // md: global?.expandColumn === -1 ? 2 : 4,
-                                                //   // lg: global?.expandColumn === -1 ? 2 : 6
-                                                // }}
+                                                  //   // xs: 1,
+                                                  //   // sm: global?.expandColumn === -1 ? 2 : 4,
+                                                  //   // md: global?.expandColumn === -1 ? 2 : 4,
+                                                  //   // lg: global?.expandColumn === -1 ? 2 : 6
+                                                  // }}
                                                 >
-                                                  {group.cards.map((card: RetroCardType, j: number) =>
-                                                    (card.createdBy ===
-                                                      global.user.id ||
-                                                      global.user.userType ==
-                                                      2 ||
-                                                      column.publish) && (
-
-
-                                                      <React.Fragment key={card.id}>
-                                                        {group.name ===
-                                                          UNGROUPED ||
+                                                  {group.cards.map(
+                                                    (
+                                                      card: RetroCardType,
+                                                      j: number
+                                                    ) =>
+                                                      (card.createdBy ===
+                                                        global.user.id ||
+                                                        global.user.userType ==
+                                                          2 ||
+                                                        column.publish) && (
+                                                        <React.Fragment
+                                                          key={card.id}
+                                                        >
+                                                          {group.name ===
+                                                            UNGROUPED ||
                                                           j <
-                                                          (groupCollapsed[i]
-                                                            ? 2
-                                                            : group.cards
-                                                              .length) ? (
-                                                          <Box sx={{
-                                                            width: isXsUp ? '100%' : global?.expandColumn === -1 ? card.value.length < 60 ? '49.5%' : '100%' :
-                                                              isLgUp ? card.value.length < 60 ? '25%' : '50%' : card.value.length < 60 ? '16.66%' : '33.33%'
-                                                            ,
-                                                            // minWidth: isXsUp ? '100%' : global?.expandColumn === -1 ? '48%' : !isLgUp ? "16.66%" : "25%", maxWidth: global?.expandColumn === -1 ? 'calc(100% )' : !isLgUp ? "33.33%" : "calc(50%)"
-                                                          }}>
-
-                                                            <Grid
-                                                              // item
-                                                              // lg={
-                                                              //   global?.expandColumn !==
-                                                              //     -1
-                                                              //     ? 2
-                                                              //     : !location.pathname.includes(
-                                                              //       'report'
-                                                              //     )
-                                                              //       ? 6
-                                                              //       : 4
-                                                              // }
-                                                              // md={
-                                                              //   global?.expandColumn !==
-                                                              //     -1
-                                                              //     ? 2
-                                                              //     : !location.pathname.includes(
-                                                              //       'report'
-                                                              //     )
-                                                              //       ? 6
-                                                              //       : 4
-                                                              // }
-                                                              // xs={12}
-                                                              ref={e =>
-                                                                cardRefCollector(
-                                                                  e as HTMLDivElement,
-                                                                  i,
-                                                                  j,
-                                                                  card)
-                                                              }
-                                                              style={{ padding: '10px' }}
+                                                            (groupCollapsed[i]
+                                                              ? 2
+                                                              : group.cards
+                                                                  .length) ? (
+                                                            <Box
+                                                              sx={{
+                                                                width: isXsUp
+                                                                  ? '100%'
+                                                                  : global?.expandColumn ===
+                                                                    -1
+                                                                  ? card.value
+                                                                      .length <
+                                                                    60
+                                                                    ? '49.5%'
+                                                                    : '100%'
+                                                                  : isLgUp
+                                                                  ? card.value
+                                                                      .length <
+                                                                    60
+                                                                    ? '25%'
+                                                                    : '50%'
+                                                                  : card.value
+                                                                      .length <
+                                                                    60
+                                                                  ? '16.66%'
+                                                                  : '33.33%',
+                                                                // minWidth: isXsUp ? '100%' : global?.expandColumn === -1 ? '48%' : !isLgUp ? "16.66%" : "25%", maxWidth: global?.expandColumn === -1 ? 'calc(100% )' : !isLgUp ? "33.33%" : "calc(50%)"
+                                                              }}
                                                             >
-                                                              <Draggable
-                                                                nodeRef={
-                                                                  nodeRef
-                                                                }
-                                                                ref={ref => {
-                                                                  draggableRefs[
-                                                                    i
-                                                                  ][j] = ref;
-                                                                }}
-                                                                disabled={
-                                                                  ended ||
-                                                                  global.leaveRetro ||
-                                                                  (card.locked &&
-                                                                    card.lockedBy !==
-                                                                    global
-                                                                      .user
-                                                                      .id)
-                                                                }
-                                                                onStart={(
-                                                                  event,
-                                                                  data
-                                                                ) =>
-                                                                  handleStart(
+                                                              <Grid
+                                                                // item
+                                                                // lg={
+                                                                //   global?.expandColumn !==
+                                                                //     -1
+                                                                //     ? 2
+                                                                //     : !location.pathname.includes(
+                                                                //       'report'
+                                                                //     )
+                                                                //       ? 6
+                                                                //       : 4
+                                                                // }
+                                                                // md={
+                                                                //   global?.expandColumn !==
+                                                                //     -1
+                                                                //     ? 2
+                                                                //     : !location.pathname.includes(
+                                                                //       'report'
+                                                                //     )
+                                                                //       ? 6
+                                                                //       : 4
+                                                                // }
+                                                                // xs={12}
+                                                                ref={e =>
+                                                                  cardRefCollector(
+                                                                    e as HTMLDivElement,
                                                                     i,
                                                                     j,
-                                                                    event,
-                                                                    data
+                                                                    card
                                                                   )
                                                                 }
-                                                                onStop={(
-                                                                  event,
-                                                                  data
-                                                                ) => {
-                                                                  handleStop(
-                                                                    i,
-                                                                    j,
-                                                                    event,
-                                                                    data
-                                                                  );
+                                                                style={{
+                                                                  padding:
+                                                                    '10px',
                                                                 }}
-                                                                onDrag={(
-                                                                  event,
-                                                                  data
-                                                                ) =>
-                                                                  handleDrag(
-                                                                    i,
-                                                                    j,
-                                                                    event,
-                                                                    data
-                                                                  )
-                                                                }
-                                                                enableUserSelectHack={
-                                                                  true
-                                                                }
-                                                                cancel={'.can'}
-                                                                handle=".handle"
                                                               >
-                                                                <span
-                                                                  className={
-                                                                    global.user
-                                                                      .userType ==
-                                                                      2
-                                                                      ? 'handle'
-                                                                      : ''
+                                                                <Draggable
+                                                                  nodeRef={
+                                                                    nodeRef
                                                                   }
-                                                                  id={i + ''}
-                                                                  ref={nodeRef}
-                                                                // style={{display:'flex',width:'100%',minWidth:'100%',maxWidth:'400px'}}
+                                                                  ref={ref => {
+                                                                    draggableRefs[
+                                                                      i
+                                                                    ][j] = ref;
+                                                                  }}
+                                                                  disabled={
+                                                                    ended ||
+                                                                    global.leaveRetro ||
+                                                                    (card.locked &&
+                                                                      card.lockedBy !==
+                                                                        global
+                                                                          .user
+                                                                          .id)
+                                                                  }
+                                                                  onStart={(
+                                                                    event,
+                                                                    data
+                                                                  ) =>
+                                                                    handleStart(
+                                                                      i,
+                                                                      j,
+                                                                      event,
+                                                                      data
+                                                                    )
+                                                                  }
+                                                                  onStop={(
+                                                                    event,
+                                                                    data
+                                                                  ) => {
+                                                                    handleStop(
+                                                                      i,
+                                                                      j,
+                                                                      event,
+                                                                      data
+                                                                    );
+                                                                  }}
+                                                                  onDrag={(
+                                                                    event,
+                                                                    data
+                                                                  ) =>
+                                                                    handleDrag(
+                                                                      i,
+                                                                      j,
+                                                                      event,
+                                                                      data
+                                                                    )
+                                                                  }
+                                                                  enableUserSelectHack={
+                                                                    true
+                                                                  }
+                                                                  cancel={
+                                                                    '.can'
+                                                                  }
+                                                                  handle=".handle"
                                                                 >
-
-                                                                  <RetroCard
-
-                                                                    moveCard={
-                                                                      moveCard
+                                                                  <span
+                                                                    className={
+                                                                      global
+                                                                        .user
+                                                                        .userType ==
+                                                                      2
+                                                                        ? 'handle'
+                                                                        : ''
                                                                     }
-                                                                    card={card}
-                                                                    groups={
-                                                                      cardGroups
+                                                                    id={i + ''}
+                                                                    ref={
+                                                                      nodeRef
                                                                     }
-                                                                    currentGroupId={
-                                                                      group.id
-                                                                    }
-                                                                    columnId={
-                                                                      column.id
-                                                                    }
-                                                                    hideButtons={
-                                                                      false
-                                                                    }
-                                                                    animate={
-                                                                      true
-                                                                    }
-                                                                    isPrintPage={
-                                                                      false
-                                                                    }
+                                                                    // style={{display:'flex',width:'100%',minWidth:'100%',maxWidth:'400px'}}
+                                                                  >
+                                                                    <RetroCard
+                                                                      moveCard={
+                                                                        moveCard
+                                                                      }
+                                                                      card={
+                                                                        card
+                                                                      }
+                                                                      groups={
+                                                                        cardGroups
+                                                                      }
+                                                                      currentGroupId={
+                                                                        group.id
+                                                                      }
+                                                                      columnId={
+                                                                        column.id
+                                                                      }
+                                                                      hideButtons={
+                                                                        false
+                                                                      }
+                                                                      animate={
+                                                                        true
+                                                                      }
+                                                                      isPrintPage={
+                                                                        false
+                                                                      }
+                                                                    />
+                                                                  </span>
+                                                                </Draggable>
+                                                              </Grid>
 
-                                                                  />
-
-
-                                                                </span>
-                                                              </Draggable>
-                                                            </Grid>
-
-                                                            <span
-                                                              ref={e => {
-                                                                landingZones[i][
-                                                                  j + 1
-                                                                ] =
-                                                                  e as HTMLDivElement;
-                                                              }}
-                                                              style={{
-                                                                maxHeight: '0',
-                                                                margin: '0',
-                                                                padding: '0',
-                                                              }}
-                                                            ></span>
-                                                          </Box>
-                                                        ) : null}
-                                                      </React.Fragment>
-
-                                                    )
+                                                              <span
+                                                                ref={e => {
+                                                                  landingZones[
+                                                                    i
+                                                                  ][j + 1] =
+                                                                    e as HTMLDivElement;
+                                                                }}
+                                                                style={{
+                                                                  maxHeight:
+                                                                    '0',
+                                                                  margin: '0',
+                                                                  padding: '0',
+                                                                }}
+                                                              ></span>
+                                                            </Box>
+                                                          ) : null}
+                                                        </React.Fragment>
+                                                      )
                                                   )}
                                                 </Grid>
-
-
                                               </Box>
                                             ) : (
                                               <></>
                                             )}
                                           </RetroCardGroup>
-
                                         </Grid>
                                       </div>
                                     )}
@@ -1505,8 +1535,8 @@ const hidekeywords =async()=>{
           height: noHeightLimit
             ? 'auto'
             : isXsUp
-              ? 'calc(var(--app-height) - 165px)'
-              : 'calc(var(--app-height) - 150px)',
+            ? 'calc(var(--app-height) - 165px)'
+            : 'calc(var(--app-height) - 150px)',
         }}
         onMouseOver={() => {
           setMouseOver(true);
@@ -1650,9 +1680,9 @@ const hidekeywords =async()=>{
                                           isPrintPage={false}
                                         >
                                           {group.name === UNGROUPED ||
-                                            !groupCollapsed[i] ||
-                                            group.cards.length < 1 ||
-                                            expandAllGroups ? (
+                                          !groupCollapsed[i] ||
+                                          group.cards.length < 1 ||
+                                          expandAllGroups ? (
                                             <div
                                               style={{
                                                 display: 'flex',
@@ -1686,11 +1716,11 @@ const hidekeywords =async()=>{
                                                     >
                                                       {group.name ===
                                                         UNGROUPED ||
-                                                        j <
+                                                      j <
                                                         (groupCollapsed[i]
                                                           ? 1
                                                           : group.cards
-                                                            .length) ? (
+                                                              .length) ? (
                                                         <>
                                                           <Grid
                                                             item
@@ -1720,8 +1750,8 @@ const hidekeywords =async()=>{
                                                                 global.leaveRetro ||
                                                                 (card.locked &&
                                                                   card.lockedBy !==
-                                                                  global.user
-                                                                    .id)
+                                                                    global.user
+                                                                      .id)
                                                               }
                                                               onStart={(
                                                                 event,
@@ -1766,7 +1796,7 @@ const hidekeywords =async()=>{
                                                                 className={
                                                                   global.user
                                                                     .userType ==
-                                                                    2
+                                                                  2
                                                                     ? 'handle'
                                                                     : ''
                                                                 }
@@ -1797,9 +1827,9 @@ const hidekeywords =async()=>{
                                                             </Draggable>
                                                             <div
                                                               ref={ref =>
-                                                              (placeholderRefs[
-                                                                i
-                                                              ][j] = ref)
+                                                                (placeholderRefs[
+                                                                  i
+                                                                ][j] = ref)
                                                               }
                                                             ></div>
                                                           </Grid>

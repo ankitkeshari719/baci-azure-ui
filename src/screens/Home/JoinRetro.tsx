@@ -18,7 +18,7 @@ import './../../global.scss';
 import { Retro as RetroType } from '../../types';
 import { useRetro } from '../../helpers';
 import { ActionType, GlobalContext } from '../../contexts/GlobalContext';
-import Avatar from '../../elements/Avatar';
+import Avatar from '../../components/Elements/Avatar';
 import { avatarName } from '../../constants/AvatarName';
 import { useAzureAuth } from '../../msal/azureauth';
 import { UserTypeArray } from '../../constants';

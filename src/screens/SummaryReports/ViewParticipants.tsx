@@ -4,7 +4,7 @@ import '../../global.scss';
 import './styles.scss';
 
 import { Row, Col } from 'react-bootstrap';
-import Avatar from '../../elements/Avatar';
+import Avatar from '../../components/Elements/Avatar';
 import { LazyLoadImage } from 'react-lazy-load-image-component';
 
 type Props = {

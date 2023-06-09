@@ -13,9 +13,9 @@ import {
   Draggable as Drag,
   Droppable,
 } from 'react-beautiful-dnd';
-import ColumnHeader from '../../elements/ColumnHeader';
-import { RetroCard } from '../../elements/retroCard/RetroCard';
-import { RetroCardGroup } from '../../elements/RetroCardGroup';
+import ColumnHeader from '../../components/Elements/ColumnHeader';
+import { RetroCard } from '../../components/Elements/retroCard/RetroCard';
+import { RetroCardGroup } from '../../components/Elements/RetroCardGroup';
 
 export function PrintRetroColumn({
   column,

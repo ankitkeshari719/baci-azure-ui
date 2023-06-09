@@ -4,11 +4,11 @@ import FormControl from '@mui/material/FormControl';
 import ListItemText from '@mui/material/ListItemText';
 import Select from '@mui/material/Select';
 import Checkbox from '@mui/material/Checkbox';
-import { BoardContext } from '../contexts/BoardContext';
-import { GlobalContext } from '../contexts/GlobalContext';
+import { BoardContext } from '../../contexts/BoardContext';
+import { GlobalContext } from '../../contexts/GlobalContext';
 import { ListItemIcon, Typography } from '@mui/material';
 import { LazyLoadImage } from 'react-lazy-load-image-component';
-import { UserType } from '../types';
+import { UserType } from '../../types';
 import * as Icons from 'heroicons-react';
 
 const ITEM_HEIGHT = 48;

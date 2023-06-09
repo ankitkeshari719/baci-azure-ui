@@ -17,7 +17,7 @@ import { GlobalContext } from '../../contexts/GlobalContext';
 import { BoardActionType } from '../../statemachine/BoardStateMachine';
 import theme from '../../theme/theme';
 import { RetroDetails } from '../Board/RetroDetails';
-import Avatar from '../../elements/Avatar';
+import Avatar from '../../components/Elements/Avatar';
 
 const PulseCheckTopbar = (props: any) => {
   const isXsUp = useMediaQuery(theme.breakpoints.only('xs'));

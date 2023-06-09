@@ -1,7 +1,7 @@
 import { Box } from '@material-ui/core';
 import { Grid, Tooltip, Typography } from '@mui/material';
 import React, { useEffect } from 'react';
-import { BoardContext } from '../contexts/BoardContext';
+import { BoardContext } from '../../contexts/BoardContext';
 import OutlinedInput from '@mui/material/OutlinedInput';
 import MenuItem from '@mui/material/MenuItem';
 import ListItemText from '@mui/material/ListItemText';
@@ -9,9 +9,9 @@ import Select, { SelectChangeEvent } from '@mui/material/Select';
 import Checkbox from '@mui/material/Checkbox';
 import Avatar from './Avatar';
 import { CountdownTimer } from './CountdownTimer';
-import { ActionType, GlobalContext } from '../contexts/GlobalContext';
-import commonStyles from './../style.module.scss';
-import { OutlinedButton } from '../components';
+import { ActionType, GlobalContext } from '../../contexts/GlobalContext';
+import commonStyles from './../../style.module.scss';
+import { OutlinedButton } from '..';
 import ReactToPrint from 'react-to-print';
 
 const ITEM_HEIGHT = 48;

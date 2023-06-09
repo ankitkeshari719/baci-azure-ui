@@ -1,5 +1,5 @@
 import { BrowserRouter, Outlet, Route, Routes } from 'react-router-dom';
-import { SnackMessage } from './elements/SnackMessage';
+import { SnackMessage } from './components/Elements/SnackMessage';
 import { ThemeProvider } from '@mui/material/styles';
 import theme from './theme/theme';
 import { MsalProvider, useMsal } from '@azure/msal-react';

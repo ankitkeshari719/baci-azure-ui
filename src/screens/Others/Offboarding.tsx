@@ -24,7 +24,7 @@ import commonStyles from './../../style.module.scss';
 import './../../global.scss';
 import successAnimation from './../../assets/img/success-animation.gif';
 import { useNavigate } from 'react-router-dom';
-import Toolbar from '../../elements/Toolbar';
+import Toolbar from '../../components/Elements/Toolbar';
 import theme from '../../theme/theme';
 import { DeploymentPopUp } from '../Utils/Alerts/DeploymentPopUp';
 

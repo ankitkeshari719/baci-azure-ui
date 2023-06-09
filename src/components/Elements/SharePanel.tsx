@@ -9,13 +9,13 @@ import {
   useMediaQuery,
 } from '@mui/material';
 
-import { BoardContext } from '../contexts/BoardContext';
+import { BoardContext } from '../../contexts/BoardContext';
 import CloseIcon from '@mui/icons-material/Close';
 import { CopyToClipboard } from 'react-copy-to-clipboard';
-import { GlobalContext } from '../contexts/GlobalContext';
+import { GlobalContext } from '../../contexts/GlobalContext';
 import QRCode from 'qrcode.react';
 import React from 'react';
-import theme from '../theme/theme';
+import theme from '../../theme/theme';
 
 export default function SharePanel({ onClose }: { onClose: () => void }) {
   const isXsUp = useMediaQuery(theme.breakpoints.only('xs'));

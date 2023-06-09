@@ -23,8 +23,8 @@ import email from '../../assets/img/emailbox.png';
 import { GlobalContext } from '../../contexts/GlobalContext';
 import useLoadRetro from '../../hooks/useLoadRetro';
 import theme from '../../theme/theme';
-import Toolbar from '../../elements/Toolbar';
-import StartRetroButton from '../../elements/StartRetroButton';
+import Toolbar from '../../components/Elements/Toolbar';
+import StartRetroButton from '../../components/Elements/StartRetroButton';
 import { DeploymentPopUp } from '../Utils/Alerts/DeploymentPopUp';
 
 const styles = {

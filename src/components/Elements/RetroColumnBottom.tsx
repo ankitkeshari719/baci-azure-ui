@@ -2,9 +2,9 @@ import { Button, Grid, TextField, Typography } from '@mui/material';
 import { Box, styled } from '@mui/system';
 import EmojiPicker from 'emoji-picker-react';
 import React from 'react';
-import { MAX_CARD_TEXT_LENGTH, UNGROUPED } from '../constants';
+import { MAX_CARD_TEXT_LENGTH, UNGROUPED } from '../../constants';
 import SendIcon from '@mui/icons-material/Send';
-import { Column } from '../types';
+import { Column } from '../../types';
 const TextFieldNoBorderWrapper = styled('div')({
   '.MuiInputBase-multiline': {
     paddingLeft: '10px',

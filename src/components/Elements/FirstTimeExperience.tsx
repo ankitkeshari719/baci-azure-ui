@@ -2,8 +2,8 @@ import { Button, Paper, Typography, useMediaQuery } from '@mui/material';
 import { Box } from '@mui/system';
 import React from 'react';
 
-import { GlobalContext, ActionType} from '../contexts/GlobalContext';
-import theme from '../theme/theme';
+import { GlobalContext, ActionType} from '../../contexts/GlobalContext';
+import theme from '../../theme/theme';
 
 const FirstTimeExperience = (props: any) => {
   

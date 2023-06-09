@@ -5,20 +5,20 @@ import {
   TextField,
   Typography,
 } from '@mui/material';
-import { BoardContext } from '../contexts/BoardContext';
-import { BoardActionType } from '../statemachine/BoardStateMachine';
-import { CardGroup, Column } from '../types';
+import { BoardContext } from '../../contexts/BoardContext';
+import { BoardActionType } from '../../statemachine/BoardStateMachine';
+import { CardGroup, Column } from '../../types';
 
 import DeleteIcon from '@mui/icons-material/Delete';
 import React from 'react';
-import { UNGROUPED } from '../constants';
-import { ConfirmContext } from '../contexts/ConfirmContext';
-import { ActionType, GlobalContext } from '../contexts/GlobalContext';
+import { UNGROUPED } from '../../constants';
+import { ConfirmContext } from '../../contexts/ConfirmContext';
+import { ActionType, GlobalContext } from '../../contexts/GlobalContext';
 import {
   DraggableProvided,
 } from 'react-beautiful-dnd';
 import { XMarkIcon, CheckIcon } from '@heroicons/react/24/solid';
-import { OutlinedButton } from '../components/CustomizedButton/OutlinedButton';
+import { OutlinedButton } from '../CustomizedButton/OutlinedButton';
 export function RetroCardGroup({
   admin,
   group,

@@ -1,4 +1,4 @@
-import { BoardContext } from '../contexts/BoardContext';
+import { BoardContext } from '../../contexts/BoardContext';
 import {
   Box,
   Button,
@@ -16,14 +16,14 @@ import AddIcon from '@mui/icons-material/Add';
 import CloseIcon from '@mui/icons-material/Close';
 import Countdown from 'react-countdown';
 import Draggable from 'react-draggable';
-import { GlobalContext } from '../contexts/GlobalContext';
+import { GlobalContext } from '../../contexts/GlobalContext';
 import Pause from '@mui/icons-material/Pause';
 import PlayArrowIcon from '@mui/icons-material/PlayArrow';
 import React from 'react';
 import RemoveIcon from '@mui/icons-material/Remove';
 import { Stop } from '@mui/icons-material';
-import { BoardActionType } from '../statemachine/BoardStateMachine';
-import theme from '../theme/theme';
+import { BoardActionType } from '../../statemachine/BoardStateMachine';
+import theme from '../../theme/theme';
 
 const RoundButton = styled('button')({
   background: '#159ADD',

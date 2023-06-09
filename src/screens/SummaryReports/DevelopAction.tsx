@@ -4,8 +4,8 @@ import { Row, Col } from 'react-bootstrap';
 import './styles.scss';
 import '../../global.scss';
 import { LazyLoadImage } from 'react-lazy-load-image-component';
-import Avatar from '../../elements/Avatar';
-import { Word } from '../../elements/WordCloud';
+import Avatar from '../../components/Elements/Avatar';
+import { Word } from '../../components/Elements/WordCloud';
 
 type Props = {
   actionCardData: any;

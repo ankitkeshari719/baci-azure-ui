@@ -32,8 +32,8 @@ import {
   QUICK_PULSE_CHECK_QUESTIONS,
   FEEDBACK_QUESTIONS,
 } from '../../constants';
-import { Question } from '../../elements/PulseCheckChart';
-import { Word } from '../../elements/WordCloud';
+import { Question } from '../../components/Elements/PulseCheckChart';
+import { Word } from '../../components/Elements/WordCloud';
 import { BoardContext } from '../../contexts/BoardContext';
 import { ActionType, GlobalContext } from '../../contexts/GlobalContext';
 import { ViewParticipants } from './ViewParticipants';

@@ -6,7 +6,7 @@ import {
   WHAT_DIDNT_GO_WELL,
   WHAT_WENT_WELL_COLUMN,
   WORD_CLOUD_IGNORE_WORDS,
-} from '../constants';
+} from '../../constants';
 import {
   Box,
   Card,
@@ -22,12 +22,12 @@ import WordCloud, { Word } from './WordCloud';
 import { eng, removeStopwords } from 'stopword';
 import commonStyles from './../style.module.scss';
 import './../global.scss';
-import { BoardContext } from '../contexts/BoardContext';
+import { BoardContext } from '../../contexts/BoardContext';
 import React from 'react';
 import { RetroColumn } from './RetroColumn';
 import * as Icons from 'heroicons-react';
-import Toolbar from '../elements/Toolbar';
-import { GlobalContext } from '../contexts/GlobalContext';
+import Toolbar from './Toolbar';
+import { GlobalContext } from '../../contexts/GlobalContext';
 import ReactToPrint from 'react-to-print';
 import { Bar } from 'react-chartjs-2';
 import {
