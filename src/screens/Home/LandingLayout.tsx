@@ -1,13 +1,11 @@
-import { Box, Grid, Paper, Typography, useMediaQuery } from '@mui/material';
 import React from 'react';
-import ReactDOM from 'react-dom';
-import LandingImage from '../assets/img/landing_img.png';
-import LandingMobileImage from '../assets/img/Mobile_home_Image.png';
-import BACILogo from '../assets/img/bacilogobeta.svg';
-import commomStyles from './../style.module.scss';
-import theme from '../theme/theme';
+import { Box, Typography, useMediaQuery } from '@mui/material';
 import { LazyLoadImage } from 'react-lazy-load-image-component';
-import { SocketContext } from '../contexts/SocketProvider';
+import { SocketContext } from '../../contexts/SocketProvider';
+import LandingImage from '../../assets/img/landing_img.png';
+import LandingMobileImage from '../../assets/img/Mobile_home_Image.png';
+import BACILogo from '../../assets/img/bacilogobeta.svg';
+import commomStyles from './../../style.module.scss';
 
 const styles = {
   mainDiv: {

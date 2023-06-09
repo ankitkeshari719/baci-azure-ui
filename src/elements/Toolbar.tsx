@@ -21,7 +21,7 @@ import BACILogo from '../assets/img/bacilogobeta.svg';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { BoardContext } from '../contexts/BoardContext';
 import { BoardActionType } from '../statemachine/BoardStateMachine';
-import { RetroDetails } from '../screens/RetroDetails';
+import { RetroDetails } from '../screens/Board/RetroDetails';
 import commonStyles from './../style.module.scss';
 import SessionEndingMessage from '../atoms/SessionEndingMessage';
 import LeaveRetroDialog from '../atoms/LeaveRetroDialog';

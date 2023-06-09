@@ -8,18 +8,17 @@ import {
   Typography,
   useMediaQuery,
 } from '@mui/material';
-import { BoardContext } from '../contexts/BoardContext';
+import { BoardContext } from '../../contexts/BoardContext';
 
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
-import { UserAvatar } from '../atoms/UserAvatar';
-import { ConfirmContext } from '../contexts/ConfirmContext';
-import { GlobalContext } from '../contexts/GlobalContext';
-import { FeedbackColumn } from '../elements/FeedbackColumn';
-import useLoadRetro from '../hooks/useLoadRetro';
-import { BoardActionType } from '../statemachine/BoardStateMachine';
-import theme from '../theme/theme';
-import FeedbackPopup from '../atoms/FeedbackPopup';
+import { UserAvatar } from '../../atoms/UserAvatar';
+import { ConfirmContext } from '../../contexts/ConfirmContext';
+import { GlobalContext } from '../../contexts/GlobalContext';
+import useLoadRetro from '../../hooks/useLoadRetro';
+import { BoardActionType } from '../../statemachine/BoardStateMachine';
+import theme from '../../theme/theme';
+import FeedbackPopup from '../../atoms/FeedbackPopup';
 
 export default function Feedback() {
   const navigate = useNavigate();

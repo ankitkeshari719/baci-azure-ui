@@ -16,7 +16,7 @@ import { BoardContext } from '../../contexts/BoardContext';
 import { GlobalContext } from '../../contexts/GlobalContext';
 import { BoardActionType } from '../../statemachine/BoardStateMachine';
 import theme from '../../theme/theme';
-import { RetroDetails } from '../RetroDetails';
+import { RetroDetails } from '../Board/RetroDetails';
 import Avatar from '../../elements/Avatar';
 
 const PulseCheckTopbar = (props: any) => {

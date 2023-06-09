@@ -15,17 +15,17 @@ import {
 } from '@mui/material';
 import { useNavigate, useParams } from 'react-router-dom';
 import { EmailShareButton } from 'react-share';
-import { ActionType, GlobalContext } from '../contexts/GlobalContext';
+import { ActionType, GlobalContext } from '../../contexts/GlobalContext';
 import EmailIcon from '@mui/icons-material/Email';
 import Box from '@mui/material/Box';
 import CssBaseline from '@mui/material/CssBaseline';
 import QRCode from 'qrcode.react';
 import { useState } from 'react';
 import { CopyToClipboard } from 'react-copy-to-clipboard';
-import { useRetro } from '../helpers';
-import { Retro as RetroType } from '../types';
-import { useAzureAuth } from '../msal/azureauth';
-import { BoardContext } from '../contexts/BoardContext';
+import { useRetro } from '../../helpers';
+import { Retro as RetroType } from '../../types';
+import { BoardContext } from '../../contexts/BoardContext';
+import { useAzureAuth } from '../../msal/azureauth';
 
 export function Onboarding() {
   const { id } = useParams();
@@ -208,7 +208,6 @@ export function Onboarding() {
           style={{ width: '145px', height: '90px' }}
         />
       </Box>
-
       <Slide
         direction="up"
         in={!global.currentRetro && !started && !joining && !id}
@@ -520,7 +519,6 @@ export function Onboarding() {
           </Box>
         </Box>
       </Slide>
-
       <Slide direction="up" in={!!global.currentRetro}>
         <Box
           sx={{

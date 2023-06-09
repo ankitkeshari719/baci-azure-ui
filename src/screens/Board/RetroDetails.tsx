@@ -1,32 +1,23 @@
+import * as React from 'react';
 import {
   Box,
   Button,
-  FormControl,
-  FormHelperText,
   Grid,
-  MenuItem,
-  Select,
-  TextField,
   Tooltip,
   Typography,
 } from '@mui/material';
-import * as React from 'react';
-import { LandingLayout } from './LandingLayout';
-import commonStyles from './../style.module.scss';
-import './../global.scss';
-import { Link, Navigate, useNavigate, useParams } from 'react-router-dom';
-import { useRetro } from '../helpers';
+import { LandingLayout } from '../Home/LandingLayout';
+import commonStyles from './../../style.module.scss';
+import { useNavigate } from 'react-router-dom';
 
-import email from '../assets/img/emailbox.png';
-import copy from '../assets/img/Vectorcopy.png';
-import send from '../assets/img/Vectorsend.png';
-import download from '../assets/img/download.png';
-import { BoardContext } from '../contexts/BoardContext';
-import { Email, EmailOutlined } from '@mui/icons-material';
-import { GlobalContext } from '../contexts/GlobalContext';
+import email from '../../assets/img/emailbox.png';
+import copy from '../../assets/img/Vectorcopy.png';
+import send from '../../assets/img/Vectorsend.png';
+import download from '../../assets/img/download.png';
+import { BoardContext } from '../../contexts/BoardContext';
+import { GlobalContext } from '../../contexts/GlobalContext';
 import { CopyToClipboard } from 'react-copy-to-clipboard';
 import QRCode from 'qrcode.react';
-import * as Icons from 'heroicons-react';
 
 const styles = {
   frame101: {
@@ -149,6 +140,7 @@ const styles = {
     cursor: 'pointer',
   },
 };
+
 export function RetroDetails(props: any) {
   const [global, dispatch] = React.useContext(GlobalContext);
   const [iscopied, setIsCopied] = React.useState(false);
@@ -166,9 +158,11 @@ export function RetroDetails(props: any) {
   const shareRetroDetails = () => {
     navigator.share(shareData);
   };
+
   function goToRetro() {
     navigate('/join/' + global?.currentRetro?.humanId);
   }
+
   const downloadQRCode = () => {
     const canvas = document.querySelector('canvas');
     if (canvas) {
@@ -183,11 +177,13 @@ export function RetroDetails(props: any) {
       downloadLink.click();
     }
   };
+
   const handleTooltipClose = () => {
     setTimeout(() => {
       setIsCopied(false);
     }, 1500);
   };
+  
   return (
     <Grid container spacing={0}>
       {!props?.popover && (

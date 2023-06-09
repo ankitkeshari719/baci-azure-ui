@@ -12,7 +12,7 @@ import {
 } from '@mui/material';
 import * as React from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
-import { LandingLayout } from './../LandingLayout';
+import { LandingLayout } from './LandingLayout';
 import commonStyles from './../../style.module.scss';
 import './../../global.scss';
 import { Retro as RetroType } from '../../types';

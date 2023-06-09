@@ -18,7 +18,7 @@ import commonStyles from './../../style.module.scss';
 import { useNavigate, useParams } from 'react-router-dom';
 import { useAzureAuth } from '../../msal/azureauth';
 import { Dayjs } from 'dayjs';
-import { LandingLayout } from '../LandingLayout';
+import { LandingLayout } from './LandingLayout';
 import { Retro as RetroType } from '../../types';
 import { useRetro } from '../../helpers';
 import { ActionType, GlobalContext } from '../../contexts/GlobalContext';
