@@ -12,13 +12,13 @@ import { BoardContext } from '../../contexts/BoardContext';
 
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
-import { UserAvatar } from '../../atoms/UserAvatar';
+import { UserAvatar } from '../../components/atoms/UserAvatar';
 import { ConfirmContext } from '../../contexts/ConfirmContext';
 import { GlobalContext } from '../../contexts/GlobalContext';
 import useLoadRetro from '../../helpers/hooks/useLoadRetro';
 import { BoardActionType } from '../../helpers/statemachine/BoardStateMachine';
 import theme from '../../helpers/theme/theme';
-import FeedbackPopup from '../../atoms/FeedbackPopup';
+import FeedbackPopup from '../../components/atoms/FeedbackPopup';
 
 export default function Feedback() {
   const navigate = useNavigate();

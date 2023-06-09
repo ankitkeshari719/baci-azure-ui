@@ -1,6 +1,6 @@
 import React, { ComponentProps } from 'react';
 
-import ConfirmDialog from '../atoms/ConfirmDialog';
+import ConfirmDialog from '../components/atoms/ConfirmDialog';
 
 export interface ConfirmAction {
   onConfirm: () => void;

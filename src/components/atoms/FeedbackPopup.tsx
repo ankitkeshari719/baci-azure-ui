@@ -15,21 +15,21 @@ import {
   FEEDBACK_QUESTIONS_COLORS,
   FEEDBACK_QUESTIONS_FILLED,
   FEEDBACK_QUESTIONS_OUTLINE,
-} from '../constants';
+} from '../../constants';
 import LinearProgress, {
   linearProgressClasses,
 } from '@mui/material/LinearProgress';
-import commonStyles from './../style.module.scss';
-import './../global.scss';
+import commonStyles from './../../style.module.scss';
+import './../../global.scss';
 import React from 'react';
-import { BoardActionType } from '../helpers/statemachine/BoardStateMachine';
-import { BoardContext } from '../contexts/BoardContext';
-import { ActionType, GlobalContext } from '../contexts/GlobalContext';
-import { FeedbackEntry } from '../helpers/types';
-import { ConfirmContext } from '../contexts/ConfirmContext';
+import { BoardActionType } from '../../helpers/statemachine/BoardStateMachine';
+import { BoardContext } from '../../contexts/BoardContext';
+import { ActionType, GlobalContext } from '../../contexts/GlobalContext';
+import { FeedbackEntry } from '../../helpers/types';
+import { ConfirmContext } from '../../contexts/ConfirmContext';
 import { useNavigate } from 'react-router-dom';
-import closeImage from '../assets/img/Vectorclose.png';
-import theme from '../helpers/theme/theme';
+import closeImage from '../../assets/img/Vectorclose.png';
+import theme from '../../helpers/theme/theme';
 const BorderLinearProgress = styled(LinearProgress)(({ theme }) => ({
   height: '6px',
   borderRadius: '4px',

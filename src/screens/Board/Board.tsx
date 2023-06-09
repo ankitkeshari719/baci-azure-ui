@@ -25,7 +25,7 @@ import { FeedbackColumn } from '../../components/Elements/FeedbackColumn';
 import { RetroColumn } from '../../components/Elements/RetroColumn';
 import useLoadRetro from '../../helpers/hooks/useLoadRetro';
 import theme from '../../helpers/theme/theme';
-import FeedbackPopup from '../../atoms/FeedbackPopup';
+import FeedbackPopup from '../../components/atoms/FeedbackPopup';
 import Toolbar from '../../components/Elements/Toolbar';
 import SubToolbar from '../../components/Elements/SubToolbar';
 import FirstTimeExperience from '../../components/Elements/FirstTimeExperience';
