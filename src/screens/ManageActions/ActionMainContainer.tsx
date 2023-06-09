@@ -4,14 +4,14 @@ import './styles.scss';
 import { Box, SelectChangeEvent, useMediaQuery } from '@mui/material';
 import { BoardContext } from '../../contexts/BoardContext';
 import { ActionType, GlobalContext } from '../../contexts/GlobalContext';
-import { BoardActionType } from '../../statemachine/BoardStateMachine';
-import { ActionInterface, DyanamicDialog } from '../../types';
+import { BoardActionType } from '../../helpers/statemachine/BoardStateMachine';
+import { ActionInterface, DyanamicDialog } from '../../helpers/types';
 import ActionsListFacilitator from './ActionsListFacilitator';
 
 import ActionHeader from './ActionHeader';
 import AddAction from './AddAction';
 import ZeroActions from './ZeroActions';
-import theme from '../../theme/theme';
+import theme from '../../helpers/theme/theme';
 import ActionsListParticipant from './ActionsListParticipant';
 import { NONE, VALUE_ASC, VALUE_DSC, VOTES_ASC, VOTES_DSC } from './const';
 import ActionSubToolbar from './ActionSubToolbar';

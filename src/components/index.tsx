@@ -1,4 +1,4 @@
-export { ContainedButton } from './ContainedButton';
-export { OutlinedButton } from './OutlinedButton';
-export { ButtonWithIcon } from './ButtonWithIcon';
-export { TextButton } from './TextButton';
+export { ContainedButton } from './CustomizedButton/ContainedButton';
+export { OutlinedButton } from './CustomizedButton/OutlinedButton';
+export { ButtonWithIcon } from './CustomizedButton/ButtonWithIcon';
+export { TextButton } from './CustomizedButton/TextButton';

@@ -18,7 +18,7 @@ import { pulseChecksData, pulseCheckInterface } from './const';
 import { ContainedButton, OutlinedButton } from '../../components';
 import * as Icons from 'heroicons-react';
 import { createUseStyles } from 'react-jss';
-import theme from '../../theme/theme';
+import theme from '../../helpers/theme/theme';
 import { LearnMorePulseCheck } from './LearnMorePulseCheck';
 
 function SampleNextArrow(props: any) {

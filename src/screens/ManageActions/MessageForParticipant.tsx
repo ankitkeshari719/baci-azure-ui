@@ -6,8 +6,8 @@ import {
   LightBulbIcon,
 } from '@heroicons/react/24/outline';
 import { OutlinedInput, Box, styled, Typography, Tooltip } from '@mui/material';
-import ButtonWithIconWithNoBorder from '../../components/ButtonWithIconWithNoBorder';
-import { Actions } from '../../types';
+import ButtonWithIconWithNoBorder from '../../components/CustomizedButton/ButtonWithIconWithNoBorder';
+import { Actions } from '../../helpers/types';
 import { MAX_CARD_TEXT_LENGTH } from '../../constants';
 import { GlobalContext } from '../../contexts/GlobalContext';
 

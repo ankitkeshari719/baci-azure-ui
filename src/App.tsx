@@ -1,7 +1,7 @@
 import { BrowserRouter, Outlet, Route, Routes } from 'react-router-dom';
-import { SnackMessage } from './elements/SnackMessage';
+import { SnackMessage } from './components/Elements/SnackMessage';
 import { ThemeProvider } from '@mui/material/styles';
-import theme from './theme/theme';
+import theme from './helpers/theme/theme';
 import { MsalProvider, useMsal } from '@azure/msal-react';
 import { IPublicClientApplication } from '@azure/msal-browser';
 
@@ -12,14 +12,14 @@ import { ErrorProvider } from './contexts/ErrorContext';
 import { GlobalProvider } from './contexts/GlobalContext';
 import { SocketProvider } from './contexts/SocketProvider';
 
-import { Offboarding } from './screens/Offboarding';
-import { RetroDetails } from './screens/RetroDetails';
+import { Offboarding } from './screens/Others/Offboarding';
+import { RetroDetails } from './screens/Board/RetroDetails';
 import { ParticipantWaitingPage } from './screens/Board/ParticipantWaitingPage';
 import { CreateRetroMain } from './screens/CreateRetro/CreateRetroMain';
-import { StartRetro } from './screens/StartRetro';
+import { StartRetro } from './screens/Home/StartRetro';
 import { Grid } from '@mui/material';
 import { PageNotFound } from './screens/Others/PageNotFound';
-import Feedback from './screens/Feedback';
+import Feedback from './screens/Others/Feedback';
 import Board from './screens/Board/Board';
 import PulseCheckMain from './screens/PulseChecks/PulseCheckMain';
 import SummaryReportMain from './screens/SummaryReports/SummaryReportMain';

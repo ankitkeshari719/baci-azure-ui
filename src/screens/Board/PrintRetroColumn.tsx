@@ -3,19 +3,19 @@ import React, { ReactElement, useMemo } from 'react';
 import Draggable, { DraggableData, DraggableEvent } from 'react-draggable';
 import { UNGROUPED } from '../../constants';
 import { BoardContext } from '../../contexts/BoardContext';
-import { BoardActionType } from '../../statemachine/BoardStateMachine';
-import { Card, Card as RetroCardType, CardGroup, Column } from '../../types';
+import { BoardActionType } from '../../helpers/statemachine/BoardStateMachine';
+import { Card, Card as RetroCardType, CardGroup, Column } from '../../helpers/types';
 import shortid from 'shortid';
 import { ActionType, GlobalContext } from '../../contexts/GlobalContext';
-import theme from '../../theme/theme';
+import theme from '../../helpers/theme/theme';
 import {
   DragDropContext,
   Draggable as Drag,
   Droppable,
 } from 'react-beautiful-dnd';
-import ColumnHeader from '../../elements/ColumnHeader';
-import { RetroCard } from '../../elements/retroCard/RetroCard';
-import { RetroCardGroup } from '../../elements/RetroCardGroup';
+import ColumnHeader from '../../components/Elements/ColumnHeader';
+import { RetroCard } from '../../components/Elements/retroCard/RetroCard';
+import { RetroCardGroup } from '../../components/Elements/RetroCardGroup';
 
 export function PrintRetroColumn({
   column,

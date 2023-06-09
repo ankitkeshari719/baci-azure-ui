@@ -5,7 +5,7 @@ import {
   Retro,
   SnackMessageClass,
   User,
-} from '../types';
+} from '../helpers/types';
 
 export enum ActionType {
   SET_CURRENT_RETRO = 'setCurrentRetro',

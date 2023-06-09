@@ -14,10 +14,10 @@ import React from 'react';
 import BACILogo from '../../assets/img/bacilogobeta.svg';
 import { BoardContext } from '../../contexts/BoardContext';
 import { GlobalContext } from '../../contexts/GlobalContext';
-import { BoardActionType } from '../../statemachine/BoardStateMachine';
-import theme from '../../theme/theme';
-import { RetroDetails } from '../RetroDetails';
-import Avatar from '../../elements/Avatar';
+import { BoardActionType } from '../../helpers/statemachine/BoardStateMachine';
+import theme from '../../helpers/theme/theme';
+import { RetroDetails } from '../Board/RetroDetails';
+import Avatar from '../../components/Elements/Avatar';
 
 const PulseCheckTopbar = (props: any) => {
   const isXsUp = useMediaQuery(theme.breakpoints.only('xs'));

@@ -1,19 +1,18 @@
 import { ActionType, GlobalContext } from '../contexts/GlobalContext';
-//import { createRetro,getRetro,addRetroAction,getRetroByHumanId } from "../firebase/firestore";
 import {
   createRetro,
   getRetro,
   addRetroAction,
   getRetroByHumanId,
-} from '../msal/services';
-import { Action, Retro } from '../types';
+} from './msal/services';
+import { Action, Retro } from './types';
 
 import React from 'react';
 import shortid from 'shortid';
 import {
   BoardActionType,
   BOARD_STATE_MACHINE_VERSION,
-} from '../statemachine/BoardStateMachine';
+} from './statemachine/BoardStateMachine';
 import { pulseCheckInterface } from '../screens/CreateRetro/const';
 import { SocketContext } from '../contexts/SocketProvider';
 

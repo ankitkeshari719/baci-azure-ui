@@ -4,9 +4,9 @@ import { Box, Grid, Typography } from '@mui/material';
 import { Row, Col } from 'react-bootstrap';
 import './styles.scss';
 import '../../global.scss';
-import WordCloud from '../../elements/WordCloud';
+import WordCloud from '../../components/Elements/WordCloud';
 import { LazyLoadImage } from 'react-lazy-load-image-component';
-import { Word } from '../../elements/WordCloud';
+import { Word } from '../../components/Elements/WordCloud';
 
 const styles = {
   whatDidNotWellBox: {

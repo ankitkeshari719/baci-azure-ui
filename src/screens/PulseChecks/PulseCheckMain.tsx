@@ -7,9 +7,9 @@ import SimplePulseCheck from './SimplePulseCheck';
 import BusinessAgility from './BusinessAgility';
 import PulseCheckTopbar from './PulseCheckTopbar';
 import { DeploymentPopUp } from '../Utils/Alerts/DeploymentPopUp';
-import theme from '../../theme/theme';
-import useReRoute from '../../hooks/useReRoute';
-import useLoadRetro from '../../hooks/useLoadRetro';
+import theme from '../../helpers/theme/theme';
+import useReRoute from '../../helpers/hooks/useReRoute';
+import useLoadRetro from '../../helpers/hooks/useLoadRetro';
 
 export default function PulseCheckMain() {
   const navigate = useNavigate();

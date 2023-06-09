@@ -15,12 +15,12 @@ import './styles.scss';
 import Slider from 'react-slick';
 import { templatesData } from './const';
 import { LearnMore } from './LearnMore';
-import { ContainedButton } from '../../components/ContainedButton';
-import { OutlinedButton } from '../../components/OutlinedButton';
+import { ContainedButton } from '../../components/CustomizedButton/ContainedButton';
+import { OutlinedButton } from '../../components/CustomizedButton/OutlinedButton';
 import { CustomizeTemplate } from './CustomizeTemplate';
 import * as Icons from 'heroicons-react';
 import { createUseStyles } from 'react-jss';
-import theme from '../../theme/theme';
+import theme from '../../helpers/theme/theme';
 
 function SampleNextArrow(props: any) {
   const { className, style, onClick } = props;

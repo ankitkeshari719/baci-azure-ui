@@ -3,8 +3,8 @@ import { useNavigate } from 'react-router-dom';
 import { ContainedButton } from '../../components';
 import { BoardContext } from '../../contexts/BoardContext';
 import { ActionType, GlobalContext } from '../../contexts/GlobalContext';
-import { getRetro } from '../../msal/services';
-import { BoardActionType } from '../../statemachine/BoardStateMachine';
+import { getRetro } from '../../helpers/msal/services';
+import { BoardActionType } from '../../helpers/statemachine/BoardStateMachine';
 import { TimeInputDialog } from './TimeInputDialog';
 
 export function StartRetroWithTemplate() {

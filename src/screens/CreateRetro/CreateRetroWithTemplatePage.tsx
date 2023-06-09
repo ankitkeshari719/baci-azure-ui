@@ -4,7 +4,7 @@ import '../../global.scss';
 import './styles.scss';
 import { useNavigate, useParams } from 'react-router-dom';
 import { useRetro } from '../../helpers';
-import { useAzureAuth } from '../../msal/azureauth';
+import { useAzureAuth } from '../../helpers/msal/azureauth';
 import { GlobalContext } from '../../contexts/GlobalContext';
 import { ActionType } from '../../contexts/GlobalContext';
 import { BaciDetailsTab } from './BaciDetailsTab';
@@ -13,7 +13,7 @@ import { PulseCheckTab } from './PulseCheckTab';
 import { UserDetailsTab } from './UserDetailsTab';
 import { pulseCheckInterface, pulseChecksData, templatesData } from './const';
 import { UserTypeArray } from '../../constants';
-import { getRetro } from '../../msal/services';
+import { getRetro } from '../../helpers/msal/services';
 import { StartRetroWithTemplate } from './StartRetroWithTemplate';
 
 type Props = {

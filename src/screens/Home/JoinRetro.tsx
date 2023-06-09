@@ -12,21 +12,21 @@ import {
 } from '@mui/material';
 import * as React from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
-import { LandingLayout } from './../LandingLayout';
+import { LandingLayout } from './LandingLayout';
 import commonStyles from './../../style.module.scss';
 import './../../global.scss';
-import { Retro as RetroType } from '../../types';
+import { Retro as RetroType } from '../../helpers/types';
 import { useRetro } from '../../helpers';
 import { ActionType, GlobalContext } from '../../contexts/GlobalContext';
-import Avatar from '../../elements/Avatar';
+import Avatar from '../../components/Elements/Avatar';
 import { avatarName } from '../../constants/AvatarName';
-import { useAzureAuth } from '../../msal/azureauth';
+import { useAzureAuth } from '../../helpers/msal/azureauth';
 import { UserTypeArray } from '../../constants';
 import { BoardContext } from '../../contexts/BoardContext';
-import theme from '../../theme/theme';
+import theme from '../../helpers/theme/theme';
 import { SocketContext } from '../../contexts/SocketProvider';
 import { DeploymentPopUp } from './../Utils/Alerts/DeploymentPopUp';
-import useReRoute from '../../hooks/useReRoute';
+import useReRoute from '../../helpers/hooks/useReRoute';
 import { PrivacyAndRetentionDialog } from '../Utils/Dialogs/PrivacyAndRetentionDialog';
 const AVATAR_CHARACTER_LIMIT = 30;
 const styles = {

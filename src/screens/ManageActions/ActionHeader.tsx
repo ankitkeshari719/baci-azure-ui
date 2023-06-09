@@ -2,7 +2,7 @@ import * as React from 'react';
 import './styles.scss';
 
 import { Typography, Box } from '@material-ui/core';
-import { ActionInterface, Actions } from '../../types';
+import { ActionInterface, Actions } from '../../helpers/types';
 import { ActionType } from '../../contexts/GlobalContext';
 import * as Icons from 'heroicons-react';
 import {
@@ -22,7 +22,7 @@ import {
 } from '@mui/material';
 import { MAX_CARD_TEXT_LENGTH } from '../../constants';
 import { NONE, VOTES_ASC, VOTES_DSC, VALUE_ASC, VALUE_DSC } from './const';
-import theme from '../../theme/theme';
+import theme from '../../helpers/theme/theme';
 import { BoardContext } from '../../contexts/BoardContext';
 
 type Props = {

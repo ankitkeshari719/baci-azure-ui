@@ -1,5 +1,5 @@
 import React, { ComponentProps, Dispatch } from 'react';
-import { LastRetroName } from '../types';
+import { LastRetroName } from '../helpers/types';
 
 export enum ActionType {
   SET_LAST_RETRO_NAME = 'setLastRetroName',
