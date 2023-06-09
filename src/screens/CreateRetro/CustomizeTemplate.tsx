@@ -17,10 +17,10 @@ import './styles.scss';
 import { TopBar } from './TopBar';
 import * as Icons from 'heroicons-react';
 import EdiText from 'react-editext';
-import theme from '../../theme/theme';
+import theme from '../../helpers/theme/theme';
 import './styles.scss';
 import { BoardContext } from '../../contexts/BoardContext';
-import { BoardActionType } from '../../statemachine/BoardStateMachine';
+import { BoardActionType } from '../../helpers/statemachine/BoardStateMachine';
 import { ActionType, GlobalContext } from '../../contexts/GlobalContext';
 import { CustomizeTemplateDialog } from './CustomizeTemplateDialog';
 

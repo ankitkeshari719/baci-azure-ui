@@ -15,7 +15,7 @@ import { CopyToClipboard } from 'react-copy-to-clipboard';
 import { GlobalContext } from '../../contexts/GlobalContext';
 import QRCode from 'qrcode.react';
 import React from 'react';
-import theme from '../../theme/theme';
+import theme from '../../helpers/theme/theme';
 
 export default function SharePanel({ onClose }: { onClose: () => void }) {
   const isXsUp = useMediaQuery(theme.breakpoints.only('xs'));

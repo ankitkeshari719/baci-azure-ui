@@ -3,7 +3,7 @@ import { eng, removeStopwords } from 'stopword';
 import ReactToPrint from 'react-to-print';
 import moment from 'moment';
 import * as Icons from 'heroicons-react';
-import theme from '../../theme/theme';
+import theme from '../../helpers/theme/theme';
 import {
   Box,
   Typography,
@@ -38,21 +38,21 @@ import { BoardContext } from '../../contexts/BoardContext';
 import { ActionType, GlobalContext } from '../../contexts/GlobalContext';
 import { ViewParticipants } from './ViewParticipants';
 import { ContainedButton } from '../../components';
-import { addFeedback } from '../../msal/services';
+import { addFeedback } from '../../helpers/msal/services';
 import happy from '../../assets/img/happy.png';
 import sad from '../../assets/img/sad.png';
 import neutral from '../../assets/img/neutral.png';
 import happyMask from '../../assets/img/Happy_Mask.png';
 import sadMask from '../../assets/img/sad_mask.png';
 import neutralMask from '../../assets/img/Neutral_Mask.png';
-import { BoardActionType } from '../../statemachine/BoardStateMachine';
+import { BoardActionType } from '../../helpers/statemachine/BoardStateMachine';
 import { FeedbackSubmitDialog } from './FeedbackSubmitDialog';
 import DidNotWentWell from './DidNotWentWell';
 import WhatWentWell from './WhatWentWellCoulmn';
 import PulseCheckSection from './PulseCheckSection';
 import DevelopActionRedesign from './DevelopActionRedesign';
-import useLoadRetro from '../../hooks/useLoadRetro';
-import { ActionInterface } from '../../types';
+import useLoadRetro from '../../helpers/hooks/useLoadRetro';
+import { ActionInterface } from '../../helpers/types';
 import ManageActionSummary from './ManageActionSummary';
 
 ChartJS.register(

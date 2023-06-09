@@ -22,8 +22,8 @@ import PlayArrowIcon from '@mui/icons-material/PlayArrow';
 import React from 'react';
 import RemoveIcon from '@mui/icons-material/Remove';
 import { Stop } from '@mui/icons-material';
-import { BoardActionType } from '../../statemachine/BoardStateMachine';
-import theme from '../../theme/theme';
+import { BoardActionType } from '../../helpers/statemachine/BoardStateMachine';
+import theme from '../../helpers/theme/theme';
 
 const RoundButton = styled('button')({
   background: '#159ADD',

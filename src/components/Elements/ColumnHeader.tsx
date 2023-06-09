@@ -2,8 +2,8 @@
 import { FormControlLabel, FormGroup, Grid, Switch, TextField, ThemeProvider, Tooltip, Typography } from '@mui/material';
 import React, { useEffect } from 'react';
 import { ActionType } from '../../contexts/GlobalContext';
-import theme from '../../theme/theme';
-import { Column } from '../../types';
+import theme from '../../helpers/theme/theme';
+import { Column } from '../../helpers/types';
 import RefreshIcon from '@mui/icons-material/Refresh';
 import { UNGROUPED } from '../../constants';
 const ColumnHeader = ({

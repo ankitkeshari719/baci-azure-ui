@@ -15,9 +15,9 @@ import { useNavigate } from 'react-router-dom';
 import { UserAvatar } from '../../atoms/UserAvatar';
 import { ConfirmContext } from '../../contexts/ConfirmContext';
 import { GlobalContext } from '../../contexts/GlobalContext';
-import useLoadRetro from '../../hooks/useLoadRetro';
-import { BoardActionType } from '../../statemachine/BoardStateMachine';
-import theme from '../../theme/theme';
+import useLoadRetro from '../../helpers/hooks/useLoadRetro';
+import { BoardActionType } from '../../helpers/statemachine/BoardStateMachine';
+import theme from '../../helpers/theme/theme';
 import FeedbackPopup from '../../atoms/FeedbackPopup';
 
 export default function Feedback() {

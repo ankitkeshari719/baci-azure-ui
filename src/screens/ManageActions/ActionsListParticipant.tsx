@@ -1,7 +1,7 @@
 import * as React from 'react';
 import './styles.scss';
 
-import { ActionInterface } from '../../types';
+import { ActionInterface } from '../../helpers/types';
 import ActionItem from './ActionItem';
 import { Box, List } from '@mui/material';
 import { Typography } from '@material-ui/core';

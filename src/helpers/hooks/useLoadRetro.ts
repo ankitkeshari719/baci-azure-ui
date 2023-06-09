@@ -1,11 +1,11 @@
 import { useNavigate, useParams } from 'react-router-dom';
-import { BoardContext } from '../contexts/BoardContext';
+import { BoardContext } from '../../contexts/BoardContext';
 import { BoardActionType } from '../statemachine/BoardStateMachine';
-import { ActionType, GlobalContext } from '../contexts/GlobalContext';
+import { ActionType, GlobalContext } from '../../contexts/GlobalContext';
 import log from 'loglevel';
 import React from 'react';
-import { FEATURE_FLAGS } from '../constants';
-import { ErrorContext } from '../contexts/ErrorContext';
+import { FEATURE_FLAGS } from '../../constants';
+import { ErrorContext } from '../../contexts/ErrorContext';
 import { getRetro } from '../msal/services';
 import { useMediaQuery } from '@mui/material';
 import theme from '../theme/theme';

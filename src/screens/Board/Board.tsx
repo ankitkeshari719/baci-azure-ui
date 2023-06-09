@@ -18,13 +18,13 @@ import { useNavigate } from 'react-router-dom';
 import shortid from 'shortid';
 import { sentence } from 'txtgen';
 import { BoardContext } from '../../contexts/BoardContext';
-import { BoardActionType } from '../../statemachine/BoardStateMachine';
+import { BoardActionType } from '../../helpers/statemachine/BoardStateMachine';
 import { ConfirmContext } from '../../contexts/ConfirmContext';
 import { ActionType, GlobalContext } from '../../contexts/GlobalContext';
 import { FeedbackColumn } from '../../components/Elements/FeedbackColumn';
 import { RetroColumn } from '../../components/Elements/RetroColumn';
-import useLoadRetro from '../../hooks/useLoadRetro';
-import theme from '../../theme/theme';
+import useLoadRetro from '../../helpers/hooks/useLoadRetro';
+import theme from '../../helpers/theme/theme';
 import FeedbackPopup from '../../atoms/FeedbackPopup';
 import Toolbar from '../../components/Elements/Toolbar';
 import SubToolbar from '../../components/Elements/SubToolbar';
@@ -37,7 +37,7 @@ import moment from 'moment';
 import { PrintRetroColumn } from './PrintRetroColumn';
 import ReactToPrint from 'react-to-print';
 import { OutlinedButton } from '../../components';
-import useReRoute from '../../hooks/useReRoute';
+import useReRoute from '../../helpers/hooks/useReRoute';
 import ActionMainContainer from '../ManageActions/ActionMainContainer';
 
 interface StyledTabsProps {

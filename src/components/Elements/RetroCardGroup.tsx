@@ -6,8 +6,8 @@ import {
   Typography,
 } from '@mui/material';
 import { BoardContext } from '../../contexts/BoardContext';
-import { BoardActionType } from '../../statemachine/BoardStateMachine';
-import { CardGroup, Column } from '../../types';
+import { BoardActionType } from '../../helpers/statemachine/BoardStateMachine';
+import { CardGroup, Column } from '../../helpers/types';
 
 import DeleteIcon from '@mui/icons-material/Delete';
 import React from 'react';

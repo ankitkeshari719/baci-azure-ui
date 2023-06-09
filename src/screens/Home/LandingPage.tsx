@@ -11,18 +11,18 @@ import {
   Typography,
   useMediaQuery,
 } from '@mui/material';
-import theme from '../../theme/theme';
+import theme from '../../helpers/theme/theme';
 import './../../global.scss';
 import './styles.scss';
 import commonStyles from './../../style.module.scss';
 import { useNavigate, useParams } from 'react-router-dom';
-import { useAzureAuth } from '../../msal/azureauth';
+import { useAzureAuth } from '../../helpers/msal/azureauth';
 import { Dayjs } from 'dayjs';
 import { LandingLayout } from './LandingLayout';
-import { Retro as RetroType } from '../../types';
+import { Retro as RetroType } from '../../helpers/types';
 import { useRetro } from '../../helpers';
 import { ActionType, GlobalContext } from '../../contexts/GlobalContext';
-import { addDeploymentData } from '../../msal/services';
+import { addDeploymentData } from '../../helpers/msal/services';
 import { AddDeploymentDataDialog } from '../Utils/Dialogs/AddDeploymentDataDialog';
 import { DeploymentPopUp } from '../Utils/Alerts/DeploymentPopUp';
 import { PrivacyAndRetentionDialog } from '../Utils/Dialogs/PrivacyAndRetentionDialog';

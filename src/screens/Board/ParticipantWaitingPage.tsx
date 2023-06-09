@@ -2,13 +2,13 @@ import { Box, Grid, Typography, useMediaQuery } from '@mui/material';
 import React from 'react';
 import commonStyles from './../../style.module.scss';
 import gif from '../../assets/img/participant_waiting.gif';
-import useLoadRetro from '../../hooks/useLoadRetro';
+import useLoadRetro from '../../helpers/hooks/useLoadRetro';
 import StartRetroButton from '../../components/Elements/StartRetroButton';
 import Toolbar from '../../components/Elements/Toolbar';
 import { GlobalContext } from '../../contexts/GlobalContext';
-import theme from '../../theme/theme';
+import theme from '../../helpers/theme/theme';
 import { DeploymentPopUp } from '../Utils/Alerts/DeploymentPopUp';
-import useReRoute from '../../hooks/useReRoute';
+import useReRoute from '../../helpers/hooks/useReRoute';
 
 export function ParticipantWaitingPage() {
   const [global, dispatch] = React.useContext(GlobalContext);

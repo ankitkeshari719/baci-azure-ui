@@ -12,12 +12,12 @@ import {
   useMediaQuery,
 } from '@mui/material';
 import { BoardContext } from '../../contexts/BoardContext';
-import { BoardActionType } from '../../statemachine/BoardStateMachine';
+import { BoardActionType } from '../../helpers/statemachine/BoardStateMachine';
 
 import CloseIcon from '@mui/icons-material/Close';
 import React, { useState } from 'react';
 import { GlobalContext } from '../../contexts/GlobalContext';
-import theme from '../../theme/theme';
+import theme from '../../helpers/theme/theme';
 import EditIcon from '@mui/icons-material/Edit';
 import DoneIcon from '@mui/icons-material/Done';
 export default function RetroPropsPanel({

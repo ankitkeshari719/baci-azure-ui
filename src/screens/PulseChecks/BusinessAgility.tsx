@@ -18,7 +18,7 @@ import {
 } from '@mui/material';
 import commonStyles from './../../style.module.scss';
 import './styles.scss';
-import theme from '../../theme/theme';
+import theme from '../../helpers/theme/theme';
 import * as Icons from 'heroicons-react';
 
 import Bluepulse from '../../assets/img/bluepulse.png';
@@ -33,8 +33,8 @@ import { BoardContext } from '../../contexts/BoardContext';
 import { useNavigate } from 'react-router-dom';
 import { ConfirmContext } from '../../contexts/ConfirmContext';
 import { GlobalContext, ActionType } from '../../contexts/GlobalContext';
-import useLoadRetro from '../../hooks/useLoadRetro';
-import { BoardActionType } from '../../statemachine/BoardStateMachine';
+import useLoadRetro from '../../helpers/hooks/useLoadRetro';
+import { BoardActionType } from '../../helpers/statemachine/BoardStateMachine';
 import { ContainedButton } from '../../components';
 
 const BootstrapTooltip = styled(({ className, ...props }: TooltipProps) => (

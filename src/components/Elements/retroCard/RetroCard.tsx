@@ -17,8 +17,8 @@ import './RetroCard.scss';
 import { NestedDropdown } from 'mui-nested-menu';
 import { MAX_CARD_TEXT_LENGTH, UNGROUPED } from '../../../constants';
 import { BoardContext } from '../../../contexts/BoardContext';
-import { BoardActionType } from '../../../statemachine/BoardStateMachine';
-import { Card as RetroCardType, CardGroup, Column } from '../../../types';
+import { BoardActionType } from '../../../helpers/statemachine/BoardStateMachine';
+import { Card as RetroCardType, CardGroup, Column } from '../../../helpers/types';
 
 import DeleteForever from '@mui/icons-material/DeleteForever';
 import MoveDownIcon from '@mui/icons-material/MoveDown';
@@ -27,7 +27,7 @@ import React from 'react';
 import shortid from 'shortid';
 import { ConfirmContext } from '../../../contexts/ConfirmContext';
 import { ActionType, GlobalContext } from '../../../contexts/GlobalContext';
-import theme from '../../../theme/theme';
+import theme from '../../../helpers/theme/theme';
 import Avatar from '../Avatar';
 
 const bumpAnimation = keyframes`

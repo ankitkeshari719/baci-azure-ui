@@ -1,10 +1,10 @@
-import { Action, BoardState } from '../types';
+import { Action, BoardState } from '../helpers/types';
 import {
   BOARD_STATE_MACHINE_VERSION,
   BoardActionType,
   processAction,
   validateAction,
-} from '../statemachine/BoardStateMachine';
+} from '../helpers/statemachine/BoardStateMachine';
 import {
   Box,
   CircularProgress,
@@ -23,7 +23,7 @@ import {
   addRetroAction,
   getRetroActions,
   // onSnapshotRetroActions
-} from '../msal/services';
+} from '../helpers/msal/services';
 
 import { GlobalContext } from './GlobalContext';
 import { INITIAL_COLUMNS } from '../constants';
@@ -31,7 +31,7 @@ import _ from 'lodash';
 import log from 'loglevel';
 import shortid from 'shortid';
 import stringifyDate from 'json-stringify-date';
-import { useSocket } from '../hooks/useSocket';
+import { useSocket } from '../helpers/hooks/useSocket';
 import { SocketContext } from './SocketProvider';
 import { ErrorContext } from './ErrorContext';
 

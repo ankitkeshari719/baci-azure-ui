@@ -19,13 +19,13 @@ import EmojiEventsIcon from '@mui/icons-material/EmojiEvents';
 import EmojiEventsOutlinedIcon from '@mui/icons-material/EmojiEventsOutlined';
 import { FEATURE_FLAGS } from '../../constants';
 import React from 'react';
-import { addFeedback } from '../../msal/services';
+import { addFeedback } from '../../helpers/msal/services';
 import commonStyles from './../../style.module.scss';
 import './../../global.scss';
 import successAnimation from './../../assets/img/success-animation.gif';
 import { useNavigate } from 'react-router-dom';
 import Toolbar from '../../components/Elements/Toolbar';
-import theme from '../../theme/theme';
+import theme from '../../helpers/theme/theme';
 import { DeploymentPopUp } from '../Utils/Alerts/DeploymentPopUp';
 
 export function Offboarding() {

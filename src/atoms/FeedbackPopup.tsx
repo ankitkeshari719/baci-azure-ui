@@ -22,14 +22,14 @@ import LinearProgress, {
 import commonStyles from './../style.module.scss';
 import './../global.scss';
 import React from 'react';
-import { BoardActionType } from '../statemachine/BoardStateMachine';
+import { BoardActionType } from '../helpers/statemachine/BoardStateMachine';
 import { BoardContext } from '../contexts/BoardContext';
 import { ActionType, GlobalContext } from '../contexts/GlobalContext';
-import { FeedbackEntry } from '../types';
+import { FeedbackEntry } from '../helpers/types';
 import { ConfirmContext } from '../contexts/ConfirmContext';
 import { useNavigate } from 'react-router-dom';
 import closeImage from '../assets/img/Vectorclose.png';
-import theme from '../theme/theme';
+import theme from '../helpers/theme/theme';
 const BorderLinearProgress = styled(LinearProgress)(({ theme }) => ({
   height: '6px',
   borderRadius: '4px',

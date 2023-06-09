@@ -20,7 +20,7 @@ import { OutlinedButton } from '../../components/CustomizedButton/OutlinedButton
 import { CustomizeTemplate } from './CustomizeTemplate';
 import * as Icons from 'heroicons-react';
 import { createUseStyles } from 'react-jss';
-import theme from '../../theme/theme';
+import theme from '../../helpers/theme/theme';
 
 function SampleNextArrow(props: any) {
   const { className, style, onClick } = props;

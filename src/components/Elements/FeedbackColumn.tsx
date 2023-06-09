@@ -2,13 +2,13 @@ import { styled, useMediaQuery } from '@mui/material';
 import React, { ReactElement } from 'react';
 import { FEATURE_FLAGS, FEEDBACK_QUESTIONS } from '../../constants';
 import { BoardContext } from '../../contexts/BoardContext';
-import { BoardActionType } from '../../statemachine/BoardStateMachine';
+import { BoardActionType } from '../../helpers/statemachine/BoardStateMachine';
 import { ConfirmContext } from '../../contexts/ConfirmContext';
 import { ActionType, GlobalContext } from '../../contexts/GlobalContext';
 
 import { useNavigate } from 'react-router';
-import theme from '../../theme/theme';
-import { FeedbackEntry } from '../../types';
+import theme from '../../helpers/theme/theme';
+import { FeedbackEntry } from '../../helpers/types';
 
 const ColumnComponent = styled('div')({
   height: 'calc(var(--app-height) - 120px)',

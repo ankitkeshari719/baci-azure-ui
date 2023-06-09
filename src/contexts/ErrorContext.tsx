@@ -3,7 +3,7 @@ import React, { ComponentProps } from 'react';
 
 import ErrorDialog from '../atoms/ErrorDialog';
 import ErrorMobileDialog from '../atoms/ErrorMobileDialog';
-import theme from '../theme/theme';
+import theme from '../helpers/theme/theme';
 
 export interface ErrorContextType {
   error: string | undefined;

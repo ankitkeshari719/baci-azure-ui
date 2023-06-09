@@ -19,7 +19,7 @@ import { BoardContext } from '../../contexts/BoardContext';
 import CheckIcon from '@mui/icons-material/Check';
 import CloseIcon from '@mui/icons-material/Close';
 import { UserAvatar } from '../../atoms/UserAvatar';
-import theme from '../../theme/theme';
+import theme from '../../helpers/theme/theme';
 
 export default function ParticipantsPanel({
   onClose,

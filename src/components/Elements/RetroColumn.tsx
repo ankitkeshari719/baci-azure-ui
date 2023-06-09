@@ -3,12 +3,12 @@ import React, { ReactElement, useMemo } from 'react';
 import Draggable, { DraggableData, DraggableEvent } from 'react-draggable';
 import { UNGROUPED, SUGGESTEDGROUP } from '../../constants';
 import { BoardContext } from '../../contexts/BoardContext';
-import { BoardActionType } from '../../statemachine/BoardStateMachine';
-import { Card, Card as RetroCardType, CardGroup, Column } from '../../types';
+import { BoardActionType } from '../../helpers/statemachine/BoardStateMachine';
+import { Card, Card as RetroCardType, CardGroup, Column } from '../../helpers/types';
 import shortid from 'shortid';
 import { ActionType, GlobalContext } from '../../contexts/GlobalContext';
 import { RetroCard } from './retroCard/RetroCard';
-import theme from '../../theme/theme';
+import theme from '../../helpers/theme/theme';
 import { RetroCardGroup } from './RetroCardGroup';
 import Masonry from '@mui/lab/Masonry';
 
@@ -19,7 +19,7 @@ import {
 } from 'react-beautiful-dnd';
 import ColumnHeader from './ColumnHeader';
 import RetroColumnBottom from './RetroColumnBottom';
-import { groupSuggestion, keywordExtraction } from '../../msal/services';
+import { groupSuggestion, keywordExtraction } from '../../helpers/msal/services';
 
 const ColumnComponent = styled('div')({
   height: 'calc(var(--app-height) - 160px)',

@@ -21,8 +21,8 @@ import './../../global.scss';
 import email from '../../assets/img/emailbox.png';
 
 import { GlobalContext } from '../../contexts/GlobalContext';
-import useLoadRetro from '../../hooks/useLoadRetro';
-import theme from '../../theme/theme';
+import useLoadRetro from '../../helpers/hooks/useLoadRetro';
+import theme from '../../helpers/theme/theme';
 import Toolbar from '../../components/Elements/Toolbar';
 import StartRetroButton from '../../components/Elements/StartRetroButton';
 import { DeploymentPopUp } from '../Utils/Alerts/DeploymentPopUp';

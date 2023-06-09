@@ -2,7 +2,7 @@ import * as React from 'react';
 import './styles.scss';
 import * as Icons from 'heroicons-react';
 
-import { ActionInterface } from '../../types';
+import { ActionInterface } from '../../helpers/types';
 import { ListItemIcon, ListItemText } from '@material-ui/core';
 import {
   Box,
@@ -16,7 +16,7 @@ import {
   TextField,
   Typography,
 } from '@mui/material';
-import { BoardActionType } from '../../statemachine/BoardStateMachine';
+import { BoardActionType } from '../../helpers/statemachine/BoardStateMachine';
 import { BoardContext } from '../../contexts/BoardContext';
 import { ActionType, GlobalContext } from '../../contexts/GlobalContext';
 import { MAX_CARD_TEXT_LENGTH } from '../../constants';

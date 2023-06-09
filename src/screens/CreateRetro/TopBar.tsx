@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { AppBar, Box, Toolbar, useMediaQuery } from '@mui/material';
-import theme from '../../theme/theme';
+import theme from '../../helpers/theme/theme';
 import BACILogo from '../../assets/img/bacilogobeta.svg';
 import Link from '@mui/material/Link';
 

@@ -3,7 +3,7 @@ import { Box } from '@mui/system';
 import React from 'react';
 
 import { GlobalContext, ActionType} from '../../contexts/GlobalContext';
-import theme from '../../theme/theme';
+import theme from '../../helpers/theme/theme';
 
 const FirstTimeExperience = (props: any) => {
   

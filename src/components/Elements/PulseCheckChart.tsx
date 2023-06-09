@@ -2,7 +2,7 @@ import { FunctionComponent, useEffect } from 'react';
 import { groupSort, sum } from 'd3';
 
 import React from 'react';
-import { StackedBarChartSVG } from '../../thirdparty/StackedBarChartSVG';
+import { StackedBarChartSVG } from '../../helpers/thirdparty/StackedBarChartSVG';
 
 export interface Question {
   question: string;

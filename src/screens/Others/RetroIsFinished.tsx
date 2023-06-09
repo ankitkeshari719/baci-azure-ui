@@ -5,8 +5,8 @@ import animation from '../../assets/img/Retro_Finished_SVG.png';
 import './../../global.scss';
 import './styles.scss';
 import { ContainedButton } from '../../components';
-import theme from '../../theme/theme';
-import useScreenOrientation from '../../hooks/useScreenOrientation';
+import theme from '../../helpers/theme/theme';
+import useScreenOrientation from '../../helpers/hooks/useScreenOrientation';
 import BACILogo from '../../assets/img/bacilogobeta.svg';
 import {
   LANDSCAPE_PRIMARY,

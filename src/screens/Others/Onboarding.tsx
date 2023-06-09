@@ -23,9 +23,9 @@ import QRCode from 'qrcode.react';
 import { useState } from 'react';
 import { CopyToClipboard } from 'react-copy-to-clipboard';
 import { useRetro } from '../../helpers';
-import { Retro as RetroType } from '../../types';
+import { Retro as RetroType } from '../../helpers/types';
 import { BoardContext } from '../../contexts/BoardContext';
-import { useAzureAuth } from '../../msal/azureauth';
+import { useAzureAuth } from '../../helpers/msal/azureauth';
 
 export function Onboarding() {
   const { id } = useParams();

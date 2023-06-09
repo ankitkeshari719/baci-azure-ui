@@ -1,10 +1,10 @@
 import React from 'react';
 import { BoardContext } from '../../contexts/BoardContext';
 import { ActionType, GlobalContext } from '../../contexts/GlobalContext';
-import { BoardActionType } from '../../statemachine/BoardStateMachine';
+import { BoardActionType } from '../../helpers/statemachine/BoardStateMachine';
 import { Button } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
-import { getRetro } from '../../msal/services';
+import { getRetro } from '../../helpers/msal/services';
 import RetroTimeInputDialog from '../../atoms/RetroTimeInputDialog';
 const styles = {
   goToRetroBtn: {

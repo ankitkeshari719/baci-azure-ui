@@ -4,7 +4,7 @@ import './../../../global.scss';
 import './styles.scss';
 import dayjs, { Dayjs } from 'dayjs';
 import { GlobalContext } from '../../../contexts/GlobalContext';
-import { getDeploymentData } from '../../../msal/services';
+import { getDeploymentData } from '../../../helpers/msal/services';
 import { CustomAlert } from './CustomAlert';
 
 export function DeploymentPopUp() {

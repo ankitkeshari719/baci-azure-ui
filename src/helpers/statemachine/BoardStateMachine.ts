@@ -8,7 +8,7 @@ import {
   FeedbackEntry,
   PulseCheckEntry,
 } from '../types';
-import { UNGROUPED } from '../constants';
+import { UNGROUPED } from '../../constants';
 
 export enum BoardActionType {
   RESET_RETRO = 'resetRetro',

@@ -8,7 +8,7 @@ import { BoardContext } from '../../contexts/BoardContext';
 import { GlobalContext } from '../../contexts/GlobalContext';
 import { ListItemIcon, Typography } from '@mui/material';
 import { LazyLoadImage } from 'react-lazy-load-image-component';
-import { UserType } from '../../types';
+import { UserType } from '../../helpers/types';
 import * as Icons from 'heroicons-react';
 
 const ITEM_HEIGHT = 48;

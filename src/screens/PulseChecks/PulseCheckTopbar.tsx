@@ -14,8 +14,8 @@ import React from 'react';
 import BACILogo from '../../assets/img/bacilogobeta.svg';
 import { BoardContext } from '../../contexts/BoardContext';
 import { GlobalContext } from '../../contexts/GlobalContext';
-import { BoardActionType } from '../../statemachine/BoardStateMachine';
-import theme from '../../theme/theme';
+import { BoardActionType } from '../../helpers/statemachine/BoardStateMachine';
+import theme from '../../helpers/theme/theme';
 import { RetroDetails } from '../Board/RetroDetails';
 import Avatar from '../../components/Elements/Avatar';
 
