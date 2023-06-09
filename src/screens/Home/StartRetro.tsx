@@ -1,41 +1,32 @@
+import * as React from 'react';
 import {
   Box,
   Button,
-  FormControl,
-  FormHelperText,
   Grid,
-  MenuItem,
-  Select,
-  TextField,
   Tooltip,
   Typography,
-  Link,
   useMediaQuery,
 } from '@mui/material';
-import * as React from 'react';
-import { LandingLayout } from './LandingLayout';
-import commonStyles from './../style.module.scss';
-import './../global.scss';
-import {
-  Link as RouterLink,
-  Navigate,
-  useNavigate,
-  useParams,
-} from 'react-router-dom';
-import { useRetro } from '../helpers';
 
-import email from '../assets/img/emailbox.png';
-import { Email, EmailOutlined } from '@mui/icons-material';
-import { GlobalContext } from '../contexts/GlobalContext';
+import {
+  useNavigate,
+} from 'react-router-dom';
+import * as Icons from 'heroicons-react';
+import { EmailShareButton } from 'react-share';
 import { CopyToClipboard } from 'react-copy-to-clipboard';
 import QRCode from 'qrcode.react';
-import * as Icons from 'heroicons-react';
-import StartRetroButton from '../elements/StartRetroButton';
-import Toolbar from '../elements/Toolbar';
-import useLoadRetro from '../hooks/useLoadRetro';
-import { EmailShareButton, WhatsappShareButton } from 'react-share';
-import theme from '../theme/theme';
-import { DeploymentPopUp } from './Utils/Alerts/DeploymentPopUp';
+
+import commonStyles from './../../style.module.scss';
+import './../../global.scss';
+import email from '../../assets/img/emailbox.png';
+
+import { GlobalContext } from '../../contexts/GlobalContext';
+import useLoadRetro from '../../hooks/useLoadRetro';
+import theme from '../../theme/theme';
+import Toolbar from '../../elements/Toolbar';
+import StartRetroButton from '../../elements/StartRetroButton';
+import { DeploymentPopUp } from '../Utils/Alerts/DeploymentPopUp';
+
 const styles = {
   frame101: {
     marginTop: '48px',
@@ -155,6 +146,7 @@ const styles = {
     height: '36px',
   },
 };
+
 export function StartRetro() {
   const [global, dispatch] = React.useContext(GlobalContext);
   const [iscopied, setIsCopied] = React.useState(false);

@@ -16,7 +16,7 @@ import { Offboarding } from './screens/Offboarding';
 import { RetroDetails } from './screens/RetroDetails';
 import { ParticipantWaitingPage } from './screens/Board/ParticipantWaitingPage';
 import { CreateRetroMain } from './screens/CreateRetro/CreateRetroMain';
-import { StartRetro } from './screens/StartRetro';
+import { StartRetro } from './screens/Home/StartRetro';
 import { Grid } from '@mui/material';
 import { PageNotFound } from './screens/Others/PageNotFound';
 import Feedback from './screens/Feedback';
