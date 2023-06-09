@@ -9,6 +9,7 @@ import { OutlinedInput, Box, styled, Typography, Tooltip } from '@mui/material';
 import ButtonWithIconWithNoBorder from '../../components/CustomizedButton/ButtonWithIconWithNoBorder';
 import { Actions } from '../../types';
 import { MAX_CARD_TEXT_LENGTH } from '../../constants';
+import { GlobalContext } from '../../contexts/GlobalContext';
 
 const TextFieldNoBorderWrapper = styled(OutlinedInput)({
   '.MuiInputBase-multiline': {
@@ -49,14 +50,16 @@ const MessageForParticipant = ({
 }) => {
   const [enablePostButton, setEnablePostButton] = useState<boolean>(false);
   const [enableClearButton, setEnableClearButton] = useState<boolean>(false);
-  const [valueOfWidth, setValueOfWidth] = useState<string>('90%');
+  const [valueOfWidth, setValueOfWidth] = useState<string>('500px');
+  const [global, dispatch] = React.useContext(GlobalContext);
   useEffect(() => {
     const actionContainer = document.getElementById('actionMainContainer');
+
     if (actionContainer != null) {
       const width = actionContainer.offsetWidth - 30;
       setValueOfWidth(width + 'px');
     }
-  }, []);
+  }, [global.expandColumn]);
 
   useEffect(() => {
     if (messageForParticipant == '') {
@@ -174,7 +177,11 @@ const MessageForParticipant = ({
                         overflow="hidden"
                         textOverflow="ellipsis"
                         color={actionsData.fontColor}
-                        width={valueOfWidth}
+                        width={
+                          global.expandColumn == 2
+                            ? window.innerWidth - 100 + 'px'
+                            : window.innerWidth / 3 - 100 + 'px'
+                        }
                       >
                         {messageForParticipant}
                       </Typography>
