@@ -26,6 +26,10 @@ import { addDeploymentData } from '../../helpers/msal/services';
 import { AddDeploymentDataDialog } from '../Utils/Dialogs/AddDeploymentDataDialog';
 import { DeploymentPopUp } from '../Utils/Alerts/DeploymentPopUp';
 import { PrivacyAndRetentionDialog } from '../Utils/Dialogs/PrivacyAndRetentionDialog';
+import {
+  H2RegularTypography,
+  H4RegularTypography,
+} from '../../components/CustomizedTypography';
 
 const BootstrapDialog = styled(Dialog)(({ theme }) => ({
   '& .MuiDialogContent-root': {
@@ -186,20 +190,13 @@ export function LandingPage() {
             }}
           >
             {/*  What BACI retro are you joining today text*/}
-            <Typography
-              sx={{
-                fontFamily: 'Poppins',
-                fontStyle: 'normal',
-                fontWeight: 500,
-                fontSize: '24px',
-                lineHeight: '32px',
-                textAlign: 'center',
-                letterSpacing: '0.5px',
+            <H4RegularTypography
+              label={'What BACI retro are you joining today?'}
+              style={{
                 color: '#2C69A1',
+                textAlign: 'center',
               }}
-            >
-              What BACI retro are you joining today?
-            </Typography>
+            />
           </Box>
           <Box
             sx={{
@@ -269,7 +266,7 @@ export function LandingPage() {
             display="flex"
             justifyContent="center"
             alignItems="center"
-            minHeight="400px!important"
+            minHeight="400px !important"
           >
             <Grid
               item
@@ -277,9 +274,12 @@ export function LandingPage() {
               marginRight={commonStyles.m_80}
               marginLeft={commonStyles.m_80}
             >
-              <Typography variant="h2" color={commonStyles.primaryDark}>
-                What BACI retro are you joining today?
-              </Typography>
+              <H2RegularTypography
+                label={'What BACI retro are you joining today?'}
+                style={{
+                  color: '#2C69A1',
+                }}
+              />
               <TextField
                 autoFocus
                 variant="standard"
@@ -302,7 +302,6 @@ export function LandingPage() {
                   {codeError}
                 </FormHelperText>
               )}
-
               <Button
                 variant="outlined"
                 className="secondaryButton"
