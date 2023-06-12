@@ -38,6 +38,7 @@ const MessageForParticipant = ({
   actionsData,
   clearMessageForParticipant,
   userType,
+  ended,
 }: {
   expandMessageForParticipant: boolean;
   setExpandMessageForParticipant: (value: boolean) => void;
@@ -47,6 +48,7 @@ const MessageForParticipant = ({
   actionsData: Actions;
   clearMessageForParticipant: () => void;
   userType: any;
+  ended: boolean;
 }) => {
   const [enablePostButton, setEnablePostButton] = useState<boolean>(false);
   const [enableClearButton, setEnableClearButton] = useState<boolean>(false);
@@ -207,6 +209,7 @@ const MessageForParticipant = ({
                   onChange={e =>
                     setMessageForParticipant(e.currentTarget.value)
                   }
+                  disabled={ended}
                   value={messageForParticipant}
                   inputProps={{
                     maxLength: MAX_CARD_TEXT_LENGTH,
@@ -265,14 +268,16 @@ const MessageForParticipant = ({
                       }}
                     />
 
-                    <ButtonWithIconWithNoBorder
-                      disabled={false}
-                      //   aria-controls={open ? 'basic-menu' : undefined}
-                      id="clear-button"
-                      label="CLEAR"
-                      iconPath="/svgs/Clear.svg"
-                      onClick={clearMessageForParticipant}
-                    />
+                    {!ended && (
+                      <ButtonWithIconWithNoBorder
+                        disabled={ended}
+                        //   aria-controls={open ? 'basic-menu' : undefined}
+                        id="clear-button"
+                        label="CLEAR"
+                        iconPath="/svgs/Clear.svg"
+                        onClick={clearMessageForParticipant}
+                      />
+                    )}
                   </Box>
                   <ButtonWithIconWithNoBorder
                     disabled={false}

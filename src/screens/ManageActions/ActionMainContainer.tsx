@@ -538,6 +538,7 @@ export default function ActionMainContainer() {
         actionsData={actionsData}
         clearMessageForParticipant={clearMessageForParticipant}
         userType={global.user.userType}
+        ended={ended}
       />
 
       {!ended && (

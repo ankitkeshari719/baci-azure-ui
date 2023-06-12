@@ -84,7 +84,7 @@ export default function ActionItem({
 
   // For Main Menu
   const handleMainMenuClick = (event: React.MouseEvent<HTMLElement>) => {
-    if (ended || (global.user.userType === 1 && isOtherParticipantAction)) {
+    if (ended || global.leaveRetro || (global.user.userType === 1 && isOtherParticipantAction)) {
       return;
     }
     setMainAnchorEl(event.currentTarget);
