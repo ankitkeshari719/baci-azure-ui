@@ -4,13 +4,13 @@ import './styles.scss';
 
 type Props = {
   label: string;
-  onClick: (...param: any) => void;
+  onClick?: (...param: any) => void;
   style?: any;
 };
 
 export function BodyItalicTypography({ label, onClick, style }: Props) {
   return (
-    <Typography className="bodyItalic" component="span">
+    <Typography className="bodyItalic" component="span" style={style}>
       {label}
     </Typography>
   );
