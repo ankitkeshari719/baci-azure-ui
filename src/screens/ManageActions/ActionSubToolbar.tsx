@@ -1,7 +1,7 @@
 import { Box, Menu, MenuItem } from '@mui/material';
 import React from 'react';
 import { LazyLoadImage } from 'react-lazy-load-image-component';
-import { ButtonWithIcon, TextButton } from '../../components';
+import { OutlinedButtonWithIcon, TextButton } from '../../components';
 import { BoardContext } from '../../contexts/BoardContext';
 
 import './styles.scss';
@@ -50,7 +50,7 @@ const ActionSubToolbar = ({
         sx={{ maxWidth: '220px', justifyContent: 'space-between' }}
       >
         {global.user.userType == 2 && (
-          <ButtonWithIcon
+          <OutlinedButtonWithIcon
             disabled={selectedActionCount == 0 ? true : false}
             aria-controls={open ? 'basic-menu' : undefined}
             id="assign-button"
@@ -63,7 +63,7 @@ const ActionSubToolbar = ({
           />
         )}
 
-        <ButtonWithIcon
+        <OutlinedButtonWithIcon
           disabled={false}
           id="remove"
           onClick={handleRemove}

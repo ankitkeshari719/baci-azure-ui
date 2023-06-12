@@ -6,10 +6,10 @@ import {
   LightBulbIcon,
 } from '@heroicons/react/24/outline';
 import { OutlinedInput, Box, styled, Typography, Tooltip } from '@mui/material';
-import ButtonWithIconWithNoBorder from '../../components/CustomizedButton/ButtonWithIconWithNoBorder';
 import { Actions } from '../../helpers/types';
 import { MAX_CARD_TEXT_LENGTH } from '../../constants';
 import { GlobalContext } from '../../contexts/GlobalContext';
+import OutlineButtonWithIconWithNoBorder from '../../components/CustomizedButton/OutlineButtonWithIconWithNoBorder';
 
 const TextFieldNoBorderWrapper = styled(OutlinedInput)({
   '.MuiInputBase-multiline': {
@@ -250,7 +250,7 @@ const MessageForParticipant = ({
                   justifyContent="space-between"
                 >
                   <Box>
-                    <ButtonWithIconWithNoBorder
+                    <OutlineButtonWithIconWithNoBorder
                       disabled={!enablePostButton}
                       //   aria-controls={open ? 'basic-menu' : undefined}
                       id="post-button"
@@ -269,7 +269,7 @@ const MessageForParticipant = ({
                     />
 
                     {!ended && (
-                      <ButtonWithIconWithNoBorder
+                      <OutlineButtonWithIconWithNoBorder
                         disabled={ended}
                         //   aria-controls={open ? 'basic-menu' : undefined}
                         id="clear-button"
@@ -279,7 +279,7 @@ const MessageForParticipant = ({
                       />
                     )}
                   </Box>
-                  <ButtonWithIconWithNoBorder
+                  <OutlineButtonWithIconWithNoBorder
                     disabled={false}
                     //   aria-controls={open ? 'basic-menu' : undefined}
                     id="close-button"

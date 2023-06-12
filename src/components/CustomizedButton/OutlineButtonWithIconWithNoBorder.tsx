@@ -1,7 +1,7 @@
 import React from 'react';
 import { Box, Button } from '@mui/material';
 
-const ButtonWithIconWithNoBorder = ({
+const OutlineButtonWithIconWithNoBorder = ({
   label,
   iconPath,
   color,
@@ -58,4 +58,4 @@ const ButtonWithIconWithNoBorder = ({
   );
 };
 
-export default ButtonWithIconWithNoBorder;
+export default OutlineButtonWithIconWithNoBorder;

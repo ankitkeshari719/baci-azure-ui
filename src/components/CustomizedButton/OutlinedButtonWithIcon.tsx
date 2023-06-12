@@ -2,7 +2,7 @@ import React from 'react';
 import { Box, Button } from '@mui/material';
 import './styles.scss';
 
-export const ButtonWithIcon = ({
+export const OutlinedButtonWithIcon = ({
   label,
   iconPath,
   color,

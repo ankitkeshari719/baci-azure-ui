@@ -177,76 +177,87 @@ export function LandingPage() {
   return (
     <>
       {isXsUp ? (
-        <Box sx={{ height: 'calc(var(--app-height))', overflowY: 'auto' }}>
+        <Box
+          sx={{
+            height: 'calc(var(--app-height))',
+            overflowY: 'auto',
+            display: 'flex',
+            flexDirection: 'column',
+          }}
+        >
           <DeploymentPopUp />
           <LandingLayout></LandingLayout>
           <Box
             sx={{
+              minHeight: '300px',
+              height: '50%',
               display: 'flex',
               alignItems: 'center',
+              flexDirection: 'column',
               justifyContent: 'center',
-              flexDirection: 'column',
-              marginTop: '16px',
+              width: '100%',
             }}
           >
-            {/*  What BACI retro are you joining today text*/}
-            <H4RegularTypography
-              label={'What BACI retro are you joining today?'}
-              style={{
-                color: '#2C69A1',
-                textAlign: 'center',
+            <Box
+              sx={{
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'flex-start',
+                flexDirection: 'column',
+                margin: '16px',
+                width: '100%',
+                padding: '20px',
               }}
-            />
-          </Box>
-          <Box
-            sx={{
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'flex-start',
-              flexDirection: 'column',
-              margin: '16px',
-            }}
-          >
-            {' '}
-            {/* Retro text field */}
-            <FormControl style={{ width: '100%', marginTop: '32px' }}>
-              <TextField
-                autoFocus
-                variant="standard"
-                label="Retro access code"
-                error={!!codeError}
-                sx={{
-                  ...styles.accessCodeTextField,
-                }}
-                onKeyDown={e => {
-                  if (e.keyCode === 13) {
-                    joinRetro();
-                  }
-                }}
-                value={humanId}
-                onChange={e => {
-                  setHumanId(e.currentTarget.value);
-                  setCodeError('');
+            >
+              <H4RegularTypography
+                label={'What BACI retro are you joining today?'}
+                style={{
+                  color: '#2C69A1',
+                  textAlign: 'center',
                 }}
               />
-              {/* Error message */}
-              {codeError !== '' && (
-                <FormHelperText style={{ color: '#d32f2f', marginLeft: '5px' }}>
-                  {codeError}
-                </FormHelperText>
-              )}
-            </FormControl>
-            {/* Go On Button */}
-            <Button
-              variant="outlined"
-              className="secondaryButton"
-              style={{ width: '100%', marginTop: '48px' }}
-              onClick={() => joinRetro()}
-            >
-              <Typography component="span" className="secondaryButtonText">
-                Go on..
-              </Typography>
-            </Button>
+              {/* Retro text field */}
+              <FormControl style={{ width: '100%', marginTop: '32px' }}>
+                <TextField
+                  autoFocus
+                  variant="standard"
+                  label="Retro access code"
+                  error={!!codeError}
+                  sx={{
+                    ...styles.accessCodeTextField,
+                  }}
+                  onKeyDown={e => {
+                    if (e.keyCode === 13) {
+                      joinRetro();
+                    }
+                  }}
+                  value={humanId}
+                  onChange={e => {
+                    setHumanId(e.currentTarget.value);
+                    setCodeError('');
+                  }}
+                />
+                {/* Error message */}
+                {codeError !== '' && (
+                  <FormHelperText
+                    style={{ color: '#d32f2f', marginLeft: '5px' }}
+                  >
+                    {codeError}
+                  </FormHelperText>
+                )}
+              </FormControl>
+              {/* Go On Button */}
+              <Button
+                variant="outlined"
+                className="secondaryButton"
+                style={{ width: '100%', marginTop: '48px' }}
+                onClick={() => joinRetro()}
+              >
+                <Typography component="span" className="secondaryButtonText">
+                  Go on..
+                </Typography>
+              </Button>
+            </Box>
           </Box>
         </Box>
       ) : (
@@ -267,12 +278,18 @@ export function LandingPage() {
             justifyContent="center"
             alignItems="center"
             minHeight="400px !important"
+            flexDirection="column"
+            height="100%"
           >
             <Grid
               item
               xs={12}
               marginRight={commonStyles.m_80}
               marginLeft={commonStyles.m_80}
+              display="flex"
+              flexDirection="column"
+              height="100%"
+              justifyContent="center"
             >
               <H2RegularTypography
                 label={'What BACI retro are you joining today?'}
@@ -280,6 +297,7 @@ export function LandingPage() {
                   color: '#2C69A1',
                 }}
               />
+              <Box component="span" mt="50px" />
               <TextField
                 autoFocus
                 variant="standard"
@@ -302,6 +320,8 @@ export function LandingPage() {
                   {codeError}
                 </FormHelperText>
               )}
+              <Box component="span" mt="50px" />
+
               <Button
                 variant="outlined"
                 className="secondaryButton"
