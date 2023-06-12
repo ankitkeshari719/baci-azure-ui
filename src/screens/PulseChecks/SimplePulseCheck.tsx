@@ -248,7 +248,7 @@ export default function SimplePulseCheck({ pulseCheck }: Props) {
           alignItems: 'center',
           justifyContent: 'center',
           padding: isXsUp ? '8px' : '56px',
-          height: 'calc(100vh - 70px)'
+          height: 'calc(100vh - 70px)',
         }}
       >
         {/* Text one */}
@@ -493,6 +493,7 @@ export default function SimplePulseCheck({ pulseCheck }: Props) {
                 minWidth: '260px !important',
                 height: '36px !important',
               }}
+              textStyle={{ color: '#FFFFFF' }}
             />
           </Box>
         </Grid>

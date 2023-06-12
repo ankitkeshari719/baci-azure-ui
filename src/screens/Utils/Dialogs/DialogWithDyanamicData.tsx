@@ -69,30 +69,48 @@ const DialogWithDyanamicData = ({
             </DialogContentText>
           </DialogContent>
           <DialogActions>
-            {agreeLabel.split(" ")[0] == 'REMOVE' ? (
+            {agreeLabel.split(' ')[0] == 'REMOVE' ? (
               <ContainedButton
                 onClick={acceptClose}
-                style={{ padding: '12px', height: '44px', width: '217px',backgroundColor:'#EA4335!important',borderColor:'#EA4335!important',
-              boxShadow:"none!important" }}
+                style={{
+                  padding: '12px',
+                  height: '44px',
+                  width: '217px',
+                  backgroundColor: '#EA4335!important',
+                  borderColor: '#EA4335!important',
+                  boxShadow: 'none!important',
+                }}
                 name={agreeLabel}
                 id={agreeLabel}
+                textStyle={{ color: '#FFFFFF' }}
               />
             ) : (
               <ContainedButton
                 onClick={acceptClose}
-                style={{ padding: '12px', height: '44px', width: '217px',  boxShadow:"none!important" 
-               }}
+                style={{
+                  padding: '12px',
+                  height: '44px',
+                  width: '217px',
+                  boxShadow: 'none!important',
+                }}
                 name={agreeLabel}
                 id={agreeLabel}
+                textStyle={{ color: '#FFFFFF' }}
               />
             )}
             {/* autoFocus */}
             <Box component="span" width="10px" />
             <OutlinedButton
               onClick={handleClose}
-              style={{ padding: '12px', height: '44px', width: '217px', boxShadow:"none!important"  }}
-              name={cancelLabel}
+              style={{
+                padding: '12px',
+                height: '44px',
+                width: '217px',
+                boxShadow: 'none!important',
+              }}
+              label={cancelLabel}
               id={cancelLabel}
+              textStyle={{ color: '#159ADD' }}
             />
           </DialogActions>
         </Box>

@@ -26,6 +26,10 @@ import { addDeploymentData } from '../../helpers/msal/services';
 import { AddDeploymentDataDialog } from '../Utils/Dialogs/AddDeploymentDataDialog';
 import { DeploymentPopUp } from '../Utils/Alerts/DeploymentPopUp';
 import { PrivacyAndRetentionDialog } from '../Utils/Dialogs/PrivacyAndRetentionDialog';
+import {
+  H2RegularTypography,
+  H4RegularTypography,
+} from '../../components/CustomizedTypography';
 
 const BootstrapDialog = styled(Dialog)(({ theme }) => ({
   '& .MuiDialogContent-root': {
@@ -173,7 +177,14 @@ export function LandingPage() {
   return (
     <>
       {isXsUp ? (
-        <Box sx={{ height: 'calc(var(--app-height))', overflowY: 'auto',display:'flex',flexDirection:'column' }}>
+        <Box
+          sx={{
+            height: 'calc(var(--app-height))',
+            overflowY: 'auto',
+            display: 'flex',
+            flexDirection: 'column',
+          }}
+        >
           <DeploymentPopUp />
           <LandingLayout></LandingLayout>
           <Box
@@ -187,7 +198,6 @@ export function LandingPage() {
               width: '100%',
             }}
           >
-        
             <Box
               sx={{
                 display: 'flex',
@@ -197,23 +207,15 @@ export function LandingPage() {
                 margin: '16px',
                 width: '100%',
                 padding: '20px',
-              
               }}
             >
-              <Typography
-                sx={{
-                  fontFamily: 'Poppins',
-                  fontStyle: 'normal',
-                  fontWeight: 500,
-                  fontSize: '24px',
-                  lineHeight: '32px',
-                  textAlign: 'center',
-                  letterSpacing: '0.5px',
+              <H4RegularTypography
+                label={'What BACI retro are you joining today?'}
+                style={{
                   color: '#2C69A1',
+                  textAlign: 'center',
                 }}
-              >
-                What BACI retro are you joining today?
-              </Typography>{' '}
+              />
               {/* Retro text field */}
               <FormControl style={{ width: '100%', marginTop: '32px' }}>
                 <TextField
@@ -275,7 +277,7 @@ export function LandingPage() {
             display="flex"
             justifyContent="center"
             alignItems="center"
-            minHeight="400px!important"
+            minHeight="400px !important"
           >
             <Grid
               item
@@ -283,9 +285,12 @@ export function LandingPage() {
               marginRight={commonStyles.m_80}
               marginLeft={commonStyles.m_80}
             >
-              <Typography variant="h2" color={commonStyles.primaryDark}>
-                What BACI retro are you joining today?
-              </Typography>
+              <H2RegularTypography
+                label={'What BACI retro are you joining today?'}
+                style={{
+                  color: '#2C69A1',
+                }}
+              />
               <TextField
                 autoFocus
                 variant="standard"
@@ -308,7 +313,6 @@ export function LandingPage() {
                   {codeError}
                 </FormHelperText>
               )}
-
               <Button
                 variant="outlined"
                 className="secondaryButton"

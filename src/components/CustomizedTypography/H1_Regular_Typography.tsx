@@ -4,13 +4,13 @@ import './styles.scss';
 
 type Props = {
   label: string;
-  onClick: (...param: any) => void;
+  onClick?: (...param: any) => void;
   style?: any;
 };
 
 export function H1RegularTypography({ label, onClick, style }: Props) {
   return (
-    <Typography className="h1Regular" component="span">
+    <Typography className="h1Regular" component="span" style={style}>
       {label}
     </Typography>
   );

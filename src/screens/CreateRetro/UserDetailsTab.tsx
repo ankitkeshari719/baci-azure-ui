@@ -284,9 +284,10 @@ export function UserDetailsTab({
                     minWidth: '75px !important',
                     height: '36px !important',
                   }}
+                  textStyle={{ color: '#FFFFFF' }}
                 />
                 <OutlinedButton
-                  name="Back"
+                  label="Back"
                   onClick={() => onClickBack('pulseCheckPanel')}
                   style={{
                     minWidth: '75px !important',
@@ -294,6 +295,7 @@ export function UserDetailsTab({
                     mt: 5,
                     ml: 6,
                   }}
+                  textStyle={{ color: '#159ADD' }}
                 />
               </Box>
             </Grid>
@@ -371,12 +373,13 @@ export function UserDetailsTab({
             }}
           >
             <OutlinedButton
-              name="Cancel"
+              label="Cancel"
               onClick={() => setOpenAvatarDialog(false)}
               style={{
                 minWidth: '75px !important',
                 height: '36px !important',
               }}
+              textStyle={{ color: '#159ADD' }}
             />
             <ContainedButton
               name="Select"
@@ -385,6 +388,7 @@ export function UserDetailsTab({
                 minWidth: '75px !important',
                 height: '36px !important',
               }}
+              textStyle={{ color: '#FFFFFF' }}
             />
           </Box>
         </Box>

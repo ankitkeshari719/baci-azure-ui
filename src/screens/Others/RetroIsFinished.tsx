@@ -57,7 +57,8 @@ export function RetroIsFinished() {
             width: '100%',
             paddingLeft:
               isXsUp || window.screen.width <= 1280 ? '16px' : '56px',
-            paddingRight: isXsUp || window.screen.width <= 1280 ? '16px' : '56px',
+            paddingRight:
+              isXsUp || window.screen.width <= 1280 ? '16px' : '56px',
             paddingTop: isXsUp || window.screen.width <= 1280 ? '14px' : 0,
             paddingBottom: isXsUp || window.screen.width <= 1280 ? '14px' : 0,
             boxShadow: '0px 0px 2px rgba(0, 0, 0, 0.25)!important',
@@ -135,6 +136,7 @@ export function RetroIsFinished() {
                       height: '40px !important',
                       marginTop: '24px !important',
                     }}
+                    textStyle={{ color: '#FFFFFF' }}
                   />
                 </Box>
               </Box>
@@ -200,6 +202,7 @@ export function RetroIsFinished() {
                         height: '40px !important',
                         marginTop: '24px !important',
                       }}
+                      textStyle={{ color: '#FFFFFF' }}
                     />
                   </Box>
                 </Grid>
@@ -233,6 +236,7 @@ export function RetroIsFinished() {
                   height: '40px !important',
                   marginTop: '24px !important',
                 }}
+                textStyle={{ color: '#FFFFFF' }}
               />
             </Grid>
           </Grid>

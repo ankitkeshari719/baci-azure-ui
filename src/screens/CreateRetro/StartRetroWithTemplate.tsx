@@ -14,7 +14,8 @@ export function StartRetroWithTemplate() {
     state: { retroId, retroStarted },
     commitAction,
   } = React.useContext(BoardContext);
-  const [isTimeInputDialog, setIsTimeInputDialog] = React.useState<boolean>(false);
+  const [isTimeInputDialog, setIsTimeInputDialog] =
+    React.useState<boolean>(false);
   const [selectedValue, setSelectedValue] = React.useState(60);
 
   React.useEffect(() => {
@@ -94,6 +95,7 @@ export function StartRetroWithTemplate() {
           minWidth: '140px !important',
           height: '36px !important',
         }}
+        textStyle={{ color: '#FFFFFF' }}
       />
       <TimeInputDialog
         selectedValue={selectedValue}
