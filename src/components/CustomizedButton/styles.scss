@@ -6,13 +6,14 @@
   justify-content: center !important;
   align-items: center !important;
   padding: 6px 6px !important;
-  gap: 8px !important;
-  background: $PrimaryMain !important;
-  box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.25) !important;
+  gap: 12px !important;
+  background: #159add !important;
   border-radius: 24px !important;
-  text-transform: uppercase !important;
-  border: 1px solid $PrimaryMain !important;
-  filter: drop-shadow(0px 2px 4px rgba(0, 0, 0, 0.25)) !important;
+}
+
+.containedButton:disabled {
+  border: 1px solid gray !important;
+  opacity: 0.5 !important;
 }
 
 .outlinedButton {
@@ -22,11 +23,16 @@
   align-items: center !important;
   padding: 6px 16px !important;
   gap: 8px !important;
+  border: 1px solid #159ADD;
   border-radius: 24px !important;
-  text-transform: uppercase !important;
   background: #fafafa !important;
-  box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.25) !important;
 }
+
+.outlinedButton:disabled {
+  border: 1px solid gray !important;
+  opacity: 0.5 !important;
+}
+
 
 .buttonWithIcon {
   box-sizing: border-box !important;
