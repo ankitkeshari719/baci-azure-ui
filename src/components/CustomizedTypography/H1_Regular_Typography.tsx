@@ -3,15 +3,15 @@ import { Typography } from '@mui/material';
 import './styles.scss';
 
 type Props = {
-  name: string;
+  label: string;
   onClick: (...param: any) => void;
   style?: any;
 };
 
-export function H1RegularTypography({ name, onClick, style }: Props) {
+export function H1RegularTypography({ label, onClick, style }: Props) {
   return (
-    <Typography className="saveButtonText" component="span">
-      {name}
+    <Typography className="h1Regular" component="span">
+      {label}
     </Typography>
   );
 }

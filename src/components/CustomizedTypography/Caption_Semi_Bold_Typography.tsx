@@ -8,9 +8,9 @@ type Props = {
   style?: any;
 };
 
-export function H1SemiBoldTypography({ label, onClick, style }: Props) {
+export function CaptionSemiBoldTypography({ label, onClick, style }: Props) {
   return (
-    <Typography className="h1SemiBold" component="span">
+    <Typography className="captionsSemiBold" component="span">
       {label}
     </Typography>
   );
