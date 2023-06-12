@@ -61,7 +61,7 @@ const styles = {
   logoImage: {
     //position: 'absolute' as 'absolute',
     height: '49.5px',
-    marginTop: '53px',
+    marginTop: '25px',
     marginLeft: '58px',
   },
   logoImageXs: {
@@ -136,39 +136,50 @@ export function LandingLayout() {
               top: '0px',
             }}
           >
-            <Box>
-              <LazyLoadImage
-                style={styles.logoImageXs}
-                alt="logo"
-                height="48px"
-                width="108px"
-                // height='50px'
-                src={BACILogo} // use normal <img> attributes as props
-                // width={image.width}
-              />
-              {/* <img src={BACILogo} alt="Logo" style={styles.logoImageXs} /> */}
-            </Box>
-            <Box display="flex" mt="32px">
-              <Typography variant="h5" color={commomStyles.grey} mr="6px">
-                Reflect
-              </Typography>
-              <Typography color={commomStyles.secondaryMain} mr="6px" ml="6px">
-                {'\u002E'}
-              </Typography>
-              <Typography variant="h5" color={commomStyles.grey} mr="6px">
-                Gratitude
-              </Typography>
-              <Typography color={commomStyles.secondaryMain} mr="6px" ml="6px">
-                {'\u002E'}
-              </Typography>
+            <Box sx={{ background: 'rgba(0, 0, 0, 0.4)',display:'flex', width:'100%',alignItems:'center',flexDirection:'column',
+          padding:'30px' }}>
+              <Box>
+                <LazyLoadImage
+                  style={styles.logoImageXs}
+                  alt="logo"
+                  height="48px"
+                  width="108px"
+                  // height='50px'
+                  src={BACILogo} // use normal <img> attributes as props
+                  // width={image.width}
+                />
+                {/* <img src={BACILogo} alt="Logo" style={styles.logoImageXs} /> */}
+              </Box>
+              <Box display="flex" mt="32px">
+                <Typography variant="h5" color={commomStyles.grey} mr="6px">
+                  Reflect
+                </Typography>
+                <Typography
+                  color={commomStyles.secondaryMain}
+                  mr="6px"
+                  ml="6px"
+                >
+                  {'\u002E'}
+                </Typography>
+                <Typography variant="h5" color={commomStyles.grey} mr="6px">
+                  Gratitude
+                </Typography>
+                <Typography
+                  color={commomStyles.secondaryMain}
+                  mr="6px"
+                  ml="6px"
+                >
+                  {'\u002E'}
+                </Typography>
 
-              <Typography
-                variant="h5"
-                color={commomStyles.secondaryMain}
-                mr="6px"
-              >
-                Action
-              </Typography>
+                <Typography
+                  variant="h5"
+                  color={commomStyles.secondaryMain}
+                  mr="6px"
+                >
+                  Action
+                </Typography>
+              </Box>
             </Box>
           </Box>
         </Box>
@@ -194,8 +205,13 @@ export function LandingLayout() {
               sx={{
                 position: 'absolute',
                 top: isMaintenanceAlertOpen ? '80px' : '0px',
+                width: '100%',
+                display: 'flex',
                 // zIndex: 1000,
                 // height: '400px',
+                background: 'rgba(0, 0, 0, 0.4)',
+                flexDirection: 'column',
+                paddingBottom: '30px',
               }}
             >
               <Box>
