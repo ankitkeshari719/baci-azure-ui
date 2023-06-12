@@ -278,12 +278,18 @@ export function LandingPage() {
             justifyContent="center"
             alignItems="center"
             minHeight="400px !important"
+            flexDirection="column"
+            height="100%"
           >
             <Grid
               item
               xs={12}
               marginRight={commonStyles.m_80}
               marginLeft={commonStyles.m_80}
+              display="flex"
+              flexDirection="column"
+              height="100%"
+              justifyContent="center"
             >
               <H2RegularTypography
                 label={'What BACI retro are you joining today?'}
@@ -291,6 +297,7 @@ export function LandingPage() {
                   color: '#2C69A1',
                 }}
               />
+              <Box component="span" mt="50px" />
               <TextField
                 autoFocus
                 variant="standard"
@@ -313,6 +320,8 @@ export function LandingPage() {
                   {codeError}
                 </FormHelperText>
               )}
+              <Box component="span" mt="50px" />
+
               <Button
                 variant="outlined"
                 className="secondaryButton"
