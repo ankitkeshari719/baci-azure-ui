@@ -432,6 +432,7 @@ const Toolbar = (props: any) => {
                     marginRight: '40px',
                     display: isXsUp ? 'none' : 'block',
                   }}
+                  textStyle={{ color: '#FFFFFF' }}
                 />
                 {showSessionEndMessage && (
                   <SessionEndingMessage
@@ -456,6 +457,7 @@ const Toolbar = (props: any) => {
                       marginRight: '40px',
                       display: isXsUp ? 'none' : 'block',
                     }}
+                    textStyle={{ color: '#FFFFFF' }}
                   />
                 )}
                 {showSessionEndMessage && (
@@ -499,6 +501,7 @@ const Toolbar = (props: any) => {
                   width: '150px !important',
                   marginRight: '16px',
                 }}
+                textStyle={{ color: '#FFFFFF' }}
               />
             </>
           )}
@@ -532,6 +535,7 @@ const Toolbar = (props: any) => {
                 marginRight: '16px',
                 position: 'initial',
               }}
+              textStyle={{ color: '#FFFFFF' }}
             />
           </>
         )}
@@ -650,6 +654,7 @@ const Toolbar = (props: any) => {
               marginRight: '16px',
               position: 'initial',
             }}
+            textStyle={{ color: '#FFFFFF' }}
           />
         )}
         {!ended && (

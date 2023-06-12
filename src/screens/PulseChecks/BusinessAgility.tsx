@@ -547,6 +547,7 @@ export default function BusinessAgility({ pulseCheck }: Props) {
               minWidth: '260px !important',
               height: '36px !important',
             }}
+            textStyle={{ color: '#FFFFFF' }}
           />
         </Box>
       </Grid>

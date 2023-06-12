@@ -1,6 +1,7 @@
 import * as React from 'react';
 import { Button, Typography } from '@mui/material';
 import './styles.scss';
+import { ButtonLabelTypography } from '../CustomizedTypography';
 
 type Props = {
   name: string;
@@ -8,21 +9,27 @@ type Props = {
   style?: any;
   disabled?: boolean;
   id?: string;
+  textStyle?: any;
 };
 
-export function ContainedButton({ id, name, onClick, style, disabled }: Props) {
+export function ContainedButton({
+  id,
+  name,
+  onClick,
+  style,
+  disabled,
+  textStyle,
+}: Props) {
   return (
     <Button
-    id= {id}
+      id={id}
       variant="contained"
       className="containedButton"
       onClick={onClick}
       sx={{ ...style }}
       disabled={disabled}
     >
-      <Typography className="saveButtonText" component="span">
-        {name}
-      </Typography>
+      <ButtonLabelTypography label={name} style={textStyle} />
     </Button>
   );
 }

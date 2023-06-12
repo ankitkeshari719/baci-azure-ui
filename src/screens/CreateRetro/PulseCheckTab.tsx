@@ -182,7 +182,9 @@ export function PulseCheckTab({
                     <Card
                       key={pulseCheck.id}
                       sx={{
-                        pointerEvents: pulseCheck.isComingSoon ? 'none' : 'initial',
+                        pointerEvents: pulseCheck.isComingSoon
+                          ? 'none'
+                          : 'initial',
                         display: 'flex !important',
                         flexDirection: 'column !important',
                         justifyContent: 'space-between !important',
@@ -303,9 +305,10 @@ export function PulseCheckTab({
                     minWidth: '75px !important',
                     height: '36px !important',
                   }}
+                  textStyle={{ color: '#FFFFFF' }}
                 />
                 <OutlinedButton
-                  name="Back"
+                  label="Back"
                   onClick={() => onClickBack('templatePanel')}
                   style={{
                     minWidth: '75px !important',
@@ -313,6 +316,7 @@ export function PulseCheckTab({
                     mt: 5,
                     ml: 6,
                   }}
+                  textStyle={{ color: '#159ADD' }}
                 />
               </Box>
             </Grid>

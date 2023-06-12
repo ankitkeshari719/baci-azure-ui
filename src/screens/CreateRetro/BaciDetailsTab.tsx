@@ -76,7 +76,7 @@ const styles = {
       lineHeight: '20px',
       letterSpacing: '0.6px',
     },
-    '& .css-1952jpe-MuiFormControl-root-MuiTextField-root label':{
+    '& .css-1952jpe-MuiFormControl-root-MuiTextField-root label': {
       color: 'rgba(0, 0, 0, 0.6) !important',
       fontFamily: 'Poppins',
       fontStyle: 'normal',
@@ -246,6 +246,7 @@ export function BaciDetailsTab({
                   minWidth: '75px !important',
                   height: '36px !important',
                 }}
+                textStyle={{ color: '#FFFFFF' }}
               />
             </Box>
           </Box>
