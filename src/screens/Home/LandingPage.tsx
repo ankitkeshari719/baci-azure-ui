@@ -173,83 +173,89 @@ export function LandingPage() {
   return (
     <>
       {isXsUp ? (
-        <Box sx={{ height: 'calc(var(--app-height))', overflowY: 'auto' }}>
+        <Box sx={{ height: 'calc(var(--app-height))', overflowY: 'auto',display:'flex',flexDirection:'column' }}>
           <DeploymentPopUp />
           <LandingLayout></LandingLayout>
           <Box
             sx={{
+              minHeight: '300px',
+              height: '50%',
               display: 'flex',
               alignItems: 'center',
-              justifyContent: 'center',
               flexDirection: 'column',
-              marginTop: '16px',
+              justifyContent: 'center',
+              width: '100%',
             }}
           >
-            {/*  What BACI retro are you joining today text*/}
-            <Typography
+        
+            <Box
               sx={{
-                fontFamily: 'Poppins',
-                fontStyle: 'normal',
-                fontWeight: 500,
-                fontSize: '24px',
-                lineHeight: '32px',
-                textAlign: 'center',
-                letterSpacing: '0.5px',
-                color: '#2C69A1',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'flex-start',
+                flexDirection: 'column',
+                margin: '16px',
+                width: '100%',
+                padding: '20px',
+              
               }}
             >
-              What BACI retro are you joining today?
-            </Typography>
-          </Box>
-          <Box
-            sx={{
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'flex-start',
-              flexDirection: 'column',
-              margin: '16px',
-            }}
-          >
-            {' '}
-            {/* Retro text field */}
-            <FormControl style={{ width: '100%', marginTop: '32px' }}>
-              <TextField
-                autoFocus
-                variant="standard"
-                label="Retro access code"
-                error={!!codeError}
+              <Typography
                 sx={{
-                  ...styles.accessCodeTextField,
+                  fontFamily: 'Poppins',
+                  fontStyle: 'normal',
+                  fontWeight: 500,
+                  fontSize: '24px',
+                  lineHeight: '32px',
+                  textAlign: 'center',
+                  letterSpacing: '0.5px',
+                  color: '#2C69A1',
                 }}
-                onKeyDown={e => {
-                  if (e.keyCode === 13) {
-                    joinRetro();
-                  }
-                }}
-                value={humanId}
-                onChange={e => {
-                  setHumanId(e.currentTarget.value);
-                  setCodeError('');
-                }}
-              />
-              {/* Error message */}
-              {codeError !== '' && (
-                <FormHelperText style={{ color: '#d32f2f', marginLeft: '5px' }}>
-                  {codeError}
-                </FormHelperText>
-              )}
-            </FormControl>
-            {/* Go On Button */}
-            <Button
-              variant="outlined"
-              className="secondaryButton"
-              style={{ width: '100%', marginTop: '48px' }}
-              onClick={() => joinRetro()}
-            >
-              <Typography component="span" className="secondaryButtonText">
-                Go on..
-              </Typography>
-            </Button>
+              >
+                What BACI retro are you joining today?
+              </Typography>{' '}
+              {/* Retro text field */}
+              <FormControl style={{ width: '100%', marginTop: '32px' }}>
+                <TextField
+                  autoFocus
+                  variant="standard"
+                  label="Retro access code"
+                  error={!!codeError}
+                  sx={{
+                    ...styles.accessCodeTextField,
+                  }}
+                  onKeyDown={e => {
+                    if (e.keyCode === 13) {
+                      joinRetro();
+                    }
+                  }}
+                  value={humanId}
+                  onChange={e => {
+                    setHumanId(e.currentTarget.value);
+                    setCodeError('');
+                  }}
+                />
+                {/* Error message */}
+                {codeError !== '' && (
+                  <FormHelperText
+                    style={{ color: '#d32f2f', marginLeft: '5px' }}
+                  >
+                    {codeError}
+                  </FormHelperText>
+                )}
+              </FormControl>
+              {/* Go On Button */}
+              <Button
+                variant="outlined"
+                className="secondaryButton"
+                style={{ width: '100%', marginTop: '48px' }}
+                onClick={() => joinRetro()}
+              >
+                <Typography component="span" className="secondaryButtonText">
+                  Go on..
+                </Typography>
+              </Button>
+            </Box>
           </Box>
         </Box>
       ) : (
