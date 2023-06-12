@@ -154,6 +154,7 @@ export function TimeInputDialog({
             minWidth: '140px !important',
             height: '36px !important',
           }}
+          textStyle={{ color: '#FFFFFF' }}
         />
       </Box>
     </Dialog>

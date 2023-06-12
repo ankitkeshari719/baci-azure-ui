@@ -356,9 +356,10 @@ export function RetroTemplateTab({
                     minWidth: '75px !important',
                     height: '36px !important',
                   }}
+                  textStyle={{ color: '#FFFFFF' }}
                 />
                 <OutlinedButton
-                  name="Back"
+                  label="Back"
                   onClick={() => onClickBack('detailsPanel')}
                   style={{
                     minWidth: '75px !important',
@@ -366,6 +367,7 @@ export function RetroTemplateTab({
                     mt: 5,
                     ml: 6,
                   }}
+                  textStyle={{ color: '#159ADD' }}
                 />
               </Box>
             </Grid>

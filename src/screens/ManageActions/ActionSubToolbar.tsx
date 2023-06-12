@@ -4,7 +4,6 @@ import { LazyLoadImage } from 'react-lazy-load-image-component';
 import { ButtonWithIcon, TextButton } from '../../components';
 import { BoardContext } from '../../contexts/BoardContext';
 
-
 import './styles.scss';
 const ActionSubToolbar = ({
   selectedActionCount,
@@ -72,7 +71,12 @@ const ActionSubToolbar = ({
           iconPath="/svgs/Delete.svg"
         />
       </Box>
-      <TextButton label="UNSELECT" id="unselect" onClick={handleUnselect} />
+      <TextButton
+        label="UNSELECT"
+        id="unselect"
+        onClick={handleUnselect}
+        textStyle={{ color: '#159ADD' }}
+      />
       <Menu
         MenuListProps={{
           'aria-labelledby': 'assign-button',

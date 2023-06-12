@@ -1307,6 +1307,7 @@ export const ReportSummary = React.forwardRef((props, ref) => {
                     minWidth: '185px !important',
                     height: '48px !important',
                   }}
+                  textStyle={{ color: '#FFFFFF' }}
                 />
               </Col>
             </Row>

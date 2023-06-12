@@ -353,13 +353,14 @@ const SubToolbar = ({ componentRef }: Props) => {
               trigger={() => (
                 <OutlinedButton
                   id="downloadBoardPdf"
-                  name="Download Pdf"
+                  label="Download Pdf"
                   onClick={() => {}}
                   style={{
                     minWidth: '172px !important',
                     width: '172px !important',
                     height: '40px !important',
                   }}
+                  textStyle={{ color: '#159ADD' }}
                 />
               )}
               content={() => componentRef.current}

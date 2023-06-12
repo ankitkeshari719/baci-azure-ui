@@ -1,22 +1,27 @@
 import React from 'react';
 import { Button } from '@mui/material';
+import { ButtonLabelTypography } from '../CustomizedTypography';
+
+type Props = {
+  id?: string;
+  label: string;
+  onClick: (...param: any) => void;
+  style?: any;
+  textStyle?: any;
+  disabled?: boolean;
+};
 
 export const TextButton = ({
   label,
   onClick,
   style,
+  textStyle,
   disabled,
   id,
-}: {
-  label: string;
-  onClick: (...param: any) => void;
-  style?: any;
-  disabled?: boolean;
-  id?: string;
-}) => {
+}: Props) => {
   return (
     <Button variant="text" onClick={onClick}>
-      {label}
+      <ButtonLabelTypography label={label} style={textStyle} />
     </Button>
   );
 };

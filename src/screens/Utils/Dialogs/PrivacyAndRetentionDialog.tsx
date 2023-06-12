@@ -115,6 +115,7 @@ export function PrivacyAndRetentionDialog() {
                     height: '44px !important',
                     textTransform: 'uppercase !important',
                   }}
+                  textStyle={{ color: '#FFFFFF' }}
                 />
               </Box>
             </DialogContent>
@@ -180,6 +181,7 @@ export function PrivacyAndRetentionDialog() {
                     height: '44px !important',
                     textTransform: 'uppercase !important',
                   }}
+                  textStyle={{ color: '#FFFFFF' }}
                 />
               </Box>
             </DialogContent>

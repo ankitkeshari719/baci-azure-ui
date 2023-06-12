@@ -1,15 +1,23 @@
 import * as React from 'react';
 import { Button, Typography } from '@mui/material';
 import './styles.scss';
+import { ButtonLabelTypography } from '../CustomizedTypography';
 
 type Props = {
   id?: string;
-  name: string;
+  label: string;
   onClick: (...param: any) => void;
   style?: any;
+  textStyle?: any;
 };
 
-export function OutlinedButton({ id, name, onClick, style }: Props) {
+export function OutlinedButton({
+  id,
+  label,
+  onClick,
+  style,
+  textStyle,
+}: Props) {
   return (
     <Button
       id={id}
@@ -18,9 +26,7 @@ export function OutlinedButton({ id, name, onClick, style }: Props) {
       onClick={onClick}
       sx={{ ...style }}
     >
-      <Typography className="customizeButtonText" component="span">
-        {name}
-      </Typography>
+      <ButtonLabelTypography label={label} style={textStyle} />
     </Button>
   );
 }
