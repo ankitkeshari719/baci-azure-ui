@@ -10,6 +10,7 @@ import { Actions } from '../../helpers/types';
 import { MAX_CARD_TEXT_LENGTH } from '../../constants';
 import { GlobalContext } from '../../contexts/GlobalContext';
 import OutlineButtonWithIconWithNoBorder from '../../components/CustomizedButton/OutlineButtonWithIconWithNoBorder';
+import useMediaQuery from '@mui/material/useMediaQuery';
 
 const TextFieldNoBorderWrapper = styled(OutlinedInput)({
   '.MuiInputBase-multiline': {
@@ -39,6 +40,7 @@ const MessageForParticipant = ({
   clearMessageForParticipant,
   userType,
   ended,
+  isXsUp
 }: {
   expandMessageForParticipant: boolean;
   setExpandMessageForParticipant: (value: boolean) => void;
@@ -49,7 +51,9 @@ const MessageForParticipant = ({
   clearMessageForParticipant: () => void;
   userType: any;
   ended: boolean;
+  isXsUp: boolean;
 }) => {
+
   const [enablePostButton, setEnablePostButton] = useState<boolean>(false);
   const [enableClearButton, setEnableClearButton] = useState<boolean>(false);
   const [valueOfWidth, setValueOfWidth] = useState<string>('500px');
@@ -180,7 +184,7 @@ const MessageForParticipant = ({
                         textOverflow="ellipsis"
                         color={actionsData.fontColor}
                         width={
-                          global.expandColumn == 2
+                          global.expandColumn == 2 || isXsUp
                             ? window.innerWidth - 100 + 'px'
                             : window.innerWidth / 3 - 100 + 'px'
                         }

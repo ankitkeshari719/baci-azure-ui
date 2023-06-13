@@ -539,6 +539,7 @@ export default function ActionMainContainer() {
         clearMessageForParticipant={clearMessageForParticipant}
         userType={global.user.userType}
         ended={ended}
+        isXsUp={isXsUp}
       />
 
       {!ended && (

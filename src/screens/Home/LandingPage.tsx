@@ -286,12 +286,14 @@ export function LandingPage() {
             minHeight="400px !important"
             flexDirection="column"
             height="100%"
+            // marginLeft="10px"
+            // marginRight="10px"
           >
             <Grid
               item
               xs={12}
-              marginRight={commonStyles.m_80}
-              marginLeft={commonStyles.m_80}
+              marginRight="50px"
+              marginLeft="50px"
               display="flex"
               flexDirection="column"
               height="100%"
