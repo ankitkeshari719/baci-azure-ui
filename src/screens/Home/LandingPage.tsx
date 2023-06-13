@@ -63,7 +63,7 @@ export function LandingPage() {
   const [height, setHeight] = React.useState(0);
   const [global, dispatch] = React.useContext(GlobalContext);
   // const isXsUp = useMediaQuery(theme.breakpoints.between('xs', 'sm'));
-  const isXsUp = useMediaQuery('(max-width:800px)');
+  const isXsUp = useMediaQuery('(max-width:768px)');
   const isSmUp = useMediaQuery(theme.breakpoints.only('sm'));
   const [isAddDeploymentDataDialogOpen, setIsAddDeploymentDataDialogOpen] =
     React.useState(false);
@@ -180,7 +180,7 @@ export function LandingPage() {
         <Box
           sx={{
             height: 'calc(var(--app-height))',
-            overflowY: 'auto',
+           
             display: 'flex',
             flexDirection: 'column',
           }}
@@ -189,31 +189,37 @@ export function LandingPage() {
           <LandingLayout></LandingLayout>
           <Box
             sx={{
-              minHeight: '300px',
-              height: '50%',
+            
+              height: 'calc(100% - 120px)',
               display: 'flex',
               alignItems: 'center',
               flexDirection: 'column',
-              justifyContent: 'center',
+              // justifyContent: 'center',
               width: '100%',
+              overflowY: 'auto',
             }}
           >
             <Box
               sx={{
                 display: 'flex',
                 alignItems: 'center',
-                justifyContent: 'flex-start',
+                // justifyContent: 'flex-start',
                 flexDirection: 'column',
-                margin: '16px',
-                width: '100%',
+                // margin: '16px',
+                width: 'calc(100% - 40px)',
+                
                 padding: '20px',
+               
               }}
             >
               <H4RegularTypography
                 label={'What BACI retro are you joining today?'}
                 style={{
                   color: '#2C69A1',
-                  textAlign: 'center',
+                  textAlign: 'left',
+                  width: '100%',
+                  display:'flex',
+                  marginTop:'10px'
                 }}
               />
               {/* Retro text field */}
@@ -321,6 +327,7 @@ export function LandingPage() {
                 </FormHelperText>
               )}
               <Box component="span" mt="50px" />
+              <Box>
 
               <Button
                 variant="outlined"
@@ -338,6 +345,7 @@ export function LandingPage() {
               >
                 Create New Retro
               </Button>
+              </Box>
               {/* <Button
                 className="newUserText"
                 onClick={handleAddDeploymentDataOpen}
