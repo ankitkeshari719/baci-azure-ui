@@ -80,14 +80,13 @@ const styles = {
 };
 
 export function LandingLayout() {
-  const isXsUp = useMediaQuery('(max-width:800px)');
-  const [height, setHeight] = React.useState('');
+  const isXsUp = useMediaQuery('(max-width:768px)');
+
   const socket = React.useContext(SocketContext);
   const [isMaintenanceAlertOpen, setIsMaintenanceAlertOpen] =
     React.useState<boolean>(false);
 
   React.useEffect(() => {
-    setHeight('48vh');
     const isPortrait = window.matchMedia('(orientation: portrait)').matches;
 
     console.log(isPortrait);
@@ -126,7 +125,7 @@ export function LandingLayout() {
         >
           <img
             src={LandingMobileImage}
-            style={{ width: '100%', height: height }}
+            style={{ width: '100%', height: '120px' }}
           ></img>
           <Box
             sx={{
@@ -135,7 +134,7 @@ export function LandingLayout() {
               alignItems: 'center',
               justifyContent: 'center',
               position: 'absolute',
-              height: '48vh',
+              // height: '48vh',
               width: '100%',
               top: '0px',
             }}
@@ -147,7 +146,7 @@ export function LandingLayout() {
                 width: '100%',
                 alignItems: 'center',
                 flexDirection: 'column',
-                padding: '30px',
+                padding: '10px',
               }}
             >
               <Box>
@@ -227,7 +226,13 @@ export function LandingLayout() {
               <Box>
                 <img src={BACILogo} alt="Logo" style={styles.logoImage} />
               </Box>
-              <Box display="flex" flexDirection="column" mt="47px" ml="58px">
+              <Box
+                display="flex"
+                flexDirection="row"
+                mt="47px"
+                ml="58px"
+                flexWrap="wrap"
+              >
                 <Box display="flex">
                   {/* Reflect Text */}
                   <H1SemiBoldTypography
