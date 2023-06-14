@@ -1,6 +1,5 @@
 import {
   Box,
-  Button,
   Dialog,
   DialogTitle,
   FormControl,
@@ -28,7 +27,16 @@ import { SocketContext } from '../../contexts/SocketProvider';
 import { DeploymentPopUp } from './../Utils/Alerts/DeploymentPopUp';
 import useReRoute from '../../helpers/hooks/useReRoute';
 import { PrivacyAndRetentionDialog } from '../Utils/Dialogs/PrivacyAndRetentionDialog';
+import {
+  CaptionRegularTypography,
+  H1RegularTypography,
+  H3RegularTypography,
+  H5SemiBoldTypography,
+} from '../../components/CustomizedTypography';
+import { ContainedButton, TextButton } from '../../components';
+
 const AVATAR_CHARACTER_LIMIT = 30;
+
 const styles = {
   avatarfield: {
     '& .MuiFormLabel-root': {
@@ -45,6 +53,7 @@ const styles = {
     width: '527px',
     height: '220px',
     overflowY: 'auto',
+    marginTop: '24px',
   },
   goOnBtn: {
     marginTop: '48px',
@@ -57,8 +66,8 @@ const styles = {
     borderRadius: '50%',
   },
   avatarSvgXs: {
-    width: '50px',
-    height: '50px',
+    width: '60px',
+    height: '60px',
     marginBottom: '15px',
     borderRadius: '50%',
   },
@@ -67,20 +76,13 @@ const styles = {
 export function JoinRetro() {
   const [global, dispatch] = React.useContext(GlobalContext);
   const {
-    state: {
-      users,
-      retroId,
-      retroStarted,
-      ended,
-      retroName,
-    },
+    state: { users, retroId, retroStarted, ended, retroName },
     commitAction,
   } = React.useContext(BoardContext);
   const [selectedAvatar, setAvatar] = React.useState('');
   const [avatarList, setAvatarList] = React.useState<string[]>([]);
 
   const [userName, setUserName] = React.useState('');
-  const AVATAR_COUNT = 57;
   const [codeError, setCodeError] = React.useState('');
   const [codeWarning, setCodeWarning] = React.useState('');
   const [avatarSelectionError, setAvatarSelectionError] = React.useState('');
@@ -97,10 +99,10 @@ export function JoinRetro() {
   const isXsUp = useMediaQuery(theme.breakpoints.between('xs', 'sm'));
   const [openAvatarDialog, setOpenAvatarDialog] = React.useState(false);
   const [height, setHeight] = React.useState(0);
-  
+
   // Re-Routing rules added
   useReRoute();
-  
+
   useAzureAuth();
 
   React.useEffect(() => {
@@ -320,43 +322,29 @@ export function JoinRetro() {
               marginTop: '24px',
             }}
           >
-            {/* Text 1 */}
-            <Typography
-              sx={{
-                fontFamily: 'Poppins',
-                fontStyle: 'normal',
-                fontWeight: 500,
-                fontSize: '24px',
-                lineHeight: '32px',
-                textAlign: 'center',
-                letterSpacing: '0.5px',
+            {/* Welcome to BACI Text 1 */}
+            <H3RegularTypography
+              label={'Welcome to BACI'}
+              style={{
                 color: '#2C69A1',
+                textAlign: 'center',
               }}
-            >
-              Welcome to BACI
-            </Typography>
-            {/* Text 2*/}
-            <Typography
-              sx={{
-                fontFamily: 'Poppins',
-                fontStyle: 'normal',
-                fontWeight: 600,
-                fontSize: '18px',
-                lineHeight: '24px',
-                textAlign: 'center',
-                letterSpacing: '0.5px',
+            />
+            {/* Pick Your Avatar Text 2*/}
+            <H5SemiBoldTypography
+              label={' Pick Your Avatar'}
+              style={{
                 color: '#2C69A1',
+                textAlign: 'center',
                 marginTop: '8px',
               }}
-            >
-              Pick Your Avatar
-            </Typography>
+            />
           </Box>
           <Box
             sx={{
               display: 'flex',
               alignItems: 'center',
-              justifyContent: 'flex-start',
+              justifyContent: 'center',
               flexDirection: 'column',
               margin: '16px',
             }}
@@ -383,7 +371,15 @@ export function JoinRetro() {
               )}
             </FormControl>
             {/* Select Avatar */}
-            <Box style={{ width: '100%', marginTop: '42px' }}>
+            <Box
+              style={{
+                width: '100%',
+                marginTop: '48px',
+                display: 'flex',
+                justifyContent: 'center',
+                alignItems: 'center',
+              }}
+            >
               {selectedAvatar && (
                 <Avatar
                   avatar={selectedAvatar}
@@ -394,9 +390,14 @@ export function JoinRetro() {
                   }}
                 ></Avatar>
               )}
-              <Button onClick={() => setOpenAvatarDialog(true)}>
-                <span className="primaryButtonText">Select Avatar</span>
-              </Button>
+              <TextButton
+                id={'select_avatar'}
+                label={'Select Avatar'}
+                onClick={() => setOpenAvatarDialog(true)}
+                textStyle={{
+                  color: '#159ADD',
+                }}
+              />
               {avatarSelectionError !== '' && (
                 <FormHelperText sx={{ color: 'red', marginLeft: '10px' }}>
                   {avatarSelectionError}
@@ -404,16 +405,18 @@ export function JoinRetro() {
               )}
             </Box>
             {/* Go On Button */}
-            <Button
-              variant="outlined"
-              className="secondaryButton"
-              style={{ width: '100%', marginTop: '54px' }}
+            <ContainedButton
+              id={'go_on_button'}
+              name={'Go on..'}
               onClick={setName}
-            >
-              <Typography component="span" className="secondaryButtonText">
-                Go on..
-              </Typography>
-            </Button>
+              style={{
+                width: '100%',
+                marginTop: '54px',
+                padding: '10px 20px',
+                gap: '8px',
+              }}
+              textStyle={{ color: '#ffffff' }}
+            />
           </Box>
         </Box>
       ) : (
@@ -431,29 +434,33 @@ export function JoinRetro() {
           >
             <Box sx={{ marginLeft: '80px' }}>
               {!global.currentRetro?.creatorId ? (
-                <>
-                  <Typography variant="h1" color={commonStyles.primaryDark}>
-                    Welcome to the BACI
-                  </Typography>
-                  <Typography
-                    variant="h3"
-                    color={commonStyles.primaryDark}
-                    mt="30px"
-                  >
-                    Who you are in ‘{retroName}’?
-                  </Typography>
-                </>
+                <Box sx={{ display: 'flex', flexDirection: 'column' }}>
+                  <H1RegularTypography
+                    label={'Welcome to the BACI'}
+                    style={{
+                      color: '#2C69A1',
+                    }}
+                  />
+                  <H3RegularTypography
+                    label={'Who you are in ‘' + retroName + '’?'}
+                    style={{ color: '#2C69A1' }}
+                  />
+                </Box>
               ) : (
-                <Typography variant="h3" color={commonStyles.primaryDark}>
-                  Who you are in ‘{retroName}’?
-                </Typography>
+                <Box>
+                  <H3RegularTypography
+                    label={'Who you are in ‘' + retroName + '’?'}
+                    style={{ color: '#2C69A1' }}
+                  />
+                </Box>
               )}
-              <FormControl sx={{ width: '322px' }}>
+              {/* Choose your name for this retro Form Field */}
+              <FormControl sx={{ width: '322px', marginTop: '36px' }}>
                 <TextField
                   id="standard-helperText"
                   label="Choose your name for this retro"
                   variant="standard"
-                  sx={{ ...styles.avatarfield, marginTop: '32px' }}
+                  sx={{ ...styles.avatarfield }}
                   value={userName}
                   onChange={e => handleUsername(e.currentTarget.value)}
                   inputProps={{
@@ -468,9 +475,17 @@ export function JoinRetro() {
                   </FormHelperText>
                 )}
               </FormControl>
-              <Typography sx={styles.chooseAvatarText}>
-                Choose your avatar
-              </Typography>
+              {/* Select Avatar Text */}
+              <Box style={{ marginTop: '32px' }}>
+                <CaptionRegularTypography
+                  label={'Select Avatar'}
+                  style={{
+                    color: 'rgba(0, 0, 0, 0.6)',
+                    lineHeight: '18px',
+                  }}
+                />
+              </Box>
+              {/* Avatar List */}
               <Box sx={styles.avatarBox}>
                 {avatarList.map((avatar: any, index) => (
                   <Avatar
@@ -482,6 +497,7 @@ export function JoinRetro() {
                   ></Avatar>
                 ))}
               </Box>
+              {/* Avatar selection Error */}
               {avatarSelectionError !== '' && (
                 <Box
                   sx={{
@@ -501,24 +517,31 @@ export function JoinRetro() {
                   {avatarSelectionError}
                 </Box>
               )}
-              <Button
-                variant="outlined"
-                className="secondaryButton"
-                style={styles.goOnBtn}
+              <ContainedButton
+                id={'go_on_button'}
+                name={'Go on..'}
                 onClick={setName}
-              >
-                <span className="secondaryButtonText">Go on..</span>
-              </Button>
+                style={{
+                  marginTop: '48px',
+                  padding: '10px 20px',
+                  gap: '8px',
+                }}
+                textStyle={{ color: '#ffffff' }}
+              />
             </Box>
           </Grid>
         </Grid>
       )}
+      {/* Select Avatar Dialog  for Mobile View*/}
       <Dialog
         open={openAvatarDialog}
         sx={{ height: height / 2, overflowY: 'auto' }}
       >
         <DialogTitle>
-          <Typography>Select Avatar</Typography>
+          <CaptionRegularTypography
+            label={'Select Avatar'}
+            style={{ color: 'rgba(0, 0, 0, 0.6)', lineHeight: '18px' }}
+          />
         </DialogTitle>
         <Box
           sx={{
@@ -541,16 +564,19 @@ export function JoinRetro() {
             ></Avatar>
           ))}
         </Box>
-        <Box display="flex" justifyContent="center" mb="10px">
-          <Button
-            variant="outlined"
-            className="secondaryButton"
+        <Box display="flex" justifyContent="center" mb="12px" mt="12px">
+          <ContainedButton
+            id={'select_avatar'}
+            name={'Select'}
             onClick={() => setOpenAvatarDialog(false)}
-            sx={{ width: '90%' }}
+            style={{
+              width: '90%',
+              padding: '10px 20px',
+              gap: '8px',
+            }}
+            textStyle={{ color: '#ffffff' }}
             disabled={selectedAvatar == ''}
-          >
-            <span className="secondaryButtonText">Select</span>
-          </Button>
+          />
         </Box>
       </Dialog>
       <PrivacyAndRetentionDialog />

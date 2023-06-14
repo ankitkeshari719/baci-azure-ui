@@ -3,14 +3,14 @@ import { Typography } from '@mui/material';
 import './styles.scss';
 
 type Props = {
-  label: string;
+  label:  string | undefined;
   onClick?: (...param: any) => void;
   style?: any;
 };
 
 export function H2SemiBoldTypography({ label, onClick, style }: Props) {
   return (
-    <Typography className="h2SemiBold" component="span" style={style}>
+    <Typography className="h2SemiBold" component="span" sx={{ ...style }}>
       {label}
     </Typography>
   );

@@ -23,9 +23,11 @@ export function ShareParticipants() {
 
   return (
     <Box className="participantContainer">
+      {/* Share with participants */}
       <Box component="div" whiteSpace="normal" className="createRetroText">
         Share with participants
       </Box>
+      {/* Retro Name */}
       <Box
         sx={{ mt: 4 }}
         component="div"
@@ -34,6 +36,7 @@ export function ShareParticipants() {
       >
         {global.currentRetro?.name}
       </Box>
+      {/* Retro URL */}
       <Box
         sx={{ mt: 4 }}
         component="div"
@@ -55,6 +58,7 @@ export function ShareParticipants() {
           )}
         </a>
       </Box>
+      {/* With code Text*/}
       <Box
         sx={{ mt: 4 }}
         component="div"
