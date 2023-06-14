@@ -1,6 +1,7 @@
 import React from 'react';
 import { Box, Button } from '@mui/material';
 import './styles.scss';
+import { ButtonLabelTypography } from '../CustomizedTypography';
 
 export const OutlinedButtonWithIcon = ({
   label,
@@ -10,6 +11,7 @@ export const OutlinedButtonWithIcon = ({
   id,
   disabled,
   style,
+  textStyle
 }: {
   label: string;
   iconPath?: string;
@@ -18,6 +20,7 @@ export const OutlinedButtonWithIcon = ({
   id?: string;
   disabled: boolean;
   style?: any;
+  textStyle?: any;
 }) => {
   return (
     <Button
@@ -25,10 +28,10 @@ export const OutlinedButtonWithIcon = ({
       className="buttonWithIcon"
       onClick={onClick}
       disabled={disabled}
-      style={style}
+      sx={{ ...style }}
     >
       {iconPath && <img src={iconPath} />}
-      <Box component="span">{label}</Box>
+      <ButtonLabelTypography label={label} style={textStyle} />
     </Button>
   );
 };

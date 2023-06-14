@@ -12,15 +12,15 @@ type Props = {
 };
 
 export const TextButton = ({
+  id,
   label,
   onClick,
   style,
   textStyle,
   disabled,
-  id,
 }: Props) => {
   return (
-    <Button variant="text" onClick={onClick}>
+    <Button id={id} variant="text" onClick={onClick} sx={{ ...style }}>
       <ButtonLabelTypography label={label} style={textStyle} />
     </Button>
   );

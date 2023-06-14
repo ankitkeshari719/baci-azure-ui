@@ -9,15 +9,15 @@ import { GlobalContext } from '../../contexts/GlobalContext';
 import theme from '../../helpers/theme/theme';
 import { DeploymentPopUp } from '../Utils/Alerts/DeploymentPopUp';
 import useReRoute from '../../helpers/hooks/useReRoute';
+import {
+  BodyRegularTypography,
+  BodySemiBoldTypography,
+  H2SemiBoldTypography,
+  H4RegularTypography,
+} from '../../components/CustomizedTypography';
 
 export function ParticipantWaitingPage() {
   const [global, dispatch] = React.useContext(GlobalContext);
-  const [retroName, setRetroName] = React.useState(
-    sessionStorage.getItem('retroname') || ''
-  );
-  const [animateFirst, setAnimateFirst] = React.useState(false);
-  const [animatesecond, setAnimatesecond] = React.useState(false);
-  const [animateThird, setAnimateThird] = React.useState(false);
   const isXsUp = useMediaQuery(theme.breakpoints.between('xs', 'sm'));
 
   // Re-Routing rules added
@@ -46,52 +46,28 @@ export function ParticipantWaitingPage() {
             }}
           >
             {/* Welcome Text */}
-            <Typography
-              sx={{
-                fontFamily: 'Poppins',
-                fontStyle: 'normal',
-                fontWeight: 400,
-                fontSize: '20px',
-                lineHeight: '28px',
-                textAlign: 'center',
-                letterSpacing: '0.5px',
-                color: '#2C69A1',
-              }}
-            >
-              Welcome to ‘{global?.currentRetro?.name}’ !
-            </Typography>
+            <H4RegularTypography
+              label={'Welcome to ‘' + global?.currentRetro?.name + '’ !'}
+              style={{ color: '#2C69A1', textAlign: 'center' }}
+            />
             {/* Lets go Text */}
-            <Typography
-              sx={{
-                fontFamily: 'Poppins',
-                fontStyle: 'normal',
-                fontWeight: 400,
-                fontSize: '16px',
-                lineHeight: '20px',
+            <BodyRegularTypography
+              label={'Let’s go over last 2 weeks'}
+              style={{
                 textAlign: 'center',
-                letterSpacing: '0.6px',
                 color: '#2C69A1',
                 marginTop: '8px',
               }}
-            >
-              Let’s go over last 2 weeks
-            </Typography>
+            />
             {/* Relax facilitator Text */}
-            <Typography
-              sx={{
-                fontFamily: 'Poppins',
-                fontStyle: 'normal',
-                fontWeight: 600,
-                fontSize: '16px',
-                lineHeight: '20px',
+            <BodySemiBoldTypography
+              label={'Relax while facilitator starts the retro...'}
+              style={{
                 textAlign: 'center',
-                letterSpacing: '0.6px',
                 color: '#EE7538',
                 marginTop: '24px',
               }}
-            >
-              Relax while facilitator starts the retro...
-            </Typography>
+            />
             {/* Image */}
             <Box sx={{ marginTop: '8px' }}>
               <img
@@ -130,9 +106,10 @@ export function ParticipantWaitingPage() {
                 marginTop: '16px',
               }}
             >
-              <Typography variant="h2" color={commonStyles.primaryDark}>
-                Welcome to ‘{global?.currentRetro?.name}’ !
-              </Typography>
+              <H2SemiBoldTypography
+                label={'Welcome to ‘' + global?.currentRetro?.name + '’ !'}
+                style={{ color: '#2C69A1', textAlign: 'center' }}
+              />
             </Grid>
             {/* Lets go Text */}
             <Grid
@@ -144,9 +121,14 @@ export function ParticipantWaitingPage() {
                 alignContent: 'center',
               }}
             >
-              <Typography color={commonStyles.primaryDark} variant="h4">
-                Let’s go over last 2 weeks
-              </Typography>
+              <H4RegularTypography
+                label={'Let’s go over last 2 weeks'}
+                style={{
+                  textAlign: 'center',
+                  color: '#2C69A1',
+                  marginTop: '8px',
+                }}
+              />
             </Grid>
             {/* Relax facilitator Text */}
             <Grid
@@ -158,9 +140,14 @@ export function ParticipantWaitingPage() {
                 alignContent: 'center',
               }}
             >
-              <Typography color={commonStyles.secondaryMain} variant="h4">
-                Relax while facilitator starts the retro...
-              </Typography>
+              <H4RegularTypography
+                label={'Relax while facilitator starts the retro...'}
+                style={{
+                  textAlign: 'center',
+                  color: '#EE7538',
+                  marginTop: '24px',
+                }}
+              />
             </Grid>
             {/* Image */}
             <Grid

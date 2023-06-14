@@ -1,19 +1,16 @@
 import * as React from 'react';
 import {
   Box,
-  Button,
   Dialog,
   FormControl,
   FormHelperText,
   Grid,
   styled,
   TextField,
-  Typography,
   useMediaQuery,
 } from '@mui/material';
 import theme from '../../helpers/theme/theme';
 import './../../global.scss';
-import './styles.scss';
 import commonStyles from './../../style.module.scss';
 import { useNavigate, useParams } from 'react-router-dom';
 import { useAzureAuth } from '../../helpers/msal/azureauth';
@@ -30,6 +27,7 @@ import {
   H2RegularTypography,
   H4RegularTypography,
 } from '../../components/CustomizedTypography';
+import { ContainedButton, TextButton } from '../../components';
 
 const BootstrapDialog = styled(Dialog)(({ theme }) => ({
   '& .MuiDialogContent-root': {
@@ -41,10 +39,6 @@ const BootstrapDialog = styled(Dialog)(({ theme }) => ({
 }));
 
 const styles = {
-  signInMargin: {
-    marginTop: '32px',
-    height: '44px',
-  },
   accessCodeTextField: {
     '& .MuiFormLabel-root': {
       color: 'rgba(0, 0, 0, 0.6)',
@@ -181,7 +175,7 @@ export function LandingPage() {
         <Box
           sx={{
             height: 'calc(var(--app-height))',
-           
+
             display: 'flex',
             flexDirection: 'column',
           }}
@@ -190,7 +184,6 @@ export function LandingPage() {
           <LandingLayout></LandingLayout>
           <Box
             sx={{
-            
               height: 'calc(100% - 120px)',
               display: 'flex',
               alignItems: 'center',
@@ -208,19 +201,19 @@ export function LandingPage() {
                 flexDirection: 'column',
                 // margin: '16px',
                 width: 'calc(100% - 40px)',
-                
+
                 padding: '20px',
-               
               }}
             >
+              {/* What BACI retro are you joining today? Text */}
               <H4RegularTypography
                 label={'What BACI retro are you joining today?'}
                 style={{
                   color: '#2C69A1',
                   textAlign: 'left',
                   width: '100%',
-                  display:'flex',
-                  marginTop:'10px'
+                  display: 'flex',
+                  marginTop: '10px',
                 }}
               />
               {/* Retro text field */}
@@ -254,16 +247,18 @@ export function LandingPage() {
                 )}
               </FormControl>
               {/* Go On Button */}
-              <Button
-                variant="outlined"
-                className="secondaryButton"
-                style={{ width: '100%', marginTop: '48px' }}
+              <ContainedButton
+                id={'join_retro_button'}
+                name={'Go on..'}
                 onClick={() => joinRetro()}
-              >
-                <Typography component="span" className="secondaryButtonText">
-                  Go on..
-                </Typography>
-              </Button>
+                style={{
+                  width: '100%',
+                  marginTop: '48px',
+                  padding: '10px 20px',
+                  gap: '8px',
+                }}
+                textStyle={{ color: '#ffffff' }}
+              />
             </Box>
           </Box>
         </Box>
@@ -329,25 +324,33 @@ export function LandingPage() {
                   {codeError}
                 </FormHelperText>
               )}
-              <Box component="span" mt="50px" />
               <Box>
-
-              <Button
-                variant="outlined"
-                className="secondaryButton"
-                style={styles.signInMargin}
-                onClick={() => joinRetro()}
-              >
-                <span className="secondaryButtonText">Go on..</span>
-              </Button>
-              {isSmUp&& <Button
-                className="newUserText"
-                onClick={() => {
-                  CreateNewRetro();
-                }}
-              >
-                Create New Retro
-              </Button>}
+                <ContainedButton
+                  id={'join_retro_button_desktop'}
+                  name={'Go on..'}
+                  onClick={() => joinRetro()}
+                  style={{
+                    // width: '100%',
+                    marginTop: '80px',
+                    padding: '10px 20px',
+                    gap: '8px',
+                  }}
+                  textStyle={{ color: '#ffffff' }}
+                />
+                {isSmUp && (
+                  <TextButton
+                    id={'create_new__retro_button_desktop'}
+                    label={'Create New Retro'}
+                    onClick={() => CreateNewRetro()}
+                    style={{
+                      marginTop: '42px',
+                    }}
+                    textStyle={{
+                      color: '#4285F4',
+                      textDecoration: 'underline !important',
+                    }}
+                  />
+                )}
               </Box>
               {/* <Button
                 className="newUserText"

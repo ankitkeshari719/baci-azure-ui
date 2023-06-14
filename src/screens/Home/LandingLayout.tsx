@@ -6,6 +6,10 @@ import LandingImage from '../../assets/img/landing_img.png';
 import LandingMobileImage from '../../assets/img/Mobile_home_Image.png';
 import BACILogo from '../../assets/img/bacilogobeta.svg';
 import commomStyles from './../../style.module.scss';
+import {
+  H1SemiBoldTypography,
+  H5SemiBoldTypography,
+} from '../../components/CustomizedTypography';
 
 const styles = {
   mainDiv: {
@@ -83,7 +87,6 @@ export function LandingLayout() {
     React.useState<boolean>(false);
 
   React.useEffect(() => {
-
     const isPortrait = window.matchMedia('(orientation: portrait)').matches;
 
     console.log(isPortrait);
@@ -152,16 +155,16 @@ export function LandingLayout() {
                   alt="logo"
                   height="48px"
                   width="108px"
-                  // height='50px'
                   src={BACILogo} // use normal <img> attributes as props
-                  // width={image.width}
                 />
-                {/* <img src={BACILogo} alt="Logo" style={styles.logoImageXs} /> */}
               </Box>
               <Box display="flex" mt="32px">
-                <Typography variant="h5" color={commomStyles.grey} mr="6px">
-                  Reflect
-                </Typography>
+                {/* Reflect Text */}
+                <H5SemiBoldTypography
+                  label="Reflect"
+                  style={{ color: '#F0F0F0' }}
+                />
+                {/* Dot Text */}
                 <Typography
                   color={commomStyles.secondaryMain}
                   mr="6px"
@@ -169,9 +172,12 @@ export function LandingLayout() {
                 >
                   {'\u002E'}
                 </Typography>
-                <Typography variant="h5" color={commomStyles.grey} mr="6px">
-                  Gratitude
-                </Typography>
+                {/* Gratitude Text */}
+                <H5SemiBoldTypography
+                  label="Gratitude"
+                  style={{ color: '#F0F0F0' }}
+                />
+                {/* Dot Text */}
                 <Typography
                   color={commomStyles.secondaryMain}
                   mr="6px"
@@ -179,14 +185,11 @@ export function LandingLayout() {
                 >
                   {'\u002E'}
                 </Typography>
-
-                <Typography
-                  variant="h5"
-                  color={commomStyles.secondaryMain}
-                  mr="6px"
-                >
-                  Action
-                </Typography>
+                {/* Action Text */}
+                <H5SemiBoldTypography
+                  label="Action"
+                  style={{ color: '#EE7538' }}
+                />
               </Box>
             </Box>
           </Box>
@@ -215,8 +218,6 @@ export function LandingLayout() {
                 top: isMaintenanceAlertOpen ? '80px' : '0px',
                 width: '100%',
                 display: 'flex',
-                // zIndex: 1000,
-                // height: '400px',
                 background: 'rgba(0, 0, 0, 0.4)',
                 flexDirection: 'column',
                 paddingBottom: '30px',
@@ -225,11 +226,20 @@ export function LandingLayout() {
               <Box>
                 <img src={BACILogo} alt="Logo" style={styles.logoImage} />
               </Box>
-              <Box display="flex" flexDirection="row" mt="47px" ml="58px" flexWrap="wrap">
+              <Box
+                display="flex"
+                flexDirection="row"
+                mt="47px"
+                ml="58px"
+                flexWrap="wrap"
+              >
                 <Box display="flex">
-                  <Typography variant="h1" color={commomStyles.grey} mr="6px">
-                    Reflect
-                  </Typography>
+                  {/* Reflect Text */}
+                  <H1SemiBoldTypography
+                    label="Reflect"
+                    style={{ color: '#F0F0F0' }}
+                  />
+                  {/* Dot Text */}
                   <Typography
                     color={commomStyles.secondaryMain}
                     mr="6px"
@@ -240,9 +250,12 @@ export function LandingLayout() {
                   </Typography>
                 </Box>
                 <Box display="flex">
-                  <Typography variant="h1" color={commomStyles.grey} mr="6px">
-                    Gratitude
-                  </Typography>
+                  {/* Gratitude Text */}
+                  <H1SemiBoldTypography
+                    label="Gratitude"
+                    style={{ color: '#F0F0F0' }}
+                  />
+                  {/* Dot Text */}
                   <Typography
                     color={commomStyles.secondaryMain}
                     mr="6px"
@@ -252,13 +265,11 @@ export function LandingLayout() {
                     {'\u002E'}
                   </Typography>
                 </Box>
-                <Typography
-                  variant="h1"
-                  color={commomStyles.secondaryMain}
-                  mr="6px"
-                >
-                  Action
-                </Typography>
+                {/* Action Text */}
+                <H1SemiBoldTypography
+                  label="Action"
+                  style={{ color: '#EE7538' }}
+                />
               </Box>
             </Box>
           </Box>

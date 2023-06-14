@@ -4,11 +4,11 @@ import './styles.scss';
 import { ButtonLabelTypography } from '../CustomizedTypography';
 
 type Props = {
+  id?: string;
   name: string;
   onClick: (...param: any) => void;
   style?: any;
   disabled?: boolean;
-  id?: string;
   textStyle?: any;
 };
 

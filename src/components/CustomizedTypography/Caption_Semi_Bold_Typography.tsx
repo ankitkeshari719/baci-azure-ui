@@ -3,14 +3,14 @@ import { Typography } from '@mui/material';
 import './styles.scss';
 
 type Props = {
-  label: string;
+  label:  string | undefined;
   onClick?: (...param: any) => void;
   style?: any;
 };
 
 export function CaptionSemiBoldTypography({ label, onClick, style }: Props) {
   return (
-    <Typography className="captionsSemiBold" component="span" style={style}>
+    <Typography className="captionsSemiBold" component="span" sx={{ ...style }}>
       {label}
     </Typography>
   );
