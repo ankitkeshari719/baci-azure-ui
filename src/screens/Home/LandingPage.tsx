@@ -64,7 +64,8 @@ export function LandingPage() {
   const [global, dispatch] = React.useContext(GlobalContext);
   // const isXsUp = useMediaQuery(theme.breakpoints.between('xs', 'sm'));
   const isXsUp = useMediaQuery('(max-width:768px)');
-  const isSmUp = useMediaQuery(theme.breakpoints.only('sm'));
+  const isSmUp = useMediaQuery('(min-width:1024px)');
+  // const isSmUp = useMediaQuery(theme.breakpoints.only('sm'));
   const [isAddDeploymentDataDialogOpen, setIsAddDeploymentDataDialogOpen] =
     React.useState(false);
 
@@ -339,14 +340,14 @@ export function LandingPage() {
               >
                 <span className="secondaryButtonText">Go on..</span>
               </Button>
-              <Button
+              {isSmUp&& <Button
                 className="newUserText"
                 onClick={() => {
                   CreateNewRetro();
                 }}
               >
                 Create New Retro
-              </Button>
+              </Button>}
               </Box>
               {/* <Button
                 className="newUserText"
