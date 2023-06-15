@@ -58,7 +58,8 @@ export function LandingPage() {
   const [global, dispatch] = React.useContext(GlobalContext);
   // const isXsUp = useMediaQuery(theme.breakpoints.between('xs', 'sm'));
   const isXsUp = useMediaQuery('(max-width:768px)');
-  const isSmUp = useMediaQuery(theme.breakpoints.only('sm'));
+  const isSmUp = useMediaQuery('(min-width:1024px)');
+  // const isSmUp = useMediaQuery(theme.breakpoints.only('sm'));
   const [isAddDeploymentDataDialogOpen, setIsAddDeploymentDataDialogOpen] =
     React.useState(false);
 
@@ -323,30 +324,34 @@ export function LandingPage() {
                   {codeError}
                 </FormHelperText>
               )}
-              <ContainedButton
-                id={'join_retro_button_desktop'}
-                name={'Go on..'}
-                onClick={() => joinRetro()}
-                style={{
-                  width: '100%',
-                  marginTop: '80px',
-                  padding: '10px 20px',
-                  gap: '8px',
-                }}
-                textStyle={{ color: '#ffffff' }}
-              />
-              <TextButton
-                id={'create_new__retro_button_desktop'}
-                label={'Create New Retro'}
-                onClick={() => CreateNewRetro()}
-                style={{
-                  marginTop: '42px',
-                }}
-                textStyle={{
-                  color: '#4285F4',
-                  textDecoration: 'underline !important',
-                }}
-              />
+              <Box>
+                <ContainedButton
+                  id={'join_retro_button_desktop'}
+                  name={'Go on..'}
+                  onClick={() => joinRetro()}
+                  style={{
+                    // width: '100%',
+                    marginTop: '80px',
+                    padding: '10px 20px',
+                    gap: '8px',
+                  }}
+                  textStyle={{ color: '#ffffff' }}
+                />
+                {isSmUp && (
+                  <TextButton
+                    id={'create_new__retro_button_desktop'}
+                    label={'Create New Retro'}
+                    onClick={() => CreateNewRetro()}
+                    style={{
+                      marginTop: '42px',
+                    }}
+                    textStyle={{
+                      color: '#4285F4',
+                      textDecoration: 'underline !important',
+                    }}
+                  />
+                )}
+              </Box>
               {/* <Button
                 className="newUserText"
                 onClick={handleAddDeploymentDataOpen}
