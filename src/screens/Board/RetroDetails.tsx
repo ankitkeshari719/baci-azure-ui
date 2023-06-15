@@ -1,11 +1,5 @@
 import * as React from 'react';
-import {
-  Box,
-  Button,
-  Grid,
-  Tooltip,
-  Typography,
-} from '@mui/material';
+import { Box, Button, Grid, Tooltip, Typography } from '@mui/material';
 import { LandingLayout } from '../Home/LandingLayout';
 import commonStyles from './../../style.module.scss';
 import { useNavigate } from 'react-router-dom';
@@ -18,32 +12,23 @@ import { BoardContext } from '../../contexts/BoardContext';
 import { GlobalContext } from '../../contexts/GlobalContext';
 import { CopyToClipboard } from 'react-copy-to-clipboard';
 import QRCode from 'qrcode.react';
+import { H3RegularTypography } from '../../components/CustomizedTypography';
+import { TextButton } from '../../components';
 
 const styles = {
-  frame101: {
-    marginTop: '112px',
-    marginBttom: '259px',
-  },
-  group100: {
-    marginTop: '60px',
-  },
-  nowAvailableAt: {
-    height: '20px',
-    fontFamily: "'Poppins'",
-    fontStyle: 'normal',
-    fontWeight: 500,
-    fontSize: '14px',
-    lineHeight: '20px',
-    letterSpacing: '0.4px',
-    textTransform: 'uppercase',
-    opacity: '0.5',
-  },
   displayCenter: {
     display: 'flex',
     justifyContent: 'center',
   },
   link: {
     color: commonStyles.PrimaryMain,
+    fontFamily: 'Poppins',
+    fontStyle: 'normal',
+    fontWeight: 400,
+    fontSize: '16px',
+    lineHeight: '125%',
+    letterSpacing: '0.006em',
+    marginTop: '16px'
   },
   shareImg: {},
   group99: {
@@ -183,187 +168,146 @@ export function RetroDetails(props: any) {
       setIsCopied(false);
     }, 1500);
   };
-  
+
   return (
     <Grid container spacing={0}>
-      {!props?.popover && (
-        <Grid item lg={6}>
-          <LandingLayout></LandingLayout>
-        </Grid>
-      )}
-      <Grid item lg={!props?.popover ? 6 : 12}>
-        <Grid
-          item
-          xs={12}
-          marginRight={commonStyles.m_80}
-          marginLeft={commonStyles.m_80}
+      <Grid item lg={12}>
+        <Box
+          sx={{
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            flexDirection: 'column',
+            padding: '32px',
+          }}
         >
-          <Box
-            style={
-              !props?.popover
-                ? styles.frame101
-                : { marginTop: '50px', marginBottom: '50px' }
-            }
+          {/* Name Text */}
+          <H3RegularTypography
+            label={retroName}
+            style={{ color: '#4E4E4E', textAlign: 'center' }}
+          />
+          <TextButton
+            id={'participant_join'}
+            label={'Participants can join at'}
+            onClick={() => null}
+            style={{ marginTop: '32px' }}
+          />
+          <a
+            href="https://baci.app/"
+            rel="noreferrer"
+            target="_blank"
+            style={styles.link}
           >
-            {!props?.popover ? (
-              <Typography
-                variant="h2"
-                color={commonStyles.primaryDark}
-                className="alignCenter"
-              >
-                ‘{retroName}’ retro is created successfully!
-              </Typography>
-            ) : (
-              <Typography
-                variant="h2"
-                color={commonStyles.primaryDark}
-                className="alignCenter"
-              >
-                Name : ‘{retroName}’
-              </Typography>
-            )}
-            <Box style={styles.group100}>
-              <Box style={styles.displayCenter}>
-                <Button sx={styles.nowAvailableAt}>now available at</Button>
-              </Box>
-              <Box style={styles.displayCenter}>
-                {' '}
-                <a
-                  href="https://baci.app/"
-                  rel="noreferrer"
-                  target="_blank"
-                  style={styles.link}
-                >
-                  https://baci.app
-                </a>
-              </Box>
-            </Box>
-            <Box sx={styles.group99}>
-              <div style={styles.displayCenter}>
-                <Typography color={commonStyles.primaryDark}>
-                  WITH CODE
-                </Typography>
-              </div>
-              <div style={styles.displayCenter}>
-                <Typography
-                  variant="h2"
-                  display="block"
-                  color={commonStyles.primaryDark}
-                  style={{
-                    margin: '12px 0px 0px 0px',
-                    width: '185px',
-                    textAlign: 'center',
-                  }}
-                >
-                  {global?.currentRetro?.humanId}
-                </Typography>
-              </div>
-
-              <Grid container spacing={2} mt="48px">
-                <Grid item xs={4}>
-                  <Box sx={styles.group96}>
-                    <Box
-                      mt="80px"
+            https://baci.app
+          </a>
+          <TextButton
+            id={'with_code'}
+            label={'WITH CODE'}
+            onClick={() => null}
+            style={{ marginTop: '32px' }}
+          />
+          <Typography
+            variant="h2"
+            display="block"
+            color={commonStyles.primaryDark}
+            style={{
+              margin: '12px 0px 0px 0px',
+              width: '185px',
+              textAlign: 'center',
+            }}
+          >
+            {global?.currentRetro?.humanId}
+          </Typography>
+          <Box sx={styles.group99}>
+            <Grid container spacing={2} mt="48px">
+              <Grid item xs={4}>
+                <Box sx={styles.group96}>
+                  <Box
+                    mt="80px"
+                    style={{
+                      maxWidth: '154px',
+                      overflowX: 'hidden',
+                    }}
+                  >
+                    <a
                       style={{
-                        maxWidth: '154px',
-                        overflowX: 'hidden',
+                        overflowWrap: 'break-word',
+                        color: commonStyles.primaryDark,
                       }}
                     >
-                      <a
-                        style={{
-                          overflowWrap: 'break-word',
-                          color: commonStyles.primaryDark,
-                        }}
-                      >
-                        {global?.currentRetro?.joinUrl}
-                      </a>
-                    </Box>
+                      {global?.currentRetro?.joinUrl}
+                    </a>
+                  </Box>
 
-                    <Box mt="75px">
-                      <CopyToClipboard
-                        text={global?.currentRetro?.joinUrl}
-                        onCopy={() => setIsCopied(true)}
+                  <Box mt="75px">
+                    <CopyToClipboard
+                      text={global?.currentRetro?.joinUrl}
+                      onCopy={() => setIsCopied(true)}
+                    >
+                      <Tooltip
+                        onClose={handleTooltipClose}
+                        open={iscopied}
+                        style={{ width: '20px', fontSize: '10px' }}
+                        enterNextDelay={1500}
+                        placement="top"
+                        title="Link Copied!"
                       >
-                        <Tooltip
-                          onClose={handleTooltipClose}
-                          open={iscopied}
-                          style={{ width: '20px', fontSize: '10px' }}
-                          enterNextDelay={1500}
-                          placement="top"
-                          title="Link Copied!"
-                        >
-                          <img
-                            src={copy}
-                            style={
-                              (styles.copyURL,
-                              { marginTop: '0', cursor: 'pointer' })
-                            }
-                          ></img>
-                        </Tooltip>
-                      </CopyToClipboard>
-                    </Box>
+                        <img
+                          src={copy}
+                          style={
+                            (styles.copyURL,
+                            { marginTop: '0', cursor: 'pointer' })
+                          }
+                        ></img>
+                      </Tooltip>
+                    </CopyToClipboard>
                   </Box>
-                </Grid>
-                <Grid item xs={4}>
-                  <Box sx={styles.group97}>
-                    <QRCode
-                      value={global.currentRetro?.joinUrl || ''}
-                      style={styles.qrCode}
-                    />
-                    <div style={styles.div97}>
-                      <img
-                        src={download}
-                        style={styles.copyURL}
-                        onClick={downloadQRCode}
-                        // onTouchStart={downloadQRCode}
-                      ></img>
-                    </div>
-                  </Box>
-                </Grid>
-                <Grid item xs={4}>
-                  <Box sx={styles.group98}>
-                    <img src={email} alt="email" style={styles.emailImg} />
-                    <div style={styles.div98}>
-                      <img
-                        src={send}
-                        style={styles.copyURL}
-                        onClick={shareRetroDetails}
-                        // onTouchStart={shareRetroDetails}
-                      ></img>
-                    </div>
-                  </Box>
-                </Grid>
+                </Box>
               </Grid>
-            </Box>
-            <Box
-              display="flex"
-              sx={{ justifyContent: 'center', alignItems: 'center' }}
-              mt="48px"
-            >
-              {!props?.popover ? (
-                <Button
-                  variant="outlined"
-                  className="secondaryButton"
-                  style={styles.goToRetroBtn}
-                  onClick={() => goToRetro()}
-                  // onTouchStart={() => goToRetro()}
-                >
-                  <span className="secondaryButtonText">Go to retro</span>
-                </Button>
-              ) : (
-                <Button
-                  variant="outlined"
-                  className="secondaryButton"
-                  style={styles.goToRetroBtn}
-                  onClick={() => props?.popover && props.close()}
-                  // onTouchStart={() => props?.popover && props.close()}
-                >
-                  <span className="secondaryButtonText">Close</span>
-                </Button>
-              )}
-            </Box>
+              <Grid item xs={4}>
+                <Box sx={styles.group97}>
+                  <QRCode
+                    value={global.currentRetro?.joinUrl || ''}
+                    style={styles.qrCode}
+                  />
+                  <div style={styles.div97}>
+                    <img
+                      src={download}
+                      style={styles.copyURL}
+                      onClick={downloadQRCode}
+                    ></img>
+                  </div>
+                </Box>
+              </Grid>
+              <Grid item xs={4}>
+                <Box sx={styles.group98}>
+                  <img src={email} alt="email" style={styles.emailImg} />
+                  <div style={styles.div98}>
+                    <img
+                      src={send}
+                      style={styles.copyURL}
+                      onClick={shareRetroDetails}
+                    ></img>
+                  </div>
+                </Box>
+              </Grid>
+            </Grid>
           </Box>
-        </Grid>
+          <Box
+            display="flex"
+            sx={{ justifyContent: 'center', alignItems: 'center' }}
+            mt="48px"
+          >
+            <Button
+              variant="outlined"
+              className="secondaryButton"
+              style={styles.goToRetroBtn}
+              onClick={() => props.close()}
+            >
+              <span className="secondaryButtonText">Close</span>
+            </Button>
+          </Box>
+        </Box>
       </Grid>
     </Grid>
   );
