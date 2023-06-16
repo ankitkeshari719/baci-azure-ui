@@ -1,10 +1,11 @@
 import * as React from 'react';
-import { AppBar, Box, Button, Divider, Grid, Toolbar } from '@mui/material';
+import { AppBar, Box, Divider, Grid, Toolbar } from '@mui/material';
 import '../../global.scss';
 import './styles.scss';
 import { TopBar } from './TopBar';
 import Typography from '@mui/material/Typography';
 import * as Icons from 'heroicons-react';
+import { ContainedButton, OutlinedButton } from '../../components';
 
 type Props = {
   selectedTemplate: any;
@@ -75,27 +76,26 @@ export function LearnMore({
               >
                 {selectedTemplate.templateName}
               </Typography>
-              <Button
-                autoFocus
-                variant="outlined"
-                className="customizeButton"
+              <OutlinedButton
+                id={'customize_button'}
+                label="Customize"
+                size={'medium'}
                 onClick={onClickCustomButton}
-              >
-                <Typography className="customizeButtonText" component="span">
-                  Customize
-                </Typography>
-              </Button>
-              <Button
-                autoFocus
-                variant="contained"
-                className="saveButton"
-                sx={{ ml: 2 }}
+                style={{
+                  minWidth: '75px !important',
+                  height: '36px !important',
+                }}
+              />
+              <ContainedButton
+                name="Select"
                 onClick={() => onClickSelectButton(selectedTemplate.templateId)}
-              >
-                <Typography className="saveButtonText" component="span">
-                  Select
-                </Typography>
-              </Button>
+                style={{
+                  minWidth: '75px !important',
+                  height: '36px !important',
+                  marginLeft: '16px',
+                }}
+                size={'medium'}
+              />
             </Toolbar>
           </AppBar>
         </Grid>

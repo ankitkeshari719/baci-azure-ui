@@ -95,7 +95,7 @@ export function StartRetroWithTemplate() {
           minWidth: '140px !important',
           height: '36px !important',
         }}
-        textStyle={{ color: '#FFFFFF' }}
+        size={'medium'}
       />
       <TimeInputDialog
         selectedValue={selectedValue}

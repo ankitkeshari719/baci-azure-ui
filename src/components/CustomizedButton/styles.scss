@@ -1,34 +1,147 @@
 @import './../../style.module.scss';
 
-.containedButton {
+.containedButtonSmall {
   display: flex !important;
   flex-direction: row !important;
   justify-content: center !important;
   align-items: center !important;
-  background: #159add !important;
-  border-radius: 24px !important;
-  box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.25) !important;
-}
-
-.containedButton:disabled {
-  background: #CCCCCC !important;
-}
-
-.outlinedButton {
-  display: flex !important;
-  flex-direction: row !important;
-  justify-content: center !important;
-  align-items: center !important;
-  padding: 6px 16px !important;
+  padding: 12px 14px !important;
   gap: 8px !important;
-  border: 1px solid #159add;
-  border-radius: 24px !important;
-  background: #fafafa !important;
+  background: #159add !important;
+  border-radius: 8px !important;
+  color: #ffffff;
 }
 
-.outlinedButton:disabled {
-  border: 1px solid gray !important;
-  opacity: 0.5 !important;
+.containedButtonMedium {
+  display: flex !important;
+  flex-direction: row !important;
+  justify-content: center !important;
+  align-items: center !important;
+  padding: 12px 16px !important;
+  gap: 16px !important;
+  background: #159add !important;
+  border-radius: 8px !important;
+  color: #ffffff;
+}
+
+.containedButtonLarge {
+  display: flex !important;
+  flex-direction: row !important;
+  justify-content: center !important;
+  align-items: center !important;
+  padding: 12px 18px !important;
+  gap: 16px !important;
+  background: #159add !important;
+  border-radius: 8px !important;
+  color: #ffffff;
+}
+
+.containedButtonSmall:disabled {
+  background: #cccccc !important;
+  color: #ffffff !important;
+}
+
+.containedButtonMedium:disabled {
+  background: #cccccc !important;
+  color: #ffffff !important;
+}
+
+.containedButtonLarge:disabled {
+  background: #cccccc !important;
+  color: #ffffff !important;
+}
+
+.outlinedButtonSmall {
+  display: flex !important;
+  flex-direction: row !important;
+  justify-content: center !important;
+  align-items: center !important;
+  padding: 12px 14px !important;
+  gap: 8px !important;
+  border: 1px solid #cccccc !important;
+  border-radius: 8px !important;
+  background: #fafafa !important;
+  color: #159add;
+}
+
+.outlinedButtonMedium {
+  display: flex !important;
+  flex-direction: row !important;
+  justify-content: center !important;
+  align-items: center !important;
+  padding: 12px 16px !important;
+  gap: 16px !important;
+  border: 1px solid #cccccc !important;
+  border-radius: 8px !important;
+  background: #fafafa !important;
+  color: #159add !important;
+}
+
+.outlinedButtonLarge {
+  display: flex !important;
+  flex-direction: row !important;
+  justify-content: center !important;
+  align-items: center !important;
+  padding: 12px 18px !important;
+  gap: 16px !important;
+  border: 1px solid #cccccc !important;
+  border-radius: 8px !important;
+  background: #fafafa !important;
+  color: #159add !important;
+}
+
+.outlinedButtonSmall:disabled {
+  border: 1px solid #cccccc !important;
+  color: #cccccc !important;
+}
+
+.outlinedButtonMedium:disabled {
+  border: 1px solid #cccccc !important;
+  color: #cccccc !important;
+}
+
+.outlinedButtonLarge:disabled {
+  border: 1px solid #cccccc !important;
+  color: #cccccc !important;
+}
+
+.textButtonSmall {
+  display: flex !important;
+  flex-direction: row !important;
+  justify-content: center !important;
+  align-items: center !important;
+  padding: 12px 14px !important;
+  gap: 8px !important;
+  background: #ffffff !important;
+  border-radius: 8px !important;
+  text-decoration-line: underline !important;
+  color: #159add;
+}
+
+.textButtonMedium {
+  display: flex !important;
+  flex-direction: row !important;
+  justify-content: center !important;
+  align-items: center !important;
+  padding: 12px 16px !important;
+  gap: 16px !important;
+  background: #ffffff !important;
+  border-radius: 8px !important;
+  text-decoration-line: underline !important;
+  color: #159add;
+}
+
+.textButtonLarge {
+  display: flex !important;
+  flex-direction: row !important;
+  justify-content: center !important;
+  align-items: center !important;
+  padding: 12px 18px !important;
+  gap: 16px !important;
+  background: #ffffff !important;
+  border-radius: 8px !important;
+  text-decoration-line: underline !important;
+  color: #159add;
 }
 
 .buttonWithIcon {

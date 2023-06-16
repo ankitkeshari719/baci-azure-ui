@@ -101,13 +101,13 @@ export function CustomizeTemplateDialog({
         }}
       >
         <OutlinedButton
+          id={'exit_without_saving'}
           label="Exit without saving"
+          size={'medium'}
           onClick={() => exitWithOutExit(templateId)}
-          textStyle={{ color: '#159ADD' }}
           style={{
             minWidth: '225px !important',
             height: '44px !important',
-            textTransform: 'uppercase !important',
             marginTop: '0px !important',
           }}
         />
@@ -120,7 +120,7 @@ export function CustomizeTemplateDialog({
             textTransform: 'uppercase !important',
             marginLeft: '50px !important',
           }}
-          textStyle={{ color: '#FFFFFF' }}
+          size={'medium'}
         />
       </DialogActions>
     </Box>

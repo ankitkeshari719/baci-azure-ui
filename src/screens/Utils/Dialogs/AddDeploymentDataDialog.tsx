@@ -133,6 +133,7 @@ export function AddDeploymentDataDialog({
       >
         <OutlinedButton
           label="Cancel"
+          size={'medium'}
           onClick={handleAddDeploymentDataClose}
           style={{
             minWidth: '225px !important',
@@ -140,7 +141,6 @@ export function AddDeploymentDataDialog({
             textTransform: 'uppercase !important',
             marginTop: '0px !important',
           }}
-          textStyle={{ color: '#159ADD' }}
         />
         <ContainedButton
           name="Save"
@@ -151,7 +151,7 @@ export function AddDeploymentDataDialog({
             textTransform: 'uppercase !important',
             marginLeft: '50px !important',
           }}
-          textStyle={{ color: '#FFFFFF' }}
+          size={'medium'}
         />
       </DialogActions>
     </Box>

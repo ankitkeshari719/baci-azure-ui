@@ -6,13 +6,11 @@ import {
   FormHelperText,
   Grid,
   TextField,
-  Typography,
   useMediaQuery,
 } from '@mui/material';
 import * as React from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { LandingLayout } from './LandingLayout';
-import commonStyles from './../../style.module.scss';
 import './../../global.scss';
 import { Retro as RetroType } from '../../helpers/types';
 import { useRetro } from '../../helpers';
@@ -394,9 +392,7 @@ export function JoinRetro() {
                 id={'select_avatar'}
                 label={'Select Avatar'}
                 onClick={() => setOpenAvatarDialog(true)}
-                textStyle={{
-                  color: '#159ADD',
-                }}
+                size={'medium'}
               />
               {avatarSelectionError !== '' && (
                 <FormHelperText sx={{ color: 'red', marginLeft: '10px' }}>
@@ -415,7 +411,7 @@ export function JoinRetro() {
                 padding: '10px 20px',
                 gap: '8px',
               }}
-              textStyle={{ color: '#ffffff' }}
+              size={'medium'}
             />
           </Box>
         </Box>
@@ -526,7 +522,7 @@ export function JoinRetro() {
                   padding: '10px 20px',
                   gap: '8px',
                 }}
-                textStyle={{ color: '#ffffff' }}
+                size={'medium'}
               />
             </Box>
           </Grid>
@@ -574,8 +570,8 @@ export function JoinRetro() {
               padding: '10px 20px',
               gap: '8px',
             }}
-            textStyle={{ color: '#ffffff' }}
             disabled={selectedAvatar == ''}
+            size={'medium'}
           />
         </Box>
       </Dialog>

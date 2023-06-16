@@ -75,7 +75,7 @@ const ActionSubToolbar = ({
         label="UNSELECT"
         id="unselect"
         onClick={handleUnselect}
-        textStyle={{ color: '#159ADD' }}
+        size={'medium'}
       />
       <Menu
         MenuListProps={{

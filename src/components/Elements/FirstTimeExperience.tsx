@@ -2,17 +2,18 @@ import { Button, Paper, Typography, useMediaQuery } from '@mui/material';
 import { Box } from '@mui/system';
 import React from 'react';
 
-import { GlobalContext, ActionType} from '../../contexts/GlobalContext';
+import { GlobalContext, ActionType } from '../../contexts/GlobalContext';
 import theme from '../../helpers/theme/theme';
+import { ContainedButton } from '../CustomizedButton/ContainedButton';
+import { TextButton } from '../CustomizedButton/TextButton';
 
 const FirstTimeExperience = (props: any) => {
-  
   const isXsUp = useMediaQuery(theme.breakpoints.only('xs'));
   const [showManual, setShowManual] = React.useState(
     sessionStorage.getItem('showManual')
   );
   const [global, dispatch] = React.useContext(GlobalContext);
-  
+
   const [isMaintenanceAlertOpen, setIsMaintenanceAlertOpen] =
     React.useState<boolean>(true);
 
@@ -41,7 +42,6 @@ const FirstTimeExperience = (props: any) => {
         payload: { loadingFlag: true },
       });
       setTimeout(function () {
-        
         showPublishInfo();
         //your code to be executed after 1 second
       }, 500);
@@ -52,8 +52,7 @@ const FirstTimeExperience = (props: any) => {
         payload: { loadingFlag: true },
       });
       setTimeout(function () {
-      
-        showFinishInfo()
+        showFinishInfo();
         //your code to be executed after 1 second
       }, 500);
       showFinishInfo();
@@ -68,10 +67,11 @@ const FirstTimeExperience = (props: any) => {
           payload: { loadingFlag: true },
         });
         setTimeout(function () {
-          showLeaveInfo()
+          showLeaveInfo();
           //your code to be executed after 1 second
         }, 500);
-        showLeaveInfo();}
+        showLeaveInfo();
+      }
     }
   }, [isXsUp, showManual && props.facilitator == false]);
 
@@ -81,7 +81,6 @@ const FirstTimeExperience = (props: any) => {
   };
 
   const showPublishInfo = () => {
-  
     let elem = document.getElementById('publish0');
     if (elem != null && elem != undefined) {
       var d = document.getElementById('publishDiv');
@@ -284,44 +283,31 @@ const FirstTimeExperience = (props: any) => {
               Participants will then see all cards, grouping and will be able to
               vote
             </Typography>
-            <Box sx={{ display: 'flex', flexDiection: 'row', width: '80%' }}>
-              <Box sx={{ display: 'flex', width: '35%' }}></Box>
-              <Box
-                component="span"
-                sx={{
-                  display: 'flex',
-                  flexDirection: 'row',
-                  width: '65%',
-                  alignItems: 'center',
-                  height: '40px',
-                  justifyContent: 'space-between',
+            <Box
+              sx={{
+                display: 'flex',
+                flexDiection: 'row',
+                width: '100%',
+                justifyContent: 'space-evenly',
+                alignItems: 'center',
+              }}
+            >
+              <ContainedButton
+                id="showFinishInfo"
+                name="Next"
+                onClick={showFinishInfo}
+                size={'small'}
+              />
+              <TextButton
+                id={'Skip_Intro'}
+                label={'Skip Intro'}
+                size={'small'}
+                onClick={doneWithManual}
+                style={{
+                  textDecorationLine: 'underline',
+                  cursor: 'pointer',
                 }}
-              >
-                <Button
-                  variant="contained"
-                  sx={{
-                    padding: '10px 20px',
-                    borderRadius: '24px',
-                    fontSize: '16px',
-                    width: '100px',
-                  }}
-                  onClick={showFinishInfo}
-                  // onTouchStart={showFinishInfo}
-                >
-                  Next
-                </Button>
-                <Typography
-                  sx={{
-                    color: '#4285F4',
-                    textDecorationLine: 'underline',
-                    cursor: 'pointer',
-                  }}
-                  onClick={doneWithManual}
-                  // onTouchStart={doneWithManual}
-                >
-                  Skip Intro
-                </Typography>
-              </Box>
+              />
             </Box>
           </Paper>
           {/* Finish Retro Info */}
@@ -349,44 +335,31 @@ const FirstTimeExperience = (props: any) => {
               Hit "FINISH RETRO" at the end of the session to access Retro
               Summary. All Participants will see Feedback questions
             </Typography>
-            <Box sx={{ display: 'flex', flexDiection: 'row', width: '80%' }}>
-              <Box
-                component="span"
-                sx={{
-                  display: 'flex',
-                  flexDirection: 'row',
-                  width: '65%',
-                  alignItems: 'center',
-                  height: '40px',
-                  justifyContent: 'space-between',
+            <Box
+              sx={{
+                display: 'flex',
+                flexDiection: 'row',
+                width: '100%',
+                justifyContent: 'space-evenly',
+                alignItems: 'center',
+              }}
+            >
+              <TextButton
+                id={'back'}
+                label={'Back'}
+                size={'small'}
+                onClick={showPublishInfo}
+                style={{
+                  textDecorationLine: 'underline',
+                  cursor: 'pointer',
                 }}
-              >
-                <Typography
-                  sx={{
-                    color: '#4285F4',
-                    textDecorationLine: 'underline',
-                    cursor: 'pointer',
-                  }}
-                  onClick={showPublishInfo}
-                  // onTouchStart={showPublishInfo}
-                >
-                  Back
-                </Typography>
-                <Button
-                  variant="contained"
-                  sx={{
-                    padding: '10px 20px',
-                    borderRadius: '24px',
-                    fontSize: '16px',
-                    width: '100px',
-                  }}
-                  onClick={doneWithManual}
-                  // onTouchStart={doneWithManual}
-                >
-                  Done
-                </Button>
-              </Box>
-              <Box sx={{ display: 'flex', width: '35%' }}></Box>
+              />
+              <ContainedButton
+                id="done"
+                name="Done"
+                onClick={doneWithManual}
+                size={'small'}
+              />
             </Box>
           </Paper>
           {/* Leave Retro Info */}
@@ -419,20 +392,12 @@ const FirstTimeExperience = (props: any) => {
             <Typography align="center" pl="47" pr="47">
               You would be asked to submit the feedback
             </Typography>
-
-            <Button
-              variant="contained"
-              sx={{
-                padding: '10px 20px',
-                borderRadius: '24px',
-                fontSize: '16px',
-                width: '100px',
-              }}
+            <ContainedButton
+              id="GOT_IT"
+              name="GOT IT"
               onClick={doneWithManual}
-              // onTouchStart={doneWithManual}
-            >
-              GOT IT
-            </Button>
+              size={'small'}
+            />
           </Paper>
         </>
       )}

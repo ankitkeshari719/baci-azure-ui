@@ -50,7 +50,6 @@ import { FeedbackSubmitDialog } from './FeedbackSubmitDialog';
 import DidNotWentWell from './DidNotWentWell';
 import WhatWentWell from './WhatWentWellCoulmn';
 import PulseCheckSection from './PulseCheckSection';
-import DevelopActionRedesign from './DevelopActionRedesign';
 import useLoadRetro from '../../helpers/hooks/useLoadRetro';
 import { ActionInterface } from '../../helpers/types';
 import ManageActionSummary from './ManageActionSummary';
@@ -1307,7 +1306,7 @@ export const ReportSummary = React.forwardRef((props, ref) => {
                     minWidth: '185px !important',
                     height: '48px !important',
                   }}
-                  textStyle={{ color: '#FFFFFF' }}
+                  size={'medium'}
                 />
               </Col>
             </Row>

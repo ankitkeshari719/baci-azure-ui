@@ -5,7 +5,6 @@ import {
   DialogContent,
   DialogContentText,
   DialogActions,
-  Button,
 } from '@mui/material';
 import React from 'react';
 import { ContainedButton, OutlinedButton } from '../../../components';
@@ -82,7 +81,7 @@ const DialogWithDyanamicData = ({
                 }}
                 name={agreeLabel}
                 id={agreeLabel}
-                textStyle={{ color: '#FFFFFF' }}
+                size={'medium'}
               />
             ) : (
               <ContainedButton
@@ -95,12 +94,14 @@ const DialogWithDyanamicData = ({
                 }}
                 name={agreeLabel}
                 id={agreeLabel}
-                textStyle={{ color: '#FFFFFF' }}
+                size={'medium'}
               />
             )}
             {/* autoFocus */}
             <Box component="span" width="10px" />
             <OutlinedButton
+              id={cancelLabel}
+              size={'medium'}
               onClick={handleClose}
               style={{
                 padding: '12px',
@@ -109,8 +110,6 @@ const DialogWithDyanamicData = ({
                 boxShadow: 'none!important',
               }}
               label={cancelLabel}
-              id={cancelLabel}
-              textStyle={{ color: '#159ADD' }}
             />
           </DialogActions>
         </Box>

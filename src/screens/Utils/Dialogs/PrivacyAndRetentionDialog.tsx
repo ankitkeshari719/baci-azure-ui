@@ -10,6 +10,10 @@ import '../../../global.scss';
 import './styles.scss';
 
 import { ContainedButton } from '../../../components';
+import {
+  BodyRegularTypography,
+  H3RegularTypography,
+} from '../../../components/CustomizedTypography';
 
 export interface DialogTitleProps {
   id: string;
@@ -96,26 +100,21 @@ export function PrivacyAndRetentionDialog() {
                 paddingRight: '16px',
               }}
             >
-              <Typography className="privacyDialogTitle">
-                Privacy & Data Retention
-              </Typography>
-              <Typography
-                className="privacyDialogDescription"
-                style={{ marginTop: '24px' }}
-              >
-                You are in control of your data. Data stored are encrypted for
-                upto 90 days to retrieve your retro reports.
-              </Typography>
+              <H3RegularTypography
+                label="Privacy & Data Retention"
+                style={{ color: '#EE7538' }}
+              />
+              <BodyRegularTypography
+                label="You are in control of your data. Data stored are encrypted for
+                upto 90 days to retrieve your retro reports."
+                style={{ color: '#4E4E4E', marginTop: '24px' }}
+              />
               <Box style={{ marginTop: '48px' }}>
                 <ContainedButton
                   name="OK"
+                  size={'medium'}
                   onClick={handlePrivacyDialogClose}
-                  style={{
-                    minWidth: '225px !important',
-                    height: '44px !important',
-                    textTransform: 'uppercase !important',
-                  }}
-                  textStyle={{ color: '#FFFFFF' }}
+                  style={{ minWidth: '150px', minHeight: '40px' }}
                 />
               </Box>
             </DialogContent>
@@ -162,26 +161,21 @@ export function PrivacyAndRetentionDialog() {
                 paddingRight: '16px',
               }}
             >
-              <Typography className="privacyDialogTitle">
-                Privacy & Data Retention
-              </Typography>
-              <Typography
-                className="privacyDialogDescription"
-                style={{ marginTop: '24px' }}
-              >
-                You are in control of your data. Data stored are encrypted for
-                upto 90 days to retrieve your retro reports.
-              </Typography>
+              <H3RegularTypography
+                label="Privacy & Data Retention"
+                style={{ color: '#EE7538' }}
+              />
+              <BodyRegularTypography
+                label="You are in control of your data. Data stored are encrypted for
+                upto 90 days to retrieve your retro reports."
+                style={{ color: '#4E4E4E', marginTop: '24px' }}
+              />
               <Box style={{ marginTop: '48px' }}>
                 <ContainedButton
                   name="OK"
                   onClick={handlePrivacyDialogClose}
-                  style={{
-                    minWidth: '225px !important',
-                    height: '44px !important',
-                    textTransform: 'uppercase !important',
-                  }}
-                  textStyle={{ color: '#FFFFFF' }}
+                  size={'medium'}
+                  style={{ minWidth: '150px', minHeight: '40px' }}
                 />
               </Box>
             </DialogContent>

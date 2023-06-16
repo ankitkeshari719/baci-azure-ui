@@ -16,7 +16,7 @@ import { AVATAR_CHARACTER_LIMIT } from './const';
 import Avatar from '../../components/Elements/Avatar';
 import { avatarName } from '../../constants/AvatarName';
 import { LazyLoadImage } from 'react-lazy-load-image-component';
-import { ContainedButton, OutlinedButton } from '../../components';
+import { ContainedButton, OutlinedButton, TextButton } from '../../components';
 
 const styles = {
   avatarfield: {
@@ -231,11 +231,12 @@ export function UserDetailsTab({
                               src="../svgs/Empty-Animals.svg"
                             ></LazyLoadImage>
                           )}
-                          <Button onClick={() => setOpenAvatarDialog(true)}>
-                            <span className="selectAvatarButtonText">
-                              Select Avatar
-                            </span>
-                          </Button>
+                          <TextButton
+                            id={'Select_Avatar'}
+                            label={'Select Avatar'}
+                            size={'small'}
+                            onClick={() => setOpenAvatarDialog(true)}
+                          />
                         </Box>
                         <Box>
                           {avatarSelectionError !== '' && (
@@ -284,10 +285,11 @@ export function UserDetailsTab({
                     minWidth: '75px !important',
                     height: '36px !important',
                   }}
-                  textStyle={{ color: '#FFFFFF' }}
+                  size={'medium'}
                 />
                 <OutlinedButton
                   label="Back"
+                  size={'medium'}
                   onClick={() => onClickBack('pulseCheckPanel')}
                   style={{
                     minWidth: '75px !important',
@@ -295,7 +297,6 @@ export function UserDetailsTab({
                     mt: 5,
                     ml: 6,
                   }}
-                  textStyle={{ color: '#159ADD' }}
                 />
               </Box>
             </Grid>
@@ -374,12 +375,12 @@ export function UserDetailsTab({
           >
             <OutlinedButton
               label="Cancel"
+              size={'medium'}
               onClick={() => setOpenAvatarDialog(false)}
               style={{
                 minWidth: '75px !important',
                 height: '36px !important',
               }}
-              textStyle={{ color: '#159ADD' }}
             />
             <ContainedButton
               name="Select"
@@ -388,7 +389,7 @@ export function UserDetailsTab({
                 minWidth: '75px !important',
                 height: '36px !important',
               }}
-              textStyle={{ color: '#FFFFFF' }}
+              size={'medium'}
             />
           </Box>
         </Box>

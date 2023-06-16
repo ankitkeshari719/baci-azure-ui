@@ -7,7 +7,6 @@ import { GlobalContext } from '../../contexts/GlobalContext';
 import QRCode from 'qrcode.react';
 import { EmailShareButton } from 'react-share';
 import * as Icons from 'heroicons-react';
-
 import {
   H1SemiBoldTypography,
   H3RegularTypography,
@@ -90,6 +89,7 @@ export function RetroDetails(props: any) {
           <TextButton
             id={'participant_join'}
             label={'Participants can join at'}
+            size={'medium'}
             onClick={() => null}
             style={{ marginTop: '32px' }}
           />
@@ -104,6 +104,7 @@ export function RetroDetails(props: any) {
           {/* With Code Text */}
           <TextButton
             id={'with_code'}
+            size={'medium'}
             label={'WITH CODE'}
             onClick={() => null}
             style={{ marginTop: '32px' }}
@@ -165,18 +166,33 @@ export function RetroDetails(props: any) {
                 flexDirection: 'row',
                 alignItems: 'center',
                 justifyContent: 'center',
+                padding: '12px 16px',
                 gap: '8px',
-                border: '1px solid #159ADD',
-                filter: 'drop-shadow(0px 2px 4px rgba(0, 0, 0, 0.25))',
-                borderRadius: '24px',
+                border: '1px solid #CCCCCC',
+                borderRadius: '8px',
                 background: '#ffffff',
               }}
             >
-              <Typography component="span" className="inviteText">
+              <Typography
+                component="span"
+                sx={{
+                  fontFamily: 'Poppins',
+                  fontStyle: 'normal',
+                  fontWeight: ' 500',
+                  fontSize: '16px',
+                  lineHeight: '120%',
+                  leadingTrim: 'both',
+                  textEdge: 'cap',
+                  letterSpacing: '0.03em',
+                  textTransform: 'uppercase',
+                  color: '#159add',
+                }}
+              >
                 <Icons.Mail
                   size={20}
                   style={{
                     marginRight: '8px',
+                    color: '#159add',
                   }}
                 />
                 invite via email
