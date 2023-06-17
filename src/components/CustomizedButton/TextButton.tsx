@@ -38,6 +38,7 @@ export const TextButton = ({
       <ButtonLabelTypography
         label={label}
         style={{
+          ':hover': { color: '#CCCCCC !important' },
           color: '#159ADD',
           fontSize: size === 'small' ? '14px !important' : '16px !important',
         }}
