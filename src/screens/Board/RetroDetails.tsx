@@ -167,9 +167,9 @@ export function RetroDetails(props: any) {
                 alignItems: 'center',
                 justifyContent: 'center',
                 padding: '12px 16px',
-                gap: '8px',
-                border: '1px solid #CCCCCC',
-                borderRadius: '8px',
+                gap: '16px',
+                border: '1px solid #159ADD',
+                borderRadius: '24px',
                 background: '#ffffff',
               }}
             >
