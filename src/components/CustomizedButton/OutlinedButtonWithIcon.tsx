@@ -42,6 +42,7 @@ export const OutlinedButtonWithIcon = ({
       <ButtonLabelTypography
         label={label}
         style={{
+          ':disabled': { color: '#CCCCCC !important' },
           color: '#159ADD',
           fontSize: size === 'small' ? '14px !important' : '16px !important',
         }}
