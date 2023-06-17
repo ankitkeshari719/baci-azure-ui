@@ -1,11 +1,5 @@
 import * as React from 'react';
-import {
-  Box,
-  Button,
-  Grid,
-  Tooltip,
-  Typography,
-} from '@mui/material';
+import { Box, Button, Grid, Tooltip, Typography } from '@mui/material';
 
 import * as Icons from 'heroicons-react';
 import { EmailShareButton } from 'react-share';
@@ -136,6 +130,7 @@ const styles = {
   },
 };
 
+// This component is not in used
 export function StartRetro() {
   const [global, dispatch] = React.useContext(GlobalContext);
   const [iscopied, setIsCopied] = React.useState(false);

@@ -31,7 +31,6 @@ export const SnackMessage = () => {
       <Alert severity= {global.snackMessage?.snackMessageType}>
         {global.snackMessage?.message}
         <Button color="primary" size="small" onClick={clearMessage} 
-        // onTouchStart={clearMessage}
         >
           <CloseIcon />
         </Button>

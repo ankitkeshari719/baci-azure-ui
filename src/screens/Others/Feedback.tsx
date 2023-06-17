@@ -176,18 +176,6 @@ export default function Feedback() {
             onClick={backToBoard}
             size={'medium'}
           />
-          {/* <Button
-            variant="outlined"
-            sx={{
-              ':hover': { background: '#695F9B' },
-              background: '#695F9B',
-              color: '#fff',
-              justifySelf: 'flex-end',
-            }}
-            onClick={backToBoard}
-          >
-            Back to Board
-          </Button> */}
         </AppBar>
       ) : null}
 

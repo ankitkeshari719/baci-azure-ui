@@ -12,15 +12,12 @@ import {
 } from '@mui/material';
 
 import AccessTimeIcon from '@mui/icons-material/AccessTime';
-import AddIcon from '@mui/icons-material/Add';
 import CloseIcon from '@mui/icons-material/Close';
 import Countdown from 'react-countdown';
-import Draggable from 'react-draggable';
 import { GlobalContext } from '../../contexts/GlobalContext';
 import Pause from '@mui/icons-material/Pause';
 import PlayArrowIcon from '@mui/icons-material/PlayArrow';
 import React from 'react';
-import RemoveIcon from '@mui/icons-material/Remove';
 import { Stop } from '@mui/icons-material';
 import { BoardActionType } from '../../helpers/statemachine/BoardStateMachine';
 import theme from '../../helpers/theme/theme';
@@ -38,6 +35,7 @@ const RoundButton = styled('button')({
     border: '1px solid #159ADD',
   },
 });
+
 const RoundButtonOrange = styled('button')({
   background: '#FBBC05',
   borderRadius: '25px',
@@ -51,6 +49,7 @@ const RoundButtonOrange = styled('button')({
     border: '1px solid #FBBC05',
   },
 });
+
 const RoundButtonRed = styled('button')({
   background: '#EA4335',
   borderRadius: '25px',
@@ -119,7 +118,7 @@ export function CountdownTimer({
   };
 
   // Check disabled for now
-  const isRetroCreator = () => true; //global.currentRetro?.creatorId === global.user.id;
+  const isRetroCreator = () => true;
 
   const saveAndProcessAction = async (
     actionName: BoardActionType,
@@ -318,7 +317,6 @@ export function CountdownTimer({
         <Card
           sx={{
             display: countdownWindowOpen ? '' : 'none',
-            // display: 'flex',
             flexDirection: 'column',
             width: '332px',
             height: '295px',
@@ -343,9 +341,6 @@ export function CountdownTimer({
             </Box>
             <Box sx={{ position: 'absolute', right: '26px', top: '20px' }}>
               <Button
-                // onTouchStart={event => {
-                //   handleClose();
-                // }}
                 onClick={event => {
                   handleClose();
                 }}
@@ -387,31 +382,10 @@ export function CountdownTimer({
               sx={{
                 display: 'flex',
                 flexDirection: 'column',
-                // justifyContent: 'space-evenly',
-                // margin: '10px 20px',
                 alignItems: 'center',
-                // width:"calc(100%-10px)"
                 height: '300px',
               }}
             >
-              {/* <div
-                style={{
-                  minHeight: '160px',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                  display: 'flex',
-                  flexDirection: 'column',
-                }}
-              > */}
-
-              {/* {countdownFrom === -1 && !countdownPaused ? (
-                    <Button
-                      onClick={() => decrementTimer(60 * 1000)}
-                      onTouchStart={() => decrementTimer(60 * 1000)}
-                    >
-                      <RemoveIcon></RemoveIcon>
-                    </Button>
-                  ) : null} */}
               <Countdown
                 ref={countdownInBoxRef}
                 autoStart={false}
@@ -435,8 +409,6 @@ export function CountdownTimer({
                     }}
                   >
                     {countdownFrom === -1 && !countdownPaused ? (
-                      // <Box component="span" style={{display:'flex',flexDirection:'column',alignItems:'center'}}>
-
                       <span
                         style={{
                           display: 'flex',
@@ -446,7 +418,6 @@ export function CountdownTimer({
                       >
                         <span style={{ height: '130px' }}>
                           <TextField
-                            // onChange={handleNameChange}
                             value={minutes < 10 ? '0' + minutes : minutes}
                             onChange={async event => {
                               await saveAndProcessAction(
@@ -477,9 +448,6 @@ export function CountdownTimer({
                         </span>
                       </span>
                     ) : (
-                      // min
-                      // <Box>
-
                       <Box component="span" sx={{ padding: '10px' }}>
                         {minutes < 10 ? '0' + minutes : minutes}
                       </Box>
@@ -496,7 +464,6 @@ export function CountdownTimer({
                       >
                         <span style={{ height: '130px' }}>
                           <TextField
-                            // onChange={handleNameChange}
                             value={seconds < 10 ? '0' + seconds : seconds}
                             onChange={async event => {
                               await saveAndProcessAction(
@@ -536,53 +503,6 @@ export function CountdownTimer({
                   </Box>
                 )}
               />
-              {/* {countdownFrom === -1 && !countdownPaused ? (
-                    <Button
-                      onClick={() => incrementTimer(60 * 1000)}
-                      onTouchStart={() => incrementTimer(60 * 1000)}
-                    >
-                      <AddIcon></AddIcon>
-                    </Button>
-                  ) : null} */}
-
-              {/* <Box style={{ display: 'flex', justifyContent: 'center' }}>
-                  {countdownFrom !== -1 || countdownPaused ? (
-                    <Button
-                      onClick={() => incrementTimer(60 * 1000)}
-                      onTouchStart={() => incrementTimer(60 * 1000)}
-                    >
-                      <Typography
-                        style={{
-                          background: '#4D555A',
-                          color: 'white',
-                          borderRadius: '3px',
-                          padding: '3px',
-                        }}
-                      >
-                        +1m
-                      </Typography>
-                    </Button>
-                  ) : null}
-                  {countdownFrom !== -1 || countdownPaused ? (
-                    <Button
-                      onClick={() => incrementTimer(5 * 60 * 1000)}
-                      onTouchStart={() => incrementTimer(5 * 60 * 1000)}
-                    >
-                      <Typography
-                        style={{
-                          background: '#4D555A',
-                          color: 'white',
-                          borderRadius: '3px',
-                          padding: '3px',
-                        }}
-                      >
-                        +5m
-                      </Typography>
-                    </Button>
-                  ) : null}
-                </Box> */}
-              {/* </div> */}
-
               <Box
                 style={{
                   display: 'flex',
@@ -594,33 +514,21 @@ export function CountdownTimer({
                 }}
               >
                 {countdownFrom !== -1 && !countdownPaused && (
-                  <RoundButtonOrange
-                    onClick={pauseTimer}
-                    // onTouchStart={pauseTimer}
-                  >
+                  <RoundButtonOrange onClick={pauseTimer}>
                     <Pause></Pause>
                   </RoundButtonOrange>
                 )}
                 {countdownFrom === -1 && countdownPaused && (
-                  <RoundButton
-                    onClick={resumeTimer}
-                    // onTouchStart={resumeTimer}
-                  >
+                  <RoundButton onClick={resumeTimer}>
                     <PlayArrowIcon></PlayArrowIcon>
                   </RoundButton>
                 )}
                 {countdownFrom === -1 && !countdownPaused ? (
-                  <RoundButton
-                    onClick={startTimer}
-                    // onTouchStart={startTimer}
-                  >
+                  <RoundButton onClick={startTimer}>
                     <PlayArrowIcon></PlayArrowIcon>
                   </RoundButton>
                 ) : (
-                  <RoundButtonRed
-                    onClick={stopTimer}
-                    // onTouchStart={stopTimer}
-                  >
+                  <RoundButtonRed onClick={stopTimer}>
                     <Stop></Stop>
                   </RoundButtonRed>
                 )}

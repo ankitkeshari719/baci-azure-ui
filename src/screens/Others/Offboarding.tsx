@@ -30,7 +30,7 @@ import {
   H2SemiBoldTypography,
   H3SemiBoldTypography,
 } from '../../components/CustomizedTypography';
-import { ContainedButton } from '../../components';
+import { ContainedButton, OutlinedButton } from '../../components';
 
 export function Offboarding() {
   const [global, dispatch] = useContext(GlobalContext);
@@ -170,18 +170,12 @@ export function Offboarding() {
               marginBottom: '20px',
             }}
           >
-            <Button
-              variant="outlined"
-              sx={{
-                ':hover': { background: '#159ADD' },
-                background: '#159ADD',
-                color: '#fff',
-                minWidth: '300px',
-              }}
+            <OutlinedButton
+              id="Submit"
+              label="Submit"
+              size={'medium'}
               onClick={() => submitFeedback()}
-            >
-              Submit
-            </Button>
+            />
           </Box>
           <Box
             sx={{

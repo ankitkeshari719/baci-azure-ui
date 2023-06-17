@@ -350,12 +350,6 @@ export function LandingPage() {
                   />
                 )}
               </Box>
-              {/* <Button
-                className="newUserText"
-                onClick={handleAddDeploymentDataOpen}
-              >
-                Add Deployment Data
-              </Button> */}
             </Grid>
           </Grid>
         </Grid>
