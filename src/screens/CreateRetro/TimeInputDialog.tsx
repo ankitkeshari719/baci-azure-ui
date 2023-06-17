@@ -12,6 +12,7 @@ import {
   CaptionRegularTypography,
   H3RegularTypography,
 } from '../../components/CustomizedTypography';
+import * as Icons from 'heroicons-react';
 
 type Props = {
   isTimeInputDialog: boolean;
@@ -81,18 +82,20 @@ export function TimeInputDialog({
         },
       }}
     >
-      <Box>
-        <img
-          width="45px"
-          height="45px"
-          onClick={handleClose}
-          src="/svgs/CloseDialog.svg"
+      <Box
+        sx={{
+          width: '100%',
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'end',
+        }}
+      >
+        <Icons.X
+          size={20}
           style={{
-            position: 'absolute',
-            right: '20px',
-            top: '10px',
             cursor: 'pointer',
           }}
+          onClick={handleClose}
         />
       </Box>
       <Box
