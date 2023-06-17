@@ -17,6 +17,8 @@ import Avatar from '../../components/Elements/Avatar';
 import { avatarName } from '../../constants/AvatarName';
 import { LazyLoadImage } from 'react-lazy-load-image-component';
 import { ContainedButton, OutlinedButton, TextButton } from '../../components';
+import * as Icons from 'heroicons-react';
+import { H6RegularTypography } from '../../components/CustomizedTypography';
 
 const styles = {
   avatarfield: {
@@ -313,18 +315,22 @@ export function UserDetailsTab({
           <Grid container sx={{ display: 'flex', alignItems: 'center' }}>
             <Grid item sm={6}>
               <Box display="flex" justifyContent="flex-start">
-                <Typography component="span" className="selectAvatarText">
-                  Select Avatar
-                </Typography>
+                <H6RegularTypography
+                  label={'Select Avatar'}
+                  style={{
+                    color: '#4E4E4E',
+                  }}
+                />
               </Box>
             </Grid>
             <Grid item sm={6}>
               <Box display="flex" justifyContent="flex-end">
-                <img
-                  width="45px"
-                  height="45px"
+                <Icons.X
+                  size={20}
+                  style={{
+                    cursor: 'pointer',
+                  }}
                   onClick={() => setOpenAvatarDialog(false)}
-                  src="/svgs/CloseDialog.svg"
                 />
               </Box>
             </Grid>
