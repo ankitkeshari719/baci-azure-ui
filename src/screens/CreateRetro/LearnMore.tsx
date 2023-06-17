@@ -313,7 +313,7 @@ export function LearnMore({
             }}
           >
             <Typography className="aboutTemplate" component="div">
-              Develop Actions
+              Manage Actions
             </Typography>
             <Typography
               className="templateDescription"
