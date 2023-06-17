@@ -26,8 +26,7 @@ import Toolbar from '../../components/Elements/Toolbar';
 import theme from '../../helpers/theme/theme';
 import { DeploymentPopUp } from '../Utils/Alerts/DeploymentPopUp';
 import {
-  H2RegularTypography,
-  H2SemiBoldTypography,
+  H4RegularTypography,
   H3SemiBoldTypography,
 } from '../../components/CustomizedTypography';
 import { ContainedButton, OutlinedButton } from '../../components';
@@ -226,12 +225,12 @@ export function Offboarding() {
               ></img>
             </Box>
             <Box mt="40px" className="alignCenter">
-              <H2RegularTypography
+              <H4RegularTypography
                 label={'Your feedback is submitted successfully!'}
                 style={{ color: commonStyles.PrimaryMain }}
               />
             </Box>
-            <Box mt="52px">
+            <Box mt="80px">
               <ContainedButton
                 id="Review_board"
                 name="Review board"
@@ -240,7 +239,7 @@ export function Offboarding() {
               />
             </Box>
             <Box
-              mt="40px"
+              mt="60px"
               sx={{ display: isXsUp ? 'block' : 'inline-flex' }}
               className="alignCenter"
             >
@@ -250,7 +249,7 @@ export function Offboarding() {
                   style={{ color: commonStyles.secondaryMain }}
                 />
               ) : (
-                <H2SemiBoldTypography
+                <H3SemiBoldTypography
                   label={'Thank You for using'}
                   style={{ color: commonStyles.secondaryMain }}
                 />
@@ -258,10 +257,14 @@ export function Offboarding() {
               {isXsUp ? (
                 <H3SemiBoldTypography
                   label={' BACI'}
-                  style={{ color: commonStyles.PrimaryMain }}
+                  style={{
+                    color: commonStyles.PrimaryMain,
+                    marginLeft: '8px',
+                    marginRight: '8px',
+                  }}
                 />
               ) : (
-                <H2SemiBoldTypography
+                <H3SemiBoldTypography
                   label={'BACI'}
                   style={{
                     color: commonStyles.PrimaryMain,
@@ -276,7 +279,7 @@ export function Offboarding() {
                   style={{ color: commonStyles.secondaryMain }}
                 />
               ) : (
-                <H2SemiBoldTypography
+                <H3SemiBoldTypography
                   label={'Retros'}
                   style={{ color: commonStyles.secondaryMain }}
                 />
