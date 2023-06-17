@@ -16,6 +16,7 @@ import dayjs, { Dayjs } from 'dayjs';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { DesktopDatePicker } from '@mui/x-date-pickers/DesktopDatePicker';
+import * as Icons from 'heroicons-react';
 
 export interface DialogTitleProps {
   id: string;
@@ -37,12 +38,12 @@ function BootstrapDialogTitle(props: DialogTitleProps) {
           className="d-flex justify-content-end align-items-center"
         >
           {onClose ? (
-            <img
-              width="45px"
-              height="45px"
+            <Icons.X
+              size={20}
+              style={{
+                cursor: 'pointer',
+              }}
               onClick={onClose}
-              src="/svgs/CloseDialog.svg"
-              style={{ cursor: 'pointer' }}
             />
           ) : null}
         </Col>

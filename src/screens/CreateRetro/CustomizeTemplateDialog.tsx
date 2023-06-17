@@ -11,6 +11,7 @@ import './styles.scss';
 
 import { Row, Col } from 'react-bootstrap';
 import { ContainedButton, OutlinedButton } from '../../components';
+import * as Icons from 'heroicons-react';
 
 type Props = {
   handleIsChangeDialogClose: () => void;
@@ -39,12 +40,12 @@ function BootstrapDialogTitle(props: DialogTitleProps) {
           className="d-flex justify-content-end align-items-center"
         >
           {onClose ? (
-            <img
-              width="45px"
-              height="45px"
+            <Icons.X
+              size={20}
+              style={{
+                cursor: 'pointer',
+              }}
               onClick={onClose}
-              src="/svgs/CloseDialog.svg"
-              style={{ cursor: 'pointer' }}
             />
           ) : null}
         </Col>
