@@ -26,6 +26,7 @@ import SummaryReportMain from './screens/SummaryReports/SummaryReportMain';
 import { LandingPage } from './screens/Home/LandingPage';
 import { JoinRetro } from './screens/Home/JoinRetro';
 import { RetroIsFinished } from './screens/Others/RetroIsFinished';
+import { JiraCallback } from './screens/Others/JiraCallback';
 
 type AppProps = {
   instance: IPublicClientApplication;
@@ -94,6 +95,10 @@ export default function App({ instance }: AppProps) {
                         <Route
                           path="/retroisfinished"
                           element={<RetroIsFinished></RetroIsFinished>}
+                        />
+                        <Route
+                          path="/jiraCallback/"
+                          element={<JiraCallback />}
                         />
                         <Route
                           path="*"

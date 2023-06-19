@@ -58,6 +58,7 @@ export class Global {
   emojiId?: string = '';
   isMaintenanceScheduled?: boolean = false;
   lastGlobalStateUpdate: Date | undefined = new Date();
+  jiraCode?: string ="";
 }
 
 export class LastRetroName {
