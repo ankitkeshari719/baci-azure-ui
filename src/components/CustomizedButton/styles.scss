@@ -1,63 +1,180 @@
 @import './../../style.module.scss';
 
-.containedButton {
+.containedButtonSmall {
   display: flex !important;
   flex-direction: row !important;
   justify-content: center !important;
   align-items: center !important;
+  padding: 12px !important;
+  gap: 8px !important;
   background: #159add !important;
   border-radius: 24px !important;
-  box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.25) !important;
+  color: #ffffff;
 }
 
-.containedButton:disabled {
-  background: #CCCCCC !important;
-}
-
-.outlinedButton {
+.containedButtonMedium {
   display: flex !important;
   flex-direction: row !important;
   justify-content: center !important;
   align-items: center !important;
-  padding: 6px 16px !important;
+  padding: 12px 16px !important;
+  gap: 16px !important;
+  background: #159add !important;
+  border-radius: 24px !important;
+  color: #ffffff;
+}
+
+.containedButtonLarge {
+  display: flex !important;
+  flex-direction: row !important;
+  justify-content: center !important;
+  align-items: center !important;
+  padding: 12px 20px !important;
+  gap: 16px !important;
+  background: #159add !important;
+  border-radius: 24px !important;
+  color: #ffffff;
+}
+
+.containedButtonSmall:hover {
+  background: rgba(0, 0, 0, 0.04) !important;
+  border-radius: 24px !important;
+  color: #CCCCCC;
+}
+
+.containedButtonMedium:hover {
+  background: rgba(0, 0, 0, 0.04) !important;
+  border-radius: 24px !important;
+  color: #CCCCCC;
+}
+
+.containedButtonLarge:hover {
+  background: rgba(0, 0, 0, 0.04) !important;
+  border-radius: 24px !important;
+  color: #CCCCCC;
+}
+
+.containedButtonSmall:disabled {
+  background: #cccccc !important;
+  color: #ffffff !important;
+}
+
+.containedButtonMedium:disabled {
+  background: #cccccc !important;
+  color: #ffffff !important;
+}
+
+.containedButtonLarge:disabled {
+  background: #cccccc !important;
+  color: #ffffff !important;
+}
+
+.outlinedButtonSmall {
+  display: flex !important;
+  flex-direction: row !important;
+  justify-content: center !important;
+  align-items: center !important;
+  padding: 12px !important;
   gap: 8px !important;
-  border: 1px solid #159add;
+  border: 1px solid #159add !important;
   border-radius: 24px !important;
   background: #fafafa !important;
+  color: #159add;
 }
 
-.outlinedButton:disabled {
-  border: 1px solid gray !important;
-  opacity: 0.5 !important;
-}
-
-.buttonWithIcon {
-  box-sizing: border-box !important;
+.outlinedButtonMedium {
   display: flex !important;
   flex-direction: row !important;
   justify-content: center !important;
   align-items: center !important;
-  padding: 4px 12px !important;
-  gap: 8px !important;
-  width: 104px !important;
-  height: 28px !important;
-  border: 1px solid $PrimaryMain !important;
-  background: white !important;
-  filter: drop-shadow(0px 2px 4px rgba(0, 0, 0, 0.25)) !important;
+  padding: 12px 16px !important;
+  gap: 16px !important;
+  border: 1px solid #159add !important;
   border-radius: 24px !important;
-  flex: none !important;
-  order: 1 !important;
-  flex-grow: 0 !important;
-  font-family: 'Poppins' !important;
-  font-style: normal !important;
-  font-weight: 500 !important;
-  font-size: 14px !important;
-  line-height: 20px !important;
+  background: #fafafa !important;
+  color: #159add !important;
 }
 
-.buttonWithIcon:disabled {
-  border: 1px solid gray !important;
-  opacity: 0.5 !important;
+.outlinedButtonLarge {
+  display: flex !important;
+  flex-direction: row !important;
+  justify-content: center !important;
+  align-items: center !important;
+  padding: 12px 20px !important;
+  gap: 16px !important;
+  border: 1px solid #159add !important;
+  border-radius: 24px !important;
+  background: #fafafa !important;
+  color: #159add !important;
+}
+
+.outlinedButtonSmall:hover {
+  background: rgba(0, 0, 0, 0.04) !important;
+  border-radius: 24px !important;
+}
+
+.outlinedButtonMedium:hover {
+  background: rgba(0, 0, 0, 0.04) !important;
+  border-radius: 24px !important;
+}
+
+.outlinedButtonLarge:hover {
+  background: rgba(0, 0, 0, 0.04) !important;
+  border-radius: 24px !important;
+}
+
+.outlinedButtonSmall:disabled {
+  background: #fafafa !important;
+  border: 1px solid #cccccc !important;
+  color: #cccccc !important;
+}
+
+.outlinedButtonMedium:disabled {
+  background: #fafafa !important;
+  border: 1px solid #cccccc !important;
+  color: #cccccc !important;
+}
+
+.outlinedButtonLarge:disabled {
+  background: #fafafa !important;
+  border: 1px solid #cccccc !important;
+  color: #cccccc !important;
+}
+
+.textButtonSmall {
+  display: flex !important;
+  flex-direction: row !important;
+  justify-content: center !important;
+  align-items: center !important;
+  padding: 12px !important;
+  gap: 8px !important;
+  background: #ffffff !important;
+  border-radius: 24px !important;
+  color: #159add;
+}
+
+.textButtonMedium {
+  display: flex !important;
+  flex-direction: row !important;
+  justify-content: center !important;
+  align-items: center !important;
+  padding: 12px 16px !important;
+  gap: 16px !important;
+  background: #ffffff !important;
+  border-radius: 24px !important;
+  color: #159add;
+}
+
+.textButtonLarge {
+  display: flex !important;
+  flex-direction: row !important;
+  justify-content: center !important;
+  align-items: center !important;
+  padding: 12px 20px !important;
+  gap: 16px !important;
+  background: #ffffff !important;
+  border-radius: 24px !important;
+  color: #159add;
 }
 
 .buttonWithIconWithNoBorder {

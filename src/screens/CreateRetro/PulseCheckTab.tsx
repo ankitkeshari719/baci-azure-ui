@@ -15,7 +15,7 @@ import './styles.scss';
 import Slider from 'react-slick';
 
 import { pulseChecksData, pulseCheckInterface } from './const';
-import { ContainedButton, OutlinedButton } from '../../components';
+import { ContainedButton, OutlinedButton, TextButton } from '../../components';
 import * as Icons from 'heroicons-react';
 import { createUseStyles } from 'react-jss';
 import theme from '../../helpers/theme/theme';
@@ -268,19 +268,22 @@ export function PulseCheckTab({
                           disableSpacing
                           sx={{
                             display: pulseCheck.isComingSoon ? 'none' : 'flex',
-                            padding: '16px',
+                            padding: '0px 16px 24px 16px',
                           }}
                         >
-                          <Button
-                            size="small"
-                            sx={{ padding: '0px' }}
+                          <TextButton
+                            id={'Learn_More'}
+                            label={'Learn More'}
+                            size={'small'}
+                            style={{
+                              paddingLeft: '0px !important',
+                              textDecorationLine: 'underline !important',
+                              backgroundColor: 'transparent !important',
+                            }}
                             disabled={pulseCheck.isComingSoon}
                             onClick={handleLearnMoreDialog}
-                          >
-                            <Typography className="templateLink">
-                              Learn More
-                            </Typography>
-                          </Button>
+                          />
+                          
                         </CardActions>
                       )}
                     </Card>
@@ -305,10 +308,12 @@ export function PulseCheckTab({
                     minWidth: '75px !important',
                     height: '36px !important',
                   }}
-                  textStyle={{ color: '#FFFFFF' }}
+                  size={'medium'}
                 />
                 <OutlinedButton
+                  id={'back_button'}
                   label="Back"
+                  size={'medium'}
                   onClick={() => onClickBack('templatePanel')}
                   style={{
                     minWidth: '75px !important',
@@ -316,7 +321,6 @@ export function PulseCheckTab({
                     mt: 5,
                     ml: 6,
                   }}
-                  textStyle={{ color: '#159ADD' }}
                 />
               </Box>
             </Grid>

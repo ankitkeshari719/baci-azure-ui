@@ -50,7 +50,6 @@ import { FeedbackSubmitDialog } from './FeedbackSubmitDialog';
 import DidNotWentWell from './DidNotWentWell';
 import WhatWentWell from './WhatWentWellCoulmn';
 import PulseCheckSection from './PulseCheckSection';
-import DevelopActionRedesign from './DevelopActionRedesign';
 import useLoadRetro from '../../helpers/hooks/useLoadRetro';
 import { ActionInterface } from '../../helpers/types';
 import ManageActionSummary from './ManageActionSummary';
@@ -809,7 +808,7 @@ export const ReportSummary = React.forwardRef((props, ref) => {
                 </tr>
                 <tr style={{ border: '1px solid #CCCCCC' }}>
                   <td style={{ border: '1px solid #CCCCCC' }}>
-                    <Typography className="textTypeOne">Date</Typography>
+                    <Typography className="textTypeOne">Date&nbsp;</Typography>
                   </td>
                   <td style={{ border: '1px solid #CCCCCC' }}>
                     <Typography
@@ -822,7 +821,7 @@ export const ReportSummary = React.forwardRef((props, ref) => {
                 </tr>
                 <tr style={{ border: '1px solid #CCCCCC' }}>
                   <td style={{ border: '1px solid #CCCCCC' }}>
-                    <Typography className="textTypeOne">Time Taken</Typography>
+                    <Typography className="textTypeOne">Time Taken&nbsp;</Typography>
                   </td>
                   <td style={{ border: '1px solid #CCCCCC' }}>
                     <Typography
@@ -836,7 +835,7 @@ export const ReportSummary = React.forwardRef((props, ref) => {
                 <tr style={{ border: '1px solid #CCCCCC' }}>
                   <td style={{ border: '1px solid #CCCCCC' }}>
                     <Typography className="textTypeOne">
-                      No. Of Participants
+                      No. Of Participants&nbsp;
                     </Typography>
                   </td>
                   <td style={{ border: '1px solid #CCCCCC' }}>
@@ -858,7 +857,7 @@ export const ReportSummary = React.forwardRef((props, ref) => {
               lg="2"
               className="d-flex justify-content-start align-items-center"
             >
-              <Typography className="textTypeOne">Date</Typography>
+              <Typography className="textTypeOne">Date&nbsp;</Typography>
               <Typography className="textTypeTwo" ml={2}>
                 {moment(startedDate, 'DD MMM YYYY').format('Do MMM YYYY')}
               </Typography>
@@ -868,7 +867,7 @@ export const ReportSummary = React.forwardRef((props, ref) => {
               lg="3"
               className="d-flex justify-content-start align-items-center"
             >
-              <Typography className="textTypeOne">Time Taken</Typography>
+              <Typography className="textTypeOne">Time Taken&nbsp;</Typography>
               <Typography className="textTypeTwo" ml={2}>
                 {timeTaken}
               </Typography>
@@ -878,7 +877,7 @@ export const ReportSummary = React.forwardRef((props, ref) => {
               className="d-flex justify-content-start align-items-center"
             >
               <Typography className="textTypeOne">
-                No. Of Participants
+                No. Of Participants&nbsp;
               </Typography>
               <Typography className="textTypeTwo" ml={2}>
                 {users.length}
@@ -1307,7 +1306,7 @@ export const ReportSummary = React.forwardRef((props, ref) => {
                     minWidth: '185px !important',
                     height: '48px !important',
                   }}
-                  textStyle={{ color: '#FFFFFF' }}
+                  size={'medium'}
                 />
               </Col>
             </Row>

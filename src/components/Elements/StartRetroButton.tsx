@@ -6,12 +6,15 @@ import { Button } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
 import { getRetro } from '../../helpers/msal/services';
 import RetroTimeInputDialog from '../atoms/RetroTimeInputDialog';
+
 const styles = {
   goToRetroBtn: {
     height: '44px',
     marginTop: '44px',
   },
 };
+
+// This component is not in used
 const StartRetroButton = () => {
   const {
     state: { retroId, retroStarted },

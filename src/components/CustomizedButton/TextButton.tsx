@@ -5,23 +5,44 @@ import { ButtonLabelTypography } from '../CustomizedTypography';
 type Props = {
   id?: string;
   label: string;
+  size: any;
   onClick: (...param: any) => void;
   style?: any;
-  textStyle?: any;
   disabled?: boolean;
 };
 
 export const TextButton = ({
   id,
   label,
+  size,
   onClick,
   style,
-  textStyle,
   disabled,
 }: Props) => {
   return (
-    <Button id={id} variant="text" onClick={onClick} sx={{ ...style }}>
-      <ButtonLabelTypography label={label} style={textStyle} />
+    <Button
+      id={id}
+      variant="text"
+      size={size}
+      onClick={onClick}
+      className={
+        size === 'small'
+          ? 'textButtonSmall'
+          : size === 'medium'
+          ? 'textButtonMedium'
+          : 'textButtonLarge'
+      }
+      sx={{ ...style }}
+      disabled={disabled}
+    >
+      <ButtonLabelTypography
+        label={label}
+        style={{
+          ':hover': { color: '#CCCCCC !important' },
+          color: '#159ADD',
+          fontSize: size === 'small' ? '14px !important' : '16px !important',
+        }}
+      />
     </Button>
   );
 };

@@ -5,12 +5,13 @@ import {
   DialogContent,
   DialogContentText,
   DialogActions,
-  Button,
 } from '@mui/material';
 import React from 'react';
 import { ContainedButton, OutlinedButton } from '../../../components';
 import './styles.scss';
 import closeImage from '../../../assets/img/Vectorclose.png';
+import * as Icons from 'heroicons-react';
+
 const DialogWithDyanamicData = ({
   open,
   header,
@@ -36,18 +37,23 @@ const DialogWithDyanamicData = ({
         aria-labelledby="alert-dialog-title"
         aria-describedby="alert-dialog-description"
       >
-        <img
-          src={closeImage}
-          onClick={handleClose}
-          style={{
-            position: 'absolute',
-            right: '20px',
-            top: '20px',
-            cursor: 'pointer',
-          }}
-        ></img>
-
         <Box className="dialogContainer">
+          <Box
+            sx={{
+              width: '100%',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'end',
+            }}
+          >
+            <Icons.X
+              size={20}
+              style={{
+                cursor: 'pointer',
+              }}
+              onClick={handleClose}
+            />
+          </Box>
           <DialogTitle
             id="alert-dialog-title"
             color="#EE7538"
@@ -82,7 +88,7 @@ const DialogWithDyanamicData = ({
                 }}
                 name={agreeLabel}
                 id={agreeLabel}
-                textStyle={{ color: '#FFFFFF' }}
+                size={'medium'}
               />
             ) : (
               <ContainedButton
@@ -95,12 +101,14 @@ const DialogWithDyanamicData = ({
                 }}
                 name={agreeLabel}
                 id={agreeLabel}
-                textStyle={{ color: '#FFFFFF' }}
+                size={'medium'}
               />
             )}
             {/* autoFocus */}
             <Box component="span" width="10px" />
             <OutlinedButton
+              id={cancelLabel}
+              size={'medium'}
               onClick={handleClose}
               style={{
                 padding: '12px',
@@ -109,8 +117,6 @@ const DialogWithDyanamicData = ({
                 boxShadow: 'none!important',
               }}
               label={cancelLabel}
-              id={cancelLabel}
-              textStyle={{ color: '#159ADD' }}
             />
           </DialogActions>
         </Box>

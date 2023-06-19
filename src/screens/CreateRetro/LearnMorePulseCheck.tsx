@@ -2,8 +2,6 @@ import * as React from 'react';
 import {
   AppBar,
   Box,
-  Button,
-  Divider,
   Grid,
   List,
   ListItem,
@@ -15,6 +13,7 @@ import { TopBar } from './TopBar';
 import Typography from '@mui/material/Typography';
 import * as Icons from 'heroicons-react';
 import { pulseCheckInterface } from './const';
+import { ContainedButton } from '../../components';
 
 type Props = {
   selectedPulseCheck: pulseCheckInterface | null;
@@ -37,7 +36,7 @@ export function LearnMorePulseCheck({
     <Box className="mainContainer">
       <TopBar />
       <Grid container spacing={0} className="retroContainer">
-        {/* About Template */}
+        {/* About Pulse Check */}
         <Grid item xs={12}>
           <Box component="div" whiteSpace="normal" className="createRetroText">
             About Pulse Check
@@ -74,21 +73,20 @@ export function LearnMorePulseCheck({
               >
                 {selectedPulseCheck && selectedPulseCheck.name}
               </Typography>
-              <Button
-                autoFocus
-                variant="contained"
-                className="saveButton"
-                sx={{ ml: 2 }}
+              <ContainedButton
+                name="Select"
                 onClick={() =>
                   onClickSelectButton(
                     selectedPulseCheck && selectedPulseCheck.id
                   )
                 }
-              >
-                <Typography className="saveButtonText" component="span">
-                  Select
-                </Typography>
-              </Button>
+                style={{
+                  minWidth: '75px !important',
+                  height: '36px !important',
+                  marginLeft: '16px',
+                }}
+                size={'medium'}
+              />
             </Toolbar>
           </AppBar>
         </Grid>

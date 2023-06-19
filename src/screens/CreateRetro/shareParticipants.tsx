@@ -5,6 +5,11 @@ import { EmailShareButton } from 'react-share';
 import * as Icons from 'heroicons-react';
 import QRCode from 'qrcode.react';
 import './styles.scss';
+import {
+  H1SemiBoldTypography,
+  H3RegularTypography,
+} from '../../components/CustomizedTypography';
+import { TextButton } from '../../components';
 
 export function ShareParticipants() {
   const [global, dispatch] = React.useContext(GlobalContext);
@@ -28,13 +33,12 @@ export function ShareParticipants() {
         Share with participants
       </Box>
       {/* Retro Name */}
-      <Box
-        sx={{ mt: 4 }}
-        component="div"
-        whiteSpace="normal"
-        className="firstDesignSprint"
-      >
-        {global.currentRetro?.name}
+      <Box sx={{ mt: 4 }} component="div" whiteSpace="normal">
+        {/* Name Text */}
+        <H3RegularTypography
+          label={global.currentRetro?.name}
+          style={{ color: '#4E4E4E', textAlign: 'center', marginTop: '12px' }}
+        />
       </Box>
       {/* Retro URL */}
       <Box
@@ -59,23 +63,18 @@ export function ShareParticipants() {
         </a>
       </Box>
       {/* With code Text*/}
-      <Box
-        sx={{ mt: 4 }}
-        component="div"
-        whiteSpace="normal"
-        className="withCode"
-      >
-        with code
-      </Box>
+      <TextButton
+        id={'with_code'}
+        label={'WITH CODE'}
+        size={'medium'}
+        onClick={() => null}
+        style={{ marginTop: '32px' }}
+      />
       {/* Human Id */}
-      <Box
-        sx={{ mt: 4 }}
-        component="div"
-        whiteSpace="normal"
-        className="codeId"
-      >
-        {global?.currentRetro?.humanId}
-      </Box>
+      <H1SemiBoldTypography
+        label={global?.currentRetro?.humanId}
+        style={{ color: '#2C69A1', textAlign: 'center', marginTop: '16px' }}
+      />
       {/* Barcode */}
       <Box sx={{ mt: 4 }}>
         <QRCode value={global.currentRetro?.joinUrl || ''} className="qrCode" />
@@ -125,18 +124,33 @@ export function ShareParticipants() {
             flexDirection: 'row',
             alignItems: 'center',
             justifyContent: 'center',
-            gap: '8px',
+            padding: '12px 16px',
+            gap: '16px',
             border: '1px solid #159ADD',
-            filter: 'drop-shadow(0px 2px 4px rgba(0, 0, 0, 0.25))',
             borderRadius: '24px',
             background: '#ffffff',
           }}
         >
-          <Typography component="span" className="inviteText">
+          <Typography
+            component="span"
+            sx={{
+              fontFamily: 'Poppins',
+              fontStyle: 'normal',
+              fontWeight: ' 500',
+              fontSize: '16px',
+              lineHeight: '120%',
+              leadingTrim: 'both',
+              textEdge: 'cap',
+              letterSpacing: '0.03em',
+              textTransform: 'uppercase',
+              color: '#159add',
+            }}
+          >
             <Icons.Mail
               size={20}
               style={{
                 marginRight: '8px',
+                color: '#159add',
               }}
             />
             invite via email

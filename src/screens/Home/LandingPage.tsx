@@ -257,7 +257,7 @@ export function LandingPage() {
                   padding: '10px 20px',
                   gap: '8px',
                 }}
-                textStyle={{ color: '#ffffff' }}
+                size={'medium'}
               />
             </Box>
           </Box>
@@ -335,7 +335,7 @@ export function LandingPage() {
                     padding: '10px 20px',
                     gap: '8px',
                   }}
-                  textStyle={{ color: '#ffffff' }}
+                  size={'medium'}
                 />
                 {isSmUp && (
                   <TextButton
@@ -344,20 +344,12 @@ export function LandingPage() {
                     onClick={() => CreateNewRetro()}
                     style={{
                       marginTop: '42px',
+                      textDecorationLine: 'underline',
                     }}
-                    textStyle={{
-                      color: '#4285F4',
-                      textDecoration: 'underline !important',
-                    }}
+                    size={'medium'}
                   />
                 )}
               </Box>
-              {/* <Button
-                className="newUserText"
-                onClick={handleAddDeploymentDataOpen}
-              >
-                Add Deployment Data
-              </Button> */}
             </Grid>
           </Grid>
         </Grid>

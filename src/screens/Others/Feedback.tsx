@@ -19,6 +19,7 @@ import useLoadRetro from '../../helpers/hooks/useLoadRetro';
 import { BoardActionType } from '../../helpers/statemachine/BoardStateMachine';
 import theme from '../../helpers/theme/theme';
 import FeedbackPopup from '../../components/atoms/FeedbackPopup';
+import { ContainedButton } from '../../components';
 
 export default function Feedback() {
   const navigate = useNavigate();
@@ -169,20 +170,12 @@ export default function Feedback() {
               alignItems: 'center',
             }}
           ></Typography>
-
-          <Button
-            variant="outlined"
-            sx={{
-              ':hover': { background: '#695F9B' },
-              background: '#695F9B',
-              color: '#fff',
-              justifySelf: 'flex-end',
-            }}
+          <ContainedButton
+            id="Back_to_Board"
+            name="Back to Board"
             onClick={backToBoard}
-            // onTouchStart={backToBoard}
-          >
-            Back to Board
-          </Button>
+            size={'medium'}
+          />
         </AppBar>
       ) : null}
 

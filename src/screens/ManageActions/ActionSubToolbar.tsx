@@ -3,8 +3,8 @@ import React from 'react';
 import { LazyLoadImage } from 'react-lazy-load-image-component';
 import { OutlinedButtonWithIcon, TextButton } from '../../components';
 import { BoardContext } from '../../contexts/BoardContext';
-
 import './styles.scss';
+
 const ActionSubToolbar = ({
   selectedActionCount,
   global,
@@ -21,18 +21,20 @@ const ActionSubToolbar = ({
   handleRemove: () => void;
 }) => {
   const {
-    state: { actionsData, ended, users },
+    state: { users },
     commitAction,
   } = React.useContext(BoardContext);
 
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
   const open = Boolean(anchorEl);
+
   const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
     setAnchorEl(event.currentTarget);
   };
   const handleClose = () => {
     setAnchorEl(null);
   };
+
   const handleAssign = (event: React.MouseEvent<HTMLElement>) => {
     setAnchorEl(null);
     const id: string = event.currentTarget.dataset.myValue
@@ -47,35 +49,39 @@ const ActionSubToolbar = ({
       {selectedActionCount == 1 ? 'Action selected' : 'Actions selected'}
       <Box
         display="flex"
-        sx={{ maxWidth: '220px', justifyContent: 'space-between' }}
+        sx={{ maxWidth: '225px', justifyContent: 'space-between' }}
       >
+        {/* Assign Button */}
         {global.user.userType == 2 && (
           <OutlinedButtonWithIcon
-            disabled={selectedActionCount == 0 ? true : false}
-            aria-controls={open ? 'basic-menu' : undefined}
             id="assign-button"
             label="ASSIGN"
+            size={'small'}
             iconPath="/svgs/VectorAssign.svg"
-            style={{ marginRight: '15px' }}
+            aria-controls={open ? 'basic-menu' : undefined}
+            style={{ marginRight: '15px', minWidth: '104px !important' }}
             onClick={res => {
               handleClick(res);
             }}
+            disabled={selectedActionCount == 0 ? true : false}
           />
         )}
-
+        {/* REMOVE Button */}
         <OutlinedButtonWithIcon
-          disabled={false}
           id="remove"
-          onClick={handleRemove}
           label="REMOVE"
+          size={'small'}
           iconPath="/svgs/Delete.svg"
+          onClick={handleRemove}
+          disabled={false}
         />
       </Box>
+      {/* UNSELECT Button */}
       <TextButton
         label="UNSELECT"
         id="unselect"
         onClick={handleUnselect}
-        textStyle={{ color: '#159ADD' }}
+        size={'medium'}
       />
       <Menu
         MenuListProps={{

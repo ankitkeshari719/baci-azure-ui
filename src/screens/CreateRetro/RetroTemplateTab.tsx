@@ -21,6 +21,7 @@ import { CustomizeTemplate } from './CustomizeTemplate';
 import * as Icons from 'heroicons-react';
 import { createUseStyles } from 'react-jss';
 import theme from '../../helpers/theme/theme';
+import { TextButton } from '../../components';
 
 function SampleNextArrow(props: any) {
   const { className, style, onClick } = props;
@@ -308,29 +309,30 @@ export function RetroTemplateTab({
                       >
                         <Grid item xs={12}>
                           <Box sx={{ float: 'left' }}>
-                            <Button
-                              size="small"
-                              sx={{ padding: '0px' }}
+                            <TextButton
+                              id={'Learn_More'}
+                              label={'Learn More'}
+                              size={'small'}
+                              style={{
+                                padding: '0px !important',
+                                textDecorationLine: 'underline !important',
+                                backgroundColor: 'transparent !important',
+                              }}
                               disabled={template.isComingSoon}
                               onClick={handleLearnMoreDialog}
-                            >
-                              <Typography className="templateLink">
-                                Learn More
-                              </Typography>
-                            </Button>
+                            />
                           </Box>
                           <Box sx={{ float: 'right' }}>
-                            <Button
-                              disabled={template.isComingSoon}
-                              variant="outlined"
-                              size="small"
-                              className="customButton"
+                            <OutlinedButton
+                              id={'customize_button'}
+                              label="Customize"
+                              size={'small'}
                               onClick={handleCustomTemplateDialog}
-                            >
-                              <Typography className="customText">
-                                Customize
-                              </Typography>
-                            </Button>
+                              style={{
+                                minWidth: '75px !important',
+                                height: '20px !important',
+                              }}
+                            />
                           </Box>
                         </Grid>
                       </CardActions>
@@ -356,9 +358,10 @@ export function RetroTemplateTab({
                     minWidth: '75px !important',
                     height: '36px !important',
                   }}
-                  textStyle={{ color: '#FFFFFF' }}
+                  size={'medium'}
                 />
                 <OutlinedButton
+                  size={'medium'}
                   label="Back"
                   onClick={() => onClickBack('detailsPanel')}
                   style={{
@@ -367,7 +370,6 @@ export function RetroTemplateTab({
                     mt: 5,
                     ml: 6,
                   }}
-                  textStyle={{ color: '#159ADD' }}
                 />
               </Box>
             </Grid>

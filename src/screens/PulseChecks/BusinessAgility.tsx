@@ -14,7 +14,6 @@ import {
   styled,
   tooltipClasses,
   TooltipProps,
-  Divider,
 } from '@mui/material';
 import commonStyles from './../../style.module.scss';
 import './styles.scss';
@@ -547,7 +546,7 @@ export default function BusinessAgility({ pulseCheck }: Props) {
               minWidth: '260px !important',
               height: '36px !important',
             }}
-            textStyle={{ color: '#FFFFFF' }}
+            size={'medium'}
           />
         </Box>
       </Grid>
@@ -602,14 +601,12 @@ export default function BusinessAgility({ pulseCheck }: Props) {
             marginBottom: '24px',
           }}
         >
-          <Button
-            variant="outlined"
-            className="secondaryButton"
+          <ContainedButton
+            id="close"
+            name="close"
             onClick={handleClose}
-            sx={{ width: '100%' }}
-          >
-            <span className="secondaryButtonText">close</span>
-          </Button>
+            size={'medium'}
+          />
         </DialogActions>
       </Dialog>
     </Grid>

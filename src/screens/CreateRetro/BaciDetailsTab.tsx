@@ -246,7 +246,7 @@ export function BaciDetailsTab({
                   minWidth: '75px !important',
                   height: '36px !important',
                 }}
-                textStyle={{ color: '#FFFFFF' }}
+                size={'medium'}
               />
             </Box>
           </Box>

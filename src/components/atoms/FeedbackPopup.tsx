@@ -6,7 +6,6 @@ import {
   DialogContent,
   DialogTitle,
   styled,
-  Typography,
   useMediaQuery,
 } from '@mui/material';
 import {
@@ -19,7 +18,6 @@ import {
 import LinearProgress, {
   linearProgressClasses,
 } from '@mui/material/LinearProgress';
-import commonStyles from './../../style.module.scss';
 import './../../global.scss';
 import React from 'react';
 import { BoardActionType } from '../../helpers/statemachine/BoardStateMachine';
@@ -28,8 +26,15 @@ import { ActionType, GlobalContext } from '../../contexts/GlobalContext';
 import { FeedbackEntry } from '../../helpers/types';
 import { ConfirmContext } from '../../contexts/ConfirmContext';
 import { useNavigate } from 'react-router-dom';
-import closeImage from '../../assets/img/Vectorclose.png';
 import theme from '../../helpers/theme/theme';
+import {
+  CaptionRegularTypography,
+  H5SemiBoldTypography,
+} from '../CustomizedTypography';
+import { TextButton } from '../CustomizedButton/TextButton';
+import { ContainedButton } from '../CustomizedButton/ContainedButton';
+import * as Icons from 'heroicons-react';
+
 const BorderLinearProgress = styled(LinearProgress)(({ theme }) => ({
   height: '6px',
   borderRadius: '4px',
@@ -66,17 +71,20 @@ export default function FeedbackPopup(props: {
     setIndex(newIndex);
     setIsBarSet(true);
   };
+
   const handlePrevious = () => {
     let newIndex = index - 1;
     setIndex(newIndex);
     setIsBarSet(false);
   };
+
   function setFeedbackBar(index: number) {
     if (isBarSet && qs[index][0] === 0) {
       setbarvalue(barvalue + 100 / qs.length);
       setIsBarSet(false);
     }
   }
+
   React.useEffect(() => {
     setShowThankYou(props.showThankYou);
     if (props.showThankYou) {
@@ -94,6 +102,7 @@ export default function FeedbackPopup(props: {
       false
     );
   };
+
   const submitFeedback = async () => {
     await saveAndProcessAction(BoardActionType.SUBMIT_FEEDBACK, {
       feedback: qs.map(
@@ -123,23 +132,21 @@ export default function FeedbackPopup(props: {
       navigate(`/offboarding`);
     }
   };
+
   const closeFeedback = () => {
     navigate(`/offboarding`);
   };
+
   return (
     <Dialog
       open={props.show}
       keepMounted
       PaperProps={{
         sx: {
-          width: '800px',
-          maxWidth: '800px',
-          height: '400px',
-          maxHeight: '400px',
-          padding: isXsUp ? '19px' : '0px',
           display: 'flex',
           flexDirection: 'column',
           alignItems: 'center',
+          padding: isXsUp ? '16px' : '16px',
           overflowX: 'hidden',
         },
       }}
@@ -150,20 +157,20 @@ export default function FeedbackPopup(props: {
       aria-describedby="alert-dialog-slide-description"
     >
       <Box
-        sx={{ display: 'flex', justifyContent: 'flex-end' }}
-        mr="23px"
-        mt="23px"
+        sx={{
+          width: '100%',
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'end',
+        }}
       >
-        <img
-          src={closeImage}
-          onClick={closeFeedback}
+        <Icons.X
+          size={20}
           style={{
-            position: 'absolute',
-            right: '20px',
-            top: '10px',
             cursor: 'pointer',
           }}
-        ></img>
+          onClick={closeFeedback}
+        />
       </Box>
       {showThankYou ? (
         <DialogContent
@@ -174,35 +181,33 @@ export default function FeedbackPopup(props: {
           }}
         >
           <img src="/images/RetroFinish.gif"></img>
-          <Typography
-            color={commonStyles.secondaryMain}
-            fontSize="24px"
-            mt="15px"
-          >
-            The retro is finished!
-          </Typography>
+          <H5SemiBoldTypography
+            label={'The retro is finished!'}
+            style={{ color: ' #EE7538' }}
+          />
         </DialogContent>
       ) : (
         <>
-          <DialogTitle
-            mt="20px"
-            variant={!isXsUp ? 'h3' : 'h5'}
-            color={commonStyles.secondaryMain}
-            textAlign="center"
-            p="0px !important"
-          >
-            Please help facilitator with your feedback
+          <DialogTitle mt="20px">
+            {/* Please help facilitator with your feedback text  */}
+            <H5SemiBoldTypography
+              label={'Please help facilitator with your feedback'}
+              style={{ color: ' #EE7538' }}
+            />
           </DialogTitle>
-          <Typography className="identityWillbeConfidentialText">
-            Your identity will be confidential
-          </Typography>
+          {/* Your identity will be confidential text */}
+          <CaptionRegularTypography
+            label={'Your identity will be confidential'}
+            style={{ color: ' #EE7538', marginTop: '40px' }}
+          />
+          {/* Bar */}
           <Box
             sx={{
               display: 'flex',
               justifyContent: 'center',
               alignItems: 'center',
               width: '100%',
-              marginTop: !isXsUp ? '20px' : '10px',
+              marginTop: '32px',
             }}
           >
             <BorderLinearProgress
@@ -213,15 +218,14 @@ export default function FeedbackPopup(props: {
               }}
             />
           </Box>
-
+          {/* Feedback Question and Rating */}
           <DialogContent
             sx={{
               display: 'flex',
               justifyContent: 'center',
               alignItems: 'flex-end',
               textAlign: 'center',
-              overflowY: 'hidden',
-              overflowX: 'hidden',
+              marginTop: '48px',
             }}
           >
             <Box
@@ -231,16 +235,10 @@ export default function FeedbackPopup(props: {
                 alignItems: 'center',
               }}
             >
-              <Box>
-                <Typography
-                  variant={!isXsUp ? 'h4' : 'h5'}
-                  mt={!isXsUp ? '32px' : '48px'}
-                  height="56px"
-                  id="alert-dialog-slide-description"
-                >
-                  {FEEDBACK_QUESTIONS[index]}
-                </Typography>
-              </Box>
+              <H5SemiBoldTypography
+                label={FEEDBACK_QUESTIONS[index]}
+                style={{ color: '#343434' }}
+              />
               <Box
                 sx={{
                   width: '216px',
@@ -248,7 +246,7 @@ export default function FeedbackPopup(props: {
                   display: 'flex',
                   flexDirection: 'row',
                   justifyContent: 'center',
-                  marginTop: !isXsUp ? '5px' : '30px',
+                  marginTop: !isXsUp ? '48px' : '24px',
                 }}
               >
                 {[1, 2, 3, 4, 5].map(i => (
@@ -281,22 +279,27 @@ export default function FeedbackPopup(props: {
                 m="20px"
               >
                 {index >= 1 && (
-                  <Button className="popupPrevBtn" onClick={handlePrevious}>
-                    Previous
-                  </Button>
+                  <TextButton
+                    id={'Previous'}
+                    label={'Previous'}
+                    size={'small'}
+                    onClick={handlePrevious}
+                  />
                 )}
                 {!(index === FEEDBACK_QUESTIONS_COLORS.length - 1) ? (
-                  <Button className="popupNextBtn" onClick={handleNext}>
-                    Next
-                  </Button>
+                  <TextButton
+                    id={'Next'}
+                    label={'Next'}
+                    size={'small'}
+                    onClick={handleNext}
+                  />
                 ) : (
-                  <Button
-                    variant="outlined"
-                    className="submitfeedback"
+                  <ContainedButton
+                    id="Submit_Feedback"
+                    name="Submit Feedback"
                     onClick={submitFeedback}
-                  >
-                    <span className="secondaryButtonText">Submit Feedback</span>
-                  </Button>
+                    size={'small'}
+                  />
                 )}
               </Box>
             ) : (
@@ -310,24 +313,28 @@ export default function FeedbackPopup(props: {
                 }}
               >
                 {!(index === FEEDBACK_QUESTIONS_COLORS.length - 1) ? (
-                  <Button className="popupNextBtn" onClick={handleNext}>
-                    Next
-                  </Button>
+                  <TextButton
+                    id={'Next'}
+                    label={'Next'}
+                    size={'small'}
+                    onClick={handleNext}
+                  />
                 ) : (
-                  <Button
-                    variant="outlined"
-                    className="submitfeedback"
+                  <ContainedButton
+                    id="Submit_Feedback"
+                    name="Submit Feedback"
                     onClick={submitFeedback}
-                    sx={{ marginBottom: '5px' }}
-                  >
-                    <span className="secondaryButtonText">Submit Feedback</span>
-                  </Button>
+                    size={'small'}
+                  />
                 )}
 
                 {index >= 1 && (
-                  <Button className="popupPrevBtn" onClick={handlePrevious}>
-                    Previous
-                  </Button>
+                  <TextButton
+                    id={'Previous'}
+                    label={'Previous'}
+                    size={'small'}
+                    onClick={handlePrevious}
+                  />
                 )}
               </Box>
             )}

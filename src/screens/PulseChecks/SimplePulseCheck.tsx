@@ -9,9 +9,6 @@ import {
   Tooltip,
   useMediaQuery,
   Link,
-  styled,
-  tooltipClasses,
-  TooltipProps,
   Divider,
 } from '@mui/material';
 import commonStyles from './../../style.module.scss';
@@ -33,7 +30,7 @@ import { ConfirmContext } from '../../contexts/ConfirmContext';
 import { GlobalContext, ActionType } from '../../contexts/GlobalContext';
 import useLoadRetro from '../../helpers/hooks/useLoadRetro';
 import { BoardActionType } from '../../helpers/statemachine/BoardStateMachine';
-import { ContainedButton } from '../../components';
+import { ContainedButton, TextButton } from '../../components';
 import {
   BodyRegularTypography,
   BodySemiBoldTypography,
@@ -400,8 +397,8 @@ export default function SimplePulseCheck({ pulseCheck }: Props) {
                         <img
                           src={sadMask}
                           style={{
-                            marginLeft: !isXsUp ? '-10px' : '-6px',
-                            marginTop: !isXsUp ? '-50px' : '-45px',
+                            marginLeft: !isXsUp ? '-50px' : '-44px',
+                            marginTop: !isXsUp ? '0px' : '5px',
                             width: !isXsUp ? '64px' : '52px',
                             height: !isXsUp ? '64px' : '52px',
                             display:
@@ -435,8 +432,8 @@ export default function SimplePulseCheck({ pulseCheck }: Props) {
                         <img
                           src={neutralMask}
                           style={{
-                            marginLeft: !isXsUp ? '-10px' : '-6px',
-                            marginTop: !isXsUp ? '-50px' : '-45px',
+                            marginLeft: !isXsUp ? '-50px' : '-44px',
+                            marginTop: !isXsUp ? '0px' : '5px',
                             width: !isXsUp ? '64px' : '52px',
                             height: !isXsUp ? '64px' : '52px',
                             display:
@@ -470,8 +467,8 @@ export default function SimplePulseCheck({ pulseCheck }: Props) {
                         <img
                           src={happyMask}
                           style={{
-                            marginLeft: !isXsUp ? '-10px' : '-6px',
-                            marginTop: !isXsUp ? '-50px' : '-45px',
+                            marginLeft: !isXsUp ? '-50px' : '-44px',
+                            marginTop: !isXsUp ? '0px' : '5px',
                             width: isXsUp ? '52px' : '64px',
                             height: isXsUp ? '52px' : '64px',
                             display:
@@ -513,24 +510,29 @@ export default function SimplePulseCheck({ pulseCheck }: Props) {
                 minWidth: '260px !important',
                 height: '36px !important',
               }}
-              textStyle={{ color: '#FFFFFF' }}
+              size={'medium'}
             />
           </Box>
         </Grid>
         {/* Skip Pulse Check button */}
-        <Grid item xs={12}>
-          <Box
-            sx={{
-              display: 'flex',
-              justifyContent: 'center',
-              cursor: 'pointer',
+        <Grid
+          item
+          xs={12}
+          sx={{
+            display: 'flex',
+            justifyContent: 'center',
+          }}
+        >
+          <TextButton
+            id={'Skip_Pulse_Check'}
+            label={'Skip Pulse Check'}
+            onClick={skipPulseCheck}
+            size={'medium'}
+            style={{
               marginTop: isXsUp ? '24px' : '40px',
+              textDecorationLine: 'underline',
             }}
-          >
-            <Link className="infoLink" onClick={skipPulseCheck}>
-              Skip Pulse Check
-            </Link>
-          </Box>
+          />
         </Grid>
       </Grid>
       <Dialog open={openHelpPopup} onClose={handleClose}>
@@ -578,7 +580,7 @@ export default function SimplePulseCheck({ pulseCheck }: Props) {
               width: '100%',
               minHeight: '44px',
             }}
-            textStyle={{ color: '#FFFFFF' }}
+            size={'medium'}
           />
         </DialogActions>
       </Dialog>

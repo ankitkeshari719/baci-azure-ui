@@ -100,7 +100,7 @@ export const templatesData = [
       },
       {
         id: '2',
-        name: 'Develop Actions',
+        name: 'Manage Actions',
         order: 2,
         cardColour: CARD_COLOURS[2],
         cardColourHover: CARD_HOVER_COLOURS[2],
@@ -174,7 +174,7 @@ export const templatesData = [
       },
       {
         id: '2',
-        name: 'Develop Actions',
+        name: 'Manage Actions',
         order: 2,
         cardColour: CARD_COLOURS[2],
         cardColourHover: CARD_HOVER_COLOURS[2],
@@ -248,7 +248,7 @@ export const templatesData = [
       },
       {
         id: '2',
-        name: 'Develop Actions',
+        name: 'Manage Actions',
         order: 2,
         cardColour: CARD_COLOURS[2],
         cardColourHover: CARD_HOVER_COLOURS[2],
@@ -321,7 +321,7 @@ export const templatesData = [
       },
       {
         id: '2',
-        name: 'Develop Actions',
+        name: 'Manage Actions',
         order: 2,
         cardColour: CARD_COLOURS[2],
         cardColourHover: CARD_HOVER_COLOURS[2],
