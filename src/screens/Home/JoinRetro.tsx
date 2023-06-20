@@ -32,6 +32,7 @@ import {
   H5SemiBoldTypography,
 } from '../../components/CustomizedTypography';
 import { ContainedButton, TextButton } from '../../components';
+import { LazyLoadImage } from 'react-lazy-load-image-component';
 
 const AVATAR_CHARACTER_LIMIT = 30;
 
@@ -48,10 +49,11 @@ const styles = {
     color: 'rgba(0, 0, 0, 0.6)',
   },
   avatarBox: {
-    width: '527px',
+    // width: '527px',
     height: '220px',
     overflowY: 'auto',
     marginTop: '24px',
+    maxWidth:'527px'
   },
   goOnBtn: {
     marginTop: '48px',
@@ -94,7 +96,9 @@ export function JoinRetro() {
   const socket = React.useContext(SocketContext);
   const [joining, setJoining] = React.useState(id ? true : false);
   const [captureName, setCaptureName] = React.useState(id ? true : false);
-  const isXsUp = useMediaQuery(theme.breakpoints.between('xs', 'sm'));
+  // const isXsUp = useMediaQuery(theme.breakpoints.between('xs', 'sm'));
+  const isXsUp = useMediaQuery('(max-width:768px)');
+  const isSmUp = useMediaQuery('(min-width:1024px)');
   const [openAvatarDialog, setOpenAvatarDialog] = React.useState(false);
   const [height, setHeight] = React.useState(0);
 
@@ -308,7 +312,7 @@ export function JoinRetro() {
   return (
     <>
       {isXsUp ? (
-        <Box sx={{ height: 'calc(var(--app-height))', overflowY: 'auto' }}>
+        <Box sx={{ height: 'calc(var(--app-height))', overflowY: 'auto'}}>
           <DeploymentPopUp />
           <LandingLayout></LandingLayout>
           <Box
@@ -378,7 +382,7 @@ export function JoinRetro() {
                 alignItems: 'center',
               }}
             >
-              {selectedAvatar && (
+              {selectedAvatar ? (
                 <Avatar
                   avatar={selectedAvatar}
                   css={{
@@ -387,7 +391,16 @@ export function JoinRetro() {
                     borderRadius: '50%',
                   }}
                 ></Avatar>
-              )}
+              ): <LazyLoadImage
+              className="avatar"
+              style={{
+                width: '32px',
+                height: '32px',
+                borderRadius: '50%',
+                border: 'none',
+              }}
+              src={'/svgs/DefaultUser.svg'}
+            ></LazyLoadImage>}
               <TextButton
                 id={'select_avatar'}
                 label={'Select Avatar'}
@@ -416,9 +429,9 @@ export function JoinRetro() {
           </Box>
         </Box>
       ) : (
-        <Grid container spacing={0} style={{ overflowY: 'auto' }}>
+        <Grid container spacing={0} style={{ overflowY: 'auto',height: 'calc(var(--app-height))' }}>
           <DeploymentPopUp />
-          <Grid item xs={6}>
+          <Grid item xs={6} >
             <LandingLayout></LandingLayout>
           </Grid>
           <Grid
@@ -428,7 +441,7 @@ export function JoinRetro() {
             justifyContent="start"
             alignItems="center"
           >
-            <Box sx={{ marginLeft: '80px' }}>
+            <Box sx={{ marginLeft: '80px',paddingTop:'10px',paddingBottom:"10px" }}>
               {!global.currentRetro?.creatorId ? (
                 <Box sx={{ display: 'flex', flexDirection: 'column' }}>
                   <H1RegularTypography
@@ -451,7 +464,7 @@ export function JoinRetro() {
                 </Box>
               )}
               {/* Choose your name for this retro Form Field */}
-              <FormControl sx={{ width: '322px', marginTop: '36px' }}>
+              <FormControl sx={{ maxWidth: '322px',width:"100%",display:'flex', marginTop: '36px' }}>
                 <TextField
                   id="standard-helperText"
                   label="Choose your name for this retro"
@@ -531,7 +544,7 @@ export function JoinRetro() {
       {/* Select Avatar Dialog  for Mobile View*/}
       <Dialog
         open={openAvatarDialog}
-        sx={{ height: height / 2, overflowY: 'auto' }}
+        sx={{ height: height , overflowY: 'auto' }}
       >
         <DialogTitle>
           <CaptionRegularTypography

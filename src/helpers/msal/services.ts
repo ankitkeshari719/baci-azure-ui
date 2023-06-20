@@ -212,6 +212,94 @@ export const keywordExtraction = async (
   return groupData;
 };
 
+// Jira Integration
+export const connectJira = async (
+  retroId: string,
+): Promise<string> => {
+  let jiraURL = "";
+  const requestOptions = {
+    method: 'GET',
+    headers: { 'Content-Type': 'application/json' },
+  };
+  await fetch(API_URL + `/connectJira?retroId=${retroId}`, requestOptions)
+    .then(response => response.json())
+    .then(data => {
+      console.log(data);
+      jiraURL = data;
+    });
+  return jiraURL;
+};
+
+export const getJiraToken = async (
+  jiraCode: string,
+): Promise<string> => {
+  let jiraAccessToken = "";
+  const requestOptions = {
+    method: 'GET',
+    headers: { 'Content-Type': 'application/json' },
+  };
+  await fetch(API_URL + `/getJiraToken?jiraCode=${jiraCode}`, requestOptions)
+    .then(response => response.json())
+    .then(data => {
+      console.log(data);
+      jiraAccessToken = data;
+    });
+  return jiraAccessToken;
+};
+export const listJiraProjects = async (
+  jiraCode: string,
+): Promise<string[]> => {
+  let jiraProjects: any[] = [];
+  const requestOptions = {
+    method: 'GET',
+    headers: { 'Content-Type': 'application/json' },
+  };
+  await fetch(API_URL + `/listJiraProjects?jiraCode=${jiraCode}`, requestOptions)
+    .then(response => response.json())
+    .then(data => {
+      console.log(data);
+      jiraProjects = data;
+    });
+  return jiraProjects;
+};
+export const listJiraMeta = async (
+  jiraCode: string,
+  projectId: string,
+): Promise<string[]> => {
+  let jiraProjects: any[] = [];
+  const requestOptions = {
+    method: 'GET',
+    headers: { 'Content-Type': 'application/json' },
+  };
+  await fetch(API_URL + `/listJiraMeta?jiraCode=${jiraCode}&projectId=${projectId}`, requestOptions)
+    .then(response => response.json())
+    .then(data => {
+      console.log(data);
+      jiraProjects = data;
+    });
+  return jiraProjects;
+};
+export const createJiraIssue = async (
+  projectId: string,
+  issueType: string,
+  jiraCode: string,
+  description: string,
+): Promise<any> => {
+  let status: any = "";
+  const requestOptions = {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ projectId, issueType, access_token: jiraCode,description }),
+  };
+  
+  await fetch(API_URL + `/createJiraIssue`, requestOptions)
+    .then(response => response.json())
+    .then(data => {
+      console.log(data);
+      status = data;
+    });
+  return status;
+};
 
 /* 
 export const onSnapshotRetroActions = (socket: Socket<DefaultEventsMap, DefaultEventsMap>,id: string, userId: string, fromTimestamp: number | undefined, callback: (([]) => void)): () => void => {
