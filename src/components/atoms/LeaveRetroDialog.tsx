@@ -1,10 +1,18 @@
 import {
+  Box,
   Button,
   Dialog,
   DialogActions,
   DialogContent,
   Typography,
 } from '@mui/material';
+import {
+  CaptionRegularTypography,
+  H3RegularTypography,
+} from '../CustomizedTypography';
+import { ContainedButton } from '../CustomizedButton/ContainedButton';
+import { OutlinedButton } from '../CustomizedButton/OutlinedButton';
+import * as Icons from 'heroicons-react';
 
 const LeaveRetroDialog = (props: any) => {
   const { onClose, open } = props;
@@ -28,55 +36,56 @@ const LeaveRetroDialog = (props: any) => {
       }}
       sx={{ '&& .MuiDialog-paper': { overflowX: 'hidden' } }}
     >
-      <img
-        onClick={handleClose}
-        style={{
-          position: 'absolute',
-          right: '20px',
-          top: '10px',
-          cursor: 'pointer',
+      <Box
+        sx={{
+          width: '100%',
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'end',
         }}
-        src="/svgs/CloseDialog.svg"
-      ></img>
-      <Typography
-        sx={{ fontSize: '24px', fontWeight: '500', color: '#EE7538' }}
       >
-        Are you done with the retro?
-      </Typography>
-
-      <DialogContent sx={{ marginTop: '30px', marginBottom: '30px' }}>
-        <Typography sx={{ fontSize: '20px' }} align="center">
-          In case of any doubts, please confirm with facilitator before leaving
-        </Typography>
+        <Icons.X
+          size={20}
+          style={{
+            cursor: 'pointer',
+          }}
+          onClick={handleClose}
+        />
+      </Box>
+      <H3RegularTypography
+        label={'Are you done with the retro?'}
+        style={{ color: '#ee7538' }}
+      />
+      <DialogContent
+        sx={{ marginTop: '30px', marginBottom: '30px', textAlign: 'center' }}
+      >
+        <CaptionRegularTypography
+          label={
+            'In case of any doubts, please confirm with facilitator before leaving'
+          }
+          style={{ color: '#ee7538' }}
+        />
       </DialogContent>
       <DialogActions
-        sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}
+        sx={{ display: 'flex', flexDirection: 'row', alignItems: 'center' }}
       >
-        <Button
-          variant="contained"
-          sx={{
-            padding: '10px 20px',
-            boxShadow: '0px 2px 4px rgba(0, 0, 0, 0.25)',
-            borderRadius: '24px',
-            width: '200px',
-          }}
+        <ContainedButton
+          id="LEAVE_RETRO"
+          name="LEAVE RETRO"
           onClick={() => onClose(true)}
-        >
-          LEAVE RETRO
-        </Button>
-        <Button
-          variant="outlined"
-          sx={{
-            padding: '10px 20px',
-            boxShadow: '0px 2px 4px rgba(0, 0, 0, 0.25)',
-            borderRadius: '24px',
-            width: '200px',
-            marginTop: '20px',
-          }}
+          size={'medium'}
+        />
+        <OutlinedButton
+          id="BACK_TO_BOARD"
+          label="BACK TO BOARD"
+          size={'medium'}
           onClick={() => handleClose()}
-        >
-          BACK TO BOARD
-        </Button>
+          style={{
+            minWidth: '172px !important',
+            width: '172px !important',
+            height: '40px !important',
+          }}
+        />
       </DialogActions>
     </Dialog>
   );

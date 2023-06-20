@@ -3,11 +3,9 @@ import { DragDropContext, Draggable, Droppable } from 'react-beautiful-dnd';
 import {
   AppBar,
   Box,
-  Button,
   Dialog,
   Grid,
   styled,
-  TextField,
   Toolbar,
   Typography,
   useMediaQuery,
@@ -20,9 +18,9 @@ import EdiText from 'react-editext';
 import theme from '../../helpers/theme/theme';
 import './styles.scss';
 import { BoardContext } from '../../contexts/BoardContext';
-import { BoardActionType } from '../../helpers/statemachine/BoardStateMachine';
-import { ActionType, GlobalContext } from '../../contexts/GlobalContext';
+import { GlobalContext } from '../../contexts/GlobalContext';
 import { CustomizeTemplateDialog } from './CustomizeTemplateDialog';
+import { ContainedButton } from '../../components';
 
 const ColumnComponent = styled('div')({
   height: 'calc(var(--app-height) - 160px)',
@@ -273,7 +271,7 @@ export function CustomizeTemplate({
       <Box className="mainContainer">
         <TopBar />
         <Grid container spacing={0} className="retroContainer">
-          {/* About Template */}
+          {/* Customize Template */}
           <Grid item xs={12}>
             <Box
               component="div"
@@ -314,18 +312,14 @@ export function CustomizeTemplate({
                 >
                   {tempSelectedTemplate && tempSelectedTemplate.templateName}
                 </Typography>
-                <Button
-                  autoFocus
-                  variant="contained"
-                  className="saveButton"
+                <ContainedButton
+                  id="select"
+                  name="Select"
                   onClick={() =>
                     onClickSelectButton(selectedTemplate.templateId)
                   }
-                >
-                  <Typography className="saveButtonText" component="span">
-                    Select
-                  </Typography>
-                </Button>
+                  size={'medium'}
+                />
               </Toolbar>
             </AppBar>
           </Grid>

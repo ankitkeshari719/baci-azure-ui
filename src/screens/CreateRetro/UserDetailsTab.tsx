@@ -16,7 +16,9 @@ import { AVATAR_CHARACTER_LIMIT } from './const';
 import Avatar from '../../components/Elements/Avatar';
 import { avatarName } from '../../constants/AvatarName';
 import { LazyLoadImage } from 'react-lazy-load-image-component';
-import { ContainedButton, OutlinedButton } from '../../components';
+import { ContainedButton, OutlinedButton, TextButton } from '../../components';
+import * as Icons from 'heroicons-react';
+import { H6RegularTypography } from '../../components/CustomizedTypography';
 
 const styles = {
   avatarfield: {
@@ -231,11 +233,12 @@ export function UserDetailsTab({
                               src="../svgs/Empty-Animals.svg"
                             ></LazyLoadImage>
                           )}
-                          <Button onClick={() => setOpenAvatarDialog(true)}>
-                            <span className="selectAvatarButtonText">
-                              Select Avatar
-                            </span>
-                          </Button>
+                          <TextButton
+                            id={'Select_Avatar'}
+                            label={'Select Avatar'}
+                            size={'small'}
+                            onClick={() => setOpenAvatarDialog(true)}
+                          />
                         </Box>
                         <Box>
                           {avatarSelectionError !== '' && (
@@ -284,10 +287,11 @@ export function UserDetailsTab({
                     minWidth: '75px !important',
                     height: '36px !important',
                   }}
-                  textStyle={{ color: '#FFFFFF' }}
+                  size={'medium'}
                 />
                 <OutlinedButton
                   label="Back"
+                  size={'medium'}
                   onClick={() => onClickBack('pulseCheckPanel')}
                   style={{
                     minWidth: '75px !important',
@@ -295,7 +299,6 @@ export function UserDetailsTab({
                     mt: 5,
                     ml: 6,
                   }}
-                  textStyle={{ color: '#159ADD' }}
                 />
               </Box>
             </Grid>
@@ -312,18 +315,22 @@ export function UserDetailsTab({
           <Grid container sx={{ display: 'flex', alignItems: 'center' }}>
             <Grid item sm={6}>
               <Box display="flex" justifyContent="flex-start">
-                <Typography component="span" className="selectAvatarText">
-                  Select Avatar
-                </Typography>
+                <H6RegularTypography
+                  label={'Select Avatar'}
+                  style={{
+                    color: '#4E4E4E',
+                  }}
+                />
               </Box>
             </Grid>
             <Grid item sm={6}>
               <Box display="flex" justifyContent="flex-end">
-                <img
-                  width="45px"
-                  height="45px"
+                <Icons.X
+                  size={20}
+                  style={{
+                    cursor: 'pointer',
+                  }}
                   onClick={() => setOpenAvatarDialog(false)}
-                  src="/svgs/CloseDialog.svg"
                 />
               </Box>
             </Grid>
@@ -374,12 +381,12 @@ export function UserDetailsTab({
           >
             <OutlinedButton
               label="Cancel"
+              size={'medium'}
               onClick={() => setOpenAvatarDialog(false)}
               style={{
                 minWidth: '75px !important',
                 height: '36px !important',
               }}
-              textStyle={{ color: '#159ADD' }}
             />
             <ContainedButton
               name="Select"
@@ -388,7 +395,7 @@ export function UserDetailsTab({
                 minWidth: '75px !important',
                 height: '36px !important',
               }}
-              textStyle={{ color: '#FFFFFF' }}
+              size={'medium'}
             />
           </Box>
         </Box>

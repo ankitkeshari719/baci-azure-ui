@@ -3,14 +3,14 @@ import { Typography } from '@mui/material';
 import './styles.scss';
 
 type Props = {
-  label: string;
+  label:  string | undefined;
   onClick?: (...param: any) => void;
   style?: any;
 };
 
 export function TinyTextTypography({ label, onClick, style }: Props) {
   return (
-    <Typography className="tinyText" component="span" style={style}>
+    <Typography className="tinyText" component="span" sx={{ ...style }}>
       {label}
     </Typography>
   );

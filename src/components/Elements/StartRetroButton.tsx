@@ -6,22 +6,30 @@ import { Button } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
 import { getRetro } from '../../helpers/msal/services';
 import RetroTimeInputDialog from '../atoms/RetroTimeInputDialog';
+
 const styles = {
   goToRetroBtn: {
     height: '44px',
     marginTop: '44px',
   },
 };
+
+// This component is not in used
 const StartRetroButton = () => {
   const {
-    state: { retroId, retroStarted, retroDuration },
+    state: { retroId, retroStarted },
     commitAction,
   } = React.useContext(BoardContext);
   const [open, setOpen] = React.useState(false);
   const [selectedValue, setSelectedValue] = React.useState(60);
   const navigate = useNavigate();
-
   const [global, dispatch] = React.useContext(GlobalContext);
+
+  React.useEffect(() => {
+    if (retroStarted && retroId != undefined && retroId != '') {
+      navigate(`/board/${retroId || global.currentRetro?.id}/pulsecheck`);
+    }
+  }, [retroStarted]);
 
   const saveAndProcessAction = async (
     actionName: BoardActionType,
@@ -38,6 +46,7 @@ const StartRetroButton = () => {
       type: ActionType.SET_LOADING,
       payload: { loadingFlag: true },
     });
+
     saveAndProcessAction(BoardActionType.UPDATE_RETRO_DETAILS, {
       retroStatus: 'started',
       creatorId: global.currentRetro?.creatorId,
@@ -71,29 +80,20 @@ const StartRetroButton = () => {
     });
   };
 
-  React.useEffect(() => {
-    if (retroStarted && retroId != undefined && retroId != '') {
-      navigate(`/board/${retroId || global.currentRetro?.id}/pulsecheck`);
-    }
-  }, [retroStarted]);
-
-  const handleClickOpen = () => {
-    setOpen(true);
-  };
-
   const handleClose = (value: any) => {
     setOpen(false);
   };
+  
   const handleSubmit = (value: any) => {
     setOpen(false);
     setSelectedValue(value);
     startRetro(value);
   };
+
   return (
     <>
       {global?.currentRetro?.creatorId === global?.user?.id && (
         <>
-          {' '}
           <Button
             variant="outlined"
             className="secondaryButton"

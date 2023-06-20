@@ -1,19 +1,18 @@
 import {
   Box,
-  Button,
   Dialog,
-  DialogActions,
-  DialogContent,
-  DialogTitle,
   FormControl,
   FormHelperText,
-  Grid,
   Input,
   InputLabel,
-  Typography,
 } from '@mui/material';
 import React from 'react';
 import { ContainedButton } from '../../components';
+import {
+  CaptionRegularTypography,
+  H3RegularTypography,
+} from '../../components/CustomizedTypography';
+import * as Icons from 'heroicons-react';
 
 type Props = {
   isTimeInputDialog: boolean;
@@ -83,18 +82,20 @@ export function TimeInputDialog({
         },
       }}
     >
-      <Box>
-        <img
-          width="45px"
-          height="45px"
-          onClick={handleClose}
-          src="/svgs/CloseDialog.svg"
+      <Box
+        sx={{
+          width: '100%',
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'end',
+        }}
+      >
+        <Icons.X
+          size={20}
           style={{
-            position: 'absolute',
-            right: '20px',
-            top: '10px',
             cursor: 'pointer',
           }}
+          onClick={handleClose}
         />
       </Box>
       <Box
@@ -106,14 +107,18 @@ export function TimeInputDialog({
         }}
       >
         <Box sx={{ mt: 4 }}>
-          <Typography className="time_text_one">
-            When this retro will end?
-          </Typography>
+          <H3RegularTypography
+            label={'When this retro will end?'}
+            style={{ color: '#ee7538' }}
+          />
         </Box>
         <Box sx={{ mt: 4 }}>
-          <Typography className="time_text_two">
-            Participants will get a reminder 5 minutes before the retro ends
-          </Typography>
+          <CaptionRegularTypography
+            label={
+              'Participants will get a reminder 5 minutes before the retro ends'
+            }
+            style={{ color: '#ee7538' }}
+          />
         </Box>
         <Box sx={{ mt: 4 }}>
           <FormControl
@@ -154,7 +159,7 @@ export function TimeInputDialog({
             minWidth: '140px !important',
             height: '36px !important',
           }}
-          textStyle={{ color: '#FFFFFF' }}
+          size={'medium'}
         />
       </Box>
     </Dialog>

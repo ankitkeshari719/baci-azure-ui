@@ -77,15 +77,15 @@ export default function App({ instance }: AppProps) {
                             }
                           />
                           <Route
-                            path=":id/startRetro"
-                            element={<StartRetro></StartRetro>}
-                          />
-                          <Route
                             path=":id/pulsecheck"
                             element={<PulseCheckMain />}
                           />
-                          <Route path=":id/feedback" element={<Feedback />} />
                           <Route path=":id" element={<Board />} />
+                          <Route path=":id/feedback" element={<Feedback />} />
+                          <Route
+                            path=":id/startRetro"
+                            element={<StartRetro></StartRetro>}
+                          />
                         </Route>
                         <Route
                           path="/report/:id"

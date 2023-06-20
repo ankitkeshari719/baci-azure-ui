@@ -1,10 +1,4 @@
-import {
-  Button,
-  Card,
-  Grid,
-  TextField,
-  Typography,
-} from '@mui/material';
+import { Button, Card, Grid, TextField, Typography } from '@mui/material';
 import { BoardContext } from '../../contexts/BoardContext';
 import { BoardActionType } from '../../helpers/statemachine/BoardStateMachine';
 import { CardGroup, Column } from '../../helpers/types';
@@ -14,11 +8,8 @@ import React from 'react';
 import { UNGROUPED } from '../../constants';
 import { ConfirmContext } from '../../contexts/ConfirmContext';
 import { ActionType, GlobalContext } from '../../contexts/GlobalContext';
-import {
-  DraggableProvided,
-} from 'react-beautiful-dnd';
+import { DraggableProvided } from 'react-beautiful-dnd';
 import { XMarkIcon, CheckIcon } from '@heroicons/react/24/solid';
-import { OutlinedButton } from '../CustomizedButton/OutlinedButton';
 export function RetroCardGroup({
   admin,
   group,
@@ -59,18 +50,45 @@ export function RetroCardGroup({
     react => react.userId === global.user.id
   );
 
-  const groupColour = columns.find(
-    column => column.id === columnId
-  )?.groupColour;
-  const groupFontColour = columns.find(
-    column => column.id === columnId
-  )?.groupFontColour;
+  React.useEffect(() => {
+    const reactGroups = {} as any;
+    if (group.reactions) {
+      group.reactions.forEach(reaction => {
+        if (reactGroups[reaction.react]) {
+          reactGroups[reaction.react]++;
+        } else {
+          reactGroups[reaction.react] = 1;
+        }
+      });
+    }
+    setReactGroups(reactGroups);
+    setMyReact(
+      !!group.reactions?.find(react => react.userId === global.user.id)
+    );
+  }, [group.reactions]);
+
+  React.useEffect(() => {
+    const inputText = document.getElementById('groupTextField' + group.id);
+    if (inputText && enableEdit) {
+      setNameSet(true);
+      inputText.focus();
+    }
+  }, [enableEdit]);
+
   React.useEffect(() => {
     setName(group.name);
     if (group.name) {
       setNameSet(true);
     }
   }, [group.name]);
+
+  const groupColour = columns.find(
+    column => column.id === columnId
+  )?.groupColour;
+
+  const groupFontColour = columns.find(
+    column => column.id === columnId
+  )?.groupFontColour;
 
   const deleteGroup = async (groupId: string) => {
     setConfirmAction({
@@ -100,6 +118,7 @@ export function RetroCardGroup({
   const lockGroup = async (groupId: string, lock: boolean) => {
     await saveAndProcessAction(BoardActionType.LOCK_CARD, { groupId, lock });
   };
+
   const setGroupName = async (groupId: string, name: string) => {
     await saveAndProcessAction(BoardActionType.SET_GROUP_NAME, {
       groupId,
@@ -114,7 +133,6 @@ export function RetroCardGroup({
     });
     await saveAndProcessAction(BoardActionType.CONFIRM_GROUP, {
       groupId,
-
     });
     dispatch({
       type: ActionType.SET_LOADING,
@@ -137,31 +155,6 @@ export function RetroCardGroup({
       });
     });
   };
-
-  React.useEffect(() => {
-    const reactGroups = {} as any;
-    if (group.reactions) {
-      group.reactions.forEach(reaction => {
-        if (reactGroups[reaction.react]) {
-          reactGroups[reaction.react]++;
-        } else {
-          reactGroups[reaction.react] = 1;
-        }
-      });
-    }
-    setReactGroups(reactGroups);
-    setMyReact(
-      !!group.reactions?.find(react => react.userId === global.user.id)
-    );
-  }, [group.reactions]);
-
-  React.useEffect(() => {
-    const inputText = document.getElementById('groupTextField' + group.id);
-    if (inputText && enableEdit) {
-      setNameSet(true);
-      inputText.focus();
-    }
-  }, [enableEdit]);
 
   const saveGroupName = async () => {
     if (admin) {
@@ -188,17 +181,19 @@ export function RetroCardGroup({
     <>
       <Card
         variant="outlined"
-
         sx={{
           margin: '0',
           borderRadius: 0,
-          background: group.suggested ? 'none' : group.name !== UNGROUPED ? groupColour : 'none',
+          background: group.suggested
+            ? 'none'
+            : group.name !== UNGROUPED
+            ? groupColour
+            : 'none',
           optacity: 0.1,
           border: 'none',
           marginBottom: 0,
           paddingBottom: '5px',
           width: '100%',
-
         }}
       >
         {group.name !== UNGROUPED ? (
@@ -242,7 +237,7 @@ export function RetroCardGroup({
                           // paddingLeft: '12px!important',
                           width:
                             global.expandColumn != -1 ||
-                              location.pathname.includes('report')
+                            location.pathname.includes('report')
                               ? '200px'
                               : '100%',
                           // width: (nameSet ? name.length : 14) + 3 + 'ch',
@@ -271,22 +266,22 @@ export function RetroCardGroup({
                         InputProps={{
                           readOnly: ended,
                         }}
-                      // onFocus={async event => {
-                      //   if (admin) {
-                      //     setNameSet(true);
-                      //     await lockGroup(group.id, true);
-                      //   }
-                      // }}
-                      // onBlur={async () => {
-                      //   if (admin) {
-                      //     lockGroup(group.id, false);
-                      //     if (!name) {
-                      //       setNameSet(false);
-                      //     } else {
-                      //       await setGroupName(group.id, name);
-                      //     }
-                      //   }
-                      // }}
+                        // onFocus={async event => {
+                        //   if (admin) {
+                        //     setNameSet(true);
+                        //     await lockGroup(group.id, true);
+                        //   }
+                        // }}
+                        // onBlur={async () => {
+                        //   if (admin) {
+                        //     lockGroup(group.id, false);
+                        //     if (!name) {
+                        //       setNameSet(false);
+                        //     } else {
+                        //       await setGroupName(group.id, name);
+                        //     }
+                        //   }
+                        // }}
                       />
                     </Grid>
                     <XMarkIcon
@@ -318,7 +313,11 @@ export function RetroCardGroup({
                 ) : (
                   <Typography
                     sx={{
-                      color: nameSet ? group.suggested ? '#343434' : groupFontColour : '#8D858A',
+                      color: nameSet
+                        ? group.suggested
+                          ? '#343434'
+                          : groupFontColour
+                        : '#8D858A',
                       whiteSpace: 'nowrap',
                       width: '100%',
                       overflow: 'hidden',
@@ -341,13 +340,13 @@ export function RetroCardGroup({
                 item
                 lg={
                   global?.expandColumn !== -1 ||
-                    location.pathname.includes('report')
+                  location.pathname.includes('report')
                     ? 2.5
                     : 3
                 }
                 md={
                   global?.expandColumn !== -1 ||
-                    location.pathname.includes('report')
+                  location.pathname.includes('report')
                     ? 3
                     : 4
                 }
@@ -357,26 +356,33 @@ export function RetroCardGroup({
                 alignItems="center"
                 justifyContent="space-between"
               >
-                {group.suggested && global?.expandColumn !== -1 && global.user.userType === 2 && (
-                  !location.pathname.includes('report')) ? <Grid>
-                  <Button
+                {group.suggested &&
+                global?.expandColumn !== -1 &&
+                global.user.userType === 2 &&
+                !location.pathname.includes('report') ? (
+                  <Grid>
+                    <Button
+                      className="containedButton"
+                      sx={{
+                        borderRadius: '0px!important',
+                        color: 'white!important',
+                      }}
+                      onClick={() => confirmGroup(group.id)}
+                    >
+                      Confirm Group
+                    </Button>
+                  </Grid>
+                ) : (
+                  <Grid></Grid>
+                )}
 
-
-                    className='containedButton'
-                    sx={{ borderRadius: '0px!important', color: 'white!important' }}
-                    onClick={() => confirmGroup(group.id)}
-
-                  >
-
-                    Confirm Group
-
-                  </Button>
-
-                </Grid>
-                  : <Grid></Grid>
-                }
-
-                <Grid item lg={global?.expandColumn == -1 ? 12 : 4} container flexDirection="row" justifyContent="space-between">
+                <Grid
+                  item
+                  lg={global?.expandColumn == -1 ? 12 : 4}
+                  container
+                  flexDirection="row"
+                  justifyContent="space-between"
+                >
                   <Grid
                     style={{
                       fontWeight: '600',
@@ -387,15 +393,14 @@ export function RetroCardGroup({
                     {'( ' + group.cards.length + ' )'}
                   </Grid>
                   {group.name !== UNGROUPED && (
-
-
                     <Grid
                       item
                       display="flex"
                       flexDirection="row"
                       alignSelf="center"
                       style={{
-                        cursor: !ended && !global.leaveRetro ? 'pointer' : 'auto',
+                        cursor:
+                          !ended && !global.leaveRetro ? 'pointer' : 'auto',
                       }}
                       onClick={() =>
                         !ended && !global.leaveRetro
@@ -451,8 +456,8 @@ export function RetroCardGroup({
           </div>
         ) : null}
         {showCollapse &&
-          group.cards.length === 0 &&
-          group.name !== UNGROUPED ? (
+        group.cards.length === 0 &&
+        group.name !== UNGROUPED ? (
           <Grid container direction="row" justifyContent="center">
             <Grid
               item

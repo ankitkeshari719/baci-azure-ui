@@ -16,6 +16,7 @@ import dayjs, { Dayjs } from 'dayjs';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { DesktopDatePicker } from '@mui/x-date-pickers/DesktopDatePicker';
+import * as Icons from 'heroicons-react';
 
 export interface DialogTitleProps {
   id: string;
@@ -37,12 +38,12 @@ function BootstrapDialogTitle(props: DialogTitleProps) {
           className="d-flex justify-content-end align-items-center"
         >
           {onClose ? (
-            <img
-              width="45px"
-              height="45px"
+            <Icons.X
+              size={20}
+              style={{
+                cursor: 'pointer',
+              }}
               onClick={onClose}
-              src="/svgs/CloseDialog.svg"
-              style={{ cursor: 'pointer' }}
             />
           ) : null}
         </Col>
@@ -133,6 +134,7 @@ export function AddDeploymentDataDialog({
       >
         <OutlinedButton
           label="Cancel"
+          size={'medium'}
           onClick={handleAddDeploymentDataClose}
           style={{
             minWidth: '225px !important',
@@ -140,7 +142,6 @@ export function AddDeploymentDataDialog({
             textTransform: 'uppercase !important',
             marginTop: '0px !important',
           }}
-          textStyle={{ color: '#159ADD' }}
         />
         <ContainedButton
           name="Save"
@@ -151,7 +152,7 @@ export function AddDeploymentDataDialog({
             textTransform: 'uppercase !important',
             marginLeft: '50px !important',
           }}
-          textStyle={{ color: '#FFFFFF' }}
+          size={'medium'}
         />
       </DialogActions>
     </Box>

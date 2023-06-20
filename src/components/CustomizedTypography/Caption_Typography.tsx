@@ -3,14 +3,14 @@ import { Typography } from '@mui/material';
 import './styles.scss';
 
 type Props = {
-  label: string;
+  label:  string | undefined;
   onClick?: (...param: any) => void;
   style?: any;
 };
 
-export function CaptionTypography({ label, onClick, style }: Props) {
+export function CaptionRegularTypography({ label, onClick, style }: Props) {
   return (
-    <Typography className="captions" component="span" style={style}>
+    <Typography className="captionsRegular" component="span"sx={{ ...style }}>
       {label}
     </Typography>
   );

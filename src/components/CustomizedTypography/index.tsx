@@ -3,7 +3,7 @@ export { BodyRegularTypography } from './Body_Regular_Typography';
 export { BodySemiBoldTypography } from './Body_Semi_Bold_Typography';
 export { ButtonLabelTypography } from './Button_Label_Typography';
 export { CaptionSemiBoldTypography } from './Caption_Semi_Bold_Typography';
-export { CaptionTypography } from './Caption_Typography';
+export { CaptionRegularTypography } from './Caption_Typography';
 export { H1RegularTypography } from './H1_Regular_Typography';
 export { H1SemiBoldTypography } from './H1_SemiBold_Typography';
 export { H2RegularTypography } from './H2_Regular_Typography';

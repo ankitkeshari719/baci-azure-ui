@@ -1,16 +1,6 @@
 import * as React from 'react';
-import {
-  Box,
-  Button,
-  Grid,
-  Tooltip,
-  Typography,
-  useMediaQuery,
-} from '@mui/material';
+import { Box, Button, Grid, Tooltip, Typography } from '@mui/material';
 
-import {
-  useNavigate,
-} from 'react-router-dom';
 import * as Icons from 'heroicons-react';
 import { EmailShareButton } from 'react-share';
 import { CopyToClipboard } from 'react-copy-to-clipboard';
@@ -22,7 +12,6 @@ import email from '../../assets/img/emailbox.png';
 
 import { GlobalContext } from '../../contexts/GlobalContext';
 import useLoadRetro from '../../helpers/hooks/useLoadRetro';
-import theme from '../../helpers/theme/theme';
 import Toolbar from '../../components/Elements/Toolbar';
 import StartRetroButton from '../../components/Elements/StartRetroButton';
 import { DeploymentPopUp } from '../Utils/Alerts/DeploymentPopUp';
@@ -122,14 +111,8 @@ const styles = {
     marginBottom: '17.5px',
     marginLeft: '46%',
   },
-  div97: {
-    // marginTop: '27.75px',
-    // marginBottom: '17.5px',
-  },
-  div98: {
-    // marginTop: '19.12px',
-    // marginBottom: '17.5px',
-  },
+  div97: {},
+  div98: {},
   joinurl: {
     color: commonStyles.primaryDark,
     width: '153px',
@@ -147,26 +130,13 @@ const styles = {
   },
 };
 
+// This component is not in used
 export function StartRetro() {
   const [global, dispatch] = React.useContext(GlobalContext);
   const [iscopied, setIsCopied] = React.useState(false);
-  const navigate = useNavigate();
-  const isXsUp = useMediaQuery(theme.breakpoints.between('xs', 'sm'));
-  const shareData = {
-    title: 'Retro',
-    text: 'Join the retro',
-    url: global.currentRetro?.joinUrl,
-  };
 
-  const shareRetroDetails = () => {
-    // navigator.share(shareData);
-    navigator.share(shareData);
-  };
-  const canShare = navigator.canShare && navigator.canShare(shareData);
   useLoadRetro();
-  function goToRetro() {
-    navigate('/join/' + global?.currentRetro?.humanId);
-  }
+
   const downloadQRCode = () => {
     const canvas = document.querySelector('canvas');
     if (canvas) {
@@ -181,9 +151,11 @@ export function StartRetro() {
       downloadLink.click();
     }
   };
+
   const handleTooltipClose = () => {
     setIsCopied(false);
   };
+
   return (
     <Grid container spacing={0}>
       <DeploymentPopUp />
@@ -288,7 +260,6 @@ export function StartRetro() {
                   </CopyToClipboard>
                 </Box>
               </Box>
-
               <Box sx={styles.group97}>
                 <Box
                   height="70%"
@@ -303,7 +274,6 @@ export function StartRetro() {
                     style={styles.qrCode}
                   />
                 </Box>
-
                 <div style={styles.div97}>
                   <Button
                     variant="outlined"
@@ -311,14 +281,12 @@ export function StartRetro() {
                     startIcon={<Icons.Qrcode size={20} />}
                     style={styles.copyURL}
                     onClick={downloadQRCode}
-                    // onTouchStart={downloadQRCode}
                   >
                     <span className="primaryButtonText">download qr code</span>
                   </Button>
                 </div>
               </Box>
 
-              {/* {canShare && ( */}
               <Box sx={styles.group98}>
                 <Box
                   height="70%"
@@ -361,14 +329,6 @@ export function StartRetro() {
             sx={{ justifyContent: 'center', alignItems: 'center' }}
           >
             <StartRetroButton />
-            {/* <Button
-              variant="outlined"
-              className="secondaryButton"
-              style={styles.goToRetroBtn}
-              onClick={() => goToRetro()}
-            >
-              <span className="secondaryButtonText">Start retro</span>
-            </Button> */}
           </Box>
         </Box>
       </Grid>

@@ -136,7 +136,7 @@ export function RetroIsFinished() {
                       height: '40px !important',
                       marginTop: '24px !important',
                     }}
-                    textStyle={{ color: '#FFFFFF' }}
+                    size={'medium'}
                   />
                 </Box>
               </Box>
@@ -202,7 +202,7 @@ export function RetroIsFinished() {
                         height: '40px !important',
                         marginTop: '24px !important',
                       }}
-                      textStyle={{ color: '#FFFFFF' }}
+                      size={'medium'}
                     />
                   </Box>
                 </Grid>
@@ -236,7 +236,7 @@ export function RetroIsFinished() {
                   height: '40px !important',
                   marginTop: '24px !important',
                 }}
-                textStyle={{ color: '#FFFFFF' }}
+                size={'medium'}
               />
             </Grid>
           </Grid>

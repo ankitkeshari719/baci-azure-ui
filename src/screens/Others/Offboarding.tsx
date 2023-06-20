@@ -6,7 +6,6 @@ import {
   Grid,
   Link,
   Slide,
-  Slider,
   TextField,
   Typography,
   useMediaQuery,
@@ -18,7 +17,6 @@ import CssBaseline from '@mui/material/CssBaseline';
 import EmojiEventsIcon from '@mui/icons-material/EmojiEvents';
 import EmojiEventsOutlinedIcon from '@mui/icons-material/EmojiEventsOutlined';
 import { FEATURE_FLAGS } from '../../constants';
-import React from 'react';
 import { addFeedback } from '../../helpers/msal/services';
 import commonStyles from './../../style.module.scss';
 import './../../global.scss';
@@ -27,6 +25,11 @@ import { useNavigate } from 'react-router-dom';
 import Toolbar from '../../components/Elements/Toolbar';
 import theme from '../../helpers/theme/theme';
 import { DeploymentPopUp } from '../Utils/Alerts/DeploymentPopUp';
+import {
+  H4RegularTypography,
+  H3SemiBoldTypography,
+} from '../../components/CustomizedTypography';
+import { ContainedButton, OutlinedButton } from '../../components';
 
 export function Offboarding() {
   const [global, dispatch] = useContext(GlobalContext);
@@ -123,7 +126,6 @@ export function Offboarding() {
                     <Button
                       sx={{ color: '#FCB34C', padding: 0 }}
                       onClick={() => setRating(i)}
-                      // onTouchStart={() => setRating(i)}
                     >
                       {i > rating ? (
                         <EmojiEventsOutlinedIcon sx={{ fontSize: 40 }} />
@@ -167,19 +169,12 @@ export function Offboarding() {
               marginBottom: '20px',
             }}
           >
-            <Button
-              variant="outlined"
-              sx={{
-                ':hover': { background: '#159ADD' },
-                background: '#159ADD',
-                color: '#fff',
-                minWidth: '300px',
-              }}
+            <OutlinedButton
+              id="Submit"
+              label="Submit"
+              size={'medium'}
               onClick={() => submitFeedback()}
-              // onTouchStart={() => submitFeedback()}
-            >
-              Submit
-            </Button>
+            />
           </Box>
           <Box
             sx={{
@@ -205,10 +200,11 @@ export function Offboarding() {
           </Box>
         </Box>
       </Slide>
+      {/* Feedback successfully Submitted  Page! */}
       <Slide direction="up" in={done} key="thank-you">
         <Box
           sx={{
-            height: isXsUp ? 'calc(var(--app-height))' : 'calc(100vh - 100px)',
+            height: isXsUp ? 'calc(var(--app-height))' : 'calc(100vh)',
             overflowY: 'auto',
           }}
         >
@@ -229,45 +225,65 @@ export function Offboarding() {
               ></img>
             </Box>
             <Box mt="40px" className="alignCenter">
-              <Typography variant="h4" color={commonStyles.PrimaryMain}>
-                Your feedback is submitted successfully!
-              </Typography>
+              <H4RegularTypography
+                label={'Your feedback is submitted successfully!'}
+                style={{ color: commonStyles.PrimaryMain }}
+              />
             </Box>
-            <Box mt="52px">
-              <Button
-                variant="outlined"
-                className="secondaryButton"
+            <Box mt="80px">
+              <ContainedButton
+                id="Review_board"
+                name="Review board"
                 onClick={() => navigate('/board/' + global.currentRetro?.id)}
-                // onTouchStart={() => navigate('/board/' + global.currentRetro?.id)}
-              >
-                <span className="secondaryButtonText">Review board</span>
-              </Button>
+                size={'medium'}
+              />
             </Box>
             <Box
-              mt="40px"
+              mt="60px"
               sx={{ display: isXsUp ? 'block' : 'inline-flex' }}
               className="alignCenter"
             >
-              <Typography
-                variant={isXsUp ? 'h3' : 'h1'}
-                color={commonStyles.secondaryMain}
-              >
-                Thank You for using{' '}
-              </Typography>
-              <Typography
-                mr="10px"
-                ml="10px"
-                variant={isXsUp ? 'h3' : 'h1'}
-                color={commonStyles.PrimaryMain}
-              >
-                BACI
-              </Typography>
-              <Typography
-                variant={isXsUp ? 'h3' : 'h1'}
-                color={commonStyles.secondaryMain}
-              >
-                Retros
-              </Typography>
+              {isXsUp ? (
+                <H3SemiBoldTypography
+                  label={'Thank You for using'}
+                  style={{ color: commonStyles.secondaryMain }}
+                />
+              ) : (
+                <H3SemiBoldTypography
+                  label={'Thank You for using'}
+                  style={{ color: commonStyles.secondaryMain }}
+                />
+              )}
+              {isXsUp ? (
+                <H3SemiBoldTypography
+                  label={' BACI'}
+                  style={{
+                    color: commonStyles.PrimaryMain,
+                    marginLeft: '8px',
+                    marginRight: '8px',
+                  }}
+                />
+              ) : (
+                <H3SemiBoldTypography
+                  label={'BACI'}
+                  style={{
+                    color: commonStyles.PrimaryMain,
+                    marginLeft: '8px',
+                    marginRight: '8px',
+                  }}
+                />
+              )}
+              {isXsUp ? (
+                <H3SemiBoldTypography
+                  label={'Retros'}
+                  style={{ color: commonStyles.secondaryMain }}
+                />
+              ) : (
+                <H3SemiBoldTypography
+                  label={'Retros'}
+                  style={{ color: commonStyles.secondaryMain }}
+                />
+              )}
             </Box>
           </Box>
         </Box>

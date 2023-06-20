@@ -10,12 +10,15 @@ import {
   Typography,
 } from '@mui/material';
 import React from 'react';
+
 export interface RetroTimeInputDialogProps {
   open: boolean;
   selectedValue: any;
   onSubmit: (value: any) => void;
   onClose: (value: string) => void;
 }
+
+// This component is not in used
 const RetroTimeInputDialog = (props: RetroTimeInputDialogProps) => {
   const { onClose, onSubmit, selectedValue, open } = props;
   const [endEpochTime, setEndEpochTime] = React.useState(0);

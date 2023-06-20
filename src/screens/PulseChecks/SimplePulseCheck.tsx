@@ -1,25 +1,21 @@
 import * as React from 'react';
 import {
   Box,
-  Button,
   Dialog,
   DialogActions,
   DialogContent,
   DialogTitle,
   Grid,
   Tooltip,
-  Typography,
   useMediaQuery,
   Link,
-  styled,
-  tooltipClasses,
-  TooltipProps,
+  Divider,
 } from '@mui/material';
 import commonStyles from './../../style.module.scss';
 import './styles.scss';
+
 import theme from '../../helpers/theme/theme';
 import * as Icons from 'heroicons-react';
-
 import Bluepulse from '../../assets/img/bluepulse.png';
 import Greypulse from '../../assets/img/greypulse.png';
 import happy from '../../assets/img/happy.png';
@@ -34,21 +30,13 @@ import { ConfirmContext } from '../../contexts/ConfirmContext';
 import { GlobalContext, ActionType } from '../../contexts/GlobalContext';
 import useLoadRetro from '../../helpers/hooks/useLoadRetro';
 import { BoardActionType } from '../../helpers/statemachine/BoardStateMachine';
-import { ContainedButton } from '../../components';
-
-const BootstrapTooltip = styled(({ className, ...props }: TooltipProps) => (
-  <Tooltip {...props} classes={{ popper: className }}>
-    {props.children}
-  </Tooltip>
-))(({ theme }) => ({
-  [`& .${tooltipClasses.arrow}`]: {
-    color: theme.palette.common.black,
-  },
-  [`& .${tooltipClasses.tooltip}`]: {
-    backgroundColor: theme.palette.common.black,
-    fontSize: '14px',
-  },
-}));
+import { ContainedButton, TextButton } from '../../components';
+import {
+  BodyRegularTypography,
+  BodySemiBoldTypography,
+  CaptionRegularTypography,
+  H5SemiBoldTypography,
+} from '../../components/CustomizedTypography';
 
 type Props = {
   pulseCheck: any;
@@ -68,7 +56,6 @@ export default function SimplePulseCheck({ pulseCheck }: Props) {
   const selectedQuestions =
     pulseCheck && pulseCheck.value.map((q: string) => React.useState(-1));
   const [scrollDownButton, setScrollDownButton] = React.useState(true);
-  const [showSharePanel, setShowSharePanel] = React.useState(false);
   const [pulse1, setPulse1] = React.useState(false);
   const [pulse2, setPulse2] = React.useState(false);
   const [pulse3, setPulse3] = React.useState(false);
@@ -251,7 +238,7 @@ export default function SimplePulseCheck({ pulseCheck }: Props) {
           height: 'calc(100vh - 70px)',
         }}
       >
-        {/* Text one */}
+        {/* Let's start with a quick Pulse Check to see how you are feeling Text */}
         <Grid item xs={12}>
           <Box
             sx={{
@@ -262,12 +249,15 @@ export default function SimplePulseCheck({ pulseCheck }: Props) {
               background: 'white',
             }}
           >
-            <Typography variant={isXsUp ? 'h6' : 'h4'} className="textOne">
-              Let's start with a quick Pulse Check to see how you are feeling
-            </Typography>
+            <BodyRegularTypography
+              label={
+                "Let's start with a quick Pulse Check to see how you are feeling"
+              }
+              style={{ color: '#343434', textAlign: 'center' }}
+            />
           </Box>
         </Grid>
-        {/* Text two */}
+        {/* Your identity will be confidential Text */}
         <Grid item xs={12}>
           <Box
             sx={{
@@ -276,22 +266,23 @@ export default function SimplePulseCheck({ pulseCheck }: Props) {
               justifyContent: 'center',
               userSelect: 'none',
               background: 'white',
-              marginTop: isXsUp ? '16px' : '40px',
+              marginTop: isXsUp ? '16px' : '36px',
             }}
           >
-            <Typography className="textTwo">
-              Your identity will be confidential
-            </Typography>
+            <CaptionRegularTypography
+              label={'Your identity will be confidential'}
+              style={{ color: '#EE7538', textAlign: 'center', opacity: '0.8' }}
+            />
           </Box>
         </Grid>
-        {/* Pulsebar Image */}
+        {/* Pulse bar Image */}
         {!isXsUp ? (
           <Grid item xs={12}>
             <Box
               sx={{
                 display: 'flex',
                 justifyContent: 'center',
-                marginTop: isXsUp ? '16px' : '70px',
+                marginTop: isXsUp ? '16px' : '64px',
               }}
             >
               <span
@@ -319,7 +310,7 @@ export default function SimplePulseCheck({ pulseCheck }: Props) {
               display: 'flex',
               alignItems: 'center',
               flexDirection: isXsUp ? 'column' : 'row',
-              marginTop: isXsUp ? '16px' : '180px',
+              marginTop: isXsUp ? '80px' : '180px',
             }}
           >
             {pulseCheck &&
@@ -337,8 +328,15 @@ export default function SimplePulseCheck({ pulseCheck }: Props) {
                 >
                   <Box>
                     {/* Question Part */}
-                    <Typography className="question">
-                      {question}
+                    <Box
+                      sx={{
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                        flexDirection: 'row',
+                      }}
+                    >
+                      <BodySemiBoldTypography label={question} />
                       {isXsUp ? (
                         <Icons.QuestionMarkCircleOutline
                           size={20}
@@ -365,18 +363,22 @@ export default function SimplePulseCheck({ pulseCheck }: Props) {
                           />
                         </Tooltip>
                       )}
-                    </Typography>
+                    </Box>
                     {/* Image Part */}
                     <Box
                       sx={{
                         display: 'flex',
                         justifyContent: 'center',
-                        marginTop: isXsUp ? '24px' : '48px',
+                        alignItems: 'center',
+                        marginTop: isXsUp ? '32px' : '48px',
                       }}
                     >
                       {/* Sad */}
                       <Box
                         sx={{
+                          display: 'flex',
+                          justifyContent: 'center',
+                          alignItems: 'center',
                           width: !isXsUp ? '64px' : '52px',
                           height: !isXsUp ? '64px' : '52px',
                         }}
@@ -395,8 +397,8 @@ export default function SimplePulseCheck({ pulseCheck }: Props) {
                         <img
                           src={sadMask}
                           style={{
-                            marginLeft: !isXsUp ? '-10px' : '-6px',
-                            marginTop: !isXsUp ? '-50px' : '-45px',
+                            marginLeft: !isXsUp ? '-50px' : '-44px',
+                            marginTop: !isXsUp ? '0px' : '5px',
                             width: !isXsUp ? '64px' : '52px',
                             height: !isXsUp ? '64px' : '52px',
                             display:
@@ -409,6 +411,9 @@ export default function SimplePulseCheck({ pulseCheck }: Props) {
                       {/* Neutral */}
                       <Box
                         sx={{
+                          display: 'flex',
+                          justifyContent: 'center',
+                          alignItems: 'center',
                           width: !isXsUp ? '64px' : '52px',
                           height: !isXsUp ? '64px' : '52px',
                         }}
@@ -418,7 +423,6 @@ export default function SimplePulseCheck({ pulseCheck }: Props) {
                             backgroundImage: 'url(' + neutral + ')',
                             width: '40px',
                             height: '40px',
-                            marginRight: '32px',
                           }}
                           onClick={() => {
                             selectedQuestions[index][1](2);
@@ -428,8 +432,8 @@ export default function SimplePulseCheck({ pulseCheck }: Props) {
                         <img
                           src={neutralMask}
                           style={{
-                            marginLeft: !isXsUp ? '-10px' : '-6px',
-                            marginTop: !isXsUp ? '-50px' : '-45px',
+                            marginLeft: !isXsUp ? '-50px' : '-44px',
+                            marginTop: !isXsUp ? '0px' : '5px',
                             width: !isXsUp ? '64px' : '52px',
                             height: !isXsUp ? '64px' : '52px',
                             display:
@@ -442,6 +446,9 @@ export default function SimplePulseCheck({ pulseCheck }: Props) {
                       {/* Happy */}
                       <Box
                         sx={{
+                          display: 'flex',
+                          justifyContent: 'center',
+                          alignItems: 'center',
                           width: !isXsUp ? '64px' : '52px',
                           height: !isXsUp ? '64px' : '52px',
                         }}
@@ -460,8 +467,8 @@ export default function SimplePulseCheck({ pulseCheck }: Props) {
                         <img
                           src={happyMask}
                           style={{
-                            marginLeft: !isXsUp ? '-10px' : '-6px',
-                            marginTop: !isXsUp ? '-50px' : '-45px',
+                            marginLeft: !isXsUp ? '-50px' : '-44px',
+                            marginTop: !isXsUp ? '0px' : '5px',
                             width: isXsUp ? '52px' : '64px',
                             height: isXsUp ? '52px' : '64px',
                             display:
@@ -472,6 +479,16 @@ export default function SimplePulseCheck({ pulseCheck }: Props) {
                         ></img>
                       </Box>
                     </Box>
+                    {isXsUp && index != 2 && (
+                      <Divider
+                        color="#E3E3E3"
+                        style={{
+                          width: '100%',
+                          marginTop: '32px',
+                          marginBottom: '32px',
+                        }}
+                      />
+                    )}
                   </Box>
                 </Grid>
               ))}
@@ -493,72 +510,80 @@ export default function SimplePulseCheck({ pulseCheck }: Props) {
                 minWidth: '260px !important',
                 height: '36px !important',
               }}
-              textStyle={{ color: '#FFFFFF' }}
+              size={'medium'}
             />
           </Box>
         </Grid>
         {/* Skip Pulse Check button */}
-        <Grid item xs={12}>
-          <Box
-            sx={{
-              display: 'flex',
-              justifyContent: 'center',
-              cursor: 'pointer',
+        <Grid
+          item
+          xs={12}
+          sx={{
+            display: 'flex',
+            justifyContent: 'center',
+          }}
+        >
+          <TextButton
+            id={'Skip_Pulse_Check'}
+            label={'Skip Pulse Check'}
+            onClick={skipPulseCheck}
+            size={'medium'}
+            style={{
               marginTop: isXsUp ? '24px' : '40px',
+              textDecorationLine: 'underline',
             }}
-          >
-            <Link className="infoLink" onClick={skipPulseCheck}>
-              Skip Pulse Check
-            </Link>
-          </Box>
+          />
         </Grid>
-        <Dialog open={openHelpPopup} onClose={handleClose}>
-          <DialogTitle
-            sx={{
-              display: 'flex',
-              justifyContent: 'center',
-              alignItems: 'center',
-              marginTop: '24px',
-            }}
-          >
-            <Typography variant="h6" color={commonStyles.secondaryMain}>
-              {popupTitle}
-            </Typography>
-          </DialogTitle>
-          <DialogContent
-            sx={{
-              display: 'flex',
-              justifyContent: 'center',
-              alignItems: 'center',
-            }}
-          >
-            <Typography
-              variant="h5"
-              color={commonStyles.grey60}
-              sx={{ textAlign: 'justify' }}
-            >
-              {popupContent}
-            </Typography>
-          </DialogContent>
-          <DialogActions
-            sx={{
-              display: 'flex',
-              justifyContent: 'center',
-              alignItems: 'center',
-              marginBottom: '24px',
-            }}
-          >
-            <Button
-              variant="outlined"
-              className="secondaryButton"
-              onClick={handleClose}
-              sx={{ width: '100%' }}
-            >
-              <span className="secondaryButtonText">close</span>
-            </Button>
-          </DialogActions>
-        </Dialog>
       </Grid>
+      <Dialog open={openHelpPopup} onClose={handleClose}>
+        <DialogTitle
+          sx={{
+            display: 'flex',
+            justifyContent: 'center',
+            alignItems: 'center',
+            marginTop: '24px',
+          }}
+        >
+          <BodySemiBoldTypography
+            label={popupTitle}
+            style={{ textAlign: 'center', color: '#EE7538' }}
+          />
+        </DialogTitle>
+        <DialogContent
+          sx={{
+            display: 'flex',
+            justifyContent: 'center',
+            alignItems: 'center',
+          }}
+        >
+          <H5SemiBoldTypography
+            label={popupContent}
+            style={{
+              textAlign: 'justifyContent',
+              color: '#676767',
+              lineHeight: '24px',
+            }}
+          />
+        </DialogContent>
+        <DialogActions
+          sx={{
+            display: 'flex',
+            justifyContent: 'center',
+            alignItems: 'center',
+            marginBottom: '24px',
+          }}
+        >
+          <ContainedButton
+            name="close"
+            onClick={handleClose}
+            style={{
+              width: '100%',
+              minHeight: '44px',
+            }}
+            size={'medium'}
+          />
+        </DialogActions>
+      </Dialog>
     </>
   );
 }

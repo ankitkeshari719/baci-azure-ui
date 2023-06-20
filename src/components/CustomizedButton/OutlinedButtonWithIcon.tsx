@@ -1,34 +1,52 @@
 import React from 'react';
 import { Box, Button } from '@mui/material';
 import './styles.scss';
+import { ButtonLabelTypography } from '../CustomizedTypography';
+
+type Props = {
+  id?: string;
+  label: string;
+  size: any;
+  iconPath?: string;
+  onClick: (...param: any) => void;
+  style?: any;
+  disabled?: boolean;
+};
 
 export const OutlinedButtonWithIcon = ({
-  label,
-  iconPath,
-  color,
-  onClick,
   id,
-  disabled,
+  label,
+  size,
+  iconPath,
+  onClick,
   style,
-}: {
-  label: string;
-  iconPath?: string;
-  color?: string;
-  onClick?: (...param: any) => void;
-  id?: string;
-  disabled: boolean;
-  style?: any;
-}) => {
+  disabled,
+}: Props) => {
   return (
     <Button
+      id={id}
+      size={size}
       variant="outlined"
-      className="buttonWithIcon"
+      className={
+        size === 'small'
+          ? 'outlinedButtonSmall'
+          : size === 'medium'
+          ? 'outlinedButtonMedium'
+          : 'outlinedButtonLarge'
+      }
       onClick={onClick}
+      sx={{ ...style }}
       disabled={disabled}
-      style={style}
     >
       {iconPath && <img src={iconPath} />}
-      <Box component="span">{label}</Box>
+      <ButtonLabelTypography
+        label={label}
+        style={{
+          ':disabled': { color: '#CCCCCC !important' },
+          color: '#159ADD',
+          fontSize: size === 'small' ? '14px !important' : '16px !important',
+        }}
+      />
     </Button>
   );
 };

@@ -31,8 +31,8 @@ import FacilitatorDropDown from './FacilitatorDropDown';
 import { ContainedButton } from '../CustomizedButton/ContainedButton';
 import { ActionInterface } from '../../helpers/types';
 import { Row, Col } from 'react-bootstrap';
-import * as Icons from 'heroicons-react';
 import { LazyLoadImage } from 'react-lazy-load-image-component';
+import { OutlinedButton } from '../CustomizedButton/OutlinedButton';
 
 const Toolbar = (props: any) => {
   const isXsUp = useMediaQuery(theme.breakpoints.only('xs'));
@@ -432,7 +432,7 @@ const Toolbar = (props: any) => {
                     marginRight: '40px',
                     display: isXsUp ? 'none' : 'block',
                   }}
-                  textStyle={{ color: '#FFFFFF' }}
+                  size={'medium'}
                 />
                 {showSessionEndMessage && (
                   <SessionEndingMessage
@@ -457,7 +457,7 @@ const Toolbar = (props: any) => {
                       marginRight: '40px',
                       display: isXsUp ? 'none' : 'block',
                     }}
-                    textStyle={{ color: '#FFFFFF' }}
+                    size={'medium'}
                   />
                 )}
                 {showSessionEndMessage && (
@@ -501,7 +501,7 @@ const Toolbar = (props: any) => {
                   width: '150px !important',
                   marginRight: '16px',
                 }}
-                textStyle={{ color: '#FFFFFF' }}
+                size={'medium'}
               />
             </>
           )}
@@ -535,7 +535,7 @@ const Toolbar = (props: any) => {
                 marginRight: '16px',
                 position: 'initial',
               }}
-              textStyle={{ color: '#FFFFFF' }}
+              size={'medium'}
             />
           </>
         )}
@@ -654,7 +654,7 @@ const Toolbar = (props: any) => {
               marginRight: '16px',
               position: 'initial',
             }}
-            textStyle={{ color: '#FFFFFF' }}
+            size={'medium'}
           />
         )}
         {!ended && (
@@ -875,43 +875,21 @@ const Toolbar = (props: any) => {
             marginTop: '28px',
           }}
         >
-          <Button
-            sx={{
-              fontFamily: 'Poppins',
-              fontStyle: 'normal',
-              fontWeight: 500,
-              fontSize: '16px',
-              lineHeight: '20px',
-              borderRadius: '24px',
-              textAlign: 'center',
-              letterSpacing: '0.4px',
-              color: '#FAFAFA',
-            }}
+          <ContainedButton
+            id="END_RETRO_AND_VIEW_SUMMARY"
+            name="END RETRO AND VIEW SUMMARY"
+            size={'medium'}
             onClick={() => {
               props.onFinishRetro(), setOpenDialog(false);
             }}
-            variant="contained"
-            autoFocus
-          >
-            END RETRO AND VIEW SUMMARY
-          </Button>
-          <Button
-            sx={{
-              fontFamily: 'Poppins',
-              fontStyle: 'normal',
-              fontWeight: 500,
-              fontSize: '16px',
-              lineHeight: '20px',
-              borderRadius: '24px',
-              textAlign: 'center',
-              letterSpacing: '0.4px',
-              color: '#159ADD',
-            }}
-            variant="outlined"
+          />
+         
+          <OutlinedButton
+            id=" CONTINUE_WITH_RETRO"
+            label=" CONTINUE WITH RETRO"
+            size={'medium'}
             onClick={() => setOpenDialog(false)}
-          >
-            CONTINUE WITH RETRO
-          </Button>
+          />
         </DialogActions>
       </Dialog>
       {/* Leave Retro Dialog */}

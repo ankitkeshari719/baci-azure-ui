@@ -28,7 +28,7 @@ const OutlineButtonWithIconWithNoBorder = ({
           className="buttonWithIconWithNoBorder"
           onClick={onClick}
           disabled={disabled}
-          style={style}
+          sx={{ ...style }}
           color="error"
         >
           {iconPath && <img src={iconPath} />}
@@ -43,9 +43,7 @@ const OutlineButtonWithIconWithNoBorder = ({
           className="buttonWithIconWithNoBorder"
           onClick={onClick}
           disabled={disabled}
-          style={style}
-          //   color={style && style.color == 'red!important' && 'error'}
-          //    color= {$PrimaryMain}
+          sx={{ ...style }}
         >
           {iconPath && <img src={iconPath} />}
 

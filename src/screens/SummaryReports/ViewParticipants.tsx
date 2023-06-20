@@ -4,8 +4,8 @@ import '../../global.scss';
 import './styles.scss';
 
 import { Row, Col } from 'react-bootstrap';
-import Avatar from '../../components/Elements/Avatar';
 import { LazyLoadImage } from 'react-lazy-load-image-component';
+import * as Icons from 'heroicons-react';
 
 type Props = {
   handleViewParticipantsDialogClose: () => void;
@@ -32,12 +32,12 @@ function BootstrapDialogTitle(props: DialogTitleProps) {
           className="d-flex justify-content-end align-items-center"
         >
           {onClose ? (
-            <img
-              width="45px"
-              height="45px"
+            <Icons.X
+              size={20}
+              style={{
+                cursor: 'pointer',
+              }}
               onClick={onClose}
-              src="/svgs/CloseDialog.svg"
-              style={{ cursor: 'pointer' }}
             />
           ) : null}
         </Col>
@@ -62,7 +62,9 @@ export function ViewParticipants({
         <Box>
           {users?.map((user: any, index: any) => (
             <Row
-              style={{ marginBottom: index < users.length - 1 ? '16px' : '0px' }}
+              style={{
+                marginBottom: index < users.length - 1 ? '16px' : '0px',
+              }}
               key={index}
             >
               <Col

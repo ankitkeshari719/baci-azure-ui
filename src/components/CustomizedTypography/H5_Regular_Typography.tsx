@@ -3,14 +3,14 @@ import { Typography } from '@mui/material';
 import './styles.scss';
 
 type Props = {
-  label: string;
+  label:  string | undefined;
   onClick?: (...param: any) => void;
   style?: any;
 };
 
 export function H5RegularTypography({ label, onClick, style }: Props) {
   return (
-    <Typography className="h5Regular" component="span" style={style}>
+    <Typography className="h5Regular" component="span" sx={{ ...style }}>
       {label}
     </Typography>
   );
