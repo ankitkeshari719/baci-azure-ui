@@ -1,5 +1,6 @@
-import React from 'react';
-import { Box, Tooltip, Typography } from '@mui/material';
+import React, { useEffect, useState } from 'react';
+import { GlobalContext } from '../../contexts/GlobalContext';
+import { Box, Button, Grid, MenuItem, Select, Tooltip, Typography } from '@mui/material';
 import { Row, Col } from 'react-bootstrap';
 import Avatar from '../../components/Elements/Avatar';
 import { ActionInterface } from '../../helpers/types';
@@ -7,6 +8,8 @@ import * as Icons from 'heroicons-react';
 import './styles.scss';
 import '../../global.scss';
 import { LazyLoadImage } from 'react-lazy-load-image-component';
+import { connectJira, listJiraProjects, listJiraMeta, createJiraIssue } from '../../helpers/msal/services';
+import { Dialog, DialogActions, DialogTitle } from '@material-ui/core';
 
 type Props = {
   manageActions: ActionInterface[];
@@ -19,7 +22,14 @@ type Props = {
   setIsCopied?: (isCopied: boolean) => void;
   isCopied?: boolean;
 };
-
+interface JiraProject {
+  id: number;
+  name: string;
+}
+interface JiraMeta {
+  id: number;
+  name: string;
+}
 export default function ManageActionSummary({
   manageActions,
   copyAllManageActions,
@@ -36,7 +46,68 @@ export default function ManageActionSummary({
       setIsCopied && setIsCopied(false);
     }, 1500);
   };
+  const [global, dispatch] = React.useContext(GlobalContext);
+  const [listOfJiraProjects, setListOfJiraProjects] = useState<JiraProject[]>([]);
+  const [listOfJiraMeta, setListOfJiraMeta] = useState<JiraMeta[]>([]);
+  const [selectedJiraProject, setSelectedJiraProject] = useState<string>('');
+  const [selectedJiraMeta, setSelectedJiraMeta] = useState<string>('');
+  const [openHelpPopup, SetOpenHelpPopup] = React.useState(false);
+  const connect = async() => {
+    await connectJira(global.currentRetro?.id as string).then((res: any) => {
 
+      console.log(res.response)
+      window.location.href = res.response;
+    }, error => {
+      console.log("error", error);
+    })
+
+  }
+  const handleClose = () => {
+    SetOpenHelpPopup(false);
+  };
+
+  const createIssue = async() => {
+    manageActions.map(
+      (action: any, index: number) => {
+    console.log("selected", selectedJiraProject, selectedJiraMeta);
+    createJiraIssue(selectedJiraProject, selectedJiraMeta, global.jiraCode as string, action.value).then((res: any) => {
+      console.log(res.response);
+      return res.response;
+    }, (error: any) => {
+      console.log("error", error);
+      return [];
+    });
+  });
+  SetOpenHelpPopup(true);
+  }
+  const loadJiraProjects = async(): Promise<string[]> => {
+    return await listJiraProjects(global.jiraCode as string).then((res: any) => {
+      console.log(res.response);
+      return res.response;
+    }, (error: any) => {
+      console.log("error", error);
+      return [];
+    });
+  };
+  const loadJiraMeta = async(projectId: string): Promise<string[]> => {
+    return await listJiraMeta(global.jiraCode as string, projectId).then((res: any) => {
+      console.log(res.response);
+      return res.response;
+    }, (error: any) => {
+      console.log("error", error);
+      return [];
+    });
+  };
+  
+  useEffect(() => {
+    const loadProjects = async () => {
+      if (global.jiraCode) {
+        const listOfprojects : any[]= await loadJiraProjects();
+        setListOfJiraProjects(listOfprojects);
+      }
+    };
+    loadProjects();
+  }, []);
   return (
     <Box>
       {/* Actions to be Taken Section 1*/}
@@ -44,6 +115,91 @@ export default function ManageActionSummary({
         <Col xs="2" className="d-flex justify-content-start align-items-center">
           <Typography className="textTypeFour">Actions Identified</Typography>
         </Col>
+         {/* Jira Integration*/}
+         {global.jiraCode  ? (
+        <Col
+          xs="6"
+          className="d-flex justify-content-start align-items-center"
+        >
+        
+            <Typography className="textTypeFour">List to Jira Projects</Typography>
+            <Select
+                variant="outlined"
+                label="Time Frame"
+                displayEmpty
+                sx={{
+                  color: '#727D84',
+                  minWidth: '200px',
+                  margin: '10px',
+                }}
+                onChange={async (event: any) => {
+                  console.log(event);
+                  setSelectedJiraProject(event.target.value);
+                  const listOfMeta : any[]= await loadJiraMeta(event.target.value);
+                  setListOfJiraMeta(listOfMeta);
+                 }}
+              >
+                {listOfJiraProjects.map((project) => (
+                  <MenuItem key={project.id} value={project.id}>{project.name}</MenuItem>
+                ))}
+              </Select> 
+            <Select
+                variant="outlined"
+                label="Time Frame"
+                displayEmpty
+                sx={{
+                  color: '#727D84',
+                  minWidth: '200px',
+                  margin: '10px',
+                }}
+                onChange={async (event: any) => {
+                  console.log(event);
+                  setSelectedJiraMeta(event.target.value);
+                 }}
+              >
+                {listOfJiraMeta.map((meta) => (
+                  <MenuItem key={meta.id} value={meta.id}>{meta.name}</MenuItem>
+                ))}
+              </Select> 
+              <Button
+                    variant="outlined"
+                    className="submitfeedback"
+                    onClick={createIssue}
+                  >
+            <Typography className="textTypeFour">Create</Typography>
+          </Button>
+          <Dialog open={openHelpPopup} onClose={handleClose}>
+          <DialogTitle>
+            <Typography variant="h6">
+              Successully created Jira Issues
+            </Typography>
+          </DialogTitle>
+          <DialogActions>
+            <Button
+              variant="outlined"
+              className="secondaryButton"
+              onClick={handleClose}
+              sx={{ width: '100%' }}
+            >
+              <span className="secondaryButtonText">close</span>
+            </Button>
+          </DialogActions>
+        </Dialog>
+        </Col>
+        ): (
+          <Col
+          xs="4"
+          className="d-flex justify-content-start align-items-center"
+        >
+          <Button
+                    variant="outlined"
+                    className="submitfeedback"
+                    onClick={connect}
+                  >
+            <Typography className="textTypeFour">Connect to Jira</Typography>
+          </Button>
+        </Col>
+        )}
         {manageActions.length === 0 ? null : (
           <Col
             xs={{ span: 2, offset: 8 }}
