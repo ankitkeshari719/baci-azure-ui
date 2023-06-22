@@ -33,6 +33,7 @@ import { ActionInterface } from '../../helpers/types';
 import { Row, Col } from 'react-bootstrap';
 import { LazyLoadImage } from 'react-lazy-load-image-component';
 import { OutlinedButton } from '../CustomizedButton/OutlinedButton';
+import CustomizedDialog from '../CustomizedDialog/CustomizedDialog';
 
 const Toolbar = (props: any) => {
   const isXsUp = useMediaQuery(theme.breakpoints.only('xs'));
@@ -883,7 +884,7 @@ const Toolbar = (props: any) => {
               props.onFinishRetro(), setOpenDialog(false);
             }}
           />
-         
+
           <OutlinedButton
             id=" CONTINUE_WITH_RETRO"
             label=" CONTINUE WITH RETRO"
@@ -893,7 +894,10 @@ const Toolbar = (props: any) => {
         </DialogActions>
       </Dialog>
       {/* Leave Retro Dialog */}
-      <LeaveRetroDialog
+      <CustomizedDialog
+        type="success"
+        title="Are you done with the retro?"
+        subTitle="In case of any doubts, please confirm with facilitator before leaving"
         open={leaveDiaOpen}
         onClose={(value: any) => {
           if (value) props.onFinishRetro();
