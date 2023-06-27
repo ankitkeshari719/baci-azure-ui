@@ -26,7 +26,7 @@ export function JiraCallback() {
           type: ActionType.SET_JIRA_CODE,
           payload: { jiraCode: res.response },
         });
-        navigate(`/report/`+state);
+        navigate(`/board/`+state);
       }, error => {
         console.log("error", error);
       })
