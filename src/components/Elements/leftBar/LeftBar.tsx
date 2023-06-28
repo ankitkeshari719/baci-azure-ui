@@ -12,8 +12,10 @@ import {
   BellIcon,
 } from '@heroicons/react/24/outline';
 import React from 'react';
+import { useNavigate } from 'react-router-dom';
 
 const LeftBar = () => {
+  const navigate = useNavigate();
   const [selectedMenu, setSelectedMenu] = React.useState('');
   const menuArray = [
     { id: 1, label: 'Home', icon: HomeIcon, routeTo: '', disabled: false },
@@ -35,7 +37,7 @@ const LeftBar = () => {
       id: 4,
       label: 'Analytics',
       icon: ChartBarIcon,
-      routeTo: '',
+      routeTo: '/analytics/',
       disabled: false,
     },
     {
@@ -93,6 +95,7 @@ const LeftBar = () => {
                   }
                   onClick={() => {
                     setSelectedMenu(menu.label);
+                    navigate(menu.routeTo);
                   }}
                 />
               </Tooltip>

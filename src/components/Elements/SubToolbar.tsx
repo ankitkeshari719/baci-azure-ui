@@ -11,8 +11,9 @@ import Avatar from './Avatar';
 import { CountdownTimer } from './CountdownTimer';
 import { ActionType, GlobalContext } from '../../contexts/GlobalContext';
 import commonStyles from './../../style.module.scss';
-import { OutlinedButton } from '..';
+import { ContainedButton, OutlinedButton } from '..';
 import ReactToPrint from 'react-to-print';
+import { useNavigate } from 'react-router-dom';
 
 const ITEM_HEIGHT = 48;
 const ITEM_PADDING_TOP = 8;
@@ -30,6 +31,7 @@ type Props = {
 };
 
 const SubToolbar = ({ componentRef }: Props) => {
+  const navigate = useNavigate();
   const {
     state: { users, ended },
   } = React.useContext(BoardContext);
@@ -335,6 +337,15 @@ const SubToolbar = ({ componentRef }: Props) => {
           {/* Count Down Timer */}
           {!ended && (
             <CountdownTimer color={'#2B9FDE'} bold={true}></CountdownTimer>
+          )}
+          {/* Go to Analytics Button */}
+          {global.user.userType == 2 && (
+            <ContainedButton
+              id="go_to_analytics"
+              name="Go To Analytics"
+              onClick={() => navigate('/analytics/')}
+              size={'small'}
+            />
           )}
         </Grid>
         {/* Download PDF Button */}

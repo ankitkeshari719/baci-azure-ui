@@ -1,3 +1,4 @@
+import React from 'react';
 import {
   Box,
   Card,
@@ -11,13 +12,20 @@ import {
   H1RegularTypography,
 } from '../../components/CustomizedTypography';
 import { useNavigate } from 'react-router-dom';
+import { ContainedButton } from '../../components';
+import { BoardContext } from '../../contexts/BoardContext';
 
 export default function AnalyticsMainContainer() {
   const navigate = useNavigate();
+  const {
+    state: { retroId },
+    commitAction,
+  } = React.useContext(BoardContext);
 
   const handleOnClick = (link: string) => {
     navigate(link);
   };
+
   const analyticsCards = [
     {
       id: 1,
@@ -61,6 +69,7 @@ export default function AnalyticsMainContainer() {
       link: 'enterpriseLevelSentimentsMoods',
     },
   ];
+
   return (
     <Box sx={{ overflowY: 'auto' }} height="calc(var(--app-height))">
       <Box sx={{ margin: '48px' }}>
@@ -73,6 +82,22 @@ export default function AnalyticsMainContainer() {
           }}
         >
           <H1RegularTypography label="Analytics" />
+        </Box>
+        {/* Back Button */}
+        <Box
+          sx={{
+            width: '100%',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'flex-start',
+          }}
+        >
+          <ContainedButton
+            id="go_back_to_analytics"
+            name="Back"
+            onClick={() => navigate(`/board/${retroId}/`)}
+            size={'small'}
+          />
         </Box>
         <Grid container spacing={2} sx={{ marginTop: '48px' }}>
           {analyticsCards.map(analyticsCard => {
