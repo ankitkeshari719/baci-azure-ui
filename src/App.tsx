@@ -27,6 +27,15 @@ import { LandingPage } from './screens/Home/LandingPage';
 import { JoinRetro } from './screens/Home/JoinRetro';
 import { RetroIsFinished } from './screens/Others/RetroIsFinished';
 import { JiraCallback } from './screens/Others/JiraCallback';
+import AnalyticsMainContainer from './screens/Analytics/AnalyticsMainContainer';
+import AverageParticipantChart from './screens/Analytics/AverageParticipantChart';
+import AverageRetroChart from './screens/Analytics/AverageRetroChart';
+import EnterpriseLevelSentimentsMoodsChart from './screens/Analytics/EnterpriseLevelSentimentsMoodsChart';
+import EnterpriseLevelSentimentsSummaryChart from './screens/Analytics/EnterpriseLevelSentimentsSummaryChart';
+import EnterpriseLevelSentimentsThemeChart from './screens/Analytics/EnterpriseLevelSentimentsThemeChart';
+import TeamLevelActionsCountChart from './screens/Analytics/TeamLevelActionsCountChart';
+import EnterpriseLevelActionsCountChart from './screens/Analytics/EnterpriseLevelActionsCountChart';
+import DummyChart from './screens/Analytics/DummyChart';
 
 type AppProps = {
   instance: IPublicClientApplication;
@@ -86,6 +95,37 @@ export default function App({ instance }: AppProps) {
                           <Route
                             path=":id/startRetro"
                             element={<StartRetro></StartRetro>}
+                          />
+                        </Route>
+                        <Route path="/analytics/">
+                          <Route path="" element={<AnalyticsMainContainer />} />
+                          <Route
+                            path="teamLevelActionsCount"
+                            element={<DummyChart />}
+                          />
+                          <Route
+                            path="enterpriseLevelActionsCount"
+                            element={<DummyChart />}
+                          />
+                          <Route
+                            path="enterpriseLevelParticipantsCount"
+                            element={<AverageParticipantChart />}
+                          />
+                          <Route
+                            path="enterpriseLevelRetrosCount"
+                            element={<DummyChart />}
+                          />
+                          <Route
+                            path="enterpriseLevelSentimentsSummary"
+                            element={<DummyChart />}
+                          />
+                          <Route
+                            path="enterpriseLevelSentimentsThemes"
+                            element={<DummyChart />}
+                          />
+                          <Route
+                            path="enterpriseLevelSentimentsMoods"
+                            element={<DummyChart />}
                           />
                         </Route>
                         <Route
