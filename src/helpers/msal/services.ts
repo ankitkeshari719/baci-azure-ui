@@ -73,7 +73,7 @@ export const getRetroActions = async (
   };
   await fetch(
     API_URL +
-    `/getRetroActions?id=${id}&userId=${userId}&fromTimestamp=${fromTimestamp}`,
+      `/getRetroActions?id=${id}&userId=${userId}&fromTimestamp=${fromTimestamp}`,
     requestOptions
   )
     .then(response => response.json())
@@ -174,8 +174,6 @@ export const getDeploymentData = async (): Promise<any> => {
   return deploymentData;
 };
 
-
-
 export const groupSuggestion = async (
   retroId: string,
   column: any
@@ -184,7 +182,7 @@ export const groupSuggestion = async (
   const requestOptions = {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({column:column}),
+    body: JSON.stringify({ column: column }),
   };
   await fetch(API_URL + '/groupSuggestion', requestOptions)
     .then(response => response.json())
@@ -202,7 +200,7 @@ export const keywordExtraction = async (
   const requestOptions = {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({column:column}),
+    body: JSON.stringify({ column: column }),
   };
   await fetch(API_URL + '/keywordExtraction', requestOptions)
     .then(response => response.json())
@@ -213,10 +211,8 @@ export const keywordExtraction = async (
 };
 
 // Jira Integration
-export const connectJira = async (
-  retroId: string,
-): Promise<string> => {
-  let jiraURL = "";
+export const connectJira = async (retroId: string): Promise<string> => {
+  let jiraURL = '';
   const requestOptions = {
     method: 'GET',
     headers: { 'Content-Type': 'application/json' },
@@ -230,10 +226,8 @@ export const connectJira = async (
   return jiraURL;
 };
 
-export const getJiraToken = async (
-  jiraCode: string,
-): Promise<string> => {
-  let jiraAccessToken = "";
+export const getJiraToken = async (jiraCode: string): Promise<string> => {
+  let jiraAccessToken = '';
   const requestOptions = {
     method: 'GET',
     headers: { 'Content-Type': 'application/json' },
@@ -246,15 +240,17 @@ export const getJiraToken = async (
     });
   return jiraAccessToken;
 };
-export const listJiraProjects = async (
-  jiraCode: string,
-): Promise<string[]> => {
+
+export const listJiraProjects = async (jiraCode: string): Promise<string[]> => {
   let jiraProjects: any[] = [];
   const requestOptions = {
     method: 'GET',
     headers: { 'Content-Type': 'application/json' },
   };
-  await fetch(API_URL + `/listJiraProjects?jiraCode=${jiraCode}`, requestOptions)
+  await fetch(
+    API_URL + `/listJiraProjects?jiraCode=${jiraCode}`,
+    requestOptions
+  )
     .then(response => response.json())
     .then(data => {
       console.log(data);
@@ -262,16 +258,20 @@ export const listJiraProjects = async (
     });
   return jiraProjects;
 };
+
 export const listJiraMeta = async (
   jiraCode: string,
-  projectId: string,
+  projectId: string
 ): Promise<string[]> => {
   let jiraProjects: any[] = [];
   const requestOptions = {
     method: 'GET',
     headers: { 'Content-Type': 'application/json' },
   };
-  await fetch(API_URL + `/listJiraMeta?jiraCode=${jiraCode}&projectId=${projectId}`, requestOptions)
+  await fetch(
+    API_URL + `/listJiraMeta?jiraCode=${jiraCode}&projectId=${projectId}`,
+    requestOptions
+  )
     .then(response => response.json())
     .then(data => {
       console.log(data);
@@ -279,19 +279,25 @@ export const listJiraMeta = async (
     });
   return jiraProjects;
 };
+
 export const createJiraIssue = async (
   projectId: string,
   issueType: string,
   jiraCode: string,
-  description: string,
+  description: string
 ): Promise<any> => {
-  let status: any = "";
+  let status: any = '';
   const requestOptions = {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ projectId, issueType, access_token: jiraCode,description }),
+    body: JSON.stringify({
+      projectId,
+      issueType,
+      access_token: jiraCode,
+      description,
+    }),
   };
-  
+
   await fetch(API_URL + `/createJiraIssue`, requestOptions)
     .then(response => response.json())
     .then(data => {
@@ -299,6 +305,96 @@ export const createJiraIssue = async (
       status = data;
     });
   return status;
+};
+
+// Api to get dummy chart data
+export const getDummyChartData = async (): Promise<any> => {
+  let dummyChartData;
+  const requestOptions = {
+    method: 'GET',
+  };
+  await fetch(API_URL + '/getDummyChartData', requestOptions)
+    .then(response => response.json())
+    .then(data => {
+      dummyChartData = data;
+    });
+
+  return dummyChartData;
+};
+
+// Api to get count of all participant over time
+export const getParticipantsCount = async (): Promise<any> => {
+  let participantsCountData;
+  const requestOptions = {
+    method: 'GET',
+  };
+  await fetch(API_URL + '/getParticipantsCount', requestOptions)
+    .then(response => response.json())
+    .then(data => {
+      participantsCountData = data;
+    });
+
+  return participantsCountData;
+};
+
+// Api to get count of all retros over time
+export const getRetrosCount = async (): Promise<any> => {
+  let retrosCountData;
+  const requestOptions = {
+    method: 'GET',
+  };
+  await fetch(API_URL + '/getRetrosCount', requestOptions)
+    .then(response => response.json())
+    .then(data => {
+      retrosCountData = data;
+    });
+
+  return retrosCountData;
+};
+
+// Api to get Team Level Actions Count
+export const getTeamLevelActionsCount = async (): Promise<any> => {
+  let teamLevelActionsCountData;
+  const requestOptions = {
+    method: 'GET',
+  };
+  await fetch(API_URL + '/getTeamLevelActionsCount', requestOptions)
+    .then(response => response.json())
+    .then(data => {
+      teamLevelActionsCountData = data;
+    });
+
+  return teamLevelActionsCountData;
+};
+
+// Api to get Enterprise Level ActionsCount
+export const getEnterpriseLevelActionsCount = async (): Promise<any> => {
+  let enterpriseLevelActionsCountData;
+  const requestOptions = {
+    method: 'GET',
+  };
+  await fetch(API_URL + '/getEnterpriseLevelActionsCount', requestOptions)
+    .then(response => response.json())
+    .then(data => {
+      enterpriseLevelActionsCountData = data;
+    });
+
+  return enterpriseLevelActionsCountData;
+};
+
+// Api to get Enterprise Level Sentiments Moods
+export const getEnterpriseLevelSentimentsMoods = async (): Promise<any> => {
+  let enterpriseLevelSentimentsMoodsData;
+  const requestOptions = {
+    method: 'GET',
+  };
+  await fetch(API_URL + '/getEnterpriseLevelSentimentsMoods', requestOptions)
+    .then(response => response.json())
+    .then(data => {
+      enterpriseLevelSentimentsMoodsData = data;
+    });
+
+  return enterpriseLevelSentimentsMoodsData;
 };
 
 /* 

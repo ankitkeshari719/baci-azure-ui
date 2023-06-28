@@ -1,0 +1,196 @@
+import React, { useState } from 'react';
+import { getParticipantsCount } from '../../helpers/msal/services';
+import ReactApexChart from 'react-apexcharts';
+import { ApexOptions } from 'apexcharts';
+import { Box, Grid } from '@mui/material';
+import {
+  H1RegularTypography,
+  H3RegularTypography,
+} from '../../components/CustomizedTypography';
+import { ContainedButton } from '../../components';
+import { useNavigate } from 'react-router-dom';
+
+export default function EnterpriseLevelSentimentsThemeChart() {
+  const [participantsCounts, setParticipantsCounts] = useState<any>([]);
+  const [averageParticipants, setAverageParticipants] = useState([]);
+  const [months, setMonths] = useState([]);
+  const navigate = useNavigate();
+
+  React.useEffect(() => {
+    handleGetParticipantChartData();
+  }, []);
+
+  const handleGetParticipantChartData = async () => {
+    await getParticipantsCount().then(
+      res => {
+        if (res && res.result) {
+          setParticipantsCounts(res.result);
+          setAverageParticipants(
+            res.result?.map((item: any) => item.averageParticipants)
+          );
+          setMonths(res.result?.map((item: any) => item.month));
+        }
+      },
+      err => {
+        console.log('err', err);
+      }
+    );
+  };
+
+  const series = [
+    //data on the y-axis
+    {
+      name: 'Total No. of Participants',
+      data: averageParticipants,
+    },
+  ];
+
+  const options: ApexOptions = {
+    //data on the x-axis
+    xaxis: {
+      categories: months,
+    },
+    chart: {
+      id: 'area-chart',
+      height: 350,
+      zoom: {
+        enabled: false,
+      },
+    },
+    title: {
+      text: 'Avg. Participants per Month',
+      style: {
+        fontFamily: 'Poppins',
+        fontWeight: '400',
+        fontSize: '18px',
+        color: '#4E4E4E',
+      },
+    },
+    subtitle: {
+      text: '154 Participants',
+      style: {
+        fontFamily: 'Poppins',
+        fontWeight: '400',
+        fontSize: '24px',
+        color: '#000000',
+      },
+    },
+    dataLabels: {
+      enabled: true,
+      textAnchor: 'start',
+      style: {
+        fontFamily: 'Poppins',
+        fontWeight: '400',
+        fontSize: '12px',
+        colors: ['#ffffff'],
+      },
+      background: {
+        enabled: true,
+        foreColor: '#333333',
+        borderRadius: 50,
+        dropShadow: {
+          top: 10,
+        },
+      },
+    },
+    stroke: {
+      show: true,
+      curve: 'smooth',
+      lineCap: 'butt',
+      colors: undefined,
+      width: 2,
+      dashArray: 0,
+    },
+    grid: {
+      show: true,
+      borderColor: '#CCCCCC',
+      strokeDashArray: 3,
+      position: 'front',
+      xaxis: {
+        lines: {
+          show: true,
+        },
+      },
+      yaxis: {
+        lines: {
+          show: true,
+        },
+      },
+    },
+    legend: {
+      show: true,
+      position: 'top',
+      horizontalAlign: 'right',
+    },
+  };
+
+  return (
+    <Box sx={{ overflowY: 'auto' }} height="calc(var(--app-height))">
+      <Box sx={{ margin: '48px' }}>
+        {/* Analytics Title */}
+        <Box
+          sx={{
+            width: '100%',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+          }}
+        >
+          <H1RegularTypography label="Analytics" />
+        </Box>
+        {/* Back Button */}
+        <Box
+          sx={{
+            width: '100%',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'flex-start',
+          }}
+        >
+          <ContainedButton
+            id="go_back_to_analytics"
+            name="Back"
+            onClick={() => navigate('/analytics/')}
+            size={'small'}
+          />
+        </Box>
+        {/* Chart Title */}
+        <Box
+          sx={{
+            width: '100%',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            marginTop: '48px',
+          }}
+        >
+          <H3RegularTypography
+            label=".Analytics - Enterprise Level - Sentiments - Key Themes Heatmap."
+            style={{ color: '#767676' }}
+          />
+        </Box>
+        {/* Chart */}
+        <Grid container spacing={2} sx={{ marginTop: '48px' }}>
+          <Grid
+            item
+            xs={12}
+            sx={{
+              padding: '0px !important',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+            }}
+          >
+            <ReactApexChart
+              options={options}
+              series={series}
+              type="area"
+              width="850"
+              height="464"
+            />
+          </Grid>
+        </Grid>
+      </Box>
+    </Box>
+  );
+}
