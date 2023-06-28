@@ -21,6 +21,8 @@ import { BoardContext } from '../../contexts/BoardContext';
 import { ActionType, GlobalContext } from '../../contexts/GlobalContext';
 import { MAX_CARD_TEXT_LENGTH } from '../../constants';
 import { LazyLoadImage } from 'react-lazy-load-image-component';
+import { connectJira, listJiraProjects, listJiraMeta, createJiraIssue } from '../../helpers/msal/services';
+import { NestedDropdown } from 'mui-nested-menu';
 
 type Props = {
   action: ActionInterface;
@@ -33,6 +35,7 @@ type Props = {
   disabled: boolean;
   removeAction: (selectedActions: ActionInterface) => void;
   assignAction: (ids: string[], assigneeId: string) => void;
+
   isOtherParticipantAction?: boolean;
 };
 
@@ -71,13 +74,14 @@ export default function ActionItem({
   );
   const openMainMenu = Boolean(mainAnchorEl);
 
+
   // For Users Menu
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
   const open = Boolean(anchorEl);
-
+  const openProjectList = Boolean(anchorEl)
   const [selectedActionForAssign, setSelectedActionForAssign] =
     React.useState<ActionInterface>();
-
+  const [jiraProject, setJiraProject] = React.useState<{ id: string, name: string }[]>();
   const userReacted = !!(action.reacts || []).find(
     r => r.by === global.user.id
   );
@@ -190,6 +194,161 @@ export default function ActionItem({
     navigator.clipboard.writeText(action.value);
   };
 
+  //connect to jira
+  const connect = async () => {
+    await connectJira(global.currentRetro?.id as string).then((res: any) => {
+
+      console.log("jira", res.response)
+      window.location.href = res.response;
+    }, error => {
+      console.log("error", error);
+    })
+
+  }
+  const functionToGetArray = () => {
+    const items: any = [];
+    users.map((user, index) => {
+      
+      const userItem = {
+        label:global.user.id == user.userId? user.userNickname:"You",
+        leftIcon: (<LazyLoadImage
+          width="32px !important"
+          height="32px !important"
+          style={{
+            borderRadius: '50%',
+          }}
+          src={'/avatars/animals/' + user.avatar + '.svg'}
+        ></LazyLoadImage>),
+        callback: () => handleAssign,
+        items:[{
+          label: '   Edit   ',
+          leftIcon: (
+            <Icons.Pencil
+              size={18}
+              color="#676767"
+              style={{
+                cursor: 'unset',
+              }}
+            />
+          ),
+          callback: () => (openEditActionOption(action),
+            handleMainMenuClose())
+  
+        }]
+
+      }
+
+      items.push(userItem)
+    })
+
+    // const abc: any = {
+    //   label: "user",
+    //   leftIcon: (
+    //     <Icons.TrashOutline
+    //       size={18}
+    //       color="#EA4335"
+    //       style={{
+    //         cursor: 'unset',
+    //       }}
+    //     />
+    //   ),
+    //   callback: () => console.log("vishal")
+    // }
+    // items.push(abc)
+    return items;
+  };
+  const menuItemsData: any = {
+    label: <img style={{ width: '20px!important' }} src="/svgs/Dots.svg"></img>,
+    items: [
+      {
+        label: '   Edit   ',
+        leftIcon: (
+          <Icons.Pencil
+            size={18}
+            color="#676767"
+            style={{
+              cursor: 'unset',
+            }}
+          />
+        ),
+        callback: () => (openEditActionOption(action),
+          handleMainMenuClose())
+
+      },
+      {
+        label: '   Copy   ',
+        leftIcon: (
+          <Icons.DocumentDuplicateOutline
+            size={18}
+            color="#676767"
+            style={{
+              cursor: 'unset',
+            }}
+          />
+        ),
+        callback: () => (copyManageActions(action), handleMainMenuClose())
+      },
+      {
+        label: '    Assign    ',
+        leftIcon: (
+          <Icons.UserCircleOutline
+            size={18}
+            color="#676767"
+            style={{
+              cursor: 'unset',
+            }}
+          />
+        ),
+        rightIcon: <img src="/svgs/RightArrow.svg" />,
+        items: functionToGetArray(),
+      },
+      {
+        label: '   Remove   ',
+        leftIcon: (
+          <Icons.TrashOutline
+            size={18}
+            color="#EA4335"
+            style={{
+              cursor: 'unset',
+            }}
+          />
+        ),
+        callback: () => {
+          removeAction(action),
+            handleMainMenuClose()
+        }
+      },
+    ],
+  };
+  //load jira projects
+  const loadJiraProjects = async (event: any): Promise<string[]> => {
+    return await listJiraProjects(global.jiraCode as string).then((res: any) => {
+      console.log(res);
+      if (res.status == 401) {
+        dispatch({
+          type: ActionType.SET_JIRA_CODE,
+          payload: { jiraCode: "" },
+        });
+      }
+      setAnchorEl(event.currentTarget);
+      setJiraProject(res.response)
+      return res.response;
+    }, (error: any) => {
+      console.log("error", error);
+      return [];
+    });
+  };
+  //load jira meta data
+  const loadJiraMeta = async (projectId: string): Promise<string[]> => {
+    return await listJiraMeta(global.jiraCode as string, projectId).then((res: any) => {
+      console.log(res.response);
+      return res.response;
+    }, (error: any) => {
+      console.log("error", error);
+      return [];
+    });
+  };
+
   return (
     <>
       <ListItem key={labelId} style={{ padding: '8px 12px' }}>
@@ -254,7 +413,7 @@ export default function ActionItem({
                 wordWrap: 'break-word',
               }}
             />
-            {!ended  &&
+            {!ended &&
               isMouseHover &&
               (global.user.userType == 2 ||
                 (global.user.id === action.createdBy &&
@@ -332,7 +491,7 @@ export default function ActionItem({
               />
               {/* Limitation */}
               {editActionValue &&
-              editActionValue.length >= MAX_CARD_TEXT_LENGTH - 20 ? (
+                editActionValue.length >= MAX_CARD_TEXT_LENGTH - 20 ? (
                 <Typography
                   style={{
                     fontSize: '0.75rem',
@@ -459,10 +618,32 @@ export default function ActionItem({
             </Button>
           </Box>
         )}
+
+
+
+        {/* <NestedDropdown
+          menuItemsData={
+            global.user.userType == 2
+              ? menuItemsData
+              : {
+                label: menuItemsData.label,
+                items: [menuItemsData.items[0]],
+              }
+          }
+          MenuProps={{ elevation: 3 ,
+          }}
+          ButtonProps={{ variant: undefined }}
+        /> */}
+
+
+
+
+
+
         {/* Avatar */}
         <ListItemAvatar>
           {action?.assigneeAvatar === '' ||
-          action.assigneeAvatar === undefined ? (
+            action.assigneeAvatar === undefined ? (
             <LazyLoadImage
               className="avatar"
               style={{
@@ -495,7 +676,7 @@ export default function ActionItem({
             open={openMainMenu}
             onClose={handleMainMenuClose}
             MenuListProps={{
-              'aria-labelledby': 'long-button',
+              'aria-labelledby': 'project-button',
             }}
             PaperProps={{
               elevation: 0,
@@ -592,8 +773,53 @@ export default function ActionItem({
                 >
                   Assign
                 </ListItemText>
+              </MenuItem>)}
+            {global.jiraCode ?
+
+              <MenuItem aria-controls={openProjectList ? 'long-menu' : undefined}
+                aria-expanded={openProjectList ? 'true' : undefined}
+                aria-haspopup="true"
+                onClick={loadJiraProjects}
+              >
+                <ListItemIcon>
+                  <Icons.UserCircleOutline
+                    size={18}
+                    color="#676767"
+                    style={{
+                      cursor: 'unset',
+                    }}
+                  />
+                </ListItemIcon>
+                <ListItemText
+                  className="actionItemMenuText"
+                  style={{ color: '#343434' }}
+                >
+                  Jira projects   </ListItemText> ̰
               </MenuItem>
-            )}
+
+              :
+              <MenuItem
+
+                onClick={connect}
+              >
+                <ListItemIcon>
+                  <Icons.UserCircleOutline
+                    size={18}
+                    color="#676767"
+                    style={{
+                      cursor: 'unset',
+                    }}
+                  />
+                </ListItemIcon>
+                <ListItemText
+                  className="actionItemMenuText"
+                  style={{ color: '#343434' }}
+                >
+                  Connect to Jira
+                </ListItemText>
+              </MenuItem>}
+
+
             {/* Remove Action Menu */}
             <MenuItem
               onClick={() => {
@@ -621,6 +847,16 @@ export default function ActionItem({
         </ListItemAvatar>
       </ListItem>
       {/* Menus for Users */}
+      <Menu id="project-list"
+        MenuListProps={{
+          'aria-labelledby': 'project-button',
+        }}
+        open={openProjectList}
+
+      >
+        project1
+      </Menu>
+
       <Menu
         id="long-menu"
         MenuListProps={{

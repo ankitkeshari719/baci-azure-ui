@@ -28,6 +28,7 @@ import {
   H4RegularTypography,
 } from '../../components/CustomizedTypography';
 import { ContainedButton, TextButton } from '../../components';
+import LeftBar from '../../components/Elements/leftBar/LeftBar';
 
 const BootstrapDialog = styled(Dialog)(({ theme }) => ({
   '& .MuiDialogContent-root': {
@@ -263,6 +264,11 @@ export function LandingPage() {
           </Box>
         </Box>
       ) : (
+        <Box
+        sx={{display:'flex',flexDirection:'row',height:'calc(var(--app-height))'}}>
+          <Box sx={{display:'flex',width:'72px', height:'100%'}}>
+          <LeftBar/>
+          </Box>
         <Grid
           container
           spacing={0}
@@ -352,7 +358,7 @@ export function LandingPage() {
               </Box>
             </Grid>
           </Grid>
-        </Grid>
+        </Grid></Box>
       )}
       <BootstrapDialog
         open={isAddDeploymentDataDialogOpen}

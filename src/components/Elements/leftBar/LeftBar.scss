@@ -1,0 +1,39 @@
+@import './../../../style.module.scss';
+.leftBarContainer,.topContainer,.bottomContainer{
+    display:flex;
+flex-direction: column;
+width: 72px;
+justify-content: space-between;
+align-items: center;
+height: 100%;
+padding-bottom: 8px;
+
+
+}
+.leftBarContainer{
+    overflow-y: auto;
+    overflow-x: hidden;
+}
+.topContainer{
+justify-content: flex-start;
+height: auto;
+}
+.bottomContainer{
+    justify-content: flex-start;
+    height: auto;
+}
+
+.menuIcon,.menuIconSelected{
+    width: 56px;
+    height: 56px;
+    padding: 16px;
+    cursor: pointer;
+    border-radius: 8px;
+}
+.menuIcon:hover{
+    background: $HoverMask;
+}
+.menuIconSelected{
+    background-color: $PrimaryLight;
+}
+.menuIconSelected:hover{ background-color:$PrimaryHover}
