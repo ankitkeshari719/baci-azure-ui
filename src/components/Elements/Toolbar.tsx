@@ -245,7 +245,7 @@ const Toolbar = (props: any) => {
             </Link>
           </>
         ) : (
-          <Link href="/">
+          isXsUp&&<Link href="/">
             <img
               src={BACILogo}
               alt="Logo"
