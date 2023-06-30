@@ -5,9 +5,14 @@ import {
     BellIcon,
 } from '@heroicons/react/24/outline';
 import React from "react";
+import Avatar from "../Avatar";
+import { GlobalContext } from "../../../contexts/GlobalContext";
+import { LazyLoadImage } from "react-lazy-load-image-component";
 
 const LeftBar = () => {
     const [selectedMenu, setSelectedMenu] = React.useState("");
+    const [{  user }] =
+    React.useContext(GlobalContext);
     const menuArray = [
         { id: 1, label: 'Home', icon: HomeIcon, routeTo: '', disabled: false },
         { id: 2, label: 'Retros', icon: ViewColumnsIcon, routeTo: '', disabled: false },
@@ -46,11 +51,35 @@ const LeftBar = () => {
                     </Tooltip>)
                 })
             }
+              <Tooltip title={user?.name + ''}>
+            <span>
+              {user?.avatar ? (
+                <Avatar
+                  avatar={user?.avatar}
+                  onClickAvatar={() => {}}
+                  css={{
+                    width: '48px',
+                    height: '48px',
+                    borderRadius: '50%',
+                    border: 'none',
+                  }}
+                ></Avatar>
+              ):<LazyLoadImage
+                width="48px !important"
+                height="48px !important"
+                style={{
+                  borderRadius: '50%',
+                  border: 'none',
+                }}
+                src={'/svgs/DefaultUser.svg'}
+              ></LazyLoadImage>}
+            </span>
+          </Tooltip>
         </Box>
     </Box>
-        <Box sx={{ display: 'flex', position: 'abosolute', left: '72px', zIndex: '1000', background: 'white' }}>
+        {/* <Box sx={{ display: 'flex', position: 'abosolute', left: '72px', zIndex: '1000', background: 'white' }}>
 
-        </Box>
+        </Box> */}
 
     </>
 
