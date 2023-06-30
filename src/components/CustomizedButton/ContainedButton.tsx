@@ -39,7 +39,7 @@ export function ContainedButton({
       <ButtonLabelTypography
         label={name}
         style={{
-          ':hover': { color: '#CCCCCC !important' },
+          // ':hover': { color: '#CCCCCC !important' },
           ':disabled': { color: '#FFFFFF !important' },
           color: '#FFFFFF',
           fontSize: size === 'small' ? '14px !important' : '16px !important',

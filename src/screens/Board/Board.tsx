@@ -39,6 +39,7 @@ import ReactToPrint from 'react-to-print';
 import { OutlinedButton } from '../../components';
 import useReRoute from '../../helpers/hooks/useReRoute';
 import ActionMainContainer from '../ManageActions/ActionMainContainer';
+import LeftBar from '../../components/Elements/leftBar/LeftBar';
 
 interface StyledTabsProps {
   children?: React.ReactNode;
@@ -220,34 +221,34 @@ export default function RetroBoard() {
   const getProcessedColumns = () =>
     columns
       ? columns.map(
-          column => {
-            const groups = [...column.groups];
-            return {
-              ...column,
-              groups: groups
-                .map(group => {
-                  const cards = group.cards.filter(card =>
-                    global.user?.userType !== 2
-                      ? card
-                      : global.usersSelected?.some(user => {
-                          return user?.userId === card?.createdBy;
-                        })
-                  );
-                  return {
-                    ...group,
-                    cards,
-                  };
-                })
-                .filter(
-                  group =>
-                    !justMyCards ||
-                    group.name === UNGROUPED ||
-                    group.cards.length !== 0
-                ),
-            };
-          }
-          // }
-        )
+        column => {
+          const groups = [...column.groups];
+          return {
+            ...column,
+            groups: groups
+              .map(group => {
+                const cards = group.cards.filter(card =>
+                  global.user?.userType !== 2
+                    ? card
+                    : global.usersSelected?.some(user => {
+                      return user?.userId === card?.createdBy;
+                    })
+                );
+                return {
+                  ...group,
+                  cards,
+                };
+              })
+              .filter(
+                group =>
+                  !justMyCards ||
+                  group.name === UNGROUPED ||
+                  group.cards.length !== 0
+              ),
+          };
+        }
+        // }
+      )
       : [];
 
   const totalPanels = columns
@@ -382,328 +383,336 @@ export default function RetroBoard() {
   return (
     <>
       {/* Board HTML */}
-      <Box
-        style={{
-          flexGrow: 1,
-          display: 'flex',
-          flexDirection: 'column',
-          overflowY: 'auto',
-          height: 'calc(var(--app-height))',
-        }}
-      >
-        {/* First Time Experience : User is facilitator */}
-        {global?.user.userType == 2 && !ended && (
-          <FirstTimeExperience facilitator={true} />
-        )}
-        {/* First Time Experience : User is not facilitator */}
-        {global?.user.userType != 2 &&
-          !ended &&
-          (isXsUp ? (
-            <FirstTimeExperience facilitator={false} isXsUp={true} />
-          ) : (
-            <FirstTimeExperience facilitator={false} isXsUp={false} />
-          ))}
-        <DeploymentPopUp />
-        <Grid xs={12} item>
-          <Toolbar onFinishRetro={finishRetro}></Toolbar>
-          {!isXsUp && <SubToolbar componentRef={componentRef} />}
-        </Grid>
-        <Grid
-          container
-          spacing={0}
-          style={{
-            flexWrap: 'nowrap',
-            flexGrow: 1,
-            background: 'white',
-            paddingLeft: isXsUp ? 0 : '42px',
-            paddingRight: isXsUp ? 0 : '42px',
-          }}
-        >
-          {/* Feedback Pop up */}
-          {showFeedback ? (
-            <FeedbackPopup show={true} showThankYou={ended}></FeedbackPopup>
-          ) : null}
+      <Box display="flex" width="100%">
+        <Box width='72px' display="flex">
+        <LeftBar />
+        </Box>
+        <Box display='flex' width="calc(100% - 72px)">
           <Box
-            sx={{
+            style={{
+              // flexGrow: 1,
+              width:"100%",
               display: 'flex',
               flexDirection: 'column',
-              width: '100%',
+              overflowY: 'auto',
+              height: 'calc(var(--app-height))',
             }}
           >
-            {/* Column View For Mobile User */}
-            {isXsUp && getColumns().length !== 0 ? (
-              <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
-                <StyledTabs
-                  color={getColumns()[value].groupFontColour}
-                  value={value}
-                  onChange={handleChange}
-                  aria-label="basic tabs example"
-                  sx={{ color: 'green!important' }}
+            {/* First Time Experience : User is facilitator */}
+            {global?.user.userType == 2 && !ended && (
+              <FirstTimeExperience facilitator={true} />
+            )}
+            {/* First Time Experience : User is not facilitator */}
+            {global?.user.userType != 2 &&
+              !ended &&
+              (isXsUp ? (
+                <FirstTimeExperience facilitator={false} isXsUp={true} />
+              ) : (
+                <FirstTimeExperience facilitator={false} isXsUp={false} />
+              ))}
+            <DeploymentPopUp />
+            <Grid xs={12} item>
+              <Toolbar onFinishRetro={finishRetro}></Toolbar>
+              {!isXsUp && <SubToolbar componentRef={componentRef} />}
+            </Grid>
+            <Grid
+              container
+              spacing={0}
+              style={{
+                flexWrap: 'nowrap',
+                flexGrow: 1,
+                background: 'white',
+                paddingLeft: isXsUp ? 0 : '42px',
+                paddingRight: isXsUp ? 0 : '42px',
+              }}
+            >
+              {/* Feedback Pop up */}
+              {showFeedback ? (
+                <FeedbackPopup show={true} showThankYou={ended}></FeedbackPopup>
+              ) : null}
+              <Box
+                sx={{
+                  display: 'flex',
+                  flexDirection: 'column',
+                  width: '100%',
+                }}
+              >
+                {/* Column View For Mobile User */}
+                {isXsUp && getColumns().length !== 0 ? (
+                  <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
+                    <StyledTabs
+                      color={getColumns()[value].groupFontColour}
+                      value={value}
+                      onChange={handleChange}
+                      aria-label="basic tabs example"
+                      sx={{ color: 'green!important' }}
+                    >
+                      <StyledTab
+                        color={getColumns()[0].groupFontColour}
+                        label={getColumns()[0].name}
+                        {...a11yProps(0)}
+                        sx={{ fontSize: '16px' }}
+                      />
+                      <StyledTab
+                        color={getColumns()[1].groupFontColour}
+                        label={getColumns()[1].name}
+                        {...a11yProps(1)}
+                        sx={{ fontSize: '16px' }}
+                      />
+                      <StyledTab
+                        color={getColumns()[2].groupFontColour}
+                        label={getColumns()[2].name}
+                        {...a11yProps(2)}
+                        sx={{ fontSize: '16px' }}
+                      />
+                      ;
+                    </StyledTabs>
+                  </Box>
+                ) : (
+                  <></>
+                )}
+                <div
+                  style={{ display: 'flex', flexDirection: 'row', width: '100%' }}
                 >
-                  <StyledTab
-                    color={getColumns()[0].groupFontColour}
-                    label={getColumns()[0].name}
-                    {...a11yProps(0)}
-                    sx={{ fontSize: '16px' }}
-                  />
-                  <StyledTab
-                    color={getColumns()[1].groupFontColour}
-                    label={getColumns()[1].name}
-                    {...a11yProps(1)}
-                    sx={{ fontSize: '16px' }}
-                  />
-                  <StyledTab
-                    color={getColumns()[2].groupFontColour}
-                    label={getColumns()[2].name}
-                    {...a11yProps(2)}
-                    sx={{ fontSize: '16px' }}
-                  />
-                  ;
-                </StyledTabs>
+                  {useMemo(
+                    () =>
+                      (false
+                        ? [...getProcessedColumns(), undefined]
+                        : getProcessedColumns()
+                      ).map((column, index) => {
+                        return (
+                          <React.Fragment key={index}>
+                            {((isXsUp && index == value) ||
+                              (!isXsUp &&
+                                (global.expandColumn == -1 ||
+                                  (column &&
+                                    +column.id == global.expandColumn)))) && (
+                                <ColumnContainer totalPanels={1} key={index + '1'}>
+                                  {!!column ? (
+                                    <>
+                                      {getProcessedColumns().length == 3 ? (
+                                        <>
+                                          {column.id != '2' &&
+                                            global.expandColumn != 10 ? (
+                                            <RetroColumn
+                                              leftHeaderComponent={
+                                                <LeftContainer index={index} />
+                                              }
+                                              rightHeaderComponent={
+                                                <RightContainer index={index} />
+                                              }
+                                              column={column}
+                                              columnId={column.id}
+                                              noHeader={false}
+                                              showEditBox={showEditBox}
+                                              setShowEditBox={setShowEditBox}
+                                              setIslanded={setIsLanded}
+                                              cardGroups={column.groups}
+                                              columnIndex={index}
+                                            />
+                                          ) : (
+                                            column.id == '2' && (
+                                              <ActionMainContainer />
+                                            )
+                                          )}
+                                        </>
+                                      ) : (
+                                        <RetroColumn
+                                          leftHeaderComponent={
+                                            <LeftContainer index={index} />
+                                          }
+                                          rightHeaderComponent={
+                                            <RightContainer index={index} />
+                                          }
+                                          column={column}
+                                          columnId={column.id}
+                                          noHeader={false}
+                                          showEditBox={showEditBox}
+                                          setShowEditBox={setShowEditBox}
+                                          setIslanded={setIsLanded}
+                                          cardGroups={column.groups}
+                                          columnIndex={index}
+                                        />
+                                      )}
+                                    </>
+                                  ) : (
+                                    <FeedbackColumn
+                                      noHeader={isXsUp}
+                                      leftHeaderComponent={
+                                        <LeftContainer index={index} />
+                                      }
+                                      rightHeaderComponent={
+                                        <RightContainer index={index} />
+                                      }
+                                    />
+                                  )}
+                                </ColumnContainer>
+                              )}
+                          </React.Fragment>
+                        );
+                      }),
+                    [
+                      lastStateUpdate,
+                      isXsUp,
+                      value,
+                      justMyCards,
+                      currentColumn,
+                      showEditBox,
+                      global.expandColumn,
+                      global.usersSelected,
+                    ]
+                  )}
+                </div>
               </Box>
-            ) : (
-              <></>
-            )}
-            <div
-              style={{ display: 'flex', flexDirection: 'row', width: '100%' }}
-            >
-              {useMemo(
-                () =>
-                  (false
-                    ? [...getProcessedColumns(), undefined]
-                    : getProcessedColumns()
-                  ).map((column, index) => {
-                    return (
-                      <React.Fragment key={index}>
-                        {((isXsUp && index == value) ||
-                          (!isXsUp &&
-                            (global.expandColumn == -1 ||
-                              (column &&
-                                +column.id == global.expandColumn)))) && (
-                          <ColumnContainer totalPanels={1} key={index + '1'}>
-                            {!!column ? (
-                              <>
-                                {getProcessedColumns().length == 3 ? (
-                                  <>
-                                    {column.id != '2' &&
-                                    global.expandColumn != 10 ? (
-                                      <RetroColumn
-                                        leftHeaderComponent={
-                                          <LeftContainer index={index} />
-                                        }
-                                        rightHeaderComponent={
-                                          <RightContainer index={index} />
-                                        }
-                                        column={column}
-                                        columnId={column.id}
-                                        noHeader={false}
-                                        showEditBox={showEditBox}
-                                        setShowEditBox={setShowEditBox}
-                                        setIslanded={setIsLanded}
-                                        cardGroups={column.groups}
-                                        columnIndex={index}
-                                      />
-                                    ) : (
-                                      column.id == '2' && (
-                                        <ActionMainContainer />
-                                      )
-                                    )}
-                                  </>
-                                ) : (
-                                  <RetroColumn
-                                    leftHeaderComponent={
-                                      <LeftContainer index={index} />
-                                    }
-                                    rightHeaderComponent={
-                                      <RightContainer index={index} />
-                                    }
-                                    column={column}
-                                    columnId={column.id}
-                                    noHeader={false}
-                                    showEditBox={showEditBox}
-                                    setShowEditBox={setShowEditBox}
-                                    setIslanded={setIsLanded}
-                                    cardGroups={column.groups}
-                                    columnIndex={index}
-                                  />
-                                )}
-                              </>
-                            ) : (
-                              <FeedbackColumn
-                                noHeader={isXsUp}
-                                leftHeaderComponent={
-                                  <LeftContainer index={index} />
-                                }
-                                rightHeaderComponent={
-                                  <RightContainer index={index} />
-                                }
-                              />
-                            )}
-                          </ColumnContainer>
-                        )}
-                      </React.Fragment>
-                    );
-                  }),
-                [
-                  lastStateUpdate,
-                  isXsUp,
-                  value,
-                  justMyCards,
-                  currentColumn,
-                  showEditBox,
-                  global.expandColumn,
-                  global.usersSelected,
-                ]
-              )}
-            </div>
+            </Grid>
           </Box>
-        </Grid>
-      </Box>
-      {/* Print Board HTML */}
-      <Container
-        style={{
-          display: 'none',
-          height: 'calc(var(--app-height))',
-          overflowY: 'auto',
-          backgroundColor: '#F5F5F5',
-        }}
-      >
-        <Box ref={componentRef} id="boardPrint">
-          {/* Logo */}
-          <Row>
-            <Col
-              xs="12"
-              className="d-flex justify-content-start align-items-center"
-            >
-              <img
-                src={BACILogo}
-                alt="Logo"
-                className="logo"
-                height="48px"
-                width="108px"
-              />
-            </Col>
-          </Row>
-          {/* Divider */}
-          <Divider
-            color="#CDCDD4"
-            style={{ width: '100%', marginTop: '18px' }}
-          />
-          {/* Retro Name */}
-          <Row style={{ marginTop: '16px' }}>
-            <Col
-              xs="12"
-              className="d-flex justify-content-start align-items-center"
-            >
-              <Typography className="textTypeThree">
-                {global.currentRetro?.name}
-              </Typography>
-            </Col>
-          </Row>
-          {/* DATE and TIME TAKEN */}
-          <Row style={{ marginTop: '16px' }}>
-            <Col
-              xs="4"
-              className="d-flex justify-content-start align-items-center"
-            >
-              <Typography className="textTypeOne">Date</Typography>
-              <Typography className="textTypeTwo" ml={2}>
-                {moment(startedDate, 'DD MMM YYYY').format('Do MMM YYYY')}
-              </Typography>
-            </Col>
-            <Col
-              xs="8"
-              className="d-flex justify-content-start align-items-center"
-            >
-              <Typography className="textTypeOne">Time Taken</Typography>
-              <Typography className="textTypeTwo" ml={2}>
-                {timeTaken}
-              </Typography>
-            </Col>
-          </Row>
-          {/* NO. OF PARTICIPANTS and FACILITATORS */}
-          <Row style={{ marginTop: '16px' }}>
-            <Col
-              xs="4"
-              className="d-flex justify-content-start align-items-center"
-            >
-              <Typography className="textTypeOne">
-                No. Of Participants
-              </Typography>
-              <Typography className="textTypeTwo" ml={2}>
-                {users.length}
-              </Typography>
-            </Col>
-            <Col
-              xs="8"
-              className="d-flex justify-content-start align-items-center"
-            >
-              <Typography className="textTypeOne">Facilitators</Typography>
-              <Typography className="textTypeTwo" ml={2}>
-                {global.user.name}
-              </Typography>
-            </Col>
-          </Row>
-          {/* Retro Column */}
-          <div
-            style={{ display: 'flex', flexDirection: 'column', width: '100%' }}
+          {/* Print Board HTML */}
+          <Container
+            style={{
+              display: 'none',
+              height: 'calc(var(--app-height))',
+              overflowY: 'auto',
+              backgroundColor: '#F5F5F5',
+            }}
           >
-            {useMemo(
-              () =>
-                (false
-                  ? [...getProcessedColumns(), undefined]
-                  : getProcessedColumns()
-                ).map((column, index) => {
-                  return (
-                    <React.Fragment key={index}>
-                      {((isXsUp && index == value) ||
-                        (!isXsUp &&
-                          (global.expandColumn == -1 ||
-                            (column &&
-                              +column.id == global.expandColumn)))) && (
-                        <PrintColumnContainer
-                          totalPanels={totalPanels}
-                          key={index + '1'}
-                        >
-                          {!!column && (
-                            <>
-                              <PrintRetroColumn
-                                leftHeaderComponent={
-                                  <LeftContainer index={index} />
-                                }
-                                rightHeaderComponent={
-                                  <RightContainer index={index} />
-                                }
-                                column={column}
-                                columnId={column.id}
-                                noHeader={false}
-                                showEditBox={showEditBox}
-                                setShowEditBox={setShowEditBox}
-                                setIslanded={setIsLanded}
-                                cardGroups={column.groups}
-                                columnIndex={index}
-                              />
-                            </>
-                          )}
-                        </PrintColumnContainer>
-                      )}
-                    </React.Fragment>
-                  );
-                }),
-              [
-                lastStateUpdate,
-                isXsUp,
-                value,
-                justMyCards,
-                currentColumn,
-                showEditBox,
-                global.expandColumn,
-                global.usersSelected,
-              ]
-            )}
-          </div>
+            <Box ref={componentRef} id="boardPrint">
+              {/* Logo */}
+              <Row>
+                <Col
+                  xs="12"
+                  className="d-flex justify-content-start align-items-center"
+                >
+                  <img
+                    src={BACILogo}
+                    alt="Logo"
+                    className="logo"
+                    height="48px"
+                    width="108px"
+                  />
+                </Col>
+              </Row>
+              {/* Divider */}
+              <Divider
+                color="#CDCDD4"
+                style={{ width: '100%', marginTop: '18px' }}
+              />
+              {/* Retro Name */}
+              <Row style={{ marginTop: '16px' }}>
+                <Col
+                  xs="12"
+                  className="d-flex justify-content-start align-items-center"
+                >
+                  <Typography className="textTypeThree">
+                    {global.currentRetro?.name}
+                  </Typography>
+                </Col>
+              </Row>
+              {/* DATE and TIME TAKEN */}
+              <Row style={{ marginTop: '16px' }}>
+                <Col
+                  xs="4"
+                  className="d-flex justify-content-start align-items-center"
+                >
+                  <Typography className="textTypeOne">Date</Typography>
+                  <Typography className="textTypeTwo" ml={2}>
+                    {moment(startedDate, 'DD MMM YYYY').format('Do MMM YYYY')}
+                  </Typography>
+                </Col>
+                <Col
+                  xs="8"
+                  className="d-flex justify-content-start align-items-center"
+                >
+                  <Typography className="textTypeOne">Time Taken</Typography>
+                  <Typography className="textTypeTwo" ml={2}>
+                    {timeTaken}
+                  </Typography>
+                </Col>
+              </Row>
+              {/* NO. OF PARTICIPANTS and FACILITATORS */}
+              <Row style={{ marginTop: '16px' }}>
+                <Col
+                  xs="4"
+                  className="d-flex justify-content-start align-items-center"
+                >
+                  <Typography className="textTypeOne">
+                    No. Of Participants
+                  </Typography>
+                  <Typography className="textTypeTwo" ml={2}>
+                    {users.length}
+                  </Typography>
+                </Col>
+                <Col
+                  xs="8"
+                  className="d-flex justify-content-start align-items-center"
+                >
+                  <Typography className="textTypeOne">Facilitators</Typography>
+                  <Typography className="textTypeTwo" ml={2}>
+                    {global.user.name}
+                  </Typography>
+                </Col>
+              </Row>
+              {/* Retro Column */}
+              <div
+                style={{ display: 'flex', flexDirection: 'column', width: '100%' }}
+              >
+                {useMemo(
+                  () =>
+                    (false
+                      ? [...getProcessedColumns(), undefined]
+                      : getProcessedColumns()
+                    ).map((column, index) => {
+                      return (
+                        <React.Fragment key={index}>
+                          {((isXsUp && index == value) ||
+                            (!isXsUp &&
+                              (global.expandColumn == -1 ||
+                                (column &&
+                                  +column.id == global.expandColumn)))) && (
+                              <PrintColumnContainer
+                                totalPanels={totalPanels}
+                                key={index + '1'}
+                              >
+                                {!!column && (
+                                  <>
+                                    <PrintRetroColumn
+                                      leftHeaderComponent={
+                                        <LeftContainer index={index} />
+                                      }
+                                      rightHeaderComponent={
+                                        <RightContainer index={index} />
+                                      }
+                                      column={column}
+                                      columnId={column.id}
+                                      noHeader={false}
+                                      showEditBox={showEditBox}
+                                      setShowEditBox={setShowEditBox}
+                                      setIslanded={setIsLanded}
+                                      cardGroups={column.groups}
+                                      columnIndex={index}
+                                    />
+                                  </>
+                                )}
+                              </PrintColumnContainer>
+                            )}
+                        </React.Fragment>
+                      );
+                    }),
+                  [
+                    lastStateUpdate,
+                    isXsUp,
+                    value,
+                    justMyCards,
+                    currentColumn,
+                    showEditBox,
+                    global.expandColumn,
+                    global.usersSelected,
+                  ]
+                )}
+              </div>
+            </Box>
+          </Container>
         </Box>
-      </Container>
+      </Box>
     </>
   );
 }
