@@ -77,8 +77,9 @@ export default function ActionItem({
 
   // For Users Menu
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
+  const [anchorEl1, setAnchorEl1] = React.useState<null | HTMLElement>(null);
   const open = Boolean(anchorEl);
-  const openProjectList = Boolean(anchorEl)
+  const openProjectList = Boolean(anchorEl1)
   const [selectedActionForAssign, setSelectedActionForAssign] =
     React.useState<ActionInterface>();
   const [jiraProject, setJiraProject] = React.useState<{ id: string, name: string }[]>();
@@ -621,19 +622,6 @@ export default function ActionItem({
 
 
 
-        {/* <NestedDropdown
-          menuItemsData={
-            global.user.userType == 2
-              ? menuItemsData
-              : {
-                label: menuItemsData.label,
-                items: [menuItemsData.items[0]],
-              }
-          }
-          MenuProps={{ elevation: 3 ,
-          }}
-          ButtonProps={{ variant: undefined }}
-        /> */}
 
 
 
@@ -776,7 +764,7 @@ export default function ActionItem({
               </MenuItem>)}
             {global.jiraCode ?
 
-              <MenuItem aria-controls={openProjectList ? 'long-menu' : undefined}
+              <MenuItem aria-controls={openProjectList ? 'project-list' : undefined}
                 aria-expanded={openProjectList ? 'true' : undefined}
                 aria-haspopup="true"
                 onClick={loadJiraProjects}
@@ -799,8 +787,10 @@ export default function ActionItem({
 
               :
               <MenuItem
-
-                onClick={connect}
+              aria-controls={openProjectList ? 'project-list' : undefined}
+                aria-expanded={openProjectList ? 'true' : undefined}
+                aria-haspopup="true"
+                onClick={(event)=> {setAnchorEl1(event.currentTarget); connect()} }
               >
                 <ListItemIcon>
                   <Icons.UserCircleOutline
@@ -815,7 +805,7 @@ export default function ActionItem({
                   className="actionItemMenuText"
                   style={{ color: '#343434' }}
                 >
-                  Connect to Jira
+                  Export to Jira
                 </ListItemText>
               </MenuItem>}
 
@@ -845,14 +835,53 @@ export default function ActionItem({
             </MenuItem>
           </Menu>
         </ListItemAvatar>
+        {/* <NestedDropdown
+          menuItemsData={
+            global.user.userType == 2
+              ? menuItemsData
+              : {
+                label: menuItemsData.label,
+                items: [menuItemsData.items[0]],
+              }
+          }
+          MenuProps={{ elevation: 3 ,
+          }}
+          ButtonProps={{ variant: undefined }}
+        />  */}
       </ListItem>
+      
       {/* Menus for Users */}
       <Menu id="project-list"
         MenuListProps={{
           'aria-labelledby': 'project-button',
         }}
         open={openProjectList}
-
+        anchorEl={anchorEl1}
+        onClose={()=>{setAnchorEl1(null)}}
+        PaperProps={{
+          elevation: 0,
+          sx: {
+            border: '1px solid #cccccc',
+            boxShadow: '0px 1px 10px rgba(0, 0, 0, 0.15)',
+            borderRadius: '10px',
+            background: '#ffffff',
+            overflow: 'visible',
+            '&:before': {
+              content: '""',
+              display: 'block',
+              position: 'absolute',
+              top: 0,
+              right: 14,
+              width: 10,
+              height: 10,
+              bgcolor: 'background.paper',
+              transform: 'translateY(-50%) rotate(45deg)',
+              zIndex: 0,
+            },
+          },
+        }}
+        transformOrigin={{ horizontal: 'right', vertical: 'top' }}
+        anchorOrigin={{ horizontal: 'left', vertical: 'bottom' }}
       >
         project1
       </Menu>
@@ -977,6 +1006,8 @@ export default function ActionItem({
             )
         )}
       </Menu>
+
+     
     </>
   );
 }
