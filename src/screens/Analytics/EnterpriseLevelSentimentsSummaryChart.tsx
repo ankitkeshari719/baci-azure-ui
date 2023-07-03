@@ -2,16 +2,12 @@ import React, { useState } from 'react';
 import { getParticipantsCount } from '../../helpers/msal/services';
 import ReactApexChart from 'react-apexcharts';
 import { ApexOptions } from 'apexcharts';
+import { Box, Grid } from '@mui/material';
 import {
-  Box,
-  Grid,
-} from '@mui/material';
-import {
-  H1RegularTypography,
-  H3RegularTypography,
+  H2SemiBoldTypography,
 } from '../../components/CustomizedTypography';
-import { ContainedButton } from '../../components';
-import { useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
+import * as Icons from 'heroicons-react';
 
 export default function EnterpriseLevelSentimentsSummaryChart() {
   const [participantsCounts, setParticipantsCounts] = useState<any>([]);
@@ -107,12 +103,13 @@ export default function EnterpriseLevelSentimentsSummaryChart() {
     grid: {
       show: true,
       borderColor: '#CCCCCC',
-      strokeDashArray: 3,
+      strokeDashArray: 0,
       position: 'front',
       xaxis: {
         lines: {
           show: true,
         },
+        
       },
       yaxis: {
         lines: {
@@ -122,26 +119,15 @@ export default function EnterpriseLevelSentimentsSummaryChart() {
     },
     legend: {
       show: true,
-      position: 'top',
-      horizontalAlign: 'right',
+      position: 'bottom',
+      horizontalAlign: 'center',
     },
   };
 
   return (
     <Box sx={{ overflowY: 'auto' }} height="calc(var(--app-height))">
       <Box sx={{ margin: '48px' }}>
-        {/* Analytics Title */}
-        <Box
-          sx={{
-            width: '100%',
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-          }}
-        >
-          <H1RegularTypography label="Analytics" />
-        </Box>
-        {/* Back Button */}
+        {/* Route Path */}
         <Box
           sx={{
             width: '100%',
@@ -150,26 +136,29 @@ export default function EnterpriseLevelSentimentsSummaryChart() {
             justifyContent: 'flex-start',
           }}
         >
-          <ContainedButton
-            id="go_back_to_analytics"
-            name="Back"
-            onClick={() => navigate('/analytics/')}
-            size={'small'}
-          />
+          <Link to={'/analytics/'}>Analytics </Link>&nbsp;\ Overall summary
         </Box>
-        {/* Chart Title */}
+        {/* Back Button & Chart Title */}
         <Box
           sx={{
             width: '100%',
             display: 'flex',
             alignItems: 'center',
-            justifyContent: 'center',
-            marginTop: '48px',
+            justifyContent: 'flex-start',
+            marginTop: '12px',
           }}
         >
-          <H3RegularTypography
-            label="Analytics - Enterprise Level - Sentiments - Overall Summary Paragraph and Word Cloud."
-            style={{ color: '#767676' }}
+          <Icons.ArrowCircleLeftOutline
+            size={32}
+            style={{
+              cursor: 'pointer',
+              color: '#159ADD',
+            }}
+            onClick={() => navigate('/analytics/')}
+          />
+          <H2SemiBoldTypography
+            label="Overall summary paragraph and word cloud"
+            style={{ color: '#2C69A1', marginLeft: '12px' }}
           />
         </Box>
         {/* Chart */}

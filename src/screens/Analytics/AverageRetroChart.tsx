@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { getRetrosCount } from '../../helpers/msal/services';
 import ReactApexChart from 'react-apexcharts';
 import { ApexOptions } from 'apexcharts';
-import { useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import {
   Box,
   Grid,
@@ -14,11 +14,8 @@ import {
   styled,
   tableCellClasses,
 } from '@mui/material';
-import {
-  H1RegularTypography,
-  H3RegularTypography,
-} from '../../components/CustomizedTypography';
-import { ContainedButton } from '../../components';
+import { H2SemiBoldTypography } from '../../components/CustomizedTypography';
+import * as Icons from 'heroicons-react';
 
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
   [`&.${tableCellClasses.head}`]: {
@@ -80,7 +77,7 @@ export default function AverageRetroChart() {
       },
     },
     title: {
-      text: 'Avg. Retro over time per month',
+      text: 'Avg. Sessions over time per month',
       style: {
         fontFamily: 'Poppins',
         fontWeight: '400',
@@ -89,7 +86,7 @@ export default function AverageRetroChart() {
       },
     },
     subtitle: {
-      text: '154 Retro',
+      text: '61 Sessions',
       style: {
         fontFamily: 'Poppins',
         fontWeight: '400',
@@ -126,8 +123,8 @@ export default function AverageRetroChart() {
     grid: {
       show: true,
       borderColor: '#CCCCCC',
-      strokeDashArray: 3,
-      position: 'front',
+      strokeDashArray: 0,
+      position: 'back',
       xaxis: {
         lines: {
           show: true,
@@ -139,7 +136,7 @@ export default function AverageRetroChart() {
         },
       },
     },
-    colors:['#0E9CFF'],
+    colors: ['#0E9CFF'],
     legend: {
       show: true,
       position: 'top',
@@ -151,18 +148,7 @@ export default function AverageRetroChart() {
     <>
       <Box sx={{ overflowY: 'auto' }} height="calc(var(--app-height))">
         <Box sx={{ margin: '48px' }}>
-          {/* Analytics Title */}
-          <Box
-            sx={{
-              width: '100%',
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-            }}
-          >
-            <H1RegularTypography label="Analytics" />
-          </Box>
-          {/* Back Button */}
+          {/* Route Path */}
           <Box
             sx={{
               width: '100%',
@@ -171,45 +157,39 @@ export default function AverageRetroChart() {
               justifyContent: 'flex-start',
             }}
           >
-            <ContainedButton
-              id="go_back_to_analytics"
-              name="Back"
-              onClick={() => navigate('/analytics/')}
-              size={'small'}
-            />
+            <Link to={'/analytics/'}>Analytics </Link>&nbsp;\ Count of all Sessions
           </Box>
-          {/* Chart Title */}
+          {/* Back Button & Chart Title */}
           <Box
             sx={{
               width: '100%',
               display: 'flex',
               alignItems: 'center',
-              justifyContent: 'center',
-              marginTop: '48px',
+              justifyContent: 'flex-start',
+              marginTop: '12px',
             }}
           >
-            <H3RegularTypography
-              label="Analytics - Enterprise Level - Count of all retros over time."
-              style={{ color: '#767676' }}
+            <Icons.ArrowCircleLeftOutline
+              size={32}
+              style={{
+                cursor: 'pointer',
+                color: '#159ADD',
+              }}
+              onClick={() => navigate('/analytics/')}
+            />
+            <H2SemiBoldTypography
+              label="Count of all sessions"
+              style={{ color: '#2C69A1', marginLeft: '12px' }}
             />
           </Box>
           {/* Chart and table */}
           <Grid container spacing={2} sx={{ marginTop: '48px' }}>
-            <Grid item xs={12} md={8}>
-              <ReactApexChart
-                options={options}
-                series={series}
-                type="area"
-                width="850"
-                height="464"
-              />
-            </Grid>
             <Grid item xs={12} md={4} sx={{ padding: '0px !important' }}>
               <TableContainer>
                 <TableHead>
                   <TableRow>
-                    <StyledTableCell align="center">Month</StyledTableCell>
-                    <StyledTableCell align="center">
+                    <StyledTableCell align="left">Month</StyledTableCell>
+                    <StyledTableCell align="left">
                       No. of Retros
                     </StyledTableCell>
                   </TableRow>
@@ -233,6 +213,15 @@ export default function AverageRetroChart() {
                   })}
                 </TableBody>
               </TableContainer>
+            </Grid>
+            <Grid item xs={12} md={8}>
+              <ReactApexChart
+                options={options}
+                series={series}
+                type="area"
+                width="850"
+                height="464"
+              />
             </Grid>
           </Grid>
         </Box>

@@ -3,12 +3,9 @@ import { getEnterpriseLevelActionsCount } from '../../helpers/msal/services';
 import ReactApexChart from 'react-apexcharts';
 import { ApexOptions } from 'apexcharts';
 import { Box, Grid } from '@mui/material';
-import {
-  H1RegularTypography,
-  H3RegularTypography,
-} from '../../components/CustomizedTypography';
-import { ContainedButton } from '../../components';
-import { useNavigate } from 'react-router-dom';
+import { H2SemiBoldTypography } from '../../components/CustomizedTypography';
+import { Link, useNavigate } from 'react-router-dom';
+import * as Icons from 'heroicons-react';
 
 export default function EnterpriseLevelActionsCountChart() {
   const [enterpriseLevelActions, setEnterpriseLevelActions] = useState<any>([]);
@@ -40,12 +37,12 @@ export default function EnterpriseLevelActionsCountChart() {
   const series = [
     //data on the y-axis
     {
-      name: 'Assigned',
-      data: assignedActions,
+      name: 'Completed Actions',
+      data: completedActions,
     },
     {
-      name: 'Completed',
-      data: completedActions,
+      name: 'Action Pending',
+      data: assignedActions,
     },
   ];
 
@@ -58,7 +55,6 @@ export default function EnterpriseLevelActionsCountChart() {
       id: 'bar',
       height: 350,
       stacked: true,
-      //   stackType: '100%',
       zoom: {
         enabled: false,
       },
@@ -88,8 +84,8 @@ export default function EnterpriseLevelActionsCountChart() {
     grid: {
       show: true,
       borderColor: '#CCCCCC',
-      strokeDashArray: 3,
-      position: 'front',
+      strokeDashArray: 0,
+      position: 'back',
       xaxis: {
         lines: {
           show: true,
@@ -104,8 +100,8 @@ export default function EnterpriseLevelActionsCountChart() {
     colors: ['#2C69A1', '#159ADD'],
     legend: {
       show: true,
-      position: 'top',
-      horizontalAlign: 'left',
+      position: 'bottom',
+      horizontalAlign: 'center',
       offsetX: 40,
     },
     fill: {
@@ -121,18 +117,7 @@ export default function EnterpriseLevelActionsCountChart() {
   return (
     <Box sx={{ overflowY: 'auto' }} height="calc(var(--app-height))">
       <Box sx={{ margin: '48px' }}>
-        {/* Analytics Title */}
-        <Box
-          sx={{
-            width: '100%',
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-          }}
-        >
-          <H1RegularTypography label="Analytics" />
-        </Box>
-        {/* Back Button */}
+        {/* Route Path */}
         <Box
           sx={{
             width: '100%',
@@ -141,26 +126,29 @@ export default function EnterpriseLevelActionsCountChart() {
             justifyContent: 'flex-start',
           }}
         >
-          <ContainedButton
-            id="go_back_to_analytics"
-            name="Back"
-            onClick={() => navigate('/analytics/')}
-            size={'small'}
-          />
+          <Link to={'/analytics/'}>Analytics </Link>&nbsp;\ Count of actions
         </Box>
-        {/* Chart Title */}
+        {/* Back Button & Chart Title */}
         <Box
           sx={{
             width: '100%',
             display: 'flex',
             alignItems: 'center',
-            justifyContent: 'center',
-            marginTop: '48px',
+            justifyContent: 'flex-start',
+            marginTop: '12px',
           }}
         >
-          <H3RegularTypography
-            label="Analytics - Enterprise Level - Count of actions (assigned vs completed) all teams."
-            style={{ color: '#767676' }}
+          <Icons.ArrowCircleLeftOutline
+            size={32}
+            style={{
+              cursor: 'pointer',
+              color: '#159ADD',
+            }}
+            onClick={() => navigate('/analytics/')}
+          />
+          <H2SemiBoldTypography
+            label="Count of actions (Assigned vs Completed) all teams"
+            style={{ color: '#2C69A1', marginLeft: '12px' }}
           />
         </Box>
         {/* Chart */}
@@ -179,8 +167,8 @@ export default function EnterpriseLevelActionsCountChart() {
               options={options}
               series={series}
               type="bar"
-              width="850"
-              height="464"
+              width="1200"
+              height="500"
             />
           </Grid>
         </Grid>

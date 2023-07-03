@@ -3,12 +3,9 @@ import { getParticipantsCount } from '../../helpers/msal/services';
 import ReactApexChart from 'react-apexcharts';
 import { ApexOptions } from 'apexcharts';
 import { Box, Grid } from '@mui/material';
-import {
-  H1RegularTypography,
-  H3RegularTypography,
-} from '../../components/CustomizedTypography';
-import { ContainedButton } from '../../components';
-import { useNavigate } from 'react-router-dom';
+import { H2SemiBoldTypography } from '../../components/CustomizedTypography';
+import { Link, useNavigate } from 'react-router-dom';
+import * as Icons from 'heroicons-react';
 
 export default function EnterpriseLevelSentimentsThemeChart() {
   const [participantsCounts, setParticipantsCounts] = useState<any>([]);
@@ -104,7 +101,7 @@ export default function EnterpriseLevelSentimentsThemeChart() {
     grid: {
       show: true,
       borderColor: '#CCCCCC',
-      strokeDashArray: 3,
+      strokeDashArray: 0,
       position: 'front',
       xaxis: {
         lines: {
@@ -119,26 +116,15 @@ export default function EnterpriseLevelSentimentsThemeChart() {
     },
     legend: {
       show: true,
-      position: 'top',
-      horizontalAlign: 'right',
+      position: 'bottom',
+      horizontalAlign: 'center',
     },
   };
 
   return (
     <Box sx={{ overflowY: 'auto' }} height="calc(var(--app-height))">
       <Box sx={{ margin: '48px' }}>
-        {/* Analytics Title */}
-        <Box
-          sx={{
-            width: '100%',
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-          }}
-        >
-          <H1RegularTypography label="Analytics" />
-        </Box>
-        {/* Back Button */}
+        {/* Route Path */}
         <Box
           sx={{
             width: '100%',
@@ -147,26 +133,29 @@ export default function EnterpriseLevelSentimentsThemeChart() {
             justifyContent: 'flex-start',
           }}
         >
-          <ContainedButton
-            id="go_back_to_analytics"
-            name="Back"
-            onClick={() => navigate('/analytics/')}
-            size={'small'}
-          />
+          <Link to={'/analytics/'}>Analytics </Link>&nbsp;\ Key theme heatmap
         </Box>
-        {/* Chart Title */}
+        {/* Back Button & Chart Title */}
         <Box
           sx={{
             width: '100%',
             display: 'flex',
             alignItems: 'center',
-            justifyContent: 'center',
-            marginTop: '48px',
+            justifyContent: 'flex-start',
+            marginTop: '12px',
           }}
         >
-          <H3RegularTypography
-            label=".Analytics - Enterprise Level - Sentiments - Key Themes Heatmap."
-            style={{ color: '#767676' }}
+          <Icons.ArrowCircleLeftOutline
+            size={32}
+            style={{
+              cursor: 'pointer',
+              color: '#159ADD',
+            }}
+            onClick={() => navigate('/analytics/')}
+          />
+          <H2SemiBoldTypography
+            label="Key themes heatmap"
+            style={{ color: '#2C69A1', marginLeft: '12px' }}
           />
         </Box>
         {/* Chart */}
