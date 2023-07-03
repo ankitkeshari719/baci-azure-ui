@@ -83,22 +83,6 @@ export default function AnalyticsMainContainer() {
         >
           <H1RegularTypography label="Analytics" />
         </Box>
-        {/* Back Button */}
-        <Box
-          sx={{
-            width: '100%',
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'flex-start',
-          }}
-        >
-          <ContainedButton
-            id="go_back_to_analytics"
-            name="Back"
-            onClick={() => navigate(`/board/${retroId}/`)}
-            size={'small'}
-          />
-        </Box>
         <Grid container spacing={2} sx={{ marginTop: '48px' }}>
           {analyticsCards.map(analyticsCard => {
             return (

@@ -3,12 +3,9 @@ import { getEnterpriseLevelSentimentsMoods } from '../../helpers/msal/services';
 import ReactApexChart from 'react-apexcharts';
 import { ApexOptions } from 'apexcharts';
 import { Box, Grid } from '@mui/material';
-import {
-  H1RegularTypography,
-  H3RegularTypography,
-} from '../../components/CustomizedTypography';
-import { ContainedButton } from '../../components';
-import { useNavigate } from 'react-router-dom';
+import { H2SemiBoldTypography } from '../../components/CustomizedTypography';
+import { Link, useNavigate } from 'react-router-dom';
+import * as Icons from 'heroicons-react';
 
 export default function EnterpriseLevelSentimentsMoodsChart() {
   const [moods, setMoods] = useState<any>([]);
@@ -60,11 +57,13 @@ export default function EnterpriseLevelSentimentsMoodsChart() {
     xaxis: {
       categories: months,
     },
+    yaxis: {
+      max: 100,
+    },
     chart: {
       type: 'area',
       height: 350,
       stacked: true,
-      // stackType: '100%',
       zoom: {
         enabled: false,
       },
@@ -101,7 +100,7 @@ export default function EnterpriseLevelSentimentsMoodsChart() {
     grid: {
       show: true,
       borderColor: '#CCCCCC',
-      strokeDashArray: 3,
+      strokeDashArray: 0,
       position: 'front',
       xaxis: {
         lines: {
@@ -116,8 +115,8 @@ export default function EnterpriseLevelSentimentsMoodsChart() {
     },
     legend: {
       show: true,
-      position: 'top',
-      horizontalAlign: 'left',
+      position: 'bottom',
+      horizontalAlign: 'center',
       offsetX: 40,
     },
   };
@@ -125,18 +124,7 @@ export default function EnterpriseLevelSentimentsMoodsChart() {
   return (
     <Box sx={{ overflowY: 'auto' }} height="calc(var(--app-height))">
       <Box sx={{ margin: '48px' }}>
-        {/* Analytics Title */}
-        <Box
-          sx={{
-            width: '100%',
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-          }}
-        >
-          <H1RegularTypography label="Analytics" />
-        </Box>
-        {/* Back Button */}
+        {/* Route Path */}
         <Box
           sx={{
             width: '100%',
@@ -145,26 +133,29 @@ export default function EnterpriseLevelSentimentsMoodsChart() {
             justifyContent: 'flex-start',
           }}
         >
-          <ContainedButton
-            id="go_back_to_analytics"
-            name="Back"
-            onClick={() => navigate('/analytics/')}
-            size={'small'}
-          />
+          <Link to={'/analytics/'}>Analytics </Link>&nbsp;\ Participants Mood
         </Box>
-        {/* Chart Title */}
+        {/* Back Button & Chart Title */}
         <Box
           sx={{
             width: '100%',
             display: 'flex',
             alignItems: 'center',
-            justifyContent: 'center',
-            marginTop: '48px',
+            justifyContent: 'flex-start',
+            marginTop: '12px',
           }}
         >
-          <H3RegularTypography
-            label="Analytics - Enterprise Level - Sentiments - Moods."
-            style={{ color: '#767676' }}
+          <Icons.ArrowCircleLeftOutline
+            size={32}
+            style={{
+              cursor: 'pointer',
+              color: '#159ADD',
+            }}
+            onClick={() => navigate('/analytics/')}
+          />
+          <H2SemiBoldTypography
+            label="Participants Mood"
+            style={{ color: '#2C69A1', marginLeft: '12px' }}
           />
         </Box>
         {/* Chart */}
@@ -183,8 +174,8 @@ export default function EnterpriseLevelSentimentsMoodsChart() {
               options={options}
               series={series}
               type="area"
-              width="850"
-              height="464"
+              width="1200"
+              height="500"
             />
           </Grid>
         </Grid>
