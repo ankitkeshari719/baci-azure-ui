@@ -46,6 +46,8 @@ export default function AverageParticipantChart() {
   const [months, setMonths] = useState([]);
   const [fromDate, setFromDate] = useState<string>('10');
   const [toDate, setToDate] = useState<string>('15');
+  const [totalAverageParticipants, setTotalAverageParticipants] =
+    useState<number>();
   const navigate = useNavigate();
 
   React.useEffect(() => {
@@ -61,6 +63,11 @@ export default function AverageParticipantChart() {
             res.result?.map((item: any) => item.averageParticipants)
           );
           setMonths(res.result?.map((item: any) => item.month));
+          let temp = 0;
+          res.result.map((item: any) => {
+            temp = temp + item.averageParticipants;
+          });
+          setTotalAverageParticipants(temp);
         }
       },
       err => {
@@ -99,7 +106,7 @@ export default function AverageParticipantChart() {
       },
     },
     subtitle: {
-      text: '154 Participants',
+      text: totalAverageParticipants + ' Participants',
       style: {
         fontFamily: 'Poppins',
         fontWeight: '400',

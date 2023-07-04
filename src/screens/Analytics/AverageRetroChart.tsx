@@ -46,6 +46,7 @@ export default function AverageRetroChart() {
   const [months, setMonths] = useState([]);
   const [fromDate, setFromDate] = useState<string>('10');
   const [toDate, setToDate] = useState<string>('15');
+  const [totalAverageSessions, setTotalAverageSessions] = useState<number>();
   const navigate = useNavigate();
 
   React.useEffect(() => {
@@ -59,6 +60,11 @@ export default function AverageRetroChart() {
           setRetrosCounts(res.result);
           setAverageRetros(res.result?.map((item: any) => item.averageRetros));
           setMonths(res.result?.map((item: any) => item.month));
+          let temp = 0;
+          res.result.map((item: any) => {
+            temp = temp + item.averageRetros;
+          });
+          setTotalAverageSessions(temp);
         }
       },
       err => {
@@ -97,7 +103,7 @@ export default function AverageRetroChart() {
       },
     },
     subtitle: {
-      text: '61 Sessions',
+      text: totalAverageSessions + ' Sessions',
       style: {
         fontFamily: 'Poppins',
         fontWeight: '400',
