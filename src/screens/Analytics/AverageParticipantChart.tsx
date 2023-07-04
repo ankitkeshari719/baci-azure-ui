@@ -24,7 +24,7 @@ import {
 } from '../../components/CustomizedTypography';
 import { Link, useNavigate } from 'react-router-dom';
 import * as Icons from 'heroicons-react';
-import { MONTH_SELECTORS } from './const';
+import { MONTH_SELECTORS, MenuProps } from './const';
 
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
   [`&.${tableCellClasses.head}`]: {
@@ -46,6 +46,8 @@ export default function AverageParticipantChart() {
   const [months, setMonths] = useState([]);
   const [fromDate, setFromDate] = useState<string>('10');
   const [toDate, setToDate] = useState<string>('15');
+  const [totalAverageParticipants, setTotalAverageParticipants] =
+    useState<number>();
   const navigate = useNavigate();
 
   React.useEffect(() => {
@@ -61,6 +63,11 @@ export default function AverageParticipantChart() {
             res.result?.map((item: any) => item.averageParticipants)
           );
           setMonths(res.result?.map((item: any) => item.month));
+          let temp = 0;
+          res.result.map((item: any) => {
+            temp = temp + item.averageParticipants;
+          });
+          setTotalAverageParticipants(temp);
         }
       },
       err => {
@@ -99,7 +106,7 @@ export default function AverageParticipantChart() {
       },
     },
     subtitle: {
-      text: '154 Participants',
+      text: totalAverageParticipants + ' Participants',
       style: {
         fontFamily: 'Poppins',
         fontWeight: '400',
@@ -212,27 +219,48 @@ export default function AverageParticipantChart() {
                 display: 'flex',
                 flexDirection: 'row',
                 alignItems: 'center',
+                justifyContent: 'start',
+                marginTop: '16px',
               }}
             >
               {/* Select Range Title */}
               <ButtonLabelTypography
-                label="Select Range"
+                label="Select Range:"
                 style={{
                   color: '#343434',
                 }}
               />
               {/* From Date */}
               <Box
-                sx={{ minWidth: 120, marginLeft: '8px', marginRight: '8px' }}
+                sx={{ minWidth: 120, marginLeft: '16px', marginRight: '16px' }}
               >
                 <FormControl fullWidth>
-                  <InputLabel id="from-Date">From</InputLabel>
                   <Select
+                    sx={{
+                      fieldset: {
+                        border: 'none',
+                        opacity: 1,
+                        color: '#4E4E4E',
+                      },
+                    }}
                     labelId="from-Date"
                     id="from_date"
                     value={fromDate}
                     label="From"
                     onChange={handleFromDate}
+                    IconComponent={props => (
+                      <Icons.ChevronDownOutline
+                        size={24}
+                        color="#4E4E4E"
+                        style={{
+                          cursor: 'pointer',
+                          position: 'absolute',
+                          top: 'calc(50% - 0.8em)',
+                        }}
+                        {...props}
+                      />
+                    )}
+                    MenuProps={MenuProps}
                   >
                     {MONTH_SELECTORS.map(month_selector => {
                       return (
@@ -247,16 +275,41 @@ export default function AverageParticipantChart() {
                   </Select>
                 </FormControl>
               </Box>
+              <ButtonLabelTypography
+                label="To"
+                style={{
+                  color: '#343434',
+                }}
+              />
               {/*To Date */}
-              <Box sx={{ minWidth: 120 }}>
+              <Box sx={{ minWidth: 120, marginLeft: '16px' }}>
                 <FormControl fullWidth>
-                  <InputLabel id="to-Date">To</InputLabel>
                   <Select
+                    sx={{
+                      fieldset: {
+                        border: 'none',
+                        opacity: 1,
+                        color: '#4E4E4E',
+                      },
+                    }}
                     labelId="to-Date"
                     id="to_date"
                     value={toDate}
                     label="To"
                     onChange={handleToDate}
+                    IconComponent={props => (
+                      <Icons.ChevronDownOutline
+                        size={24}
+                        color="#4E4E4E"
+                        style={{
+                          cursor: 'pointer',
+                          position: 'absolute',
+                          top: 'calc(50% - 0.8em)',
+                        }}
+                        {...props}
+                      />
+                    )}
+                    MenuProps={MenuProps}
                   >
                     {MONTH_SELECTORS.map(month_selector => {
                       return (

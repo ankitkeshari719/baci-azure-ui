@@ -2,11 +2,22 @@ import React, { useState } from 'react';
 import { getEnterpriseLevelSentimentsMoods } from '../../helpers/msal/services';
 import ReactApexChart from 'react-apexcharts';
 import { ApexOptions } from 'apexcharts';
-import { Box, FormControl, Grid, InputLabel, MenuItem, Select, SelectChangeEvent } from '@mui/material';
-import { ButtonLabelTypography, H2SemiBoldTypography } from '../../components/CustomizedTypography';
+import {
+  Box,
+  FormControl,
+  Grid,
+  InputLabel,
+  MenuItem,
+  Select,
+  SelectChangeEvent,
+} from '@mui/material';
+import {
+  ButtonLabelTypography,
+  H2SemiBoldTypography,
+} from '../../components/CustomizedTypography';
 import { Link, useNavigate } from 'react-router-dom';
 import * as Icons from 'heroicons-react';
-import { MONTH_SELECTORS } from './const';
+import { MONTH_SELECTORS, MenuProps } from './const';
 
 export default function EnterpriseLevelSentimentsMoodsChart() {
   const [moods, setMoods] = useState<any>([]);
@@ -176,25 +187,45 @@ export default function EnterpriseLevelSentimentsMoodsChart() {
             flexDirection: 'row',
             alignItems: 'center',
             justifyContent: 'center',
+            marginTop: '16px',
           }}
         >
           {/* Select Range Title */}
           <ButtonLabelTypography
-            label="Select Range"
+            label="Select Range:"
             style={{
               color: '#343434',
             }}
           />
           {/* From Date */}
-          <Box sx={{ minWidth: 120, marginLeft: '8px', marginRight: '8px' }}>
+          <Box sx={{ minWidth: 240, marginLeft: '16px', marginRight: '16px' }}>
             <FormControl fullWidth>
-              <InputLabel id="from-Date">From</InputLabel>
               <Select
+                sx={{
+                  fieldset: {
+                    border: 'none',
+                    opacity: 1,
+                    color: '#4E4E4E',
+                  },
+                }}
                 labelId="from-Date"
                 id="from_date"
                 value={fromDate}
                 label="From"
                 onChange={handleFromDate}
+                IconComponent={props => (
+                  <Icons.ChevronDownOutline
+                    size={24}
+                    color="#4E4E4E"
+                    style={{
+                      cursor: 'pointer',
+                      position: 'absolute',
+                      top: 'calc(50% - 0.8em)',
+                    }}
+                    {...props}
+                  />
+                )}
+                MenuProps={MenuProps}
               >
                 {MONTH_SELECTORS.map(month_selector => {
                   return (
@@ -206,16 +237,41 @@ export default function EnterpriseLevelSentimentsMoodsChart() {
               </Select>
             </FormControl>
           </Box>
+          <ButtonLabelTypography
+            label="To"
+            style={{
+              color: '#343434',
+            }}
+          />
           {/*To Date */}
-          <Box sx={{ minWidth: 120 }}>
+          <Box sx={{ minWidth: 240, marginLeft: '16px' }}>
             <FormControl fullWidth>
-              <InputLabel id="to-Date">To</InputLabel>
               <Select
+                sx={{
+                  fieldset: {
+                    border: 'none',
+                    opacity: 1,
+                    color: '#4E4E4E',
+                  },
+                }}
                 labelId="to-Date"
                 id="to_date"
                 value={toDate}
                 label="To"
                 onChange={handleToDate}
+                IconComponent={props => (
+                  <Icons.ChevronDownOutline
+                    size={24}
+                    color="#4E4E4E"
+                    style={{
+                      cursor: 'pointer',
+                      position: 'absolute',
+                      top: 'calc(50% - 0.8em)',
+                    }}
+                    {...props}
+                  />
+                )}
+                MenuProps={MenuProps}
               >
                 {MONTH_SELECTORS.map(month_selector => {
                   return (
