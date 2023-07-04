@@ -1,11 +1,15 @@
 import React, { useState } from 'react';
 import { getDummyChartData } from '../../helpers/msal/services';
-import Chart from 'react-apexcharts';
 import ReactApexChart from 'react-apexcharts';
+import { H1RegularTypography } from '../../components/CustomizedTypography';
+import { Box } from '@mui/material';
+import * as Icons from 'heroicons-react';
+import { useNavigate } from 'react-router-dom';
 
 export default function DummyChart() {
   const [averageTemp, setAverageTemp] = useState([]);
   const [date, setDate] = useState([]);
+  const navigate = useNavigate();
 
   React.useEffect(() => {
     handleGetDummyChartData();
@@ -42,15 +46,40 @@ export default function DummyChart() {
   };
 
   return (
-    <>
-      <Chart options={options} series={series} type="bar" width="650" />
-      <Chart options={options} series={series} type="line" width="650" />
+    <Box
+      sx={{
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+        flexDirection: 'column',
+        padding: '48px',
+      }}
+    >
+      {/* Back Button & Chart Title */}
+      <Box
+        sx={{
+          width: '100%',
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'flex-start',
+        }}
+      >
+        <Icons.ArrowCircleLeftOutline
+          size={32}
+          style={{
+            cursor: 'pointer',
+            color: '#159ADD',
+          }}
+          onClick={() => navigate('/analytics/')}
+        />
+        <H1RegularTypography label="Dummy Chart for R&D" />
+      </Box>
       <ReactApexChart
         options={options}
         series={series}
-        type="line"
+        type="bar"
         width="650"
       />
-    </>
+    </Box>
   );
 }

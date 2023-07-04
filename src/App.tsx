@@ -101,11 +101,11 @@ export default function App({ instance }: AppProps) {
                           <Route path="" element={<AnalyticsMainContainer />} />
                           <Route
                             path="teamLevelActionsCount"
-                            element={<TeamLevelActionsCountChart />}
+                            element={<DummyChart />}
                           />
                           <Route
                             path="enterpriseLevelActionsCount"
-                            element={<EnterpriseLevelActionsCountChart />}
+                            element={<DummyChart />}
                           />
                           <Route
                             path="enterpriseLevelParticipantsCount"
@@ -117,15 +117,15 @@ export default function App({ instance }: AppProps) {
                           />
                           <Route
                             path="enterpriseLevelSentimentsSummary"
-                            element={<EnterpriseLevelSentimentsSummaryChart />}
+                            element={<DummyChart />}
                           />
                           <Route
                             path="enterpriseLevelSentimentsThemes"
-                            element={<EnterpriseLevelSentimentsThemeChart />}
+                            element={<DummyChart />}
                           />
                           <Route
                             path="enterpriseLevelSentimentsMoods"
-                            element={<EnterpriseLevelSentimentsMoodsChart />}
+                            element={<DummyChart />}
                           />
                         </Route>
                         <Route
