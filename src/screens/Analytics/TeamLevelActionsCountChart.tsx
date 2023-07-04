@@ -2,26 +2,27 @@ import React, { useState } from 'react';
 import { getTeamLevelActionsCount } from '../../helpers/msal/services';
 import ReactApexChart from 'react-apexcharts';
 import { ApexOptions } from 'apexcharts';
-import { Box, Grid } from '@mui/material';
-import {
-  H2SemiBoldTypography,
-} from '../../components/CustomizedTypography';
+import { Box, FormControl, Grid, InputLabel, MenuItem, Select, SelectChangeEvent } from '@mui/material';
+import { ButtonLabelTypography, H2SemiBoldTypography } from '../../components/CustomizedTypography';
 import { Link, useNavigate } from 'react-router-dom';
 import * as Icons from 'heroicons-react';
+import { MONTH_SELECTORS } from './const';
 
 export default function TeamLevelActionsCountChart() {
   const [teamLevelActions, setTeamLevelActions] = useState<any>([]);
   const [assignedActions, setAssignedActions] = useState([]);
   const [completedActions, setCompletedActions] = useState([]);
   const [months, setMonths] = useState([]);
+  const [fromDate, setFromDate] = useState<string>('10');
+  const [toDate, setToDate] = useState<string>('15');
   const navigate = useNavigate();
 
   React.useEffect(() => {
     handleGetTeamLevelActionsCountData();
-  }, []);
+  }, [fromDate, toDate]);
 
   const handleGetTeamLevelActionsCountData = async () => {
-    await getTeamLevelActionsCount().then(
+    await getTeamLevelActionsCount(fromDate, toDate).then(
       res => {
         if (res && res.result) {
           setTeamLevelActions(res.result);
@@ -116,6 +117,14 @@ export default function TeamLevelActionsCountChart() {
     },
   };
 
+  const handleFromDate = (event: SelectChangeEvent) => {
+    setFromDate(event.target.value as string);
+  };
+
+  const handleToDate = (event: SelectChangeEvent) => {
+    setToDate(event.target.value as string);
+  };
+
   return (
     <Box sx={{ overflowY: 'auto' }} height="calc(var(--app-height))">
       <Box sx={{ margin: '48px' }}>
@@ -152,6 +161,65 @@ export default function TeamLevelActionsCountChart() {
             label="Count of actions (Assigned vs Completed)"
             style={{ color: '#2C69A1', marginLeft: '12px' }}
           />
+        </Box>
+        {/* Selector */}
+        <Box
+          sx={{
+            display: 'flex',
+            flexDirection: 'row',
+            alignItems: 'center',
+            justifyContent: 'center'
+          }}
+        >
+          {/* Select Range Title */}
+          <ButtonLabelTypography
+            label="Select Range"
+            style={{
+              color: '#343434',
+            }}
+          />
+          {/* From Date */}
+          <Box sx={{ minWidth: 120, marginLeft: '8px', marginRight: '8px' }}>
+            <FormControl fullWidth>
+              <InputLabel id="from-Date">From</InputLabel>
+              <Select
+                labelId="from-Date"
+                id="from_date"
+                value={fromDate}
+                label="From"
+                onChange={handleFromDate}
+              >
+                {MONTH_SELECTORS.map(month_selector => {
+                  return (
+                    <MenuItem value={month_selector.id} key={month_selector.id}>
+                      {month_selector.month}
+                    </MenuItem>
+                  );
+                })}
+              </Select>
+            </FormControl>
+          </Box>
+          {/*To Date */}
+          <Box sx={{ minWidth: 120 }}>
+            <FormControl fullWidth>
+              <InputLabel id="to-Date">To</InputLabel>
+              <Select
+                labelId="to-Date"
+                id="to_date"
+                value={toDate}
+                label="To"
+                onChange={handleToDate}
+              >
+                {MONTH_SELECTORS.map(month_selector => {
+                  return (
+                    <MenuItem value={month_selector.id} key={month_selector.id}>
+                      {month_selector.month}
+                    </MenuItem>
+                  );
+                })}
+              </Select>
+            </FormControl>
+          </Box>
         </Box>
         {/* Chart */}
         <Grid

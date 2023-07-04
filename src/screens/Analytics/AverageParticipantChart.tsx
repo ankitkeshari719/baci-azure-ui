@@ -4,7 +4,12 @@ import ReactApexChart from 'react-apexcharts';
 import { ApexOptions } from 'apexcharts';
 import {
   Box,
+  FormControl,
   Grid,
+  InputLabel,
+  MenuItem,
+  Select,
+  SelectChangeEvent,
   TableBody,
   TableCell,
   TableContainer,
@@ -13,9 +18,13 @@ import {
   styled,
   tableCellClasses,
 } from '@mui/material';
-import { H2SemiBoldTypography } from '../../components/CustomizedTypography';
+import {
+  ButtonLabelTypography,
+  H2SemiBoldTypography,
+} from '../../components/CustomizedTypography';
 import { Link, useNavigate } from 'react-router-dom';
 import * as Icons from 'heroicons-react';
+import { MONTH_SELECTORS } from './const';
 
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
   [`&.${tableCellClasses.head}`]: {
@@ -35,14 +44,16 @@ export default function AverageParticipantChart() {
   const [participantsCounts, setParticipantsCounts] = useState<any>([]);
   const [averageParticipants, setAverageParticipants] = useState([]);
   const [months, setMonths] = useState([]);
+  const [fromDate, setFromDate] = useState<string>('10');
+  const [toDate, setToDate] = useState<string>('15');
   const navigate = useNavigate();
 
   React.useEffect(() => {
     handleGetParticipantChartData();
-  }, []);
+  }, [fromDate, toDate]);
 
   const handleGetParticipantChartData = async () => {
-    await getParticipantsCount().then(
+    await getParticipantsCount(fromDate, toDate).then(
       res => {
         if (res && res.result) {
           setParticipantsCounts(res.result);
@@ -146,6 +157,14 @@ export default function AverageParticipantChart() {
     },
   };
 
+  const handleFromDate = (event: SelectChangeEvent) => {
+    setFromDate(event.target.value as string);
+  };
+
+  const handleToDate = (event: SelectChangeEvent) => {
+    setToDate(event.target.value as string);
+  };
+
   return (
     <Box sx={{ overflowY: 'auto' }} height="calc(var(--app-height))">
       <Box sx={{ margin: '48px' }}>
@@ -158,7 +177,8 @@ export default function AverageParticipantChart() {
             justifyContent: 'flex-start',
           }}
         >
-          <Link to={'/analytics/'}>Analytics </Link>&nbsp;\ Count of participants
+          <Link to={'/analytics/'}>Analytics </Link>&nbsp;\ Count of
+          participants
         </Box>
         {/* Back Button & Chart Title */}
         <Box
@@ -186,34 +206,103 @@ export default function AverageParticipantChart() {
         {/* Chart and table */}
         <Grid container spacing={2} sx={{ marginTop: '48px' }}>
           <Grid item xs={12} md={4} sx={{ padding: '0px !important' }}>
-            <TableContainer>
-              <TableHead>
-                <TableRow>
-                  <StyledTableCell align="left">Month</StyledTableCell>
-                  <StyledTableCell align="left">
-                    Total No. of Participants
-                  </StyledTableCell>
-                </TableRow>
-              </TableHead>
-              <TableBody>
-                {participantsCounts.map((participantsCount: any) => {
-                  return (
-                    <TableRow key={participantsCount.id}>
-                      <StyledTableCell
-                        component="th"
-                        scope="row"
-                        align="center"
-                      >
-                        {participantsCount.month}
-                      </StyledTableCell>
-                      <StyledTableCell align="center">
-                        {participantsCount.averageParticipants}
-                      </StyledTableCell>
-                    </TableRow>
-                  );
-                })}
-              </TableBody>
-            </TableContainer>
+            {/* Selector */}
+            <Box
+              sx={{
+                display: 'flex',
+                flexDirection: 'row',
+                alignItems: 'center',
+              }}
+            >
+              {/* Select Range Title */}
+              <ButtonLabelTypography
+                label="Select Range"
+                style={{
+                  color: '#343434',
+                }}
+              />
+              {/* From Date */}
+              <Box
+                sx={{ minWidth: 120, marginLeft: '8px', marginRight: '8px' }}
+              >
+                <FormControl fullWidth>
+                  <InputLabel id="from-Date">From</InputLabel>
+                  <Select
+                    labelId="from-Date"
+                    id="from_date"
+                    value={fromDate}
+                    label="From"
+                    onChange={handleFromDate}
+                  >
+                    {MONTH_SELECTORS.map(month_selector => {
+                      return (
+                        <MenuItem
+                          value={month_selector.id}
+                          key={month_selector.id}
+                        >
+                          {month_selector.month}
+                        </MenuItem>
+                      );
+                    })}
+                  </Select>
+                </FormControl>
+              </Box>
+              {/*To Date */}
+              <Box sx={{ minWidth: 120 }}>
+                <FormControl fullWidth>
+                  <InputLabel id="to-Date">To</InputLabel>
+                  <Select
+                    labelId="to-Date"
+                    id="to_date"
+                    value={toDate}
+                    label="To"
+                    onChange={handleToDate}
+                  >
+                    {MONTH_SELECTORS.map(month_selector => {
+                      return (
+                        <MenuItem
+                          value={month_selector.id}
+                          key={month_selector.id}
+                        >
+                          {month_selector.month}
+                        </MenuItem>
+                      );
+                    })}
+                  </Select>
+                </FormControl>
+              </Box>
+            </Box>
+            {/* Table */}
+            <Box sx={{ marginTop: '48px' }}>
+              <TableContainer>
+                <TableHead>
+                  <TableRow>
+                    <StyledTableCell align="left">Month</StyledTableCell>
+                    <StyledTableCell align="left">
+                      Total No. of Participants
+                    </StyledTableCell>
+                  </TableRow>
+                </TableHead>
+                <TableBody>
+                  {participantsCounts.map((participantsCount: any) => {
+                    return (
+                      <TableRow key={participantsCount.id}>
+                        <StyledTableCell
+                          component="th"
+                          scope="row"
+                          align="center"
+                        >
+                          {participantsCount.month}
+                        </StyledTableCell>
+                        <StyledTableCell align="center">
+                          {participantsCount.averageParticipants}
+                        </StyledTableCell>
+                      </TableRow>
+                    );
+                  })}
+                </TableBody>
+              </TableContainer>
+            </Box>
           </Grid>
           <Grid item xs={12} md={8} sx={{ padding: '0px !important' }}>
             <ReactApexChart
