@@ -2,10 +2,15 @@ import React, { useState } from 'react';
 import { getRetrosCount } from '../../helpers/msal/services';
 import ReactApexChart from 'react-apexcharts';
 import { ApexOptions } from 'apexcharts';
-import { useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import {
   Box,
+  FormControl,
   Grid,
+  InputLabel,
+  MenuItem,
+  Select,
+  SelectChangeEvent,
   TableBody,
   TableCell,
   TableContainer,
@@ -15,10 +20,11 @@ import {
   tableCellClasses,
 } from '@mui/material';
 import {
-  H1RegularTypography,
-  H3RegularTypography,
+  ButtonLabelTypography,
+  H2SemiBoldTypography,
 } from '../../components/CustomizedTypography';
-import { ContainedButton } from '../../components';
+import * as Icons from 'heroicons-react';
+import { MONTH_SELECTORS } from './const';
 
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
   [`&.${tableCellClasses.head}`]: {
@@ -38,14 +44,16 @@ export default function AverageRetroChart() {
   const [retrosCounts, setRetrosCounts] = useState<any>([]);
   const [averageRetros, setAverageRetros] = useState([]);
   const [months, setMonths] = useState([]);
+  const [fromDate, setFromDate] = useState<string>('10');
+  const [toDate, setToDate] = useState<string>('15');
   const navigate = useNavigate();
 
   React.useEffect(() => {
     handleGetRetroChartData();
-  }, []);
+  }, [fromDate, toDate]);
 
   const handleGetRetroChartData = async () => {
-    await getRetrosCount().then(
+    await getRetrosCount(fromDate, toDate).then(
       res => {
         if (res && res.result) {
           setRetrosCounts(res.result);
@@ -80,7 +88,7 @@ export default function AverageRetroChart() {
       },
     },
     title: {
-      text: 'Avg. Retro over time per month',
+      text: 'Avg. Sessions over time per month',
       style: {
         fontFamily: 'Poppins',
         fontWeight: '400',
@@ -89,7 +97,7 @@ export default function AverageRetroChart() {
       },
     },
     subtitle: {
-      text: '154 Retro',
+      text: '61 Sessions',
       style: {
         fontFamily: 'Poppins',
         fontWeight: '400',
@@ -126,8 +134,8 @@ export default function AverageRetroChart() {
     grid: {
       show: true,
       borderColor: '#CCCCCC',
-      strokeDashArray: 3,
-      position: 'front',
+      strokeDashArray: 0,
+      position: 'back',
       xaxis: {
         lines: {
           show: true,
@@ -139,7 +147,7 @@ export default function AverageRetroChart() {
         },
       },
     },
-    colors:['#0E9CFF'],
+    colors: ['#0E9CFF'],
     legend: {
       show: true,
       position: 'top',
@@ -147,22 +155,19 @@ export default function AverageRetroChart() {
     },
   };
 
+  const handleFromDate = (event: SelectChangeEvent) => {
+    setFromDate(event.target.value as string);
+  };
+
+  const handleToDate = (event: SelectChangeEvent) => {
+    setToDate(event.target.value as string);
+  };
+
   return (
     <>
       <Box sx={{ overflowY: 'auto' }} height="calc(var(--app-height))">
         <Box sx={{ margin: '48px' }}>
-          {/* Analytics Title */}
-          <Box
-            sx={{
-              width: '100%',
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-            }}
-          >
-            <H1RegularTypography label="Analytics" />
-          </Box>
-          {/* Back Button */}
+          {/* Route Path */}
           <Box
             sx={{
               width: '100%',
@@ -171,30 +176,133 @@ export default function AverageRetroChart() {
               justifyContent: 'flex-start',
             }}
           >
-            <ContainedButton
-              id="go_back_to_analytics"
-              name="Back"
-              onClick={() => navigate('/analytics/')}
-              size={'small'}
-            />
+            <Link to={'/analytics/'}>Analytics </Link>&nbsp;\ Count of all
+            Sessions
           </Box>
-          {/* Chart Title */}
+          {/* Back Button & Chart Title */}
           <Box
             sx={{
               width: '100%',
               display: 'flex',
               alignItems: 'center',
-              justifyContent: 'center',
-              marginTop: '48px',
+              justifyContent: 'flex-start',
+              marginTop: '12px',
             }}
           >
-            <H3RegularTypography
-              label="Analytics - Enterprise Level - Count of all retros over time."
-              style={{ color: '#767676' }}
+            <Icons.ArrowCircleLeftOutline
+              size={32}
+              style={{
+                cursor: 'pointer',
+                color: '#159ADD',
+              }}
+              onClick={() => navigate('/analytics/')}
+            />
+            <H2SemiBoldTypography
+              label="Count of all sessions"
+              style={{ color: '#2C69A1', marginLeft: '12px' }}
             />
           </Box>
           {/* Chart and table */}
           <Grid container spacing={2} sx={{ marginTop: '48px' }}>
+            <Grid item xs={12} md={4} sx={{ padding: '0px !important' }}>
+              {/* Selector */}
+              <Box
+                sx={{
+                  display: 'flex',
+                  flexDirection: 'row',
+                  alignItems: 'center',
+                }}
+              >
+                {/* Select Range Title */}
+                <ButtonLabelTypography
+                  label="Select Range"
+                  style={{
+                    color: '#343434',
+                  }}
+                />
+                {/* From Date */}
+                <Box
+                  sx={{ minWidth: 120, marginLeft: '8px', marginRight: '8px' }}
+                >
+                  <FormControl fullWidth>
+                    <InputLabel id="from-Date">From</InputLabel>
+                    <Select
+                      labelId="from-Date"
+                      id="from_date"
+                      value={fromDate}
+                      label="From"
+                      onChange={handleFromDate}
+                    >
+                      {MONTH_SELECTORS.map(month_selector => {
+                        return (
+                          <MenuItem
+                            value={month_selector.id}
+                            key={month_selector.id}
+                          >
+                            {month_selector.month}
+                          </MenuItem>
+                        );
+                      })}
+                    </Select>
+                  </FormControl>
+                </Box>
+                {/*To Date */}
+                <Box sx={{ minWidth: 120 }}>
+                  <FormControl fullWidth>
+                    <InputLabel id="to-Date">To</InputLabel>
+                    <Select
+                      labelId="to-Date"
+                      id="to_date"
+                      value={toDate}
+                      label="To"
+                      onChange={handleToDate}
+                    >
+                      {MONTH_SELECTORS.map(month_selector => {
+                        return (
+                          <MenuItem
+                            value={month_selector.id}
+                            key={month_selector.id}
+                          >
+                            {month_selector.month}
+                          </MenuItem>
+                        );
+                      })}
+                    </Select>
+                  </FormControl>
+                </Box>
+              </Box>
+              {/* Table Container */}
+              <Box sx={{ marginTop: '48px' }}>
+                <TableContainer>
+                  <TableHead>
+                    <TableRow>
+                      <StyledTableCell align="left">Month</StyledTableCell>
+                      <StyledTableCell align="left">
+                        No. of Retros
+                      </StyledTableCell>
+                    </TableRow>
+                  </TableHead>
+                  <TableBody>
+                    {retrosCounts.map((retrosCount: any) => {
+                      return (
+                        <TableRow key={retrosCount.id}>
+                          <StyledTableCell
+                            component="th"
+                            scope="row"
+                            align="center"
+                          >
+                            {retrosCount.month}
+                          </StyledTableCell>
+                          <StyledTableCell align="center">
+                            {retrosCount.averageRetros}
+                          </StyledTableCell>
+                        </TableRow>
+                      );
+                    })}
+                  </TableBody>
+                </TableContainer>
+              </Box>
+            </Grid>
             <Grid item xs={12} md={8}>
               <ReactApexChart
                 options={options}
@@ -203,36 +311,6 @@ export default function AverageRetroChart() {
                 width="850"
                 height="464"
               />
-            </Grid>
-            <Grid item xs={12} md={4} sx={{ padding: '0px !important' }}>
-              <TableContainer>
-                <TableHead>
-                  <TableRow>
-                    <StyledTableCell align="center">Month</StyledTableCell>
-                    <StyledTableCell align="center">
-                      No. of Retros
-                    </StyledTableCell>
-                  </TableRow>
-                </TableHead>
-                <TableBody>
-                  {retrosCounts.map((retrosCount: any) => {
-                    return (
-                      <TableRow key={retrosCount.id}>
-                        <StyledTableCell
-                          component="th"
-                          scope="row"
-                          align="center"
-                        >
-                          {retrosCount.month}
-                        </StyledTableCell>
-                        <StyledTableCell align="center">
-                          {retrosCount.averageRetros}
-                        </StyledTableCell>
-                      </TableRow>
-                    );
-                  })}
-                </TableBody>
-              </TableContainer>
             </Grid>
           </Grid>
         </Box>

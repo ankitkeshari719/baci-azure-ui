@@ -21,7 +21,12 @@ import { BoardContext } from '../../contexts/BoardContext';
 import { ActionType, GlobalContext } from '../../contexts/GlobalContext';
 import { MAX_CARD_TEXT_LENGTH } from '../../constants';
 import { LazyLoadImage } from 'react-lazy-load-image-component';
-import { connectJira, listJiraProjects, listJiraMeta, createJiraIssue } from '../../helpers/msal/services';
+import {
+  connectJira,
+  listJiraProjects,
+  listJiraMeta,
+  createJiraIssue,
+} from '../../helpers/msal/services';
 import { NestedDropdown } from 'mui-nested-menu';
 import DyanamicDialog from '../../components/atoms/DyanamicDialog';
 
@@ -80,10 +85,9 @@ const [jiraProjects,setJiraProjects]=React.useState<any>([]);
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
   const [anchorEl1, setAnchorEl1] = React.useState<null | HTMLElement>(null);
   const open = Boolean(anchorEl);
-  const openProjectList = Boolean(anchorEl1)
+  const openProjectList = Boolean(anchorEl1);
   const [selectedActionForAssign, setSelectedActionForAssign] =
     React.useState<ActionInterface>();
-  const [jiraProject, setJiraProject] = React.useState<{ id: string, name: string }[]>();
   const [showDialog,setShowDialog]=React.useState<boolean>(false);
   const userReacted = !!(action.reacts || []).find(
     r => r.by === global.user.id
@@ -91,7 +95,11 @@ const [jiraProjects,setJiraProjects]=React.useState<any>([]);
 
   // For Main Menu
   const handleMainMenuClick = (event: React.MouseEvent<HTMLElement>) => {
-    if (ended || global.leaveRetro || (global.user.userType === 1 && isOtherParticipantAction)) {
+    if (
+      ended ||
+      global.leaveRetro ||
+      (global.user.userType === 1 && isOtherParticipantAction)
+    ) {
       return;
     }
     setMainAnchorEl(event.currentTarget);
@@ -202,55 +210,66 @@ const [jiraProjects,setJiraProjects]=React.useState<any>([]);
 
   //connect to jira
   const connect = async () => {
-    await connectJira(global.currentRetro?.id as string).then((res: any) => {
-
-      console.log("jira", res.response)
-      window.location.href = res.response;
-    }, error => {
-      console.log("error", error);
-    })
-
-  }
+    await connectJira(global.currentRetro?.id as string).then(
+      (res: any) => {
+        window.location.href = res.response;
+      },
+      error => {
+        console.log('error', error);
+      }
+    );
+  };
   const functionToGetArray = () => {
     const items: any = [];
     users.map((user, index) => {
       const userItem = {
-        label: global.user.id == user.userId ? user.userNickname : "You",
-        leftIcon: (<LazyLoadImage
-          width="32px !important"
-          height="32px !important"
-          style={{
-            borderRadius: '50%',
-          }}
+        label: global.user.id == user.userId ? user.userNickname : 'You',
+        leftIcon: (
+          <LazyLoadImage
+            width="32px !important"
+            height="32px !important"
+            style={{
+              borderRadius: '50%',
+            }}
+            src={'/avatars/animals/' + user.avatar + '.svg'}
+          ></LazyLoadImage>
+        ),
+        callback: () => handleAssign,
+        items: [
+          {
+            label: '   Edit   ',
+            leftIcon: (
+              <Icons.Pencil
+                size={18}
+                color="#676767"
+                style={{
+                  cursor: 'unset',
+                }}
+              />
+            ),
+            callback: () => (
+              openEditActionOption(action), handleMainMenuClose()
+            ),
+          },
+        ],
+      };
 
-          src={'/avatars/animals/' + user.avatar + '.svg'}
-        ></LazyLoadImage>),
-        callback: () => {
-          assignAction([action.id], user.userId);
-        },
+      items.push(userItem);
+    });
 
-      }
-
-      items.push(userItem)
-    })
-    if (action.assigneeId != "") {
-      const unAssignItem = {
-        label: 'Un-assign',
-        leftIcon: (<LazyLoadImage
-          width="32px !important"
-          height="32px !important"
-          style={{
-            borderRadius: '50%',
-          }}
-
-          src={'/svgs/DefaultUser.svg'}
-        ></LazyLoadImage>),
-        callback: () => {
-          assignAction([action.id], "");
-        },
-      }
-      items.push(unAssignItem);
-    }
+    // const abc: any = {
+    //   label: "user",
+    //   leftIcon: (
+    //     <Icons.TrashOutline
+    //       size={18}
+    //       color="#EA4335"
+    //       style={{
+    //         cursor: 'unset',
+    //       }}
+    //     />
+    //   ),
+    // }
+    // items.push(abc)
     return items;
   };
 
@@ -302,9 +321,7 @@ const [jiraProjects,setJiraProjects]=React.useState<any>([]);
             }}
           />
         ),
-        callback: () => (openEditActionOption(action),
-          handleMainMenuClose())
-
+        callback: () => (openEditActionOption(action), handleMainMenuClose()),
       },
       {
         label: '   Copy   ',
@@ -317,7 +334,7 @@ const [jiraProjects,setJiraProjects]=React.useState<any>([]);
             }}
           />
         ),
-        callback: () => (copyManageActions(action), handleMainMenuClose())
+        callback: () => (copyManageActions(action), handleMainMenuClose()),
       },
       {
         label: '    Assign to  ',
@@ -382,9 +399,8 @@ const [jiraProjects,setJiraProjects]=React.useState<any>([]);
           />
         ),
         callback: () => {
-          removeAction(action),
-            handleMainMenuClose()
-        }
+          removeAction(action), handleMainMenuClose();
+        },
       },
     ],
   };
@@ -396,30 +412,36 @@ setJiraProjects(loadJiraProjects());
   },[global.jiraCode])
   //load jira projects
   const loadJiraProjects = async (): Promise<string[]> => {
-    return await listJiraProjects(global.jiraCode as string).then((res: any) => {
-      console.log(res);
-      if (res.status == 401) {
-        dispatch({
-          type: ActionType.SET_JIRA_CODE,
-          payload: { jiraCode: "" },
-        });
-      }
-      return res.response;
-    }, (error: any) => {
-      console.log("error", error);
+    return await listJiraProjects(global.jiraCode as string).then(
+      (res: any) => {
+        if (res.status == 401) {
+          dispatch({
+            type: ActionType.SET_JIRA_CODE,
+            payload: { jiraCode: '' },
+          });
+        }
       
-      return [];
-    });
+        setJiraProjects(res.response);
+        return res.response;
+      },
+      (error: any) => {
+        console.log('error', error);
+        return [];
+      }
+    );
   };
   //load jira meta data
   const loadJiraMeta = async (projectId: string): Promise<string[]> => {
-    return await listJiraMeta(global.jiraCode as string, projectId).then((res: any) => {
-      console.log(res.response);
-      return res.response;
-    }, (error: any) => {
-      console.log("error", error);
-      return [];
-    });
+    return await listJiraMeta(global.jiraCode as string, projectId).then(
+      (res: any) => {
+        console.log(res.response);
+        return res.response;
+      },
+      (error: any) => {
+        console.log('error', error);
+        return [];
+      }
+    );
   };
 
   return (
@@ -565,7 +587,7 @@ setJiraProjects(loadJiraProjects());
               />
               {/* Limitation */}
               {editActionValue &&
-                editActionValue.length >= MAX_CARD_TEXT_LENGTH - 20 ? (
+              editActionValue.length >= MAX_CARD_TEXT_LENGTH - 20 ? (
                 <Typography
                   style={{
                     fontSize: '0.75rem',
@@ -693,18 +715,10 @@ setJiraProjects(loadJiraProjects());
           </Box>
         )}
 
-
-
-
-
-
-
-
-
         {/* Avatar */}
         {/* <ListItemAvatar>
           {action?.assigneeAvatar === '' ||
-            action.assigneeAvatar === undefined ? (
+          action.assigneeAvatar === undefined ? (
             <LazyLoadImage
               className="avatar"
               style={{
@@ -834,10 +848,11 @@ setJiraProjects(loadJiraProjects());
                 >
                   Assign
                 </ListItemText>
-              </MenuItem>)}
-            {global.jiraCode ?
-
-              <MenuItem aria-controls={openProjectList ? 'project-list' : undefined}
+              </MenuItem>
+            )}
+            {global.jiraCode ? (
+              <MenuItem
+                aria-controls={openProjectList ? 'project-list' : undefined}
                 aria-expanded={openProjectList ? 'true' : undefined}
                 aria-haspopup="true"
                 onClick={loadJiraProjects}
@@ -855,10 +870,11 @@ setJiraProjects(loadJiraProjects());
                   className="actionItemMenuText"
                   style={{ color: '#343434' }}
                 >
-                  Jira projects   </ListItemText> ̰
+                  Jira projects{' '}
+                </ListItemText>
+                 ̰
               </MenuItem>
-
-              :
+            ) : (
               <MenuItem
                 aria-controls={openProjectList ? 'project-list' : undefined}
                 aria-expanded={openProjectList ? 'true' : undefined}

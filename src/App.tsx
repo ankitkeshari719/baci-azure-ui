@@ -82,6 +82,11 @@ export default function App({ instance }: AppProps) {
                           <Route
                             path="/retrodetails"
                             element={<RetroDetails></RetroDetails>}
+                            />
+                        
+                          <Route
+                            path="enterpriseLevelActionsCount"
+                            element={<EnterpriseLevelActionsCountChart />}
                           />
                           <Route
                             path="/offboarding"
@@ -108,9 +113,10 @@ export default function App({ instance }: AppProps) {
                           <Route path="/analytics/">
                             <Route path="" element={<AnalyticsMainContainer />} />
                             <Route
-                              path="teamLevelActionsCount"
-                              element={<DummyChart />}
-                            />
+                            path="teamLevelActionsCount"
+                            element={<TeamLevelActionsCountChart />}
+                          />
+                          
                             <Route
                               path="enterpriseLevelActionsCount"
                               element={<DummyChart />}
@@ -151,6 +157,22 @@ export default function App({ instance }: AppProps) {
                           <Route
                             path="*"
                             element={<PageNotFound></PageNotFound>}
+                            />
+                            <Route
+                            path="enterpriseLevelRetrosCount"
+                            element={<AverageRetroChart />}
+                          />
+                          <Route
+                            path="enterpriseLevelSentimentsSummary"
+                            element={<EnterpriseLevelSentimentsSummaryChart />}
+                          />
+                          <Route
+                            path="enterpriseLevelSentimentsThemes"
+                            element={<EnterpriseLevelSentimentsThemeChart />}
+                          />
+                          <Route
+                            path="enterpriseLevelSentimentsMoods"
+                            element={<EnterpriseLevelSentimentsMoodsChart />}
                           />
                         </Routes>
                    

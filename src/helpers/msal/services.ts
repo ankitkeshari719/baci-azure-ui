@@ -220,7 +220,6 @@ export const connectJira = async (retroId: string): Promise<string> => {
   await fetch(API_URL + `/connectJira?retroId=${retroId}`, requestOptions)
     .then(response => response.json())
     .then(data => {
-      console.log(data);
       jiraURL = data;
     });
   return jiraURL;
@@ -235,7 +234,6 @@ export const getJiraToken = async (jiraCode: string): Promise<string> => {
   await fetch(API_URL + `/getJiraToken?jiraCode=${jiraCode}`, requestOptions)
     .then(response => response.json())
     .then(data => {
-      console.log(data);
       jiraAccessToken = data;
     });
   return jiraAccessToken;
@@ -253,7 +251,6 @@ export const listJiraProjects = async (jiraCode: string): Promise<string[]> => {
   )
     .then(response => response.json())
     .then(data => {
-      console.log(data);
       jiraProjects = data;
     });
   return jiraProjects;
@@ -274,7 +271,6 @@ export const listJiraMeta = async (
   )
     .then(response => response.json())
     .then(data => {
-      console.log(data);
       jiraProjects = data;
     });
   return jiraProjects;
@@ -301,7 +297,6 @@ export const createJiraIssue = async (
   await fetch(API_URL + `/createJiraIssue`, requestOptions)
     .then(response => response.json())
     .then(data => {
-      console.log(data);
       status = data;
     });
   return status;
@@ -322,43 +317,19 @@ export const getDummyChartData = async (): Promise<any> => {
   return dummyChartData;
 };
 
-// Api to get count of all participant over time
-export const getParticipantsCount = async (): Promise<any> => {
-  let participantsCountData;
-  const requestOptions = {
-    method: 'GET',
-  };
-  await fetch(API_URL + '/getParticipantsCount', requestOptions)
-    .then(response => response.json())
-    .then(data => {
-      participantsCountData = data;
-    });
-
-  return participantsCountData;
-};
-
-// Api to get count of all retros over time
-export const getRetrosCount = async (): Promise<any> => {
-  let retrosCountData;
-  const requestOptions = {
-    method: 'GET',
-  };
-  await fetch(API_URL + '/getRetrosCount', requestOptions)
-    .then(response => response.json())
-    .then(data => {
-      retrosCountData = data;
-    });
-
-  return retrosCountData;
-};
-
 // Api to get Team Level Actions Count
-export const getTeamLevelActionsCount = async (): Promise<any> => {
+export const getTeamLevelActionsCount = async (
+  fromDate: string,
+  toDate: string
+): Promise<any> => {
   let teamLevelActionsCountData;
   const requestOptions = {
     method: 'GET',
   };
-  await fetch(API_URL + '/getTeamLevelActionsCount', requestOptions)
+  await fetch(
+    API_URL + `/getTeamLevelActionsCount?fromDate=${fromDate}&toDate=${toDate}`,
+    requestOptions
+  )
     .then(response => response.json())
     .then(data => {
       teamLevelActionsCountData = data;
@@ -368,12 +339,19 @@ export const getTeamLevelActionsCount = async (): Promise<any> => {
 };
 
 // Api to get Enterprise Level ActionsCount
-export const getEnterpriseLevelActionsCount = async (): Promise<any> => {
+export const getEnterpriseLevelActionsCount = async (
+  fromDate: string,
+  toDate: string
+): Promise<any> => {
   let enterpriseLevelActionsCountData;
   const requestOptions = {
     method: 'GET',
   };
-  await fetch(API_URL + '/getEnterpriseLevelActionsCount', requestOptions)
+  await fetch(
+    API_URL +
+      `/getEnterpriseLevelActionsCount?fromDate=${fromDate}&toDate=${toDate}`,
+    requestOptions
+  )
     .then(response => response.json())
     .then(data => {
       enterpriseLevelActionsCountData = data;
@@ -382,13 +360,62 @@ export const getEnterpriseLevelActionsCount = async (): Promise<any> => {
   return enterpriseLevelActionsCountData;
 };
 
+// Api to get count of all participant over time
+export const getParticipantsCount = async (
+  fromDate: string,
+  toDate: string
+): Promise<any> => {
+  let participantsCountData;
+  const requestOptions = {
+    method: 'GET',
+  };
+  await fetch(
+    API_URL + `/getParticipantsCount?fromDate=${fromDate}&toDate=${toDate}`,
+    requestOptions
+  )
+    .then(response => response.json())
+    .then(data => {
+      participantsCountData = data;
+    });
+
+  return participantsCountData;
+};
+
+// Api to get count of all retros over time
+export const getRetrosCount = async (
+  fromDate: string,
+  toDate: string
+): Promise<any> => {
+  let retrosCountData;
+  const requestOptions = {
+    method: 'GET',
+  };
+  await fetch(
+    API_URL + `/getRetrosCount?fromDate=${fromDate}&toDate=${toDate}`,
+    requestOptions
+  )
+    .then(response => response.json())
+    .then(data => {
+      retrosCountData = data;
+    });
+
+  return retrosCountData;
+};
+
 // Api to get Enterprise Level Sentiments Moods
-export const getEnterpriseLevelSentimentsMoods = async (): Promise<any> => {
+export const getEnterpriseLevelSentimentsMoods = async (
+  fromDate: string,
+  toDate: string
+): Promise<any> => {
   let enterpriseLevelSentimentsMoodsData;
   const requestOptions = {
     method: 'GET',
   };
-  await fetch(API_URL + '/getEnterpriseLevelSentimentsMoods', requestOptions)
+  await fetch(
+    API_URL +
+      `/getEnterpriseLevelSentimentsMoods?fromDate=${fromDate}&toDate=${toDate}`,
+    requestOptions
+  )
     .then(response => response.json())
     .then(data => {
       enterpriseLevelSentimentsMoodsData = data;
