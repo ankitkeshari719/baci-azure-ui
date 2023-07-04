@@ -71,7 +71,7 @@ export default function AnalyticsMainContainer() {
   ];
 
   return (
-    <Box sx={{ overflowY: 'auto' }} height="calc(var(--app-height))">
+    <Box sx={{ overflowY: 'auto' }} height="calc(var(--app-height))" width="100%">
       <Box sx={{ margin: '48px' }}>
         <Box
           sx={{

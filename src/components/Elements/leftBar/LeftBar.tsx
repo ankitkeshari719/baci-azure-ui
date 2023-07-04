@@ -30,7 +30,7 @@ const LeftBar = () => {
   const [{ user }] = React.useContext(GlobalContext);
 
   const menuArray = [
-    { id: 1, label: 'Home', icon: HomeIcon, routeTo: '', disabled: false },
+    { id: 1, label: 'Home', icon: HomeIcon, routeTo: '/demo/facilitatorDashboard', disabled: false },
 
     {
       id: 2,
@@ -45,7 +45,7 @@ const LeftBar = () => {
       label: 'Workspace',
       icon: ClipboardDocumentCheckIcon,
       routeTo: '',
-      disabled: false,
+      disabled: true,
     },
 
     {
@@ -61,7 +61,7 @@ const LeftBar = () => {
       label: 'Templates',
       icon: Square3Stack3DIcon,
       routeTo: '',
-      disabled: false,
+      disabled: true,
     },
 
     {
@@ -69,7 +69,7 @@ const LeftBar = () => {
       label: 'Users',
       icon: UserGroupIcon,
       routeTo: '',
-      disabled: false,
+      disabled: true,
     },
 
     {
@@ -77,7 +77,7 @@ const LeftBar = () => {
       label: 'Settings',
       icon: Cog8ToothIcon,
       routeTo: '',
-      disabled: false,
+      disabled: true,
     },
   ];
 
@@ -87,14 +87,14 @@ const LeftBar = () => {
       label: 'Help',
       icon: QuestionMarkCircleIcon,
       routeTo: '',
-      disabled: false,
+      disabled: true,
     },
     {
       id: 9,
       label: 'Notifications',
       icon: BellIcon,
       routeTo: '',
-      disabled: false,
+      disabled: true,
     },
   ];
 
@@ -114,8 +114,9 @@ const LeftBar = () => {
                     menu.label == selectedMenu ? 'menuIconSelected' : 'menuIcon'
                   }
                   onClick={() => {
-                    setSelectedMenu(menu.label);
-                    navigate(menu.routeTo);
+                    if(!menu.disabled)
+                    {setSelectedMenu(menu.label);
+                    navigate(menu.routeTo);}
                   }}
                 />
               </Tooltip>
@@ -143,7 +144,7 @@ const LeftBar = () => {
             <span>
               {user?.avatar ? (
                 <Avatar
-                  avatar={user?.avatar}
+                  avatar={user.avatar}
                   onClickAvatar={() => {}}
                   css={{
                     width: '48px',

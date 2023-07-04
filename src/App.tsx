@@ -37,6 +37,7 @@ import TeamLevelActionsCountChart from './screens/Analytics/TeamLevelActionsCoun
 import EnterpriseLevelActionsCountChart from './screens/Analytics/EnterpriseLevelActionsCountChart';
 import DummyChart from './screens/Analytics/DummyChart';
 import LeftBar from './components/Elements/leftBar/LeftBar';
+import FacilitatorDashboard from './components/Elements/facilitatorDashboard/facilitatorDashboard';
 
 type AppProps = {
   instance: IPublicClientApplication;
@@ -65,12 +66,20 @@ export default function App({ instance }: AppProps) {
                   <ThemeProvider theme={theme}>
                     <MsalProvider instance={instance}>
 
-                    
-                       
-                        <Box display="flex"  height= 'calc(var(--app-height))'>
-                        {!isXsUp&&<LeftBar />}
+
+
+                      <Box display="flex" height='calc(var(--app-height))'>
+                        {!isXsUp && <LeftBar />}
                         <Routes >
+                        <Route
+                            path="/demo"
+                          >
+                            <Route path="/demo/facilitatorDashboard" element={<FacilitatorDashboard />} />
+                          </Route>
+
+
                           <Route path="/" element={<LandingPage></LandingPage>} />
+                          
                           <Route
                             path="/join/:id"
                             element={<JoinRetro></JoinRetro>}
@@ -82,12 +91,9 @@ export default function App({ instance }: AppProps) {
                           <Route
                             path="/retrodetails"
                             element={<RetroDetails></RetroDetails>}
-                            />
-                        
-                          <Route
-                            path="enterpriseLevelActionsCount"
-                            element={<EnterpriseLevelActionsCountChart />}
                           />
+
+
                           <Route
                             path="/offboarding"
                             element={<Offboarding></Offboarding>}
@@ -114,13 +120,13 @@ export default function App({ instance }: AppProps) {
                             <Route path="" element={<AnalyticsMainContainer />} />
 
                             <Route
-                            path="teamLevelActionsCount"
-                            element={<DummyChart />}
-                          />
-                          
+                              path="teamLevelActionsCount"
+                              element={<DummyChart />}
+                            />
+
                             <Route
                               path="enterpriseLevelActionsCount"
-                              element={<DummyChart />}
+                              element={<EnterpriseLevelActionsCountChart />}
                             />
                             <Route
                               path="enterpriseLevelParticipantsCount"
@@ -128,7 +134,7 @@ export default function App({ instance }: AppProps) {
                             />
                             <Route
                               path="enterpriseLevelRetrosCount"
-                              element={<DummyChart />}
+                              element={<AverageRetroChart />}
                             />
                             <Route
                               path="enterpriseLevelSentimentsSummary"
@@ -143,11 +149,12 @@ export default function App({ instance }: AppProps) {
                               element={<DummyChart />}
                             />
                           </Route>
+
                           <Route
                             path="/report/:id"
                             element={<SummaryReportMain />}
-                            />
-                            <Route
+                          />
+                          <Route
                             path="enterpriseLevelActionsCount"
                             element={<DummyChart />}
                           />
@@ -159,29 +166,17 @@ export default function App({ instance }: AppProps) {
                             path="/jiraCallback/"
                             element={<JiraCallback />}
                           />
+
+                         
+
+
                           <Route
                             path="*"
                             element={<PageNotFound></PageNotFound>}
-                            />
-                            <Route
-                            path="enterpriseLevelRetrosCount"
-                            element={<AverageRetroChart />}
-                          />
-                          <Route
-                            path="enterpriseLevelSentimentsSummary"
-                            element={<DummyChart />}
-                          />
-                          <Route
-                            path="enterpriseLevelSentimentsThemes"
-                            element={<DummyChart />}
-                          />
-                          <Route
-                            path="enterpriseLevelSentimentsMoods"
-                            element={<DummyChart />}
                           />
                         </Routes>
-                   
-                   
+
+
                       </Box>
 
                     </MsalProvider>
