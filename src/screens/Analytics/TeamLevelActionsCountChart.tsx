@@ -2,26 +2,38 @@ import React, { useState } from 'react';
 import { getTeamLevelActionsCount } from '../../helpers/msal/services';
 import ReactApexChart from 'react-apexcharts';
 import { ApexOptions } from 'apexcharts';
-import { Box, Grid } from '@mui/material';
 import {
+  Box,
+  FormControl,
+  Grid,
+  InputLabel,
+  MenuItem,
+  Select,
+  SelectChangeEvent,
+} from '@mui/material';
+import {
+  ButtonLabelTypography,
   H2SemiBoldTypography,
 } from '../../components/CustomizedTypography';
 import { Link, useNavigate } from 'react-router-dom';
 import * as Icons from 'heroicons-react';
+import { MONTH_SELECTORS, MenuProps } from './const';
 
 export default function TeamLevelActionsCountChart() {
   const [teamLevelActions, setTeamLevelActions] = useState<any>([]);
   const [assignedActions, setAssignedActions] = useState([]);
   const [completedActions, setCompletedActions] = useState([]);
   const [months, setMonths] = useState([]);
+  const [fromDate, setFromDate] = useState<string>('10');
+  const [toDate, setToDate] = useState<string>('15');
   const navigate = useNavigate();
 
   React.useEffect(() => {
     handleGetTeamLevelActionsCountData();
-  }, []);
+  }, [fromDate, toDate]);
 
   const handleGetTeamLevelActionsCountData = async () => {
-    await getTeamLevelActionsCount().then(
+    await getTeamLevelActionsCount(fromDate, toDate).then(
       res => {
         if (res && res.result) {
           setTeamLevelActions(res.result);
@@ -116,6 +128,14 @@ export default function TeamLevelActionsCountChart() {
     },
   };
 
+  const handleFromDate = (event: SelectChangeEvent) => {
+    setFromDate(event.target.value as string);
+  };
+
+  const handleToDate = (event: SelectChangeEvent) => {
+    setToDate(event.target.value as string);
+  };
+
   return (
     <Box sx={{ overflowY: 'auto' }} height="calc(var(--app-height))">
       <Box sx={{ margin: '48px' }}>
@@ -153,12 +173,116 @@ export default function TeamLevelActionsCountChart() {
             style={{ color: '#2C69A1', marginLeft: '12px' }}
           />
         </Box>
+        {/* Selector */}
+        <Box
+          sx={{
+            display: 'flex',
+            flexDirection: 'row',
+            alignItems: 'center',
+            justifyContent: 'center',
+            marginTop: '16px',
+          }}
+        >
+          {/* Select Range Title */}
+          <ButtonLabelTypography
+            label="Select Range:"
+            style={{
+              color: '#343434',
+            }}
+          />
+          {/* From Date */}
+          <Box sx={{ minWidth: 240, marginLeft: '16px', marginRight: '16px' }}>
+            <FormControl fullWidth>
+              <Select
+                sx={{
+                  fieldset: {
+                    border: 'none',
+                    opacity: 1,
+                    color: '#4E4E4E',
+                  },
+                }}
+                labelId="from-Date"
+                id="from_date"
+                value={fromDate}
+                label="From"
+                onChange={handleFromDate}
+                IconComponent={props => (
+                  <Icons.ChevronDownOutline
+                    size={24}
+                    color="#4E4E4E"
+                    style={{
+                      cursor: 'pointer',
+                      position: 'absolute',
+                      top: 'calc(50% - 0.8em)',
+                    }}
+                    {...props}
+                  />
+                )}
+                MenuProps={MenuProps}
+              >
+                {MONTH_SELECTORS.map(month_selector => {
+                  return (
+                    <MenuItem value={month_selector.id} key={month_selector.id}>
+                      {month_selector.month}
+                    </MenuItem>
+                  );
+                })}
+              </Select>
+            </FormControl>
+          </Box>
+          <ButtonLabelTypography
+            label="To"
+            style={{
+              color: '#343434',
+            }}
+          />
+          {/*To Date */}
+          <Box sx={{ minWidth: 240, marginLeft: '16px' }}>
+            <FormControl fullWidth>
+              <Select
+                sx={{
+                  fieldset: {
+                    border: 'none',
+                    opacity: 1,
+                    color: '#4E4E4E',
+                  },
+                }}
+                labelId="to-Date"
+                id="to_date"
+                value={toDate}
+                label="To"
+                onChange={handleToDate}
+                IconComponent={props => (
+                  <Icons.ChevronDownOutline
+                    size={24}
+                    color="#4E4E4E"
+                    style={{
+                      cursor: 'pointer',
+                      position: 'absolute',
+                      top: 'calc(50% - 0.8em)',
+                    }}
+                    {...props}
+                  />
+                )}
+                MenuProps={MenuProps}
+              >
+                {MONTH_SELECTORS.map(month_selector => {
+                  return (
+                    <MenuItem value={month_selector.id} key={month_selector.id}>
+                      {month_selector.month}
+                    </MenuItem>
+                  );
+                })}
+              </Select>
+            </FormControl>
+          </Box>
+        </Box>
         {/* Chart */}
         <Grid
           container
           spacing={2}
           sx={{
-            marginTop: '48px',
+            marginTop: '16px',
           }}
         >
           <Grid

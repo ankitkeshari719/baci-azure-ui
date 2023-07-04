@@ -20,20 +20,20 @@ export default function EnterpriseLevelSentimentsSummaryChart() {
   }, []);
 
   const handleGetParticipantChartData = async () => {
-    await getParticipantsCount().then(
-      res => {
-        if (res && res.result) {
-          setParticipantsCounts(res.result);
-          setAverageParticipants(
-            res.result?.map((item: any) => item.averageParticipants)
-          );
-          setMonths(res.result?.map((item: any) => item.month));
-        }
-      },
-      err => {
-        console.log('err', err);
-      }
-    );
+    // await getParticipantsCount().then(
+    //   res => {
+    //     if (res && res.result) {
+    //       setParticipantsCounts(res.result);
+    //       setAverageParticipants(
+    //         res.result?.map((item: any) => item.averageParticipants)
+    //       );
+    //       setMonths(res.result?.map((item: any) => item.month));
+    //     }
+    //   },
+    //   err => {
+    //     console.log('err', err);
+    //   }
+    // );
   };
 
   const series = [
