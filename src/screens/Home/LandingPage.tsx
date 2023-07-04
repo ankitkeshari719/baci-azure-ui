@@ -176,7 +176,7 @@ export function LandingPage() {
         <Box
           sx={{
             height: 'calc(var(--app-height))',
-
+width:"100%",
             display: 'flex',
             flexDirection: 'column',
           }}
@@ -269,6 +269,7 @@ export function LandingPage() {
             display: 'flex',
             flexDirection: 'row',
             height: 'calc(var(--app-height))',
+            width:"100%",
           }}
         >
           {/* <Box sx={{ display: 'flex', width: '72px', height: '100%' }}>

@@ -109,9 +109,7 @@ export function LandingLayout() {
     }
   }, []);
 
-  React.useEffect(() => {
-    console.log(isXsUp);
-  }, [isXsUp]);
+
 
   return (
     <>
@@ -121,6 +119,7 @@ export function LandingLayout() {
             position: 'relative',
             display: 'flex',
             flexDirection: 'column',
+            width:'100%'
           }}
         >
           <img
