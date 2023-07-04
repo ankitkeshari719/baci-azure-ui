@@ -1,11 +1,14 @@
 import { Box, Button } from '@mui/material';
 import * as React from 'react';
-import { ButtonLabelTypography, CaptionRegularTypography, CaptionSemiBoldTypography, H1RegularTypography, H1SemiBoldTypography, H6RegularTypography, H6SemiBoldTypography } from '../../CustomizedTypography';
+import { ButtonLabelTypography, CaptionRegularTypography, CaptionSemiBoldTypography, H1RegularTypography, H1SemiBoldTypography, H4RegularTypography, H6RegularTypography, H6SemiBoldTypography } from '../../CustomizedTypography';
 import commonStyles from './../../../style.module.scss';
 import {
     EllipsisVerticalIcon, ArrowRightCircleIcon
 } from '@heroicons/react/24/outline';
 import Avatar from '../Avatar';
+import ReactApexChart from 'react-apexcharts';
+import { ApexOptions } from 'apexcharts';
+import AverageParticipantChart from '../../../screens/Analytics/AverageParticipantChart';
 function FacilitatorDashboard() {
 
     const menuList = [
@@ -69,8 +72,81 @@ function FacilitatorDashboard() {
         }
     ]
 
+
+
+    // apex charts
+
+    const series = [{
+        name: 'Completed Actions',
+        data: [44, 55, 41, 67, 22, 43]
+    }, {
+        name: 'Actions Pending',
+        data: [13, 23, 20, 8, 13, 27]
+    }]
+    const options: ApexOptions = {
+        colors: ['#2c69a1', '#149add'],
+        chart: {
+            type: 'bar',
+            height: 350,
+            stacked: true,
+            toolbar: {
+                show: true
+            },
+            zoom: {
+                enabled: true
+            }
+        },
+        responsive: [{
+            breakpoint: 480,
+            options: {
+                legend: {
+                    position: 'bottom',
+                    offsetX: -10,
+                    offsetY: 0
+                }
+            }
+        }],
+        plotOptions: {
+            bar: {
+                horizontal: false,
+                borderRadius: 10,
+                dataLabels: {
+                    total: {
+                        enabled: true,
+                        style: {
+                            fontSize: '13px',
+                            fontWeight: 900
+                        }
+                    }
+                }
+            },
+        },
+        xaxis: {
+            type: 'category',
+            categories: ['Team A', 'Team B', 'Team C', 'Team D',
+                'Team E', 'Team F'
+            ],
+        },
+        legend: {
+            position: 'bottom',
+            show: true,
+            showForSingleSeries: true,
+            customLegendItems: ['Completed Actions', 'Actions Pending'],
+            markers: {
+                fillColors: ['#2c69a1', '#149add']
+            }
+            //   offsetY: 40
+        },
+
+        fill: {
+            opacity: 1
+        }
+    }
+
+
+
     return (<>
-        <Box display="flex" flexDirection="column" width="100%" height="100%" padding="10px" sx={{overflowY:'auto',minHeight:'900px!important'}}>
+        <Box display="flex" flexDirection="column" width="100%" height="100%" padding="10px" sx={{ overflow: 'auto', minHeight: '900px!important' }}>
             {/* Toolbar start*/}
             <Box display="flex" flexDirection="row" width="100%" justifyContent="space-between" height="40px" alignItems="center">
                 <Box component="span">
@@ -136,36 +212,37 @@ function FacilitatorDashboard() {
                         <CaptionRegularTypography label={subMenu.isRetroFinished ? subMenu.retroStartDate : "Code : " + subMenu.retroCode} />
                         {subMenu.isRetroFinished ? <>
                             <CaptionSemiBoldTypography label={subMenu.totalActions + " Actions"} style={{ color: commonStyles.PrimaryMain }} />
-                           <Box>
-                            <CaptionRegularTypography label="Participants "/>
-                            {subMenu.users.map((user,index)=>{
-                               { return index<4&&
-                               <Avatar
-                                key={user.name}
-                                avatar={user.avatar}
-                                css={{
-                                  width: '40px',
-                                  height: '40px',
-                                  marginLeft: '0',
-                                  marginRight: '-8px',
-                                  border:'0px'
-                                }}
-                              />  
-                              }
-                            })}
-                              <CaptionRegularTypography style={{marginLeft:'14px'}} label={"+"+(subMenu.users.length+1-4)} />
+                            <Box>
+                                <CaptionRegularTypography label="Participants " />
+                                {subMenu.users.map((user, index) => {
+                                    {
+                                        return index < 4 &&
+                                            <Avatar
+                                                key={user.name}
+                                                avatar={user.avatar}
+                                                css={{
+                                                    width: '40px',
+                                                    height: '40px',
+                                                    marginLeft: '0',
+                                                    marginRight: '-8px',
+                                                    border: '0px'
+                                                }}
+                                            />
+                                    }
+                                })}
+                                <CaptionRegularTypography style={{ marginLeft: '14px' }} label={"+" + (subMenu.users.length + 1 - 4)} />
                             </Box>
-                           </>
-                            : 
+                        </>
+                            :
                             <>
-                            <CaptionRegularTypography label={"Link : " + subMenu.retroLink} />
-                            <Button variant="outlined" sx={{ borderRadius: '24px', fontWeight: '500px' }} color='primary'>
-                                <ButtonLabelTypography label="START SESSION" />
-                            </Button>
+                                <CaptionRegularTypography label={"Link : " + subMenu.retroLink} />
+                                <Button variant="outlined" sx={{ borderRadius: '24px', fontWeight: '500px' }} color='primary'>
+                                    <ButtonLabelTypography label="START SESSION" />
+                                </Button>
                             </>
-                            }
-                            
-                           
+                        }
+
+
 
                     </Box>
                 })}
@@ -173,12 +250,28 @@ function FacilitatorDashboard() {
 
             </Box>
 
-{/* Analytics start here */}
-<Box height="500px" display="flex" width="100%"
-sx={{boxShadow: "10px 10px 40px 20px rgba(21, 154, 221, 0.08)",border: "1px solid rgba(250, 250, 250, 1)",
-marginTop:'10px'}}
+            {/* Analytics start here */}
+            <Box height="500px"
 
->   </Box>
+
+                sx={{
+                    boxShadow: "10px 10px 40px 20px rgba(21, 154, 221, 0.08)", border: "1px solid rgba(250, 250, 250, 1)",
+                    marginTop: '10px'
+                }} >
+                <Box style={{ marginLeft: '16px', marginTop: '16px', marginBottom: '30px' }}>
+                    <H4RegularTypography label="Analytics" />
+                </Box>
+                <Box display="flex" width="100%">
+                    <Box display="flex" flexDirection="column" alignItems="center" mr="20px" sx={{border: "1px solid rgba(240, 240, 240, 1)", padding:'10px'}}>
+                        <ReactApexChart options={options} series={series} type="bar" height={370} width={550} />
+                        <CaptionRegularTypography label="Count of actions (Assigned vs Completed)" />
+                    </Box>
+                    <Box display="flex" flexDirection="column" alignItems="center" mr="20px" sx={{border: "1px solid rgba(240, 240, 240, 1)", padding:'10px'}}>
+                        <AverageParticipantChart dashboard={true} />
+                        <CaptionRegularTypography label="Count of all participants over time" />
+                    </Box>
+                </Box>
+            </Box>
 
         </Box>
 

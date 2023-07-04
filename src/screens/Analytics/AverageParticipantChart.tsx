@@ -40,7 +40,7 @@ const StyledTableCell = styled(TableCell)(({ theme }) => ({
   },
 }));
 
-export default function AverageParticipantChart() {
+export default function AverageParticipantChart({dashboard}:{dashboard?:boolean}) {
   const [participantsCounts, setParticipantsCounts] = useState<any>([]);
   const [averageParticipants, setAverageParticipants] = useState([]);
   const [months, setMonths] = useState([]);
@@ -97,7 +97,7 @@ export default function AverageParticipantChart() {
       },
     },
     title: {
-      text: 'Avg. Participants per Month',
+      text: dashboard?"":'Avg. Participants per Month',
       style: {
         fontFamily: 'Poppins',
         fontWeight: '400',
@@ -173,7 +173,16 @@ export default function AverageParticipantChart() {
   };
 
   return (
-    <Box sx={{ overflowY: 'auto' }} height="calc(var(--app-height))">
+    <>
+    {dashboard? <>
+      <ReactApexChart
+              options={options}
+              series={series}
+              type="area"
+              width="550"
+              height="370"
+            />
+    </> :<Box sx={{ overflowY: 'auto' }} height="calc(var(--app-height))">
       <Box sx={{ margin: '48px' }}>
         {/* Route Path */}
         <Box
@@ -368,6 +377,6 @@ export default function AverageParticipantChart() {
           </Grid>
         </Grid>
       </Box>
-    </Box>
+    </Box>}</>
   );
 }
