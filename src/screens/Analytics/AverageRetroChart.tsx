@@ -20,8 +20,10 @@ import {
   tableCellClasses,
 } from '@mui/material';
 import {
+  BodyRegularTypography,
   ButtonLabelTypography,
   H2SemiBoldTypography,
+  H4SemiBoldTypography,
 } from '../../components/CustomizedTypography';
 import * as Icons from 'heroicons-react';
 import { MONTH_SELECTORS, MenuProps } from './const';
@@ -40,14 +42,38 @@ const StyledTableCell = styled(TableCell)(({ theme }) => ({
   },
 }));
 
-export default function AverageRetroChart() {
+export default function AverageRetroChart({
+  dashboard,
+}: {
+  dashboard?: boolean;
+}) {
   const [retrosCounts, setRetrosCounts] = useState<any>([]);
   const [averageRetros, setAverageRetros] = useState([]);
   const [months, setMonths] = useState([]);
   const [fromDate, setFromDate] = useState<string>('10');
   const [toDate, setToDate] = useState<string>('15');
+  const [selectedFromDate, setSelectedFromDate] = useState<string>();
+  const [selectedToDate, setSelectedToDate] = useState<string>();
   const [totalAverageSessions, setTotalAverageSessions] = useState<number>();
   const navigate = useNavigate();
+
+  React.useEffect(() => {
+    const tempSelectedFromDate = MONTH_SELECTORS.filter(
+      monthSelector => monthSelector.id === Number(fromDate)
+    );
+    const tempSelectedToDate = MONTH_SELECTORS.filter(
+      monthSelector => monthSelector.id === Number(toDate)
+    );
+
+    setSelectedFromDate(
+      tempSelectedFromDate &&
+        tempSelectedFromDate[0] &&
+        tempSelectedFromDate[0].month
+    );
+    setSelectedToDate(
+      tempSelectedToDate && tempSelectedToDate[0] && tempSelectedToDate[0].month
+    );
+  }, [fromDate, toDate]);
 
   React.useEffect(() => {
     handleGetRetroChartData();
@@ -76,7 +102,7 @@ export default function AverageRetroChart() {
   const series = [
     //data on the y-axis
     {
-      name: 'Total No. of Retros',
+      name: 'Total No. of Session',
       data: averageRetros,
     },
   ];
@@ -92,23 +118,11 @@ export default function AverageRetroChart() {
       zoom: {
         enabled: false,
       },
-    },
-    title: {
-      text: 'Avg. Sessions over time per month',
-      style: {
-        fontFamily: 'Poppins',
-        fontWeight: '400',
-        fontSize: '18px',
-        color: '#4E4E4E',
-      },
-    },
-    subtitle: {
-      text: totalAverageSessions + ' Sessions',
-      style: {
-        fontFamily: 'Poppins',
-        fontWeight: '400',
-        fontSize: '24px',
-        color: '#000000',
+      toolbar: {
+        show: true,
+        tools: {
+          download: false,
+        },
       },
     },
     dataLabels: {
@@ -171,12 +185,22 @@ export default function AverageRetroChart() {
 
   return (
     <>
-      <Box sx={{ overflowY: 'auto' }} height="calc(var(--app-height))">
-        <Box sx={{ margin: '48px' }}>
+      {dashboard ? (
+        <ReactApexChart
+          options={options}
+          series={series}
+          type="area"
+          width="550"
+          height="370"
+        />
+      ) : (
+        <Grid container spacing={2} sx={{ padding: '48px', overflowY: 'auto' }}>
           {/* Route Path */}
-          <Box
+          <Grid
+            item
+            xs={12}
             sx={{
-              width: '100%',
+              padding: '0px !important',
               display: 'flex',
               alignItems: 'center',
               justifyContent: 'flex-start',
@@ -184,15 +208,17 @@ export default function AverageRetroChart() {
           >
             <Link to={'/analytics/'}>Analytics </Link>&nbsp;\ Count of all
             Sessions
-          </Box>
+          </Grid>
           {/* Back Button & Chart Title */}
-          <Box
+          <Grid
+            item
+            xs={12}
             sx={{
-              width: '100%',
+              padding: '0px !important',
               display: 'flex',
               alignItems: 'center',
               justifyContent: 'flex-start',
-              marginTop: '12px',
+              marginTop: '24px',
             }}
           >
             <Icons.ArrowCircleLeftOutline
@@ -207,170 +233,218 @@ export default function AverageRetroChart() {
               label="Count of all sessions"
               style={{ color: '#2C69A1', marginLeft: '12px' }}
             />
-          </Box>
-          {/* Chart and table */}
-          <Grid container spacing={2} sx={{ marginTop: '48px' }}>
-            <Grid item xs={12} md={4} sx={{ padding: '0px !important' }}>
-              {/* Selector */}
+          </Grid>
+          {/* Table */}
+          <Grid
+            item
+            xs={12}
+            md={4}
+            sx={{
+              padding: '0px !important',
+              display: 'flex',
+              alignItems: 'center',
+              flexDirection: 'column',
+              marginTop: '24px',
+            }}
+          >
+            {/* Selector */}
+            <Box
+              sx={{
+                display: 'flex',
+                flexDirection: 'row',
+                alignItems: 'center',
+                justifyContent: 'start',
+              }}
+            >
+              {/* Select Range Title */}
+              <ButtonLabelTypography
+                label="Select Range:"
+                style={{
+                  color: '#343434',
+                }}
+              />
+              {/* From Date */}
               <Box
                 sx={{
-                  display: 'flex',
-                  flexDirection: 'row',
-                  alignItems: 'center',
-                  justifyContent: 'start',
-                  marginTop: '16px',
+                  minWidth: 120,
+                  marginLeft: '16px',
+                  marginRight: '16px',
                 }}
               >
-                {/* Select Range Title */}
-                <ButtonLabelTypography
-                  label="Select Range:"
-                  style={{
-                    color: '#343434',
-                  }}
-                />
-                {/* From Date */}
-                <Box
-                  sx={{
-                    minWidth: 120,
-                    marginLeft: '16px',
-                    marginRight: '16px',
-                  }}
-                >
-                  <FormControl fullWidth>
-                    <Select
-                      sx={{
-                        fieldset: {
-                          border: 'none',
-                          opacity: 1,
-                          color: '#4E4E4E',
-                        },
-                      }}
-                      labelId="from-Date"
-                      id="from_date"
-                      value={fromDate}
-                      label="From"
-                      onChange={handleFromDate}
-                      IconComponent={props => (
-                        <Icons.ChevronDownOutline
-                          size={24}
-                          color="#4E4E4E"
-                          style={{
-                            cursor: 'pointer',
-                            position: 'absolute',
-                            top: 'calc(50% - 0.8em)',
-                          }}
-                          {...props}
-                        />
-                      )}
-                      MenuProps={MenuProps}
-                    >
-                      {MONTH_SELECTORS.map(month_selector => {
-                        return (
-                          <MenuItem
-                            value={month_selector.id}
-                            key={month_selector.id}
-                          >
-                            {month_selector.month}
-                          </MenuItem>
-                        );
-                      })}
-                    </Select>
-                  </FormControl>
-                </Box>
-                <ButtonLabelTypography
-                  label="To"
-                  style={{
-                    color: '#343434',
-                  }}
-                />
-                {/*To Date */}
-                <Box sx={{ minWidth: 120, marginLeft: '16px' }}>
-                  <FormControl fullWidth>
-                    <Select
-                      sx={{
-                        fieldset: {
-                          border: 'none',
-                          opacity: 1,
-                          color: '#4E4E4E',
-                        },
-                      }}
-                      labelId="to-Date"
-                      id="to_date"
-                      value={toDate}
-                      label="To"
-                      onChange={handleToDate}
-                      IconComponent={props => (
-                        <Icons.ChevronDownOutline
-                          size={24}
-                          color="#4E4E4E"
-                          style={{
-                            cursor: 'pointer',
-                            position: 'absolute',
-                            top: 'calc(50% - 0.8em)',
-                          }}
-                          {...props}
-                        />
-                      )}
-                      MenuProps={MenuProps}
-                    >
-                      {MONTH_SELECTORS.map(month_selector => {
-                        return (
-                          <MenuItem
-                            value={month_selector.id}
-                            key={month_selector.id}
-                          >
-                            {month_selector.month}
-                          </MenuItem>
-                        );
-                      })}
-                    </Select>
-                  </FormControl>
-                </Box>
-              </Box>
-              {/* Table Container */}
-              <Box sx={{ marginTop: '48px' }}>
-                <TableContainer>
-                  <TableHead>
-                    <TableRow>
-                      <StyledTableCell align="left">Month</StyledTableCell>
-                      <StyledTableCell align="left">
-                        No. of Retros
-                      </StyledTableCell>
-                    </TableRow>
-                  </TableHead>
-                  <TableBody>
-                    {retrosCounts.map((retrosCount: any) => {
+                <FormControl fullWidth>
+                  <Select
+                    sx={{
+                      fieldset: {
+                        border: 'none',
+                        opacity: 1,
+                        color: '#4E4E4E',
+                      },
+                    }}
+                    labelId="from-Date"
+                    id="from_date"
+                    value={fromDate}
+                    label="From"
+                    onChange={handleFromDate}
+                    IconComponent={props => (
+                      <Icons.ChevronDownOutline
+                        size={24}
+                        color="#4E4E4E"
+                        style={{
+                          cursor: 'pointer',
+                          position: 'absolute',
+                          top: 'calc(50% - 0.8em)',
+                        }}
+                        {...props}
+                      />
+                    )}
+                    MenuProps={MenuProps}
+                  >
+                    {MONTH_SELECTORS.map(month_selector => {
                       return (
-                        <TableRow key={retrosCount.id}>
-                          <StyledTableCell
-                            component="th"
-                            scope="row"
-                            align="center"
-                          >
-                            {retrosCount.month}
-                          </StyledTableCell>
-                          <StyledTableCell align="center">
-                            {retrosCount.averageRetros}
-                          </StyledTableCell>
-                        </TableRow>
+                        <MenuItem
+                          value={month_selector.id}
+                          key={month_selector.id}
+                        >
+                          {month_selector.month}
+                        </MenuItem>
                       );
                     })}
-                  </TableBody>
-                </TableContainer>
+                  </Select>
+                </FormControl>
               </Box>
-            </Grid>
-            <Grid item xs={12} md={8}>
-              <ReactApexChart
-                options={options}
-                series={series}
-                type="area"
-                width="850"
-                height="464"
+              <ButtonLabelTypography
+                label="To"
+                style={{
+                  color: '#343434',
+                }}
               />
-            </Grid>
+              {/*To Date */}
+              <Box sx={{ minWidth: 120, marginLeft: '16px' }}>
+                <FormControl fullWidth>
+                  <Select
+                    sx={{
+                      fieldset: {
+                        border: 'none',
+                        opacity: 1,
+                        color: '#4E4E4E',
+                      },
+                    }}
+                    labelId="to-Date"
+                    id="to_date"
+                    value={toDate}
+                    label="To"
+                    onChange={handleToDate}
+                    IconComponent={props => (
+                      <Icons.ChevronDownOutline
+                        size={24}
+                        color="#4E4E4E"
+                        style={{
+                          cursor: 'pointer',
+                          position: 'absolute',
+                          top: 'calc(50% - 0.8em)',
+                        }}
+                        {...props}
+                      />
+                    )}
+                    MenuProps={MenuProps}
+                  >
+                    {MONTH_SELECTORS.map(month_selector => {
+                      return (
+                        <MenuItem
+                          value={month_selector.id}
+                          key={month_selector.id}
+                        >
+                          {month_selector.month}
+                        </MenuItem>
+                      );
+                    })}
+                  </Select>
+                </FormControl>
+              </Box>
+            </Box>
+            {/* Table Container */}
+            <Box sx={{ marginTop: '32px' }}>
+              <TableContainer>
+                <TableHead>
+                  <TableRow>
+                    <StyledTableCell align="center">Month</StyledTableCell>
+                    <StyledTableCell align="center">
+                      No. of Sessions
+                    </StyledTableCell>
+                  </TableRow>
+                </TableHead>
+                <TableBody>
+                  {retrosCounts.map((retrosCount: any) => {
+                    return (
+                      <TableRow key={retrosCount.id}>
+                        <StyledTableCell
+                          component="th"
+                          scope="row"
+                          align="center"
+                        >
+                          {retrosCount.month}
+                        </StyledTableCell>
+                        <StyledTableCell align="center">
+                          {retrosCount.averageRetros}
+                        </StyledTableCell>
+                      </TableRow>
+                    );
+                  })}
+                </TableBody>
+              </TableContainer>
+            </Box>
           </Grid>
-        </Box>
-      </Box>
+          {/* Chart */}
+          <Grid
+            item
+            xs={12}
+            md={7}
+            sx={{
+              padding: '0px !important',
+              marginTop: '16px',
+              display: 'flex',
+              alignItems: 'flex-start',
+              flexDirection: 'column',
+            }}
+          >
+            <Box>
+              <Grid item xs={12} sx={{ padding: '0px !important' }}>
+                <BodyRegularTypography
+                  label="Avg. Sessions over time per month"
+                  style={{ color: '#343434' }}
+                />
+              </Grid>
+              <Grid
+                item
+                xs={12}
+                sx={{ padding: '0px !important', marginTop: '10px' }}
+              >
+                <H4SemiBoldTypography
+                  label={totalAverageSessions + ' Sessions'}
+                  style={{ color: '#343434' }}
+                />
+              </Grid>
+              <Grid
+                item
+                xs={12}
+                sx={{ padding: '0px !important', marginTop: '10px' }}
+              >
+                <BodyRegularTypography
+                  label={selectedFromDate + ' To ' + selectedToDate}
+                  style={{ color: '#343434' }}
+                />
+              </Grid>
+            </Box>
+            <ReactApexChart
+              options={options}
+              series={series}
+              type="area"
+              width="750"
+              height="700"
+            />
+          </Grid>
+        </Grid>
+      )}
     </>
   );
 }
