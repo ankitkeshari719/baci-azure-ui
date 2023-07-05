@@ -6,7 +6,6 @@ import {
   Box,
   FormControl,
   Grid,
-  InputLabel,
   MenuItem,
   Select,
   SelectChangeEvent,
@@ -19,8 +18,10 @@ import {
   tableCellClasses,
 } from '@mui/material';
 import {
+  BodyRegularTypography,
   ButtonLabelTypography,
   H2SemiBoldTypography,
+  H4SemiBoldTypography,
 } from '../../components/CustomizedTypography';
 import { Link, useNavigate } from 'react-router-dom';
 import * as Icons from 'heroicons-react';
@@ -40,15 +41,62 @@ const StyledTableCell = styled(TableCell)(({ theme }) => ({
   },
 }));
 
-export default function AverageParticipantChart({dashboard}:{dashboard?:boolean}) {
+export default function AverageParticipantChart({
+  dashboard,
+}: {
+  dashboard?: boolean;
+}) {
   const [participantsCounts, setParticipantsCounts] = useState<any>([]);
   const [averageParticipants, setAverageParticipants] = useState([]);
   const [months, setMonths] = useState([]);
   const [fromDate, setFromDate] = useState<string>('10');
   const [toDate, setToDate] = useState<string>('15');
+  const [selectedFromDate, setSelectedFromDate] = useState<string>();
+  const [selectedToDate, setSelectedToDate] = useState<string>();
   const [totalAverageParticipants, setTotalAverageParticipants] =
     useState<number>();
   const navigate = useNavigate();
+  const windowWidth = React.useRef(window.innerWidth);
+
+  const getChartWidth = () => {
+    switch (true) {
+      case windowWidth.current <= 1051:
+        return '400';
+      case windowWidth.current > 1051 && windowWidth.current <= 1150:
+        return '500';
+      case windowWidth.current >= 1151 && windowWidth.current <= 1199:
+        return '520';
+      case windowWidth.current >= 1200 && windowWidth.current <= 1300:
+        return '650';
+      case windowWidth.current >= 1301 && windowWidth.current <= 1400:
+        return '700';
+      case windowWidth.current >= 1401 && windowWidth.current <= 1500:
+        return '750';
+      case windowWidth.current >= 1500:
+        return '850';
+
+      default:
+        return '500';
+    }
+  };
+
+  React.useEffect(() => {
+    const tempSelectedFromDate = MONTH_SELECTORS.filter(
+      monthSelector => monthSelector.id === Number(fromDate)
+    );
+    const tempSelectedToDate = MONTH_SELECTORS.filter(
+      monthSelector => monthSelector.id === Number(toDate)
+    );
+
+    setSelectedFromDate(
+      tempSelectedFromDate &&
+        tempSelectedFromDate[0] &&
+        tempSelectedFromDate[0].month
+    );
+    setSelectedToDate(
+      tempSelectedToDate && tempSelectedToDate[0] && tempSelectedToDate[0].month
+    );
+  }, [fromDate, toDate]);
 
   React.useEffect(() => {
     handleGetParticipantChartData();
@@ -84,6 +132,10 @@ export default function AverageParticipantChart({dashboard}:{dashboard?:boolean}
     },
   ];
 
+  React.useEffect(() => {
+    console.log('innerWidth', windowWidth);
+  }, [windowWidth]);
+
   const options: ApexOptions = {
     //data on the x-axis
     xaxis: {
@@ -95,23 +147,11 @@ export default function AverageParticipantChart({dashboard}:{dashboard?:boolean}
       zoom: {
         enabled: false,
       },
-    },
-    title: {
-      text: dashboard?"":'Avg. Participants per Month',
-      style: {
-        fontFamily: 'Poppins',
-        fontWeight: '400',
-        fontSize: '18px',
-        color: '#4E4E4E',
-      },
-    },
-    subtitle: {
-      text: totalAverageParticipants + ' Participants',
-      style: {
-        fontFamily: 'Poppins',
-        fontWeight: '400',
-        fontSize: '24px',
-        color: '#000000',
+      toolbar: {
+        show: true,
+        tools: {
+          download: false,
+        },
       },
     },
     dataLabels: {
@@ -174,54 +214,71 @@ export default function AverageParticipantChart({dashboard}:{dashboard?:boolean}
 
   return (
     <>
-    {dashboard? <>
-      <ReactApexChart
-              options={options}
-              series={series}
-              type="area"
-              width="550"
-              height="370"
-            />
-    </> :<Box sx={{ overflowY: 'auto' }} height="calc(var(--app-height))">
-      <Box sx={{ margin: '48px' }}>
-        {/* Route Path */}
-        <Box
-          sx={{
-            width: '100%',
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'flex-start',
-          }}
-        >
-          <Link to={'/analytics/'}>Analytics </Link>&nbsp;\ Count of
-          participants
-        </Box>
-        {/* Back Button & Chart Title */}
-        <Box
-          sx={{
-            width: '100%',
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'flex-start',
-            marginTop: '12px',
-          }}
-        >
-          <Icons.ArrowCircleLeftOutline
-            size={32}
-            style={{
-              cursor: 'pointer',
-              color: '#159ADD',
+      {dashboard ? (
+        <>
+          <ReactApexChart
+            options={options}
+            series={series}
+            type="area"
+            width="550"
+            height="370"
+          />
+        </>
+      ) : (
+        <Grid container spacing={2} sx={{ padding: '48px', overflowY: 'auto' }}>
+          {/* Route Path */}
+          <Grid
+            item
+            xs={12}
+            sx={{
+              padding: '0px !important',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'flex-start',
             }}
-            onClick={() => navigate('/analytics/')}
-          />
-          <H2SemiBoldTypography
-            label="Count of all participants over time"
-            style={{ color: '#2C69A1', marginLeft: '12px' }}
-          />
-        </Box>
-        {/* Chart and table */}
-        <Grid container spacing={2} sx={{ marginTop: '48px' }}>
-          <Grid item xs={12} md={4} sx={{ padding: '0px !important' }}>
+          >
+            <Link to={'/analytics/'}>Analytics </Link>&nbsp;\ Count of
+            participants
+          </Grid>
+          {/* Back Button & Chart Title */}
+          <Grid
+            item
+            xs={12}
+            sx={{
+              padding: '0px !important',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'flex-start',
+              marginTop: '24px',
+            }}
+          >
+            <Icons.ArrowCircleLeftOutline
+              size={32}
+              style={{
+                cursor: 'pointer',
+                color: '#159ADD',
+              }}
+              onClick={() => navigate('/analytics/')}
+            />
+            <H2SemiBoldTypography
+              label="Count of all participants over time"
+              style={{ color: '#2C69A1', marginLeft: '16px' }}
+            />
+          </Grid>
+          {/* Table */}
+          <Grid
+            item
+            xs={12}
+            md={6}
+            lg={5}
+            sx={{
+              padding: '0px !important',
+              display: 'flex',
+              alignItems: 'center',
+              flexDirection: 'column',
+              marginTop: '24px',
+            }}
+          >
             {/* Selector */}
             <Box
               sx={{
@@ -229,7 +286,6 @@ export default function AverageParticipantChart({dashboard}:{dashboard?:boolean}
                 flexDirection: 'row',
                 alignItems: 'center',
                 justifyContent: 'start',
-                marginTop: '16px',
               }}
             >
               {/* Select Range Title */}
@@ -241,7 +297,11 @@ export default function AverageParticipantChart({dashboard}:{dashboard?:boolean}
               />
               {/* From Date */}
               <Box
-                sx={{ minWidth: 120, marginLeft: '16px', marginRight: '16px' }}
+                sx={{
+                  minWidth: 120,
+                  marginLeft: '16px',
+                  marginRight: '16px',
+                }}
               >
                 <FormControl fullWidth>
                   <Select
@@ -291,7 +351,7 @@ export default function AverageParticipantChart({dashboard}:{dashboard?:boolean}
                 }}
               />
               {/*To Date */}
-              <Box sx={{ minWidth: 120, marginLeft: '16px' }}>
+              <Box sx={{ minWidth: 120, marginLeft: '24px' }}>
                 <FormControl fullWidth>
                   <Select
                     sx={{
@@ -335,12 +395,12 @@ export default function AverageParticipantChart({dashboard}:{dashboard?:boolean}
               </Box>
             </Box>
             {/* Table */}
-            <Box sx={{ marginTop: '48px' }}>
+            <Box sx={{ marginTop: '32px' }}>
               <TableContainer>
                 <TableHead>
                   <TableRow>
-                    <StyledTableCell align="left">Month</StyledTableCell>
-                    <StyledTableCell align="left">
+                    <StyledTableCell align="center">Month</StyledTableCell>
+                    <StyledTableCell align="center">
                       Total No. of Participants
                     </StyledTableCell>
                   </TableRow>
@@ -366,17 +426,58 @@ export default function AverageParticipantChart({dashboard}:{dashboard?:boolean}
               </TableContainer>
             </Box>
           </Grid>
-          <Grid item xs={12} md={8} sx={{ padding: '0px !important' }}>
+          {/* Chart  */}
+          <Grid
+            item
+            xs={12}
+            md={6}
+            lg={7}
+            sx={{
+              padding: '0px !important',
+              marginTop: '16px',
+              display: 'flex',
+              alignItems: 'flex-start',
+              flexDirection: 'column',
+            }}
+          >
+            <Box>
+              <Grid item xs={12} sx={{ padding: '0px !important' }}>
+                <BodyRegularTypography
+                  label="Avg. Participants per Month"
+                  style={{ color: '#343434' }}
+                />
+              </Grid>
+              <Grid
+                item
+                xs={12}
+                sx={{ padding: '0px !important', marginTop: '10px' }}
+              >
+                <H4SemiBoldTypography
+                  label={totalAverageParticipants + ' Participants'}
+                  style={{ color: '#343434' }}
+                />
+              </Grid>
+              <Grid
+                item
+                xs={12}
+                sx={{ padding: '0px !important', marginTop: '10px' }}
+              >
+                <BodyRegularTypography
+                  label={selectedFromDate + ' To ' + selectedToDate}
+                  style={{ color: '#343434' }}
+                />
+              </Grid>
+            </Box>
             <ReactApexChart
               options={options}
               series={series}
               type="area"
-              width="850"
-              height="500"
+              width={getChartWidth()}
+              height="700"
             />
           </Grid>
         </Grid>
-      </Box>
-    </Box>}</>
+      )}
+    </>
   );
 }
