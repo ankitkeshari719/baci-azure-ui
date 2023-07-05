@@ -19,7 +19,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import * as Icons from 'heroicons-react';
 import { MONTH_SELECTORS, MenuProps } from './const';
 
-export default function EnterpriseLevelActionsCountChart() {
+export default function EnterpriseLevelActionsCountChart({dashboard}:{dashboard?:boolean}) {
   const [enterpriseLevelActions, setEnterpriseLevelActions] = useState<any>([]);
   const [assignedActions, setAssignedActions] = useState([]);
   const [completedActions, setCompletedActions] = useState([]);
@@ -137,7 +137,18 @@ export default function EnterpriseLevelActionsCountChart() {
   };
 
   return (
-    <Box sx={{ overflowY: 'auto' }} height="calc(var(--app-height))">
+    <>
+    {dashboard ?
+    <>
+     <ReactApexChart
+              options={options}
+              series={series}
+              type="bar"
+              width="550"
+              height="370"
+            />
+    </>
+    : <Box sx={{ overflowY: 'auto' }} height="calc(var(--app-height))">
       <Box sx={{ margin: '48px' }}>
         {/* Route Path */}
         <Box
@@ -299,6 +310,6 @@ export default function EnterpriseLevelActionsCountChart() {
           </Grid>
         </Grid>
       </Box>
-    </Box>
+    </Box>}</>
   );
 }

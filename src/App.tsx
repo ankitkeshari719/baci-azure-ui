@@ -37,7 +37,8 @@ import TeamLevelActionsCountChart from './screens/Analytics/TeamLevelActionsCoun
 import EnterpriseLevelActionsCountChart from './screens/Analytics/EnterpriseLevelActionsCountChart';
 import DummyChart from './screens/Analytics/DummyChart';
 import LeftBar from './components/Elements/leftBar/LeftBar';
-import FacilitatorDashboard from './components/Elements/facilitatorDashboard/facilitatorDashboard';
+import FacilitatorDashboard from './components/Elements/facilitatorDashboard/FacilitatorDashboard';
+
 
 type AppProps = {
   instance: IPublicClientApplication;
@@ -69,16 +70,52 @@ export default function App({ instance }: AppProps) {
 
 
                       <Box display="flex" height='calc(var(--app-height))'>
-                        {!isXsUp && <LeftBar />}
+                        {!isXsUp  && <LeftBar />}
+                        <Box display="flex" width="calc(100% - 72px)">
                         <Routes >
                         <Route
-                            path="/demo"
+                            path="/facilitator/"
+                           
                           >
-                            <Route path="/demo/facilitatorDashboard" element={<FacilitatorDashboard />} />
+                            <Route path="dashboard" element={<FacilitatorDashboard />} />
+                            <Route path="analytics/">
+                            <Route path="" element={<AnalyticsMainContainer />} />
+
+                            <Route
+                              path="teamLevelActionsCount"
+                              element={<DummyChart />}
+                            />
+
+                            <Route
+                              path="enterpriseLevelActionsCount"
+                              element={<EnterpriseLevelActionsCountChart />}
+                            />
+                            <Route
+                              path="enterpriseLevelParticipantsCount"
+                              element={<AverageParticipantChart />}
+                            />
+                            <Route
+                              path="enterpriseLevelRetrosCount"
+                              element={<AverageRetroChart />}
+                            />
+                            <Route
+                              path="enterpriseLevelSentimentsSummary"
+                              element={<DummyChart />}
+                            />
+                            <Route
+                              path="enterpriseLevelSentimentsThemes"
+                              element={<DummyChart />}
+                            />
+                            <Route
+                              path="enterpriseLevelSentimentsMoods"
+                              element={<DummyChart />}
+                            />
+                          </Route>
                           </Route>
 
 
-                          <Route path="/" element={<LandingPage></LandingPage>} />
+                          <Route path="/" element={<LandingPage isDemo={true}></LandingPage>} />
+                         
                           
                           <Route
                             path="/join/:id"
@@ -175,7 +212,7 @@ export default function App({ instance }: AppProps) {
                             element={<PageNotFound></PageNotFound>}
                           />
                         </Routes>
-
+                        </Box>
 
                       </Box>
 

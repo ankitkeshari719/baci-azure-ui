@@ -14,23 +14,23 @@ import {
   BellIcon,
 } from '@heroicons/react/24/outline';
 
-import React from 'react';
+import React, { useEffect } from 'react';
 
 import Avatar from '../Avatar';
 
 import { GlobalContext } from '../../../contexts/GlobalContext';
 
 import { LazyLoadImage } from 'react-lazy-load-image-component';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useSearchParams } from 'react-router-dom';
 
 const LeftBar = () => {
   const navigate = useNavigate();
   const [selectedMenu, setSelectedMenu] = React.useState('');
-
+  const [searchParams] = useSearchParams();
   const [{ user }] = React.useContext(GlobalContext);
 
   const menuArray = [
-    { id: 1, label: 'Home', icon: HomeIcon, routeTo: '/demo/facilitatorDashboard', disabled: false },
+    { id: 1, label: 'Home', icon: HomeIcon, routeTo: 'facilitator/dashboard', disabled: false },
 
     {
       id: 2,
@@ -52,7 +52,7 @@ const LeftBar = () => {
       id: 4,
       label: 'Analytics',
       icon: ChartBarIcon,
-      routeTo: '/analytics/',
+      routeTo: 'facilitator/analytics/',
       disabled: false,
     },
 
@@ -97,13 +97,22 @@ const LeftBar = () => {
       disabled: true,
     },
   ];
+useEffect(()=>{
+ if(location.pathname.includes('facilitator/dashboard')){
+  setSelectedMenu(menuArray[0].label);
+ }
+ else if(location.pathname.includes('analytics')){
+  setSelectedMenu(menuArray[3].label);
 
+ }
+
+},[location.pathname.includes('analytics'),location.pathname.includes('facilitator/dashboard')])
   return (
     <>
-      <Box className="leftBarContainer">
+      <Box className="leftBarContainer" sx={{display:location.pathname.includes('facilitator')?'flex':'none'}}>
         <Box className="topContainer">
           <Box>
-            <img src="../images/r_MenuHeader.png" style={{ width: '56px' }} />
+            <img src="/../images/r_MenuHeader.png" style={{ width: '56px' }} />
           </Box>
 
           {menuArray.map((menu, index) => {
