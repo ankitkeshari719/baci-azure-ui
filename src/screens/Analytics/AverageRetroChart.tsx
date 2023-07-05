@@ -261,7 +261,8 @@ export default function AverageRetroChart({
           <Grid
             item
             xs={12}
-            md={4}
+            md={6}
+            lg={5}
             sx={{
               padding: '0px !important',
               display: 'flex',
@@ -421,7 +422,8 @@ export default function AverageRetroChart({
           <Grid
             item
             xs={12}
-            md={7}
+            md={6}
+            lg={7}
             sx={{
               padding: '0px !important',
               marginTop: '16px',
