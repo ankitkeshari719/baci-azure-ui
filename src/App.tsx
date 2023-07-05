@@ -126,7 +126,7 @@ export default function App({ instance }: AppProps) {
 
                             <Route
                               path="enterpriseLevelActionsCount"
-                              element={<EnterpriseLevelActionsCountChart />}
+                              element={<DummyChart />}
                             />
                             <Route
                               path="enterpriseLevelParticipantsCount"
