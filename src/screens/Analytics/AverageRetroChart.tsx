@@ -56,6 +56,29 @@ export default function AverageRetroChart({
   const [selectedToDate, setSelectedToDate] = useState<string>();
   const [totalAverageSessions, setTotalAverageSessions] = useState<number>();
   const navigate = useNavigate();
+  const windowWidth = React.useRef(window.innerWidth);
+
+  const getChartWidth = () => {
+    switch (true) {
+      case windowWidth.current <= 1051:
+        return '400';
+      case windowWidth.current > 1051 && windowWidth.current <= 1150:
+        return '500';
+      case windowWidth.current >= 1151 && windowWidth.current <= 1199:
+        return '520';
+      case windowWidth.current >= 1200 && windowWidth.current <= 1300:
+        return '650';
+      case windowWidth.current >= 1301 && windowWidth.current <= 1400:
+        return '700';
+      case windowWidth.current >= 1401 && windowWidth.current <= 1500:
+        return '750';
+      case windowWidth.current >= 1500:
+        return '850';
+
+      default:
+        return '500';
+    }
+  };
 
   React.useEffect(() => {
     const tempSelectedFromDate = MONTH_SELECTORS.filter(
@@ -238,7 +261,8 @@ export default function AverageRetroChart({
           <Grid
             item
             xs={12}
-            md={4}
+            md={6}
+            lg={5}
             sx={{
               padding: '0px !important',
               display: 'flex',
@@ -398,7 +422,8 @@ export default function AverageRetroChart({
           <Grid
             item
             xs={12}
-            md={7}
+            md={6}
+            lg={7}
             sx={{
               padding: '0px !important',
               marginTop: '16px',
@@ -439,7 +464,7 @@ export default function AverageRetroChart({
               options={options}
               series={series}
               type="area"
-              width="750"
+              width={getChartWidth()}
               height="700"
             />
           </Grid>
