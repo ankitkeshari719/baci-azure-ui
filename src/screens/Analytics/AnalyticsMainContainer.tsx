@@ -12,7 +12,6 @@ import {
   H1RegularTypography,
 } from '../../components/CustomizedTypography';
 import { useNavigate } from 'react-router-dom';
-import { ContainedButton } from '../../components';
 import { BoardContext } from '../../contexts/BoardContext';
 
 export default function AnalyticsMainContainer() {

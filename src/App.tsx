@@ -146,7 +146,7 @@ export default function App({ instance }: AppProps) {
                             />
                             <Route
                               path="enterpriseLevelSentimentsMoods"
-                              element={<DummyChart />}
+                              element={<EnterpriseLevelSentimentsMoodsChart />}
                             />
                           </Route>
 

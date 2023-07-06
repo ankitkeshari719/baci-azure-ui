@@ -115,7 +115,7 @@ export default function AverageParticipantChart({
           res.result.map((item: any) => {
             temp = temp + item.averageParticipants;
           });
-          setTotalAverageParticipants(Math.round(temp/res.result.length));
+          setTotalAverageParticipants(Math.round(temp / res.result.length));
         }
       },
       err => {
@@ -131,7 +131,6 @@ export default function AverageParticipantChart({
       data: averageParticipants,
     },
   ];
-
 
   const options: ApexOptions = {
     //data on the x-axis
@@ -212,15 +211,13 @@ export default function AverageParticipantChart({
   return (
     <>
       {dashboard ? (
-        <>
-          <ReactApexChart
-            options={options}
-            series={series}
-            type="area"
-            width="550"
-            height="370"
-          />
-        </>
+        <ReactApexChart
+          options={options}
+          series={series}
+          type="area"
+          width="550"
+          height="370"
+        />
       ) : (
         <Grid container spacing={2} sx={{ padding: '48px', overflowY: 'auto' }}>
           {/* Route Path */}
