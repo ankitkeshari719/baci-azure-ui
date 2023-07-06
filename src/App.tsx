@@ -65,21 +65,21 @@ export default function App({ instance }: AppProps) {
                 <ConfirmProvider>
                   <ThemeProvider theme={theme}>
                     <MsalProvider instance={instance}>
-
-
-
-                      <Box display="flex" height='calc(var(--app-height))'>
+                      <Box display="flex" height="calc(var(--app-height))">
                         {!isXsUp && <LeftBar />}
-                        <Routes >
-                        <Route
-                            path="/demo"
-                          >
-                            <Route path="/demo/facilitatorDashboard" element={<FacilitatorDashboard />} />
+                        <Routes>
+                          <Route path="/demo">
+                            <Route
+                              path="/demo/facilitatorDashboard"
+                              element={<FacilitatorDashboard />}
+                            />
                           </Route>
 
+                          <Route
+                            path="/"
+                            element={<LandingPage></LandingPage>}
+                          />
 
-                          <Route path="/" element={<LandingPage></LandingPage>} />
-                          
                           <Route
                             path="/join/:id"
                             element={<JoinRetro></JoinRetro>}
@@ -92,7 +92,6 @@ export default function App({ instance }: AppProps) {
                             path="/retrodetails"
                             element={<RetroDetails></RetroDetails>}
                           />
-
 
                           <Route
                             path="/offboarding"
@@ -117,16 +116,19 @@ export default function App({ instance }: AppProps) {
                             />
                           </Route>
                           <Route path="/analytics/">
-                            <Route path="" element={<AnalyticsMainContainer />} />
+                            <Route
+                              path=""
+                              element={<AnalyticsMainContainer />}
+                            />
 
                             <Route
                               path="teamLevelActionsCount"
-                              element={<DummyChart />}
+                              element={<TeamLevelActionsCountChart />}
                             />
 
                             <Route
                               path="enterpriseLevelActionsCount"
-                              element={<DummyChart />}
+                              element={<EnterpriseLevelActionsCountChart />}
                             />
                             <Route
                               path="enterpriseLevelParticipantsCount"
@@ -167,18 +169,12 @@ export default function App({ instance }: AppProps) {
                             element={<JiraCallback />}
                           />
 
-                         
-
-
                           <Route
                             path="*"
                             element={<PageNotFound></PageNotFound>}
                           />
                         </Routes>
-
-
                       </Box>
-
                     </MsalProvider>
                     <SnackMessage />
                   </ThemeProvider>
