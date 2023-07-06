@@ -115,7 +115,7 @@ export default function AverageParticipantChart({
           res.result.map((item: any) => {
             temp = temp + item.averageParticipants;
           });
-          setTotalAverageParticipants(temp);
+          setTotalAverageParticipants(Math.round(temp/res.result.length));
         }
       },
       err => {
@@ -132,9 +132,6 @@ export default function AverageParticipantChart({
     },
   ];
 
-  React.useEffect(() => {
-    console.log('innerWidth', windowWidth);
-  }, [windowWidth]);
 
   const options: ApexOptions = {
     //data on the x-axis
