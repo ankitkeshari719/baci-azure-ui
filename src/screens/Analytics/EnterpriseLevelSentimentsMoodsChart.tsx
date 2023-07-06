@@ -84,21 +84,12 @@ export default function EnterpriseLevelSentimentsMoodsChart({
           res.result.map((item: any) => {
             temp_3 = temp_3 + item.happy;
           });
-          setSadMoodPercentage(
-            res.result &&
-              res.result[res.result.length - 1] &&
-              res.result[res.result.length - 1].sad
-          );
-          setNeutralMoodPercentage(
-            res.result &&
-              res.result[res.result.length - 1] &&
-              res.result[res.result.length - 1].neutral
-          );
-          setHappyMoodPercentage(
-            res.result &&
-              res.result[res.result.length - 1] &&
-              res.result[res.result.length - 1].happy
-          );
+          const sadData = (temp_1 / (temp_1 + temp_2 + temp_3)) * 100;
+          const neutralData = (temp_2 / (temp_1 + temp_2 + temp_3)) * 100;
+          const happyData = (temp_3 / (temp_1 + temp_2 + temp_3)) * 100;
+          setSadMoodPercentage(Math.round(sadData));
+          setNeutralMoodPercentage(Math.round(neutralData));
+          setHappyMoodPercentage(Math.round(happyData));
         }
       },
       err => {
