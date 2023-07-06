@@ -113,7 +113,7 @@ export default function AverageRetroChart({
           res.result.map((item: any) => {
             temp = temp + item.averageRetros;
           });
-          setTotalAverageSessions(temp);
+          setTotalAverageSessions(Math.round(temp/res.result.length));
         }
       },
       err => {
