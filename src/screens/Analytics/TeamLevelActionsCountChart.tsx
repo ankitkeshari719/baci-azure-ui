@@ -221,7 +221,7 @@ export default function TeamLevelActionsCountChart({
               justifyContent: 'flex-start',
             }}
           >
-            <Link to={'/analytics/'}>Analytics </Link>&nbsp;\ Team Level
+            <Link to={'/facilitator/analytics/'}>Analytics </Link>&nbsp;\ Team Level
           </Grid>
           {/* Back Button & Chart Title */}
           <Grid
@@ -241,7 +241,7 @@ export default function TeamLevelActionsCountChart({
                 cursor: 'pointer',
                 color: '#159ADD',
               }}
-              onClick={() => navigate('/analytics/')}
+              onClick={() => navigate('/facilitator/analytics/')}
             />
             <H2SemiBoldTypography
               label="Count of actions (Assigned vs Completed)"

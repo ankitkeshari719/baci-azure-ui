@@ -229,7 +229,7 @@ export default function AverageRetroChart({
               justifyContent: 'flex-start',
             }}
           >
-            <Link to={'/analytics/'}>Analytics </Link>&nbsp;\ Count of all
+            <Link to={'/facilitator/analytics/'}>Analytics </Link>&nbsp;\ Count of all
             Sessions
           </Grid>
           {/* Back Button & Chart Title */}
@@ -250,7 +250,7 @@ export default function AverageRetroChart({
                 cursor: 'pointer',
                 color: '#159ADD',
               }}
-              onClick={() => navigate('/analytics/')}
+              onClick={() => navigate('/facilitator/analytics/')}
             />
             <H2SemiBoldTypography
               label="Count of all sessions"

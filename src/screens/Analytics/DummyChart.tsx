@@ -70,7 +70,7 @@ export default function DummyChart() {
             cursor: 'pointer',
             color: '#159ADD',
           }}
-          onClick={() => navigate('/analytics/')}
+          onClick={() => navigate('/facilitator/analytics/')}
         />
         <H1RegularTypography label="Dummy Chart for R&D" />
       </Box>
