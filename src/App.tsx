@@ -37,9 +37,8 @@ import TeamLevelActionsCountChart from './screens/Analytics/TeamLevelActionsCoun
 import EnterpriseLevelActionsCountChart from './screens/Analytics/EnterpriseLevelActionsCountChart';
 import DummyChart from './screens/Analytics/DummyChart';
 import LeftBar from './components/Elements/leftBar/LeftBar';
-import FacilitatorDashboard from './components/Elements/facilitatorDashboard/FacilitatorDashboard';
 import ActionDashboard from './components/Elements/actionDashboard/ActionDashboard';
-
+import FacilitatorDashboard from './components/Elements/facilitatorDashboard/facilitatorDashboard';
 
 type AppProps = {
   instance: IPublicClientApplication;
@@ -67,159 +66,160 @@ export default function App({ instance }: AppProps) {
                 <ConfirmProvider>
                   <ThemeProvider theme={theme}>
                     <MsalProvider instance={instance}>
-
-
-
-                      <Box display="flex" height='calc(var(--app-height))'>
-                        {!isXsUp  && <LeftBar />}
+                      <Box display="flex" height="calc(var(--app-height))">
+                        {!isXsUp && <LeftBar />}
                         <Box display="flex" width="calc(100% - 72px)">
-                        <Routes >
-                        <Route
-                            path="/facilitator/"
-                           
-                          >
-                            <Route path="dashboard" element={<FacilitatorDashboard />} />
-                            <Route path="actions" element={<ActionDashboard/>}/>
-                            <Route path="analytics/">
-                            
-                            <Route path="" element={<AnalyticsMainContainer />} />
+                          <Routes>
+                            <Route path="/facilitator/">
+                              <Route
+                                path="dashboard"
+                                element={<FacilitatorDashboard />}
+                              />
+                              <Route
+                                path="actions"
+                                element={<ActionDashboard />}
+                              />
+                              <Route path="analytics/">
+                                <Route
+                                  path=""
+                                  element={<AnalyticsMainContainer />}
+                                />
 
-                            <Route
-                              path="teamLevelActionsCount"
-                              element={<TeamLevelActionsCountChart />}
-                            />
+                                <Route
+                                  path="teamLevelActionsCount"
+                                  element={<TeamLevelActionsCountChart />}
+                                />
 
+                                <Route
+                                  path="enterpriseLevelActionsCount"
+                                  element={<EnterpriseLevelActionsCountChart />}
+                                />
+                                <Route
+                                  path="enterpriseLevelParticipantsCount"
+                                  element={<AverageParticipantChart />}
+                                />
+                                <Route
+                                  path="enterpriseLevelRetrosCount"
+                                  element={<AverageRetroChart />}
+                                />
+                                <Route
+                                  path="enterpriseLevelSentimentsSummary"
+                                  element={<DummyChart />}
+                                />
+                                <Route
+                                  path="enterpriseLevelSentimentsThemes"
+                                  element={<DummyChart />}
+                                />
+                                <Route
+                                  path="enterpriseLevelSentimentsMoods"
+                                  element={<DummyChart />}
+                                />
+                              </Route>
+                            </Route>
                             <Route
-                              path="enterpriseLevelActionsCount"
-                              element={<EnterpriseLevelActionsCountChart />}
-                            />
-                            <Route
-                              path="enterpriseLevelParticipantsCount"
-                              element={<AverageParticipantChart />}
-                            />
-                            <Route
-                              path="enterpriseLevelRetrosCount"
-                              element={<AverageRetroChart />}
-                            />
-                            <Route
-                              path="enterpriseLevelSentimentsSummary"
-                              element={<DummyChart />}
-                            />
-                            <Route
-                              path="enterpriseLevelSentimentsThemes"
-                              element={<DummyChart />}
-                            />
-                            <Route
-                              path="enterpriseLevelSentimentsMoods"
-                              element={<DummyChart />}
-                            />
-                          </Route>
-                          </Route>
-
-                          <Route
-                            path="/"
-                            element={<LandingPage></LandingPage>}
-                          />
-
-                          <Route path="/" element={<LandingPage isDemo={true}></LandingPage>} />
-                         
-                          
-                          <Route
-                            path="/join/:id"
-                            element={<JoinRetro></JoinRetro>}
-                          />
-                          <Route
-                            path="/create"
-                            element={<CreateRetroMain></CreateRetroMain>}
-                          />
-                          <Route
-                            path="/retrodetails"
-                            element={<RetroDetails></RetroDetails>}
-                          />
-
-                          <Route
-                            path="/offboarding"
-                            element={<Offboarding></Offboarding>}
-                          />
-                          <Route path="/board" element={<MainContent />}>
-                            <Route
-                              path=":id/waiting"
+                              path="/"
                               element={
-                                <ParticipantWaitingPage></ParticipantWaitingPage>
+                                <LandingPage isDemo={true}></LandingPage>
                               }
                             />
                             <Route
-                              path=":id/pulsecheck"
-                              element={<PulseCheckMain />}
+                              path="/join/:id"
+                              element={<JoinRetro></JoinRetro>}
                             />
-                            <Route path=":id" element={<Board />} />
-                            <Route path=":id/feedback" element={<Feedback />} />
                             <Route
-                              path=":id/startRetro"
-                              element={<StartRetro></StartRetro>}
+                              path="/create"
+                              element={<CreateRetroMain></CreateRetroMain>}
                             />
-                          </Route>
-                          <Route path="/analytics/">
                             <Route
-                              path=""
-                              element={<AnalyticsMainContainer />}
+                              path="/retrodetails"
+                              element={<RetroDetails></RetroDetails>}
                             />
 
                             <Route
-                              path="teamLevelActionsCount"
-                              element={<TeamLevelActionsCountChart />}
+                              path="/offboarding"
+                              element={<Offboarding></Offboarding>}
                             />
+                            <Route path="/board" element={<MainContent />}>
+                              <Route
+                                path=":id/waiting"
+                                element={
+                                  <ParticipantWaitingPage></ParticipantWaitingPage>
+                                }
+                              />
+                              <Route
+                                path=":id/pulsecheck"
+                                element={<PulseCheckMain />}
+                              />
+                              <Route path=":id" element={<Board />} />
+                              <Route
+                                path=":id/feedback"
+                                element={<Feedback />}
+                              />
+                              <Route
+                                path=":id/startRetro"
+                                element={<StartRetro></StartRetro>}
+                              />
+                            </Route>
+                            <Route path="/analytics/">
+                              <Route
+                                path=""
+                                element={<AnalyticsMainContainer />}
+                              />
+                              <Route
+                                path="teamLevelActionsCount"
+                                element={<TeamLevelActionsCountChart />}
+                              />
+                              <Route
+                                path="enterpriseLevelActionsCount"
+                                element={<EnterpriseLevelActionsCountChart />}
+                              />
+                              <Route
+                                path="enterpriseLevelParticipantsCount"
+                                element={<AverageParticipantChart />}
+                              />
+                              <Route
+                                path="enterpriseLevelRetrosCount"
+                                element={<AverageRetroChart />}
+                              />
+                              <Route
+                                path="enterpriseLevelSentimentsSummary"
+                                element={<DummyChart />}
+                              />
+                              <Route
+                                path="enterpriseLevelSentimentsThemes"
+                                element={<DummyChart />}
+                              />
+                              <Route
+                                path="enterpriseLevelSentimentsMoods"
+                                element={
+                                  <EnterpriseLevelSentimentsMoodsChart />
+                                }
+                              />
+                            </Route>
 
+                            <Route
+                              path="/report/:id"
+                              element={<SummaryReportMain />}
+                            />
                             <Route
                               path="enterpriseLevelActionsCount"
-                              element={<EnterpriseLevelActionsCountChart />}
-                            />
-                            <Route
-                              path="enterpriseLevelParticipantsCount"
-                              element={<AverageParticipantChart />}
-                            />
-                            <Route
-                              path="enterpriseLevelRetrosCount"
-                              element={<AverageRetroChart />}
-                            />
-                            <Route
-                              path="enterpriseLevelSentimentsSummary"
                               element={<DummyChart />}
                             />
                             <Route
-                              path="enterpriseLevelSentimentsThemes"
-                              element={<DummyChart />}
+                              path="/retroisfinished"
+                              element={<RetroIsFinished></RetroIsFinished>}
                             />
                             <Route
-                              path="enterpriseLevelSentimentsMoods"
-                              element={<EnterpriseLevelSentimentsMoodsChart />}
+                              path="/jiraCallback/"
+                              element={<JiraCallback />}
                             />
-                          </Route>
 
-                          <Route
-                            path="/report/:id"
-                            element={<SummaryReportMain />}
-                          />
-                          <Route
-                            path="enterpriseLevelActionsCount"
-                            element={<DummyChart />}
-                          />
-                          <Route
-                            path="/retroisfinished"
-                            element={<RetroIsFinished></RetroIsFinished>}
-                          />
-                          <Route
-                            path="/jiraCallback/"
-                            element={<JiraCallback />}
-                          />
-
-                          <Route
-                            path="*"
-                            element={<PageNotFound></PageNotFound>}
-                          />
-                        </Routes>
+                            <Route
+                              path="*"
+                              element={<PageNotFound></PageNotFound>}
+                            />
+                          </Routes>
                         </Box>
-
                       </Box>
                     </MsalProvider>
                     <SnackMessage />
