@@ -223,7 +223,8 @@ export default function EnterpriseLevelActionsCountChart({
               justifyContent: 'flex-start',
             }}
           >
-            <Link to={'/analytics/'}>Analytics </Link>&nbsp;\ Count of actions
+            <Link to={'/facilitator/analytics/'}>Analytics </Link>&nbsp;\ Count
+            of actions
           </Grid>
           {/* Back Button & Chart Title */}
           <Grid
@@ -243,7 +244,7 @@ export default function EnterpriseLevelActionsCountChart({
                 cursor: 'pointer',
                 color: '#159ADD',
               }}
-              onClick={() => navigate('/analytics/')}
+              onClick={() => navigate('/facilitator/analytics/')}
             />
             <H2SemiBoldTypography
               label="Count of actions (Assigned vs Completed) all teams"

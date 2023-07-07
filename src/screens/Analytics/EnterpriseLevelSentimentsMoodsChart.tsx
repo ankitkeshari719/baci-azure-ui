@@ -220,7 +220,7 @@ export default function EnterpriseLevelSentimentsMoodsChart({
               justifyContent: 'flex-start',
             }}
           >
-            <Link to={'/analytics/'}>Analytics </Link>&nbsp;\ Participants Mood
+            <Link to={'/facilitator/analytics/'}>Analytics </Link>&nbsp;\ Participants Mood
           </Grid>
           {/* Back Button & Chart Title */}
           <Grid
@@ -240,7 +240,7 @@ export default function EnterpriseLevelSentimentsMoodsChart({
                 cursor: 'pointer',
                 color: '#159ADD',
               }}
-              onClick={() => navigate('/analytics/')}
+              onClick={() => navigate('/facilitator/analytics/')}
             />
             <H2SemiBoldTypography
               label="Participants Mood"
