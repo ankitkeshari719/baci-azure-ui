@@ -48,7 +48,7 @@ const styles = {
   },
 };
 
-export function LandingPage() {
+export function LandingPage({isDemo}:{isDemo?:boolean}) {
   const { id } = useParams();
   const retro = useRetro();
   const navigate = useNavigate();
@@ -63,6 +63,8 @@ export function LandingPage() {
   // const isSmUp = useMediaQuery(theme.breakpoints.only('sm'));
   const [isAddDeploymentDataDialogOpen, setIsAddDeploymentDataDialogOpen] =
     React.useState(false);
+    // const [isDemo,setIsDemo]=React.useState<boolean>(false);
+
 
   useAzureAuth();
 
@@ -73,6 +75,7 @@ export function LandingPage() {
     sessionStorage.removeItem('showManual');
     localStorage.removeItem('selectedTemplate');
     localStorage.removeItem('tempSelectedTemplateData');
+
   }, []);
 
   React.useEffect(() => {
@@ -297,7 +300,34 @@ width:"100%",
               // marginLeft="10px"
               // marginRight="10px"
             >
-              <Grid
+              {isDemo?<>
+              <Box display="flex" flexDirection="row">
+                <ContainedButton
+                    id={'login_as_facilitator'}
+                    name={'Facilitator Login'}
+                    onClick={() =>   navigate('facilitator/dashboard/')}
+                    style={{
+                      // width: '100%',
+                      marginRight: '40px',
+                      padding: '10px 20px',
+                      gap: '8px',
+                    }}
+                    size={'medium'}
+                  />
+              <ContainedButton
+                    id={'login_as_enterprise'}
+                    name={'Enterprise Login'}
+                    onClick={() => navigate('facilitator/dashboard/')}
+                    style={{
+                      // width: '100%',
+                      // marginTop: '80px',
+                      padding: '10px 20px',
+                      gap: '8px',
+                    }}
+                    size={'medium'}
+                  />
+                  </Box>
+              </>:<Grid
                 item
                 xs={12}
                 marginRight="50px"
@@ -364,7 +394,7 @@ width:"100%",
                     />
                   )}
                 </Box>
-              </Grid>
+              </Grid>}
             </Grid>
           </Grid>
         </Box>

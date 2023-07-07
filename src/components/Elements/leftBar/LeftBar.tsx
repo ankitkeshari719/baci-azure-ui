@@ -14,48 +14,52 @@ import {
   BellIcon,
 } from '@heroicons/react/24/outline';
 
-import React from 'react';
+import React, { useEffect } from 'react';
 
 import Avatar from '../Avatar';
 
 import { GlobalContext } from '../../../contexts/GlobalContext';
 
 import { LazyLoadImage } from 'react-lazy-load-image-component';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useSearchParams } from 'react-router-dom';
 
 const LeftBar = () => {
   const navigate = useNavigate();
   const [selectedMenu, setSelectedMenu] = React.useState('');
-
+  const [searchParams] = useSearchParams();
   const [{ user }] = React.useContext(GlobalContext);
 
   const menuArray = [
-    { id: 1, label: 'Home', icon: HomeIcon, routeTo: '/demo/facilitatorDashboard', disabled: false },
-
+    {
+      id: 1,
+      label: 'Home',
+      icon: HomeIcon,
+      routeTo: 'facilitator/dashboard',
+      disabled: false,
+    },
     {
       id: 2,
-      label: 'Retros',
-      icon: ViewColumnsIcon,
-      routeTo: '',
+      label: 'Actions',
+      icon: ClipboardDocumentCheckIcon,
+      routeTo: 'facilitator/actions',
       disabled: false,
     },
 
     {
       id: 3,
-      label: 'Workspace',
-      icon: ClipboardDocumentCheckIcon,
-      routeTo: '',
-      disabled: true,
+      label: 'Analytics',
+      icon: ChartBarIcon,
+      routeTo: 'facilitator/analytics/',
+      disabled: false,
     },
 
     {
       id: 4,
-      label: 'Analytics',
-      icon: ChartBarIcon,
-      routeTo: '/analytics/',
-      disabled: false,
+      label: 'Retros',
+      icon: ViewColumnsIcon,
+      routeTo: '',
+      disabled: true,
     },
-
     {
       id: 5,
       label: 'Templates',
@@ -97,13 +101,29 @@ const LeftBar = () => {
       disabled: true,
     },
   ];
-
+  useEffect(() => {
+    if (location.pathname.includes('facilitator/dashboard')) {
+      setSelectedMenu(menuArray[0].label);
+    } else if (location.pathname.includes('analytics')) {
+      setSelectedMenu(menuArray[2].label);
+    } else if (location.pathname.includes('actions')) {
+      setSelectedMenu(menuArray[1].label);
+    }
+  }, [
+    location.pathname.includes('analytics'),
+    location.pathname.includes('facilitator/dashboard'),
+  ]);
   return (
     <>
-      <Box className="leftBarContainer">
+      <Box
+        className="leftBarContainer"
+        sx={{
+          display: location.pathname.includes('facilitator') ? 'flex' : 'none',
+        }}
+      >
         <Box className="topContainer">
           <Box>
-            <img src="../images/r_MenuHeader.png" style={{ width: '56px' }} />
+            <img src="/../images/r_MenuHeader.png" style={{ width: '56px' }} />
           </Box>
 
           {menuArray.map((menu, index) => {
@@ -114,9 +134,10 @@ const LeftBar = () => {
                     menu.label == selectedMenu ? 'menuIconSelected' : 'menuIcon'
                   }
                   onClick={() => {
-                    if(!menu.disabled)
-                    {setSelectedMenu(menu.label);
-                    navigate(menu.routeTo);}
+                    if (!menu.disabled) {
+                      setSelectedMenu(menu.label);
+                      navigate(menu.routeTo);
+                    }
                   }}
                 />
               </Tooltip>
