@@ -220,7 +220,7 @@ export default function EnterpriseLevelSentimentsThemeChart({
               justifyContent: 'flex-start',
             }}
           >
-            <Link to={'/analytics/'}>Analytics </Link>&nbsp;\ Key themes heatmap
+            <Link to={'/facilitator/analytics/'}>Analytics </Link>&nbsp;\ Key themes heatmap
           </Grid>
           {/* Back Button & Chart Title */}
           <Grid
@@ -240,7 +240,7 @@ export default function EnterpriseLevelSentimentsThemeChart({
                 cursor: 'pointer',
                 color: '#159ADD',
               }}
-              onClick={() => navigate('/analytics/')}
+              onClick={() => navigate('/facilitator/analytics/')}
             />
             <H2SemiBoldTypography
               label="Key themes heatmap"

@@ -104,15 +104,21 @@ export default function App({ instance }: AppProps) {
                                 />
                                 <Route
                                   path="enterpriseLevelSentimentsSummary"
-                                  element={<DummyChart />}
+                                  element={
+                                    <EnterpriseLevelSentimentsSummaryChart />
+                                  }
                                 />
                                 <Route
                                   path="enterpriseLevelSentimentsThemes"
-                                  element={<DummyChart />}
+                                  element={
+                                    <EnterpriseLevelSentimentsThemeChart />
+                                  }
                                 />
                                 <Route
                                   path="enterpriseLevelSentimentsMoods"
-                                  element={<DummyChart />}
+                                  element={
+                                    <EnterpriseLevelSentimentsMoodsChart />
+                                  }
                                 />
                               </Route>
                             </Route>
@@ -183,11 +189,15 @@ export default function App({ instance }: AppProps) {
                               />
                               <Route
                                 path="enterpriseLevelSentimentsSummary"
-                                element={<DummyChart />}
+                                element={
+                                  <EnterpriseLevelSentimentsSummaryChart />
+                                }
                               />
                               <Route
                                 path="enterpriseLevelSentimentsThemes"
-                                element={<DummyChart />}
+                                element={
+                                  <EnterpriseLevelSentimentsThemeChart />
+                                }
                               />
                               <Route
                                 path="enterpriseLevelSentimentsMoods"
@@ -196,7 +206,6 @@ export default function App({ instance }: AppProps) {
                                 }
                               />
                             </Route>
-
                             <Route
                               path="/report/:id"
                               element={<SummaryReportMain />}
