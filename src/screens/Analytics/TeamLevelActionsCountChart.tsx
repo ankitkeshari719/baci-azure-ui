@@ -1,12 +1,14 @@
 import React, { useState } from 'react';
-import { getTeamLevelActionsCount } from '../../helpers/msal/services';
+import {
+  getTeamLevelActionsCount,
+  getTeamLevelActionsCounts,
+} from '../../helpers/msal/services';
 import ReactApexChart from 'react-apexcharts';
 import { ApexOptions } from 'apexcharts';
 import {
   Box,
   FormControl,
   Grid,
-  InputLabel,
   MenuItem,
   Select,
   SelectChangeEvent,
@@ -19,17 +21,44 @@ import { Link, useNavigate } from 'react-router-dom';
 import * as Icons from 'heroicons-react';
 import { MONTH_SELECTORS, MenuProps } from './const';
 
-export default function TeamLevelActionsCountChart() {
+export default function TeamLevelActionsCountChart({
+  dashboard,
+}: {
+  dashboard?: boolean;
+}) {
   const [teamLevelActions, setTeamLevelActions] = useState<any>([]);
-  const [assignedActions, setAssignedActions] = useState([]);
-  const [completedActions, setCompletedActions] = useState([]);
-  const [months, setMonths] = useState([]);
+  const [assignedActions, setAssignedActions] = useState<any>([]);
+  const [completedActions, setCompletedActions] = useState<any>([]);
+  const [months, setMonths] = useState<any>([]);
   const [fromDate, setFromDate] = useState<string>('10');
   const [toDate, setToDate] = useState<string>('15');
   const navigate = useNavigate();
+  const windowWidth = React.useRef(window.innerWidth);
+
+  const getChartWidth = () => {
+    switch (true) {
+      case windowWidth.current <= 1051:
+        return '700';
+      case windowWidth.current > 1051 && windowWidth.current <= 1150:
+        return '750';
+      case windowWidth.current >= 1151 && windowWidth.current <= 1199:
+        return '800';
+      case windowWidth.current >= 1200 && windowWidth.current <= 1300:
+        return '900';
+      case windowWidth.current >= 1301 && windowWidth.current <= 1400:
+        return '1000';
+      case windowWidth.current >= 1401 && windowWidth.current <= 1500:
+        return '1050';
+      case windowWidth.current >= 1500:
+        return '1100';
+      default:
+        return '500';
+    }
+  };
 
   React.useEffect(() => {
-    handleGetTeamLevelActionsCountData();
+    // handleGetTeamLevelActionsCountData();
+    handleGetTeamLevelActionsCountsData();
   }, [fromDate, toDate]);
 
   const handleGetTeamLevelActionsCountData = async () => {
@@ -40,6 +69,34 @@ export default function TeamLevelActionsCountChart() {
           setAssignedActions(res.result?.map((item: any) => item.assigned));
           setCompletedActions(res.result?.map((item: any) => item.completed));
           setMonths(res.result?.map((item: any) => item.month));
+        }
+      },
+      err => {
+        console.log('err', err);
+      }
+    );
+  };
+
+  const handleGetTeamLevelActionsCountsData = async () => {
+    await getTeamLevelActionsCounts(fromDate, toDate).then(
+      res => {
+        if (res && res.result) {
+          const teamsData = res.result.map((item: any, index: number) => {
+            return item.teams;
+          });
+          let nameArray = [];
+          let assignedArray = [];
+          let completedArray = [];
+          for (let i = 0; i < teamsData.length; i++) {
+            for (let j = 0; j < teamsData[i].length; j++) {
+              nameArray.push(teamsData[i][j].name);
+              assignedArray.push(teamsData[i][j].assigned);
+              completedArray.push(teamsData[i][j].completed);
+            }
+          }
+          setAssignedActions(assignedArray);
+          setCompletedActions(completedArray);
+          setMonths(nameArray);
         }
       },
       err => {
@@ -68,9 +125,14 @@ export default function TeamLevelActionsCountChart() {
     chart: {
       id: 'bar',
       stacked: true,
-      //   stackType: '100%',
       zoom: {
         enabled: false,
+      },
+      toolbar: {
+        show: true,
+        tools: {
+          download: false,
+        },
       },
     },
     dataLabels: {
@@ -137,159 +199,177 @@ export default function TeamLevelActionsCountChart() {
   };
 
   return (
-    <Box sx={{ overflowY: 'auto' }} height="calc(var(--app-height))">
-      <Box sx={{ margin: '48px' }}>
-        {/* Route Path */}
-        <Box
-          sx={{
-            width: '100%',
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'flex-start',
-          }}
-        >
-          <Link to={'/analytics/'}>Analytics </Link>&nbsp;\ Team Level
-        </Box>
-        {/* Back Button & Chart Title */}
-        <Box
-          sx={{
-            width: '100%',
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'flex-start',
-            marginTop: '12px',
-          }}
-        >
-          <Icons.ArrowCircleLeftOutline
-            size={32}
-            style={{
-              cursor: 'pointer',
-              color: '#159ADD',
-            }}
-            onClick={() => navigate('/analytics/')}
-          />
-          <H2SemiBoldTypography
-            label="Count of actions (Assigned vs Completed)"
-            style={{ color: '#2C69A1', marginLeft: '12px' }}
-          />
-        </Box>
-        {/* Selector */}
-        <Box
-          sx={{
-            display: 'flex',
-            flexDirection: 'row',
-            alignItems: 'center',
-            justifyContent: 'center',
-            marginTop: '16px',
-          }}
-        >
-          {/* Select Range Title */}
-          <ButtonLabelTypography
-            label="Select Range:"
-            style={{
-              color: '#343434',
-            }}
-          />
-          {/* From Date */}
-          <Box sx={{ minWidth: 240, marginLeft: '16px', marginRight: '16px' }}>
-            <FormControl fullWidth>
-              <Select
-                sx={{
-                  fieldset: {
-                    border: 'none',
-                    opacity: 1,
-                    color: '#4E4E4E',
-                  },
-                }}
-                labelId="from-Date"
-                id="from_date"
-                value={fromDate}
-                label="From"
-                onChange={handleFromDate}
-                IconComponent={props => (
-                  <Icons.ChevronDownOutline
-                    size={24}
-                    color="#4E4E4E"
-                    style={{
-                      cursor: 'pointer',
-                      position: 'absolute',
-                      top: 'calc(50% - 0.8em)',
-                    }}
-                    {...props}
-                  />
-                )}
-                MenuProps={MenuProps}
-              >
-                {MONTH_SELECTORS.map(month_selector => {
-                  return (
-                    <MenuItem value={month_selector.id} key={month_selector.id}>
-                      {month_selector.month}
-                    </MenuItem>
-                  );
-                })}
-              </Select>
-            </FormControl>
-          </Box>
-          <ButtonLabelTypography
-            label="To"
-            style={{
-              color: '#343434',
-            }}
-          />
-          {/*To Date */}
-          <Box sx={{ minWidth: 240, marginLeft: '16px' }}>
-            <FormControl fullWidth>
-              <Select
-                sx={{
-                  fieldset: {
-                    border: 'none',
-                    opacity: 1,
-                    color: '#4E4E4E',
-                  },
-                }}
-                labelId="to-Date"
-                id="to_date"
-                value={toDate}
-                label="To"
-                onChange={handleToDate}
-                IconComponent={props => (
-                  <Icons.ChevronDownOutline
-                    size={24}
-                    color="#4E4E4E"
-                    style={{
-                      cursor: 'pointer',
-                      position: 'absolute',
-                      top: 'calc(50% - 0.8em)',
-                    }}
-                    {...props}
-                  />
-                )}
-                MenuProps={MenuProps}
-              >
-                {MONTH_SELECTORS.map(month_selector => {
-                  return (
-                    <MenuItem value={month_selector.id} key={month_selector.id}>
-                      {month_selector.month}
-                    </MenuItem>
-                  );
-                })}
-              </Select>
-            </FormControl>
-          </Box>
-        </Box>
-        {/* Chart */}
-        <Grid
-          container
-          spacing={2}
-          sx={{
-            marginTop: '16px',
-          }}
-        >
+    <>
+      {dashboard ? (
+        <ReactApexChart
+          options={options}
+          series={series}
+          type="bar"
+          width="550"
+          height="370"
+        />
+      ) : (
+        <Grid container spacing={2} sx={{ padding: '48px', overflowY: 'auto' }}>
+          {/* Route Path */}
           <Grid
             item
             xs={12}
             sx={{
               padding: '0px !important',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'flex-start',
+            }}
+          >
+            <Link to={'/analytics/'}>Analytics </Link>&nbsp;\ Team Level
+          </Grid>
+          {/* Back Button & Chart Title */}
+          <Grid
+            item
+            xs={12}
+            sx={{
+              padding: '0px !important',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'flex-start',
+              marginTop: '24px',
+            }}
+          >
+            <Icons.ArrowCircleLeftOutline
+              size={32}
+              style={{
+                cursor: 'pointer',
+                color: '#159ADD',
+              }}
+              onClick={() => navigate('/analytics/')}
+            />
+            <H2SemiBoldTypography
+              label="Count of actions (Assigned vs Completed)"
+              style={{ color: '#2C69A1', marginLeft: '16px' }}
+            />
+          </Grid>
+          {/* Selector */}
+          <Grid
+            item
+            xs={12}
+            sx={{
+              padding: '0px !important',
+              display: 'flex',
+              flexDirection: 'row',
+              alignItems: 'center',
+              justifyContent: 'center',
+              marginTop: '16px',
+            }}
+          >
+            {/* Select Range Title */}
+            <ButtonLabelTypography
+              label="Select Range:"
+              style={{
+                color: '#343434',
+              }}
+            />
+            {/* From Date */}
+            <Box
+              sx={{ minWidth: 240, marginLeft: '16px', marginRight: '16px' }}
+            >
+              <FormControl fullWidth>
+                <Select
+                  sx={{
+                    fieldset: {
+                      border: 'none',
+                      opacity: 1,
+                      color: '#4E4E4E',
+                    },
+                  }}
+                  labelId="from-Date"
+                  id="from_date"
+                  value={fromDate}
+                  label="From"
+                  onChange={handleFromDate}
+                  IconComponent={props => (
+                    <Icons.ChevronDownOutline
+                      size={24}
+                      color="#4E4E4E"
+                      style={{
+                        cursor: 'pointer',
+                        position: 'absolute',
+                        top: 'calc(50% - 0.8em)',
+                      }}
+                      {...props}
+                    />
+                  )}
+                  MenuProps={MenuProps}
+                >
+                  {MONTH_SELECTORS.map(month_selector => {
+                    return (
+                      <MenuItem
+                        value={month_selector.id}
+                        key={month_selector.id}
+                      >
+                        {month_selector.month}
+                      </MenuItem>
+                    );
+                  })}
+                </Select>
+              </FormControl>
+            </Box>
+            <ButtonLabelTypography
+              label="To"
+              style={{
+                color: '#343434',
+              }}
+            />
+            {/*To Date */}
+            <Box sx={{ minWidth: 240, marginLeft: '16px' }}>
+              <FormControl fullWidth>
+                <Select
+                  sx={{
+                    fieldset: {
+                      border: 'none',
+                      opacity: 1,
+                      color: '#4E4E4E',
+                    },
+                  }}
+                  labelId="to-Date"
+                  id="to_date"
+                  value={toDate}
+                  label="To"
+                  onChange={handleToDate}
+                  IconComponent={props => (
+                    <Icons.ChevronDownOutline
+                      size={24}
+                      color="#4E4E4E"
+                      style={{
+                        cursor: 'pointer',
+                        position: 'absolute',
+                        top: 'calc(50% - 0.8em)',
+                      }}
+                      {...props}
+                    />
+                  )}
+                  MenuProps={MenuProps}
+                >
+                  {MONTH_SELECTORS.map(month_selector => {
+                    return (
+                      <MenuItem
+                        value={month_selector.id}
+                        key={month_selector.id}
+                      >
+                        {month_selector.month}
+                      </MenuItem>
+                    );
+                  })}
+                </Select>
+              </FormControl>
+            </Box>
+          </Grid>
+          {/* Chart  */}
+          <Grid
+            item
+            xs={12}
+            sx={{
+              padding: '0px !important',
+              marginTop: '48px',
               display: 'flex',
               alignItems: 'center',
               justifyContent: 'center',
@@ -299,12 +379,12 @@ export default function TeamLevelActionsCountChart() {
               options={options}
               series={series}
               type="bar"
-              width="1200"
+              width={getChartWidth()}
               height="500"
             />
           </Grid>
         </Grid>
-      </Box>
-    </Box>
+      )}
+    </>
   );
 }

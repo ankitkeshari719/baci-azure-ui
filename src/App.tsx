@@ -86,7 +86,7 @@ export default function App({ instance }: AppProps) {
 
                             <Route
                               path="teamLevelActionsCount"
-                              element={<DummyChart />}
+                              element={<TeamLevelActionsCountChart />}
                             />
 
                             <Route
@@ -116,6 +116,10 @@ export default function App({ instance }: AppProps) {
                           </Route>
                           </Route>
 
+                          <Route
+                            path="/"
+                            element={<LandingPage></LandingPage>}
+                          />
 
                           <Route path="/" element={<LandingPage isDemo={true}></LandingPage>} />
                          
@@ -132,7 +136,6 @@ export default function App({ instance }: AppProps) {
                             path="/retrodetails"
                             element={<RetroDetails></RetroDetails>}
                           />
-
 
                           <Route
                             path="/offboarding"
@@ -157,16 +160,19 @@ export default function App({ instance }: AppProps) {
                             />
                           </Route>
                           <Route path="/analytics/">
-                            <Route path="" element={<AnalyticsMainContainer />} />
+                            <Route
+                              path=""
+                              element={<AnalyticsMainContainer />}
+                            />
 
                             <Route
                               path="teamLevelActionsCount"
-                              element={<DummyChart />}
+                              element={<TeamLevelActionsCountChart />}
                             />
 
                             <Route
                               path="enterpriseLevelActionsCount"
-                              element={<DummyChart />}
+                              element={<EnterpriseLevelActionsCountChart />}
                             />
                             <Route
                               path="enterpriseLevelParticipantsCount"
@@ -186,7 +192,7 @@ export default function App({ instance }: AppProps) {
                             />
                             <Route
                               path="enterpriseLevelSentimentsMoods"
-                              element={<DummyChart />}
+                              element={<EnterpriseLevelSentimentsMoodsChart />}
                             />
                           </Route>
 
@@ -207,9 +213,6 @@ export default function App({ instance }: AppProps) {
                             element={<JiraCallback />}
                           />
 
-                         
-
-
                           <Route
                             path="*"
                             element={<PageNotFound></PageNotFound>}
@@ -218,7 +221,6 @@ export default function App({ instance }: AppProps) {
                         </Box>
 
                       </Box>
-
                     </MsalProvider>
                     <SnackMessage />
                   </ThemeProvider>
