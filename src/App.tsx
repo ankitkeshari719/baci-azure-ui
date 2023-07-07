@@ -38,6 +38,7 @@ import EnterpriseLevelActionsCountChart from './screens/Analytics/EnterpriseLeve
 import DummyChart from './screens/Analytics/DummyChart';
 import LeftBar from './components/Elements/leftBar/LeftBar';
 import FacilitatorDashboard from './components/Elements/facilitatorDashboard/FacilitatorDashboard';
+import ActionDashboard from './components/Elements/actionDashboard/ActionDashboard';
 
 
 type AppProps = {
@@ -78,7 +79,9 @@ export default function App({ instance }: AppProps) {
                            
                           >
                             <Route path="dashboard" element={<FacilitatorDashboard />} />
+                            <Route path="actions" element={<ActionDashboard/>}/>
                             <Route path="analytics/">
+                            
                             <Route path="" element={<AnalyticsMainContainer />} />
 
                             <Route
