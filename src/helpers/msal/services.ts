@@ -360,6 +360,50 @@ export const getEnterpriseLevelActionsCount = async (
   return enterpriseLevelActionsCountData;
 };
 
+// Api to get Team Level Actions Count
+export const getTeamLevelActionsCounts = async (
+  fromDate: string,
+  toDate: string
+): Promise<any> => {
+  let teamLevelActionsCountData;
+  const requestOptions = {
+    method: 'GET',
+  };
+  await fetch(
+    API_URL +
+      `/getTeamLevelActionsCounts?fromDate=${fromDate}&toDate=${toDate}`,
+    requestOptions
+  )
+    .then(response => response.json())
+    .then(data => {
+      teamLevelActionsCountData = data;
+    });
+
+  return teamLevelActionsCountData;
+};
+
+// Api to get Enterprise Level ActionsCount
+export const getEnterpriseLevelActionsCounts = async (
+  fromDate: string,
+  toDate: string
+): Promise<any> => {
+  let enterpriseLevelActionsCountData;
+  const requestOptions = {
+    method: 'GET',
+  };
+  await fetch(
+    API_URL +
+      `/getEnterpriseLevelActionsCounts?fromDate=${fromDate}&toDate=${toDate}`,
+    requestOptions
+  )
+    .then(response => response.json())
+    .then(data => {
+      enterpriseLevelActionsCountData = data;
+    });
+
+  return enterpriseLevelActionsCountData;
+};
+
 // Api to get count of all participant over time
 export const getParticipantsCount = async (
   fromDate: string,

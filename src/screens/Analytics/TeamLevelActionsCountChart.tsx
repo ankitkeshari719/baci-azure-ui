@@ -1,5 +1,8 @@
 import React, { useState } from 'react';
-import { getTeamLevelActionsCount } from '../../helpers/msal/services';
+import {
+  getTeamLevelActionsCount,
+  getTeamLevelActionsCounts,
+} from '../../helpers/msal/services';
 import ReactApexChart from 'react-apexcharts';
 import { ApexOptions } from 'apexcharts';
 import {
@@ -24,9 +27,9 @@ export default function TeamLevelActionsCountChart({
   dashboard?: boolean;
 }) {
   const [teamLevelActions, setTeamLevelActions] = useState<any>([]);
-  const [assignedActions, setAssignedActions] = useState([]);
-  const [completedActions, setCompletedActions] = useState([]);
-  const [months, setMonths] = useState([]);
+  const [assignedActions, setAssignedActions] = useState<any>([]);
+  const [completedActions, setCompletedActions] = useState<any>([]);
+  const [months, setMonths] = useState<any>([]);
   const [fromDate, setFromDate] = useState<string>('10');
   const [toDate, setToDate] = useState<string>('15');
   const navigate = useNavigate();
@@ -54,7 +57,8 @@ export default function TeamLevelActionsCountChart({
   };
 
   React.useEffect(() => {
-    handleGetTeamLevelActionsCountData();
+    // handleGetTeamLevelActionsCountData();
+    handleGetTeamLevelActionsCountsData();
   }, [fromDate, toDate]);
 
   const handleGetTeamLevelActionsCountData = async () => {
@@ -65,6 +69,34 @@ export default function TeamLevelActionsCountChart({
           setAssignedActions(res.result?.map((item: any) => item.assigned));
           setCompletedActions(res.result?.map((item: any) => item.completed));
           setMonths(res.result?.map((item: any) => item.month));
+        }
+      },
+      err => {
+        console.log('err', err);
+      }
+    );
+  };
+
+  const handleGetTeamLevelActionsCountsData = async () => {
+    await getTeamLevelActionsCounts(fromDate, toDate).then(
+      res => {
+        if (res && res.result) {
+          const teamsData = res.result.map((item: any, index: number) => {
+            return item.teams;
+          });
+          let nameArray = [];
+          let assignedArray = [];
+          let completedArray = [];
+          for (let i = 0; i < teamsData.length; i++) {
+            for (let j = 0; j < teamsData[i].length; j++) {
+              nameArray.push(teamsData[i][j].name);
+              assignedArray.push(teamsData[i][j].assigned);
+              completedArray.push(teamsData[i][j].completed);
+            }
+          }
+          setAssignedActions(assignedArray);
+          setCompletedActions(completedArray);
+          setMonths(nameArray);
         }
       },
       err => {
