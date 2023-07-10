@@ -34,7 +34,7 @@ export default function EnterpriseLevelSentimentsMoodsChart({
   const [happyMoodPercentage, setHappyMoodPercentage] = useState<number>();
   const [months, setMonths] = useState([]);
   const [fromDate, setFromDate] = useState<string>('10');
-  const [toDate, setToDate] = useState<string>('15');
+  const [toDate, setToDate] = useState<string>('16');
   const navigate = useNavigate();
   const windowWidth = React.useRef(window.innerWidth);
 
@@ -68,20 +68,34 @@ export default function EnterpriseLevelSentimentsMoodsChart({
       res => {
         if (res && res.result) {
           setMoods(res.result);
-          setSadMoods(res.result?.map((item: any) => item.sad));
-          setNeutralMoods(res.result?.map((item: any) => item.neutral));
-          setHappyMoods(res.result?.map((item: any) => item.happy));
+          setSadMoods(
+            res.result?.map((item: any) =>
+              Math.round(
+                (item.sad / (item.sad + item.neutral + item.happy)) * 100
+              )
+            )
+          );
+          setNeutralMoods(
+            res.result?.map((item: any) =>
+              Math.round(
+                (item.neutral / (item.sad + item.neutral + item.happy)) * 100
+              )
+            )
+          );
+          setHappyMoods(
+            res.result?.map((item: any) =>
+              Math.round(
+                (item.happy / (item.sad + item.neutral + item.happy)) * 100
+              )
+            )
+          );
           setMonths(res.result?.map((item: any) => item.month));
           let temp_1 = 0;
           let temp_2 = 0;
           let temp_3 = 0;
           res.result.map((item: any) => {
             temp_1 = temp_1 + item.sad;
-          });
-          res.result.map((item: any) => {
             temp_2 = temp_2 + item.neutral;
-          });
-          res.result.map((item: any) => {
             temp_3 = temp_3 + item.happy;
           });
           const sadData = (temp_1 / (temp_1 + temp_2 + temp_3)) * 100;
@@ -220,7 +234,8 @@ export default function EnterpriseLevelSentimentsMoodsChart({
               justifyContent: 'flex-start',
             }}
           >
-            <Link to={'/facilitator/analytics/'}>Analytics </Link>&nbsp;\ Participants Mood
+            <Link to={'/facilitator/analytics/'}>Analytics </Link>&nbsp;\
+            Participants Mood
           </Grid>
           {/* Back Button & Chart Title */}
           <Grid

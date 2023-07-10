@@ -31,7 +31,7 @@ export default function TeamLevelActionsCountChart({
   const [completedActions, setCompletedActions] = useState<any>([]);
   const [months, setMonths] = useState<any>([]);
   const [fromDate, setFromDate] = useState<string>('10');
-  const [toDate, setToDate] = useState<string>('15');
+  const [toDate, setToDate] = useState<string>('16');
   const navigate = useNavigate();
   const windowWidth = React.useRef(window.innerWidth);
 
