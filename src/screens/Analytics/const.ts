@@ -9,11 +9,11 @@ export const MONTH_SELECTORS = [
   },
   {
     id: 3,
-    month: 'June 22',
+    month: 'Jun 22',
   },
   {
     id: 4,
-    month: 'July 22',
+    month: 'Jul 22',
   },
   {
     id: 5,
@@ -57,11 +57,11 @@ export const MONTH_SELECTORS = [
   },
   {
     id: 15,
-    month: 'June 23',
+    month: 'Jun 23',
   },
   {
     id: 16,
-    month: 'July 23',
+    month: 'Jul 23',
   },
 ];
 
