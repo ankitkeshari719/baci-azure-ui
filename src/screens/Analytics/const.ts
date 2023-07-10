@@ -59,6 +59,10 @@ export const MONTH_SELECTORS = [
     id: 15,
     month: 'June 23',
   },
+  {
+    id: 16,
+    month: 'July 23',
+  },
 ];
 
 const ITEM_HEIGHT = 48;
