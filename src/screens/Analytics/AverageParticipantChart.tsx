@@ -50,7 +50,7 @@ export default function AverageParticipantChart({
   const [averageParticipants, setAverageParticipants] = useState([]);
   const [months, setMonths] = useState([]);
   const [fromDate, setFromDate] = useState<string>('10');
-  const [toDate, setToDate] = useState<string>('15');
+  const [toDate, setToDate] = useState<string>('16');
   const [selectedFromDate, setSelectedFromDate] = useState<string>();
   const [selectedToDate, setSelectedToDate] = useState<string>();
   const [totalAverageParticipants, setTotalAverageParticipants] =
