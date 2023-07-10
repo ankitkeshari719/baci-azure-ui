@@ -51,7 +51,7 @@ export default function AverageRetroChart({
   const [averageRetros, setAverageRetros] = useState([]);
   const [months, setMonths] = useState([]);
   const [fromDate, setFromDate] = useState<string>('10');
-  const [toDate, setToDate] = useState<string>('15');
+  const [toDate, setToDate] = useState<string>('16');
   const [selectedFromDate, setSelectedFromDate] = useState<string>();
   const [selectedToDate, setSelectedToDate] = useState<string>();
   const [totalAverageSessions, setTotalAverageSessions] = useState<number>();
