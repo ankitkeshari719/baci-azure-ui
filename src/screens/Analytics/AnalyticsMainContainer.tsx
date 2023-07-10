@@ -42,15 +42,13 @@ export default function AnalyticsMainContainer() {
     },
     {
       id: 3,
-      cardDesc:
-        'Enterprise Level - Count of all participants over time',
+      cardDesc: 'Enterprise Level - Count of all participants over time',
       link: 'enterpriseLevelParticipantsCount',
       image: '/svgs/Analytics_Images_3.svg',
     },
     {
       id: 4,
-      cardDesc:
-        'Enterprise Level - Count of all retros over time',
+      cardDesc: 'Enterprise Level - Count of all retros over time',
       link: 'enterpriseLevelRetrosCount',
       image: '/svgs/Analytics_Images_4.svg',
     },
@@ -63,8 +61,7 @@ export default function AnalyticsMainContainer() {
     },
     {
       id: 6,
-      cardDesc:
-        'Enterprise Level - Sentiments - Key Themes Heatmap',
+      cardDesc: 'Enterprise Level - Sentiments - Key Themes Heatmap',
       link: 'enterpriseLevelSentimentsThemes',
       image: '/svgs/Analytics_Images_6.svg',
     },
@@ -88,10 +85,10 @@ export default function AnalyticsMainContainer() {
             width: '100%',
             display: 'flex',
             alignItems: 'center',
-            justifyContent: 'center',
+            justifyContent: 'start',
           }}
         >
-          <H1RegularTypography label="Analytics" />
+          <H1RegularTypography label="Analytics" style={{ color: '#2C69A1' }} />
         </Box>
         <Grid container spacing={2} sx={{ marginTop: '48px' }}>
           {analyticsCards.map(analyticsCard => {
