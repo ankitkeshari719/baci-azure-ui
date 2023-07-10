@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
 import {
-  getEnterpriseLevelActionsCount,
   getEnterpriseLevelActionsCounts,
 } from '../../helpers/msal/services';
 import ReactApexChart from 'react-apexcharts';
@@ -62,41 +61,13 @@ export default function EnterpriseLevelActionsCountChart({
   }, [fromDate, toDate]);
 
   const handleEnterpriseLevelActionsCountData = async () => {
-    await getEnterpriseLevelActionsCount(fromDate, toDate).then(
+    await getEnterpriseLevelActionsCounts(fromDate, toDate).then(
       res => {
         if (res && res.result) {
           setEnterpriseLevelActions(res.result);
           setAssignedActions(res.result?.map((item: any) => item.assigned));
           setCompletedActions(res.result?.map((item: any) => item.completed));
           setMonths(res.result?.map((item: any) => item.month));
-        }
-      },
-      err => {
-        console.log('err', err);
-      }
-    );
-  };
-
-  const handleEnterpriseTeamLevelActionsCountsData = async () => {
-    await getEnterpriseLevelActionsCounts(fromDate, toDate).then(
-      res => {
-        if (res && res.result) {
-          const teamsData = res.result.map((item: any, index: number) => {
-            return item.teams;
-          });
-          let nameArray = [];
-          let assignedArray = [];
-          let completedArray = [];
-          for (let i = 0; i < teamsData.length; i++) {
-            for (let j = 0; j < teamsData[i].length; j++) {
-              nameArray.push(teamsData[i][j].name);
-              assignedArray.push(teamsData[i][j].assigned);
-              completedArray.push(teamsData[i][j].completed);
-            }
-          }
-          setAssignedActions(assignedArray);
-          setCompletedActions(completedArray);
-          setMonths(nameArray);
         }
       },
       err => {

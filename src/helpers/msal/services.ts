@@ -317,29 +317,8 @@ export const getDummyChartData = async (): Promise<any> => {
   return dummyChartData;
 };
 
-// Api to get Team Level Actions Count
-export const getTeamLevelActionsCount = async (
-  fromDate: string,
-  toDate: string
-): Promise<any> => {
-  let teamLevelActionsCountData;
-  const requestOptions = {
-    method: 'GET',
-  };
-  await fetch(
-    API_URL + `/getTeamLevelActionsCount?fromDate=${fromDate}&toDate=${toDate}`,
-    requestOptions
-  )
-    .then(response => response.json())
-    .then(data => {
-      teamLevelActionsCountData = data;
-    });
-
-  return teamLevelActionsCountData;
-};
-
 // Api to get Enterprise Level ActionsCount
-export const getEnterpriseLevelActionsCount = async (
+export const getEnterpriseLevelActionsCounts = async (
   fromDate: string,
   toDate: string
 ): Promise<any> => {
@@ -349,7 +328,7 @@ export const getEnterpriseLevelActionsCount = async (
   };
   await fetch(
     API_URL +
-      `/getEnterpriseLevelActionsCount?fromDate=${fromDate}&toDate=${toDate}`,
+      `/getEnterpriseLevelActionsCounts?fromDate=${fromDate}&toDate=${toDate}`,
     requestOptions
   )
     .then(response => response.json())
@@ -380,28 +359,6 @@ export const getTeamLevelActionsCounts = async (
     });
 
   return teamLevelActionsCountData;
-};
-
-// Api to get Enterprise Level ActionsCount
-export const getEnterpriseLevelActionsCounts = async (
-  fromDate: string,
-  toDate: string
-): Promise<any> => {
-  let enterpriseLevelActionsCountData;
-  const requestOptions = {
-    method: 'GET',
-  };
-  await fetch(
-    API_URL +
-      `/getEnterpriseLevelActionsCounts?fromDate=${fromDate}&toDate=${toDate}`,
-    requestOptions
-  )
-    .then(response => response.json())
-    .then(data => {
-      enterpriseLevelActionsCountData = data;
-    });
-
-  return enterpriseLevelActionsCountData;
 };
 
 // Api to get count of all participant over time

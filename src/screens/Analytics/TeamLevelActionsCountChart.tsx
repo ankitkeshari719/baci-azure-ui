@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
 import {
-  getTeamLevelActionsCount,
   getTeamLevelActionsCounts,
 } from '../../helpers/msal/services';
 import ReactApexChart from 'react-apexcharts';
@@ -57,25 +56,8 @@ export default function TeamLevelActionsCountChart({
   };
 
   React.useEffect(() => {
-    // handleGetTeamLevelActionsCountData();
     handleGetTeamLevelActionsCountsData();
   }, [fromDate, toDate]);
-
-  const handleGetTeamLevelActionsCountData = async () => {
-    await getTeamLevelActionsCount(fromDate, toDate).then(
-      res => {
-        if (res && res.result) {
-          setTeamLevelActions(res.result);
-          setAssignedActions(res.result?.map((item: any) => item.assigned));
-          setCompletedActions(res.result?.map((item: any) => item.completed));
-          setMonths(res.result?.map((item: any) => item.month));
-        }
-      },
-      err => {
-        console.log('err', err);
-      }
-    );
-  };
 
   const handleGetTeamLevelActionsCountsData = async () => {
     await getTeamLevelActionsCounts(fromDate, toDate).then(
