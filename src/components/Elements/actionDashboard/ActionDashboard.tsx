@@ -13,6 +13,8 @@ import Avatar from '../Avatar';
 import { Box, TextField } from '@mui/material';
 import { BodyRegularTypography, BodySemiBoldTypography, H1SemiBoldTypography, H2SemiBoldTypography } from '../../CustomizedTypography';
 import commonStyles from '../../../style.module.scss';
+import StatusDropDown from './StatusDropDown';
+import AssigneeDropdown from './AssigneeDropdown';
 
 interface Column {
     id: 'teamName' | 'jiraId' | 'initialSession' | 'action.value' | 'action.assigneeId' | 'startDate' | 'status';
@@ -25,15 +27,12 @@ interface Column {
 const columns: Column[] = [
     { id: 'teamName', label: 'Team', minWidth: 200 },
     { id: 'jiraId', label: 'JIRA ID', minWidth: 200 },
-    { id: 'action.value', label: 'Action', minWidth: 330 },
+    { id: 'action.value', label: 'Action', minWidth: 300 },
     {
         id: 'initialSession',
         label: 'Initial Session',
-        //  getActions: (params: GridRowParams) => [
-        //      <GridActionsCellItem icon={<SecurityIcon/>}  label="Delete" showInMenu/>,
-        //      <GridActionsCellItem icon={<SecurityIcon/>}  label="Print"  />,
-        //    ],
-        minWidth: 400,
+    
+        minWidth: 250,
     },
     {
         id: 'action.assigneeId',
@@ -51,15 +50,7 @@ const columns: Column[] = [
         label: 'Status',
         minWidth: 90,
     },
-    //   {
-    //     field: 'fullName',
-    //     headerName: 'Assignee',
-    //     description: 'This column has a value getter and is not sortable.',
-    //     sortable: false,
-    //     width: 160,
-    //     valueGetter: (params: GridValueGetterParams) =>
-    //       `${params.row.firstName || ''} ${params.row.lastName || ''}`,
-    //   },
+
 ];
 
 
@@ -144,14 +135,14 @@ export default function ActionDashboard() {
     const returnUser =(id:string)=>{
        const user= users.find(user=> user.id==id);
        return<Box display="flex" flexDirection="row" alignItems="center">
-       <Avatar avatar={user?.avatar} css={{width:"32px",height:'32px'}}/>
+       <Avatar avatar={user?.avatar} css={{width:"32px",height:'32px',border:'none',marginRight:'5px'}}/>
        {user?.name}
        </Box>
     }
 
     const statusColors=["rgba(234, 67, 53, 1)",  "rgba(223, 133, 23, 1)", "rgba(52, 168, 83, 1)",   "rgba(128, 128, 128, 1)"];
 const returnTheColor=(status:string)=>{
-  return  statusColors[jiraActionStatus.findIndex((element)=> element==status)];
+  return  statusColors[jiraActionStatus.findIndex((element)=> element.label==status)];
 }
 
 
@@ -163,9 +154,9 @@ const returnTheColor=(status:string)=>{
 
 <Box display="flex" flexDirection="row">
 {jiraActionStatus.map((action,index)=>{
-    return<Box display="flex" flexDirection="column" width="92px"  gap="8px" padding="16px" borderRadius="4px" marginRight="10px" marginTop="20px" marginBottom="20px" sx={{background:"white", border: "1px solid "+commonStyles.PrimaryLight}}>
-     <H1SemiBoldTypography style={{color:statusColors[index]}} label="22"/>
-     <BodyRegularTypography style={{color:statusColors[index]}} label="TO DO"/>
+    return<Box display="flex" flexDirection="column" key={index+"jiraActionStatus"}   gap="8px" padding="16px" borderRadius="4px" marginRight="10px" marginTop="20px" marginBottom="20px" sx={{background:"white", border: "1px solid "+commonStyles.PrimaryLight}}>
+     <H1SemiBoldTypography style={{color:statusColors[index]}} label={index==0? "22":index==1?"30":index==2?"17":"12"}/>
+     <BodyRegularTypography style={{color:statusColors[index]}} label={index==0? "TO DO":index==1?"IN-PROGRESS":index==2?"DONE (Last 30 days)":"LAST ADDED (Last 30 days)"}/>
 
         </Box>
 })}
@@ -211,9 +202,10 @@ const returnTheColor=(status:string)=>{
 
                                             else if (column.id == "action.assigneeId") {
                                                 return (<TableCell key={column.id + "12"} align={column.align} sx={{
-                                                     minWidth: '100px'
+                                                     minWidth: '150px'
                                                 }}>
-                                                  {returnUser(value)}
+                                                  {/* {returnUser(value)} */}
+                                                  <AssigneeDropdown status={value} />
                                                 </TableCell>)
                                             }
                                            
@@ -222,12 +214,13 @@ const returnTheColor=(status:string)=>{
                                                      minWidth: '100px', color:returnTheColor(value)
 
                                                 }}>
-                                                  {value}
+                                                    <StatusDropDown status={value}/>
+                                                  {/* {value} */}
                                                 </TableCell>)
                                             }   
                                             else {
                                                 return (
-                                                    <TableCell key={column.id} align={column.align}>
+                                                    <TableCell key={column.id} align={column.align} sx={{maxWidth:"250px"}}>
                                                      {value}
                                                     </TableCell>
                                                 );

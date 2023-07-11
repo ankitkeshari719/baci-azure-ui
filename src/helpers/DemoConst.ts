@@ -48,7 +48,9 @@ export const retro=[
     {retroId:'BACI005',retroName:'Project Kick off',retroCode:'12832',retroStatus:'inprogress',teamId:teams[3].teamId,actions:'',retroDate:("13-08-2022")}
 ]
 
-export const jiraActionStatus=["TO DO","IN PROGRESS","DONE","CANCELLED"]
+export const jiraActionStatus=[{label:"TO DO",color:'rgba(234, 67, 53, 1)'},{label:"IN PROGRESS",color:'rgba(223, 133, 23, 1)'},
+{label:"DONE",color:'rgba(52, 168, 83, 1)'},{label:"CANCELLED",color:'rgba(128, 128, 128, 1)'}]
+
 
 
 export const ActionList: JiraActionInterface[] = [
@@ -67,7 +69,7 @@ export const ActionList: JiraActionInterface[] = [
         jiraId: 'PB-234',
         initialSession: retro[3].retroName,
         startDate: retro[3].retroDate,
-        status: jiraActionStatus[0]
+        status: jiraActionStatus[0].label
     },
     {
         action: {
@@ -84,7 +86,7 @@ export const ActionList: JiraActionInterface[] = [
         jiraId: 'PB-633',
         initialSession: retro[2].retroName,
         startDate: retro[2].retroDate,
-        status: jiraActionStatus[1]
+        status: jiraActionStatus[1].label
     },
     {
         action: {
@@ -101,7 +103,7 @@ export const ActionList: JiraActionInterface[] = [
         jiraId: 'PB-276',
         initialSession: retro[3].retroName,
         startDate: retro[3].retroDate,
-        status: jiraActionStatus[3]
+        status: jiraActionStatus[3].label
     },
     {
         action: {
@@ -118,7 +120,7 @@ export const ActionList: JiraActionInterface[] = [
         jiraId: 'PB-835',
         initialSession: retro[4].retroName,
         startDate: retro[4].retroDate,
-        status: jiraActionStatus[2]
+        status: jiraActionStatus[2].label
     }
 
 ]
