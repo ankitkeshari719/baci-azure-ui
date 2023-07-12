@@ -260,6 +260,7 @@ export default function App({ instance }: AppProps) {
                               path="/retroisfinished"
                               element={<RetroIsFinished></RetroIsFinished>}
                             />
+
                             <Route
                               path="/jiraCallback/"
                               element={<JiraCallback />}
