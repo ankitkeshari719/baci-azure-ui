@@ -50,7 +50,7 @@ export default function AverageParticipantChart({
   const [averageParticipants, setAverageParticipants] = useState([]);
   const [months, setMonths] = useState([]);
   const [fromDate, setFromDate] = useState<string>('10');
-  const [toDate, setToDate] = useState<string>('15');
+  const [toDate, setToDate] = useState<string>('16');
   const [selectedFromDate, setSelectedFromDate] = useState<string>();
   const [selectedToDate, setSelectedToDate] = useState<string>();
   const [totalAverageParticipants, setTotalAverageParticipants] =
@@ -231,8 +231,8 @@ export default function AverageParticipantChart({
               justifyContent: 'flex-start',
             }}
           >
-            <Link to={'/analytics/'}>Analytics </Link>&nbsp;\ Count of
-            participants
+            <Link to={'/facilitator/analytics/'}>Analytics </Link>&nbsp;\ Count
+            of participants
           </Grid>
           {/* Back Button & Chart Title */}
           <Grid
@@ -252,7 +252,7 @@ export default function AverageParticipantChart({
                 cursor: 'pointer',
                 color: '#159ADD',
               }}
-              onClick={() => navigate('/analytics/')}
+              onClick={() => navigate('/facilitator/analytics/')}
             />
             <H2SemiBoldTypography
               label="Count of all participants over time"

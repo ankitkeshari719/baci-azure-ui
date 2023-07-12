@@ -29,48 +29,45 @@ export default function AnalyticsMainContainer() {
     {
       id: 1,
       cardDesc:
-        'Analytics - Team Level - Count of actions (assigned vs completed)',
+        'Team Level - Count of actions (assigned vs completed) more wor',
       link: 'teamLevelActionsCount',
       image: '/svgs/Analytics_Images_1.svg',
     },
     {
       id: 2,
       cardDesc:
-        'Analytics 2 - Enterprise Level - Count of actions (assigned vs completed) all teams',
+        'Enterprise Level - Count of actions (assigned vs completed) all teams',
       link: 'enterpriseLevelActionsCount',
       image: '/svgs/Analytics_Images_2.svg',
     },
     {
       id: 3,
-      cardDesc:
-        'Analytics 3 - Enterprise Level - Count of all participants over time',
+      cardDesc: 'Enterprise Level - Count of all participants over time',
       link: 'enterpriseLevelParticipantsCount',
       image: '/svgs/Analytics_Images_3.svg',
     },
     {
       id: 4,
-      cardDesc:
-        'Analytics 4 - Enterprise Level - Count of all retros over time',
+      cardDesc: 'Enterprise Level - Count of all retros over time',
       link: 'enterpriseLevelRetrosCount',
       image: '/svgs/Analytics_Images_4.svg',
     },
     {
       id: 5,
       cardDesc:
-        'Analytics 5 - Enterprise Level - Sentiments - Overall Summary Paragraph and Word Cloud',
+        'Enterprise Level - Sentiments - Overall Summary Paragraph and Word Cloud',
       link: 'enterpriseLevelSentimentsSummary',
       image: '/svgs/Analytics_Images_5.svg',
     },
     {
       id: 6,
-      cardDesc:
-        'Analytics 6 - Enterprise Level - Sentiments - Key Themes Heatmap',
+      cardDesc: 'Enterprise Level - Sentiments - Key Themes Heatmap',
       link: 'enterpriseLevelSentimentsThemes',
       image: '/svgs/Analytics_Images_6.svg',
     },
     {
       id: 7,
-      cardDesc: 'Analytics 7 - Enterprise Level - Sentiments - Moods',
+      cardDesc: 'Enterprise Level - Sentiments - Moods',
       link: 'enterpriseLevelSentimentsMoods',
       image: '/svgs/Analytics_Images_7.svg',
     },
@@ -88,10 +85,10 @@ export default function AnalyticsMainContainer() {
             width: '100%',
             display: 'flex',
             alignItems: 'center',
-            justifyContent: 'center',
+            justifyContent: 'start',
           }}
         >
-          <H1RegularTypography label="Analytics" />
+          <H1RegularTypography label="Analytics" style={{ color: '#2C69A1' }} />
         </Box>
         <Grid container spacing={2} sx={{ marginTop: '48px' }}>
           {analyticsCards.map(analyticsCard => {

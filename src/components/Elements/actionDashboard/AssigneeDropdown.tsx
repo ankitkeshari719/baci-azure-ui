@@ -1,11 +1,13 @@
 import * as React from 'react';
-import { jiraActionStatus, users } from '../../../helpers/DemoConst';
+import { users } from '../../../helpers/DemoConst';
 import { Box, Button, Menu, MenuItem } from '@mui/material';
 import Avatar from '../Avatar';
 import { ChevronDownIcon } from '@heroicons/react/24/outline';
 
 export default function AssigneeDropdown({ status }: { status: string }) {
   const [assigneeId, setAssigneeId] = React.useState<string>(status);
+  const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
+  const open = Boolean(anchorEl);
 
   const returnUser = (id: string) => {
     const user = users.find(user => user.id == id);
@@ -25,8 +27,6 @@ export default function AssigneeDropdown({ status }: { status: string }) {
     );
   };
 
-  const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
-  const open = Boolean(anchorEl);
   const handleClose = () => {
     setAnchorEl(null);
   };

@@ -1,24 +1,11 @@
 import * as React from 'react';
 import { Theme, useTheme } from '@mui/material/styles';
-import OutlinedInput from '@mui/material/OutlinedInput';
-import InputLabel from '@mui/material/InputLabel';
 import MenuItem from '@mui/material/MenuItem';
-import FormControl from '@mui/material/FormControl';
-import Select, { SelectChangeEvent } from '@mui/material/Select';
 import { jiraActionStatus } from '../../../helpers/DemoConst';
+import { Box, Button, Menu } from '@mui/material';
+import { ChevronDownIcon } from '@heroicons/react/24/outline';
 
-const ITEM_HEIGHT = 48;
-const ITEM_PADDING_TOP = 8;
-const MenuProps = {
-  PaperProps: {
-    style: {
-      maxHeight: ITEM_HEIGHT * 4.5 + ITEM_PADDING_TOP,
-      width: 180,
-    },
-  },
-};
-
-const names = jiraActionStatus;
+const statusList = jiraActionStatus;
 
 function getStyles(name: any, personName: string, theme: Theme) {
   return {
@@ -30,54 +17,84 @@ function getStyles(name: any, personName: string, theme: Theme) {
   };
 }
 
-export default function StatusDropDown({status}:{status:string}) {
+export default function StatusDropDown({ status }: { status: string }) {
   const theme = useTheme();
   const [statusSelected, setStatusSelected] = React.useState<string>(status);
+  const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
+  const open = Boolean(anchorEl);
 
-  const handleChange = (event: SelectChangeEvent<typeof statusSelected>) => {
-    const {
-      target: { value },
-    } = event;
-    setStatusSelected(value);
-  };
   const returnColor = (): string => {
-    var booleanFlag:boolean=false;
-    var color:string="black"
+    var booleanFlag: boolean = false;
+    var color: string = 'black';
     jiraActionStatus.forEach(jira => {
       if (jira.label == statusSelected) {
-        booleanFlag=true;
-        color=jira.color
+        booleanFlag = true;
+        color = jira.color;
         return jira.color;
-
       }
     });
     return color;
   };
+
+  const handleClose = () => {
+    setAnchorEl(null);
+  };
+  const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
+    setAnchorEl(event.currentTarget);
+  };
+
+  React.useEffect(() => {
+    setStatusSelected(status);
+  }, [status]);
+
   return (
-    <div>
-      <FormControl sx={{ m: 1, width: 180 }} size="small">
-
-        <Select
-          labelId="demo-select-small-label"
-          id="demo-small-name"
-
-          value={statusSelected}
-          style={{ color: returnColor() }}
-          onChange={handleChange}
-
-          MenuProps={MenuProps}
+    <Box>
+      <Box display="flex" flexDirection="row">
+        <Box width="100px" style={{ color: returnColor() }}>
+          {statusSelected}
+        </Box>
+        <Button
+          aria-controls={open ? 'basic-menu' : undefined}
+          id="basic-button"
+          aria-haspopup="true"
+          aria-expanded={open ? 'true' : undefined}
+          onClick={handleClick}
         >
-          {names.map(name => (
+          <ChevronDownIcon fontSize="24px" width="16px" color="gray" />
+        </Button>
+        <Menu
+          id="basic-menu"
+          anchorEl={anchorEl}
+          open={open}
+          onClose={handleClose}
+          style={{ maxHeight: '300px' }}
+          MenuListProps={{
+            'aria-labelledby': 'basic-button',
+          }}
+          anchorOrigin={{
+            vertical: 'bottom',
+            horizontal: 'right',
+          }}
+          transformOrigin={{
+            vertical: 'top',
+            horizontal: 'right',
+          }}
+        >
+          {statusList.map((name: any) => (
             <MenuItem
               key={name.label}
               value={name.label}
               style={getStyles(name, statusSelected, theme)}
+              onClick={() => {
+                setStatusSelected(name.label);
+                handleClose();
+              }}
             >
               {name.label}
             </MenuItem>
           ))}
-        </Select>
-      </FormControl>
-    </div>
+        </Menu>
+      </Box>
+    </Box>
   );
 }

@@ -30,32 +30,36 @@ const LeftBar = () => {
   const [{ user }] = React.useContext(GlobalContext);
 
   const menuArray = [
-    { id: 1, label: 'Home', icon: HomeIcon, routeTo: 'facilitator/dashboard', disabled: false },
-
     {
-      id: 2,
-      label: 'Retros',
-      icon: ViewColumnsIcon,
-      routeTo: '',
+      id: 1,
+      label: 'Home',
+      icon: HomeIcon,
+      routeTo: 'facilitator/dashboard',
       disabled: false,
     },
-
     {
-      id: 3,
-      label: 'Workspace',
+      id: 2,
+      label: 'Actions',
       icon: ClipboardDocumentCheckIcon,
       routeTo: 'facilitator/actions',
       disabled: false,
     },
 
     {
-      id: 4,
+      id: 3,
       label: 'Analytics',
       icon: ChartBarIcon,
       routeTo: 'facilitator/analytics/',
       disabled: false,
     },
 
+    {
+      id: 4,
+      label: 'Retros',
+      icon: ViewColumnsIcon,
+      routeTo: '',
+      disabled: true,
+    },
     {
       id: 5,
       label: 'Templates',
@@ -97,25 +101,26 @@ const LeftBar = () => {
       disabled: true,
     },
   ];
-useEffect(()=>{
- if(location.pathname.includes('facilitator/dashboard')){
-  setSelectedMenu(menuArray[0].label);
- }
- else if(location.pathname.includes('analytics')){
-  setSelectedMenu(menuArray[3].label);
-
- }
- else if(location.pathname.includes('actions')){
-  setSelectedMenu(menuArray[2].label);
-
- }
-
- 
-
-},[location.pathname.includes('analytics'),location.pathname.includes('facilitator/dashboard')])
+  useEffect(() => {
+    if (location.pathname.includes('facilitator/dashboard')) {
+      setSelectedMenu(menuArray[0].label);
+    } else if (location.pathname.includes('analytics')) {
+      setSelectedMenu(menuArray[2].label);
+    } else if (location.pathname.includes('actions')) {
+      setSelectedMenu(menuArray[1].label);
+    }
+  }, [
+    location.pathname.includes('analytics'),
+    location.pathname.includes('facilitator/dashboard'),
+  ]);
   return (
     <>
-      <Box className="leftBarContainer" sx={{display:location.pathname.includes('facilitator')?'flex':'none'}}>
+      <Box
+        className="leftBarContainer"
+        sx={{
+          display: location.pathname.includes('facilitator') ? 'flex' : 'none',
+        }}
+      >
         <Box className="topContainer">
           <Box>
             <img src="/../images/r_MenuHeader.png" style={{ width: '56px' }} />
@@ -129,9 +134,10 @@ useEffect(()=>{
                     menu.label == selectedMenu ? 'menuIconSelected' : 'menuIcon'
                   }
                   onClick={() => {
-                    if(!menu.disabled)
-                    {setSelectedMenu(menu.label);
-                    navigate(menu.routeTo);}
+                    if (!menu.disabled) {
+                      setSelectedMenu(menu.label);
+                      navigate(menu.routeTo);
+                    }
                   }}
                 />
               </Tooltip>

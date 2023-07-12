@@ -37,8 +37,8 @@ import TeamLevelActionsCountChart from './screens/Analytics/TeamLevelActionsCoun
 import EnterpriseLevelActionsCountChart from './screens/Analytics/EnterpriseLevelActionsCountChart';
 import DummyChart from './screens/Analytics/DummyChart';
 import LeftBar from './components/Elements/leftBar/LeftBar';
-import FacilitatorDashboard from './components/Elements/facilitatorDashboard/FacilitatorDashboard';
 import ActionDashboard from './components/Elements/actionDashboard/ActionDashboard';
+import FacilitatorDashboard from './components/Elements/facilitatorDashboard/FacilitatorDashboard';
 
 type AppProps = {
   instance: IPublicClientApplication;
@@ -104,31 +104,30 @@ export default function App({ instance }: AppProps) {
                                 />
                                 <Route
                                   path="enterpriseLevelSentimentsSummary"
-                                  element={<DummyChart />}
+                                  element={
+                                    <EnterpriseLevelSentimentsSummaryChart />
+                                  }
                                 />
                                 <Route
                                   path="enterpriseLevelSentimentsThemes"
-                                  element={<DummyChart />}
+                                  element={
+                                    <EnterpriseLevelSentimentsThemeChart />
+                                  }
                                 />
                                 <Route
                                   path="enterpriseLevelSentimentsMoods"
-                                  element={<DummyChart />}
+                                  element={
+                                    <EnterpriseLevelSentimentsMoodsChart />
+                                  }
                                 />
                               </Route>
                             </Route>
-
-                            <Route
-                              path="/"
-                              element={<LandingPage></LandingPage>}
-                            />
-
                             <Route
                               path="/"
                               element={
                                 <LandingPage isDemo={true}></LandingPage>
                               }
                             />
-
                             <Route
                               path="/join/:id"
                               element={<JoinRetro></JoinRetro>}
@@ -172,12 +171,10 @@ export default function App({ instance }: AppProps) {
                                 path=""
                                 element={<AnalyticsMainContainer />}
                               />
-
                               <Route
                                 path="teamLevelActionsCount"
                                 element={<TeamLevelActionsCountChart />}
                               />
-
                               <Route
                                 path="enterpriseLevelActionsCount"
                                 element={<EnterpriseLevelActionsCountChart />}
@@ -192,11 +189,15 @@ export default function App({ instance }: AppProps) {
                               />
                               <Route
                                 path="enterpriseLevelSentimentsSummary"
-                                element={<DummyChart />}
+                                element={
+                                  <EnterpriseLevelSentimentsSummaryChart />
+                                }
                               />
                               <Route
                                 path="enterpriseLevelSentimentsThemes"
-                                element={<DummyChart />}
+                                element={
+                                  <EnterpriseLevelSentimentsThemeChart />
+                                }
                               />
                               <Route
                                 path="enterpriseLevelSentimentsMoods"
@@ -205,7 +206,6 @@ export default function App({ instance }: AppProps) {
                                 }
                               />
                             </Route>
-
                             <Route
                               path="/report/:id"
                               element={<SummaryReportMain />}
@@ -218,6 +218,7 @@ export default function App({ instance }: AppProps) {
                               path="/retroisfinished"
                               element={<RetroIsFinished></RetroIsFinished>}
                             />
+
                             <Route
                               path="/jiraCallback/"
                               element={<JiraCallback />}

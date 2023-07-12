@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
 import {
-  getEnterpriseLevelActionsCount,
   getEnterpriseLevelActionsCounts,
 } from '../../helpers/msal/services';
 import ReactApexChart from 'react-apexcharts';
@@ -32,7 +31,7 @@ export default function EnterpriseLevelActionsCountChart({
   const [completedActions, setCompletedActions] = useState<any>([]);
   const [months, setMonths] = useState<any>([]);
   const [fromDate, setFromDate] = useState<string>('10');
-  const [toDate, setToDate] = useState<string>('15');
+  const [toDate, setToDate] = useState<string>('16');
   const navigate = useNavigate();
   const windowWidth = React.useRef(window.innerWidth);
 
@@ -58,46 +57,17 @@ export default function EnterpriseLevelActionsCountChart({
   };
 
   React.useEffect(() => {
-    // handleEnterpriseLevelActionsCountData();
-    handleEnterpriseTeamLevelActionsCountsData();
+    handleEnterpriseLevelActionsCountData();
   }, [fromDate, toDate]);
 
   const handleEnterpriseLevelActionsCountData = async () => {
-    await getEnterpriseLevelActionsCount(fromDate, toDate).then(
+    await getEnterpriseLevelActionsCounts(fromDate, toDate).then(
       res => {
         if (res && res.result) {
           setEnterpriseLevelActions(res.result);
           setAssignedActions(res.result?.map((item: any) => item.assigned));
           setCompletedActions(res.result?.map((item: any) => item.completed));
           setMonths(res.result?.map((item: any) => item.month));
-        }
-      },
-      err => {
-        console.log('err', err);
-      }
-    );
-  };
-
-  const handleEnterpriseTeamLevelActionsCountsData = async () => {
-    await getEnterpriseLevelActionsCounts(fromDate, toDate).then(
-      res => {
-        if (res && res.result) {
-          const teamsData = res.result.map((item: any, index: number) => {
-            return item.teams;
-          });
-          let nameArray = [];
-          let assignedArray = [];
-          let completedArray = [];
-          for (let i = 0; i < teamsData.length; i++) {
-            for (let j = 0; j < teamsData[i].length; j++) {
-              nameArray.push(teamsData[i][j].name);
-              assignedArray.push(teamsData[i][j].assigned);
-              completedArray.push(teamsData[i][j].completed);
-            }
-          }
-          setAssignedActions(assignedArray);
-          setCompletedActions(completedArray);
-          setMonths(nameArray);
         }
       },
       err => {
@@ -223,7 +193,8 @@ export default function EnterpriseLevelActionsCountChart({
               justifyContent: 'flex-start',
             }}
           >
-            <Link to={'/analytics/'}>Analytics </Link>&nbsp;\ Count of actions
+            <Link to={'/facilitator/analytics/'}>Analytics </Link>&nbsp;\ Count
+            of actions
           </Grid>
           {/* Back Button & Chart Title */}
           <Grid
@@ -243,7 +214,7 @@ export default function EnterpriseLevelActionsCountChart({
                 cursor: 'pointer',
                 color: '#159ADD',
               }}
-              onClick={() => navigate('/analytics/')}
+              onClick={() => navigate('/facilitator/analytics/')}
             />
             <H2SemiBoldTypography
               label="Count of actions (Assigned vs Completed) all teams"

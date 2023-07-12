@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
 import {
-  getTeamLevelActionsCount,
   getTeamLevelActionsCounts,
 } from '../../helpers/msal/services';
 import ReactApexChart from 'react-apexcharts';
@@ -31,7 +30,7 @@ export default function TeamLevelActionsCountChart({
   const [completedActions, setCompletedActions] = useState<any>([]);
   const [months, setMonths] = useState<any>([]);
   const [fromDate, setFromDate] = useState<string>('10');
-  const [toDate, setToDate] = useState<string>('15');
+  const [toDate, setToDate] = useState<string>('16');
   const navigate = useNavigate();
   const windowWidth = React.useRef(window.innerWidth);
 
@@ -57,25 +56,8 @@ export default function TeamLevelActionsCountChart({
   };
 
   React.useEffect(() => {
-    // handleGetTeamLevelActionsCountData();
     handleGetTeamLevelActionsCountsData();
   }, [fromDate, toDate]);
-
-  const handleGetTeamLevelActionsCountData = async () => {
-    await getTeamLevelActionsCount(fromDate, toDate).then(
-      res => {
-        if (res && res.result) {
-          setTeamLevelActions(res.result);
-          setAssignedActions(res.result?.map((item: any) => item.assigned));
-          setCompletedActions(res.result?.map((item: any) => item.completed));
-          setMonths(res.result?.map((item: any) => item.month));
-        }
-      },
-      err => {
-        console.log('err', err);
-      }
-    );
-  };
 
   const handleGetTeamLevelActionsCountsData = async () => {
     await getTeamLevelActionsCounts(fromDate, toDate).then(
@@ -221,7 +203,7 @@ export default function TeamLevelActionsCountChart({
               justifyContent: 'flex-start',
             }}
           >
-            <Link to={'/analytics/'}>Analytics </Link>&nbsp;\ Team Level
+            <Link to={'/facilitator/analytics/'}>Analytics </Link>&nbsp;\ Team Level
           </Grid>
           {/* Back Button & Chart Title */}
           <Grid
@@ -241,7 +223,7 @@ export default function TeamLevelActionsCountChart({
                 cursor: 'pointer',
                 color: '#159ADD',
               }}
-              onClick={() => navigate('/analytics/')}
+              onClick={() => navigate('/facilitator/analytics/')}
             />
             <H2SemiBoldTypography
               label="Count of actions (Assigned vs Completed)"

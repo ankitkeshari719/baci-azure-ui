@@ -3,9 +3,7 @@ import { getParticipantsCount } from '../../helpers/msal/services';
 import ReactApexChart from 'react-apexcharts';
 import { ApexOptions } from 'apexcharts';
 import { Box, Grid } from '@mui/material';
-import {
-  H2SemiBoldTypography,
-} from '../../components/CustomizedTypography';
+import { H2SemiBoldTypography } from '../../components/CustomizedTypography';
 import { Link, useNavigate } from 'react-router-dom';
 import * as Icons from 'heroicons-react';
 
@@ -109,7 +107,6 @@ export default function EnterpriseLevelSentimentsSummaryChart() {
         lines: {
           show: true,
         },
-        
       },
       yaxis: {
         lines: {
@@ -136,7 +133,8 @@ export default function EnterpriseLevelSentimentsSummaryChart() {
             justifyContent: 'flex-start',
           }}
         >
-          <Link to={'/analytics/'}>Analytics </Link>&nbsp;\ Overall summary
+          <Link to={'/facilitator/analytics/'}>Analytics </Link>&nbsp;\ Overall
+          summary
         </Box>
         {/* Back Button & Chart Title */}
         <Box
@@ -154,7 +152,7 @@ export default function EnterpriseLevelSentimentsSummaryChart() {
               cursor: 'pointer',
               color: '#159ADD',
             }}
-            onClick={() => navigate('/analytics/')}
+            onClick={() => navigate('/facilitator/analytics/')}
           />
           <H2SemiBoldTypography
             label="Overall summary paragraph and word cloud"
