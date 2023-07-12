@@ -22,8 +22,10 @@ import { MONTH_SELECTORS, MenuProps } from './const';
 
 export default function EnterpriseLevelSentimentsMoodsChart({
   dashboard,
+  team
 }: {
   dashboard?: boolean;
+  team: string;
 }) {
   const [moods, setMoods] = useState<any>([]);
   const [sadMoods, setSadMoods] = useState([]);
@@ -64,7 +66,7 @@ export default function EnterpriseLevelSentimentsMoodsChart({
   }, [fromDate, toDate]);
 
   const handleGetEnterpriseLevelSentimentsMoods = async () => {
-    await getEnterpriseLevelSentimentsMoods(fromDate, toDate).then(
+    await getEnterpriseLevelSentimentsMoods(fromDate, toDate,team).then(
       res => {
         if (res && res.result) {
           setMoods(res.result);

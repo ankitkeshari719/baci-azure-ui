@@ -45,8 +45,10 @@ const StyledTableCell = styled(TableCell)(({ theme }) => ({
 
 export default function AverageParticipantChart({
   dashboard,
+  team,
 }: {
   dashboard?: boolean;
+  team: string;
 }) {
   const [participantsCounts, setParticipantsCounts] = useState<any>([]);
   const [averageParticipants, setAverageParticipants] = useState([]);
@@ -105,7 +107,7 @@ export default function AverageParticipantChart({
   }, [fromDate, toDate]);
 
   const handleGetParticipantChartData = async () => {
-    await getParticipantsCount(fromDate, toDate).then(
+    await getParticipantsCount(fromDate, toDate, team).then(
       res => {
         if (res && res.result) {
           setParticipantsCounts(res.result);
