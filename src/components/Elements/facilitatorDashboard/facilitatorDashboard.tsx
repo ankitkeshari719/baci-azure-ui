@@ -414,12 +414,24 @@ function FacilitatorDashboard() {
                 <AverageParticipantChart dashboard={true} team={'0'} />
                 <CaptionRegularTypography label="Count of all participants over time" />
               </Box>
-              {/* <Box>
-                <EnterpriseLevelSentimentsMoodsChart
-                  dashboard={true}
-                  team={'0'}
-                />
-              </Box> */}
+              <Box
+                display="flex"
+                flexDirection="column"
+                alignItems="center"
+                mr="20px"
+                sx={{
+                  border: '1px solid rgba(240, 240, 240, 1)',
+                  padding: '10px',
+                }}
+                onClick={() => {
+                  navigate(
+                    '/facilitator/analytics/enterpriseLevelSentimentsMoods'
+                  );
+                }}
+              >
+                <EnterpriseLevelSentimentsMoodsChart dashboard={true} team={'0'} />
+                <CaptionRegularTypography label=" Participants Sentiments - Moods" />
+              </Box>
             </Box>
           </Box>
         </Box>
