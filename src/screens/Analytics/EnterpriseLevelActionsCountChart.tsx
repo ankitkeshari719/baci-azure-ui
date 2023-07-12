@@ -45,8 +45,10 @@ const StyledTableCell = styled(TableCell)(({ theme }) => ({
 
 export default function EnterpriseLevelActionsCountChart({
   dashboard,
+  team,
 }: {
   dashboard?: boolean;
+  team: string;
 }) {
   const [enterpriseLevelActions, setEnterpriseLevelActions] = useState<any>([]);
   const [assignedActions, setAssignedActions] = useState<any>([]);
@@ -107,7 +109,7 @@ export default function EnterpriseLevelActionsCountChart({
   }, [fromDate, toDate]);
 
   const handleEnterpriseLevelActionsCountData = async () => {
-    await getEnterpriseLevelActionsCounts(fromDate, toDate).then(
+    await getEnterpriseLevelActionsCounts(fromDate, toDate, team).then(
       res => {
         if (res && res.result) {
           let tempCompletedPercentage = 0;

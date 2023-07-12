@@ -38,7 +38,7 @@ import EnterpriseLevelActionsCountChart from './screens/Analytics/EnterpriseLeve
 import DummyChart from './screens/Analytics/DummyChart';
 import LeftBar from './components/Elements/leftBar/LeftBar';
 import ActionDashboard from './components/Elements/actionDashboard/ActionDashboard';
-import FacilitatorDashboard from './components/Elements/facilitatorDashboard/FacilitatorDashboard';
+import FacilitatorDashboard from './components/Elements/facilitatorDashboard/facilitatorDashboard';
 
 type AppProps = {
   instance: IPublicClientApplication;
@@ -92,15 +92,30 @@ export default function App({ instance }: AppProps) {
 
                                 <Route
                                   path="enterpriseLevelActionsCount"
-                                  element={<EnterpriseLevelActionsCountChart />}
+                                  element={
+                                    <EnterpriseLevelActionsCountChart
+                                      dashboard={false}
+                                      team={'0'}
+                                    />
+                                  }
                                 />
                                 <Route
                                   path="enterpriseLevelParticipantsCount"
-                                  element={<AverageParticipantChart />}
+                                  element={
+                                    <AverageParticipantChart
+                                      dashboard={false}
+                                      team={'0'}
+                                    />
+                                  }
                                 />
                                 <Route
                                   path="enterpriseLevelRetrosCount"
-                                  element={<AverageRetroChart />}
+                                  element={
+                                    <AverageRetroChart
+                                      dashboard={false}
+                                      team={'0'}
+                                    />
+                                  }
                                 />
                                 <Route
                                   path="enterpriseLevelSentimentsSummary"
@@ -111,13 +126,19 @@ export default function App({ instance }: AppProps) {
                                 <Route
                                   path="enterpriseLevelSentimentsThemes"
                                   element={
-                                    <EnterpriseLevelSentimentsThemeChart />
+                                    <EnterpriseLevelSentimentsThemeChart
+                                      dashboard={false}
+                                      team={'0'}
+                                    />
                                   }
                                 />
                                 <Route
                                   path="enterpriseLevelSentimentsMoods"
                                   element={
-                                    <EnterpriseLevelSentimentsMoodsChart />
+                                    <EnterpriseLevelSentimentsMoodsChart
+                                      dashboard={false}
+                                      team={'0'}
+                                    />
                                   }
                                 />
                               </Route>
@@ -177,15 +198,30 @@ export default function App({ instance }: AppProps) {
                               />
                               <Route
                                 path="enterpriseLevelActionsCount"
-                                element={<EnterpriseLevelActionsCountChart />}
+                                element={
+                                  <EnterpriseLevelActionsCountChart
+                                    dashboard={false}
+                                    team={'0'}
+                                  />
+                                }
                               />
                               <Route
                                 path="enterpriseLevelParticipantsCount"
-                                element={<AverageParticipantChart />}
+                                element={
+                                  <AverageParticipantChart
+                                    dashboard={false}
+                                    team={'0'}
+                                  />
+                                }
                               />
                               <Route
                                 path="enterpriseLevelRetrosCount"
-                                element={<AverageRetroChart />}
+                                element={
+                                  <AverageRetroChart
+                                    dashboard={false}
+                                    team={'0'}
+                                  />
+                                }
                               />
                               <Route
                                 path="enterpriseLevelSentimentsSummary"
@@ -196,13 +232,19 @@ export default function App({ instance }: AppProps) {
                               <Route
                                 path="enterpriseLevelSentimentsThemes"
                                 element={
-                                  <EnterpriseLevelSentimentsThemeChart />
+                                  <EnterpriseLevelSentimentsThemeChart
+                                    dashboard={false}
+                                    team={'0'}
+                                  />
                                 }
                               />
                               <Route
                                 path="enterpriseLevelSentimentsMoods"
                                 element={
-                                  <EnterpriseLevelSentimentsMoodsChart />
+                                  <EnterpriseLevelSentimentsMoodsChart
+                                    dashboard={false}
+                                    team={'0'}
+                                  />
                                 }
                               />
                             </Route>
