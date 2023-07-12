@@ -6,7 +6,6 @@ import {
   Box,
   FormControl,
   Grid,
-  InputLabel,
   MenuItem,
   Select,
   SelectChangeEvent,
@@ -119,7 +118,7 @@ export default function EnterpriseLevelActionsCountChart({
               tempCompletedPercentage + res.result[i].completed;
           }
           setCompletedPercentage(
-            Math.round(tempCompletedPercentage / months.length)
+            Math.round(tempCompletedPercentage / res.result.length)
           );
         }
       },
