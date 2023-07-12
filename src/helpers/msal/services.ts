@@ -317,7 +317,7 @@ export const getDummyChartData = async (): Promise<any> => {
   return dummyChartData;
 };
 
-// Api to get Enterprise Level ActionsCount
+// Chart 1: Api to get Enterprise Level ActionsCount
 export const getEnterpriseLevelActionsCounts = async (
   fromDate: string,
   toDate: string,
@@ -340,7 +340,7 @@ export const getEnterpriseLevelActionsCounts = async (
   return enterpriseLevelActionsCountData;
 };
 
-// Api to get Team Level Actions Count
+// Chart 2: Api to get Team Level Actions Count
 export const getTeamLevelActionsCounts = async (
   fromDate: string,
   toDate: string
@@ -362,7 +362,7 @@ export const getTeamLevelActionsCounts = async (
   return teamLevelActionsCountData;
 };
 
-// Api to get count of all participant over time
+// Chart 3: Api to get count of all participant over time
 export const getParticipantsCount = async (
   fromDate: string,
   toDate: string,
@@ -373,7 +373,8 @@ export const getParticipantsCount = async (
     method: 'GET',
   };
   await fetch(
-    API_URL + `/getParticipantsCount?fromDate=${fromDate}&toDate=${toDate}&team=${team}`,
+    API_URL +
+      `/getParticipantsCount?fromDate=${fromDate}&toDate=${toDate}&team=${team}`,
     requestOptions
   )
     .then(response => response.json())
@@ -384,7 +385,7 @@ export const getParticipantsCount = async (
   return participantsCountData;
 };
 
-// Api to get count of all retros over time
+// Chart 4: Api to get count of all retros over time
 export const getRetrosCount = async (
   fromDate: string,
   toDate: string,
@@ -395,7 +396,8 @@ export const getRetrosCount = async (
     method: 'GET',
   };
   await fetch(
-    API_URL + `/getRetrosCount?fromDate=${fromDate}&toDate=${toDate}&team=${team}`,
+    API_URL +
+      `/getRetrosCount?fromDate=${fromDate}&toDate=${toDate}&team=${team}`,
     requestOptions
   )
     .then(response => response.json())
@@ -406,7 +408,29 @@ export const getRetrosCount = async (
   return retrosCountData;
 };
 
-// Api to get Enterprise Level Sentiments Moods
+// Chart 5: Api to get count of all retros over time
+export const getEnterpriseLevelSentimentSummary = async (
+  selectedFormat: string,
+  team: string
+): Promise<any> => {
+  let retrosCountData;
+  const requestOptions = {
+    method: 'GET',
+  };
+  await fetch(
+    API_URL +
+      `/getEnterpriseLevelSentimentSummary?selectedFormat=${selectedFormat}&team=${team}`,
+    requestOptions
+  )
+    .then(response => response.json())
+    .then(data => {
+      retrosCountData = data;
+    });
+
+  return retrosCountData;
+};
+
+// Chart 7:  Api to get Enterprise Level Sentiments Moods
 export const getEnterpriseLevelSentimentsMoods = async (
   fromDate: string,
   toDate: string,
