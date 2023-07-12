@@ -10,8 +10,10 @@ import ReactApexChart from 'react-apexcharts';
 import { ApexOptions } from 'apexcharts';
 import AverageParticipantChart from '../../../screens/Analytics/AverageParticipantChart';
 import EnterpriseLevelActionsCountChart from '../../../screens/Analytics/EnterpriseLevelActionsCountChart';
+import { useNavigate } from 'react-router-dom';
+import EnterpriseLevelSentimentsMoodsChart from '../../../screens/Analytics/EnterpriseLevelSentimentsMoodsChart';
 function FacilitatorDashboard() {
-
+    const navigate = useNavigate();
     const menuList = [
         { label: 'Mobile Experience Team', actions: "VIEW 15 ACTIONS", isSelected: true },
         { label: 'Superannuation Product Team', actions: "VIEW 5 ACTIONS", isSelected: false },
@@ -153,7 +155,7 @@ function FacilitatorDashboard() {
                 <Box component="span">
 
 
-                    <H1RegularTypography label='Facilitator Dashboard' />
+                    <H1RegularTypography label='BACI Dashboard' />
                 </Box>
 
                 <Box component="span">
@@ -256,19 +258,23 @@ function FacilitatorDashboard() {
                 </Box>
 
                 {/* Analytics start here */}
-                <Box height="500px"
+                <Box height="510px"
 
 
                     sx={{
                         boxShadow: "10px 10px 40px 20px rgba(21, 154, 221, 0.08)", border: "1px solid rgba(250, 250, 250, 1)",
-                        marginTop: '10px'
+                        marginTop: '10px',
+                        overflowX:"auto",
+
                     }} >
                     <Box style={{ marginLeft: '16px', marginTop: '16px', marginBottom: '30px' }}>
                         <H4RegularTypography label="Analytics" />
                     </Box>
                     <Box display="flex" width="100%" paddingLeft="10px">
 
-                    <Box display="flex" flexDirection="column" alignItems="center" mr="20px" sx={{ border: "1px solid rgba(240, 240, 240, 1)", padding: '10px' }}>
+                    <Box display="flex" flexDirection="column" alignItems="center" mr="20px" sx={{ border: "1px solid rgba(240, 240, 240, 1)", padding: '10px' }} onClick={()=>{
+                        navigate("/facilitator/analytics/enterpriseLevelActionsCount") 
+                    }}>
 
                         <EnterpriseLevelActionsCountChart dashboard={true}/>
                         <CaptionRegularTypography label="Count of actions (Assigned vs Completed)" />
@@ -277,9 +283,18 @@ function FacilitatorDashboard() {
                             <ReactApexChart options={options} series={series} type="bar" height={370} width={550} />
                             <CaptionRegularTypography label="Count of actions (Assigned vs Completed)" />
                         </Box> */}
-                        <Box display="flex" flexDirection="column" alignItems="center" mr="20px" sx={{ border: "1px solid rgba(240, 240, 240, 1)", padding: '10px' }}>
+                        <Box display="flex" flexDirection="column" alignItems="center" mr="20px" sx={{ border: "1px solid rgba(240, 240, 240, 1)", padding: '10px' }}
+                        onClick={()=>{
+                            navigate("/facilitator/analytics/enterpriseLevelParticipantsCount") 
+                        }}
+                        
+                        >
                             <AverageParticipantChart dashboard={true} />
                             <CaptionRegularTypography label="Count of all participants over time" />
+                        </Box>
+                        <Box>
+
+                            <EnterpriseLevelSentimentsMoodsChart dashboard={true}/>
                         </Box>
                     </Box>
                 </Box>
