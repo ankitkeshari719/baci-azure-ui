@@ -259,7 +259,7 @@ export default function AverageParticipantChart({
               style={{ color: '#2C69A1', marginLeft: '16px' }}
             />
           </Grid>
-          {/* Table */}
+          {/* Table and Selector */}
           <Grid
             item
             xs={12}
