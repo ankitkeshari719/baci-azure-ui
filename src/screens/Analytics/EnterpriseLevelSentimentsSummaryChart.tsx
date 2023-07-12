@@ -1,37 +1,44 @@
 import React, { useState } from 'react';
-import { getParticipantsCount } from '../../helpers/msal/services';
+import { getEnterpriseLevelSentimentSummary } from '../../helpers/msal/services';
 import ReactApexChart from 'react-apexcharts';
 import { ApexOptions } from 'apexcharts';
-import { Box, Grid } from '@mui/material';
+import { Box, Grid, SelectChangeEvent } from '@mui/material';
 import { H2SemiBoldTypography } from '../../components/CustomizedTypography';
 import { Link, useNavigate } from 'react-router-dom';
 import * as Icons from 'heroicons-react';
 
-export default function EnterpriseLevelSentimentsSummaryChart() {
+export default function EnterpriseLevelSentimentsSummaryChart({
+  dashboard,
+  team,
+}: {
+  dashboard?: boolean;
+  team: string;
+}) {
   const [participantsCounts, setParticipantsCounts] = useState<any>([]);
   const [averageParticipants, setAverageParticipants] = useState([]);
   const [months, setMonths] = useState([]);
+  const [selectedFormat, setSelectedFormat] = useState<string>('1');
   const navigate = useNavigate();
 
   React.useEffect(() => {
-    handleGetParticipantChartData();
+    handleGetEnterpriseLevelSentimentSummary();
   }, []);
 
-  const handleGetParticipantChartData = async () => {
-    // await getParticipantsCount().then(
-    //   res => {
-    //     if (res && res.result) {
-    //       setParticipantsCounts(res.result);
-    //       setAverageParticipants(
-    //         res.result?.map((item: any) => item.averageParticipants)
-    //       );
-    //       setMonths(res.result?.map((item: any) => item.month));
-    //     }
-    //   },
-    //   err => {
-    //     console.log('err', err);
-    //   }
-    // );
+  const handleGetEnterpriseLevelSentimentSummary = async () => {
+    await getEnterpriseLevelSentimentSummary(selectedFormat, team).then(
+      res => {
+        if (res && res.result) {
+          console.log('res.result:::', res.result);
+        }
+      },
+      err => {
+        console.log('err', err);
+      }
+    );
+  };
+
+  const handleSelectedFormat = (event: SelectChangeEvent) => {
+    setSelectedFormat(event.target.value as string);
   };
 
   const series = [

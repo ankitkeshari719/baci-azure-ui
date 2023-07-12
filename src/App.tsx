@@ -120,7 +120,10 @@ export default function App({ instance }: AppProps) {
                                 <Route
                                   path="enterpriseLevelSentimentsSummary"
                                   element={
-                                    <EnterpriseLevelSentimentsSummaryChart />
+                                    <EnterpriseLevelSentimentsSummaryChart
+                                      dashboard={false}
+                                      team={'0'}
+                                    />
                                   }
                                 />
                                 <Route
@@ -226,7 +229,10 @@ export default function App({ instance }: AppProps) {
                               <Route
                                 path="enterpriseLevelSentimentsSummary"
                                 element={
-                                  <EnterpriseLevelSentimentsSummaryChart />
+                                  <EnterpriseLevelSentimentsSummaryChart
+                                    dashboard={false}
+                                    team={'0'}
+                                  />
                                 }
                               />
                               <Route
