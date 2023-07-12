@@ -33,11 +33,13 @@ const StyledTableCell = styled(TableCell)(({ theme }) => ({
     color: '#000000',
     border: '1px solid #CCC',
     minWidth: '200px',
+    borderCollapse: 'collapse',
   },
   [`&.${tableCellClasses.body}`]: {
     fontSize: 16,
     border: '1px solid #CCC',
     minWidth: '200px',
+    borderCollapse: 'collapse',
   },
 }));
 
@@ -259,7 +261,7 @@ export default function AverageParticipantChart({
               style={{ color: '#2C69A1', marginLeft: '16px' }}
             />
           </Grid>
-          {/* Table */}
+          {/* Table and Selector */}
           <Grid
             item
             xs={12}
@@ -390,7 +392,7 @@ export default function AverageParticipantChart({
             </Box>
             {/* Table */}
             <Box sx={{ marginTop: '32px' }}>
-              <TableContainer>
+              <TableContainer style={{ borderCollapse: 'collapse' }}>
                 <TableHead>
                   <TableRow>
                     <StyledTableCell align="center">Month</StyledTableCell>

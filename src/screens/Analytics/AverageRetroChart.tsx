@@ -34,11 +34,13 @@ const StyledTableCell = styled(TableCell)(({ theme }) => ({
     color: '#000000',
     border: '1px solid #CCC',
     minWidth: '200px',
+    borderCollapse: 'collapse',
   },
   [`&.${tableCellClasses.body}`]: {
     fontSize: 16,
     border: '1px solid #CCC',
     minWidth: '200px',
+    borderCollapse: 'collapse',
   },
 }));
 
@@ -113,7 +115,7 @@ export default function AverageRetroChart({
           res.result.map((item: any) => {
             temp = temp + item.averageRetros;
           });
-          setTotalAverageSessions(Math.round(temp/res.result.length));
+          setTotalAverageSessions(Math.round(temp / res.result.length));
         }
       },
       err => {
@@ -229,8 +231,8 @@ export default function AverageRetroChart({
               justifyContent: 'flex-start',
             }}
           >
-            <Link to={'/facilitator/analytics/'}>Analytics </Link>&nbsp;\ Count of all
-            Sessions
+            <Link to={'/facilitator/analytics/'}>Analytics </Link>&nbsp;\ Count
+            of all Sessions
           </Grid>
           {/* Back Button & Chart Title */}
           <Grid
@@ -257,7 +259,7 @@ export default function AverageRetroChart({
               style={{ color: '#2C69A1', marginLeft: '12px' }}
             />
           </Grid>
-          {/* Table */}
+          {/* Table and Selector */}
           <Grid
             item
             xs={12}
@@ -388,7 +390,7 @@ export default function AverageRetroChart({
             </Box>
             {/* Table Container */}
             <Box sx={{ marginTop: '32px' }}>
-              <TableContainer>
+              <TableContainer style={{ borderCollapse: 'collapse' }}>
                 <TableHead>
                   <TableRow>
                     <StyledTableCell align="center">Month</StyledTableCell>

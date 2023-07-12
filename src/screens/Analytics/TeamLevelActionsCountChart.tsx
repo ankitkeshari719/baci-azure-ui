@@ -1,7 +1,5 @@
 import React, { useState } from 'react';
-import {
-  getTeamLevelActionsCounts,
-} from '../../helpers/msal/services';
+import { getTeamLevelActionsCounts } from '../../helpers/msal/services';
 import ReactApexChart from 'react-apexcharts';
 import { ApexOptions } from 'apexcharts';
 import {
@@ -11,14 +9,39 @@ import {
   MenuItem,
   Select,
   SelectChangeEvent,
+  TableBody,
+  TableCell,
+  TableContainer,
+  TableHead,
+  TableRow,
+  styled,
+  tableCellClasses,
 } from '@mui/material';
 import {
+  BodyRegularTypography,
   ButtonLabelTypography,
   H2SemiBoldTypography,
+  H4SemiBoldTypography,
 } from '../../components/CustomizedTypography';
 import { Link, useNavigate } from 'react-router-dom';
 import * as Icons from 'heroicons-react';
 import { MONTH_SELECTORS, MenuProps } from './const';
+
+const StyledTableCell = styled(TableCell)(({ theme }) => ({
+  [`&.${tableCellClasses.head}`]: {
+    backgroundColor: '#F0F0F0',
+    color: '#000000',
+    border: '1px solid #CCC',
+    minWidth: '130px',
+    borderCollapse: 'collapse',
+  },
+  [`&.${tableCellClasses.body}`]: {
+    fontSize: 16,
+    border: '1px solid #CCC',
+    minWidth: '130px',
+    borderCollapse: 'collapse',
+  },
+}));
 
 export default function TeamLevelActionsCountChart({
   dashboard,
@@ -28,36 +51,64 @@ export default function TeamLevelActionsCountChart({
   const [teamLevelActions, setTeamLevelActions] = useState<any>([]);
   const [assignedActions, setAssignedActions] = useState<any>([]);
   const [completedActions, setCompletedActions] = useState<any>([]);
+  const [completedPercentage, setCompletedPercentage] = useState<Number>();
   const [months, setMonths] = useState<any>([]);
   const [fromDate, setFromDate] = useState<string>('10');
   const [toDate, setToDate] = useState<string>('16');
+  const [selectedFromDate, setSelectedFromDate] = useState<string>();
+  const [selectedToDate, setSelectedToDate] = useState<string>();
   const navigate = useNavigate();
   const windowWidth = React.useRef(window.innerWidth);
 
   const getChartWidth = () => {
     switch (true) {
       case windowWidth.current <= 1051:
-        return '700';
+        return '400';
       case windowWidth.current > 1051 && windowWidth.current <= 1150:
-        return '750';
+        return '450';
       case windowWidth.current >= 1151 && windowWidth.current <= 1199:
-        return '800';
-      case windowWidth.current >= 1200 && windowWidth.current <= 1300:
-        return '900';
+        return '500';
+      case windowWidth.current >= 1200 && windowWidth.current <= 125:
+        return '520';
+      case windowWidth.current >= 1251 && windowWidth.current <= 1300:
+        return '550';
       case windowWidth.current >= 1301 && windowWidth.current <= 1400:
-        return '1000';
+        return '600';
       case windowWidth.current >= 1401 && windowWidth.current <= 1500:
-        return '1050';
+        return '650';
       case windowWidth.current >= 1500:
-        return '1100';
+        return '700';
+
       default:
         return '500';
     }
   };
 
   React.useEffect(() => {
+    const tempSelectedFromDate = MONTH_SELECTORS.filter(
+      monthSelector => monthSelector.id === Number(fromDate)
+    );
+    const tempSelectedToDate = MONTH_SELECTORS.filter(
+      monthSelector => monthSelector.id === Number(toDate)
+    );
+
+    setSelectedFromDate(
+      tempSelectedFromDate &&
+        tempSelectedFromDate[0] &&
+        tempSelectedFromDate[0].month
+    );
+    setSelectedToDate(
+      tempSelectedToDate && tempSelectedToDate[0] && tempSelectedToDate[0].month
+    );
+  }, [fromDate, toDate]);
+
+  React.useEffect(() => {
     handleGetTeamLevelActionsCountsData();
   }, [fromDate, toDate]);
+
+  function removeDuplicates(arr: string[]) {
+    return arr.filter((item, index) => arr.indexOf(item) === index);
+  }
 
   const handleGetTeamLevelActionsCountsData = async () => {
     await getTeamLevelActionsCounts(fromDate, toDate).then(
@@ -69,16 +120,55 @@ export default function TeamLevelActionsCountChart({
           let nameArray = [];
           let assignedArray = [];
           let completedArray = [];
+          let teamNameArray = [];
+          let tempTeamLevelActions = [];
+          let tempCompletedPercentage = 0;
           for (let i = 0; i < teamsData.length; i++) {
             for (let j = 0; j < teamsData[i].length; j++) {
               nameArray.push(teamsData[i][j].name);
-              assignedArray.push(teamsData[i][j].assigned);
-              completedArray.push(teamsData[i][j].completed);
+            }
+          }
+          teamNameArray = removeDuplicates(nameArray);
+          for (let i = 0; i < teamNameArray.length; i++) {
+            assignedArray.push(0);
+            completedArray.push(0);
+          }
+          for (let i = 0; i < teamNameArray.length; i++) {
+            for (let j = 0; j < teamsData.length; j++) {
+              for (let k = 0; k < teamsData[j].length; k++) {
+                if (teamsData[j][k].name === teamNameArray[i]) {
+                  assignedArray[i] =
+                    assignedArray[i] + teamsData[j][k].assigned;
+                  completedArray[i] =
+                    completedArray[i] + teamsData[j][k].completed;
+                }
+              }
             }
           }
           setAssignedActions(assignedArray);
           setCompletedActions(completedArray);
-          setMonths(nameArray);
+          setMonths(teamNameArray);
+
+          for (let i = 0; i < teamNameArray.length; i++) {
+            tempTeamLevelActions.push({
+              team: teamNameArray[i],
+              assigned: assignedArray[i],
+              completed: completedArray[i],
+              completedPercentage: Math.round(
+                (completedArray[i] / (assignedArray[i] + completedArray[i])) *
+                  100
+              ),
+            });
+          }
+          setTeamLevelActions(tempTeamLevelActions);
+
+          for (let i = 0; i < completedArray.length; i++) {
+            tempCompletedPercentage =
+              tempCompletedPercentage + completedArray[i];
+          }
+          setCompletedPercentage(
+            Math.round(tempCompletedPercentage / teamNameArray.length)
+          );
         }
       },
       err => {
@@ -203,7 +293,8 @@ export default function TeamLevelActionsCountChart({
               justifyContent: 'flex-start',
             }}
           >
-            <Link to={'/facilitator/analytics/'}>Analytics </Link>&nbsp;\ Team Level
+            <Link to={'/facilitator/analytics/'}>Analytics </Link>&nbsp;\ Team
+            Level
           </Grid>
           {/* Back Button & Chart Title */}
           <Grid
@@ -230,133 +321,215 @@ export default function TeamLevelActionsCountChart({
               style={{ color: '#2C69A1', marginLeft: '16px' }}
             />
           </Grid>
-          {/* Selector */}
+          {/* Table with Selector*/}
           <Grid
             item
             xs={12}
+            md={6}
             sx={{
               padding: '0px !important',
               display: 'flex',
-              flexDirection: 'row',
               alignItems: 'center',
-              justifyContent: 'center',
-              marginTop: '16px',
+              flexDirection: 'column',
+              marginTop: '24px',
             }}
           >
-            {/* Select Range Title */}
-            <ButtonLabelTypography
-              label="Select Range:"
-              style={{
-                color: '#343434',
-              }}
-            />
-            {/* From Date */}
+            {/* Selector */}
             <Box
-              sx={{ minWidth: 240, marginLeft: '16px', marginRight: '16px' }}
-            >
-              <FormControl fullWidth>
-                <Select
-                  sx={{
-                    fieldset: {
-                      border: 'none',
-                      opacity: 1,
-                      color: '#4E4E4E',
-                    },
-                  }}
-                  labelId="from-Date"
-                  id="from_date"
-                  value={fromDate}
-                  label="From"
-                  onChange={handleFromDate}
-                  IconComponent={props => (
-                    <Icons.ChevronDownOutline
-                      size={24}
-                      color="#4E4E4E"
-                      style={{
-                        cursor: 'pointer',
-                        position: 'absolute',
-                        top: 'calc(50% - 0.8em)',
-                      }}
-                      {...props}
-                    />
-                  )}
-                  MenuProps={MenuProps}
-                >
-                  {MONTH_SELECTORS.map(month_selector => {
-                    return (
-                      <MenuItem
-                        value={month_selector.id}
-                        key={month_selector.id}
-                      >
-                        {month_selector.month}
-                      </MenuItem>
-                    );
-                  })}
-                </Select>
-              </FormControl>
-            </Box>
-            <ButtonLabelTypography
-              label="To"
-              style={{
-                color: '#343434',
+              sx={{
+                display: 'flex',
+                flexDirection: 'row',
+                alignItems: 'center',
+                justifyContent: 'start',
               }}
-            />
-            {/*To Date */}
-            <Box sx={{ minWidth: 240, marginLeft: '16px' }}>
-              <FormControl fullWidth>
-                <Select
-                  sx={{
-                    fieldset: {
-                      border: 'none',
-                      opacity: 1,
-                      color: '#4E4E4E',
-                    },
-                  }}
-                  labelId="to-Date"
-                  id="to_date"
-                  value={toDate}
-                  label="To"
-                  onChange={handleToDate}
-                  IconComponent={props => (
-                    <Icons.ChevronDownOutline
-                      size={24}
-                      color="#4E4E4E"
-                      style={{
-                        cursor: 'pointer',
-                        position: 'absolute',
-                        top: 'calc(50% - 0.8em)',
-                      }}
-                      {...props}
-                    />
-                  )}
-                  MenuProps={MenuProps}
-                >
-                  {MONTH_SELECTORS.map(month_selector => {
+            >
+              {/* Select Range Title */}
+              <ButtonLabelTypography
+                label="Select Range:"
+                style={{
+                  color: '#343434',
+                }}
+              />
+              {/* From Date */}
+              <Box
+                sx={{
+                  minWidth: 120,
+                  marginLeft: '16px',
+                  marginRight: '16px',
+                }}
+              >
+                <FormControl fullWidth>
+                  <Select
+                    sx={{
+                      fieldset: {
+                        border: 'none',
+                        opacity: 1,
+                        color: '#4E4E4E',
+                      },
+                    }}
+                    labelId="from-Date"
+                    id="from_date"
+                    value={fromDate}
+                    label="From"
+                    onChange={handleFromDate}
+                    IconComponent={props => (
+                      <Icons.ChevronDownOutline
+                        size={24}
+                        color="#4E4E4E"
+                        style={{
+                          cursor: 'pointer',
+                          position: 'absolute',
+                          top: 'calc(50% - 0.8em)',
+                        }}
+                        {...props}
+                      />
+                    )}
+                    MenuProps={MenuProps}
+                  >
+                    {MONTH_SELECTORS.map(month_selector => {
+                      return (
+                        <MenuItem
+                          value={month_selector.id}
+                          key={month_selector.id}
+                        >
+                          {month_selector.month}
+                        </MenuItem>
+                      );
+                    })}
+                  </Select>
+                </FormControl>
+              </Box>
+              <ButtonLabelTypography
+                label="To"
+                style={{
+                  color: '#343434',
+                }}
+              />
+              {/*To Date */}
+              <Box sx={{ minWidth: 120, marginLeft: '24px' }}>
+                <FormControl fullWidth>
+                  <Select
+                    sx={{
+                      fieldset: {
+                        border: 'none',
+                        opacity: 1,
+                        color: '#4E4E4E',
+                      },
+                    }}
+                    labelId="to-Date"
+                    id="to_date"
+                    value={toDate}
+                    label="To"
+                    onChange={handleToDate}
+                    IconComponent={props => (
+                      <Icons.ChevronDownOutline
+                        size={24}
+                        color="#4E4E4E"
+                        style={{
+                          cursor: 'pointer',
+                          position: 'absolute',
+                          top: 'calc(50% - 0.8em)',
+                        }}
+                        {...props}
+                      />
+                    )}
+                    MenuProps={MenuProps}
+                  >
+                    {MONTH_SELECTORS.map(month_selector => {
+                      return (
+                        <MenuItem
+                          value={month_selector.id}
+                          key={month_selector.id}
+                        >
+                          {month_selector.month}
+                        </MenuItem>
+                      );
+                    })}
+                  </Select>
+                </FormControl>
+              </Box>
+            </Box>
+            {/* Table */}
+            <Box sx={{ marginTop: '32px' }}>
+              <TableContainer style={{ borderCollapse: 'collapse' }}>
+                <TableHead>
+                  <TableRow>
+                    <StyledTableCell align="center">Team</StyledTableCell>
+                    <StyledTableCell align="center">Pending</StyledTableCell>
+                    <StyledTableCell align="center">Completed</StyledTableCell>
+                    <StyledTableCell align="center">
+                      Completed %
+                    </StyledTableCell>
+                  </TableRow>
+                </TableHead>
+                <TableBody>
+                  {teamLevelActions.map((teamLevelAction: any) => {
                     return (
-                      <MenuItem
-                        value={month_selector.id}
-                        key={month_selector.id}
-                      >
-                        {month_selector.month}
-                      </MenuItem>
+                      <TableRow key={teamLevelActions.id}>
+                        <StyledTableCell
+                          component="th"
+                          scope="row"
+                          align="center"
+                        >
+                          {teamLevelAction.team}
+                        </StyledTableCell>
+                        <StyledTableCell align="center">
+                          {teamLevelAction.assigned}
+                        </StyledTableCell>
+                        <StyledTableCell align="center">
+                          {teamLevelAction.completed}
+                        </StyledTableCell>
+                        <StyledTableCell align="center">
+                          {teamLevelAction.completedPercentage + '%'}
+                        </StyledTableCell>
+                      </TableRow>
                     );
                   })}
-                </Select>
-              </FormControl>
+                </TableBody>
+              </TableContainer>
             </Box>
           </Grid>
           {/* Chart  */}
           <Grid
             item
             xs={12}
+            md={6}
             sx={{
               padding: '0px !important',
-              marginTop: '48px',
+              marginTop: '16px',
               display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center',
+              alignItems: 'flex-start',
+              flexDirection: 'column',
             }}
           >
+            <Box>
+              <Grid item xs={12} sx={{ padding: '0px !important' }}>
+                <BodyRegularTypography
+                  label="Avg. Actions Completed"
+                  style={{ color: '#343434' }}
+                />
+              </Grid>
+              <Grid
+                item
+                xs={12}
+                sx={{ padding: '0px !important', marginTop: '10px' }}
+              >
+                <H4SemiBoldTypography
+                  label={completedPercentage + '%'}
+                  style={{ color: '#343434' }}
+                />
+              </Grid>
+              <Grid
+                item
+                xs={12}
+                sx={{ padding: '0px !important', marginTop: '10px' }}
+              >
+                <BodyRegularTypography
+                  label={selectedFromDate + ' To ' + selectedToDate}
+                  style={{ color: '#343434' }}
+                />
+              </Grid>
+            </Box>
             <ReactApexChart
               options={options}
               series={series}
