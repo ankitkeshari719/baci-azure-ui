@@ -320,7 +320,8 @@ export const getDummyChartData = async (): Promise<any> => {
 // Api to get Enterprise Level ActionsCount
 export const getEnterpriseLevelActionsCounts = async (
   fromDate: string,
-  toDate: string
+  toDate: string,
+  team: string
 ): Promise<any> => {
   let enterpriseLevelActionsCountData;
   const requestOptions = {
@@ -328,7 +329,7 @@ export const getEnterpriseLevelActionsCounts = async (
   };
   await fetch(
     API_URL +
-      `/getEnterpriseLevelActionsCounts?fromDate=${fromDate}&toDate=${toDate}`,
+      `/getEnterpriseLevelActionsCounts?fromDate=${fromDate}&toDate=${toDate}&team=${team}`,
     requestOptions
   )
     .then(response => response.json())
@@ -364,14 +365,15 @@ export const getTeamLevelActionsCounts = async (
 // Api to get count of all participant over time
 export const getParticipantsCount = async (
   fromDate: string,
-  toDate: string
+  toDate: string,
+  team: string
 ): Promise<any> => {
   let participantsCountData;
   const requestOptions = {
     method: 'GET',
   };
   await fetch(
-    API_URL + `/getParticipantsCount?fromDate=${fromDate}&toDate=${toDate}`,
+    API_URL + `/getParticipantsCount?fromDate=${fromDate}&toDate=${toDate}&team=${team}`,
     requestOptions
   )
     .then(response => response.json())
@@ -385,14 +387,15 @@ export const getParticipantsCount = async (
 // Api to get count of all retros over time
 export const getRetrosCount = async (
   fromDate: string,
-  toDate: string
+  toDate: string,
+  team: string
 ): Promise<any> => {
   let retrosCountData;
   const requestOptions = {
     method: 'GET',
   };
   await fetch(
-    API_URL + `/getRetrosCount?fromDate=${fromDate}&toDate=${toDate}`,
+    API_URL + `/getRetrosCount?fromDate=${fromDate}&toDate=${toDate}&team=${team}`,
     requestOptions
   )
     .then(response => response.json())
@@ -406,7 +409,8 @@ export const getRetrosCount = async (
 // Api to get Enterprise Level Sentiments Moods
 export const getEnterpriseLevelSentimentsMoods = async (
   fromDate: string,
-  toDate: string
+  toDate: string,
+  team: string
 ): Promise<any> => {
   let enterpriseLevelSentimentsMoodsData;
   const requestOptions = {
@@ -414,7 +418,7 @@ export const getEnterpriseLevelSentimentsMoods = async (
   };
   await fetch(
     API_URL +
-      `/getEnterpriseLevelSentimentsMoods?fromDate=${fromDate}&toDate=${toDate}`,
+      `/getEnterpriseLevelSentimentsMoods?fromDate=${fromDate}&toDate=${toDate}&team=${team}`,
     requestOptions
   )
     .then(response => response.json())

@@ -7,7 +7,6 @@ import {
   Box,
   FormControl,
   Grid,
-  InputLabel,
   MenuItem,
   Select,
   SelectChangeEvent,
@@ -46,8 +45,10 @@ const StyledTableCell = styled(TableCell)(({ theme }) => ({
 
 export default function AverageRetroChart({
   dashboard,
+  team,
 }: {
   dashboard?: boolean;
+  team: string;
 }) {
   const [retrosCounts, setRetrosCounts] = useState<any>([]);
   const [averageRetros, setAverageRetros] = useState([]);
@@ -105,7 +106,7 @@ export default function AverageRetroChart({
   }, [fromDate, toDate]);
 
   const handleGetRetroChartData = async () => {
-    await getRetrosCount(fromDate, toDate).then(
+    await getRetrosCount(fromDate, toDate, team).then(
       res => {
         if (res && res.result) {
           setRetrosCounts(res.result);
