@@ -1,7 +1,5 @@
 import React, { useState } from 'react';
-import {
-  getTeamLevelActionsCounts,
-} from '../../helpers/msal/services';
+import { getTeamLevelActionsCounts } from '../../helpers/msal/services';
 import ReactApexChart from 'react-apexcharts';
 import { ApexOptions } from 'apexcharts';
 import {
@@ -59,6 +57,10 @@ export default function TeamLevelActionsCountChart({
     handleGetTeamLevelActionsCountsData();
   }, [fromDate, toDate]);
 
+  function removeDuplicates(arr: string[]) {
+    return arr.filter((item, index) => arr.indexOf(item) === index);
+  }
+
   const handleGetTeamLevelActionsCountsData = async () => {
     await getTeamLevelActionsCounts(fromDate, toDate).then(
       res => {
@@ -67,18 +69,30 @@ export default function TeamLevelActionsCountChart({
             return item.teams;
           });
           let nameArray = [];
-          let assignedArray = [];
-          let completedArray = [];
+          let assignedArray = [0, 0, 0];
+          let completedArray = [0, 0, 0];
+          let teamNameArray = [];
           for (let i = 0; i < teamsData.length; i++) {
             for (let j = 0; j < teamsData[i].length; j++) {
               nameArray.push(teamsData[i][j].name);
-              assignedArray.push(teamsData[i][j].assigned);
-              completedArray.push(teamsData[i][j].completed);
+            }
+          }
+          teamNameArray = removeDuplicates(nameArray);
+          for (let i = 0; i < teamNameArray.length; i++) {
+            for (let j = 0; j < teamsData.length; j++) {
+              for (let k = 0; k < teamsData[j].length; k++) {
+                if (teamsData[j][k].name === teamNameArray[i]) {
+                  assignedArray[i] =
+                    assignedArray[i] + teamsData[j][k].assigned;
+                  completedArray[i] =
+                    completedArray[i] + teamsData[j][k].completed;
+                }
+              }
             }
           }
           setAssignedActions(assignedArray);
           setCompletedActions(completedArray);
-          setMonths(nameArray);
+          setMonths(teamNameArray);
         }
       },
       err => {
@@ -203,7 +217,8 @@ export default function TeamLevelActionsCountChart({
               justifyContent: 'flex-start',
             }}
           >
-            <Link to={'/facilitator/analytics/'}>Analytics </Link>&nbsp;\ Team Level
+            <Link to={'/facilitator/analytics/'}>Analytics </Link>&nbsp;\ Team
+            Level
           </Grid>
           {/* Back Button & Chart Title */}
           <Grid
