@@ -33,11 +33,13 @@ const StyledTableCell = styled(TableCell)(({ theme }) => ({
     color: '#000000',
     border: '1px solid #CCC',
     minWidth: '130px',
+    borderCollapse: 'collapse',
   },
   [`&.${tableCellClasses.body}`]: {
     fontSize: 16,
     border: '1px solid #CCC',
     minWidth: '130px',
+    borderCollapse: 'collapse',
   },
 }));
 
@@ -319,7 +321,7 @@ export default function TeamLevelActionsCountChart({
               style={{ color: '#2C69A1', marginLeft: '16px' }}
             />
           </Grid>
-          {/* Selector */}
+          {/* Table with Selector*/}
           <Grid
             item
             xs={12}
@@ -332,7 +334,7 @@ export default function TeamLevelActionsCountChart({
               marginTop: '24px',
             }}
           >
-            {/* Table with Selector*/}
+            {/* Selector */}
             <Box
               sx={{
                 display: 'flex',
@@ -449,7 +451,7 @@ export default function TeamLevelActionsCountChart({
             </Box>
             {/* Table */}
             <Box sx={{ marginTop: '32px' }}>
-              <TableContainer>
+              <TableContainer style={{ borderCollapse: 'collapse' }}>
                 <TableHead>
                   <TableRow>
                     <StyledTableCell align="center">Team</StyledTableCell>
