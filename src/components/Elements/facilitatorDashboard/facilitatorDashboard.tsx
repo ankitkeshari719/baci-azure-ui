@@ -206,7 +206,7 @@ function FacilitatorDashboard() {
           </Box>
         </Box>
         {/* Bottom container */}
-        <Box display="flex" flexDirection="column" sx={{ overflow: 'auto' }}>
+        <Box display="flex" flexDirection="column" sx={{ overflow: 'auto', height:"100%" }}>
           {/* Facilitator menu start */}
 
           <Box display="flex" flexDirection="row" width="100%" mt="10px">
@@ -361,7 +361,7 @@ function FacilitatorDashboard() {
               boxShadow: '10px 10px 40px 20px rgba(21, 154, 221, 0.08)',
               border: '1px solid rgba(250, 250, 250, 1)',
               marginTop: '10px',
-              overflowX: 'auto',
+            //   overflowX: 'auto',
             }}
           >
             <Box
