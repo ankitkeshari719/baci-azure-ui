@@ -1,7 +1,10 @@
 import React, { useState } from 'react';
-import { getEnterpriseLevelSentimentSummary } from '../../helpers/msal/services';
-import ReactApexChart from 'react-apexcharts';
-import { ApexOptions } from 'apexcharts';
+import {
+  getEnterpriseLevelSentimentSummary,
+  getParticipantsCount,
+  getRetrosCount,
+} from '../../helpers/msal/services';
+
 import {
   Box,
   FormControl,
@@ -36,17 +39,49 @@ export default function EnterpriseLevelSentimentsSummaryChart({
 }) {
   const [summary, setSummary] = useState<string>();
   const [keywords, setKeywords] = useState<Word[]>([]);
-  const [selectedFormat, setSelectedFormat] = useState<string>('1');
+  const [selectedFormat, setSelectedFormat] = useState<string>('17');
+  const [fromDate, setFromDate] = useState<string>('14');
+  const [toDate, setToDate] = useState<string>('16');
+  const [totalParticipant, setTotalParticipant] = useState<Number>();
+  const [totalRetros, setTotalRetros] = useState<Number>();
+
   const navigate = useNavigate();
+
+  React.useEffect(() => {
+    handleGetParticipantChartData();
+    handleGetRetroChartData();
+  }, []);
 
   React.useEffect(() => {
     handleGetEnterpriseLevelSentimentSummary(selectedFormat);
   }, []);
 
+  React.useEffect(() => {
+    if (Number(selectedFormat) > 0 && Number(selectedFormat) <= 16) {
+      setFromDate(selectedFormat);
+      setToDate(selectedFormat);
+    } else if (Number(selectedFormat) == 17) {
+      setFromDate('14');
+      setToDate('16');
+    } else if (Number(selectedFormat) == 18) {
+      setFromDate('11');
+      setToDate('16');
+    } else if (Number(selectedFormat) == 19) {
+      setFromDate('5');
+      setToDate('16');
+    }
+  }, [selectedFormat]);
+
   // Function to Generate Random number
   function randomIntFromInterval(min: number, max: number) {
     return Math.floor(Math.random() * (max - min + 1) + min);
   }
+
+  const generateSummary = () => {
+    handleGetEnterpriseLevelSentimentSummary(selectedFormat);
+    handleGetParticipantChartData();
+    handleGetRetroChartData();
+  };
 
   const handleGetEnterpriseLevelSentimentSummary = async (
     selectedFormat: string
@@ -60,10 +95,44 @@ export default function EnterpriseLevelSentimentsSummaryChart({
           for (let i = 0; i < keywordsData.length; i++) {
             tempKeywords.push({
               text: keywordsData[i],
-              size: randomIntFromInterval(1, 4),
+              size: randomIntFromInterval(1, 8),
             });
           }
           setKeywords(tempKeywords);
+        }
+      },
+      err => {
+        console.log('err', err);
+      }
+    );
+  };
+
+  const handleGetParticipantChartData = async () => {
+    await getParticipantsCount(fromDate, toDate, team).then(
+      res => {
+        if (res && res.result) {
+          let temp = 0;
+          for (let i = 0; i < res.result.length; i++) {
+            temp = temp + res.result[i].averageParticipants;
+          }
+          setTotalParticipant(temp);
+        }
+      },
+      err => {
+        console.log('err', err);
+      }
+    );
+  };
+
+  const handleGetRetroChartData = async () => {
+    await getRetrosCount(fromDate, toDate, team).then(
+      res => {
+        if (res && res.result) {
+          let temp = 0;
+          for (let i = 0; i < res.result.length; i++) {
+            temp = temp + res.result[i].averageRetros;
+          }
+          setTotalRetros(temp);
         }
       },
       err => {
@@ -101,7 +170,6 @@ export default function EnterpriseLevelSentimentsSummaryChart({
           display: 'flex',
           alignItems: 'center',
           justifyContent: 'flex-start',
-          marginTop: '24px',
         }}
       >
         <Icons.ArrowCircleLeftOutline
@@ -120,7 +188,7 @@ export default function EnterpriseLevelSentimentsSummaryChart({
       {/* Selector and Words */}
       <Grid
         item
-        xs={3}
+        xs={4}
         sx={{
           padding: '0px !important',
           display: 'flex',
@@ -155,7 +223,7 @@ export default function EnterpriseLevelSentimentsSummaryChart({
             alignItems: 'flex-start',
             justifyContent: 'flex-start',
             flexDirection: 'column',
-            marginTop: '96px',
+            marginTop: '48px',
           }}
         >
           <ButtonLabelTypography label="Summary of" />
@@ -212,14 +280,50 @@ export default function EnterpriseLevelSentimentsSummaryChart({
             id="generate_summary"
             label="Generate"
             size={'medium'}
-            onClick={() =>
-              handleGetEnterpriseLevelSentimentSummary(selectedFormat)
-            }
+            onClick={() => generateSummary()}
             style={{
               minWidth: '172px !important',
               width: '172px !important',
               height: '40px !important',
             }}
+          />
+        </Box>
+        {/* No. of sessions */}
+        <Box
+          sx={{
+            display: 'flex',
+            alignItems: 'flex-start',
+            justifyContent: 'flex-start',
+            flexDirection: 'column',
+            marginTop: '48px',
+          }}
+        >
+          <BodyRegularTypography
+            label="No. of sessions"
+            style={{ color: '#343434' }}
+          />
+          <H4SemiBoldTypography
+            label={totalRetros?.toString()}
+            style={{ color: '#343434', marginTop: '16px' }}
+          />
+        </Box>
+        {/* No. of Participants */}
+        <Box
+          sx={{
+            display: 'flex',
+            alignItems: 'flex-start',
+            justifyContent: 'flex-start',
+            flexDirection: 'column',
+            marginTop: '48px',
+          }}
+        >
+          <BodyRegularTypography
+            label="No. of Participants"
+            style={{ color: '#343434' }}
+          />
+          <H4SemiBoldTypography
+            label={totalParticipant?.toString()}
+            style={{ color: '#343434', marginTop: '16px' }}
           />
         </Box>
       </Grid>
@@ -234,7 +338,7 @@ export default function EnterpriseLevelSentimentsSummaryChart({
           flexDirection: 'column',
           marginTop: '24px',
           paddingRight: '48px !important',
-          paddingLeft: '48px !important',
+          paddingLeft: '0px !important',
           paddingTop: '0px !important',
           paddingBottom: '0px !important',
         }}
@@ -248,7 +352,7 @@ export default function EnterpriseLevelSentimentsSummaryChart({
       {/* Word Cloud */}
       <Grid
         item
-        xs={4}
+        xs={3}
         sx={{
           padding: '0px !important',
           display: 'flex',
