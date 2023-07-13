@@ -65,13 +65,32 @@ export const MONTH_SELECTORS = [
   },
 ];
 
+export const SELECTED_FORMATS = [
+  {
+    id: 1,
+    month: 'Last Month',
+  },
+  {
+    id: 2,
+    month: 'Last 3 Months',
+  },
+  {
+    id: 3,
+    month: 'Last 6 Months',
+  },
+  {
+    id: 4,
+    month: 'Last 12 Months',
+  },  
+];
+
 const ITEM_HEIGHT = 48;
 const ITEM_PADDING_TOP = 8;
 export const MenuProps = {
   PaperProps: {
     style: {
       maxHeight: ITEM_HEIGHT * 4.5 + ITEM_PADDING_TOP,
-      width: 302,
+      width: 150,
       background: '#FFFFFF',
       border: '1px solid #CCCCCC',
       boxShadow: '0px 1px 10px rgba(0, 0, 0, 0.15)',
