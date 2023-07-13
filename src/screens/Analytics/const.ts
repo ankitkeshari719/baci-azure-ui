@@ -68,20 +68,80 @@ export const MONTH_SELECTORS = [
 export const SELECTED_FORMATS = [
   {
     id: 1,
-    month: 'Last Month',
+    month: 'Apr 22',
   },
   {
     id: 2,
-    month: 'Last 3 Months',
+    month: 'May 22',
   },
   {
     id: 3,
-    month: 'Last 6 Months',
+    month: 'Jun 22',
   },
   {
     id: 4,
+    month: 'Jul 22',
+  },
+  {
+    id: 5,
+    month: 'Aug 22',
+  },
+  {
+    id: 6,
+    month: 'Sep 22',
+  },
+  {
+    id: 7,
+    month: 'Oct 22',
+  },
+  {
+    id: 8,
+    month: 'Nov 22',
+  },
+  {
+    id: 9,
+    month: 'Dec 22',
+  },
+  {
+    id: 10,
+    month: 'Jan 23',
+  },
+  {
+    id: 11,
+    month: 'Feb 23',
+  },
+  {
+    id: 12,
+    month: 'Mar 23',
+  },
+  {
+    id: 13,
+    month: 'Apr 23',
+  },
+  {
+    id: 14,
+    month: 'May 23',
+  },
+  {
+    id: 15,
+    month: 'Jun 23',
+  },
+  {
+    id: 16,
+    month: 'Jul 23',
+  },
+  {
+    id: 17,
+    month: 'Last 3 Months',
+  },
+  {
+    id: 18,
+    month: 'Last 6 Months',
+  },
+  {
+    id: 19,
     month: 'Last 12 Months',
-  },  
+  },
 ];
 
 const ITEM_HEIGHT = 48;
