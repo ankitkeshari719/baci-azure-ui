@@ -164,7 +164,9 @@ export default function TeamLevelActionsCountChart({
 
           for (let i = 0; i < completedArray.length; i++) {
             tempCompletedPercentage =
-              tempCompletedPercentage + completedArray[i];
+              tempCompletedPercentage +
+              (completedArray[i] / (completedArray[i] + assignedArray[i])) *
+                100;
           }
           setCompletedPercentage(
             Math.round(tempCompletedPercentage / teamNameArray.length)
@@ -480,7 +482,7 @@ export default function TeamLevelActionsCountChart({
                           {teamLevelAction.completed}
                         </StyledTableCell>
                         <StyledTableCell align="center">
-                          {teamLevelAction.completedPercentage + '%'}
+                          {teamLevelAction.completedPercentage}
                         </StyledTableCell>
                       </TableRow>
                     );

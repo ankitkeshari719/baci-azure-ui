@@ -119,7 +119,10 @@ export default function EnterpriseLevelActionsCountChart({
           setMonths(res.result?.map((item: any) => item.month));
           for (let i = 0; i < res.result.length; i++) {
             tempCompletedPercentage =
-              tempCompletedPercentage + res.result[i].completed;
+              tempCompletedPercentage +
+              (res.result[i].completed /
+                (res.result[i].completed + res.result[i].assigned)) *
+                100;
           }
           setCompletedPercentage(
             Math.round(tempCompletedPercentage / res.result.length)
@@ -441,7 +444,7 @@ export default function EnterpriseLevelActionsCountChart({
                               (enterpriseLevelAction.assigned +
                                 enterpriseLevelAction.completed)) *
                               100
-                          ) + '%'}
+                          )}
                         </StyledTableCell>
                       </TableRow>
                     );
