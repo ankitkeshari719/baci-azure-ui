@@ -40,6 +40,8 @@ import LeftBar from './components/Elements/leftBar/LeftBar';
 import ActionDashboard from './components/Elements/actionDashboard/ActionDashboard';
 import FacilitatorDashboard from './components/Elements/facilitatorDashboard/facilitatorDashboard';
 
+import EnterpriseDashboard from './components/Elements/enterpriseDashboard/EnterpriseDashboard';
+
 type AppProps = {
   instance: IPublicClientApplication;
 };
@@ -143,6 +145,83 @@ export default function App({ instance }: AppProps) {
                                 />
                               </Route>
                             </Route>
+                            <Route path="/enterprise/">
+                              <Route
+                                path="dashboard"
+                                element={<EnterpriseDashboard />}
+                              />
+                              <Route
+                                path="actions"
+                                element={<ActionDashboard />}
+                              />
+                              <Route path="analytics/">
+                                <Route
+                                  path=""
+                                  element={<AnalyticsMainContainer />}
+                                />
+
+                                <Route
+                                  path="teamLevelActionsCount"
+                                  element={<TeamLevelActionsCountChart />}
+                                />
+
+                                <Route
+                                  path="enterpriseLevelActionsCount"
+                                  element={
+                                    <EnterpriseLevelActionsCountChart
+                                      dashboard={false}
+                                      team={'0'}
+                                    />
+                                  }
+                                />
+                                <Route
+                                  path="enterpriseLevelParticipantsCount"
+                                  element={
+                                    <AverageParticipantChart
+                                      dashboard={false}
+                                      team={'0'}
+                                    />
+                                  }
+                                />
+                                <Route
+                                  path="enterpriseLevelRetrosCount"
+                                  element={
+                                    <AverageRetroChart
+                                      dashboard={false}
+                                      team={'0'}
+                                    />
+                                  }
+                                />
+                                <Route
+                                  path="enterpriseLevelSentimentsSummary"
+                                  element={
+                                    <EnterpriseLevelSentimentsSummaryChart />
+                                  }
+                                />
+                                <Route
+                                  path="enterpriseLevelSentimentsThemes"
+                                  element={
+                                    <EnterpriseLevelSentimentsThemeChart
+                                      dashboard={false}
+                                      team={'0'}
+                                    />
+                                  }
+                                />
+                                <Route
+                                  path="enterpriseLevelSentimentsMoods"
+                                  element={
+                                    <EnterpriseLevelSentimentsMoodsChart
+                                      dashboard={false}
+                                      team={'0'}
+                                    />
+                                  }
+                                />
+                              </Route>
+                            </Route>
+
+
+
+
                             <Route
                               path="/"
                               element={
