@@ -161,11 +161,11 @@ export default function EnterpriseLevelSentimentsThemeChart({
     <>
       {dashboard ? (
         <ReactApexChart
-          options={options}
           series={heatMapData}
-          type="heatmap"
-          width="550"
-          height="370"
+          options={options}
+          type="area"
+          width="518"
+          height="320"
         />
       ) : (
         <Grid container spacing={2} sx={{ padding: '48px', overflowY: 'auto' }}>

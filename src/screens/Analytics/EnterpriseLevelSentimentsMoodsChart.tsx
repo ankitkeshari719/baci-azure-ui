@@ -220,8 +220,8 @@ export default function EnterpriseLevelSentimentsMoodsChart({
           options={options}
           series={series}
           type="area"
-          width="550"
-          height="370"
+          width="518"
+          height="320"
         />
       ) : (
         <Grid container spacing={2} sx={{ padding: '48px', overflowY: 'auto' }}>

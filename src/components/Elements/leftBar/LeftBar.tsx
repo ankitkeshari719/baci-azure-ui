@@ -28,20 +28,21 @@ const LeftBar = () => {
   const [selectedMenu, setSelectedMenu] = React.useState('');
   const [searchParams] = useSearchParams();
   const [{ user }] = React.useContext(GlobalContext);
+  const [path,setPath]=React.useState(location.pathname.includes('facilitator')?"facilitator":location.pathname.includes('enterprise')?"enterprise":"facilitator");
 
   const menuArray = [
     {
       id: 1,
       label: 'Home',
       icon: HomeIcon,
-      routeTo: 'facilitator/dashboard',
+      routeTo: path+'/dashboard',
       disabled: false,
     },
     {
       id: 2,
       label: 'Actions',
       icon: ClipboardDocumentCheckIcon,
-      routeTo: 'facilitator/actions',
+      routeTo: path+'/actions',
       disabled: false,
     },
 
@@ -49,7 +50,7 @@ const LeftBar = () => {
       id: 3,
       label: 'Analytics',
       icon: ChartBarIcon,
-      routeTo: 'facilitator/analytics/',
+      routeTo: path+'/analytics/',
       disabled: false,
     },
 
@@ -102,7 +103,7 @@ const LeftBar = () => {
     },
   ];
   useEffect(() => {
-    if (location.pathname.includes('facilitator/dashboard')) {
+    if (location.pathname.includes('dashboard')) {
       setSelectedMenu(menuArray[0].label);
     } else if (location.pathname.includes('analytics')) {
       setSelectedMenu(menuArray[2].label);
@@ -118,11 +119,13 @@ const LeftBar = () => {
       <Box
         className="leftBarContainer"
         sx={{
-          display: location.pathname.includes('facilitator') ? 'flex' : 'none',
+          display: location.pathname.includes('facilitator')||location.pathname.includes('enterprise') ? 'flex' : 'none',
         }}
       >
         <Box className="topContainer">
-          <Box>
+          <Box sx={{cursor:'pointer'}} onClick={()=>{
+            navigate("/")
+          }}>
             <img src="/../images/r_MenuHeader.png" style={{ width: '56px' }} />
           </Box>
 
