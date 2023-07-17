@@ -30,7 +30,9 @@ function EnterpriseDashboard() {
   const [hoverOnMenu, setHoverOnMenu] = React.useState<Boolean>(false);
   const [hoverIndex,setHoverIndex]=React.useState<number>(0);
   const [selectId, setSelectedId] = React.useState<string>('0');
-  const retroList =retro
+  const retroList =retro;
+  const [path,setPath]=React.useState(location.pathname.includes('facilitator')?"facilitator":location.pathname.includes('enterprise')?"enterprise":"facilitator");
+
   const menuList = [
     {
       id: '0',
@@ -285,7 +287,7 @@ function EnterpriseDashboard() {
                 className="chartCard"
                 onClick={() => {
                   navigate(
-                    '/facilitator/analytics/enterpriseLevelParticipantsCount'
+                    '/enterprise/analytics/enterpriseLevelParticipantsCount'
                   );
                 }}
               >
@@ -296,7 +298,7 @@ function EnterpriseDashboard() {
                 className="chartCard"
                 onClick={() => {
                   navigate(
-                    '/facilitator/analytics/enterpriseLevelParticipantsCount'
+                    '/enterprise/analytics/enterpriseLevelParticipantsCount'
                   );
                 }}
               >
@@ -310,7 +312,7 @@ function EnterpriseDashboard() {
                 className="chartCard"
                 onClick={() => {
                   navigate(
-                    '/facilitator/analytics/enterpriseLevelActionsCount'
+                    '/enterprise/analytics/enterpriseLevelActionsCount'
                   );
                 }}
               >
@@ -322,7 +324,7 @@ function EnterpriseDashboard() {
                 className="chartCard"
                 onClick={() => {
                   navigate(
-                    '/facilitator/analytics/teamLevelActionsCount'
+                    '/enterprise/analytics/teamLevelActionsCount'
                   );
                 }}
               >
@@ -333,7 +335,7 @@ function EnterpriseDashboard() {
                 className="chartCard"
                 onClick={() => {
                   navigate(
-                    '/facilitator/analytics/enterpriseLevelSentimentsThemes'
+                    '/enterprise/analytics/enterpriseLevelSentimentsThemes'
                   );
                 }}
               >
