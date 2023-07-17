@@ -104,7 +104,6 @@ export default function EnterpriseLevelSentimentsThemeChart({
         },
       },
     },
-    colors: ['#EE7538', '#2C69A1', '#34A853'],
     dataLabels: {
       enabled: true,
       textAnchor: 'start',
@@ -150,10 +149,86 @@ export default function EnterpriseLevelSentimentsThemeChart({
       },
     },
     legend: {
-      show: true,
+      show: false,
       position: 'bottom',
       horizontalAlign: 'center',
       offsetX: 40,
+    },
+    plotOptions: {
+      heatmap: {
+        shadeIntensity: 0.5,
+        radius: 0,
+        useFillColorAsStroke: true,
+        colorScale: {
+          ranges: [
+            {
+              from: 1,
+              to: 25,
+              color: '#ffffff',
+            },
+            {
+              from: 25,
+              to: 50,
+              color: '#e3ebf3',
+            },
+            {
+              from: 50,
+              to: 75,
+              color: '#dae7f4',
+            },
+            {
+              from: 75,
+              to: 100,
+              color: '#c4dcf4',
+            },
+            {
+              from: 100,
+              to: 125,
+              color: '#95c0eb',
+            },
+            {
+              from: 125,
+              to: 150,
+              color: '#8dbeef',
+            },
+            {
+              from: 150,
+              to: 200,
+              color: '#93c8fc',
+            },
+            {
+              from: 200,
+              to: 250,
+              color: '#86bef4',
+            },
+            {
+              from: 250,
+              to: 300,
+              color: '#7ab8f4',
+            },
+            {
+              from: 300,
+              to: 350,
+              color: '#64acf1',
+            },
+            {
+              from: 350,
+              to: 400,
+              color: '#3999f6',
+            },
+            {
+              from: 400,
+              to: 450,
+              color: '#2b8ff1',
+            },
+            {
+              from: 450,
+              to: 500,
+              color: '#1f86ec',
+            },
+          ],
+        },
+      },
     },
   };
 
