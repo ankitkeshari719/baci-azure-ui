@@ -95,7 +95,6 @@ export default function ActionDashboard() {
   const [searched, setSearched] = React.useState<string>('');
 
   const requestSearch = (searchedVal: any) => {
-    console.log(searchedVal.target.value, 'searchedVal');
     const filteredRows = jiraRows.filter((row: any) => {
       return row.teamName
         .toLowerCase()
