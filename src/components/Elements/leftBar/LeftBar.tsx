@@ -123,7 +123,9 @@ const LeftBar = () => {
         }}
       >
         <Box className="topContainer">
-          <Box>
+          <Box sx={{cursor:'pointer'}} onClick={()=>{
+            navigate("/")
+          }}>
             <img src="/../images/r_MenuHeader.png" style={{ width: '56px' }} />
           </Box>
 
