@@ -317,7 +317,7 @@ width:"100%",
               <ContainedButton
                     id={'login_as_enterprise'}
                     name={'Enterprise Login'}
-                    onClick={() => navigate('facilitator/dashboard/')}
+                    onClick={() => navigate('enterprise/dashboard/')}
                     style={{
                       // width: '100%',
                       // marginTop: '80px',

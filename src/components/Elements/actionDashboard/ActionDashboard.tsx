@@ -145,8 +145,9 @@ export default function ActionDashboard() {
 
   return (
     <Paper
-      sx={{ width: '100%', background: 'rgb(249 251 252)', padding: '20px' }}
+      sx={{ width: '100%', background: 'rgb(249 251 252)', padding: '20px', display:'flex',flexDirection:'column' }}
     >
+      <BodySemiBoldTypography label="Actions" style={{marginBottom:'10px'}}/>
       <H2SemiBoldTypography
         label="All Actions"
         style={{ color: commonStyles.PrimaryDark }}
@@ -222,7 +223,7 @@ export default function ActionDashboard() {
         <FunnelIcon width="32px" style={{ cursor: 'pointer' }} />
       </Box>
 
-      <TableContainer sx={{ height: 'calc(100% - 270px)' }}>
+      <TableContainer sx={{ height: 'calc(100% - 280px)' }}>
         <Table stickyHeader aria-label="sticky table">
           <TableHead>
             <TableRow>

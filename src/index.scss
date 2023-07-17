@@ -110,12 +110,7 @@ body {
 #as.css-duy8o2-MuiSelect-select-MuiInputBase-input-MuiOutlinedInput-input {
   padding: 0px !important;
   margin-left: 10px !important;
-  // padding-left: 18px !important;
-  // padding-right: 68px !important;
 
-  // width: fit-content;
-  // min-width: 100px !important;
-  // width: fit-content !important;
 }
 
 #as.css-oqt7a2-MuiPaper-root-MuiMenu-paper-MuiPaper-root-MuiPopover-paper {
@@ -127,4 +122,12 @@ body {
 }
 .MuiSwitch-colorPrimary.Mui-checked {
   color: #159add !important;
+}
+
+.MuiTablePagination-displayedRows,.MuiTablePagination-selectLabel {
+  align-self: flex-end;
+}
+.MuiTablePagination-root{
+  overflow: hidden!important;
+
 }
