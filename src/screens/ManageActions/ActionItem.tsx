@@ -111,7 +111,6 @@ const [jiraProjects,setJiraProjects]=React.useState<any>([]);
 
   // For Users Menu
   const handleUsersMenuClick = (event: React.MouseEvent<HTMLElement>) => {
-    console.log("event", event)
     const id: string = event.currentTarget.dataset.myValue
       ? event.currentTarget.dataset.myValue
       : '';
@@ -133,12 +132,10 @@ const [jiraProjects,setJiraProjects]=React.useState<any>([]);
   };
 
   const handleAssign = (event: React.MouseEvent<HTMLElement>) => {
-    console.log("Handle Assign", event)
     setAnchorEl(null);
     const participantId: string = event.currentTarget.dataset.myValue
       ? event.currentTarget.dataset.myValue
       : '';
-    console.log(selectedActionForAssign && selectedActionForAssign.id, participantId)
     selectedActionForAssign &&
       assignAction([selectedActionForAssign.id], participantId);
     handleMainMenuClose();

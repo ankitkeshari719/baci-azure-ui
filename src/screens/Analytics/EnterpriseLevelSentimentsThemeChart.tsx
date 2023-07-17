@@ -18,6 +18,7 @@ import {
 import { Link, useNavigate } from 'react-router-dom';
 import * as Icons from 'heroicons-react';
 import { MONTH_SELECTORS, MenuProps } from './const';
+import { getEnterpriseLevelSentimentsTheme } from '../../helpers/msal/services';
 
 export default function EnterpriseLevelSentimentsThemeChart({
   dashboard,
@@ -26,18 +27,14 @@ export default function EnterpriseLevelSentimentsThemeChart({
   dashboard?: boolean;
   team: string;
 }) {
-  const [moods, setMoods] = useState<any>([]);
-  const [sadMoods, setSadMoods] = useState([]);
-  const [neutralMoods, setNeutralMoods] = useState([]);
-  const [happyMoods, setHappyMoods] = useState([]);
-  const [sadMoodPercentage, setSadMoodPercentage] = useState<number>();
-  const [neutralMoodPercentage, setNeutralMoodPercentage] = useState<number>();
-  const [happyMoodPercentage, setHappyMoodPercentage] = useState<number>();
-  const [months, setMonths] = useState([]);
-  const [fromDate, setFromDate] = useState<string>('10');
-  const [toDate, setToDate] = useState<string>('16');
   const navigate = useNavigate();
   const windowWidth = React.useRef(window.innerWidth);
+  const [heatMapData, setHeatMapData] = useState<any>([]);
+  const [sadPercentage, setSadPercentage] = useState<number>();
+  const [neutralPercentage, setNeutralPercentage] = useState<number>();
+  const [happyPercentage, setHappyPercentage] = useState<number>();
+  const [fromDate, setFromDate] = useState<string>('11');
+  const [toDate, setToDate] = useState<string>('16');
 
   const getChartWidth = () => {
     switch (true) {
@@ -64,7 +61,21 @@ export default function EnterpriseLevelSentimentsThemeChart({
     handleGetEnterpriseLevelSentimentsThemes();
   }, [fromDate, toDate]);
 
-  const handleGetEnterpriseLevelSentimentsThemes = async () => {};
+  const handleGetEnterpriseLevelSentimentsThemes = async () => {
+    await getEnterpriseLevelSentimentsTheme(fromDate, toDate, team).then(
+      res => {
+        if (res && res.result) {
+          setHeatMapData(res.result.series);
+          setSadPercentage(res.result.sadPercentage);
+          setNeutralPercentage(res.result.neutralPercentage);
+          setHappyPercentage(res.result.happyPercentage);
+        }
+      },
+      err => {
+        console.log('err', err);
+      }
+    );
+  };
 
   const handleFromDate = (event: SelectChangeEvent) => {
     setFromDate(event.target.value as string);
@@ -73,42 +84,6 @@ export default function EnterpriseLevelSentimentsThemeChart({
   const handleToDate = (event: SelectChangeEvent) => {
     setToDate(event.target.value as string);
   };
-
-  const series = [
-    //data on the y-axis
-    {
-      name: 'Work Prioritisation',
-      data: [15, 10, 75],
-    },
-    {
-      name: 'Openness to Feedback',
-      data: [15, 10, 75],
-    },
-    {
-      name: 'Decision Making',
-      data: [15, 10, 75],
-    },
-    {
-      name: 'Structure & Capabilities',
-      data: [15, 10, 75],
-    },
-    {
-      name: 'People & Resources',
-      data: [15, 10, 75],
-    },
-    {
-      name: 'Individual & Team',
-      data: [15, 10, 75],
-    },
-    {
-      name: 'Work Technology & Tools',
-      data: [15, 30, 55],
-    },
-    {
-      name: 'External Environment & Condition',
-      data: [10, 65, 25],
-    },
-  ];
 
   const options: ApexOptions = {
     //data on the x-axis
@@ -186,8 +161,8 @@ export default function EnterpriseLevelSentimentsThemeChart({
     <>
       {dashboard ? (
         <ReactApexChart
+          series={heatMapData}
           options={options}
-          series={series}
           type="area"
           width="518"
           height="320"
@@ -368,7 +343,7 @@ export default function EnterpriseLevelSentimentsThemeChart({
                 flexDirection: 'column',
               }}
             >
-              <H4RegularTypography label={sadMoodPercentage + '%'} />
+              <H4RegularTypography label={sadPercentage?.toString()} />
               <BodyRegularTypography label="Sad" />
             </Box>
             <Box
@@ -379,7 +354,7 @@ export default function EnterpriseLevelSentimentsThemeChart({
                 flexDirection: 'column',
               }}
             >
-              <H4RegularTypography label={neutralMoodPercentage + '%'} />
+              <H4RegularTypography label={neutralPercentage?.toString()} />
               <BodyRegularTypography label="Neutral" />
             </Box>
             <Box
@@ -390,7 +365,7 @@ export default function EnterpriseLevelSentimentsThemeChart({
                 flexDirection: 'column',
               }}
             >
-              <H4RegularTypography label={happyMoodPercentage + '%'} />
+              <H4RegularTypography label={happyPercentage?.toString()} />
               <BodyRegularTypography label="Happy" />
             </Box>
           </Grid>
@@ -408,7 +383,7 @@ export default function EnterpriseLevelSentimentsThemeChart({
           >
             <ReactApexChart
               options={options}
-              series={series}
+              series={heatMapData}
               type="heatmap"
               width={getChartWidth()}
               height="500"

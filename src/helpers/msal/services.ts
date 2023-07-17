@@ -430,6 +430,29 @@ export const getEnterpriseLevelSentimentSummary = async (
   return retrosCountData;
 };
 
+// Chart 5: Api to get count of all retros over time
+export const getEnterpriseLevelSentimentsTheme = async (
+  fromDate: string,
+  toDate: string,
+  team: string
+): Promise<any> => {
+  let heatMapData;
+  const requestOptions = {
+    method: 'GET',
+  };
+  await fetch(
+    API_URL +
+      `/getEnterpriseLevelSentimentsTheme?fromDate=${fromDate}&toDate=${toDate}&team=${team}`,
+    requestOptions
+  )
+    .then(response => response.json())
+    .then(data => {
+      heatMapData = data;
+    });
+
+  return heatMapData;
+};
+
 // Chart 7:  Api to get Enterprise Level Sentiments Moods
 export const getEnterpriseLevelSentimentsMoods = async (
   fromDate: string,
