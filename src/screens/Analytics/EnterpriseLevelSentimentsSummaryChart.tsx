@@ -156,7 +156,7 @@ export default function EnterpriseLevelSentimentsSummaryChart({
           display: 'flex',
           alignItems: 'flex-start',
           justifyContent: 'flex-start',
-          height: '20px !important'
+          height: '20px !important',
         }}
       >
         <Link to={'/facilitator/analytics/'}>Analytics </Link>&nbsp;\ Overall
@@ -187,6 +187,7 @@ export default function EnterpriseLevelSentimentsSummaryChart({
           style={{ color: '#2C69A1', marginLeft: '16px' }}
         />
       </Grid>
+      <Grid item xs={12}></Grid>
       {/* Selector and Words */}
       <Grid
         item
