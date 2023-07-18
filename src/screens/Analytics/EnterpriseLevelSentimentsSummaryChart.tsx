@@ -159,7 +159,7 @@ export default function EnterpriseLevelSentimentsSummaryChart({
         }}
       >
         <Link to={'/facilitator/analytics/'}>Analytics </Link>&nbsp;\ Overall
-        Summary
+        summary
       </Grid>
       {/* Back Button & Chart Title */}
       <Grid
