@@ -154,8 +154,9 @@ export default function EnterpriseLevelSentimentsSummaryChart({
         sx={{
           padding: '0px !important',
           display: 'flex',
-          alignItems: 'center',
+          alignItems: 'flex-start',
           justifyContent: 'flex-start',
+          height: '20px !important'
         }}
       >
         <Link to={'/facilitator/analytics/'}>Analytics </Link>&nbsp;\ Overall
@@ -168,9 +169,9 @@ export default function EnterpriseLevelSentimentsSummaryChart({
         sx={{
           padding: '0px !important',
           display: 'flex',
-          alignItems: 'center',
+          alignItems: 'flex-start',
           justifyContent: 'flex-start',
-          height: '40px !important',
+          height: '30px !important',
         }}
       >
         <Icons.ArrowCircleLeftOutline
