@@ -468,7 +468,7 @@ export default function EnterpriseLevelSentimentsThemeChart({
                 flexDirection: 'column',
               }}
             >
-              <H4RegularTypography label={sadPercentage?.toString()} />
+              <H4RegularTypography label={sadPercentage?.toString()+ '%'} />
               <BodyRegularTypography label="Sad" />
             </Box>
             <Box
@@ -479,7 +479,7 @@ export default function EnterpriseLevelSentimentsThemeChart({
                 flexDirection: 'column',
               }}
             >
-              <H4RegularTypography label={neutralPercentage?.toString()} />
+              <H4RegularTypography label={neutralPercentage?.toString() + '%'} />
               <BodyRegularTypography label="Neutral" />
             </Box>
             <Box
@@ -490,7 +490,7 @@ export default function EnterpriseLevelSentimentsThemeChart({
                 flexDirection: 'column',
               }}
             >
-              <H4RegularTypography label={happyPercentage?.toString()} />
+              <H4RegularTypography label={happyPercentage?.toString() + '%'} />
               <BodyRegularTypography label="Happy" />
             </Box>
           </Grid>
