@@ -170,6 +170,7 @@ export default function EnterpriseLevelSentimentsSummaryChart({
           display: 'flex',
           alignItems: 'center',
           justifyContent: 'flex-start',
+          height: '40px !important',
         }}
       >
         <Icons.ArrowCircleLeftOutline
@@ -195,7 +196,6 @@ export default function EnterpriseLevelSentimentsSummaryChart({
           alignItems: 'flex-start',
           justifyContent: 'flex-start',
           flexDirection: 'column',
-          marginTop: '24px',
         }}
       >
         {/* Words */}
@@ -336,7 +336,6 @@ export default function EnterpriseLevelSentimentsSummaryChart({
           alignItems: 'start',
           justifyContent: 'flex-start',
           flexDirection: 'column',
-          marginTop: '24px',
           paddingRight: '48px !important',
           paddingLeft: '0px !important',
           paddingTop: '0px !important',
@@ -358,7 +357,6 @@ export default function EnterpriseLevelSentimentsSummaryChart({
           display: 'flex',
           alignItems: 'center',
           justifyContent: 'flex-start',
-          marginTop: '24px',
           background: 'rgba(0, 0, 0, 0.04)',
         }}
       >
