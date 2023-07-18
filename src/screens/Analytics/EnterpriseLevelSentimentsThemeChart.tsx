@@ -226,6 +226,56 @@ export default function EnterpriseLevelSentimentsThemeChart({
               to: 500,
               color: '#1f86ec',
             },
+            {
+              from: 500,
+              to: 550,
+              color: '#3495f1',
+            },
+            {
+              from: 550,
+              to: 600,
+              color: '#4aa3f7',
+            },
+            {
+              from: 600,
+              to: 650,
+              color: '#5baffe',
+            },
+            {
+              from: 650,
+              to: 700,
+              color: '#519de4',
+            },
+            {
+              from: 700,
+              to: 750,
+              color: '#4690d4',
+            },
+            {
+              from: 750,
+              to: 800,
+              color: '#3b7ebc',
+            },
+            {
+              from: 800,
+              to: 850,
+              color: '#2c69a1',
+            },
+            {
+              from: 850,
+              to: 900,
+              color: '#188af6',
+            },
+            {
+              from: 900,
+              to: 950,
+              color: '#057cee',
+            },
+            {
+              from: 950,
+              to: 100,
+              color: '#0269cc',
+            },
           ],
         },
       },
