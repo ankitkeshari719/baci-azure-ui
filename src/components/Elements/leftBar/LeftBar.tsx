@@ -154,7 +154,7 @@ const LeftBar = () => {
         <Box className="bottomContainer">
           {bottomMenuArray.map((menu, index) => {
             return (
-              <Tooltip title={menu.label} key={menu.label} style={{position:'absolute',zIndex:'100',left:'40px'}}>
+              <Tooltip title={menu.label} key={menu.label} >
                 <menu.icon
                   className={
                     menu.label == selectedMenu ? 'menuIconSelected' : 'menuIcon'
