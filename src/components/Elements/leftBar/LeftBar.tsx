@@ -105,6 +105,7 @@ const LeftBar = () => {
   useEffect(() => {
     if (location.pathname.includes('dashboard')) {
       setSelectedMenu(menuArray[0].label);
+      setPath(location.pathname.includes('facilitator')?"facilitator":location.pathname.includes('enterprise')?"enterprise":"facilitator")
     } else if (location.pathname.includes('analytics')) {
       setSelectedMenu(menuArray[2].label);
     } else if (location.pathname.includes('actions')) {
@@ -113,6 +114,8 @@ const LeftBar = () => {
   }, [
     location.pathname.includes('analytics'),
     location.pathname.includes('facilitator/dashboard'),
+    location.pathname.includes('enterprise/dashboard'),
+    location.pathname.includes('enterprise'),
   ]);
   return (
     <>
@@ -131,7 +134,7 @@ const LeftBar = () => {
 
           {menuArray.map((menu, index) => {
             return (
-              <Tooltip title={menu.label} key={menu.label}>
+              <Tooltip title={menu.label} key={menu.label} >
                 <menu.icon
                   className={
                     menu.label == selectedMenu ? 'menuIconSelected' : 'menuIcon'
@@ -151,7 +154,7 @@ const LeftBar = () => {
         <Box className="bottomContainer">
           {bottomMenuArray.map((menu, index) => {
             return (
-              <Tooltip title={menu.label} key={menu.label}>
+              <Tooltip title={menu.label} key={menu.label} style={{position:'absolute',zIndex:'100',left:'40px'}}>
                 <menu.icon
                   className={
                     menu.label == selectedMenu ? 'menuIconSelected' : 'menuIcon'
@@ -164,7 +167,7 @@ const LeftBar = () => {
             );
           })}
 
-          <Tooltip title={user?.name + ''}>
+          <Tooltip title={user?.name + ''} placement="right-start">
             <span>
               {user?.avatar ? (
                 <Avatar
@@ -201,7 +204,7 @@ const LeftBar = () => {
 
 
 
-
+as
         </Box> */}
     </>
   );

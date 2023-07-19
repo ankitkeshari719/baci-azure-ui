@@ -1,4 +1,4 @@
-import { Box, Button } from '@mui/material';
+import { Box, Button, createTheme,ThemeProvider } from '@mui/material';
 import * as React from 'react';
 import {
   ButtonLabelTypography,
@@ -25,6 +25,22 @@ import { useNavigate } from 'react-router-dom';
 import EnterpriseLevelSentimentsMoodsChart from '../../../screens/Analytics/EnterpriseLevelSentimentsMoodsChart';
 import TeamLevelActionsCountChart from '../../../screens/Analytics/TeamLevelActionsCountChart';
 import { retro } from '../../../helpers/DemoConst';
+import EnterpriseLevelSentimentsThemeChart from '../../../screens/Analytics/EnterpriseLevelSentimentsThemeChart';
+
+
+const theme = createTheme({
+  palette: {
+   primary:{
+    main:commonStyles.PrimaryMain
+   },
+    secondary: {
+      // This is green.A700 as hex.
+      main: commonStyles.secondaryMain,
+      
+    },
+  },
+});
+
 function EnterpriseDashboard() {
   const navigate = useNavigate();
   const [hoverOnMenu, setHoverOnMenu] = React.useState<Boolean>(false);
@@ -89,17 +105,21 @@ function EnterpriseDashboard() {
           </Box>
 
           <Box component="span">
-            <Button variant="contained" color="primary">
+          <ThemeProvider theme={theme}>
+            <Button variant="contained" color="primary"  sx={{  borderRadius:'10px' }}>
               JOIN SESSION
             </Button>
             {/* <Box component="span" width="20px" /> */}
+          
             <Button
               variant="contained"
-              color="error"
-              sx={{ marginLeft: '20px' }}
+              color="secondary"
+              sx={{ marginLeft: '20px', borderRadius:'10px' }}
             >
-              NEW SESSION
+              <span style={{color:'white'}}>NEW SESSION</span>
+              
             </Button>
+            </ThemeProvider>
           </Box>
         </Box>
         {/* Bottom container */}
@@ -298,7 +318,7 @@ function EnterpriseDashboard() {
                 className="chartCard"
                 onClick={() => {
                   navigate(
-                    '/enterprise/analytics/enterpriseLevelParticipantsCount'
+                    '/enterprise/analytics/enterpriseLevelSentimentsMoods'
                   );
                 }}
               >
@@ -339,9 +359,15 @@ function EnterpriseDashboard() {
                   );
                 }}
               >
-                <EnterpriseLevelSentimentsMoodsChart dashboard={true} team={'0'}/>
+                <EnterpriseLevelSentimentsThemeChart dashboard={true} team={'0'}/>
                 <CaptionRegularTypography label="Enterprise Level - Sentiments - Key Themes Heatmap" />
               </Box>
+
+            
+
+
+     
+              
             </Box>
           </Box>
         </Box>

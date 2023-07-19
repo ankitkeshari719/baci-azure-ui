@@ -1,4 +1,4 @@
-import { Box, Button } from '@mui/material';
+import { Box, Button, ThemeProvider, createTheme } from '@mui/material';
 import * as React from 'react';
 import { ButtonLabelTypography, CaptionRegularTypography, CaptionSemiBoldTypography, H1RegularTypography, H1SemiBoldTypography, H4RegularTypography, H6RegularTypography, H6SemiBoldTypography } from '../../CustomizedTypography';
 import commonStyles from './../../../style.module.scss';
@@ -12,6 +12,19 @@ import AverageParticipantChart from '../../../screens/Analytics/AverageParticipa
 import EnterpriseLevelActionsCountChart from '../../../screens/Analytics/EnterpriseLevelActionsCountChart';
 import { useNavigate } from 'react-router-dom';
 import EnterpriseLevelSentimentsMoodsChart from '../../../screens/Analytics/EnterpriseLevelSentimentsMoodsChart';
+
+const theme = createTheme({
+    palette: {
+     primary:{
+      main:commonStyles.PrimaryMain
+     },
+      secondary: {
+        // This is green.A700 as hex.
+        main: commonStyles.secondaryMain,
+        
+      },
+    },
+  });
 function FacilitatorDashboard() {
     const navigate = useNavigate();
     const menuList = [
@@ -158,15 +171,25 @@ function FacilitatorDashboard() {
                     <H1RegularTypography label='BACI Dashboard' />
                 </Box>
 
+             
+
                 <Box component="span">
-                    <Button variant="contained" color="primary">
-                        JOIN SESSION
-                    </Button>
-                    {/* <Box component="span" width="20px" /> */}
-                    <Button variant="contained" color='error' sx={{ marginLeft: "20px" }}>
-                        NEW SESSION
-                    </Button>
-                </Box>
+          <ThemeProvider theme={theme}>
+            <Button variant="contained" color="primary"  sx={{  borderRadius:'10px' }}>
+              JOIN SESSION
+            </Button>
+            {/* <Box component="span" width="20px" /> */}
+          
+            <Button
+              variant="contained"
+              color="secondary"
+              sx={{ marginLeft: '20px', borderRadius:'10px' }}
+            >
+              <span style={{color:'white'}}>NEW SESSION</span>
+              
+            </Button>
+            </ThemeProvider>
+          </Box>
 
 
             </Box>
