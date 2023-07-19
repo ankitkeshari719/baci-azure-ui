@@ -12,6 +12,7 @@ const Avatar = (props: any) => {
     window.location.pathname.includes('board') ||
     window.location.pathname.includes('report')||
     window.location.pathname.includes('facilitator')||
+    window.location.pathname.includes('enterprise')||
     window.location.pathname.includes('actions')
   ) {
     avatar_src = '/avatars/animals/' + props.avatar + '.svg';
