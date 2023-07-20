@@ -164,117 +164,112 @@ export default function EnterpriseLevelSentimentsThemeChart({
             {
               from: 1,
               to: 25,
-              color: '#ffffff',
+              color: '#EBF8FF',
             },
             {
-              from: 25,
+              from: 26,
               to: 50,
-              color: '#e3ebf3',
+              color: '#D6F1FF',
             },
             {
-              from: 50,
+              from: 51,
               to: 75,
-              color: '#dae7f4',
+              color: '#C2EBFF',
             },
             {
-              from: 75,
+              from: 76,
               to: 100,
-              color: '#c4dcf4',
+              color: '#ADE4FF',
             },
             {
               from: 100,
               to: 125,
-              color: '#95c0eb',
+              color: '#99DDFF',
             },
             {
-              from: 125,
+              from: 126,
               to: 150,
-              color: '#8dbeef',
+              color: '#7CCBF3',
             },
             {
-              from: 150,
+              from: 151,
               to: 200,
-              color: '#93c8fc',
+              color: '#57BDEF',
             },
             {
-              from: 200,
+              from: 201,
               to: 250,
-              color: '#86bef4',
+              color: '#44B5EE',
             },
             {
-              from: 250,
+              from: 251,
               to: 300,
-              color: '#7ab8f4',
+              color: '#32AEEC',
             },
             {
-              from: 300,
+              from: 301,
               to: 350,
-              color: '#64acf1',
+              color: '#1FA6EA',
             },
             {
-              from: 350,
+              from: 351,
               to: 400,
-              color: '#3999f6',
+              color: '#159ADD',
             },
             {
-              from: 400,
+              from: 401,
               to: 450,
-              color: '#2b8ff1',
+              color: '#3F87CA',
             },
             {
-              from: 450,
+              from: 451,
               to: 500,
-              color: '#1f86ec',
+              color: '#357DC0',
             },
             {
-              from: 500,
+              from: 501,
               to: 550,
-              color: '#3495f1',
+              color: '#3072B0',
             },
             {
-              from: 550,
+              from: 551,
               to: 600,
-              color: '#4aa3f7',
+              color: '#2C69A1',
             },
             {
-              from: 600,
+              from: 601,
               to: 650,
-              color: '#5baffe',
+              color: '#275E90',
             },
             {
-              from: 650,
+              from: 651,
               to: 700,
-              color: '#519de4',
+              color: '#1e9967',
             },
             {
-              from: 700,
+              from: 701,
               to: 750,
-              color: '#4690d4',
+              color: '#1AAF58',
             },
             {
-              from: 750,
+              from: 751,
               to: 800,
-              color: '#3b7ebc',
+              color: '#18bf4d',
             },
             {
-              from: 800,
+              from: 801,
               to: 850,
-              color: '#2c69a1',
+              color: '#17C54A',
             },
             {
-              from: 850,
+              from: 851,
               to: 900,
-              color: '#188af6',
+              color: '#16CA46',
             },
             {
-              from: 900,
+              from: 901,
               to: 950,
-              color: '#057cee',
-            },
-            {
-              from: 950,
-              to: 100,
-              color: '#0269cc',
+              color: '#18DC4D',
             },
           ],
         },
@@ -468,7 +463,7 @@ export default function EnterpriseLevelSentimentsThemeChart({
                 flexDirection: 'column',
               }}
             >
-              <H4RegularTypography label={sadPercentage?.toString()+ '%'} />
+              <H4RegularTypography label={sadPercentage?.toString() + '%'} />
               <BodyRegularTypography label="Sad" />
             </Box>
             <Box
@@ -479,7 +474,9 @@ export default function EnterpriseLevelSentimentsThemeChart({
                 flexDirection: 'column',
               }}
             >
-              <H4RegularTypography label={neutralPercentage?.toString() + '%'} />
+              <H4RegularTypography
+                label={neutralPercentage?.toString() + '%'}
+              />
               <BodyRegularTypography label="Neutral" />
             </Box>
             <Box
