@@ -321,7 +321,7 @@ export default function EnterpriseLevelSentimentsThemeChart({
                 cursor: 'pointer',
                 color: '#159ADD',
               }}
-              onClick={() => navigate('/facilitator/analytics/')}
+              onClick={() => navigate(-1)}
             />
             <H2SemiBoldTypography
               label="Key themes heatmap"

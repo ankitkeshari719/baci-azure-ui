@@ -257,7 +257,7 @@ export default function EnterpriseLevelSentimentsMoodsChart({
                 cursor: 'pointer',
                 color: '#159ADD',
               }}
-              onClick={() => navigate('/facilitator/analytics/')}
+              onClick={() => navigate(-1)}
             />
             <H2SemiBoldTypography
               label="Participants Mood"
