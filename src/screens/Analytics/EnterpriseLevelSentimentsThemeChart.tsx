@@ -283,7 +283,7 @@ export default function EnterpriseLevelSentimentsThemeChart({
         <ReactApexChart
           series={heatMapData}
           options={options}
-          type="area"
+          type="heatmap"
           width="518"
           height="320"
         />
