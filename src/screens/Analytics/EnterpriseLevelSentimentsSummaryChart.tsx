@@ -95,7 +95,7 @@ export default function EnterpriseLevelSentimentsSummaryChart({
           for (let i = 0; i < keywordsData.length; i++) {
             tempKeywords.push({
               text: keywordsData[i],
-              size: randomIntFromInterval(1, 8),
+              size: randomIntFromInterval(15, 30),
             });
           }
           setKeywords(tempKeywords);
@@ -347,7 +347,7 @@ export default function EnterpriseLevelSentimentsSummaryChart({
         <H4SemiBoldTypography label="Summary" style={{ color: '#343434' }} />
         <BodyRegularTypography
           label={summary}
-          style={{ color: '#111111', textAlign: 'justify', marginTop: '24px' }}
+          style={{ color: '#111111', marginTop: '24px' }}
         />
       </Grid>
       {/* Word Cloud */}
@@ -362,7 +362,7 @@ export default function EnterpriseLevelSentimentsSummaryChart({
           background: 'rgba(0, 0, 0, 0.04)',
         }}
       >
-        <WordCloud data={keywords} showOn="whatDidntWentWell"></WordCloud>
+        <WordCloud data={keywords} showOn="summaryCloud"></WordCloud>
       </Grid>
     </Grid>
   );
