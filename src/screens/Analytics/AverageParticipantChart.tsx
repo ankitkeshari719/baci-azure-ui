@@ -17,6 +17,7 @@ import {
   styled,
   tableCellClasses,
 } from '@mui/material';
+
 import {
   BodyRegularTypography,
   ButtonLabelTypography,
@@ -256,7 +257,7 @@ export default function AverageParticipantChart({
                 cursor: 'pointer',
                 color: '#159ADD',
               }}
-              onClick={() => navigate('/facilitator/analytics/')}
+              onClick={() => navigate(-1)}
             />
             <H2SemiBoldTypography
               label="Count of all participants over time"

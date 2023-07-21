@@ -273,7 +273,7 @@ export default function EnterpriseLevelActionsCountChart({
                 cursor: 'pointer',
                 color: '#159ADD',
               }}
-              onClick={() => navigate('/facilitator/analytics/')}
+              onClick={() => navigate(-1)}
             />
             <H2SemiBoldTypography
               label="Count of actions (Assigned vs Completed) all teams"

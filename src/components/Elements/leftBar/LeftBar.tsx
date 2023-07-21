@@ -51,7 +51,7 @@ const LeftBar = () => {
       label: 'Analytics',
       icon: ChartBarIcon,
       routeTo: path+'/analytics/',
-      disabled: false,
+      disabled: true,
     },
 
     {

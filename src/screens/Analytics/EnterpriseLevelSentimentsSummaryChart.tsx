@@ -180,7 +180,7 @@ export default function EnterpriseLevelSentimentsSummaryChart({
             cursor: 'pointer',
             color: '#159ADD',
           }}
-          onClick={() => navigate('/facilitator/analytics/')}
+          onClick={() => navigate(-1)}
         />
         <H2SemiBoldTypography
           label="Overall summary paragraph and word cloud"
