@@ -35,7 +35,6 @@ import EnterpriseLevelSentimentsSummaryChart from './screens/Analytics/Enterpris
 import EnterpriseLevelSentimentsThemeChart from './screens/Analytics/EnterpriseLevelSentimentsThemeChart';
 import TeamLevelActionsCountChart from './screens/Analytics/TeamLevelActionsCountChart';
 import EnterpriseLevelActionsCountChart from './screens/Analytics/EnterpriseLevelActionsCountChart';
-import DummyChart from './screens/Analytics/DummyChart';
 import LeftBar from './components/Elements/leftBar/LeftBar';
 import ActionDashboard from './components/Elements/actionDashboard/ActionDashboard';
 import FacilitatorDashboard from './components/Elements/facilitatorDashboard/facilitatorDashboard';
