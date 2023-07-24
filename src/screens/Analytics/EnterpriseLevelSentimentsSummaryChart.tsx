@@ -83,6 +83,12 @@ export default function EnterpriseLevelSentimentsSummaryChart({
     handleGetRetroChartData();
   };
 
+  React.useEffect(() => {
+    handleGetEnterpriseLevelSentimentSummary(selectedFormat);
+    handleGetParticipantChartData();
+    handleGetRetroChartData();
+  }, [team]);
+
   const handleGetEnterpriseLevelSentimentSummary = async (
     selectedFormat: string
   ) => {

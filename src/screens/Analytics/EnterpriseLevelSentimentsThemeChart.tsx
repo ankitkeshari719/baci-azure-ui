@@ -61,6 +61,10 @@ export default function EnterpriseLevelSentimentsThemeChart({
     handleGetEnterpriseLevelSentimentsThemes();
   }, [fromDate, toDate]);
 
+  React.useEffect(() => {
+    handleGetEnterpriseLevelSentimentsThemes();
+  }, [team]);
+
   const handleGetEnterpriseLevelSentimentsThemes = async () => {
     await getEnterpriseLevelSentimentsTheme(fromDate, toDate, team).then(
       res => {

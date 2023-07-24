@@ -108,6 +108,10 @@ export default function EnterpriseLevelActionsCountChart({
     handleEnterpriseLevelActionsCountData();
   }, [fromDate, toDate]);
 
+  React.useEffect(() => {
+    handleEnterpriseLevelActionsCountData();
+  }, [team]);
+
   const handleEnterpriseLevelActionsCountData = async () => {
     await getEnterpriseLevelActionsCounts(fromDate, toDate, team).then(
       res => {
