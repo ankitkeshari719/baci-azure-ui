@@ -21,9 +21,13 @@ import * as Icons from 'heroicons-react';
 import { MONTH_SELECTORS, MenuProps } from './const';
 
 export default function EnterpriseLevelSentimentsMoodsChart({
+  fromDateInput,
+  toDateInput,
   dashboard,
   team
 }: {
+  fromDateInput?:string,
+  toDateInput?:string,
   dashboard?: boolean;
   team: string;
 }) {
@@ -60,6 +64,21 @@ export default function EnterpriseLevelSentimentsMoodsChart({
         return '500';
     }
   };
+
+  React.useEffect(()=>{
+    console.log(fromDateInput,toDateInput,"from Date")
+    if(fromDateInput!=""&&fromDateInput!=undefined&&fromDateInput!=null){
+      setFromDate(fromDateInput);
+    }
+    else if(toDateInput!=""&&toDateInput!=undefined&&toDateInput!=null){
+      setToDate(toDateInput);
+    }
+  },[
+    fromDateInput,
+    toDateInput,
+    
+  ])
+
 
   React.useEffect(() => {
     handleGetEnterpriseLevelSentimentsMoods();

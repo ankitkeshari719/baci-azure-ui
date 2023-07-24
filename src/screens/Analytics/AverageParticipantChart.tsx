@@ -46,9 +46,13 @@ const StyledTableCell = styled(TableCell)(({ theme }) => ({
 
 export default function AverageParticipantChart({
   dashboard,
+  fromDateInput,
+  toDateInput,
   team,
 }: {
   dashboard?: boolean;
+  fromDateInput?:string;
+  toDateInput?:string;
   team: string;
 }) {
   const [participantsCounts, setParticipantsCounts] = useState<any>([]);
@@ -84,6 +88,20 @@ export default function AverageParticipantChart({
         return '500';
     }
   };
+
+React.useEffect(()=>{
+  console.log(fromDateInput,toDateInput,"from Date")
+  if(fromDateInput!=""&&fromDateInput!=undefined&&fromDateInput!=null){
+    setFromDate(fromDateInput);
+  }
+  else if(toDateInput!=""&&toDateInput!=undefined&&toDateInput!=null){
+    setToDate(toDateInput);
+  }
+},[
+  fromDateInput,
+  toDateInput,
+  
+])
 
   React.useEffect(() => {
     const tempSelectedFromDate = MONTH_SELECTORS.filter(
