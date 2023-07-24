@@ -1,12 +1,45 @@
+.chartCard {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-right: 20px;
+  border: 1px solid rgba(240, 240, 240, 1);
+  padding: 10px;
+  border-radius: 5px;
+  cursor: pointer;
+}
 
-
-.chartCard{
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    margin-right: 20px;
-    border: 1px solid rgba(240, 240, 240, 1);
-    padding: 10px;
-    border-radius: 5px;
-    cursor: pointer;
+@media print {
+  body,
+  #scrollableDiv {
+    display: block !important;
+    position: relative !important;
+    width: auto !important;
+    height: auto !important;
+    overflow: visible !important;
+  }
+  #non_print_box_1 {
+    display: none !important;
+  }
+  #non_print_box_2 {
+    display: none !important;
+  }
+  #label_print {
+    display: block !important;
+  }
+  #AverageParticipantChart_Print {
+    display: block !important;
+  }
+  #EnterpriseLevelSentimentsMoodsChart_Print {
+    display: block !important;
+  }
+  #EnterpriseLevelActionsCountChart_Print {
+    display: block !important;
+  }
+  #TeamLevelActionsCountChart_Print {
+    display: block !important;
+  }
+  #EnterpriseLevelSentimentsThemeChart_Print {
+    display: block !important;
+  }
 }
