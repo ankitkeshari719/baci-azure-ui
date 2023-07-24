@@ -83,6 +83,12 @@ export default function EnterpriseLevelSentimentsSummaryChart({
     handleGetRetroChartData();
   };
 
+  React.useEffect(() => {
+    handleGetEnterpriseLevelSentimentSummary(selectedFormat);
+    handleGetParticipantChartData();
+    handleGetRetroChartData();
+  }, [team]);
+
   const handleGetEnterpriseLevelSentimentSummary = async (
     selectedFormat: string
   ) => {
@@ -95,7 +101,7 @@ export default function EnterpriseLevelSentimentsSummaryChart({
           for (let i = 0; i < keywordsData.length; i++) {
             tempKeywords.push({
               text: keywordsData[i],
-              size: randomIntFromInterval(15, 30),
+              size: randomIntFromInterval(45, 120),
             });
           }
           setKeywords(tempKeywords);

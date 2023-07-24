@@ -19,11 +19,15 @@ const WordCloud: FunctionComponent<WordCloudProps> = ({ data, showOn }) => {
   let colorsGreen = ['#48706A', '#8AC269', '#5D965B', '#467E59', '#C9E092'];
   let colorOrange = ['#73503C', '#D9A86C', '#591C16', '#D9C0A3', '#BF9169'];
   let colorBlue = [
-    '#EBF8FF',
-    '#D6F1FF',
-    '#C2EBFF',
-    '#ADE4FF',
-    '#99DDFF',
+    '#FF5C00',
+    '#34A853',
+    '#1B1F23',
+    '#4F558F',
+    '#E33283',
+    '#E33283',
+    '#34A853',
+    '#D357FF',
+    '#FF5C00',
     '#7CCBF3',
     '#57BDEF',
     '#44B5EE',
@@ -57,6 +61,16 @@ const WordCloud: FunctionComponent<WordCloudProps> = ({ data, showOn }) => {
             ? 24
             : datum.size < 45
             ? 16
+            : datum.size >= 45 && datum.size < 60
+            ? 16
+            : datum.size >= 60 && datum.size < 75
+            ? 24
+            : datum.size >= 75 && datum.size < 90
+            ? 32
+            : datum.size >= 90 && datum.size < 105
+            ? 40
+            : datum.size >= 105 && datum.size < 120
+            ? 48
             : 8
           : 16;
       })

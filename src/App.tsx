@@ -35,7 +35,6 @@ import EnterpriseLevelSentimentsSummaryChart from './screens/Analytics/Enterpris
 import EnterpriseLevelSentimentsThemeChart from './screens/Analytics/EnterpriseLevelSentimentsThemeChart';
 import TeamLevelActionsCountChart from './screens/Analytics/TeamLevelActionsCountChart';
 import EnterpriseLevelActionsCountChart from './screens/Analytics/EnterpriseLevelActionsCountChart';
-import DummyChart from './screens/Analytics/DummyChart';
 import LeftBar from './components/Elements/leftBar/LeftBar';
 import ActionDashboard from './components/Elements/actionDashboard/ActionDashboard';
 import FacilitatorDashboard from './components/Elements/facilitatorDashboard/facilitatorDashboard';
@@ -198,7 +197,9 @@ export default function App({ instance }: AppProps) {
                                 <Route
                                   path="enterpriseLevelSentimentsSummary"
                                   element={
-                                    <EnterpriseLevelSentimentsSummaryChart team={'0'} />
+                                    <EnterpriseLevelSentimentsSummaryChart
+                                      team={'0'}
+                                    />
                                   }
                                 />
                                 <Route
@@ -221,10 +222,6 @@ export default function App({ instance }: AppProps) {
                                 />
                               </Route>
                             </Route>
-
-
-
-
                             <Route
                               path="/"
                               element={
@@ -243,7 +240,6 @@ export default function App({ instance }: AppProps) {
                               path="/retrodetails"
                               element={<RetroDetails></RetroDetails>}
                             />
-
                             <Route
                               path="/offboarding"
                               element={<Offboarding></Offboarding>}
@@ -269,6 +265,18 @@ export default function App({ instance }: AppProps) {
                                 element={<StartRetro></StartRetro>}
                               />
                             </Route>
+                            <Route
+                              path="/report/:id"
+                              element={<SummaryReportMain />}
+                            />
+                            <Route
+                              path="/retroisfinished"
+                              element={<RetroIsFinished></RetroIsFinished>}
+                            />
+                            <Route
+                              path="/jiraCallback/"
+                              element={<JiraCallback />}
+                            />
                             <Route path="/analytics/">
                               <Route
                                 path=""
@@ -333,24 +341,6 @@ export default function App({ instance }: AppProps) {
                                 }
                               />
                             </Route>
-                            <Route
-                              path="/report/:id"
-                              element={<SummaryReportMain />}
-                            />
-                            <Route
-                              path="enterpriseLevelActionsCount"
-                              element={<DummyChart />}
-                            />
-                            <Route
-                              path="/retroisfinished"
-                              element={<RetroIsFinished></RetroIsFinished>}
-                            />
-
-                            <Route
-                              path="/jiraCallback/"
-                              element={<JiraCallback />}
-                            />
-
                             <Route
                               path="*"
                               element={<PageNotFound></PageNotFound>}

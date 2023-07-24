@@ -105,6 +105,10 @@ export default function AverageRetroChart({
     handleGetRetroChartData();
   }, [fromDate, toDate]);
 
+  React.useEffect(() => {
+    handleGetRetroChartData();
+  }, [team]);
+
   const handleGetRetroChartData = async () => {
     await getRetrosCount(fromDate, toDate, team).then(
       res => {
