@@ -1,3 +1,4 @@
+import * as React from 'react';
 import { Box, Button, ThemeProvider, createTheme } from '@mui/material';
 import {
   ButtonLabelTypography,
@@ -14,7 +15,6 @@ import {
   ArrowRightCircleIcon,
 } from '@heroicons/react/24/outline';
 import Avatar from '../Avatar';
-import { ApexOptions } from 'apexcharts';
 import AverageParticipantChart from '../../../screens/Analytics/AverageParticipantChart';
 import EnterpriseLevelActionsCountChart from '../../../screens/Analytics/EnterpriseLevelActionsCountChart';
 import { useNavigate } from 'react-router-dom';
@@ -34,18 +34,27 @@ const theme = createTheme({
 
 function FacilitatorDashboard() {
   const navigate = useNavigate();
+  const [selectId, setSelectedId] = React.useState<string>('0');
+
   const menuList = [
     {
+      id: '0',
       label: 'Mobile Experience Team',
       actions: 'VIEW 15 ACTIONS',
       isSelected: true,
     },
     {
+      id: '1',
       label: 'Superannuation Product Team',
       actions: 'VIEW 5 ACTIONS',
       isSelected: false,
     },
-    { label: 'Insurance Team', actions: 'VIEW 15 ACTIONS', isSelected: false },
+    {
+      id: '2',
+      label: 'Insurance Team',
+      actions: 'VIEW 15 ACTIONS',
+      isSelected: false,
+    },
   ];
 
   const subMenuList = [
@@ -107,78 +116,6 @@ function FacilitatorDashboard() {
     },
   ];
 
-  // apex charts
-
-  const series = [
-    {
-      name: 'Completed Actions',
-      data: [44, 55, 41, 67, 22, 43],
-    },
-    {
-      name: 'Actions Pending',
-      data: [13, 23, 20, 8, 13, 27],
-    },
-  ];
-  const options: ApexOptions = {
-    colors: ['#2c69a1', '#149add'],
-    chart: {
-      type: 'bar',
-      height: 350,
-      stacked: true,
-      toolbar: {
-        show: true,
-      },
-      zoom: {
-        enabled: true,
-      },
-    },
-    responsive: [
-      {
-        breakpoint: 480,
-        options: {
-          legend: {
-            position: 'bottom',
-            offsetX: -10,
-            offsetY: 0,
-          },
-        },
-      },
-    ],
-    plotOptions: {
-      bar: {
-        horizontal: false,
-        borderRadius: 10,
-        dataLabels: {
-          total: {
-            enabled: true,
-            style: {
-              fontSize: '13px',
-              fontWeight: 900,
-            },
-          },
-        },
-      },
-    },
-    xaxis: {
-      type: 'category',
-      categories: ['Team A', 'Team B', 'Team C', 'Team D', 'Team E', 'Team F'],
-    },
-    legend: {
-      position: 'bottom',
-      show: true,
-      showForSingleSeries: true,
-      customLegendItems: ['Completed Actions', 'Actions Pending'],
-      markers: {
-        fillColors: ['#2c69a1', '#149add'],
-      },
-      //   offsetY: 40
-    },
-
-    fill: {
-      opacity: 1,
-    },
-  };
-
   return (
     <>
       <Box
@@ -188,7 +125,7 @@ function FacilitatorDashboard() {
         height="100%"
         padding="10px"
       >
-        {/* Toolbar start*/}
+        {/* Label And Button*/}
         <Box
           display="flex"
           flexDirection="row"
@@ -197,10 +134,11 @@ function FacilitatorDashboard() {
           height="40px"
           alignItems="center"
         >
+          {/* BACI Dashboard Label */}
           <Box component="span">
             <H1RegularTypography label="BACI Dashboard" />
           </Box>
-
+          {/* JOIN SESSION And NEW SESSION Button */}
           <Box component="span">
             <ThemeProvider theme={theme}>
               <Button
@@ -224,12 +162,14 @@ function FacilitatorDashboard() {
         </Box>
         {/* Bottom container */}
         <Box display="flex" flexDirection="column" sx={{ overflow: 'auto' }}>
-          {/* Facilitator menu start */}
-
+          {/* Teams list menu start */}
           <Box display="flex" flexDirection="row" width="100%" mt="10px">
             {menuList.map((menu, index) => {
               return (
                 <Box
+                  onClick={() => {
+                    setSelectedId(menu.id);
+                  }}
                   width="330px"
                   height={menu.isSelected ? '170px' : '156px'}
                   border="1px solid rgba(250, 250, 250, 1)"
@@ -279,7 +219,6 @@ function FacilitatorDashboard() {
             })}
           </Box>
           {/* Retro list starts here */}
-
           <Box
             width="100%"
             height="241px"
@@ -370,7 +309,6 @@ function FacilitatorDashboard() {
               );
             })}
           </Box>
-
           {/* Analytics start here */}
           <Box
             minHeight="540px"
@@ -381,6 +319,7 @@ function FacilitatorDashboard() {
               overflowX: 'auto',
             }}
           >
+            {/* Analytics label */}
             <Box
               style={{
                 marginLeft: '16px',
@@ -390,7 +329,9 @@ function FacilitatorDashboard() {
             >
               <H4RegularTypography label="Analytics" />
             </Box>
+            {/* Analytics Chart */}
             <Box display="flex" width="100%" paddingLeft="10px">
+              {/* Enterprise Level Actions Count Chart */}
               <Box
                 display="flex"
                 flexDirection="column"
@@ -407,10 +348,13 @@ function FacilitatorDashboard() {
                   );
                 }}
               >
-                <EnterpriseLevelActionsCountChart dashboard={true} team={'0'} />
+                <EnterpriseLevelActionsCountChart
+                  dashboard={true}
+                  team={selectId}
+                />
                 <CaptionRegularTypography label="Count of actions (Assigned vs Completed)" />
               </Box>
-
+              {/* Average Participant Chart */}
               <Box
                 display="flex"
                 flexDirection="column"
@@ -427,9 +371,10 @@ function FacilitatorDashboard() {
                   );
                 }}
               >
-                <AverageParticipantChart dashboard={true} team={'0'} />
+                <AverageParticipantChart dashboard={true} team={selectId} />
                 <CaptionRegularTypography label="Count of all participants over time" />
               </Box>
+              {/* Enterprise Level Sentiments Moods Chart */}
               <Box
                 display="flex"
                 flexDirection="column"
@@ -448,7 +393,7 @@ function FacilitatorDashboard() {
               >
                 <EnterpriseLevelSentimentsMoodsChart
                   dashboard={true}
-                  team={'0'}
+                  team={selectId}
                 />
                 <CaptionRegularTypography label=" Participants Sentiments - Moods" />
               </Box>
