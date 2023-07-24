@@ -65,6 +65,10 @@ export default function EnterpriseLevelSentimentsMoodsChart({
     handleGetEnterpriseLevelSentimentsMoods();
   }, [fromDate, toDate]);
 
+  React.useEffect(() => {
+    handleGetEnterpriseLevelSentimentsMoods();
+  }, [team]);
+
   const handleGetEnterpriseLevelSentimentsMoods = async () => {
     await getEnterpriseLevelSentimentsMoods(fromDate, toDate,team).then(
       res => {

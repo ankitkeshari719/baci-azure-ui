@@ -107,6 +107,10 @@ export default function AverageParticipantChart({
     handleGetParticipantChartData();
   }, [fromDate, toDate]);
 
+  React.useEffect(() => {
+    handleGetParticipantChartData();
+  }, [team]);
+
   const handleGetParticipantChartData = async () => {
     await getParticipantsCount(fromDate, toDate, team).then(
       res => {
