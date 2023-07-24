@@ -111,7 +111,7 @@ export default function EnterpriseLevelSentimentsThemeChart({
         fontFamily: 'Poppins',
         fontWeight: '400',
         fontSize: '12px',
-        colors: ['#ffffff'],
+        colors: ['#333333'],
       },
       background: {
         enabled: true,
