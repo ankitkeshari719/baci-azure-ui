@@ -19,12 +19,15 @@ import { Link, useNavigate } from 'react-router-dom';
 import * as Icons from 'heroicons-react';
 import { MONTH_SELECTORS, MenuProps } from './const';
 import { getEnterpriseLevelSentimentsTheme } from '../../helpers/msal/services';
+import { GlobalContext } from '../../contexts/GlobalContext';
 
 export default function EnterpriseLevelSentimentsThemeChart({
   dashboard,
+ 
   team,
 }: {
   dashboard?: boolean;
+
   team: string;
 }) {
   const navigate = useNavigate();
@@ -33,8 +36,9 @@ export default function EnterpriseLevelSentimentsThemeChart({
   const [sadPercentage, setSadPercentage] = useState<number>();
   const [neutralPercentage, setNeutralPercentage] = useState<number>();
   const [happyPercentage, setHappyPercentage] = useState<number>();
-  const [fromDate, setFromDate] = useState<string>('11');
-  const [toDate, setToDate] = useState<string>('16');
+  const [global, dispatch] = React.useContext(GlobalContext);
+  const [fromDate, setFromDate] = useState<string>(global.chartStartDate?global.chartStartDate:'10');
+  const [toDate, setToDate] = useState<string>(global.chartEndDate?global.chartEndDate: '16');
 
   const getChartWidth = () => {
     switch (true) {
@@ -281,6 +285,23 @@ export default function EnterpriseLevelSentimentsThemeChart({
     },
   };
 
+
+  React.useEffect(()=>{
+   
+    const fromDateInput = global.chartStartDate;
+    const toDateInput=global.chartEndDate;
+    if(fromDateInput!=""&&fromDateInput!=undefined&&fromDateInput!=null){
+      setFromDate(fromDateInput);
+    }
+     if(toDateInput!=""&&toDateInput!=undefined&&toDateInput!=null){
+      setToDate(toDateInput);
+    }
+  },[
+    global.chartStartDate,
+    global.chartEndDate
+    
+    
+  ])
   return (
     <>
       {dashboard ? (

@@ -59,6 +59,8 @@ export class Global {
   isMaintenanceScheduled?: boolean = false;
   lastGlobalStateUpdate: Date | undefined = new Date();
   jiraCode?: string ="";
+  chartStartDate?:string="10";
+  chartEndDate?:string="16"
 }
 
 export class LastRetroName {

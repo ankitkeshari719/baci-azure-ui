@@ -23,7 +23,9 @@ export enum ActionType {
   CREATE_RETRO = 'createRetro',
   SET_EMOJI_ID = 'setEmojiId',
   SET_IS_MAINTENANCE_SCHEDULED = 'aetIsMaintenanceScheduled',
-  SET_JIRA_CODE = "setJiraCode"
+  SET_JIRA_CODE = 'setJiraCode',
+  CHART_START_DATE="chartStartDate",
+  CHART_END_DATE='chartEndDate'
 }
 
 export class ReducerPayload {
@@ -45,6 +47,8 @@ export class ReducerPayload {
   isMaintenanceScheduled?: boolean;
   lastGlobalStateUpdate?: Date | undefined;
   jiraCode?: string;
+  startDate?:string;
+  endDate?:string;
 }
 
 type ContextType = [
@@ -172,6 +176,16 @@ function GlobalProvider(props: ComponentProps<any>) {
           ...state,
           jiraCode: action.payload?.jiraCode,
         });
+        case ActionType.CHART_START_DATE:
+          return saveState({
+            ...state,
+            chartStartDate:action.payload?.startDate,
+          });
+          case ActionType.CHART_END_DATE:
+            return saveState({
+              ...state,
+              chartEndDate:action.payload?.endDate,
+            });
       default:
         noMatch = true;
         break;

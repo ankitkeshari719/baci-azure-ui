@@ -1,4 +1,10 @@
-import { Box, Button, createTheme, ThemeProvider } from '@mui/material';
+import {
+  Box,
+  Button,
+  createTheme,
+  SelectChangeEvent,
+  ThemeProvider,
+} from '@mui/material';
 import * as React from 'react';
 import {
   ButtonLabelTypography,
@@ -20,6 +26,9 @@ import EnterpriseLevelSentimentsMoodsChart from '../../../screens/Analytics/Ente
 import TeamLevelActionsCountChart from '../../../screens/Analytics/TeamLevelActionsCountChart';
 import { retro } from '../../../helpers/DemoConst';
 import EnterpriseLevelSentimentsThemeChart from '../../../screens/Analytics/EnterpriseLevelSentimentsThemeChart';
+import DateSelector from './DateSelector';
+import { useState } from 'react';
+import { ActionType, GlobalContext } from '../../../contexts/GlobalContext';
 
 const theme = createTheme({
   palette: {
@@ -39,7 +48,6 @@ function EnterpriseDashboard() {
   const [hoverIndex, setHoverIndex] = React.useState<number>(0);
   const [selectId, setSelectedId] = React.useState<string>('0');
   const retroList = retro;
-
   const [path, setPath] = React.useState(
     location.pathname.includes('facilitator')
       ? 'facilitator'
@@ -47,6 +55,9 @@ function EnterpriseDashboard() {
       ? 'enterprise'
       : 'facilitator'
   );
+  const [global, dispatch] = React.useContext(GlobalContext);
+  const [fromDate, setFromDate] = useState<string>('10');
+  const [toDate, setToDate] = useState<string>('16');
 
   const menuList = [
     {
@@ -81,6 +92,22 @@ function EnterpriseDashboard() {
       retros: [retroList[3]],
     },
   ];
+
+  const handleFromDate = (event: SelectChangeEvent) => {
+    setFromDate(event.target.value as string);
+    dispatch({
+      type: ActionType.CHART_START_DATE,
+      payload: { startDate: event.target.value },
+    });
+  };
+
+  const handleToDate = (event: SelectChangeEvent) => {
+    setToDate(event.target.value as string);
+    dispatch({
+      type: ActionType.CHART_END_DATE,
+      payload: { endDate: event.target.value },
+    });
+  };
 
   return (
     <Box
@@ -300,15 +327,6 @@ function EnterpriseDashboard() {
         >
           {/* Analytics label */}
           <Box
-            style={{
-              marginLeft: '16px',
-              marginTop: '16px',
-              marginBottom: '30px',
-            }}
-          >
-            <H4RegularTypography label="Analytics" />
-          </Box>
-          <Box
             display="flex"
             width="100%"
             paddingLeft="10px"
@@ -317,68 +335,104 @@ function EnterpriseDashboard() {
           >
             {/* Average Participant Chart */}
             <Box
-              className="chartCard"
-              onClick={() => {
-                navigate(
-                  '/enterprise/analytics/enterpriseLevelParticipantsCount'
-                );
+              style={{
+                marginLeft: '16px',
+                marginTop: '16px',
+                marginBottom: '30px',
+                display: 'flex',
+                flexDirection: 'row',
+                justifyContent: 'space-between',
+                alignItems: 'center',
+                width: '90%',
               }}
             >
-              <AverageParticipantChart dashboard={true} team={selectId} />
-              <CaptionRegularTypography label="Count of all participants over time" />
-            </Box>
-            {/* Enterprise Level Sentiments Moods Chart */}
-            <Box
-              className="chartCard"
-              onClick={() => {
-                navigate(
-                  '/enterprise/analytics/enterpriseLevelSentimentsMoods'
-                );
-              }}
-            >
-              <EnterpriseLevelSentimentsMoodsChart
-                dashboard={true}
-                team={selectId}
+              <H4RegularTypography label="Analytics" />
+
+              <DateSelector
+                handleFromDate={handleFromDate}
+                handleToDate={handleToDate}
+                fromDate={fromDate}
+                toDate={toDate}
               />
-              <CaptionRegularTypography label=" Participants Sentiments - Moods" />
             </Box>
-            {/* Enterprise Level Actions Count Chart */}
             <Box
-              className="chartCard"
-              onClick={() => {
-                navigate('/enterprise/analytics/enterpriseLevelActionsCount');
-              }}
+              display="flex"
+              width="100%"
+              paddingLeft="10px"
+              flexWrap="wrap"
+              rowGap={'10px'}
             >
-              <EnterpriseLevelActionsCountChart
-                dashboard={true}
-                team={selectId}
-              />
-              <CaptionRegularTypography label="Count of actions (Assigned vs Completed)" />
-            </Box>
-            {/* Team Level Actions Count Chart */}
-            <Box
-              className="chartCard"
-              onClick={() => {
-                navigate('/enterprise/analytics/teamLevelActionsCount');
-              }}
-            >
-              <TeamLevelActionsCountChart dashboard={true} />
-              <CaptionRegularTypography label="Count of actions (Assigned vs Completed)" />
-            </Box>
-            {/* Enterprise Level Sentiments Theme Chart */}
-            <Box
-              className="chartCard"
-              onClick={() => {
-                navigate(
-                  '/enterprise/analytics/enterpriseLevelSentimentsThemes'
-                );
-              }}
-            >
-              <EnterpriseLevelSentimentsThemeChart
-                dashboard={true}
-                team={selectId}
-              />
-              <CaptionRegularTypography label="Enterprise Level - Sentiments - Key Themes Heatmap" />
+              <Box
+                className="chartCard"
+                onClick={() => {
+                  navigate(
+                    '/enterprise/analytics/enterpriseLevelParticipantsCount'
+                  );
+                }}
+              >
+                <AverageParticipantChart
+                  dashboard={true}
+                  team={selectId}
+            
+                />
+                <CaptionRegularTypography label="Count of all participants over time" />
+              </Box>
+              <Box
+                className="chartCard"
+                onClick={() => {
+                  navigate(
+                    '/enterprise/analytics/enterpriseLevelSentimentsMoods'
+                  );
+                }}
+              >
+                <EnterpriseLevelSentimentsMoodsChart
+                  dashboard={true}
+                  team={selectId}
+                
+                />
+                <CaptionRegularTypography label=" Participants Sentiments - Moods" />
+              </Box>
+              <Box
+                className="chartCard"
+                onClick={() => {
+                  navigate('/enterprise/analytics/enterpriseLevelActionsCount');
+                }}
+              >
+                <EnterpriseLevelActionsCountChart
+                  dashboard={true}
+                  team={selectId}
+                 
+                />
+                <CaptionRegularTypography label="Count of actions (Assigned vs Completed)" />
+              </Box>
+
+              <Box
+                className="chartCard"
+                onClick={() => {
+                  navigate('/enterprise/analytics/teamLevelActionsCount');
+                }}
+              >
+                <TeamLevelActionsCountChart
+                  dashboard={true}
+                
+                />
+                <CaptionRegularTypography label="Count of actions (Assigned vs Completed)" />
+              </Box>
+              <Box
+                className="chartCard"
+                onClick={() => {
+                  navigate(
+                    '/enterprise/analytics/enterpriseLevelSentimentsThemes'
+                  );
+                }}
+              >
+                <EnterpriseLevelSentimentsThemeChart
+                  dashboard={true}
+                  team={selectId}
+            
+                />
+                <CaptionRegularTypography label="Enterprise Level - Sentiments - Key Themes Heatmap" />
+              </Box>
             </Box>
           </Box>
         </Box>
