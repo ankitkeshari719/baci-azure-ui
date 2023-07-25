@@ -19,15 +19,14 @@ import {
 import { Link, useNavigate } from 'react-router-dom';
 import * as Icons from 'heroicons-react';
 import { MONTH_SELECTORS, MenuProps } from './const';
+import { GlobalContext } from '../../contexts/GlobalContext';
 
 export default function EnterpriseLevelSentimentsMoodsChart({
-  fromDateInput,
-  toDateInput,
+
   dashboard,
   team
 }: {
-  fromDateInput?:string,
-  toDateInput?:string,
+
   dashboard?: boolean;
   team: string;
 }) {
@@ -39,8 +38,9 @@ export default function EnterpriseLevelSentimentsMoodsChart({
   const [neutralMoodPercentage, setNeutralMoodPercentage] = useState<number>();
   const [happyMoodPercentage, setHappyMoodPercentage] = useState<number>();
   const [months, setMonths] = useState([]);
-  const [fromDate, setFromDate] = useState<string>('10');
-  const [toDate, setToDate] = useState<string>('16');
+  const [global, dispatch] = React.useContext(GlobalContext);
+  const [fromDate, setFromDate] = useState<string>(global.chartStartDate?global.chartStartDate:'10');
+  const [toDate, setToDate] = useState<string>(global.chartEndDate?global.chartEndDate: '16');
   const navigate = useNavigate();
   const windowWidth = React.useRef(window.innerWidth);
 
@@ -65,17 +65,21 @@ export default function EnterpriseLevelSentimentsMoodsChart({
     }
   };
 
+
   React.useEffect(()=>{
-    console.log(fromDateInput,toDateInput,"from Date")
+   
+    const fromDateInput = global.chartStartDate;
+    const toDateInput=global.chartEndDate;
     if(fromDateInput!=""&&fromDateInput!=undefined&&fromDateInput!=null){
       setFromDate(fromDateInput);
     }
-    else if(toDateInput!=""&&toDateInput!=undefined&&toDateInput!=null){
+     if(toDateInput!=""&&toDateInput!=undefined&&toDateInput!=null){
       setToDate(toDateInput);
     }
   },[
-    fromDateInput,
-    toDateInput,
+    global.chartStartDate,
+    global.chartEndDate
+    
     
   ])
 

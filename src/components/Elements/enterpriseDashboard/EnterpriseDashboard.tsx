@@ -1,4 +1,10 @@
-import { Box, Button, createTheme,SelectChangeEvent,ThemeProvider } from '@mui/material';
+import {
+  Box,
+  Button,
+  createTheme,
+  SelectChangeEvent,
+  ThemeProvider,
+} from '@mui/material';
 import * as React from 'react';
 import {
   ButtonLabelTypography,
@@ -22,7 +28,7 @@ import { retro } from '../../../helpers/DemoConst';
 import EnterpriseLevelSentimentsThemeChart from '../../../screens/Analytics/EnterpriseLevelSentimentsThemeChart';
 import DateSelector from './DateSelector';
 import { useState } from 'react';
-
+import { ActionType, GlobalContext } from '../../../contexts/GlobalContext';
 
 const theme = createTheme({
   palette: {
@@ -41,9 +47,18 @@ function EnterpriseDashboard() {
   const [hoverOnMenu, setHoverOnMenu] = React.useState<Boolean>(false);
   const [hoverIndex, setHoverIndex] = React.useState<number>(0);
   const [selectId, setSelectedId] = React.useState<string>('0');
-  const retroList =retro;
-  const [path,setPath]=React.useState(location.pathname.includes('facilitator')?"facilitator":location.pathname.includes('enterprise')?"enterprise":"facilitator");
-const [startDate,setStartDate]=React.useState<string>()
+  const retroList = retro;
+  const [path, setPath] = React.useState(
+    location.pathname.includes('facilitator')
+      ? 'facilitator'
+      : location.pathname.includes('enterprise')
+      ? 'enterprise'
+      : 'facilitator'
+  );
+  const [global, dispatch] = React.useContext(GlobalContext);
+  const [fromDate, setFromDate] = useState<string>('10');
+  const [toDate, setToDate] = useState<string>('16');
+
   const menuList = [
     {
       id: '0',
@@ -78,17 +93,21 @@ const [startDate,setStartDate]=React.useState<string>()
     },
   ];
 
-  const [fromDate, setFromDate] = useState<string>('10');
-  const [toDate, setToDate] = useState<string>('16');
-
-
   const handleFromDate = (event: SelectChangeEvent) => {
-      setFromDate(event.target.value as string);
-    };
+    setFromDate(event.target.value as string);
+    dispatch({
+      type: ActionType.CHART_START_DATE,
+      payload: { startDate: event.target.value },
+    });
+  };
 
-    const handleToDate = (event: SelectChangeEvent) => {
-      setToDate(event.target.value as string);
-    };
+  const handleToDate = (event: SelectChangeEvent) => {
+    setToDate(event.target.value as string);
+    dispatch({
+      type: ActionType.CHART_END_DATE,
+      payload: { endDate: event.target.value },
+    });
+  };
 
   return (
     <Box
@@ -308,15 +327,6 @@ const [startDate,setStartDate]=React.useState<string>()
         >
           {/* Analytics label */}
           <Box
-            style={{
-              marginLeft: '16px',
-              marginTop: '16px',
-              marginBottom: '30px',
-            }}
-          >
-            <H4RegularTypography label="Analytics" />
-          </Box>
-          <Box
             display="flex"
             width="100%"
             paddingLeft="10px"
@@ -329,18 +339,29 @@ const [startDate,setStartDate]=React.useState<string>()
                 marginLeft: '16px',
                 marginTop: '16px',
                 marginBottom: '30px',
-                display:'flex',
-                flexDirection:'row',
-                justifyContent:'space-between',
-                alignItems:'center'
+                display: 'flex',
+                flexDirection: 'row',
+                justifyContent: 'space-between',
+                alignItems: 'center',
+                width: '90%',
               }}
-
             >
               <H4RegularTypography label="Analytics" />
 
-              <DateSelector handleFromDate={handleFromDate} handleToDate={handleToDate} fromDate={fromDate} toDate={toDate}/>
+              <DateSelector
+                handleFromDate={handleFromDate}
+                handleToDate={handleToDate}
+                fromDate={fromDate}
+                toDate={toDate}
+              />
             </Box>
-            <Box display="flex" width="100%" paddingLeft="10px" flexWrap="wrap" rowGap={"10px"}>
+            <Box
+              display="flex"
+              width="100%"
+              paddingLeft="10px"
+              flexWrap="wrap"
+              rowGap={'10px'}
+            >
               <Box
                 className="chartCard"
                 onClick={() => {
@@ -349,7 +370,11 @@ const [startDate,setStartDate]=React.useState<string>()
                   );
                 }}
               >
-                <AverageParticipantChart dashboard={true} team={selectId} fromDateInput={fromDate} toDateInput={toDate} />
+                <AverageParticipantChart
+                  dashboard={true}
+                  team={selectId}
+            
+                />
                 <CaptionRegularTypography label="Count of all participants over time" />
               </Box>
               <Box
@@ -363,31 +388,34 @@ const [startDate,setStartDate]=React.useState<string>()
                 <EnterpriseLevelSentimentsMoodsChart
                   dashboard={true}
                   team={selectId}
-                  fromDateInput={fromDate} toDateInput={toDate} 
+                
                 />
                 <CaptionRegularTypography label=" Participants Sentiments - Moods" />
               </Box>
               <Box
                 className="chartCard"
                 onClick={() => {
-                  navigate(
-                    '/enterprise/analytics/enterpriseLevelActionsCount'
-                  );
+                  navigate('/enterprise/analytics/enterpriseLevelActionsCount');
                 }}
               >
-                <EnterpriseLevelActionsCountChart dashboard={true} team={selectId} />
+                <EnterpriseLevelActionsCountChart
+                  dashboard={true}
+                  team={selectId}
+                 
+                />
                 <CaptionRegularTypography label="Count of actions (Assigned vs Completed)" />
               </Box>
 
               <Box
                 className="chartCard"
                 onClick={() => {
-                  navigate(
-                    '/enterprise/analytics/teamLevelActionsCount'
-                  );
+                  navigate('/enterprise/analytics/teamLevelActionsCount');
                 }}
               >
-                <TeamLevelActionsCountChart dashboard={true} />
+                <TeamLevelActionsCountChart
+                  dashboard={true}
+                
+                />
                 <CaptionRegularTypography label="Count of actions (Assigned vs Completed)" />
               </Box>
               <Box
@@ -398,15 +426,13 @@ const [startDate,setStartDate]=React.useState<string>()
                   );
                 }}
               >
-                <EnterpriseLevelSentimentsThemeChart dashboard={true} team={selectId}/>
+                <EnterpriseLevelSentimentsThemeChart
+                  dashboard={true}
+                  team={selectId}
+            
+                />
                 <CaptionRegularTypography label="Enterprise Level - Sentiments - Key Themes Heatmap" />
               </Box>
-
-            
-
-
-     
-              
             </Box>
           </Box>
         </Box>
