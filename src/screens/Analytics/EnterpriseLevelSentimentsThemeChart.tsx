@@ -23,7 +23,7 @@ import { GlobalContext } from '../../contexts/GlobalContext';
 
 export default function EnterpriseLevelSentimentsThemeChart({
   dashboard,
- 
+
   team,
 }: {
   dashboard?: boolean;
@@ -37,8 +37,12 @@ export default function EnterpriseLevelSentimentsThemeChart({
   const [neutralPercentage, setNeutralPercentage] = useState<number>();
   const [happyPercentage, setHappyPercentage] = useState<number>();
   const [global, dispatch] = React.useContext(GlobalContext);
-  const [fromDate, setFromDate] = useState<string>(global.chartStartDate?global.chartStartDate:'10');
-  const [toDate, setToDate] = useState<string>(global.chartEndDate?global.chartEndDate: '16');
+  const [fromDate, setFromDate] = useState<string>(
+    global.chartStartDate ? global.chartStartDate : '10'
+  );
+  const [toDate, setToDate] = useState<string>(
+    global.chartEndDate ? global.chartEndDate : '16'
+  );
 
   const getChartWidth = () => {
     switch (true) {
@@ -142,7 +146,7 @@ export default function EnterpriseLevelSentimentsThemeChart({
     },
     grid: {
       show: true,
-      borderColor: '#CCCCCC',
+      borderColor: '#ffffff',
       strokeDashArray: 0,
       position: 'front',
       xaxis: {
@@ -222,62 +226,67 @@ export default function EnterpriseLevelSentimentsThemeChart({
             {
               from: 351,
               to: 400,
-              color: '#159ADD',
+              color: '#3296d6',
             },
             {
               from: 401,
               to: 450,
-              color: '#3F87CA',
+              color: '#4F91CF',
             },
             {
               from: 451,
               to: 500,
-              color: '#357DC0',
+              color: '#3F87CA',
             },
             {
               from: 501,
               to: 550,
-              color: '#3072B0',
+              color: '#357DC0',
             },
             {
               from: 551,
               to: 600,
-              color: '#2C69A1',
+              color: '#3072B0',
             },
             {
               from: 601,
               to: 650,
-              color: '#275E90',
+              color: '#2C68A0',
             },
             {
               from: 651,
               to: 700,
-              color: '#1e9967',
+              color: '#275E90',
             },
             {
               from: 701,
               to: 750,
-              color: '#1AAF58',
+              color: '#235380',
             },
             {
               from: 751,
               to: 800,
-              color: '#18bf4d',
+              color: '#1F4970',
             },
             {
               from: 801,
               to: 850,
-              color: '#17C54A',
+              color: '#1A3E60',
             },
             {
               from: 851,
               to: 900,
-              color: '#16CA46',
+              color: '#163450',
             },
             {
               from: 901,
               to: 950,
-              color: '#18DC4D',
+              color: '#0C1F31',
+            },
+            {
+              from: 951,
+              to: 1000,
+              color: '#040A10',
             },
           ],
         },
@@ -285,23 +294,20 @@ export default function EnterpriseLevelSentimentsThemeChart({
     },
   };
 
-
-  React.useEffect(()=>{
-   
+  React.useEffect(() => {
     const fromDateInput = global.chartStartDate;
-    const toDateInput=global.chartEndDate;
-    if(fromDateInput!=""&&fromDateInput!=undefined&&fromDateInput!=null){
+    const toDateInput = global.chartEndDate;
+    if (
+      fromDateInput != '' &&
+      fromDateInput != undefined &&
+      fromDateInput != null
+    ) {
       setFromDate(fromDateInput);
     }
-     if(toDateInput!=""&&toDateInput!=undefined&&toDateInput!=null){
+    if (toDateInput != '' && toDateInput != undefined && toDateInput != null) {
       setToDate(toDateInput);
     }
-  },[
-    global.chartStartDate,
-    global.chartEndDate
-    
-    
-  ])
+  }, [global.chartStartDate, global.chartEndDate]);
   return (
     <>
       {dashboard ? (
@@ -535,6 +541,18 @@ export default function EnterpriseLevelSentimentsThemeChart({
               width={getChartWidth()}
               height="500"
             />
+          </Grid>
+          <Grid
+            item
+            xs={12}
+            sx={{
+              paddingTop: '20px !important',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+            }}
+          >
+            <img src="/svgs/Range_Image.svg"></img>
           </Grid>
         </Grid>
       )}
