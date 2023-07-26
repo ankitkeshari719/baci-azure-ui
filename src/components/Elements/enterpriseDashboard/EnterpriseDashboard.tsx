@@ -574,13 +574,12 @@ function EnterpriseDashboard() {
                   );
                 }}
               >
-              
-                <EnterpriseLevelSentimentsSummaryChart 
+                <EnterpriseLevelSentimentsSummaryChart
                   dashboard={true}
                   team={selectId}
                 />
 
-                <CaptionRegularTypography label="Enterprise Level - Overall summary" />
+                <CaptionRegularTypography label="Enterprise Level - Overall Summary" />
               </Box>
             </Box>
           </Box>
@@ -673,7 +672,7 @@ function EnterpriseDashboard() {
             team={selectId}
           />
 
-          <CaptionRegularTypography label="Enterprise Level - Sentiments - Key Themes Heatmap" />
+          <CaptionRegularTypography label="Enterprise Level - Overall Summary" />
         </Box>
       </Box>
     </>
