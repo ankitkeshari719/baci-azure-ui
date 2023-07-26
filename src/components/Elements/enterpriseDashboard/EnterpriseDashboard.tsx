@@ -498,7 +498,7 @@ function EnterpriseDashboard() {
               >
                 <AverageParticipantChart dashboard={true} team={selectId} />
 
-                <CaptionRegularTypography label="Count of all participants over time" />
+                <CaptionRegularTypography label="Count Of All Participants Over Time" />
               </Box>
 
               {/* Enterprise Level Sentiments Moods Chart */}
@@ -532,7 +532,7 @@ function EnterpriseDashboard() {
                   team={selectId}
                 />
 
-                <CaptionRegularTypography label="Count of actions (Assigned vs Completed)" />
+                <CaptionRegularTypography label="Count Of Actions (Assigned vs Completed)" />
               </Box>
 
               {/* Team Level Actions Count Chart */}
@@ -545,7 +545,7 @@ function EnterpriseDashboard() {
               >
                 <TeamLevelActionsCountChart dashboard={true} />
 
-                <CaptionRegularTypography label="Count of actions (Assigned vs Completed)" />
+                <CaptionRegularTypography label="Team Level Actions (Assigned vs Completed)" />
               </Box>
 
               {/* Enterprise Level Sentiments Theme Chart */}
@@ -580,7 +580,7 @@ function EnterpriseDashboard() {
                   team={selectId}
                 />
 
-                <CaptionRegularTypography label="Enterprise Level - Sentiments - Key Themes Heatmap" />
+                <CaptionRegularTypography label="Enterprise Level - Overall summary" />
               </Box>
             </Box>
           </Box>
