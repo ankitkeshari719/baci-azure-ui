@@ -24,6 +24,7 @@ import * as Icons from 'heroicons-react';
 import WordCloud from '../../components/Elements/WordCloud';
 import { MenuProps, SELECTED_FORMATS } from './const';
 import { OutlinedButton } from '../../components';
+import { GlobalContext } from '../../contexts/GlobalContext';
 
 export interface Word {
   text: string;
@@ -37,11 +38,16 @@ export default function EnterpriseLevelSentimentsSummaryChart({
   dashboard?: boolean;
   team: string;
 }) {
+  const [global, dispatch] = React.useContext(GlobalContext);
   const [summary, setSummary] = useState<string>();
   const [keywords, setKeywords] = useState<Word[]>([]);
   const [selectedFormat, setSelectedFormat] = useState<string>('17');
-  const [fromDate, setFromDate] = useState<string>('14');
-  const [toDate, setToDate] = useState<string>('16');
+  const [fromDate, setFromDate] = useState<string>(
+    global.chartStartDate ? global.chartStartDate : '10'
+  );
+  const [toDate, setToDate] = useState<string>(
+    global.chartEndDate ? global.chartEndDate : '16'
+  );
   const [totalParticipant, setTotalParticipant] = useState<Number>();
   const [totalRetros, setTotalRetros] = useState<Number>();
 
@@ -88,6 +94,24 @@ export default function EnterpriseLevelSentimentsSummaryChart({
     handleGetParticipantChartData();
     handleGetRetroChartData();
   }, [team]);
+
+  React.useEffect(() => {
+    const fromDateInput = global.chartStartDate;
+    const toDateInput = global.chartEndDate;
+    if (
+      fromDateInput != '' &&
+      fromDateInput != undefined &&
+      fromDateInput != null
+    ) {
+      setFromDate(fromDateInput);
+      generateSummary();
+    }
+    if (toDateInput != '' && toDateInput != undefined && toDateInput != null) {
+      setToDate(toDateInput);
+      generateSummary();
+
+    }
+  }, [global.chartStartDate, global.chartEndDate]);
 
   const handleGetEnterpriseLevelSentimentSummary = async (
     selectedFormat: string
