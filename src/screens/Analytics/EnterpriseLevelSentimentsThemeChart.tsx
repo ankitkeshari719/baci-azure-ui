@@ -477,10 +477,18 @@ export default function EnterpriseLevelSentimentsThemeChart({
           {/* Percentage */}
           <Grid
             item
-            xs={12}
+            xs={3}
             sx={{
               padding: '0px !important',
-              marginTop: '48px',
+              marginTop: '32px',
+            }}
+          ></Grid>
+          <Grid
+            item
+            xs={7}
+            sx={{
+              padding: '0px !important',
+              marginTop: '32px',
               display: 'flex',
               alignItems: 'center',
               justifyContent: 'space-evenly',
@@ -528,7 +536,7 @@ export default function EnterpriseLevelSentimentsThemeChart({
             xs={12}
             sx={{
               padding: '0px !important',
-              marginTop: '48px',
+              marginTop: '8px',
               display: 'flex',
               alignItems: 'center',
               justifyContent: 'center',
@@ -542,11 +550,12 @@ export default function EnterpriseLevelSentimentsThemeChart({
               height="500"
             />
           </Grid>
+          {/* Color Range Image  */}
           <Grid
             item
             xs={12}
             sx={{
-              paddingTop: '20px !important',
+              paddingTop: '8px !important',
               display: 'flex',
               alignItems: 'center',
               justifyContent: 'center',
