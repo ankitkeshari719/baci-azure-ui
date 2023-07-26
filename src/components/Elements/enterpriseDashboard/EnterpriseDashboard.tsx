@@ -1,4 +1,10 @@
-import { Box, Button, createTheme, SelectChangeEvent, ThemeProvider } from '@mui/material';
+import {
+  Box,
+  Button,
+  createTheme,
+  SelectChangeEvent,
+  ThemeProvider,
+} from '@mui/material';
 
 import * as React from 'react';
 
@@ -40,7 +46,7 @@ import EnterpriseLevelSentimentsThemeChart from '../../../screens/Analytics/Ente
 import DateSelector from './DateSelector';
 import { useState } from 'react';
 import { ActionType, GlobalContext } from '../../../contexts/GlobalContext';
-
+import EnterpriseLevelSentimentsSummaryChart from '../../../screens/Analytics/EnterpriseLevelSentimentsSummaryChart';
 
 const theme = createTheme({
   palette: {
@@ -443,30 +449,28 @@ function EnterpriseDashboard() {
                 marginTop: '16px',
 
                 marginBottom: '32px',
-                width:'calc(100% - 16px)',
-                justifyContent:"space-between",
-               
+                width: 'calc(100% - 16px)',
+                justifyContent: 'space-between',
               }}
             >
               <Box>
                 <H4RegularTypography label="Analytics" />
-            
 
-              <ReactToPrint
-                trigger={() => (
-                  <Icons.DownloadOutline
-                    size={20}
-                    color="#4E4E4E"
-                    style={{
-                      cursor: 'pointer',
+                <ReactToPrint
+                  trigger={() => (
+                    <Icons.DownloadOutline
+                      size={20}
+                      color="#4E4E4E"
+                      style={{
+                        cursor: 'pointer',
 
-                      marginLeft: '16px',
-                    }}
-                  />
-                )}
-                content={() => componentRef.current}
-              />
-                </Box>
+                        marginLeft: '16px',
+                      }}
+                    />
+                  )}
+                  content={() => componentRef.current}
+                />
+              </Box>
               <DateSelector
                 handleFromDate={handleFromDate}
                 handleToDate={handleToDate}
@@ -561,6 +565,23 @@ function EnterpriseDashboard() {
 
                 <CaptionRegularTypography label="Enterprise Level - Sentiments - Key Themes Heatmap" />
               </Box>
+              <Box
+                className="chartCard"
+                id="EnterpriseLevelSentimentsSummaryChart_Print"
+                onClick={() => {
+                  navigate(
+                    '/enterprise/analytics/enterpriseLevelSentimentsSummary'
+                  );
+                }}
+              >
+              
+                <EnterpriseLevelSentimentsSummaryChart 
+                  dashboard={true}
+                  team={selectId}
+                />
+
+                <CaptionRegularTypography label="Enterprise Level - Sentiments - Key Themes Heatmap" />
+              </Box>
             </Box>
           </Box>
         </Box>
@@ -636,6 +657,18 @@ function EnterpriseDashboard() {
           style={{ display: 'none' }}
         >
           <EnterpriseLevelSentimentsThemeChart
+            dashboard={true}
+            team={selectId}
+          />
+
+          <CaptionRegularTypography label="Enterprise Level - Sentiments - Key Themes Heatmap" />
+        </Box>
+        <Box
+          className="chartCard"
+          id="EnterpriseLevelSentimentsSummaryChart_Print"
+          style={{ display: 'none' }}
+        >
+          <EnterpriseLevelSentimentsSummaryChart
             dashboard={true}
             team={selectId}
           />
