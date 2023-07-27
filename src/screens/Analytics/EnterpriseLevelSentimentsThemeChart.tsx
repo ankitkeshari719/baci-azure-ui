@@ -117,7 +117,7 @@ export default function EnterpriseLevelSentimentsThemeChart({
       },
     },
     dataLabels: {
-      enabled: true,
+      enabled: false,
       textAnchor: 'start',
       style: {
         fontFamily: 'Poppins',
