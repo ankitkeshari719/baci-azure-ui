@@ -191,7 +191,7 @@ function EnterpriseDashboard() {
           {/* Enterprise Dashboard label */}
 
           <Box component="span">
-            <H1RegularTypography label="Enterprise Dashboard" />
+            <H1RegularTypography label="BACI Dashboard Dashboard" />
           </Box>
 
           {/* JOIN SESSION And NEW SESSION Button */}
