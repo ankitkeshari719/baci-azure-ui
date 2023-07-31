@@ -565,7 +565,7 @@ function EnterpriseDashboard() {
 
                 <CaptionRegularTypography label="Enterprise Level - Sentiments - Key Themes Heatmap" />
               </Box>
-              <Box
+              {selectId=='0'&& <Box
                 className="chartCard"
                 id="EnterpriseLevelSentimentsSummaryChart_Print"
                 onClick={() => {
@@ -580,7 +580,7 @@ function EnterpriseDashboard() {
                 />
 
                 <CaptionRegularTypography label="Enterprise Level - Overall Summary" />
-              </Box>
+              </Box>}
             </Box>
           </Box>
         </Box>
@@ -662,7 +662,8 @@ function EnterpriseDashboard() {
 
           <CaptionRegularTypography label="Enterprise Level - Sentiments - Key Themes Heatmap" />
         </Box>
-        <Box
+    
+        {selectId=='0'&&<Box
           className="chartCard"
           id="EnterpriseLevelSentimentsSummaryChart_Print"
           style={{ display: 'none' }}
@@ -673,7 +674,7 @@ function EnterpriseDashboard() {
           />
 
           <CaptionRegularTypography label="Enterprise Level - Overall Summary" />
-        </Box>
+        </Box>}
       </Box>
     </>
   );

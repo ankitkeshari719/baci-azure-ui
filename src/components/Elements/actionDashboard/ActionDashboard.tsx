@@ -92,7 +92,7 @@ export default function ActionDashboard() {
   const [jiraRows, setJiraRows] = React.useState<any>([]);
   const [page, setPage] = React.useState(0);
   const [rowsPerPage, setRowsPerPage] = React.useState(10);
-  const [searched, setSearched] = React.useState<string>('');
+  const [searchedVal, setSearchedVal] = React.useState('');
 
   const [actionCount, setActionCount] = React.useState<any[]>([
     // { label: 'All', count: ActionList.length, color:'black',selected:true },
@@ -198,6 +198,34 @@ export default function ActionDashboard() {
     setJiraRows([...dummyJiraRows]);
   }, [actionCount]);
 
+  const searchFunction = (row1: any) => {
+    const columns = [
+      'teamName',
+      'jiraId',
+      'initialSession',
+      'action.value',
+      'action.assigneeId',
+      'startDate',
+      'status',
+      'teamId',
+    ];
+    var fullRow = '';
+    columns.forEach((column, index) => {
+      if (index == 0) fullRow = fullRow + row1[column];
+      else if(column=="action.assigneeId"){
+        const user =users.find(user => user.id == row1[column]);
+        fullRow=fullRow + ' ' +user?.name
+
+      }
+      else fullRow = fullRow + ' ' + row1[column];
+    });
+
+    return !searchedVal.length ||fullRow
+      .toString()
+      .toLowerCase()
+      .includes(searchedVal.toString().toLowerCase());
+  };
+
   return (
     <>
       <Paper
@@ -227,7 +255,7 @@ export default function ActionDashboard() {
                 key={index + 'jiraActionStatus'}
                 gap="8px"
                 padding="16px"
-                paddingRight={"26px"}
+                paddingRight={'26px'}
                 borderRadius="4px"
                 marginRight="10px"
                 marginTop="20px"
@@ -238,7 +266,7 @@ export default function ActionDashboard() {
                     ? '1px solid ' + commonStyles.PrimaryLight
                     : '1px solid yellow',
                   cursor: 'pointer',
-                  position:'relative'
+                  position: 'relative',
                 }}
                 onClick={() => {
                   let newArrayState = actionCount;
@@ -255,7 +283,11 @@ export default function ActionDashboard() {
                   style={{ color: action.color }}
                   label={action.count}
                 />
-                <Checkbox checked={action.selected} size="small"  sx={{position:'absolute',zIndex:2,right:"0px",top:0 }}/>
+                <Checkbox
+                  checked={action.selected}
+                  size="small"
+                  sx={{ position: 'absolute', zIndex: 2, right: '0px', top: 0 }}
+                />
                 <BodyRegularTypography
                   style={{ color: action.color }}
                   label={action.label}
@@ -278,6 +310,7 @@ export default function ActionDashboard() {
             label="Search..."
             variant="outlined"
             sx={{ marginBottom: '10px', background: 'white', width: '450px' }}
+            onChange={e => setSearchedVal(e.target.value)}
             InputProps={{
               startAdornment: (
                 <InputAdornment position="start">
@@ -307,6 +340,10 @@ export default function ActionDashboard() {
             </TableHead>
             <TableBody>
               {jiraRows
+                .filter((row1: any) =>
+                  // note that I've incorporated the searchedVal length check here
+                  searchFunction(row1)
+                )
                 .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                 .map((row: any, index: number) => {
                   return (
@@ -340,7 +377,7 @@ export default function ActionDashboard() {
                                 minWidth: '150px',
                               }}
                             >
-                              <AssigneeDropdown status={value} />
+                            <AssigneeDropdown id={value} />
                             </TableCell>
                           );
                         } else if (column.id == 'status') {
@@ -390,7 +427,9 @@ export default function ActionDashboard() {
         <TablePagination
           rowsPerPageOptions={[10, 25, 100]}
           component="div"
-          count={jiraRows.length}
+          count={jiraRows.filter((row1: any) =>
+            searchFunction(row1)
+          ).length}
           rowsPerPage={rowsPerPage}
           page={page}
           onPageChange={handleChangePage}
