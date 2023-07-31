@@ -4,10 +4,12 @@ import { Box, Button, Menu, MenuItem } from '@mui/material';
 import Avatar from '../Avatar';
 import { ChevronDownIcon } from '@heroicons/react/24/outline';
 
-export default function AssigneeDropdown({ status }: { status: string }) {
-  const [assigneeId, setAssigneeId] = React.useState<string>(status);
+export default function AssigneeDropdown({ id }: { id: string }) {
+  const [assigneeId, setAssigneeId] = React.useState<string>(id);
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
   const open = Boolean(anchorEl);
+
+
 
   const returnUser = (id: string) => {
     const user = users.find(user => user.id == id);
@@ -26,6 +28,9 @@ export default function AssigneeDropdown({ status }: { status: string }) {
       </Box>
     );
   };
+  React.useEffect(() => {
+    setAssigneeId(id);
+  }, [id]);
 
   const handleClose = () => {
     setAnchorEl(null);
@@ -36,7 +41,9 @@ export default function AssigneeDropdown({ status }: { status: string }) {
 
   return (
     <Box display="flex" flexDirection="row">
-      <Box width="130px">{returnUser(assigneeId)}</Box>
+      <Box width="130px">
+        {returnUser(assigneeId)}</Box>
+
       <Button
         aria-controls={open ? 'basic-menu' : undefined}
         id="basic-button"
