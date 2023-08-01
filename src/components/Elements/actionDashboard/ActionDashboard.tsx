@@ -13,7 +13,14 @@ import {
   jiraActionStatus,
   users,
 } from '../../../helpers/DemoConst';
-import { Box, Checkbox, InputAdornment, TextField } from '@mui/material';
+import {
+  Box,
+  Checkbox,
+  InputAdornment,
+  TextField,
+  TableSortLabel,
+} from '@mui/material';
+
 import {
   BodyRegularTypography,
   BodySemiBoldTypography,
@@ -212,18 +219,47 @@ export default function ActionDashboard() {
     var fullRow = '';
     columns.forEach((column, index) => {
       if (index == 0) fullRow = fullRow + row1[column];
-      else if(column=="action.assigneeId"){
-        const user =users.find(user => user.id == row1[column]);
-        fullRow=fullRow + ' ' +user?.name
-
-      }
-      else fullRow = fullRow + ' ' + row1[column];
+      else if (column == 'action.assigneeId') {
+        const user = users.find(user => user.id == row1[column]);
+        fullRow = fullRow + ' ' + user?.name;
+      } else fullRow = fullRow + ' ' + row1[column];
     });
 
-    return !searchedVal.length ||fullRow
-      .toString()
-      .toLowerCase()
-      .includes(searchedVal.toString().toLowerCase());
+    return (
+      !searchedVal.length ||
+      fullRow
+        .toString()
+        .toLowerCase()
+        .includes(searchedVal.toString().toLowerCase())
+    );
+  };
+
+  //Table
+
+  const [orderDirection, setOrderDirection] = React.useState('asc');
+
+  const sortArray = (arr: any, orderBy: any) => {
+    switch (orderBy) {
+      case 'asc':
+      default:
+        return arr.sort((a: any, b: any) =>
+          a.jiraId > b.jiraId ? 1 : b.jiraId > a.jiraId ? -1 : 0
+        );
+      case 'desc':
+        return arr.sort((a: any, b: any) =>
+          a.jiraId < b.jiraId ? 1 : b.jiraId < a.jiraId ? -1 : 0
+        );
+    }
+  };
+
+  const handleSortRequest = () => {
+    let tempJiraRows: any = [];
+    ActionList.map(action => {
+      tempJiraRows.push(flattenObject(action));
+    });
+    // setJiraRows(tempJiraRows);
+    setJiraRows(sortArray(tempJiraRows, orderDirection));
+    setOrderDirection(orderDirection === 'asc' ? 'desc' : 'asc');
   };
 
   return (
@@ -332,8 +368,14 @@ export default function ActionDashboard() {
                     key={column.id}
                     align={column.align}
                     sx={{ borderBottom: '2px solid gray' }}
+                    onClick={handleSortRequest}
                   >
-                    <BodySemiBoldTypography label={column.label} />
+                    <TableSortLabel
+                      active={true}
+                      direction={orderDirection === 'asc' ? 'asc' : 'desc'}
+                    >
+                      <BodySemiBoldTypography label={column.label} />
+                    </TableSortLabel>
                   </TableCell>
                 ))}
               </TableRow>
@@ -377,7 +419,7 @@ export default function ActionDashboard() {
                                 minWidth: '150px',
                               }}
                             >
-                            <AssigneeDropdown id={value} />
+                              <AssigneeDropdown id={value} />
                             </TableCell>
                           );
                         } else if (column.id == 'status') {
@@ -427,9 +469,7 @@ export default function ActionDashboard() {
         <TablePagination
           rowsPerPageOptions={[10, 25, 100]}
           component="div"
-          count={jiraRows.filter((row1: any) =>
-            searchFunction(row1)
-          ).length}
+          count={jiraRows.filter((row1: any) => searchFunction(row1)).length}
           rowsPerPage={rowsPerPage}
           page={page}
           onPageChange={handleChangePage}
