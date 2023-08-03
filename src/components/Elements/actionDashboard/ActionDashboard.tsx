@@ -238,27 +238,27 @@ export default function ActionDashboard() {
 
   const [orderDirection, setOrderDirection] = React.useState('asc');
 
-  const sortArray = (arr: any, orderBy: any) => {
+  const sortArray = (arr: any, orderBy: any,id:string) => {
     switch (orderBy) {
       case 'asc':
       default:
         return arr.sort((a: any, b: any) =>
-          a.jiraId > b.jiraId ? 1 : b.jiraId > a.jiraId ? -1 : 0
+          a[id] > b[id] ? 1 : b[id] > a[id] ? -1 : 0
         );
       case 'desc':
         return arr.sort((a: any, b: any) =>
-          a.jiraId < b.jiraId ? 1 : b.jiraId < a.jiraId ? -1 : 0
+          a[id] < b[id] ? 1 : b[id] < a[id] ? -1 : 0
         );
     }
   };
 
-  const handleSortRequest = () => {
+  const handleSortRequest = (id:string) => {
     let tempJiraRows: any = [];
     ActionList.map(action => {
       tempJiraRows.push(flattenObject(action));
     });
     // setJiraRows(tempJiraRows);
-    setJiraRows(sortArray(tempJiraRows, orderDirection));
+    setJiraRows(sortArray(tempJiraRows, orderDirection,id));
     setOrderDirection(orderDirection === 'asc' ? 'desc' : 'asc');
   };
 
@@ -360,6 +360,7 @@ export default function ActionDashboard() {
         </Box>
 
         <TableContainer sx={{ height: 'calc(100% - 280px)' }}>
+          
           <Table stickyHeader aria-label="sticky table">
             <TableHead>
               <TableRow>
@@ -368,14 +369,14 @@ export default function ActionDashboard() {
                     key={column.id}
                     align={column.align}
                     sx={{ borderBottom: '2px solid gray' }}
-                    onClick={handleSortRequest}
+                    onClick={()=>column.id!="teamId"&&handleSortRequest(column.id)}
                   >
-                    <TableSortLabel
+                    {column.id=="teamId"?<><BodySemiBoldTypography label={column.label} /></>:<TableSortLabel
                       active={true}
                       direction={orderDirection === 'asc' ? 'asc' : 'desc'}
                     >
                       <BodySemiBoldTypography label={column.label} />
-                    </TableSortLabel>
+                    </TableSortLabel>}
                   </TableCell>
                 ))}
               </TableRow>

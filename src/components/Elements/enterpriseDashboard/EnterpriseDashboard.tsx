@@ -191,7 +191,7 @@ function EnterpriseDashboard() {
           {/* Enterprise Dashboard label */}
 
           <Box component="span">
-            <H1RegularTypography label="BACI Dashboard" />
+            <H1RegularTypography label="Enterprise Dashboard" />
           </Box>
 
           {/* JOIN SESSION And NEW SESSION Button */}
@@ -545,7 +545,7 @@ function EnterpriseDashboard() {
               >
                 <TeamLevelActionsCountChart dashboard={true} />
 
-                <CaptionRegularTypography label="Team Level Actions (Assigned vs Completed)" />
+                <CaptionRegularTypography label="Count Of Actions (Assigned vs Completed) All Teams" />
               </Box>
 
               {/* Enterprise Level Sentiments Theme Chart */}
