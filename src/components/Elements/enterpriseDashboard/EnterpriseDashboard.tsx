@@ -173,7 +173,6 @@ function EnterpriseDashboard() {
         id="scrollableDiv"
       >
         {/* Label and Button */}
-
         <Box
           display="flex"
           flexDirection="row"
@@ -218,9 +217,7 @@ function EnterpriseDashboard() {
             </ThemeProvider>
           </Box>
         </Box>
-
         {/* Bottom container */}
-
         <Box
           display="flex"
           flexDirection="column"
@@ -228,7 +225,6 @@ function EnterpriseDashboard() {
           id="non_print_box_2"
         >
           {/* Teams list menu start */}
-
           <Box display="flex" flexDirection="row" width="100%" mt="10px">
             {menuList.map((menu, index) => {
               return (
@@ -287,9 +283,7 @@ function EnterpriseDashboard() {
               );
             })}
           </Box>
-
           {/* Retro list starts here after hover */}
-
           <Box
             width="calc(100% - 100px)"
             height="241px"
@@ -412,9 +406,7 @@ function EnterpriseDashboard() {
               );
             })}
           </Box>
-
           {/* Analytics start here */}
-
           <Box
             minHeight="540px"
             sx={{
@@ -455,7 +447,6 @@ function EnterpriseDashboard() {
             >
               <Box>
                 <H4RegularTypography label="Analytics" />
-
                 <ReactToPrint
                   trigger={() => (
                     <Icons.DownloadOutline
@@ -584,33 +575,21 @@ function EnterpriseDashboard() {
             </Box>
           </Box>
         </Box>
-
         {/************************************* Print Box *******************************/}
-
         {/* Label Print */}
-
         <Box component="span" id="label_print" style={{ display: 'none' }}>
-          <H1RegularTypography
-            label="Enterprise Dashboard - Analytics
-
-"
-          />
+          <H1RegularTypography label="Enterprise Dashboard - Analytics" />
         </Box>
-
         {/* Average Participant Chart Print */}
-
         <Box
           className="chartCard"
           id="AverageParticipantChart_Print"
           style={{ display: 'none', marginTop: '24px' }}
         >
           <AverageParticipantChart dashboard={true} team={selectId} />
-
           <CaptionRegularTypography label="Count of all participants over time" />
         </Box>
-
         {/* Enterprise Level Sentiments Moods Chart Print */}
-
         <Box
           className="chartCard"
           id="EnterpriseLevelSentimentsMoodsChart_Print"
@@ -623,9 +602,7 @@ function EnterpriseDashboard() {
 
           <CaptionRegularTypography label=" Participants Sentiments - Moods" />
         </Box>
-
         {/* Enterprise Level Actions Count Chart Print*/}
-
         <Box
           className="chartCard"
           id="EnterpriseLevelActionsCountChart_Print"
@@ -635,9 +612,7 @@ function EnterpriseDashboard() {
 
           <CaptionRegularTypography label="Count of actions (Assigned vs Completed)" />
         </Box>
-
         {/* Team Level Actions Count Chart Print */}
-
         <Box
           className="chartCard"
           id="TeamLevelActionsCountChart_Print"
@@ -647,9 +622,7 @@ function EnterpriseDashboard() {
 
           <CaptionRegularTypography label="Count of actions (Assigned vs Completed)" />
         </Box>
-
         {/* Enterprise Level Sentiments Theme Chart Print */}
-
         <Box
           className="chartCard"
           id="EnterpriseLevelSentimentsThemeChart_Print"
@@ -662,6 +635,7 @@ function EnterpriseDashboard() {
 
           <CaptionRegularTypography label="Enterprise Level - Sentiments - Key Themes Heatmap" />
         </Box>
+        {/* Enterprise Level Sentiments Summary Chart Print */}
         <Box
           className="chartCard"
           id="EnterpriseLevelSentimentsSummaryChart_Print"
