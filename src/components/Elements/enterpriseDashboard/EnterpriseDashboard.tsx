@@ -54,7 +54,10 @@ import { ActionType, GlobalContext } from '../../../contexts/GlobalContext';
 import EnterpriseLevelSentimentsSummaryChart from '../../../screens/Analytics/EnterpriseLevelSentimentsSummaryChart';
 import moment from 'moment';
 import { MONTH_SELECTORS } from '../../../screens/Analytics/const';
-import { getRetrosCount } from '../../../helpers/msal/services';
+import {
+  getParticipantsCount,
+  getRetrosCount,
+} from '../../../helpers/msal/services';
 import { OutlinedButton } from '../../CustomizedButton/OutlinedButton';
 import AverageRetroChart from '../../../screens/Analytics/AverageRetroChart';
 
@@ -110,40 +113,7 @@ function EnterpriseDashboard() {
   const [toDateString, setToDateString] = useState<string>('');
 
   const [totalSessions, setTotalSessions] = useState<Number>();
-
-  // Function to get To and From Date in string format
-  React.useEffect(() => {
-    const tempFromDateString = MONTH_SELECTORS.filter(
-      month => month.id === Number(fromDate)
-    );
-    const tempToDateString = MONTH_SELECTORS.filter(
-      month => month.id === Number(toDate)
-    );
-    setFromDateString(tempFromDateString && tempFromDateString[0].month);
-    setToDateString(tempToDateString && tempToDateString[0].month);
-  }, [fromDate, toDate]);
-
-  // Function to get Sessions
-  React.useEffect(() => {
-    handleGetRetroChartData();
-  }, [fromDate, toDate, selectId]);
-
-  const handleGetRetroChartData = async () => {
-    await getRetrosCount(fromDate, toDate, selectId).then(
-      res => {
-        if (res && res.result) {
-          let temp = 0;
-          res.result.map((item: any) => {
-            temp = temp + item.averageRetros;
-          });
-          setTotalSessions(Math.round(temp));
-        }
-      },
-      err => {
-        console.log('err', err);
-      }
-    );
-  };
+  const [totalParticipants, setTotalParticipants] = useState<Number>();
 
   const menuList = [
     {
@@ -198,6 +168,64 @@ function EnterpriseDashboard() {
       retros: [retroList[3]],
     },
   ];
+
+  // Function to get To and From Date in string format
+  React.useEffect(() => {
+    const tempFromDateString = MONTH_SELECTORS.filter(
+      month => month.id === Number(fromDate)
+    );
+    const tempToDateString = MONTH_SELECTORS.filter(
+      month => month.id === Number(toDate)
+    );
+    setFromDateString(tempFromDateString && tempFromDateString[0].month);
+    setToDateString(tempToDateString && tempToDateString[0].month);
+  }, [fromDate, toDate]);
+
+  // Call function to get Sessions
+  React.useEffect(() => {
+    handleGetRetroChartData();
+  }, [fromDate, toDate, selectId]);
+
+  // Call function to get participant
+  React.useEffect(() => {
+    handleGetParticipantChartData();
+  }, [fromDate, toDate, selectId]);
+
+  // Function to get Sessions
+  const handleGetRetroChartData = async () => {
+    await getRetrosCount(fromDate, toDate, selectId).then(
+      res => {
+        if (res && res.result) {
+          let temp = 0;
+          res.result.map((item: any) => {
+            temp = temp + item.averageRetros;
+          });
+          setTotalSessions(Math.round(temp));
+        }
+      },
+      err => {
+        console.log('err', err);
+      }
+    );
+  };
+
+  // Function to get participant
+  const handleGetParticipantChartData = async () => {
+    await getParticipantsCount(fromDate, toDate, selectId).then(
+      res => {
+        if (res && res.result) {
+          let temp = 0;
+          res.result.map((item: any) => {
+            temp = temp + item.averageParticipants;
+          });
+          setTotalParticipants(Math.round(temp));
+        }
+      },
+      err => {
+        console.log('err', err);
+      }
+    );
+  };
 
   const handleFromDate = (event: SelectChangeEvent) => {
     setFromDate(event.target.value as string);
@@ -478,21 +506,16 @@ function EnterpriseDashboard() {
             <Box
               sx={{
                 display: 'flex',
-
                 flexDirection: 'row',
-
                 alignItems: 'center',
-
                 marginLeft: '16px',
-
                 marginTop: '16px',
-
-                marginBottom: '32px',
+                marginBottom: '16px',
                 width: 'calc(100% - 16px)',
                 justifyContent: 'space-between',
               }}
             >
-              <Box display="flex" flexDirection="row">
+              <Box display="flex" flexDirection="row" alignItems="center" justifyContent='flex-start'>
                 <H4RegularTypography label="Analytics" />
                 <ReactToPrint
                   trigger={() => (
@@ -704,9 +727,14 @@ function EnterpriseDashboard() {
                   flexDirection="row"
                   style={{ marginTop: '8px' }}
                 >
-                  <img src="/svgs/clipboard_document.svg"></img>
+                  <Icons.UserGroupOutline
+                    size={20}
+                    style={{
+                      color: '#2C69A1',
+                    }}
+                  />
                   <BodyRegularTypography
-                    label="230 Actions"
+                    label={totalParticipants + ' Participants'}
                     style={{ color: '#2C69A1', marginLeft: '18px' }}
                   />
                 </Box>
@@ -818,8 +846,7 @@ function EnterpriseDashboard() {
           }}
         >
           <CaptionRegularTypography label="Count of all Sessions" />
-          <AverageRetroChart dashboard={true}
-            team={selectId}/>
+          <AverageRetroChart dashboard={true} team={selectId} />
         </Box>
         {/* -------------------- ---Page Header ----------------------------- */}
         <Grid
@@ -909,7 +936,12 @@ function EnterpriseDashboard() {
           />
         </Box>
         {/* -------------------- ---Page Header ----------------------------- */}
-        <Grid id="page_header_1" item xs={12} style={{ display: 'none', marginTop: '108px' }}>
+        <Grid
+          id="page_header_1"
+          item
+          xs={12}
+          style={{ display: 'none', marginTop: '108px' }}
+        >
           <Box
             sx={{
               display: 'flex',
