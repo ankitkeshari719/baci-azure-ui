@@ -769,7 +769,7 @@ function EnterpriseDashboard() {
             marginTop: '48px',
           }}
         >
-          <CaptionRegularTypography label="Team Level Actions (Assigned vs Completed)" />
+          <CaptionRegularTypography label="Count of actions (Assigned vs Completed) all teams" />
           <TeamLevelActionsCountChart dashboard={true} />
         </Box>
         {/* -------------------- ---Page Header ----------------------------- */}
@@ -998,7 +998,7 @@ function EnterpriseDashboard() {
             marginTop: '48px',
           }}
         >
-          <CaptionRegularTypography label="Enterprise Level - Overall Summary" />
+          <CaptionRegularTypography label="Overall summary paragraph and word cloud" />
           <EnterpriseLevelSentimentsSummaryChart
             dashboard={true}
             team={selectId}
