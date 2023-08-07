@@ -23,7 +23,6 @@ import { GlobalContext } from '../../contexts/GlobalContext';
 
 export default function EnterpriseLevelSentimentsThemeChart({
   dashboard,
-
   team,
 }: {
   dashboard?: boolean;
