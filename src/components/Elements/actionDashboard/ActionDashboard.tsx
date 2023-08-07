@@ -13,7 +13,14 @@ import {
   jiraActionStatus,
   users,
 } from '../../../helpers/DemoConst';
-import { Box, InputAdornment, TextField } from '@mui/material';
+import {
+  Box,
+  Checkbox,
+  InputAdornment,
+  TextField,
+  TableSortLabel,
+} from '@mui/material';
+
 import {
   BodyRegularTypography,
   BodySemiBoldTypography,
@@ -92,7 +99,35 @@ export default function ActionDashboard() {
   const [jiraRows, setJiraRows] = React.useState<any>([]);
   const [page, setPage] = React.useState(0);
   const [rowsPerPage, setRowsPerPage] = React.useState(10);
-  const [searched, setSearched] = React.useState<string>('');
+  const [searchedVal, setSearchedVal] = React.useState('');
+
+  const [actionCount, setActionCount] = React.useState<any[]>([
+    // { label: 'All', count: ActionList.length, color:'black',selected:true },
+    {
+      label: jiraActionStatus[0].label,
+      count: 0,
+      color: jiraActionStatus[0].color,
+      selected: true,
+    },
+    {
+      label: jiraActionStatus[1].label,
+      count: 0,
+      color: jiraActionStatus[1].color,
+      selected: true,
+    },
+    {
+      label: jiraActionStatus[2].label,
+      count: 0,
+      color: jiraActionStatus[2].color,
+      selected: true,
+    },
+    {
+      label: jiraActionStatus[3].label,
+      count: 0,
+      color: jiraActionStatus[3].color,
+      selected: true,
+    },
+  ]);
 
   const requestSearch = (searchedVal: any) => {
     const filteredRows = jiraRows.filter((row: any) => {
@@ -103,8 +138,7 @@ export default function ActionDashboard() {
     setJiraRows(filteredRows);
   };
 
-
-  const flattenObject=(ob: any)=> {
+  const flattenObject = (ob: any) => {
     const toReturn: any = {};
 
     Object.keys(ob).map(i => {
@@ -120,15 +154,15 @@ export default function ActionDashboard() {
       return i;
     });
     return toReturn;
-  }
+  };
 
-  React.useEffect(() => {
+  const updateTable = () => {
     let tempJiraRows: any = [];
     ActionList.map(action => {
       tempJiraRows.push(flattenObject(action));
     });
     setJiraRows(tempJiraRows);
-  }, []);
+  };
 
   const handleChangePage = (event: unknown, newPage: number) => {
     setPage(newPage);
@@ -141,195 +175,311 @@ export default function ActionDashboard() {
     setPage(0);
   };
 
+  React.useEffect(() => {
+    let countOfActions = actionCount;
+    ActionList.forEach(action => {
+      countOfActions.map(labelObj => {
+        if (action.status == labelObj.label) {
+          labelObj.count = labelObj.count + 1;
+        }
+      });
+    });
+    countOfActions[3].label = countOfActions[3].label;
+    setActionCount(countOfActions);
+    updateTable();
+  }, []);
+
+  React.useEffect(() => {
+    const dummyJiraRows: any[] = [];
+    let tempJiraRows: any = [];
+    ActionList.map(action => {
+      tempJiraRows.push(flattenObject(action));
+    });
+    tempJiraRows.map((jira: any) => {
+      actionCount.map((action: any) => {
+        if (action.selected && jira.status == action.label) {
+          dummyJiraRows.push(jira);
+        }
+      });
+    });
+    setJiraRows([...dummyJiraRows]);
+  }, [actionCount]);
+
+  const searchFunction = (row1: any) => {
+    const columns = [
+      'teamName',
+      'jiraId',
+      'initialSession',
+      'action.value',
+      'action.assigneeId',
+      'startDate',
+      'status',
+      'teamId',
+    ];
+    var fullRow = '';
+    columns.forEach((column, index) => {
+      if (index == 0) fullRow = fullRow + row1[column];
+      else if (column == 'action.assigneeId') {
+        const user = users.find(user => user.id == row1[column]);
+        fullRow = fullRow + ' ' + user?.name;
+      } else fullRow = fullRow + ' ' + row1[column];
+    });
+
+    return (
+      !searchedVal.length ||
+      fullRow
+        .toString()
+        .toLowerCase()
+        .includes(searchedVal.toString().toLowerCase())
+    );
+  };
+
+  //Table
+
+  const [orderDirection, setOrderDirection] = React.useState('asc');
+
+  const sortArray = (arr: any, orderBy: any,idInput:string) => {
+    var id = idInput;
+    if(id=="action.assigneeId"){
+      id="action.assigneeName";
+    }
+    console.log(arr,id)
+    switch (orderBy) {
+      case 'asc':
+      default:
+        return arr.sort((a: any, b: any) =>
+
+       a[id].localeCompare(b[id]))
+      case 'desc':
+        return arr.sort((a: any, b: any) =>
+        b[id].localeCompare(a[id]))
+    }
+  };
+
+  const handleSortRequest = (id:string) => {
+    let tempJiraRows: any = [];
+    ActionList.map(action => {
+      tempJiraRows.push(flattenObject(action));
+    });
+    setJiraRows(sortArray(tempJiraRows, orderDirection,id));
+    setOrderDirection(orderDirection === 'asc' ? 'desc' : 'asc');
+  };
 
   return (
-    <Paper
-      sx={{ width: '100%', background: 'rgb(249 251 252)', padding: '20px', display:'flex',flexDirection:'column' }}
-    >
-      <BodySemiBoldTypography label="Actions" style={{marginBottom:'10px'}}/>
-      <H2SemiBoldTypography
-        label="All Actions"
-        style={{ color: commonStyles.PrimaryDark }}
-      />
-
-      <Box display="flex" flexDirection="row">
-        {jiraActionStatus.map((action, index) => {
-          return (
-            <Box
-              display="flex"
-              flexDirection="column"
-              key={index + 'jiraActionStatus'}
-              gap="8px"
-              padding="16px"
-              borderRadius="4px"
-              marginRight="10px"
-              marginTop="20px"
-              marginBottom="20px"
-              sx={{
-                background: 'white',
-                border: '1px solid ' + commonStyles.PrimaryLight,
-              }}
-            >
-              <H1SemiBoldTypography
-                style={{ color: action.color }}
-                label={
-                  index == 0
-                    ? '07'
-                    : index == 1
-                    ? '10'
-                    : index == 2
-                    ? '17'
-                    : '34'
-                }
-              />
-              <BodyRegularTypography
-                style={{ color: action.color }}
-                label={
-                  index == 0
-                    ? 'TO DO'
-                    : index == 1
-                    ? 'IN-PROGRESS'
-                    : index == 2
-                    ? 'DONE (Last 30 days)'
-                    : 'LAST ADDED (Last 30 days)'
-                }
-              />
-            </Box>
-          );
-        })}
-      </Box>
-
-      <Box
-        display="flex"
-        flexDirection="row"
-        justifyContent="space-between"
-        alignItems="center"
+    <>
+      <Paper
+        sx={{
+          width: '100%',
+          background: 'rgb(249 251 252)',
+          padding: '20px',
+          display: 'flex',
+          flexDirection: 'column',
+        }}
       >
-        <TextField
-          id="outlined-basic"
-          label="Search..."
-          variant="outlined"
-          sx={{ marginBottom: '10px', background: 'white', width: '450px' }}
-          InputProps={{
-            startAdornment: (
-              <InputAdornment position="start">
-                <MagnifyingGlassIcon width="20px" />
-              </InputAdornment>
-            ),
-          }}
+        <BodySemiBoldTypography
+          label="Actions"
+          style={{ marginBottom: '10px' }}
         />
+        <H2SemiBoldTypography
+          label="All Actions"
+          style={{ color: commonStyles.PrimaryDark }}
+        />
+        {/* {React.useMemo(()=>{ */}
+        <Box display="flex" flexDirection="row">
+          {actionCount.map((action, index) => {
+            return (
+              <Box
+                display="flex"
+                flexDirection="column"
+                key={index + 'jiraActionStatus'}
+                gap="8px"
+                padding="16px"
+                paddingRight={'26px'}
+                borderRadius="4px"
+                marginRight="10px"
+                marginTop="20px"
+                marginBottom="20px"
+                sx={{
+                  background: 'white',
+                  border: true
+                    ? '1px solid ' + commonStyles.PrimaryLight
+                    : '1px solid yellow',
+                  cursor: 'pointer',
+                  position: 'relative',
+                }}
+                onClick={() => {
+                  let newArrayState = actionCount;
+                  newArrayState.map((ac, index1) => {
+                    if (index == index1) {
+                      ac.selected = !action.selected;
+                    }
+                  });
 
-        <FunnelIcon width="32px" style={{ cursor: 'pointer' }} />
-      </Box>
+                  setActionCount([...newArrayState]);
+                }}
+              >
+                <H1SemiBoldTypography
+                  style={{ color: action.color }}
+                  label={action.count}
+                />
+                <Checkbox
+                  checked={action.selected}
+                  size="small"
+                  sx={{ position: 'absolute', zIndex: 2, right: '0px', top: 0 }}
+                />
+                <BodyRegularTypography
+                  style={{ color: action.color }}
+                  label={action.label}
+                />
+              </Box>
+            );
+          })}
+        </Box>
+        {/* } */}
+        {/* // ,[actionCount])} */}
 
-      <TableContainer sx={{ height: 'calc(100% - 280px)' }}>
-        <Table stickyHeader aria-label="sticky table">
-          <TableHead>
-            <TableRow>
-              {columns.map(column => (
-                <TableCell
-                  key={column.id}
-                  align={column.align}
-                  sx={{ borderBottom: '2px solid gray' }}
-                >
-                  <BodySemiBoldTypography label={column.label} />
-                </TableCell>
-              ))}
-            </TableRow>
-          </TableHead>
-          <TableBody>
-            {jiraRows
-              .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-              .map((row: any, index: number) => {
-                return (
-                  <StyledTableRow
-                    hover
-                    role="checkbox"
-                    tabIndex={-1}
-                    key={index}
+        <Box
+          display="flex"
+          flexDirection="row"
+          justifyContent="space-between"
+          alignItems="center"
+        >
+          <TextField
+            id="outlined-basic"
+            label="Search..."
+            variant="outlined"
+            sx={{ marginBottom: '10px', background: 'white', width: '450px' }}
+            onChange={e => setSearchedVal(e.target.value)}
+            InputProps={{
+              startAdornment: (
+                <InputAdornment position="start">
+                  <MagnifyingGlassIcon width="20px" />
+                </InputAdornment>
+              ),
+            }}
+          />
+
+          <FunnelIcon width="32px" style={{ cursor: 'pointer' }} />
+        </Box>
+
+        <TableContainer sx={{ height: 'calc(100% - 280px)' }}>
+          
+          <Table stickyHeader aria-label="sticky table">
+            <TableHead>
+              <TableRow>
+                {columns.map(column => (
+                  <TableCell
+                    key={column.id}
+                    align={column.align}
+                    sx={{ borderBottom: '2px solid gray' }}
+                    onClick={()=>column.id!="teamId"&&handleSortRequest(column.id)}
                   >
-                    {columns.map(column => {
-                      const value = row[column.id];
-                      if (column.id == 'jiraId') {
-                        return (
-                          <TableCell
-                            key={column.id + '12'}
-                            align={column.align}
-                            sx={{
-                              color: 'rgba(0, 0, 238, 1)',
-                              minWidth: '100px',
-                            }}
-                          >
-                            {value}
-                          </TableCell>
-                        );
-                      } else if (column.id == 'action.assigneeId') {
-                        return (
-                          <TableCell
-                            key={column.id + '12'}
-                            align={column.align}
-                            sx={{
-                              minWidth: '150px',
-                            }}
-                          >
-                 
-                            <AssigneeDropdown status={value} />
-                          </TableCell>
-                        );
-                      } else if (column.id == 'status') {
-                        return (
-                          <TableCell
-                            key={column.id + '12'}
-                            align={column.align}
-                            sx={{
-                              minWidth: '80px',
-                         
-                            }}
-                          >
-                            <StatusDropDown status={value} />
-                            {/* {value} */}
-                          </TableCell>
-                        );
-                      } else if (column.id == 'teamId') {
-                        return (
-                          <TableCell
-                            key={column.id + '12'}
-                            align={column.align}
-                            sx={{
-                              minWidth: '20px',
-                              alignItems: 'center',
-                            }}
-                          >
-                            <EllipsisVerticalIcon width="24px" />
-                          </TableCell>
-                        );
-                      } else {
-                        return (
-                          <TableCell
-                            key={column.id}
-                            align={column.align}
-                            sx={{ maxWidth: '250px' }}
-                          >
-                            {value}
-                          </TableCell>
-                        );
-                      }
-                    })}
-                  </StyledTableRow>
-                );
-              })}
-          </TableBody>
-        </Table>
-      </TableContainer>
-      <TablePagination
-        rowsPerPageOptions={[10, 25, 100]}
-        component="div"
-        count={jiraRows.length}
-        rowsPerPage={rowsPerPage}
-        page={page}
-        onPageChange={handleChangePage}
-        onRowsPerPageChange={handleChangeRowsPerPage}
-      />
-    </Paper>
+                    {column.id=="teamId"?<><BodySemiBoldTypography label={column.label} /></>:<TableSortLabel
+                      active={true}
+                      direction={orderDirection === 'asc' ? 'asc' : 'desc'}
+                    >
+                      <BodySemiBoldTypography label={column.label} />
+                    </TableSortLabel>}
+                  </TableCell>
+                ))}
+              </TableRow>
+            </TableHead>
+            <TableBody>
+              {jiraRows
+                .filter((row1: any) =>
+                  // note that I've incorporated the searchedVal length check here
+                  searchFunction(row1)
+                )
+                .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+                .map((row: any, index: number) => {
+                  return (
+                    <StyledTableRow
+                      hover
+                      role="checkbox"
+                      tabIndex={-1}
+                      key={index}
+                    >
+                      {columns.map(column => {
+                        const value = row[column.id];
+                        if (column.id == 'jiraId') {
+                          return (
+                            <TableCell
+                              key={column.id + '12'}
+                              align={column.align}
+                              sx={{
+                                color: 'rgba(0, 0, 238, 1)',
+                                minWidth: '100px',
+                              }}
+                            >
+                              {value}
+                            </TableCell>
+                          );
+                        } else if (column.id == 'action.assigneeId') {
+                          return (
+                            <TableCell
+                              key={column.id + '12'}
+                              align={column.align}
+                              sx={{
+                                minWidth: '150px',
+                              }}
+                            >
+                              <AssigneeDropdown id={value} />
+                            </TableCell>
+                          );
+                        } else if (column.id == 'status') {
+                          return (
+                            <TableCell
+                              key={column.id + '12'}
+                              align={column.align}
+                              sx={{
+                                minWidth: '80px',
+                              }}
+                            >
+                              <StatusDropDown status={value} />
+                              {/* {value} */}
+                            </TableCell>
+                          );
+                        } else if (column.id == 'teamId') {
+                          return (
+                            <TableCell
+                              key={column.id + '12'}
+                              align={column.align}
+                              sx={{
+                                minWidth: '20px',
+                                alignItems: 'center',
+                              }}
+                            >
+                              <EllipsisVerticalIcon width="24px" />
+                            </TableCell>
+                          );
+                        } else {
+                          return (
+                            <TableCell
+                              key={column.id}
+                              align={column.align}
+                              sx={{ maxWidth: '250px' }}
+                            >
+                              {value}
+                            </TableCell>
+                          );
+                        }
+                      })}
+                    </StyledTableRow>
+                  );
+                })}
+            </TableBody>
+          </Table>
+        </TableContainer>
+        <TablePagination
+          rowsPerPageOptions={[10, 25, 100]}
+          component="div"
+          count={jiraRows.filter((row1: any) => searchFunction(row1)).length}
+          rowsPerPage={rowsPerPage}
+          page={page}
+          onPageChange={handleChangePage}
+          onRowsPerPageChange={handleChangeRowsPerPage}
+        />
+      </Paper>
+    </>
   );
 }

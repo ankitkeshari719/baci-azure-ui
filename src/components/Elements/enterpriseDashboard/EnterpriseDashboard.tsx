@@ -600,7 +600,6 @@ function EnterpriseDashboard() {
                   dashboard={true}
                   team={selectId}
                 />
-
                 <CaptionRegularTypography label="Enterprise Level - Overall Summary" />
               </Box>
             </Box>
@@ -742,10 +741,9 @@ function EnterpriseDashboard() {
             marginTop: '48px',
           }}
         >
-          <CaptionRegularTypography label="Count of actions (Assigned vs Completed) all teams" />
+          <CaptionRegularTypography label="Team Level Actions (Assigned vs Completed)" />
           <TeamLevelActionsCountChart dashboard={true} />
         </Box>
-
         {/* -------------------- ---Page Header ----------------------------- */}
         <Grid id="page_header_1" item xs={12} style={{ display: 'none' }}>
           <Box
@@ -964,7 +962,7 @@ function EnterpriseDashboard() {
             width: '100%',
             display: 'none',
             alignItems: 'center !important',
-            justifyContent: 'center !important',
+            justifyContent: 'center',
             marginTop: '48px',
           }}
         >
