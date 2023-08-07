@@ -238,17 +238,21 @@ export default function ActionDashboard() {
 
   const [orderDirection, setOrderDirection] = React.useState('asc');
 
-  const sortArray = (arr: any, orderBy: any,id:string) => {
+  const sortArray = (arr: any, orderBy: any,idInput:string) => {
+    var id = idInput;
+    if(id=="action.assigneeId"){
+      id="action.assigneeName";
+    }
+    console.log(arr,id)
     switch (orderBy) {
       case 'asc':
       default:
         return arr.sort((a: any, b: any) =>
-          a[id] > b[id] ? 1 : b[id] > a[id] ? -1 : 0
-        );
+
+       a[id].localeCompare(b[id]))
       case 'desc':
         return arr.sort((a: any, b: any) =>
-          a[id] < b[id] ? 1 : b[id] < a[id] ? -1 : 0
-        );
+        b[id].localeCompare(a[id]))
     }
   };
 
@@ -257,7 +261,6 @@ export default function ActionDashboard() {
     ActionList.map(action => {
       tempJiraRows.push(flattenObject(action));
     });
-    // setJiraRows(tempJiraRows);
     setJiraRows(sortArray(tempJiraRows, orderDirection,id));
     setOrderDirection(orderDirection === 'asc' ? 'desc' : 'asc');
   };
