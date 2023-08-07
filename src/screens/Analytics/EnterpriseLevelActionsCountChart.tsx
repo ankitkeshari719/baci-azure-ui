@@ -46,11 +46,9 @@ const StyledTableCell = styled(TableCell)(({ theme }) => ({
 
 export default function EnterpriseLevelActionsCountChart({
   dashboard,
-
   team,
 }: {
   dashboard?: boolean;
-
   team: string;
 }) {
   const [enterpriseLevelActions, setEnterpriseLevelActions] = useState<any>([]);

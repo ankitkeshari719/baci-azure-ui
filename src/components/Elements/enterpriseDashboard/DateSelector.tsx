@@ -33,7 +33,6 @@ function DateSelector({
         flexDirection: 'row',
         alignItems: 'center',
         justifyContent: 'center',
-        marginTop: '16px',
       }}
     >
       {/* Select Range Title */}
