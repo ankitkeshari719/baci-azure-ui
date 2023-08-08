@@ -129,14 +129,7 @@ export default function ActionDashboard() {
     },
   ]);
 
-  const requestSearch = (searchedVal: any) => {
-    const filteredRows = jiraRows.filter((row: any) => {
-      return row.teamName
-        .toLowerCase()
-        .includes(searchedVal.target.value.toLowerCase());
-    });
-    setJiraRows(filteredRows);
-  };
+
 
   const flattenObject = (ob: any) => {
     const toReturn: any = {};
