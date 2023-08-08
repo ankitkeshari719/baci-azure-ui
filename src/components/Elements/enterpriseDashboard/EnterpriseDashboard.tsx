@@ -256,6 +256,7 @@ function EnterpriseDashboard() {
       >
         {/* Label and Button */}
         <Box
+          id="non_print_box_1"
           display="flex"
           flexDirection="row"
           width="100%"
@@ -267,7 +268,6 @@ function EnterpriseDashboard() {
 
             setHoverIndex(+selectId);
           }}
-          id="non_print_box_1"
         >
           {/* Enterprise Dashboard label */}
           <Box component="span">
@@ -295,10 +295,10 @@ function EnterpriseDashboard() {
         </Box>
         {/* Bottom container */}
         <Box
+          id="non_print_box_2"
           display="flex"
           flexDirection="column"
           sx={{ overflow: 'auto' }}
-          id="non_print_box_2"
         >
           {/* Teams list menu start */}
           <Box display="flex" flexDirection="row" width="100%" mt="10px">
@@ -515,7 +515,12 @@ function EnterpriseDashboard() {
                 justifyContent: 'space-between',
               }}
             >
-              <Box display="flex" flexDirection="row" alignItems="center" justifyContent='flex-start'>
+              <Box
+                display="flex"
+                flexDirection="row"
+                alignItems="center"
+                justifyContent="flex-start"
+              >
                 <H4RegularTypography label="Analytics" />
                 <ReactToPrint
                   trigger={() => (
@@ -629,380 +634,368 @@ function EnterpriseDashboard() {
           </Box>
         </Box>
         {/************************************* Print Box *******************************/}
-        {/* Top Data */}
-        <Box display="none" id="top_data_print">
+        <Box id="print_box" display="none">
+          {/* Top Data */}
+          <Box id="top_data_print">
+            <Box
+              sx={{
+                backgroundColor: '#CEEFFF',
+                display: 'flex',
+                flexDirection: 'row',
+                padding: '24px',
+              }}
+            >
+              {/* Image and Label */}
+              <Grid item xs={6}>
+                <Box
+                  sx={{
+                    display: 'flex',
+                    alignItems: 'flex-start',
+                    justifyContent: 'flex-start',
+                    flexDirection: 'column',
+                  }}
+                >
+                  <img src="/images/colonial_first_state.png"></img>
+                  <TinyTextSemiBoldTypography
+                    label="Powered by"
+                    style={{ color: '#2C69A1', marginTop: '8px' }}
+                  />
+                  <img
+                    src="/svgs/BACI-Beta_Filled.svg"
+                    style={{ marginTop: '8px' }}
+                  ></img>
+                  <a
+                    href="https://baci.app/"
+                    rel="noreferrer"
+                    target="_blank"
+                    style={{
+                      color: '#2C69A1',
+                      fontFamily: 'Poppins',
+                      fontStyle: 'normal',
+                      fontWeight: 400,
+                      fontSize: '12px',
+                      lineHeight: '120%',
+                      letterSpacing: '0.006em',
+                      marginTop: '8px',
+                    }}
+                  >
+                    https://baci.app
+                  </a>
+                </Box>
+              </Grid>
+              {/* Logo and data */}
+              <Grid item xs={6} style={{ marginLeft: '48px' }}>
+                <Box
+                  sx={{
+                    display: 'flex',
+                    alignItems: 'flex-start',
+                    justifyContent: 'flex-start',
+                    flexDirection: 'column',
+                  }}
+                >
+                  <H4SemiBoldTypography
+                    label="All Teams Analytics"
+                    style={{ color: '#2C69A1' }}
+                  />
+                  <TinyTextTypography
+                    label={'as of ' + currentDate}
+                    style={{ color: '#2C69A1', marginTop: '8px' }}
+                  />
+                  <Box
+                    display="flex"
+                    flexDirection="row"
+                    style={{ marginTop: '16px' }}
+                  >
+                    <Icons.CalendarOutline
+                      size={20}
+                      style={{
+                        color: '#2C69A1',
+                      }}
+                    />
+                    <BodyRegularTypography
+                      label={fromDateString + ' - ' + toDateString}
+                      style={{ color: '#2C69A1', marginLeft: '18px' }}
+                    />
+                  </Box>
+                  <Box
+                    display="flex"
+                    flexDirection="row"
+                    style={{ marginTop: '8px' }}
+                  >
+                    <img src="/svgs/square_stack.svg"></img>
+                    <BodyRegularTypography
+                      label={totalSessions + ' Sessions'}
+                      style={{ color: '#2C69A1', marginLeft: '18px' }}
+                    />
+                  </Box>
+                  <Box
+                    display="flex"
+                    flexDirection="row"
+                    style={{ marginTop: '8px' }}
+                  >
+                    <Icons.UserGroupOutline
+                      size={20}
+                      style={{
+                        color: '#2C69A1',
+                      }}
+                    />
+                    <BodyRegularTypography
+                      label={totalParticipants + ' Participants'}
+                      style={{ color: '#2C69A1', marginLeft: '18px' }}
+                    />
+                  </Box>
+                </Box>
+              </Grid>
+            </Box>
+          </Box>
+          {/* Enterprise Level Actions Count Chart Print*/}
           <Box
-            sx={{
-              backgroundColor: '#CEEFFF',
-              display: 'flex',
-              flexDirection: 'row',
-              padding: '24px',
+            className="chartCard"
+            id="EnterpriseLevelActionsCountChart_Print"
+            style={{
+              width: '100%',
+              alignItems: 'center !important',
+              justifyContent: 'center !important',
+              marginTop: '48px',
             }}
           >
-            {/* Image and Label */}
-            <Grid item xs={6}>
-              <Box
-                sx={{
-                  display: 'flex',
-                  alignItems: 'flex-start',
-                  justifyContent: 'flex-start',
-                  flexDirection: 'column',
-                }}
-              >
+            <CaptionRegularTypography label="Count of actions (Assigned vs Completed)" />
+            <EnterpriseLevelActionsCountChart
+              dashboard={true}
+              team={selectId}
+            />
+          </Box>
+          {/* Team Level Actions Count Chart Print */}
+          <Box
+            className="chartCard"
+            id="TeamLevelActionsCountChart_Print"
+            style={{
+              width: '100%',
+              alignItems: 'center !important',
+              justifyContent: 'center !important',
+              marginTop: '48px',
+            }}
+          >
+            <CaptionRegularTypography label="Count of actions (Assigned vs Completed) all teams" />
+            <TeamLevelActionsCountChart dashboard={true} />
+          </Box>
+          {/* -------------------- ---Page Header ----------------------------- */}
+          <Grid id="page_header_1" item xs={12}>
+            <Box
+              sx={{
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'space-between',
+                flexDirection: 'row',
+              }}
+            >
+              <Grid item xs={6}>
                 <img src="/images/colonial_first_state.png"></img>
-                <TinyTextSemiBoldTypography
-                  label="Powered by"
-                  style={{ color: '#2C69A1', marginTop: '8px' }}
-                />
-                <img
-                  src="/svgs/BACI-Beta_Filled.svg"
-                  style={{ marginTop: '8px' }}
-                ></img>
-                <a
-                  href="https://baci.app/"
-                  rel="noreferrer"
-                  target="_blank"
-                  style={{
-                    color: '#2C69A1',
-                    fontFamily: 'Poppins',
-                    fontStyle: 'normal',
-                    fontWeight: 400,
-                    fontSize: '12px',
-                    lineHeight: '120%',
-                    letterSpacing: '0.006em',
-                    marginTop: '8px',
-                  }}
-                >
-                  https://baci.app
-                </a>
-              </Box>
-            </Grid>
-            {/* Logo and data */}
-            <Grid item xs={6} style={{ marginLeft: '48px' }}>
-              <Box
-                sx={{
-                  display: 'flex',
-                  alignItems: 'flex-start',
-                  justifyContent: 'flex-start',
-                  flexDirection: 'column',
-                }}
-              >
-                <H4SemiBoldTypography
-                  label="All Teams Analytics"
-                  style={{ color: '#2C69A1' }}
-                />
-                <TinyTextTypography
-                  label={'as of ' + currentDate}
-                  style={{ color: '#2C69A1', marginTop: '8px' }}
-                />
+              </Grid>
+              <Grid item xs={6}>
                 <Box
+                  component="span"
                   display="flex"
-                  flexDirection="row"
-                  style={{ marginTop: '16px' }}
+                  alignItems="flex-start"
+                  justifyContent="flex-start"
+                  flexDirection="column"
                 >
-                  <Icons.CalendarOutline
-                    size={20}
+                  <CaptionRegularTypography
+                    label="All Teams Report Overview"
+                    style={{ color: '#159ADD' }}
+                  />
+                  <a
+                    href="https://baci.app/"
+                    rel="noreferrer"
+                    target="_blank"
                     style={{
                       color: '#2C69A1',
+                      fontFamily: 'Poppins',
+                      fontStyle: 'normal',
+                      fontWeight: 400,
+                      fontSize: '12px',
+                      lineHeight: '120%',
+                      letterSpacing: '0.006em',
+                      marginTop: '8px',
                     }}
-                  />
-                  <BodyRegularTypography
-                    label={fromDateString + ' - ' + toDateString}
-                    style={{ color: '#2C69A1', marginLeft: '18px' }}
-                  />
+                  >
+                    https://baci.app
+                  </a>
                 </Box>
+              </Grid>
+            </Box>
+          </Grid>
+          {/* Average Participant Chart Print */}
+          <Box
+            className="chartCard"
+            id="AverageParticipantChart_Print"
+            style={{
+              width: '100%',
+              marginTop: '48px',
+              alignItems: 'center !important',
+              justifyContent: 'center !important',
+            }}
+          >
+            <CaptionRegularTypography label="Count of all participants over time" />
+            <AverageParticipantChart dashboard={true} team={selectId} />
+          </Box>
+          {/* Average Sessions Counts Chart Print*/}
+          <Box
+            className="chartCard"
+            id="AverageRetroChart_Print"
+            style={{
+              width: '100%',
+              alignItems: 'center !important',
+              justifyContent: 'center !important',
+              marginTop: '48px',
+            }}
+          >
+            <CaptionRegularTypography label="Count of all Sessions" />
+            <AverageRetroChart dashboard={true} team={selectId} />
+          </Box>
+          {/* -------------------- ---Page Header ----------------------------- */}
+          <Grid id="page_header_2" item xs={12} style={{ marginTop: '108px' }}>
+            <Box
+              sx={{
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'space-between',
+                flexDirection: 'row',
+              }}
+            >
+              <Grid item xs={6}>
+                <img src="/images/colonial_first_state.png"></img>
+              </Grid>
+              <Grid item xs={6}>
                 <Box
+                  component="span"
                   display="flex"
-                  flexDirection="row"
-                  style={{ marginTop: '8px' }}
+                  alignItems="flex-start"
+                  justifyContent="flex-start"
+                  flexDirection="column"
                 >
-                  <img src="/svgs/square_stack.svg"></img>
-                  <BodyRegularTypography
-                    label={totalSessions + ' Sessions'}
-                    style={{ color: '#2C69A1', marginLeft: '18px' }}
+                  <CaptionRegularTypography
+                    label="All Teams Report Overview"
+                    style={{ color: '#159ADD' }}
                   />
-                </Box>
-                <Box
-                  display="flex"
-                  flexDirection="row"
-                  style={{ marginTop: '8px' }}
-                >
-                  <Icons.UserGroupOutline
-                    size={20}
+                  <a
+                    href="https://baci.app/"
+                    rel="noreferrer"
+                    target="_blank"
                     style={{
                       color: '#2C69A1',
+                      fontFamily: 'Poppins',
+                      fontStyle: 'normal',
+                      fontWeight: 400,
+                      fontSize: '12px',
+                      lineHeight: '120%',
+                      letterSpacing: '0.006em',
+                      marginTop: '8px',
                     }}
-                  />
-                  <BodyRegularTypography
-                    label={totalParticipants + ' Participants'}
-                    style={{ color: '#2C69A1', marginLeft: '18px' }}
-                  />
+                  >
+                    https://baci.app
+                  </a>
                 </Box>
-              </Box>
-            </Grid>
-          </Box>
-        </Box>
-        {/* Enterprise Level Actions Count Chart Print*/}
-        <Box
-          className="chartCard"
-          id="EnterpriseLevelActionsCountChart_Print"
-          style={{
-            width: '100%',
-            display: 'none',
-            alignItems: 'center !important',
-            justifyContent: 'center !important',
-            marginTop: '48px',
-          }}
-        >
-          <CaptionRegularTypography label="Count of actions (Assigned vs Completed)" />
-          <EnterpriseLevelActionsCountChart dashboard={true} team={selectId} />
-        </Box>
-        {/* Team Level Actions Count Chart Print */}
-        <Box
-          className="chartCard"
-          id="TeamLevelActionsCountChart_Print"
-          style={{
-            width: '100%',
-            display: 'none',
-            alignItems: 'center !important',
-            justifyContent: 'center !important',
-            marginTop: '48px',
-          }}
-        >
-          <CaptionRegularTypography label="Count of actions (Assigned vs Completed) all teams" />
-          <TeamLevelActionsCountChart dashboard={true} />
-        </Box>
-        {/* -------------------- ---Page Header ----------------------------- */}
-        <Grid id="page_header_1" item xs={12} style={{ display: 'none' }}>
+              </Grid>
+            </Box>
+          </Grid>
+          {/* Enterprise Level Sentiments Theme Chart Print */}
           <Box
-            sx={{
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'space-between',
-              flexDirection: 'row',
+            className="chartCard"
+            id="EnterpriseLevelSentimentsThemeChart_Print"
+            style={{
+              width: '100%',
+              alignItems: 'center !important',
+              justifyContent: 'center !important',
+              marginTop: '48px',
             }}
           >
-            <Grid item xs={6}>
-              <img src="/images/colonial_first_state.png"></img>
-            </Grid>
-            <Grid item xs={6}>
-              <Box
-                component="span"
-                display="flex"
-                alignItems="flex-start"
-                justifyContent="flex-start"
-                flexDirection="column"
-              >
-                <CaptionRegularTypography
-                  label="All Teams Report Overview"
-                  style={{ color: '#159ADD' }}
-                />
-                <a
-                  href="https://baci.app/"
-                  rel="noreferrer"
-                  target="_blank"
-                  style={{
-                    color: '#2C69A1',
-                    fontFamily: 'Poppins',
-                    fontStyle: 'normal',
-                    fontWeight: 400,
-                    fontSize: '12px',
-                    lineHeight: '120%',
-                    letterSpacing: '0.006em',
-                    marginTop: '8px',
-                  }}
-                >
-                  https://baci.app
-                </a>
-              </Box>
-            </Grid>
+            <CaptionRegularTypography label="Key Themes Heatmap" />
+            <EnterpriseLevelSentimentsThemeChart
+              dashboard={true}
+              team={selectId}
+            />
           </Box>
-        </Grid>
-        {/* Average Participant Chart Print */}
-        <Box
-          className="chartCard"
-          id="AverageParticipantChart_Print"
-          style={{
-            width: '100%',
-            display: 'none',
-            marginTop: '48px',
-            alignItems: 'center !important',
-            justifyContent: 'center !important',
-          }}
-        >
-          <CaptionRegularTypography label="Count of all participants over time" />
-          <AverageParticipantChart dashboard={true} team={selectId} />
-        </Box>
-        {/* Average Sessions Counts Chart Print*/}
-        <Box
-          className="chartCard"
-          id="AverageRetroChart_Print"
-          style={{
-            width: '100%',
-            display: 'none',
-            alignItems: 'center !important',
-            justifyContent: 'center !important',
-            marginTop: '48px',
-          }}
-        >
-          <CaptionRegularTypography label="Count of all Sessions" />
-          <AverageRetroChart dashboard={true} team={selectId} />
-        </Box>
-        {/* -------------------- ---Page Header ----------------------------- */}
-        <Grid
-          id="page_header_2"
-          item
-          xs={12}
-          style={{ display: 'none', marginTop: '108px' }}
-        >
+          {/* Enterprise Level Sentiments Moods Chart Print */}
           <Box
-            sx={{
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'space-between',
-              flexDirection: 'row',
+            className="chartCard"
+            id="EnterpriseLevelSentimentsMoodsChart_Print"
+            style={{
+              width: '100%',
+              alignItems: 'center !important',
+              justifyContent: 'center !important',
+              marginTop: '48px',
             }}
           >
-            <Grid item xs={6}>
-              <img src="/images/colonial_first_state.png"></img>
-            </Grid>
-            <Grid item xs={6}>
-              <Box
-                component="span"
-                display="flex"
-                alignItems="flex-start"
-                justifyContent="flex-start"
-                flexDirection="column"
-              >
-                <CaptionRegularTypography
-                  label="All Teams Report Overview"
-                  style={{ color: '#159ADD' }}
-                />
-                <a
-                  href="https://baci.app/"
-                  rel="noreferrer"
-                  target="_blank"
-                  style={{
-                    color: '#2C69A1',
-                    fontFamily: 'Poppins',
-                    fontStyle: 'normal',
-                    fontWeight: 400,
-                    fontSize: '12px',
-                    lineHeight: '120%',
-                    letterSpacing: '0.006em',
-                    marginTop: '8px',
-                  }}
-                >
-                  https://baci.app
-                </a>
-              </Box>
-            </Grid>
+            <CaptionRegularTypography label=" Participants Sentiments - Moods" />
+            <EnterpriseLevelSentimentsMoodsChart
+              dashboard={true}
+              team={selectId}
+            />
           </Box>
-        </Grid>
-        {/* Enterprise Level Sentiments Theme Chart Print */}
-        <Box
-          className="chartCard"
-          id="EnterpriseLevelSentimentsThemeChart_Print"
-          style={{
-            width: '100%',
-            display: 'none',
-            alignItems: 'center !important',
-            justifyContent: 'center !important',
-            marginTop: '48px',
-          }}
-        >
-          <CaptionRegularTypography label="Key Themes Heatmap" />
-          <EnterpriseLevelSentimentsThemeChart
-            dashboard={true}
-            team={selectId}
-          />
-        </Box>
-        {/* Enterprise Level Sentiments Moods Chart Print */}
-        <Box
-          className="chartCard"
-          id="EnterpriseLevelSentimentsMoodsChart_Print"
-          style={{
-            width: '100%',
-            display: 'none',
-            alignItems: 'center !important',
-            justifyContent: 'center !important',
-            marginTop: '48px',
-          }}
-        >
-          <CaptionRegularTypography label=" Participants Sentiments - Moods" />
-          <EnterpriseLevelSentimentsMoodsChart
-            dashboard={true}
-            team={selectId}
-          />
-        </Box>
-        {/* -------------------- ---Page Header ----------------------------- */}
-        <Grid
-          id="page_header_1"
-          item
-          xs={12}
-          style={{ display: 'none', marginTop: '108px' }}
-        >
+          {/* -------------------- ---Page Header ----------------------------- */}
+          <Grid id="page_header_1" item xs={12} style={{ marginTop: '108px' }}>
+            <Box
+              sx={{
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'space-between',
+                flexDirection: 'row',
+              }}
+            >
+              <Grid item xs={6}>
+                <img src="/images/colonial_first_state.png"></img>
+              </Grid>
+              <Grid item xs={6}>
+                <Box
+                  component="span"
+                  display="flex"
+                  alignItems="flex-start"
+                  justifyContent="flex-start"
+                  flexDirection="column"
+                >
+                  <CaptionRegularTypography
+                    label="All Teams Report Overview"
+                    style={{ color: '#159ADD' }}
+                  />
+                  <a
+                    href="https://baci.app/"
+                    rel="noreferrer"
+                    target="_blank"
+                    style={{
+                      color: '#2C69A1',
+                      fontFamily: 'Poppins',
+                      fontStyle: 'normal',
+                      fontWeight: 400,
+                      fontSize: '12px',
+                      lineHeight: '120%',
+                      letterSpacing: '0.006em',
+                      marginTop: '8px',
+                    }}
+                  >
+                    https://baci.app
+                  </a>
+                </Box>
+              </Grid>
+            </Box>
+          </Grid>
+          {/* Enterprise Level Sentiments Summary Chart Print */}
           <Box
-            sx={{
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'space-between',
-              flexDirection: 'row',
+            className="chartCard"
+            id="EnterpriseLevelSentimentsSummaryChart_Print"
+            style={{
+              width: '100%',
+              alignItems: 'center !important',
+              justifyContent: 'center',
+              marginTop: '48px',
             }}
           >
-            <Grid item xs={6}>
-              <img src="/images/colonial_first_state.png"></img>
-            </Grid>
-            <Grid item xs={6}>
-              <Box
-                component="span"
-                display="flex"
-                alignItems="flex-start"
-                justifyContent="flex-start"
-                flexDirection="column"
-              >
-                <CaptionRegularTypography
-                  label="All Teams Report Overview"
-                  style={{ color: '#159ADD' }}
-                />
-                <a
-                  href="https://baci.app/"
-                  rel="noreferrer"
-                  target="_blank"
-                  style={{
-                    color: '#2C69A1',
-                    fontFamily: 'Poppins',
-                    fontStyle: 'normal',
-                    fontWeight: 400,
-                    fontSize: '12px',
-                    lineHeight: '120%',
-                    letterSpacing: '0.006em',
-                    marginTop: '8px',
-                  }}
-                >
-                  https://baci.app
-                </a>
-              </Box>
-            </Grid>
+            <CaptionRegularTypography label="Overall summary paragraph and word cloud" />
+            <EnterpriseLevelSentimentsSummaryChart
+              dashboard={true}
+              team={selectId}
+            />
           </Box>
-        </Grid>
-        {/* Enterprise Level Sentiments Summary Chart Print */}
-        <Box
-          className="chartCard"
-          id="EnterpriseLevelSentimentsSummaryChart_Print"
-          style={{
-            width: '100%',
-            display: 'none',
-            alignItems: 'center !important',
-            justifyContent: 'center',
-            marginTop: '48px',
-          }}
-        >
-          <CaptionRegularTypography label="Overall summary paragraph and word cloud" />
-          <EnterpriseLevelSentimentsSummaryChart
-            dashboard={true}
-            team={selectId}
-          />
         </Box>
       </Box>
     </>
