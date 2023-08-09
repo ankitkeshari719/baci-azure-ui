@@ -94,49 +94,61 @@ const StyledTableRow = styled(TableRow)(({ theme }) => ({
     border: 0,
   },
 }));
-
+const ActionCount = [
+  // { label: 'All', count: ActionList.length, color:'black',selected:true },
+  {
+    label: jiraActionStatus[0].label,
+    count: 0,
+    color: jiraActionStatus[0].color,
+    selected: true,
+  },
+  {
+    label: jiraActionStatus[1].label,
+    count: 0,
+    color: jiraActionStatus[1].color,
+    selected: true,
+  },
+  {
+    label: jiraActionStatus[2].label,
+    count: 0,
+    color: jiraActionStatus[2].color,
+    selected: true,
+  },
+  {
+    label: jiraActionStatus[3].label,
+    count: 0,
+    color: jiraActionStatus[3].color,
+    selected: true,
+  },
+];
 export default function ActionDashboard() {
   const [jiraRows, setJiraRows] = React.useState<any>([]);
+  const [displayJiraRows, setDisplayJiraRows] = React.useState<any>([]);
   const [page, setPage] = React.useState(0);
   const [rowsPerPage, setRowsPerPage] = React.useState(10);
   const [searchedVal, setSearchedVal] = React.useState('');
 
-  const [actionCount, setActionCount] = React.useState<any[]>([
-    // { label: 'All', count: ActionList.length, color:'black',selected:true },
-    {
-      label: jiraActionStatus[0].label,
-      count: 0,
-      color: jiraActionStatus[0].color,
-      selected: true,
-    },
-    {
-      label: jiraActionStatus[1].label,
-      count: 0,
-      color: jiraActionStatus[1].color,
-      selected: true,
-    },
-    {
-      label: jiraActionStatus[2].label,
-      count: 0,
-      color: jiraActionStatus[2].color,
-      selected: true,
-    },
-    {
-      label: jiraActionStatus[3].label,
-      count: 0,
-      color: jiraActionStatus[3].color,
-      selected: true,
-    },
-  ]);
+  const [actionCount, setActionCount] = React.useState<any[]>(ActionCount);
 
-  const requestSearch = (searchedVal: any) => {
-    const filteredRows = jiraRows.filter((row: any) => {
-      return row.teamName
-        .toLowerCase()
-        .includes(searchedVal.target.value.toLowerCase());
-    });
-    setJiraRows(filteredRows);
-  };
+  React.useEffect(() => {
+    const localActionList = localStorage.getItem('actionList');
+    var tempActionList: any[] = [];
+    if (
+      localActionList == null ||
+      localActionList == undefined ||
+      localActionList == ''
+    ) {
+      ActionList.map(obj => {
+        tempActionList.push(flattenObject(obj));
+      });
+      const stringifiedActionList = JSON.stringify(tempActionList);
+      localStorage.setItem('actionList', stringifiedActionList);
+    } else {
+      tempActionList = JSON.parse(localActionList);
+    }
+    setJiraRows(tempActionList);
+    updateJiraCount(tempActionList);
+  }, []);
 
   const flattenObject = (ob: any) => {
     const toReturn: any = {};
@@ -156,12 +168,21 @@ export default function ActionDashboard() {
     return toReturn;
   };
 
-  const updateTable = () => {
-    let tempJiraRows: any = [];
-    ActionList.map(action => {
-      tempJiraRows.push(flattenObject(action));
+  const updateJiraCount = (list: any) => {
+    let countOfActions = ActionCount;
+    countOfActions.map(obj => {
+      obj.count = 0;
     });
-    setJiraRows(tempJiraRows);
+    list.forEach((action: any) => {
+      countOfActions.map(labelObj => {
+        if (action['status'] == labelObj.label) {
+          labelObj.count = labelObj.count + 1;
+        }
+      });
+    });
+    countOfActions[3].label = countOfActions[3].label;
+    setActionCount([...countOfActions]);
+    // updateTable(list);
   };
 
   const handleChangePage = (event: unknown, newPage: number) => {
@@ -176,33 +197,18 @@ export default function ActionDashboard() {
   };
 
   React.useEffect(() => {
-    let countOfActions = actionCount;
-    ActionList.forEach(action => {
-      countOfActions.map(labelObj => {
-        if (action.status == labelObj.label) {
-          labelObj.count = labelObj.count + 1;
-        }
-      });
-    });
-    countOfActions[3].label = countOfActions[3].label;
-    setActionCount(countOfActions);
-    updateTable();
-  }, []);
-
-  React.useEffect(() => {
     const dummyJiraRows: any[] = [];
     let tempJiraRows: any = [];
-    ActionList.map(action => {
-      tempJiraRows.push(flattenObject(action));
-    });
-    tempJiraRows.map((jira: any) => {
+
+    jiraRows.map((jira: any) => {
       actionCount.map((action: any) => {
         if (action.selected && jira.status == action.label) {
           dummyJiraRows.push(jira);
         }
       });
     });
-    setJiraRows([...dummyJiraRows]);
+    // setJiraRows([...dummyJiraRows]);
+    setDisplayJiraRows([...dummyJiraRows]);
   }, [actionCount]);
 
   const searchFunction = (row1: any) => {
@@ -238,30 +244,22 @@ export default function ActionDashboard() {
 
   const [orderDirection, setOrderDirection] = React.useState('asc');
 
-  const sortArray = (arr: any, orderBy: any,idInput:string) => {
+  const sortArray = (arr: any, orderBy: any, idInput: string) => {
     var id = idInput;
-    if(id=="action.assigneeId"){
-      id="action.assigneeName";
+    if (id == 'action.assigneeId') {
+      id = 'action.assigneeName';
     }
-    console.log(arr,id)
     switch (orderBy) {
       case 'asc':
       default:
-        return arr.sort((a: any, b: any) =>
-
-       a[id].localeCompare(b[id]))
+        return arr.sort((a: any, b: any) => a[id].localeCompare(b[id]));
       case 'desc':
-        return arr.sort((a: any, b: any) =>
-        b[id].localeCompare(a[id]))
+        return arr.sort((a: any, b: any) => b[id].localeCompare(a[id]));
     }
   };
 
-  const handleSortRequest = (id:string) => {
-    let tempJiraRows: any = [];
-    ActionList.map(action => {
-      tempJiraRows.push(flattenObject(action));
-    });
-    setJiraRows(sortArray(tempJiraRows, orderDirection,id));
+  const handleSortRequest = (id: string, jira: any) => {
+    setDisplayJiraRows(sortArray(jira, orderDirection, id));
     setOrderDirection(orderDirection === 'asc' ? 'desc' : 'asc');
   };
 
@@ -350,6 +348,7 @@ export default function ActionDashboard() {
             variant="outlined"
             sx={{ marginBottom: '10px', background: 'white', width: '450px' }}
             onChange={e => setSearchedVal(e.target.value)}
+            value={searchedVal}
             InputProps={{
               startAdornment: (
                 <InputAdornment position="start">
@@ -363,7 +362,6 @@ export default function ActionDashboard() {
         </Box>
 
         <TableContainer sx={{ height: 'calc(100% - 280px)' }}>
-          
           <Table stickyHeader aria-label="sticky table">
             <TableHead>
               <TableRow>
@@ -372,20 +370,29 @@ export default function ActionDashboard() {
                     key={column.id}
                     align={column.align}
                     sx={{ borderBottom: '2px solid gray' }}
-                    onClick={()=>column.id!="teamId"&&handleSortRequest(column.id)}
+                    onClick={() =>
+                      column.id != 'teamId' &&
+                      handleSortRequest(column.id, displayJiraRows)
+                    }
                   >
-                    {column.id=="teamId"?<><BodySemiBoldTypography label={column.label} /></>:<TableSortLabel
-                      active={true}
-                      direction={orderDirection === 'asc' ? 'asc' : 'desc'}
-                    >
-                      <BodySemiBoldTypography label={column.label} />
-                    </TableSortLabel>}
+                    {column.id == 'teamId' ? (
+                      <>
+                        <BodySemiBoldTypography label={column.label} />
+                      </>
+                    ) : (
+                      <TableSortLabel
+                        active={true}
+                        direction={orderDirection === 'asc' ? 'asc' : 'desc'}
+                      >
+                        <BodySemiBoldTypography label={column.label} />
+                      </TableSortLabel>
+                    )}
                   </TableCell>
                 ))}
               </TableRow>
             </TableHead>
             <TableBody>
-              {jiraRows
+              {displayJiraRows
                 .filter((row1: any) =>
                   // note that I've incorporated the searchedVal length check here
                   searchFunction(row1)
@@ -423,7 +430,28 @@ export default function ActionDashboard() {
                                 minWidth: '150px',
                               }}
                             >
-                              <AssigneeDropdown id={value} />
+                              <AssigneeDropdown
+                                id={value}
+                                outAssigneeSelected={valueOut => {
+                                  setSearchedVal('');
+                                  var tempJiraRows = jiraRows;
+
+                                  tempJiraRows.map((obj: any, i: number) => {
+                                    if (index == i) {
+                                      obj[column.id] = valueOut.id;
+                                      obj['assigneeName'] = valueOut.name;
+                                      obj['assigneeAvatar'] = valueOut.avatar;
+                                    }
+                                  });
+                                  setJiraRows(tempJiraRows);
+                                  localStorage.setItem(
+                                    'actionList',
+                                    JSON.stringify(tempJiraRows)
+                                  );
+                                  setDisplayJiraRows(tempJiraRows);
+                               
+                                }}
+                              />
                             </TableCell>
                           );
                         } else if (column.id == 'status') {
@@ -435,7 +463,24 @@ export default function ActionDashboard() {
                                 minWidth: '80px',
                               }}
                             >
-                              <StatusDropDown status={value} />
+                              <StatusDropDown
+                                status={value}
+                                outStatusSelected={valueOut => {
+                                  var tempJiraRows = jiraRows;
+
+                                  tempJiraRows.map((obj: any, i: number) => {
+                                    if (index == i) {
+                                      obj[column.id] = valueOut;
+                                    }
+                                  });
+                                  setJiraRows(tempJiraRows);
+                                  localStorage.setItem(
+                                    'actionList',
+                                    JSON.stringify(tempJiraRows)
+                                  );
+                                  updateJiraCount(tempJiraRows);
+                                }}
+                              />
                               {/* {value} */}
                             </TableCell>
                           );
@@ -473,7 +518,9 @@ export default function ActionDashboard() {
         <TablePagination
           rowsPerPageOptions={[10, 25, 100]}
           component="div"
-          count={jiraRows.filter((row1: any) => searchFunction(row1)).length}
+          count={
+            displayJiraRows.filter((row1: any) => searchFunction(row1)).length
+          }
           rowsPerPage={rowsPerPage}
           page={page}
           onPageChange={handleChangePage}
