@@ -15,6 +15,7 @@ import * as Icons from 'heroicons-react';
 
 import {
   BodyRegularTypography,
+  BodySemiBoldTypography,
   ButtonLabelTypography,
   CaptionRegularTypography,
   CaptionSemiBoldTypography,
@@ -659,7 +660,7 @@ function EnterpriseDashboard() {
                   dashboard={true}
                   team={selectId}
                 />
-                <CaptionRegularTypography label="Count Of Actions (Assigned vs Completed)" />
+                <BodySemiBoldTypography label="Count Of Actions (Assigned vs Completed)" />
               </Box>
               {/* Team Level Actions Count Chart */}
               <Box
@@ -669,7 +670,7 @@ function EnterpriseDashboard() {
                 }}
               >
                 <TeamLevelActionsCountChart dashboard={true} />
-                <CaptionRegularTypography label="Team Level Actions (Assigned vs Completed)" />
+                <BodySemiBoldTypography label="Team Level Actions (Assigned vs Completed)" />
               </Box>
               {/* ------------------------Page Header ----------------------------- */}
               <Grid
@@ -737,7 +738,7 @@ function EnterpriseDashboard() {
                 }}
               >
                 <AverageParticipantChart dashboard={true} team={selectId} />
-                <CaptionRegularTypography label="Count Of All Participants Over Time" />
+                <BodySemiBoldTypography label="Count Of All Participants Over Time" />
               </Box>
               {/* Average Sessions Counts Chart Print*/}
               <Box
@@ -747,7 +748,7 @@ function EnterpriseDashboard() {
                 }}
               >
                 <AverageRetroChart dashboard={true} team={selectId} />
-                <CaptionRegularTypography label="Count of all Sessions" />
+                <BodySemiBoldTypography label="Count of all Sessions" />
               </Box>
               {/* ------------------------Page Header ----------------------------- */}
               <Grid
@@ -818,7 +819,7 @@ function EnterpriseDashboard() {
                   dashboard={true}
                   team={selectId}
                 />
-                <CaptionRegularTypography label="Enterprise Level - Sentiments - Key Themes Heatmap" />
+                <BodySemiBoldTypography label="Enterprise Level - Sentiments - Key Themes Heatmap" />
               </Box>
               {/* Enterprise Level Sentiments Moods Chart */}
               <Box
@@ -833,7 +834,7 @@ function EnterpriseDashboard() {
                   dashboard={true}
                   team={selectId}
                 />
-                <CaptionRegularTypography label=" Participants Sentiments - Moods" />
+                <BodySemiBoldTypography label="Participants Sentiments - Moods" />
               </Box>
               {/* ------------------------Page Header ----------------------------- */}
               <Grid
@@ -904,7 +905,7 @@ function EnterpriseDashboard() {
                   dashboard={true}
                   team={selectId}
                 />
-                <CaptionRegularTypography label="Enterprise Level - Overall Summary" />
+                <BodySemiBoldTypography label="Enterprise Level - Overall Summary" />
               </Box>
             </Box>
           </Box>
