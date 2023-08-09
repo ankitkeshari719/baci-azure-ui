@@ -17,13 +17,10 @@
     height: auto !important;
     overflow: visible !important;
   }
-  #non_print_box_1 {
-    display: none !important;
+  #top_data_print {
+    display: block !important;
   }
-  #non_print_box_2 {
-    display: none !important;
-  }
-  #print_box {
+  #page_header_1 {
     display: block !important;
   }
 }
