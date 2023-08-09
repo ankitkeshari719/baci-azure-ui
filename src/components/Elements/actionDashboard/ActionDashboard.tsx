@@ -372,7 +372,7 @@ export default function ActionDashboard() {
                     sx={{ borderBottom: '2px solid gray' }}
                     onClick={() =>
                       column.id != 'teamId' &&
-                      handleSortRequest(column.id, jiraRows)
+                      handleSortRequest(column.id, displayJiraRows)
                     }
                   >
                     {column.id == 'teamId' ? (
@@ -449,6 +449,7 @@ export default function ActionDashboard() {
                                     JSON.stringify(tempJiraRows)
                                   );
                                   setDisplayJiraRows(tempJiraRows);
+                               
                                 }}
                               />
                             </TableCell>
