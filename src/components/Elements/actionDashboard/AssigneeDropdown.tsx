@@ -4,7 +4,7 @@ import { Box, Button, Menu, MenuItem } from '@mui/material';
 import Avatar from '../Avatar';
 import { ChevronDownIcon } from '@heroicons/react/24/outline';
 
-export default function AssigneeDropdown({ id }: { id: string }) {
+export default function AssigneeDropdown({ id,outAssigneeSelected }: { id: string,outAssigneeSelected:(value:any)=>void }) {
   const [assigneeId, setAssigneeId] = React.useState<string>(id);
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
   const open = Boolean(anchorEl);
@@ -79,6 +79,7 @@ export default function AssigneeDropdown({ id }: { id: string }) {
                 value={user.id}
                 onClick={() => {
                   handleClose();
+                  outAssigneeSelected(user)
                   setAssigneeId(user.id);
                 }}
               >

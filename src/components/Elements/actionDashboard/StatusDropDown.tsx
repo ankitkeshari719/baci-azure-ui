@@ -17,7 +17,7 @@ function getStyles(name: any, personName: string, theme: Theme) {
   };
 }
 
-export default function StatusDropDown({ status }: { status: string }) {
+export default function StatusDropDown({ status,outStatusSelected }: { status: string,outStatusSelected:(event:string)=> void }) {
   const theme = useTheme();
   const [statusSelected, setStatusSelected] = React.useState<string>(status);
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
@@ -35,6 +35,8 @@ export default function StatusDropDown({ status }: { status: string }) {
     });
     return color;
   };
+
+
 
   const handleClose = () => {
     setAnchorEl(null);
@@ -87,6 +89,7 @@ export default function StatusDropDown({ status }: { status: string }) {
               style={getStyles(name, statusSelected, theme)}
               onClick={() => {
                 setStatusSelected(name.label);
+                outStatusSelected(name.label);
                 handleClose();
               }}
             >
