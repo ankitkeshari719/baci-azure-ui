@@ -35,6 +35,7 @@ import {
   FunnelIcon,
   MagnifyingGlassIcon,
 } from '@heroicons/react/24/outline';
+import CsvDownloader from 'react-csv-downloader';
 
 interface Column {
   id:
@@ -43,45 +44,79 @@ interface Column {
     | 'initialSession'
     | 'action.value'
     | 'action.assigneeId'
+    |'action.assigneeName'
     | 'startDate'
     | 'status'
     | 'teamId';
   label: string;
   minWidth?: number;
   align?: 'right';
+  displayName?:string;
   format?: (value: number) => string;
 }
 
 const columns: Column[] = [
-  { id: 'teamName', label: 'Team', minWidth: 200 },
-  { id: 'jiraId', label: 'JIRA ID', minWidth: 200 },
-  { id: 'action.value', label: 'Action', minWidth: 300 },
+  { id: 'teamName', label: 'Team', minWidth: 200,displayName:"Team" },
+  { id: 'jiraId', label: 'JIRA ID', minWidth: 200,displayName:"JIRA ID'" },
+  { id: 'action.value', label: 'Action', minWidth: 300,displayName:"Action" },
   {
     id: 'initialSession',
     label: 'Initial Session',
 
-    minWidth: 250,
+    minWidth: 250,displayName:"Initial Session"
   },
   {
     id: 'action.assigneeId',
     label: 'Assignee',
-    minWidth: 90,
+    minWidth: 90,displayName:"Assignee"
   },
   {
     id: 'startDate',
     label: 'Start Date',
     //  type:Date(),
-    minWidth: 90,
+    minWidth: 90,displayName:"Start Date"
   },
   {
     id: 'status',
     label: 'Status',
-    minWidth: 90,
+    minWidth: 90,displayName:"Status"
   },
   {
     id: 'teamId',
     label: 'Action',
-    minWidth: 20,
+    minWidth: 20,displayName:"Action"
+  },
+];
+const columns2: Column[] = [
+  { id: 'teamName', label: 'Team', minWidth: 200,displayName:"Team" },
+  { id: 'jiraId', label: 'JIRA ID', minWidth: 200,displayName:"JIRA ID'" },
+  { id: 'action.value', label: 'Action', minWidth: 300,displayName:"Action" },
+  {
+    id: 'initialSession',
+    label: 'Initial Session',
+
+    minWidth: 250,displayName:"Initial Session"
+  },
+  {
+    id: 'action.assigneeName',
+    label: 'Assignee',
+    minWidth: 90,displayName:"Assignee"
+  },
+  {
+    id: 'startDate',
+    label: 'Start Date',
+    //  type:Date(),
+    minWidth: 90,displayName:"Start Date"
+  },
+  {
+    id: 'status',
+    label: 'Status',
+    minWidth: 90,displayName:"Status"
+  },
+  {
+    id: 'teamId',
+    label: 'Action',
+    minWidth: 20,displayName:"Action"
   },
 ];
 
@@ -357,8 +392,16 @@ export default function ActionDashboard() {
               ),
             }}
           />
-
-          <FunnelIcon width="32px" style={{ cursor: 'pointer' }} />
+<CsvDownloader
+        filename="Action List"
+        extension=".csv"
+        separator=";"
+        wrapColumnChar="'"
+        columns={columns2}
+        datas={displayJiraRows}
+        text="Export To CSV" />
+          {/* <FunnelIcon width="32px" style={{ cursor: 'pointer' }} /> */}
+       
         </Box>
 
         <TableContainer sx={{ height: 'calc(100% - 280px)' }}>
