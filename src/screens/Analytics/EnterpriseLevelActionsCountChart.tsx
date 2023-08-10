@@ -300,7 +300,7 @@ export default function EnterpriseLevelActionsCountChart({
               onClick={() => navigate(-1)}
             />
             <H2SemiBoldTypography
-              label="Count of actions (Assigned vs Completed) all teams"
+              label="Count of All Actions (Assigned vs Completed)"
               style={{ color: '#2C69A1', marginLeft: '16px' }}
             />
           </Grid>

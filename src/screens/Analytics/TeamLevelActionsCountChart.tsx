@@ -339,7 +339,7 @@ export default function TeamLevelActionsCountChart({
               onClick={() => navigate(-1)}
             />
             <H2SemiBoldTypography
-              label="Count of actions (Assigned vs Completed)"
+              label="Count of Team Actions (Assigned vs Completed)"
               style={{ color: '#2C69A1', marginLeft: '16px' }}
             />
           </Grid>
