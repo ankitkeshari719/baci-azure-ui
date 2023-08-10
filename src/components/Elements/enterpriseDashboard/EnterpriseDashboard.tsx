@@ -738,7 +738,7 @@ function EnterpriseDashboard() {
                 }}
               >
                 <AverageParticipantChart dashboard={true} team={selectId} />
-                <BodySemiBoldTypography label="Count Of All Participants Over Time" />
+                <BodySemiBoldTypography label="Count of All Participants Over Time" />
               </Box>
               {/* Average Sessions Counts Chart Print*/}
               <Box
@@ -748,7 +748,7 @@ function EnterpriseDashboard() {
                 }}
               >
                 <AverageRetroChart dashboard={true} team={selectId} />
-                <BodySemiBoldTypography label="Count of all Sessions" />
+                <BodySemiBoldTypography label="Count of All Sessions" />
               </Box>
               {/* ------------------------Page Header ----------------------------- */}
               <Grid
