@@ -19,6 +19,7 @@ import {
   InputAdornment,
   TextField,
   TableSortLabel,
+  Button,
 } from '@mui/material';
 
 import {
@@ -44,80 +45,88 @@ interface Column {
     | 'initialSession'
     | 'action.value'
     | 'action.assigneeId'
-    |'action.assigneeName'
+    | 'action.assigneeName'
     | 'startDate'
     | 'status'
     | 'teamId';
   label: string;
   minWidth?: number;
   align?: 'right';
-  displayName?:string;
+  displayName?: string;
   format?: (value: number) => string;
 }
 
 const columns: Column[] = [
-  { id: 'teamName', label: 'Team', minWidth: 200,displayName:"Team" },
-  { id: 'jiraId', label: 'JIRA ID', minWidth: 200,displayName:"JIRA ID'" },
-  { id: 'action.value', label: 'Action', minWidth: 300,displayName:"Action" },
+  { id: 'teamName', label: 'Team', minWidth: 200, displayName: 'Team' },
+  { id: 'jiraId', label: 'JIRA ID', minWidth: 200, displayName: "JIRA ID'" },
+  { id: 'action.value', label: 'Action', minWidth: 300, displayName: 'Action' },
   {
     id: 'initialSession',
     label: 'Initial Session',
 
-    minWidth: 250,displayName:"Initial Session"
+    minWidth: 250,
+    displayName: 'Initial Session',
   },
   {
     id: 'action.assigneeId',
     label: 'Assignee',
-    minWidth: 90,displayName:"Assignee"
+    minWidth: 90,
+    displayName: 'Assignee',
   },
   {
     id: 'startDate',
     label: 'Start Date',
     //  type:Date(),
-    minWidth: 90,displayName:"Start Date"
+    minWidth: 90,
+    displayName: 'Start Date',
   },
   {
     id: 'status',
     label: 'Status',
-    minWidth: 90,displayName:"Status"
+    minWidth: 90,
+    displayName: 'Status',
   },
   {
     id: 'teamId',
     label: 'Action',
-    minWidth: 20,displayName:"Action"
+    minWidth: 20,
+    displayName: 'Action',
   },
 ];
-const columns2: Column[] = [
-  { id: 'teamName', label: 'Team', minWidth: 200,displayName:"Team" },
-  { id: 'jiraId', label: 'JIRA ID', minWidth: 200,displayName:"JIRA ID'" },
-  { id: 'action.value', label: 'Action', minWidth: 300,displayName:"Action" },
+const columns2: any[] = [
+  {id:'r1',displayName:''},
+  {id:'r2',displayName:''},
+  
+  { id: 'teamName', label: 'Team', minWidth: 200, displayName: '' },
+  { id: 'jiraId', label: 'JIRA ID', minWidth: 200, displayName: ''},
+  { id: 'action.value', label: 'Action', minWidth: 300, displayName: '' },
   {
     id: 'initialSession',
     label: 'Initial Session',
 
-    minWidth: 250,displayName:"Initial Session"
+    minWidth: 250,
+    displayName: '',
   },
   {
     id: 'action.assigneeName',
     label: 'Assignee',
-    minWidth: 90,displayName:"Assignee"
+    minWidth: 90,
+    displayName: '',
   },
   {
     id: 'startDate',
     label: 'Start Date',
     //  type:Date(),
-    minWidth: 90,displayName:"Start Date"
+    minWidth: 90,
+    displayName: '',
   },
   {
     id: 'status',
     label: 'Status',
-    minWidth: 90,displayName:"Status"
+    minWidth: 90,
+    displayName: '',
   },
-  {
-    id: 'teamId',
-    label: 'Action',
-    minWidth: 20,displayName:"Action"
-  },
+
 ];
 
 const StyledTableRow = styled(TableRow)(({ theme }) => ({
@@ -159,6 +168,8 @@ const ActionCount = [
 export default function ActionDashboard() {
   const [jiraRows, setJiraRows] = React.useState<any>([]);
   const [displayJiraRows, setDisplayJiraRows] = React.useState<any>([]);
+  const [csvData, setCsvData] = React.useState<any>([]);
+
   const [page, setPage] = React.useState(0);
   const [rowsPerPage, setRowsPerPage] = React.useState(10);
   const [searchedVal, setSearchedVal] = React.useState('');
@@ -298,6 +309,31 @@ export default function ActionDashboard() {
     setOrderDirection(orderDirection === 'asc' ? 'desc' : 'asc');
   };
 
+  React.useEffect(()=>{
+    let initialData=[]
+    console.log(new Date().toLocaleString()+"","date")
+    initialData.push({r1:'Date : ',r2:new Date().toLocaleString()+""});
+
+    actionCount.forEach(action=>{
+      if(action.selected){
+        initialData.push({r1:action.label,r2:action.count})
+      }
+    })
+
+initialData.push(
+
+  {teamName:'Team', jiraId:'JIRA ID',"action.value":"Action",initialSession:'Initial Session', "action.assigneeName":'Assignee',startDate:"Start Date",status:'Status',
+teamId:'Action'}
+)
+
+    displayJiraRows.forEach((element:any )=> {
+      initialData.push(element);
+    });
+
+    setCsvData([...initialData]);
+
+   
+  },[displayJiraRows])
   return (
     <>
       <Paper
@@ -392,16 +428,29 @@ export default function ActionDashboard() {
               ),
             }}
           />
-<CsvDownloader
-        filename="Action List"
-        extension=".csv"
-        separator=";"
-        wrapColumnChar="'"
-        columns={columns2}
-        datas={displayJiraRows}
-        text="Export To CSV" />
+    
+            <CsvDownloader
+              filename="BACI Action List"
+              extension=".csv"
+              separator=";"
+              wrapColumnChar=""
+              columns={columns2}
+              datas={csvData}
+              text="Export To CSV"
+              noHeader={true}
+              style={{
+                background:"#3498db",
+                color:"white",
+                padding:'10px 20px',
+                border:'none',
+                cursor:'pointer',
+                fontSize:'16px',
+                borderRadius:'10px'
+
+              }}
+            />
+     
           {/* <FunnelIcon width="32px" style={{ cursor: 'pointer' }} /> */}
-       
         </Box>
 
         <TableContainer sx={{ height: 'calc(100% - 280px)' }}>
@@ -492,7 +541,6 @@ export default function ActionDashboard() {
                                     JSON.stringify(tempJiraRows)
                                   );
                                   setDisplayJiraRows(tempJiraRows);
-                               
                                 }}
                               />
                             </TableCell>
