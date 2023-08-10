@@ -26,6 +26,7 @@ import {
 } from '../../components/CustomizedTypography';
 import * as Icons from 'heroicons-react';
 import { MONTH_SELECTORS, MenuProps } from './const';
+import { GlobalContext } from '../../contexts/GlobalContext';
 
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
   [`&.${tableCellClasses.head}`]: {
@@ -53,8 +54,15 @@ export default function AverageRetroChart({
   const [retrosCounts, setRetrosCounts] = useState<any>([]);
   const [averageRetros, setAverageRetros] = useState([]);
   const [months, setMonths] = useState([]);
-  const [fromDate, setFromDate] = useState<string>('10');
-  const [toDate, setToDate] = useState<string>('16');
+  const [global, dispatch] = React.useContext(GlobalContext);
+  const [fromDate, setFromDate] = useState<string>(
+    global.chartStartDate ? global.chartStartDate : '10'
+  );
+  const [toDate, setToDate] = useState<string>(
+    global.chartEndDate ? global.chartEndDate : '16'
+  );
+
+
   const [selectedFromDate, setSelectedFromDate] = useState<string>();
   const [selectedToDate, setSelectedToDate] = useState<string>();
   const [totalAverageSessions, setTotalAverageSessions] = useState<number>();
@@ -82,7 +90,21 @@ export default function AverageRetroChart({
         return '500';
     }
   };
-
+  React.useEffect(() => {
+    const fromDateInput = global.chartStartDate;
+    const toDateInput = global.chartEndDate;
+    if (
+      fromDateInput != '' &&
+      fromDateInput != undefined &&
+      fromDateInput != null
+    ) {
+      setFromDate(fromDateInput);
+    }
+    if (toDateInput != '' && toDateInput != undefined && toDateInput != null) {
+      setToDate(toDateInput);
+    }
+  }, [global.chartStartDate, global.chartEndDate]);
+  
   React.useEffect(() => {
     const tempSelectedFromDate = MONTH_SELECTORS.filter(
       monthSelector => monthSelector.id === Number(fromDate)
