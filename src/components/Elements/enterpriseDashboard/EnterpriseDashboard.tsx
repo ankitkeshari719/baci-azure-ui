@@ -660,7 +660,7 @@ function EnterpriseDashboard() {
                   dashboard={true}
                   team={selectId}
                 />
-                <BodySemiBoldTypography label="Count Of All Actions (Assigned vs Completed)" />
+                <BodySemiBoldTypography label="Count of All Actions (Assigned vs Completed)" />
               </Box>
               {/* Team Level Actions Count Chart */}
               <Box
