@@ -315,38 +315,92 @@ export function LandingPage({ isDemo }: { isDemo?: boolean }) {
             >
               {isDemo ? (
                 <>
-                  <Box display="flex" flexDirection="row">
-                    <ContainedButton
-                      id={'login_as_facilitator'}
-                      name={'Facilitator Login'}
-                      onClick={() => {
-                        setDummyUser();
-                        navigate('facilitator/dashboard/');
-                      }}
+                  <Grid
+                    item
+                    xs={12}
+                    marginRight="50px"
+                    marginLeft="50px"
+                    display="flex"
+                    flexDirection="column"
+                    height="100%"
+                    justifyContent="center"
+                  >
+                    <H2RegularTypography
+                      label={'What BACI retro are you joining today?'}
                       style={{
-                        // width: '100%',
-                        marginRight: '40px',
-                        padding: '10px 20px',
-                        gap: '8px',
+                        color: '#2C69A1',
                       }}
-                      size={'medium'}
                     />
-                    <ContainedButton
-                      id={'login_as_enterprise'}
-                      name={'Enterprise Login'}
-                      onClick={() => {
-                        setDummyUser();
-                        navigate('enterprise/dashboard/');
+                    <Box component="span" mt="50px" />
+                    <TextField
+                      autoFocus
+                      variant="standard"
+                      label="Retro access code"
+                      error={!!codeError}
+                      sx={styles.accessCodeTextField}
+                      onKeyDown={e => {
+                        if (e.keyCode === 13) {
+                          joinRetro();
+                        }
                       }}
-                      style={{
-                        // width: '100%',
-                        // marginTop: '80px',
-                        padding: '10px 20px',
-                        gap: '8px',
+                      value={humanId}
+                      onChange={e => {
+                        setHumanId(e.currentTarget.value);
+                        setCodeError('');
                       }}
-                      size={'medium'}
                     />
-                  </Box>
+                    {codeError !== '' && (
+                      <FormHelperText
+                        style={{ color: '#d32f2f', marginLeft: '5px' }}
+                      >
+                        {codeError}
+                      </FormHelperText>
+                    )}
+                    <Box>
+                      <Box display="flex" flexDirection="row">
+                        <ContainedButton
+                          id={'join_retro_button_desktop'}
+                          name={'Go on..'}
+                          onClick={() => joinRetro()}
+                          style={{
+                            // // width: '100%',
+                            marginTop: '80px',
+                            padding: '10px 20px',
+                            gap: '8px',
+                          }}
+                          size={'medium'}
+                        />
+                        <ContainedButton
+                          id={'login_as_enterprise'}
+                          name={'Go to Dashboard'}
+                          onClick={() => {
+                            setDummyUser();
+                            navigate('enterprise/dashboard/');
+                          }}
+                          style={{
+                            width: '40%',
+                            marginTop: '80px',
+                            marginLeft: '24px',
+                            padding: '10px 20px',
+                            gap: '8px',
+                          }}
+                          size={'medium'}
+                        />
+                      </Box>
+                      {isSmUp && (
+                        <TextButton
+                          id={'create_new__retro_button_desktop'}
+                          label={'Create New Retro'}
+                          onClick={() => CreateNewRetro()}
+                          style={{
+                            marginTop: '20px',
+                            textDecorationLine: 'underline',
+                          }}
+                          size={'medium'}
+                        />
+                      )}
+                    </Box>
+                  </Grid>
                 </>
               ) : (
                 <Grid
