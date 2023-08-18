@@ -244,6 +244,21 @@ function EnterpriseDashboard() {
     });
   };
 
+  const getTeamNameOnSelect = (selectId: string) => {
+    console.log(selectId);
+    let teamName = "";
+    if(selectId === "0"){
+      teamName = "All Teams Analytics";
+    }else if(selectId === "1"){
+      teamName = "Mobile Experience Team Analytics";
+    }else if(selectId === "2"){
+      teamName = "Superannuation Product Team Analytics";
+    }else if(selectId === "3"){
+      teamName = "Insurance Team Analytics";
+    }
+    return teamName;
+  };
+
   return (
     <>
       <Box
@@ -595,7 +610,7 @@ function EnterpriseDashboard() {
                       }}
                     >
                       <H4SemiBoldTypography
-                        label="All Teams Analytics"
+                        label={getTeamNameOnSelect(selectId)}
                         style={{ color: '#2C69A1' }}
                       />
                       <TinyTextTypography
