@@ -116,6 +116,7 @@ export interface JiraActionInterface {
   startDate:string;
   // TO DO , IN - PROGRESS, DONE, CANCELLED
   status:string; 
+  url?:string;
 
 }
 
