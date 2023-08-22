@@ -245,7 +245,6 @@ function EnterpriseDashboard() {
   };
 
   const getTeamNameOnSelect = (selectId: string) => {
-    console.log(selectId);
     let teamName = "";
     if(selectId === "0"){
       teamName = "All Teams Analytics";
