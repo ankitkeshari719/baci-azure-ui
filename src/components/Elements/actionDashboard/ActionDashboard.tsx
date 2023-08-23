@@ -37,6 +37,7 @@ import {
   MagnifyingGlassIcon,
 } from '@heroicons/react/24/outline';
 import CsvDownloader from 'react-csv-downloader';
+import { useNavigate } from 'react-router-dom';
 
 interface Column {
   id:
@@ -175,7 +176,7 @@ export default function ActionDashboard() {
   const [searchedVal, setSearchedVal] = React.useState('');
 
   const [actionCount, setActionCount] = React.useState<any[]>(ActionCount);
-
+  const navigate = useNavigate();
   React.useEffect(() => {
     const localActionList = localStorage.getItem('actionList');
     var tempActionList: any[] = [];
@@ -508,9 +509,12 @@ teamId:'Action'}
                               sx={{
                                 color: 'rgba(0, 0, 238, 1)',
                                 minWidth: '100px',
+                                cursor:'pointer'
                               }}
+                         
                             >
-                              {value}
+                              <a href={row["url"]} target="_blank">
+                              {value}</a>
                             </TableCell>
                           );
                         } else if (column.id == 'action.assigneeId') {
