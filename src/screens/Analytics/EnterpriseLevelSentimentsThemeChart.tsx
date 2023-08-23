@@ -1,34 +1,85 @@
 import React, { useState } from 'react';
-import { getParticipantsCount } from '../../helpers/msal/services';
 import ReactApexChart from 'react-apexcharts';
 import { ApexOptions } from 'apexcharts';
-import { Box, Grid } from '@mui/material';
 import {
-  H1RegularTypography,
-  H3RegularTypography,
+  Box,
+  FormControl,
+  Grid,
+  MenuItem,
+  Select,
+  SelectChangeEvent,
+} from '@mui/material';
+import {
+  BodyRegularTypography,
+  ButtonLabelTypography,
+  H2SemiBoldTypography,
+  H4RegularTypography,
 } from '../../components/CustomizedTypography';
-import { ContainedButton } from '../../components';
-import { useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
+import * as Icons from 'heroicons-react';
+import { MONTH_SELECTORS, MenuProps } from './const';
+import { getEnterpriseLevelSentimentsTheme } from '../../helpers/msal/services';
+import { GlobalContext } from '../../contexts/GlobalContext';
 
-export default function EnterpriseLevelSentimentsThemeChart() {
-  const [participantsCounts, setParticipantsCounts] = useState<any>([]);
-  const [averageParticipants, setAverageParticipants] = useState([]);
-  const [months, setMonths] = useState([]);
+export default function EnterpriseLevelSentimentsThemeChart({
+  dashboard,
+  team,
+}: {
+  dashboard?: boolean;
+
+  team: string;
+}) {
   const navigate = useNavigate();
+  const windowWidth = React.useRef(window.innerWidth);
+  const [heatMapData, setHeatMapData] = useState<any>([]);
+  const [sadPercentage, setSadPercentage] = useState<number>();
+  const [neutralPercentage, setNeutralPercentage] = useState<number>();
+  const [happyPercentage, setHappyPercentage] = useState<number>();
+  const [global, dispatch] = React.useContext(GlobalContext);
+  const [fromDate, setFromDate] = useState<string>(
+    global.chartStartDate ? global.chartStartDate : '10'
+  );
+  const [toDate, setToDate] = useState<string>(
+    global.chartEndDate ? global.chartEndDate : '16'
+  );
+
+  const getChartWidth = () => {
+    switch (true) {
+      case windowWidth.current <= 1051:
+        return '700';
+      case windowWidth.current > 1051 && windowWidth.current <= 1150:
+        return '750';
+      case windowWidth.current >= 1151 && windowWidth.current <= 1199:
+        return '800';
+      case windowWidth.current >= 1200 && windowWidth.current <= 1300:
+        return '900';
+      case windowWidth.current >= 1301 && windowWidth.current <= 1400:
+        return '1000';
+      case windowWidth.current >= 1401 && windowWidth.current <= 1500:
+        return '1050';
+      case windowWidth.current >= 1500:
+        return '1100';
+      default:
+        return '500';
+    }
+  };
 
   React.useEffect(() => {
-    handleGetParticipantChartData();
-  }, []);
+    handleGetEnterpriseLevelSentimentsThemes();
+  }, [fromDate, toDate]);
 
-  const handleGetParticipantChartData = async () => {
-    await getParticipantsCount().then(
+  React.useEffect(() => {
+    handleGetEnterpriseLevelSentimentsThemes();
+  }, [team]);
+
+  const handleGetEnterpriseLevelSentimentsThemes = async () => {
+    await getEnterpriseLevelSentimentsTheme(fromDate, toDate, team).then(
       res => {
         if (res && res.result) {
-          setParticipantsCounts(res.result);
-          setAverageParticipants(
-            res.result?.map((item: any) => item.averageParticipants)
-          );
-          setMonths(res.result?.map((item: any) => item.month));
+          setHeatMapData(res.result.series);
+          setSadPercentage(res.result.sadPercentage);
+          setNeutralPercentage(res.result.neutralPercentage);
+          setHappyPercentage(res.result.happyPercentage);
         }
       },
       err => {
@@ -37,52 +88,41 @@ export default function EnterpriseLevelSentimentsThemeChart() {
     );
   };
 
-  const series = [
-    //data on the y-axis
-    {
-      name: 'Total No. of Participants',
-      data: averageParticipants,
-    },
-  ];
+  const handleFromDate = (event: SelectChangeEvent) => {
+    setFromDate(event.target.value as string);
+  };
+
+  const handleToDate = (event: SelectChangeEvent) => {
+    setToDate(event.target.value as string);
+  };
 
   const options: ApexOptions = {
     //data on the x-axis
     xaxis: {
-      categories: months,
+      categories: ['Sad', 'Neutral', 'Happy'],
     },
     chart: {
-      id: 'area-chart',
+      type: 'heatmap',
       height: 350,
+      stacked: true,
       zoom: {
         enabled: false,
       },
-    },
-    title: {
-      text: 'Avg. Participants per Month',
-      style: {
-        fontFamily: 'Poppins',
-        fontWeight: '400',
-        fontSize: '18px',
-        color: '#4E4E4E',
-      },
-    },
-    subtitle: {
-      text: '154 Participants',
-      style: {
-        fontFamily: 'Poppins',
-        fontWeight: '400',
-        fontSize: '24px',
-        color: '#000000',
+      toolbar: {
+        show: true,
+        tools: {
+          download: false,
+        },
       },
     },
     dataLabels: {
-      enabled: true,
+      enabled: false,
       textAnchor: 'start',
       style: {
         fontFamily: 'Poppins',
         fontWeight: '400',
         fontSize: '12px',
-        colors: ['#ffffff'],
+        colors: ['#333333'],
       },
       background: {
         enabled: true,
@@ -94,17 +134,19 @@ export default function EnterpriseLevelSentimentsThemeChart() {
       },
     },
     stroke: {
-      show: true,
       curve: 'smooth',
-      lineCap: 'butt',
-      colors: undefined,
-      width: 2,
-      dashArray: 0,
+    },
+    fill: {
+      type: 'gradient',
+      gradient: {
+        opacityFrom: 0.6,
+        opacityTo: 0.8,
+      },
     },
     grid: {
       show: true,
-      borderColor: '#CCCCCC',
-      strokeDashArray: 3,
+      borderColor: '#ffffff',
+      strokeDashArray: 0,
       position: 'front',
       xaxis: {
         lines: {
@@ -118,59 +160,166 @@ export default function EnterpriseLevelSentimentsThemeChart() {
       },
     },
     legend: {
-      show: true,
-      position: 'top',
-      horizontalAlign: 'right',
+      show: false,
+      position: 'bottom',
+      horizontalAlign: 'center',
+      offsetX: 40,
+    },
+    plotOptions: {
+      heatmap: {
+        shadeIntensity: 0.5,
+        radius: 0,
+        useFillColorAsStroke: true,
+        colorScale: {
+          ranges: [
+            {
+              from: 1,
+              to: 25,
+              color: '#EBF8FF',
+            },
+            {
+              from: 26,
+              to: 50,
+              color: '#D6F1FF',
+            },
+            {
+              from: 51,
+              to: 75,
+              color: '#C2EBFF',
+            },
+            {
+              from: 76,
+              to: 100,
+              color: '#ADE4FF',
+            },
+            {
+              from: 100,
+              to: 125,
+              color: '#99DDFF',
+            },
+            {
+              from: 126,
+              to: 150,
+              color: '#7CCBF3',
+            },
+            {
+              from: 151,
+              to: 200,
+              color: '#57BDEF',
+            },
+            {
+              from: 201,
+              to: 250,
+              color: '#44B5EE',
+            },
+            {
+              from: 251,
+              to: 300,
+              color: '#32AEEC',
+            },
+            {
+              from: 301,
+              to: 350,
+              color: '#1FA6EA',
+            },
+            {
+              from: 351,
+              to: 400,
+              color: '#3296d6',
+            },
+            {
+              from: 401,
+              to: 450,
+              color: '#4F91CF',
+            },
+            {
+              from: 451,
+              to: 500,
+              color: '#3F87CA',
+            },
+            {
+              from: 501,
+              to: 550,
+              color: '#357DC0',
+            },
+            {
+              from: 551,
+              to: 600,
+              color: '#3072B0',
+            },
+            {
+              from: 601,
+              to: 650,
+              color: '#2C68A0',
+            },
+            {
+              from: 651,
+              to: 700,
+              color: '#275E90',
+            },
+            {
+              from: 701,
+              to: 750,
+              color: '#235380',
+            },
+            {
+              from: 751,
+              to: 800,
+              color: '#1F4970',
+            },
+            {
+              from: 801,
+              to: 850,
+              color: '#1A3E60',
+            },
+            {
+              from: 851,
+              to: 900,
+              color: '#163450',
+            },
+            {
+              from: 901,
+              to: 950,
+              color: '#0C1F31',
+            },
+            {
+              from: 951,
+              to: 1000,
+              color: '#040A10',
+            },
+          ],
+        },
+      },
     },
   };
 
+  React.useEffect(() => {
+    const fromDateInput = global.chartStartDate;
+    const toDateInput = global.chartEndDate;
+    if (
+      fromDateInput != '' &&
+      fromDateInput != undefined &&
+      fromDateInput != null
+    ) {
+      setFromDate(fromDateInput);
+    }
+    if (toDateInput != '' && toDateInput != undefined && toDateInput != null) {
+      setToDate(toDateInput);
+    }
+  }, [global.chartStartDate, global.chartEndDate]);
   return (
-    <Box sx={{ overflowY: 'auto' }} height="calc(var(--app-height))">
-      <Box sx={{ margin: '48px' }}>
-        {/* Analytics Title */}
-        <Box
-          sx={{
-            width: '100%',
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-          }}
-        >
-          <H1RegularTypography label="Analytics" />
-        </Box>
-        {/* Back Button */}
-        <Box
-          sx={{
-            width: '100%',
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'flex-start',
-          }}
-        >
-          <ContainedButton
-            id="go_back_to_analytics"
-            name="Back"
-            onClick={() => navigate('/analytics/')}
-            size={'small'}
-          />
-        </Box>
-        {/* Chart Title */}
-        <Box
-          sx={{
-            width: '100%',
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-            marginTop: '48px',
-          }}
-        >
-          <H3RegularTypography
-            label=".Analytics - Enterprise Level - Sentiments - Key Themes Heatmap."
-            style={{ color: '#767676' }}
-          />
-        </Box>
-        {/* Chart */}
-        <Grid container spacing={2} sx={{ marginTop: '48px' }}>
+    <>
+      {dashboard ? (
+        <ReactApexChart
+          series={heatMapData}
+          options={options}
+          type="heatmap"
+          width="518"
+          height="320"
+        />
+      ) : (
+        <Grid container spacing={2} sx={{ padding: '48px', overflowY: 'auto' }}>
+          {/* Route Path */}
           <Grid
             item
             xs={12}
@@ -178,19 +327,243 @@ export default function EnterpriseLevelSentimentsThemeChart() {
               padding: '0px !important',
               display: 'flex',
               alignItems: 'center',
+              justifyContent: 'flex-start',
+            }}
+          >
+            <Link to={'/facilitator/analytics/'}>Analytics </Link>&nbsp;\ Key
+            themes heatmap
+          </Grid>
+          {/* Back Button & Chart Title */}
+          <Grid
+            item
+            xs={12}
+            sx={{
+              padding: '0px !important',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'flex-start',
+              marginTop: '24px',
+            }}
+          >
+            <Icons.ArrowCircleLeftOutline
+              size={32}
+              style={{
+                cursor: 'pointer',
+                color: '#159ADD',
+              }}
+              onClick={() => navigate(-1)}
+            />
+            <H2SemiBoldTypography
+              label="Key themes heatmap"
+              style={{ color: '#2C69A1', marginLeft: '16px' }}
+            />
+          </Grid>
+          {/* Selector */}
+          <Grid
+            item
+            xs={12}
+            sx={{
+              padding: '0px !important',
+              display: 'flex',
+              flexDirection: 'row',
+              alignItems: 'center',
+              justifyContent: 'center',
+              marginTop: '16px',
+            }}
+          >
+            {/* Select Range Title */}
+            <ButtonLabelTypography
+              label="Select Range:"
+              style={{
+                color: '#343434',
+              }}
+            />
+            {/* From Date */}
+            <Box
+              sx={{ minWidth: 240, marginLeft: '16px', marginRight: '16px' }}
+            >
+              <FormControl fullWidth>
+                <Select
+                  sx={{
+                    fieldset: {
+                      border: 'none',
+                      opacity: 1,
+                      color: '#4E4E4E',
+                    },
+                  }}
+                  labelId="from-Date"
+                  id="from_date"
+                  value={fromDate}
+                  label="From"
+                  onChange={handleFromDate}
+                  IconComponent={props => (
+                    <Icons.ChevronDownOutline
+                      size={24}
+                      color="#4E4E4E"
+                      style={{
+                        cursor: 'pointer',
+                        position: 'absolute',
+                        top: 'calc(50% - 0.8em)',
+                      }}
+                      {...props}
+                    />
+                  )}
+                  MenuProps={MenuProps}
+                >
+                  {MONTH_SELECTORS.map(month_selector => {
+                    return (
+                      <MenuItem
+                        value={month_selector.id}
+                        key={month_selector.id}
+                      >
+                        {month_selector.month}
+                      </MenuItem>
+                    );
+                  })}
+                </Select>
+              </FormControl>
+            </Box>
+            <ButtonLabelTypography
+              label="To"
+              style={{
+                color: '#343434',
+              }}
+            />
+            {/*To Date */}
+            <Box sx={{ minWidth: 240, marginLeft: '16px' }}>
+              <FormControl fullWidth>
+                <Select
+                  sx={{
+                    fieldset: {
+                      border: 'none',
+                      opacity: 1,
+                      color: '#4E4E4E',
+                    },
+                  }}
+                  labelId="to-Date"
+                  id="to_date"
+                  value={toDate}
+                  label="To"
+                  onChange={handleToDate}
+                  IconComponent={props => (
+                    <Icons.ChevronDownOutline
+                      size={24}
+                      color="#4E4E4E"
+                      style={{
+                        cursor: 'pointer',
+                        position: 'absolute',
+                        top: 'calc(50% - 0.8em)',
+                      }}
+                      {...props}
+                    />
+                  )}
+                  MenuProps={MenuProps}
+                >
+                  {MONTH_SELECTORS.map(month_selector => {
+                    return (
+                      <MenuItem
+                        value={month_selector.id}
+                        key={month_selector.id}
+                      >
+                        {month_selector.month}
+                      </MenuItem>
+                    );
+                  })}
+                </Select>
+              </FormControl>
+            </Box>
+          </Grid>
+          {/* Percentage */}
+          <Grid
+            item
+            xs={3}
+            sx={{
+              padding: '0px !important',
+              marginTop: '32px',
+            }}
+          ></Grid>
+          <Grid
+            item
+            xs={7}
+            sx={{
+              padding: '0px !important',
+              marginTop: '32px',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'space-evenly',
+            }}
+          >
+            <Box
+              sx={{
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                flexDirection: 'column',
+              }}
+            >
+              <H4RegularTypography label={sadPercentage?.toString() + '%'} />
+              <BodyRegularTypography label="Sad" />
+            </Box>
+            <Box
+              sx={{
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                flexDirection: 'column',
+              }}
+            >
+              <H4RegularTypography
+                label={neutralPercentage?.toString() + '%'}
+              />
+              <BodyRegularTypography label="Neutral" />
+            </Box>
+            <Box
+              sx={{
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                flexDirection: 'column',
+              }}
+            >
+              <H4RegularTypography label={happyPercentage?.toString() + '%'} />
+              <BodyRegularTypography label="Happy" />
+            </Box>
+          </Grid>
+          {/* Chart  */}
+          <Grid
+            item
+            xs={12}
+            sx={{
+              padding: '0px !important',
+              marginTop: '8px',
+              display: 'flex',
+              alignItems: 'center',
               justifyContent: 'center',
             }}
           >
             <ReactApexChart
               options={options}
-              series={series}
-              type="area"
-              width="850"
-              height="464"
+              series={heatMapData}
+              type="heatmap"
+              width={getChartWidth()}
+              height="500"
             />
           </Grid>
+          {/* Color Range Image  */}
+          <Grid
+            item
+            xs={12}
+            sx={{
+              paddingTop: '8px !important',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+            }}
+          >
+            <img src="/svgs/Range_Image.svg"></img>
+          </Grid>
         </Grid>
-      </Box>
-    </Box>
+      )}
+    </>
   );
 }

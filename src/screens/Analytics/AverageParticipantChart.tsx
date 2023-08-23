@@ -4,8 +4,11 @@ import ReactApexChart from 'react-apexcharts';
 import { ApexOptions } from 'apexcharts';
 import {
   Box,
+  FormControl,
   Grid,
-  Paper,
+  MenuItem,
+  Select,
+  SelectChangeEvent,
   TableBody,
   TableCell,
   TableContainer,
@@ -14,12 +17,17 @@ import {
   styled,
   tableCellClasses,
 } from '@mui/material';
+
 import {
-  H1RegularTypography,
-  H3RegularTypography,
+  BodyRegularTypography,
+  ButtonLabelTypography,
+  H2SemiBoldTypography,
+  H4SemiBoldTypography,
 } from '../../components/CustomizedTypography';
-import { ContainedButton } from '../../components';
-import { useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
+import * as Icons from 'heroicons-react';
+import { MONTH_SELECTORS, MenuProps } from './const';
+import { GlobalContext } from '../../contexts/GlobalContext';
 
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
   [`&.${tableCellClasses.head}`]: {
@@ -27,26 +35,107 @@ const StyledTableCell = styled(TableCell)(({ theme }) => ({
     color: '#000000',
     border: '1px solid #CCC',
     minWidth: '200px',
+    borderCollapse: 'collapse',
   },
   [`&.${tableCellClasses.body}`]: {
     fontSize: 16,
     border: '1px solid #CCC',
     minWidth: '200px',
+    borderCollapse: 'collapse',
   },
 }));
 
-export default function AverageParticipantChart() {
+export default function AverageParticipantChart({
+  dashboard,
+
+  team,
+}: {
+  dashboard?: boolean;
+
+  team: string;
+}) {
   const [participantsCounts, setParticipantsCounts] = useState<any>([]);
   const [averageParticipants, setAverageParticipants] = useState([]);
   const [months, setMonths] = useState([]);
+  const [global, dispatch] = React.useContext(GlobalContext);
+  const [fromDate, setFromDate] = useState<string>(
+    global.chartStartDate ? global.chartStartDate : '10'
+  );
+  const [toDate, setToDate] = useState<string>(
+    global.chartEndDate ? global.chartEndDate : '16'
+  );
+  const [selectedFromDate, setSelectedFromDate] = useState<string>();
+  const [selectedToDate, setSelectedToDate] = useState<string>();
+  const [totalAverageParticipants, setTotalAverageParticipants] =
+    useState<number>();
   const navigate = useNavigate();
+  const windowWidth = React.useRef(window.innerWidth);
+
+  const getChartWidth = () => {
+    switch (true) {
+      case windowWidth.current <= 1051:
+        return '400';
+      case windowWidth.current > 1051 && windowWidth.current <= 1150:
+        return '500';
+      case windowWidth.current >= 1151 && windowWidth.current <= 1199:
+        return '520';
+      case windowWidth.current >= 1200 && windowWidth.current <= 1300:
+        return '650';
+      case windowWidth.current >= 1301 && windowWidth.current <= 1400:
+        return '700';
+      case windowWidth.current >= 1401 && windowWidth.current <= 1500:
+        return '750';
+      case windowWidth.current >= 1500:
+        return '850';
+
+      default:
+        return '500';
+    }
+  };
+
+  React.useEffect(() => {
+    const fromDateInput = global.chartStartDate;
+    const toDateInput = global.chartEndDate;
+    if (
+      fromDateInput != '' &&
+      fromDateInput != undefined &&
+      fromDateInput != null
+    ) {
+      setFromDate(fromDateInput);
+    }
+    if (toDateInput != '' && toDateInput != undefined && toDateInput != null) {
+      setToDate(toDateInput);
+    }
+  }, [global.chartStartDate, global.chartEndDate]);
+
+  React.useEffect(() => {
+    const tempSelectedFromDate = MONTH_SELECTORS.filter(
+      monthSelector => monthSelector.id === Number(fromDate)
+    );
+    const tempSelectedToDate = MONTH_SELECTORS.filter(
+      monthSelector => monthSelector.id === Number(toDate)
+    );
+
+    setSelectedFromDate(
+      tempSelectedFromDate &&
+        tempSelectedFromDate[0] &&
+        tempSelectedFromDate[0].month
+    );
+    setSelectedToDate(
+      tempSelectedToDate && tempSelectedToDate[0] && tempSelectedToDate[0].month
+    );
+  }, [fromDate, toDate]);
 
   React.useEffect(() => {
     handleGetParticipantChartData();
-  }, []);
+  }, [fromDate, toDate]);
+
+  React.useEffect(() => {
+    handleGetParticipantChartData();
+  }, [team]);
 
   const handleGetParticipantChartData = async () => {
-    await getParticipantsCount().then(
+    await getParticipantsCount(fromDate, toDate, team).then(
       res => {
         if (res && res.result) {
           setParticipantsCounts(res.result);
@@ -54,6 +143,11 @@ export default function AverageParticipantChart() {
             res.result?.map((item: any) => item.averageParticipants)
           );
           setMonths(res.result?.map((item: any) => item.month));
+          let temp = 0;
+          res.result.map((item: any) => {
+            temp = temp + item.averageParticipants;
+          });
+          setTotalAverageParticipants(Math.round(temp / res.result.length));
         }
       },
       err => {
@@ -81,23 +175,11 @@ export default function AverageParticipantChart() {
       zoom: {
         enabled: false,
       },
-    },
-    title: {
-      text: 'Avg. Participants per Month',
-      style: {
-        fontFamily: 'Poppins',
-        fontWeight: '400',
-        fontSize: '18px',
-        color: '#4E4E4E',
-      },
-    },
-    subtitle: {
-      text: '154 Participants',
-      style: {
-        fontFamily: 'Poppins',
-        fontWeight: '400',
-        fontSize: '24px',
-        color: '#000000',
+      toolbar: {
+        show: true,
+        tools: {
+          download: false,
+        },
       },
     },
     dataLabels: {
@@ -142,7 +224,7 @@ export default function AverageParticipantChart() {
         },
       },
     },
-    colors:['#0E9CFF'],
+    colors: ['#0E9CFF'],
     legend: {
       show: true,
       position: 'top',
@@ -150,94 +232,278 @@ export default function AverageParticipantChart() {
     },
   };
 
+  const handleFromDate = (event: SelectChangeEvent) => {
+    setFromDate(event.target.value as string);
+  };
+
+  const handleToDate = (event: SelectChangeEvent) => {
+    setToDate(event.target.value as string);
+  };
+
   return (
-    <Box sx={{ overflowY: 'auto' }} height="calc(var(--app-height))">
-      <Box sx={{ margin: '48px' }}>
-        {/* Analytics Title */}
-        <Box
-          sx={{
-            width: '100%',
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-          }}
-        >
-          <H1RegularTypography label="Analytics" />
-        </Box>
-        {/* Back Button */}
-        <Box
-          sx={{
-            width: '100%',
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'flex-start',
-          }}
-        >
-          <ContainedButton
-            id="go_back_to_analytics"
-            name="Back"
-            onClick={() => navigate('/analytics/')}
-            size={'small'}
-          />
-        </Box>
-        {/* Chart Title */}
-        <Box
-          sx={{
-            width: '100%',
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-            marginTop: '48px',
-          }}
-        >
-          <H3RegularTypography
-            label="Analytics - Enterprise Level - Count of all participants over time."
-            style={{ color: '#767676' }}
-          />
-        </Box>
-        {/* Chart and table */}
-        <Grid container spacing={2} sx={{ marginTop: '48px' }}>
-          <Grid item xs={12} md={8} sx={{ padding: '0px !important' }}>
+    <>
+      {dashboard ? (
+        <ReactApexChart
+          options={options}
+          series={series}
+          type="area"
+          width="518"
+          height="320"
+        />
+      ) : (
+        <Grid container spacing={2} sx={{ padding: '48px', overflowY: 'auto' }}>
+          {/* Route Path */}
+          <Grid
+            item
+            xs={12}
+            sx={{
+              padding: '0px !important',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'flex-start',
+            }}
+          >
+            <Link to={'/facilitator/analytics/'}>Analytics </Link>&nbsp;\ Count
+            of participants
+          </Grid>
+          {/* Back Button & Chart Title */}
+          <Grid
+            item
+            xs={12}
+            sx={{
+              padding: '0px !important',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'flex-start',
+              marginTop: '24px',
+            }}
+          >
+            <Icons.ArrowCircleLeftOutline
+              size={32}
+              style={{
+                cursor: 'pointer',
+                color: '#159ADD',
+              }}
+              onClick={() => navigate(-1)}
+            />
+            <H2SemiBoldTypography
+              label="Count of all participants over time"
+              style={{ color: '#2C69A1', marginLeft: '16px' }}
+            />
+          </Grid>
+          {/* Table and Selector */}
+          <Grid
+            item
+            xs={12}
+            md={6}
+            lg={5}
+            sx={{
+              padding: '0px !important',
+              display: 'flex',
+              alignItems: 'center',
+              flexDirection: 'column',
+              marginTop: '24px',
+            }}
+          >
+            {/* Selector */}
+            <Box
+              sx={{
+                display: 'flex',
+                flexDirection: 'row',
+                alignItems: 'center',
+                justifyContent: 'start',
+              }}
+            >
+              {/* Select Range Title */}
+              <ButtonLabelTypography
+                label="Select Range:"
+                style={{
+                  color: '#343434',
+                }}
+              />
+              {/* From Date */}
+              <Box
+                sx={{
+                  minWidth: 120,
+                  marginLeft: '16px',
+                  marginRight: '16px',
+                }}
+              >
+                <FormControl fullWidth>
+                  <Select
+                    sx={{
+                      fieldset: {
+                        border: 'none',
+                        opacity: 1,
+                        color: '#4E4E4E',
+                      },
+                    }}
+                    labelId="from-Date"
+                    id="from_date"
+                    value={fromDate}
+                    label="From"
+                    onChange={handleFromDate}
+                    IconComponent={props => (
+                      <Icons.ChevronDownOutline
+                        size={24}
+                        color="#4E4E4E"
+                        style={{
+                          cursor: 'pointer',
+                          position: 'absolute',
+                          top: 'calc(50% - 0.8em)',
+                        }}
+                        {...props}
+                      />
+                    )}
+                    MenuProps={MenuProps}
+                  >
+                    {MONTH_SELECTORS.map(month_selector => {
+                      return (
+                        <MenuItem
+                          value={month_selector.id}
+                          key={month_selector.id}
+                        >
+                          {month_selector.month}
+                        </MenuItem>
+                      );
+                    })}
+                  </Select>
+                </FormControl>
+              </Box>
+              <ButtonLabelTypography
+                label="To"
+                style={{
+                  color: '#343434',
+                }}
+              />
+              {/*To Date */}
+              <Box sx={{ minWidth: 120, marginLeft: '24px' }}>
+                <FormControl fullWidth>
+                  <Select
+                    sx={{
+                      fieldset: {
+                        border: 'none',
+                        opacity: 1,
+                        color: '#4E4E4E',
+                      },
+                    }}
+                    labelId="to-Date"
+                    id="to_date"
+                    value={toDate}
+                    label="To"
+                    onChange={handleToDate}
+                    IconComponent={props => (
+                      <Icons.ChevronDownOutline
+                        size={24}
+                        color="#4E4E4E"
+                        style={{
+                          cursor: 'pointer',
+                          position: 'absolute',
+                          top: 'calc(50% - 0.8em)',
+                        }}
+                        {...props}
+                      />
+                    )}
+                    MenuProps={MenuProps}
+                  >
+                    {MONTH_SELECTORS.map(month_selector => {
+                      return (
+                        <MenuItem
+                          value={month_selector.id}
+                          key={month_selector.id}
+                        >
+                          {month_selector.month}
+                        </MenuItem>
+                      );
+                    })}
+                  </Select>
+                </FormControl>
+              </Box>
+            </Box>
+            {/* Table */}
+            <Box sx={{ marginTop: '32px' }}>
+              <TableContainer style={{ borderCollapse: 'collapse' }}>
+                <TableHead>
+                  <TableRow>
+                    <StyledTableCell align="center">Month</StyledTableCell>
+                    <StyledTableCell align="center">
+                      Total No. of Participants
+                    </StyledTableCell>
+                  </TableRow>
+                </TableHead>
+                <TableBody>
+                  {participantsCounts.map((participantsCount: any) => {
+                    return (
+                      <TableRow key={participantsCount.id}>
+                        <StyledTableCell
+                          component="th"
+                          scope="row"
+                          align="center"
+                        >
+                          {participantsCount.month}
+                        </StyledTableCell>
+                        <StyledTableCell align="center">
+                          {participantsCount.averageParticipants}
+                        </StyledTableCell>
+                      </TableRow>
+                    );
+                  })}
+                </TableBody>
+              </TableContainer>
+            </Box>
+          </Grid>
+          {/* Chart  */}
+          <Grid
+            item
+            xs={12}
+            md={6}
+            lg={7}
+            sx={{
+              padding: '0px !important',
+              marginTop: '16px',
+              display: 'flex',
+              alignItems: 'flex-start',
+              flexDirection: 'column',
+            }}
+          >
+            <Box>
+              <Grid item xs={12} sx={{ padding: '0px !important' }}>
+                <BodyRegularTypography
+                  label="Avg. Participants per Month"
+                  style={{ color: '#343434' }}
+                />
+              </Grid>
+              <Grid
+                item
+                xs={12}
+                sx={{ padding: '0px !important', marginTop: '10px' }}
+              >
+                <H4SemiBoldTypography
+                  label={totalAverageParticipants + ' Participants'}
+                  style={{ color: '#343434' }}
+                />
+              </Grid>
+              <Grid
+                item
+                xs={12}
+                sx={{ padding: '0px !important', marginTop: '10px' }}
+              >
+                <BodyRegularTypography
+                  label={selectedFromDate + ' To ' + selectedToDate}
+                  style={{ color: '#343434' }}
+                />
+              </Grid>
+            </Box>
             <ReactApexChart
               options={options}
               series={series}
               type="area"
-              width="850"
-              height="464"
+              width={getChartWidth()}
+              height="700"
             />
           </Grid>
-          <Grid item xs={12} md={4} sx={{ padding: '0px !important' }}>
-            <TableContainer>
-              <TableHead>
-                <TableRow>
-                  <StyledTableCell align="center">Month</StyledTableCell>
-                  <StyledTableCell align="center">
-                    Total No. of Participants
-                  </StyledTableCell>
-                </TableRow>
-              </TableHead>
-              <TableBody>
-                {participantsCounts.map((participantsCount: any) => {
-                  return (
-                    <TableRow key={participantsCount.id}>
-                      <StyledTableCell
-                        component="th"
-                        scope="row"
-                        align="center"
-                      >
-                        {participantsCount.month}
-                      </StyledTableCell>
-                      <StyledTableCell align="center">
-                        {participantsCount.averageParticipants}
-                      </StyledTableCell>
-                    </TableRow>
-                  );
-                })}
-              </TableBody>
-            </TableContainer>
-          </Grid>
         </Grid>
-      </Box>
-    </Box>
+      )}
+    </>
   );
 }

@@ -10,42 +10,32 @@ import { getJiraToken } from '../../helpers/msal/services';
 export function JiraCallback() {
   const [searchParams] = useSearchParams();
   const [global, dispatch] = React.useContext(GlobalContext);
-  let code = "";
-  let state = "";
-  code = searchParams.get("code") as string;
-  state = searchParams.get("state") as string;
+  let code = '';
+  let state = '';
+  code = searchParams.get('code') as string;
+  state = searchParams.get('state') as string;
   const navigate = useNavigate();
-
 
   React.useEffect(() => {
     const getToken = async (code: string) => {
-      await getJiraToken(code).then((res: any) => {
-  
-        console.log(res.response)
-        dispatch({
-          type: ActionType.SET_JIRA_CODE,
-          payload: { jiraCode: res.response },
-        });
-        navigate(`/board/`+state);
-      }, error => {
-        console.log("error", error);
-      })
-
-    }
-    console.log("Got code from Jira", code);
+      await getJiraToken(code).then(
+        (res: any) => {
+          dispatch({
+            type: ActionType.SET_JIRA_CODE,
+            payload: { jiraCode: res.response },
+          });
+          navigate(`/board/` + state);
+        },
+        error => {
+          console.log('error', error);
+        }
+      );
+    };
     getToken(code);
-    
   }, []);
 
-  
-
-
-  return (
-    <>
-    </>
-  );
+  return <></>;
 }
 function async(arg0: string) {
   throw new Error('Function not implemented.');
 }
-

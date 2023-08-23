@@ -61,7 +61,7 @@ export function Offboarding() {
   };
 
   return (
-    <>
+    <Box display="flex" width="100%">
       <CssBaseline />
       <Slide direction="up" in={!done} key="rate">
         <Box
@@ -73,6 +73,7 @@ export function Offboarding() {
             flexDirection: 'column',
             justifyContent: 'flex-start',
             alignItems: 'center',
+            width:'100%'
           }}
         >
           <DeploymentPopUp />
@@ -206,6 +207,7 @@ export function Offboarding() {
           sx={{
             height: isXsUp ? 'calc(var(--app-height))' : 'calc(100vh)',
             overflowY: 'auto',
+            width:'100%'
           }}
         >
           <DeploymentPopUp />
@@ -288,6 +290,6 @@ export function Offboarding() {
           </Box>
         </Box>
       </Slide>
-    </>
+    </Box>
   );
 }

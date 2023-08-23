@@ -2,19 +2,19 @@ import { ActionType, GlobalContext } from '../../contexts/GlobalContext';
 import { User } from '../types';
 import { v4 as uuidv4 } from 'uuid';
 import React from 'react';
-
+export const azureToUser = (uuid: string): User => {
+  return {
+    id: uuid,
+    name: '',
+    avatar: '',
+    userType: 0,
+   
+  };
+};
 export const useAzureAuth = () => {
   const [global, dispatch] = React.useContext(GlobalContext);
 
-  const azureToUser = (uuid: string): User => {
-    return {
-      id: uuid,
-      name: '',
-      avatar: '',
-      userType: 0,
-     
-    };
-  };
+
 
   React.useEffect(() => {
     const uuid = localStorage.getItem('uuid');

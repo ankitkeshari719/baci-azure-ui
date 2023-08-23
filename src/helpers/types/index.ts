@@ -59,6 +59,8 @@ export class Global {
   isMaintenanceScheduled?: boolean = false;
   lastGlobalStateUpdate: Date | undefined = new Date();
   jiraCode?: string ="";
+  chartStartDate?:string="10";
+  chartEndDate?:string="16"
 }
 
 export class LastRetroName {
@@ -105,6 +107,20 @@ export interface Actions {
   backgroundColor?:string;
   fontColor?:string;
 }
+export interface JiraActionInterface {
+  action:ActionInterface;
+  teamId:string;
+  teamName:string;
+  jiraId:string;
+  initialSession:string;
+  startDate:string;
+  // TO DO , IN - PROGRESS, DONE, CANCELLED
+  status:string; 
+  url?:string;
+
+}
+
+
 
 export interface CardGroup {
   id: string;
