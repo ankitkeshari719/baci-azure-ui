@@ -258,6 +258,20 @@ function EnterpriseDashboard() {
     return teamName;
   };
 
+  const getTeamReportOnSelect = (selectId: string) => {
+    let teamName = "";
+    if(selectId === "0"){
+      teamName = "All Teams Report Overview";
+    }else if(selectId === "1"){
+      teamName = "Mobile Experience Team Report Overview";
+    }else if(selectId === "2"){
+      teamName = "Superannuation Product Team Report Overview";
+    }else if(selectId === "3"){
+      teamName = "Insurance Team Report Overview";
+    }
+    return teamName;
+  };
+
   return (
     <>
       <Box
@@ -718,7 +732,7 @@ function EnterpriseDashboard() {
                       flexDirection="column"
                     >
                       <CaptionRegularTypography
-                        label="All Teams Report Overview"
+                        label={getTeamReportOnSelect(selectId)}
                         style={{ color: '#159ADD' }}
                       />
                       <a
@@ -796,7 +810,7 @@ function EnterpriseDashboard() {
                       flexDirection="column"
                     >
                       <CaptionRegularTypography
-                        label="All Teams Report Overview"
+                        label={getTeamReportOnSelect(selectId)}
                         style={{ color: '#159ADD' }}
                       />
                       <a
@@ -882,7 +896,7 @@ function EnterpriseDashboard() {
                       flexDirection="column"
                     >
                       <CaptionRegularTypography
-                        label="All Teams Report Overview"
+                        label={getTeamReportOnSelect(selectId)}
                         style={{ color: '#159ADD' }}
                       />
                       <a
