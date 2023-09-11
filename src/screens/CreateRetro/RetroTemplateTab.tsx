@@ -22,6 +22,7 @@ import * as Icons from 'heroicons-react';
 import { createUseStyles } from 'react-jss';
 import theme from '../../helpers/theme/theme';
 import { TextButton } from '../../components';
+import { H6RegularTypography, H5SemiBoldTypography } from '../../components/CustomizedTypography';
 
 function SampleNextArrow(props: any) {
   const { className, style, onClick } = props;
@@ -184,7 +185,14 @@ export function RetroTemplateTab({
                   color: '#4E4E4E !important',
                 }}
               >
-                {selectedTemplate?.templateName + ' Retro Template'}
+                <H6RegularTypography label="Session Template" />
+              </Box>
+              <Box
+                sx={{
+                  ml: 2,
+                }}
+              >
+                <H5SemiBoldTypography label={selectedTemplate?.templateName} />
               </Box>
               {isTemplateCustomized && (
                 <Box
@@ -208,7 +216,7 @@ export function RetroTemplateTab({
                     : '#4E4E4E !important',
               }}
             >
-              Retro Template
+              Session Template
             </Typography>
           )}
         </Box>

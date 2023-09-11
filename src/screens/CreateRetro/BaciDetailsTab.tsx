@@ -12,6 +12,10 @@ import '../../global.scss';
 import './styles.scss';
 import { RETRONAME_CHARACTER_LIMIT } from './const';
 import { ContainedButton } from '../../components/CustomizedButton/ContainedButton';
+import {
+  H5SemiBoldTypography,
+  H6RegularTypography,
+} from '../../components/CustomizedTypography';
 
 const styles = {
   retroNameTextField: {
@@ -127,7 +131,7 @@ export function BaciDetailsTab({
 }: Props) {
   return (
     <>
-      {/* BACI Details Panel */}
+      {/* Session Details Panel */}
       <Box sx={{ borderBottom: 1, borderColor: '#CCCCCC' }}>
         <Box
           sx={{
@@ -141,21 +145,30 @@ export function BaciDetailsTab({
           retroName != '' &&
           retroTimeFrame != '' ? (
             <>
-              <Box
-                className="tabSummary"
-                sx={{
-                  color: '#4E4E4E !important',
-                }}
-              >
-                {retroName}
-              </Box>
-              <Box
-                className="timeFrameSummary"
-                sx={{
-                  ml: 5,
-                }}
-              >
-                {retroTimeFrame}
+              <Box display="flex" alignItems="center" flexDirection="row">
+                <Box
+                  className="tabSummary"
+                  sx={{
+                    color: '#4E4E4E !important',
+                  }}
+                >
+                  <H6RegularTypography label="Session Name" />
+                </Box>
+                <Box
+                  sx={{
+                    ml: 2,
+                  }}
+                >
+                  <H5SemiBoldTypography label={retroName} />
+                </Box>
+                <Box
+                  className="timeFrameSummary"
+                  sx={{
+                    ml: 5,
+                  }}
+                >
+                  {retroTimeFrame}
+                </Box>
               </Box>
             </>
           ) : (
@@ -165,7 +178,7 @@ export function BaciDetailsTab({
                 color: '#2c69a1 !important',
               }}
             >
-              BACI Details
+              Session Details
             </Typography>
           )}
         </Box>
@@ -179,7 +192,7 @@ export function BaciDetailsTab({
                       <TextField
                         autoFocus
                         variant="standard"
-                        label="Retro Name"
+                        label="Session Name"
                         inputProps={{
                           maxLength: RETRONAME_CHARACTER_LIMIT,
                         }}

@@ -384,10 +384,10 @@ export default function RetroBoard() {
     <>
       {/* Board HTML */}
       <Box display="flex" width="100%">
-        <Box width='72px' display="flex">
+        {/* <Box width='72px' display="flex">
         <LeftBar />
-        </Box>
-        <Box display='flex' width="calc(100% - 72px)">
+        </Box> */}
+        <Box display='flex' width="calc(100%)">
           <Box
             style={{
               // flexGrow: 1,

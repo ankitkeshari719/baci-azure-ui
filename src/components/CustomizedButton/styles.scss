@@ -6,9 +6,9 @@
   justify-content: center !important;
   align-items: center !important;
   padding: 12px !important;
-  gap: 8px !important;
+  gap: 16px !important;
   background: #159add !important;
-  border-radius: 24px !important;
+  border-radius: 8px !important;
   color: #ffffff;
 }
 
@@ -20,7 +20,7 @@
   padding: 12px 16px !important;
   gap: 16px !important;
   background: #159add !important;
-  border-radius: 24px !important;
+  border-radius: 8px !important;
   color: #ffffff;
 }
 
@@ -32,27 +32,9 @@
   padding: 12px 20px !important;
   gap: 16px !important;
   background: #159add !important;
-  border-radius: 24px !important;
+  border-radius: 8px !important;
   color: #ffffff;
 }
-
-// .containedButtonSmall:hover {
-//   background: rgba(0, 0, 0, 0.04) !important;
-//   border-radius: 24px !important;
-//   color: #CCCCCC;
-// }
-
-// .containedButtonMedium:hover {
-//   background: rgba(0, 0, 0, 0.04) !important;
-//   border-radius: 24px !important;
-//   color: #CCCCCC;
-// }
-
-// .containedButtonLarge:hover {
-//   background: rgba(0, 0, 0, 0.04) !important;
-//   border-radius: 24px !important;
-//   color: #CCCCCC;
-// }
 
 .containedButtonSmall:disabled {
   background: #cccccc !important;
@@ -77,7 +59,7 @@
   padding: 12px !important;
   gap: 8px !important;
   border: 1px solid #159add !important;
-  border-radius: 24px !important;
+  border-radius: 8px !important;
   background: #fafafa !important;
   color: #159add;
 }
@@ -90,7 +72,7 @@
   padding: 12px 16px !important;
   gap: 16px !important;
   border: 1px solid #159add !important;
-  border-radius: 24px !important;
+  border-radius: 8px !important;
   background: #fafafa !important;
   color: #159add !important;
 }
@@ -103,24 +85,24 @@
   padding: 12px 20px !important;
   gap: 16px !important;
   border: 1px solid #159add !important;
-  border-radius: 24px !important;
+  border-radius: 8px !important;
   background: #fafafa !important;
   color: #159add !important;
 }
 
 .outlinedButtonSmall:hover {
   background: rgba(0, 0, 0, 0.04) !important;
-  border-radius: 24px !important;
+  border-radius: 8px !important;
 }
 
 .outlinedButtonMedium:hover {
   background: rgba(0, 0, 0, 0.04) !important;
-  border-radius: 24px !important;
+  border-radius: 8px !important;
 }
 
 .outlinedButtonLarge:hover {
   background: rgba(0, 0, 0, 0.04) !important;
-  border-radius: 24px !important;
+  border-radius: 8px !important;
 }
 
 .outlinedButtonSmall:disabled {
@@ -149,7 +131,7 @@
   padding: 12px !important;
   gap: 8px !important;
   background: #ffffff !important;
-  border-radius: 24px !important;
+  border-radius: 8px !important;
   color: #159add;
 }
 
@@ -161,7 +143,7 @@
   padding: 12px 16px !important;
   gap: 16px !important;
   background: #ffffff !important;
-  border-radius: 24px !important;
+  border-radius: 8px !important;
   color: #159add;
 }
 
@@ -173,7 +155,7 @@
   padding: 12px 20px !important;
   gap: 16px !important;
   background: #ffffff !important;
-  border-radius: 24px !important;
+  border-radius: 8px !important;
   color: #159add;
 }
 

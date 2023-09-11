@@ -220,7 +220,6 @@ export const connectJira = async (retroId: string): Promise<string> => {
   await fetch(API_URL + `/connectJira?retroId=${retroId}`, requestOptions)
     .then(response => response.json())
     .then(data => {
-      console.log(data);
       jiraURL = data;
     });
   return jiraURL;
@@ -235,13 +234,12 @@ export const getJiraToken = async (jiraCode: string): Promise<string> => {
   await fetch(API_URL + `/getJiraToken?jiraCode=${jiraCode}`, requestOptions)
     .then(response => response.json())
     .then(data => {
-      console.log(data);
       jiraAccessToken = data;
     });
   return jiraAccessToken;
 };
 
-export const listJiraProjects = async (jiraCode: string): Promise<string[]> => {
+export const listJiraProjects = async (jiraCode: string): Promise<any> => {
   let jiraProjects: any[] = [];
   const requestOptions = {
     method: 'GET',
@@ -253,7 +251,6 @@ export const listJiraProjects = async (jiraCode: string): Promise<string[]> => {
   )
     .then(response => response.json())
     .then(data => {
-      console.log(data);
       jiraProjects = data;
     });
   return jiraProjects;
@@ -274,7 +271,6 @@ export const listJiraMeta = async (
   )
     .then(response => response.json())
     .then(data => {
-      console.log(data);
       jiraProjects = data;
     });
   return jiraProjects;
@@ -301,7 +297,6 @@ export const createJiraIssue = async (
   await fetch(API_URL + `/createJiraIssue`, requestOptions)
     .then(response => response.json())
     .then(data => {
-      console.log(data);
       status = data;
     });
   return status;
@@ -322,58 +317,21 @@ export const getDummyChartData = async (): Promise<any> => {
   return dummyChartData;
 };
 
-// Api to get count of all participant over time
-export const getParticipantsCount = async (): Promise<any> => {
-  let participantsCountData;
-  const requestOptions = {
-    method: 'GET',
-  };
-  await fetch(API_URL + '/getParticipantsCount', requestOptions)
-    .then(response => response.json())
-    .then(data => {
-      participantsCountData = data;
-    });
-
-  return participantsCountData;
-};
-
-// Api to get count of all retros over time
-export const getRetrosCount = async (): Promise<any> => {
-  let retrosCountData;
-  const requestOptions = {
-    method: 'GET',
-  };
-  await fetch(API_URL + '/getRetrosCount', requestOptions)
-    .then(response => response.json())
-    .then(data => {
-      retrosCountData = data;
-    });
-
-  return retrosCountData;
-};
-
-// Api to get Team Level Actions Count
-export const getTeamLevelActionsCount = async (): Promise<any> => {
-  let teamLevelActionsCountData;
-  const requestOptions = {
-    method: 'GET',
-  };
-  await fetch(API_URL + '/getTeamLevelActionsCount', requestOptions)
-    .then(response => response.json())
-    .then(data => {
-      teamLevelActionsCountData = data;
-    });
-
-  return teamLevelActionsCountData;
-};
-
-// Api to get Enterprise Level ActionsCount
-export const getEnterpriseLevelActionsCount = async (): Promise<any> => {
+// Chart 1: Api to get Enterprise Level ActionsCount
+export const getEnterpriseLevelActionsCounts = async (
+  fromDate: string,
+  toDate: string,
+  team: string
+): Promise<any> => {
   let enterpriseLevelActionsCountData;
   const requestOptions = {
     method: 'GET',
   };
-  await fetch(API_URL + '/getEnterpriseLevelActionsCount', requestOptions)
+  await fetch(
+    API_URL +
+      `/getEnterpriseLevelActionsCounts?fromDate=${fromDate}&toDate=${toDate}&team=${team}`,
+    requestOptions
+  )
     .then(response => response.json())
     .then(data => {
       enterpriseLevelActionsCountData = data;
@@ -382,13 +340,134 @@ export const getEnterpriseLevelActionsCount = async (): Promise<any> => {
   return enterpriseLevelActionsCountData;
 };
 
-// Api to get Enterprise Level Sentiments Moods
-export const getEnterpriseLevelSentimentsMoods = async (): Promise<any> => {
+// Chart 2: Api to get Team Level Actions Count
+export const getTeamLevelActionsCounts = async (
+  fromDate: string,
+  toDate: string
+): Promise<any> => {
+  let teamLevelActionsCountData;
+  const requestOptions = {
+    method: 'GET',
+  };
+  await fetch(
+    API_URL +
+      `/getTeamLevelActionsCounts?fromDate=${fromDate}&toDate=${toDate}`,
+    requestOptions
+  )
+    .then(response => response.json())
+    .then(data => {
+      teamLevelActionsCountData = data;
+    });
+
+  return teamLevelActionsCountData;
+};
+
+// Chart 3: Api to get count of all participant over time
+export const getParticipantsCount = async (
+  fromDate: string,
+  toDate: string,
+  team: string
+): Promise<any> => {
+  let participantsCountData;
+  const requestOptions = {
+    method: 'GET',
+  };
+  await fetch(
+    API_URL +
+      `/getParticipantsCount?fromDate=${fromDate}&toDate=${toDate}&team=${team}`,
+    requestOptions
+  )
+    .then(response => response.json())
+    .then(data => {
+      participantsCountData = data;
+    });
+
+  return participantsCountData;
+};
+
+// Chart 4: Api to get count of all retros over time
+export const getRetrosCount = async (
+  fromDate: string,
+  toDate: string,
+  team: string
+): Promise<any> => {
+  let retrosCountData;
+  const requestOptions = {
+    method: 'GET',
+  };
+  await fetch(
+    API_URL +
+      `/getRetrosCount?fromDate=${fromDate}&toDate=${toDate}&team=${team}`,
+    requestOptions
+  )
+    .then(response => response.json())
+    .then(data => {
+      retrosCountData = data;
+    });
+
+  return retrosCountData;
+};
+
+// Chart 5: Api to get count of all retros over time
+export const getEnterpriseLevelSentimentSummary = async (
+  selectedFormat: string,
+  team: string
+): Promise<any> => {
+  let retrosCountData;
+  const requestOptions = {
+    method: 'GET',
+  };
+  await fetch(
+    API_URL +
+      `/getEnterpriseLevelSentimentSummary?selectedFormat=${selectedFormat}&team=${team}`,
+    requestOptions
+  )
+    .then(response => response.json())
+    .then(data => {
+      retrosCountData = data;
+    });
+
+  return retrosCountData;
+};
+
+// Chart 5: Api to get count of all retros over time
+export const getEnterpriseLevelSentimentsTheme = async (
+  fromDate: string,
+  toDate: string,
+  team: string
+): Promise<any> => {
+  let heatMapData;
+  const requestOptions = {
+    method: 'GET',
+  };
+  await fetch(
+    API_URL +
+      `/getEnterpriseLevelSentimentsTheme?fromDate=${fromDate}&toDate=${toDate}&team=${team}`,
+    requestOptions
+  )
+    .then(response => response.json())
+    .then(data => {
+      heatMapData = data;
+    });
+
+  return heatMapData;
+};
+
+// Chart 7:  Api to get Enterprise Level Sentiments Moods
+export const getEnterpriseLevelSentimentsMoods = async (
+  fromDate: string,
+  toDate: string,
+  team: string
+): Promise<any> => {
   let enterpriseLevelSentimentsMoodsData;
   const requestOptions = {
     method: 'GET',
   };
-  await fetch(API_URL + '/getEnterpriseLevelSentimentsMoods', requestOptions)
+  await fetch(
+    API_URL +
+      `/getEnterpriseLevelSentimentsMoods?fromDate=${fromDate}&toDate=${toDate}&team=${team}`,
+    requestOptions
+  )
     .then(response => response.json())
     .then(data => {
       enterpriseLevelSentimentsMoodsData = data;
@@ -396,37 +475,644 @@ export const getEnterpriseLevelSentimentsMoods = async (): Promise<any> => {
 
   return enterpriseLevelSentimentsMoodsData;
 };
+// ---------------------------------------- Roles API's -----------------------------------------------
 
-/* 
-export const onSnapshotRetroActions = (socket: Socket<DefaultEventsMap, DefaultEventsMap>,id: string, userId: string, fromTimestamp: number | undefined, callback: (([]) => void)): () => void => {
-        const unsubscribe = socket.on('newMessage',(snapshot: { retroId: string; action: any; }[]) => {
-        const results = [] as any[];
-        snapshot.forEach((change: { retroId: string; action: any; }) => {
-           // if ((change.type === "modified" || change.type === "added") && !change.doc.metadata.hasPendingWrites) {
-            if (change.retroId === id) {    
-                const data = change.action;
-                if (!data.onlyVisibleBy || data.onlyVisibleBy.includes(userId)) {
-                    results.push(data);
-                }
-            }
-            // }
-        });
-        callback(
-            results.sort(
-            (a: any, b: any) =>
-                a.sourceActionTimestamp.toMillis() !== b.sourceActionTimestamp.toMillis() ?
-                    a.sourceActionTimestamp.toMillis() - b.sourceActionTimestamp.toMillis() :
-                    a.timestamp.toMillis() - b.timestamp.toMillis())
-            .map((action) =>
-            ({
-                ...action,
-                timestamp: action.timestamp?.toMillis(),
-                date: action.timestamp?.toDate() || new Date(),
-                sourceActionTimestamp: action.sourceActionTimestamp?.toMillis(),
-            })));
+// Create Role
+export const createRole = async (roleName: string): Promise<any> => {
+  let data: any;
+  const requestOptions = {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({
+      roleName,
+    }),
+  };
+
+  await fetch(API_URL + `/roles/create`, requestOptions)
+    .then(response => response.json())
+    .then(response => {
+      data = response.data;
     });
-    const id2 = Math.random();
-    return () => {
-        unsubscribe;
-    };
-} */
+  return data;
+};
+
+// Get All Roles
+export const getAllRoles = async (): Promise<any> => {
+  let roles: any[] = [];
+  const requestOptions = {
+    method: 'GET',
+    headers: { 'Content-Type': 'application/json' },
+  };
+  await fetch(API_URL + `/roles/`, requestOptions)
+    .then(response => response.json())
+    .then(response => {
+      if (response && response.data) {
+        roles = response.data;
+      }
+    })
+    .catch(err => console.log(err));
+
+  return roles;
+};
+
+// Get By Id Role
+export const getRoleById = async (roleId: string): Promise<any> => {
+  let role;
+  const requestOptions = {
+    method: 'GET',
+    headers: { 'Content-Type': 'application/json' },
+  };
+  await fetch(API_URL + `/roles/${roleId}`, requestOptions)
+    .then(response => response.json())
+    .then(response => {
+      if (response) {
+        role = response.data;
+      }
+    })
+    .catch(err => console.log(err));
+  return role;
+};
+
+// Get By Role Name
+export const getRoleByName = async (roleName: string): Promise<any> => {
+  let role;
+  const requestOptions = {
+    method: 'GET',
+    headers: { 'Content-Type': 'application/json' },
+  };
+  await fetch(API_URL + `/roles/getByName/${roleName}`, requestOptions)
+    .then(response => response.json())
+    .then(response => {
+      if (response) {
+        role = response.data;
+      }
+    })
+    .catch(err => console.log(err));
+  return role;
+};
+
+// Update Role
+export const updateRole = async (
+  roleId: string,
+  roleName: string
+): Promise<any> => {
+  let message: any = '';
+  const requestOptions = {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({
+      roleName,
+    }),
+  };
+
+  await fetch(API_URL + `/roles/update/${roleId}`, requestOptions)
+    .then(response => response.json())
+    .then(response => {
+      message = response.message;
+    });
+  return message;
+};
+
+// Delete Role
+export const deleteRoleById = async (roleId: string): Promise<any> => {
+  let message;
+  const requestOptions = {
+    method: 'DELETE',
+    headers: { 'Content-Type': 'application/json' },
+  };
+  await fetch(API_URL + `/roles/${roleId}`, requestOptions)
+    .then(response => response.json())
+    .then(response => {
+      message = response.message;
+    });
+  return message;
+};
+
+// ---------------------------------------- Teams API's -----------------------------------------------
+
+// Create Team
+export const createTeam = async (requestBody: any): Promise<any> => {
+  let data: any;
+  const requestOptions = {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({
+      teamName: requestBody.teamName,
+      teamDescription: requestBody.teamDescription,
+      teamDepartment: requestBody.teamDepartment,
+      createdBy: requestBody.createdBy,
+      userEmailIds: requestBody.userEmailIds,
+      enterpriseId: requestBody.enterpriseId,
+      isActive: requestBody.isActive,
+    }),
+  };
+
+  await fetch(API_URL + `/teams/create`, requestOptions)
+    .then(response => response.json())
+    .then(response => {
+      data = response.data;
+    });
+  return data;
+};
+
+// Get All Teams
+export const getAllTeams = async (): Promise<any> => {
+  let teams: any[] = [];
+  const requestOptions = {
+    method: 'GET',
+    headers: { 'Content-Type': 'application/json' },
+  };
+  await fetch(API_URL + `/teams/`, requestOptions)
+    .then(response => response.json())
+    .then(response => {
+      if (response && response.data) {
+        teams = response.data;
+      }
+    })
+    .catch(err => console.log(err));
+
+  return teams;
+};
+
+// Get By Id Team
+export const getTeamById = async (teamId: string): Promise<any> => {
+  let team;
+  const requestOptions = {
+    method: 'GET',
+    headers: { 'Content-Type': 'application/json' },
+  };
+  await fetch(API_URL + `/teams/${teamId}`, requestOptions)
+    .then(response => response.json())
+    .then(response => {
+      if (response) {
+        team = response.data;
+      }
+    })
+    .catch(err => console.log(err));
+  return team;
+};
+
+// Update Team
+export const updateTeam = async (
+  teamId: string,
+  requestBody: any
+): Promise<any> => {
+  let data: any;
+  const requestOptions = {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({
+      teamName: requestBody.teamName,
+      teamDescription: requestBody.teamDescription,
+      enterpriseId: requestBody.enterpriseId,
+      createdBy: requestBody.createdBy,
+      isActive: requestBody.isActive,
+      userEmailIds: requestBody.userEmailIds,
+    }),
+  };
+
+  await fetch(API_URL + `/teams/update/${teamId}`, requestOptions)
+    .then(response => response.json())
+    .then(response => {
+      data = response.data;
+    });
+  return data;
+};
+
+// Delete Role
+export const deleteTeamById = async (teamId: string): Promise<any> => {
+  let message;
+  const requestOptions = {
+    method: 'DELETE',
+    headers: { 'Content-Type': 'application/json' },
+  };
+  await fetch(API_URL + `/teams/${teamId}`, requestOptions)
+    .then(response => response.json())
+    .then(response => {
+      message = response.message;
+    });
+  return message;
+};
+
+// Get All Teams
+export const getAllTeamsByEnterpriseId = async (
+  enterpriseId: string
+): Promise<any> => {
+  let teams: any[] = [];
+  const requestOptions = {
+    method: 'GET',
+    headers: { 'Content-Type': 'application/json' },
+  };
+  await fetch(
+    API_URL + `/teams/getAllTeamsByEnterpriseId/${enterpriseId}`,
+    requestOptions
+  )
+    .then(response => response.json())
+    .then(response => {
+      if (response && response.data) {
+        teams = response.data;
+      }
+    })
+    .catch(err => console.log(err));
+  return teams;
+};
+
+// ---------------------------------------- Enterprise API's -----------------------------------------------
+// Create Enterprise
+export const createEnterprise = async (requestBody: any): Promise<any> => {
+  let data: any;
+  const requestOptions = {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({
+      organisationName: requestBody.organisationName,
+      organisationDomain: requestBody.organisationDomain,
+      organisationCountry: requestBody.organisationCountry,
+      organisationPhoto: requestBody.organisationPhoto,
+      isActive: requestBody.isActive,
+    }),
+  };
+
+  await fetch(API_URL + `/enterprises/create`, requestOptions)
+    .then(response => response.json())
+    .then(response => {
+      data = response.data;
+    });
+  return data;
+};
+
+// Get All Enterprises
+export const getAllEnterprises = async (): Promise<any> => {
+  let enterprises: any[] = [];
+  const requestOptions = {
+    method: 'GET',
+    headers: { 'Content-Type': 'application/json' },
+  };
+  await fetch(API_URL + `/enterprises/`, requestOptions)
+    .then(response => response.json())
+    .then(response => {
+      if (response && response.data) {
+        enterprises = response.data;
+      }
+    })
+    .catch(err => console.log(err));
+
+  return enterprises;
+};
+
+// Get By Id Enterprise
+export const getEnterpriseById = async (enterpriseId: string): Promise<any> => {
+  let enterprise;
+  const requestOptions = {
+    method: 'GET',
+    headers: { 'Content-Type': 'application/json' },
+  };
+  await fetch(API_URL + `/enterprises/${enterpriseId}`, requestOptions)
+    .then(response => response.json())
+    .then(response => {
+      if (response) {
+        enterprise = response.data;
+      }
+    })
+    .catch(err => console.log(err));
+  return enterprise;
+};
+
+// Update Enterprise
+export const updateEnterprise = async (
+  enterpriseId: string,
+  requestBody: any
+): Promise<any> => {
+  let data: any;
+  const requestOptions = {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({
+      enterpriseName: requestBody.enterpriseName,
+      enterpriseDomain: requestBody.enterpriseDomain,
+      enterpriseAddress: requestBody.enterpriseAddress,
+      isActive: requestBody.isActive,
+    }),
+  };
+
+  await fetch(API_URL + `/enterprises/update/${enterpriseId}`, requestOptions)
+    .then(response => response.json())
+    .then(response => {
+      data = response.data;
+    });
+  return data;
+};
+
+// Delete Role
+export const deleteEnterpriseById = async (
+  enterpriseId: string
+): Promise<any> => {
+  let message;
+  const requestOptions = {
+    method: 'DELETE',
+    headers: { 'Content-Type': 'application/json' },
+  };
+  await fetch(API_URL + `/enterprises/${enterpriseId}`, requestOptions)
+    .then(response => response.json())
+    .then(response => {
+      message = response.message;
+    });
+  return message;
+};
+
+// ---------------------------------------- Actions API's -----------------------------------------------
+// Create Action
+export const createAction = async (requestBody: any): Promise<any> => {
+  let data: any;
+  const requestOptions = {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({
+      actionName: requestBody.actionName,
+      jiraId: requestBody.jiraId,
+      retroId: requestBody.retroId,
+      assignedTo: requestBody.assignedTo,
+      createdBy: requestBody.createdBy,
+      status: requestBody.status,
+      isActive: requestBody.isActive,
+    }),
+  };
+
+  await fetch(API_URL + `/actions/create`, requestOptions)
+    .then(response => response.json())
+    .then(response => {
+      data = response.data;
+    });
+  return data;
+};
+
+// Get All Actions
+export const getAllActions = async (): Promise<any> => {
+  let actions: any[] = [];
+  const requestOptions = {
+    method: 'GET',
+    headers: { 'Content-Type': 'application/json' },
+  };
+  await fetch(API_URL + `/actions/`, requestOptions)
+    .then(response => response.json())
+    .then(response => {
+      if (response && response.data) {
+        actions = response.data;
+      }
+    })
+    .catch(err => console.log(err));
+
+  return actions;
+};
+
+// Get By Id Action
+export const getActionById = async (actionId: string): Promise<any> => {
+  let action;
+  const requestOptions = {
+    method: 'GET',
+    headers: { 'Content-Type': 'application/json' },
+  };
+  await fetch(API_URL + `/actions/${actionId}`, requestOptions)
+    .then(response => response.json())
+    .then(response => {
+      if (response) {
+        action = response.data;
+      }
+    })
+    .catch(err => console.log(err));
+  return action;
+};
+
+// Update Action
+export const updateAction = async (
+  actionId: string,
+  requestBody: any
+): Promise<any> => {
+  let data: any;
+  const requestOptions = {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({
+      actionName: requestBody.actionName,
+      jiraId: requestBody.jiraId,
+      retroId: requestBody.retroId,
+      assignedTo: requestBody.assignedTo,
+      createdBy: requestBody.createdBy,
+      status: requestBody.status,
+      isActive: requestBody.isActive,
+    }),
+  };
+
+  await fetch(API_URL + `/actions/update/${actionId}`, requestOptions)
+    .then(response => response.json())
+    .then(response => {
+      data = response.data;
+    });
+  return data;
+};
+
+// Delete Role
+export const deleteActionById = async (actionId: string): Promise<any> => {
+  let message;
+  const requestOptions = {
+    method: 'DELETE',
+    headers: { 'Content-Type': 'application/json' },
+  };
+  await fetch(API_URL + `/actions/${actionId}`, requestOptions)
+    .then(response => response.json())
+    .then(response => {
+      message = response.message;
+    });
+  return message;
+};
+
+// ---------------------------------------- Users API's -----------------------------------------------
+// Get All Users
+export const getAllUsers = async (): Promise<any> => {
+  let users: any[] = [];
+  const requestOptions = {
+    method: 'GET',
+    headers: { 'Content-Type': 'application/json' },
+  };
+  await fetch(API_URL + `/users/`, requestOptions)
+    .then(response => response.json())
+    .then(response => {
+      if (response && response.data) {
+        users = response.data;
+      }
+    })
+    .catch(err => console.log(err));
+
+  return users;
+};
+
+// Get By Id User
+export const getUserByEmailId = async (emailId: string): Promise<any> => {
+  let user;
+  const requestOptions = {
+    method: 'GET',
+    headers: { 'Content-Type': 'application/json' },
+  };
+  await fetch(API_URL + `/users/${emailId}`, requestOptions)
+    .then(response => response.json())
+    .then(response => {
+      if (response) {
+        user = response.data;
+      }
+    })
+    .catch(err => console.log(err));
+  return user;
+};
+
+// Get All Users By Email Ids
+export const getAllUsersByEmails = async (emails: any): Promise<any> => {
+  let users: any[] = [];
+  const requestOptions = {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({
+      emails: emails,
+    }),
+  };
+  await fetch(API_URL + `/users/`, requestOptions)
+    .then(response => response.json())
+    .then(response => {
+      if (response && response.data) {
+        users = response.data;
+      }
+    })
+    .catch(err => console.log(err));
+
+  return users;
+};
+
+// Get All Users By Enterprise Id
+export const getAllUsersByEnterpriseId = async (
+  enterpriseId: string
+): Promise<any> => {
+  let users: any[] = [];
+  const requestOptions = {
+    method: 'GET',
+    headers: { 'Content-Type': 'application/json' },
+  };
+  await fetch(
+    API_URL + `/users/getAllUsersByEnterpriseId/${enterpriseId}`,
+    requestOptions
+  )
+    .then(response => response.json())
+    .then(response => {
+      if (response && response.data) {
+        users = response.data;
+      }
+    })
+    .catch(err => console.log(err));
+
+  return users;
+};
+
+// Create User
+export const createUser = async (requestBody: any): Promise<any> => {
+  let data: any;
+  const requestOptions = {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({
+      emailId: requestBody.emailId,
+      firstName: requestBody.firstName,
+      lastName: requestBody.lastName,
+      phoneNo: requestBody.phoneNo,
+      name: requestBody.name,
+      cityCode: requestBody.cityCode,
+      country: requestBody.country,
+      companyName: requestBody.companyName,
+      role: requestBody.role,
+      team: requestBody.team,
+      plan: requestBody.plan,
+      enterpriseId: requestBody.enterpriseId,
+      roleId: requestBody.roleId,
+      roleName: requestBody.roleName,
+      enterpriseName: requestBody.enterpriseName,
+      enterprisePhoto: requestBody.enterprisePhoto,
+      isActive: requestBody.isActive,
+    }),
+  };
+
+  await fetch(API_URL + `/users/create`, requestOptions)
+    .then(response => response.json())
+    .then(response => {
+      data = response.data;
+    });
+  return data;
+};
+
+// Update User
+export const updateUser = async (
+  emailId: string,
+  requestBody: any
+): Promise<any> => {
+  let data: any;
+  const requestOptions = {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({
+      firstName: requestBody.firstName,
+      lastName: requestBody.lastName,
+      phoneNo: requestBody.phoneNo,
+      name: requestBody.name,
+      cityCode: requestBody.cityCode,
+      country: requestBody.country,
+      companyName: requestBody.companyName,
+      role: requestBody.role,
+      team: requestBody.team,
+      plan: requestBody.plan,
+      enterpriseId: requestBody.enterpriseId,
+      roleId: requestBody.roleId,
+      roleName: requestBody.roleName,
+      enterpriseName: requestBody.enterpriseName,
+      isActive: requestBody.isActive,
+      isEnterpriserRequested: requestBody.isEnterpriserRequested,
+    }),
+  };
+
+  await fetch(API_URL + `/users/update/${emailId}`, requestOptions)
+    .then(response => response.json())
+    .then(response => {
+      data = response.data;
+    });
+  return data;
+};
+
+// Delete Role
+export const deleteUserById = async (userId: string): Promise<any> => {
+  let message;
+  const requestOptions = {
+    method: 'DELETE',
+    headers: { 'Content-Type': 'application/json' },
+  };
+  await fetch(API_URL + `/users/${userId}`, requestOptions)
+    .then(response => response.json())
+    .then(response => {
+      message = response.message;
+    });
+  return message;
+};
+
+// Authenticate user
+export const authenticateUser = async (requestBody: any): Promise<any> => {
+  let data: any;
+  const requestOptions = {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({
+      emailId: requestBody.emailId,
+      password: requestBody.password,
+    }),
+  };
+
+  await fetch(API_URL + `/users/authenticate`, requestOptions)
+    .then(response => response.json())
+    .then(response => {
+      data = response.data;
+    });
+  return data;
+};

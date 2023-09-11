@@ -18,7 +18,10 @@ import { avatarName } from '../../constants/AvatarName';
 import { LazyLoadImage } from 'react-lazy-load-image-component';
 import { ContainedButton, OutlinedButton, TextButton } from '../../components';
 import * as Icons from 'heroicons-react';
-import { H6RegularTypography } from '../../components/CustomizedTypography';
+import {
+  H5SemiBoldTypography,
+  H6RegularTypography,
+} from '../../components/CustomizedTypography';
 
 const styles = {
   avatarfield: {
@@ -162,7 +165,7 @@ export function UserDetailsTab({
                   ml: 5,
                 }}
               >
-                {userName}
+                <H5SemiBoldTypography label={userName} />
               </Box>
             </>
           ) : (
@@ -175,7 +178,7 @@ export function UserDetailsTab({
                     : '#4E4E4E !important',
               }}
             >
-              User Details
+              <H6RegularTypography label="User Details" />
             </Typography>
           )}
         </Box>

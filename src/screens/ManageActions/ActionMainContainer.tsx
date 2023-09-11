@@ -65,7 +65,6 @@ export default function ActionMainContainer() {
     setMessageForParticipant(
       actionsData.messageForParicipants ? actionsData.messageForParicipants : ''
     );
-    console.log(actionsData.messageForParicipants);
     setAllActions([...tempActions]);
     setAllActionsTemp([...tempActions]);
   }, [actionsData]);
@@ -431,13 +430,11 @@ export default function ActionMainContainer() {
   };
 
   const postMessageForParticipantFlag = async (post: boolean) => {
-    console.log('messageForParticipant', messageForParticipant);
     updateMessageForParticipant(messageForParticipant);
     // await saveAndProcessAction(
     //   BoardActionType.POST_MESSAGE_FOR_PARTICIPANTS_FLAG,
     //   { post }
     // ).then(res => {
-    //   console.log();
     // });
   };
   const clearMessageForParticipant = async () => {
@@ -452,7 +449,6 @@ export default function ActionMainContainer() {
     ).then(
       res => {
         setLoadingFlag(false);
-        console.log();
       },
       error => {
         setLoadingFlag(false);

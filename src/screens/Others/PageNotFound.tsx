@@ -1,40 +1,51 @@
-import commonStyles from './../../style.module.scss';
-import './../../global.scss';
-import animation from '../../assets/img/wild-card-404.gif';
-import { Button, Grid, Typography } from '@mui/material';
+import Paper from '@mui/material/Paper';
+import { Box } from '@mui/material';
+
 import { useNavigate } from 'react-router-dom';
-import { ContainedButton } from '../../components';
-export function PageNotFound() {
+import { ContainedButtonWithIcon } from '../../components/CustomizedButton/ContainedButtonWithIcon';
+import {
+  BodyRegularTypography,
+  H2SemiBoldTypography,
+} from '../../components/CustomizedTypography';
+
+export default function PageNotFound() {
   const navigate = useNavigate();
+
+  // Function to navigate on create new retro page
   function goToLanding() {
     navigate(`/`);
   }
+
   return (
-    <Grid
-      container
-      display="flex"
-      justifyContent="center"
-      alignItems="center"
-      flexDirection="column"
-    >
-      <img src={animation} style={{ height: 'calc(100vh - 300px)' }}></img>
-      <Typography fontSize="48px" color={commonStyles.PrimaryMain}>
-        Oops!
-      </Typography>
-      <Typography
-        mt="23px"
-        mb="48px"
-        variant="h3"
-        color={commonStyles.PrimaryMain}
+    <>
+      <Paper
+        sx={{
+          width: '100%',
+          background: 'rgb(249 251 252)',
+          padding: '20px',
+          display: 'flex',
+          flexDirection: 'column',
+          justifyContent: 'center',
+          alignItems: 'center',
+        }}
       >
-        Could not find the page you are looking for!
-      </Typography>
-      <ContainedButton
-        id="Go_back_to_Home"
-        name="Go back to Home"
-        onClick={() => goToLanding()}
-        size={'medium'}
-      />
-    </Grid>
+        <img src="/svgs/pageNotFound.svg" width={400} height={400} />
+        <H2SemiBoldTypography
+          label="Something’s missing"
+          style={{ color: '#2C69A1' }}
+        />
+        <BodyRegularTypography
+          label="The page you are looking for is missing or the link entered is incorrect."
+          style={{ color: '#4E4E4E', marginTop: '10px' }}
+        />
+        <ContainedButtonWithIcon
+          id={'page-not-found'}
+          label={'Go to Homepage'}
+          size={'medium'}
+          style={{ width: '260px', marginTop: '40px', textAlign: 'center' }}
+          onClick={() => goToLanding()}
+        />
+      </Paper>
+    </>
   );
 }

@@ -16,7 +16,7 @@ const OutlineButtonWithIconWithNoBorder = ({
   color?: string;
   onClick?: (...param: any) => void;
   id?: string;
-  disabled: boolean;
+  disabled?: boolean;
   style?: any;
   error?: boolean;
 }) => {
@@ -32,7 +32,6 @@ const OutlineButtonWithIconWithNoBorder = ({
           color="error"
         >
           {iconPath && <img src={iconPath} />}
-
           <Box component="span" marginLeft="10px">
             {label}
           </Box>
@@ -46,7 +45,6 @@ const OutlineButtonWithIconWithNoBorder = ({
           sx={{ ...style }}
         >
           {iconPath && <img src={iconPath} />}
-
           <Box component="span" marginLeft="10px">
             {label}
           </Box>

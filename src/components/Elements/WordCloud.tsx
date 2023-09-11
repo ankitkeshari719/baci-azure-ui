@@ -18,21 +18,61 @@ const WordCloud: FunctionComponent<WordCloudProps> = ({ data, showOn }) => {
   const [cloud, setCloud] = useState(cloudWords);
   let colorsGreen = ['#48706A', '#8AC269', '#5D965B', '#467E59', '#C9E092'];
   let colorOrange = ['#73503C', '#D9A86C', '#591C16', '#D9C0A3', '#BF9169'];
+  let colorBlue = [
+    '#FF5C00',
+    '#34A853',
+    '#1B1F23',
+    '#4F558F',
+    '#E33283',
+    '#E33283',
+    '#34A853',
+    '#D357FF',
+    '#FF5C00',
+    '#7CCBF3',
+    '#57BDEF',
+    '#44B5EE',
+    '#32AEEC',
+    '#1FA6EA',
+    '#159ADD',
+    '#3F87CA',
+    '#357DC0',
+    '#3072B0',
+    '#2C69A1',
+    '#275E90',
+    '#1e9967',
+    '#1AAF58',
+    '#18bf4d',
+    '#17C54A',
+    '#16CA46',
+    '#18DC4D',
+  ];
+
   useEffect(() => {
-
-
     d3Cloud()
       .size([500, 250])
       .timeInterval(20)
       .words(data)
       .font(({ text, size }, i) => ['Poppins', 'Poppins', 'Poppins'][i % 3])
       .fontSize(datum => {
-        // if(datum.size === 10){
-        //   return 32;
-        // }else{
-        //   return datum.size ? datum.size * 5 : 0;
-        // }
-        return datum.size ? datum.size < 15 ? 18 : datum.size < 30 ? 15 : datum.size < 45 ? 12 : 8 : 16;
+        return datum.size
+          ? datum.size < 15
+            ? 32
+            : datum.size < 30
+            ? 24
+            : datum.size < 45
+            ? 16
+            : datum.size >= 45 && datum.size < 60
+            ? 16
+            : datum.size >= 60 && datum.size < 75
+            ? 24
+            : datum.size >= 75 && datum.size < 90
+            ? 32
+            : datum.size >= 90 && datum.size < 105
+            ? 40
+            : datum.size >= 105 && datum.size < 120
+            ? 48
+            : 8
+          : 16;
       })
       .padding(10)
       .rotate(() => 0)
@@ -42,11 +82,9 @@ const WordCloud: FunctionComponent<WordCloudProps> = ({ data, showOn }) => {
       .on('end', words => setCloud(words))
       .start();
   }, [data]);
-  function fillcolor() {
 
-  }
   return (
-    <svg viewBox="0 0 500 250" width={'100%'} height={'100%'} >
+    <svg viewBox="0 0 500 250" width={'100%'} height={'100%'}>
       <g transform={`translate(${250},${125})`}>
         {cloud &&
           cloud.map(word => {
@@ -56,12 +94,21 @@ const WordCloud: FunctionComponent<WordCloudProps> = ({ data, showOn }) => {
                 style={{
                   fontSize: word.size + 'px',
                   fontFamily: word.font,
-                  fill: showOn === 'whatWentWell' ? colorsGreen[Math.floor(Math.random() * colorsGreen.length)] : colorOrange[Math.floor(Math.random() * colorOrange.length)],
+                  fill:
+                    showOn === 'whatWentWell'
+                      ? colorsGreen[
+                          Math.floor(Math.random() * colorsGreen.length)
+                        ]
+                      : showOn === 'whatDidntWentWell'
+                      ? colorOrange[
+                          Math.floor(Math.random() * colorOrange.length)
+                        ]
+                      : colorBlue[Math.floor(Math.random() * colorBlue.length)],
                   backgroundColor: 'yellow',
                   top: '5px',
                   right: '5px',
                   bottom: '5px',
-                  left: '5px'
+                  left: '5px',
                 }}
                 textAnchor="middle"
                 transform={`translate(${word.x},${word.y}) rotate(${word.rotate})`}
