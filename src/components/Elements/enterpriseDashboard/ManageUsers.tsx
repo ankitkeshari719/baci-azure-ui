@@ -5,6 +5,7 @@ import {
   FormControl,
   Select,
   MenuItem,
+  Checkbox,
 } from '@mui/material';
 import * as React from 'react';
 import * as Icons from 'heroicons-react';
@@ -49,8 +50,7 @@ export default function ManageUsers() {
 
   const localUserData = localStorage.getItem('userData');
   const tempLocalUserData = localUserData && JSON.parse(localUserData);
-  const [role, setRole] = React.useState();
-  const [records, setRecords] = React.useState([]);
+  const [records, setRecords] = React.useState<any>([]);
   const [searchedVal, setSearchedVal] = React.useState('');
   const [filterFn, setFilterFn] = React.useState<any>({
     fn: (items: any) => {
@@ -80,6 +80,7 @@ export default function ManageUsers() {
             teams: user.teams,
             roleName: user.roleName,
             createdAt: moment(user.createdAt).format('Do MMM YYYY'),
+            checked: false,
           };
         });
         setRecords(tempRes);
@@ -177,6 +178,20 @@ export default function ManageUsers() {
     );
   };
 
+  // Handle Checkbox
+  const handleChange = (
+    event: React.ChangeEvent<HTMLInputElement>,
+    userId: any
+  ) => {
+    const newRecord = records.map((record: any) => {
+      if (record.emailId === userId) {
+        record.checked = !record.checked;
+      }
+      return record;
+    });
+    setRecords(newRecord);
+  };
+
   return (
     <>
       <Box
@@ -209,6 +224,7 @@ export default function ManageUsers() {
             marginTop: '16px !important',
           }}
         >
+          {/* Search Bar */}
           <TextField
             id="outlined-basic"
             label="Search..."
@@ -233,6 +249,13 @@ export default function ManageUsers() {
               {recordAfterPagingAndSorting().map((item: any) => {
                 return (
                   <TableRow key={item.id}>
+                    <TableCell>
+                      <Checkbox
+                        checked={item.checked}
+                        onChange={e => handleChange(e, item.id)}
+                        inputProps={{ 'aria-label': 'controlled' }}
+                      />
+                    </TableCell>
                     <TableCell>{item.fullName}</TableCell>
                     <TableCell>{item.emailId}</TableCell>
                     <TableCell>
