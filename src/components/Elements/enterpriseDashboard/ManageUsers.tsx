@@ -33,15 +33,16 @@ import {
 } from '../../../constants/applicationConst';
 
 const headCells = [
+  { id: 'check', label: '', disableSorting: true },
   { id: 'fullName', label: 'Name', disableSorting: false },
   {
     id: 'emailId',
     label: 'Email',
     disableSorting: false,
   },
-  { id: 'teams', label: 'Team', disableSorting: true },
+  { id: 'teams', label: 'Team', disableSorting: false },
   { id: 'roleName', label: 'Role', disableSorting: true },
-  { id: 'createdAt', label: 'Date Joined', disableSorting: true },
+  { id: 'createdAt', label: 'Date Joined', disableSorting: false },
   { id: 'actions', label: 'Actions', disableSorting: true },
 ];
 
@@ -61,7 +62,9 @@ export default function ManageUsers() {
     useTable(records, headCells, filterFn);
 
   React.useEffect(() => {
-    callGetAllUsersByEnterpriseId(tempLocalUserData.enterpriseId);
+    callGetAllUsersByEnterpriseId(
+      tempLocalUserData && tempLocalUserData.enterpriseId
+    );
   }, []);
 
   // Get All Users
