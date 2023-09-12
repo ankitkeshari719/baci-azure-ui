@@ -18,6 +18,7 @@ import {
 import { GlobalContext, ActionType } from '../../../contexts/GlobalContext';
 import { getEnterpriseById, updateUser } from '../../../helpers/msal/services';
 import OutlineButtonWithIconWithNoBorder from '../../CustomizedButton/OutlineButtonWithIconWithNoBorder';
+import { LazyLoadImage } from 'react-lazy-load-image-component';
 
 const styles = {
   accessCodeTextField: {
@@ -57,6 +58,7 @@ export default function UpdateProfile({ handleEdit }: Props) {
   const [global, dispatch] = React.useContext(GlobalContext);
   const localUserData = localStorage.getItem('userData');
   const tempLocalUserData = localUserData && JSON.parse(localUserData);
+  const [selectedAvatar, setSelectedAvatar] = React.useState('');
 
   const [firstName, setFirstName] = React.useState('');
   const [lastName, setLastName] = React.useState('');
@@ -90,6 +92,7 @@ export default function UpdateProfile({ handleEdit }: Props) {
     setIsEnterpriserRequested(
       tempLocalUserData && tempLocalUserData.isEnterpriserRequested
     );
+    setSelectedAvatar(tempLocalUserData && tempLocalUserData.selectedAvatar);
   }, []);
 
   React.useEffect(() => {
@@ -167,6 +170,8 @@ export default function UpdateProfile({ handleEdit }: Props) {
       });
   };
 
+  const imaSrc = '/avatars/animals/' + selectedAvatar + '.svg';
+
   return (
     <>
       <Box
@@ -187,10 +192,23 @@ export default function UpdateProfile({ handleEdit }: Props) {
             flexDirection: 'column',
           }}
         >
-          <img
-            src="/images/user-preview.png"
-            style={{ height: '345px', width: '345px' }}
-          />
+          {selectedAvatar != '' ? (
+            <LazyLoadImage
+              className="avatar"
+              style={{
+                height: '345px',
+                width: '345px',
+                borderRadius: '50%',
+                border: '5px solid #f9fbf8',
+              }}
+              src={imaSrc}
+            ></LazyLoadImage>
+          ) : (
+            <img
+              src={'/svgs/DefaultUser.svg'}
+              style={{ height: '345px', width: '345px' }}
+            />
+          )}
           {firstName === '' && lastName === '' ? (
             <H6RegularTypography label="-" />
           ) : (

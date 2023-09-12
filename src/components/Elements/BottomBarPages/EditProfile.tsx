@@ -1,8 +1,21 @@
 import * as React from 'react';
 import { AuthenticatedTemplate, useMsal } from '@azure/msal-react';
 
-import { Box, FormControl, FormHelperText, TextField } from '@mui/material';
-import { ContainedButton, OutlinedButton } from '../../../components';
+import {
+  Box,
+  Button,
+  Dialog,
+  DialogTitle,
+  FormControl,
+  FormHelperText,
+  Grid,
+  TextField,
+} from '@mui/material';
+import {
+  ContainedButton,
+  OutlinedButton,
+  TextButton,
+} from '../../../components';
 import * as Icons from 'heroicons-react';
 
 import {
@@ -18,6 +31,9 @@ import { GlobalContext, ActionType } from '../../../contexts/GlobalContext';
 import { styled } from '@mui/material/styles';
 import Tooltip, { TooltipProps, tooltipClasses } from '@mui/material/Tooltip';
 import OutlineButtonWithIconWithNoBorder from '../../CustomizedButton/OutlineButtonWithIconWithNoBorder';
+import { avatarName } from '../../../constants/AvatarName';
+import Avatar from '../Avatar';
+import { LazyLoadImage } from 'react-lazy-load-image-component';
 
 const styles = {
   accessCodeTextField: {
@@ -54,6 +70,12 @@ type Props = {
 
 export default function EditProfile({ handleEdit }: Props) {
   const { instance } = useMsal();
+  const [openAvatarDialog, setOpenAvatarDialog] = React.useState(false);
+  const [avatarList, setAvatarList] = React.useState<string[]>([]);
+  const [height, setHeight] = React.useState(0);
+  const [selectedAvatar, setSelectedAvatar] = React.useState('');
+  const [avatarError, setAvatarError] = React.useState('');
+
   const [global, dispatch] = React.useContext(GlobalContext);
   const [firstName, setFirstName] = React.useState('');
   const [lastName, setLastName] = React.useState('');
@@ -88,12 +110,18 @@ export default function EditProfile({ handleEdit }: Props) {
     setIsEnterpriserRequested(
       tempLocalUserData && tempLocalUserData.isEnterpriserRequested
     );
+    setSelectedAvatar(tempLocalUserData && tempLocalUserData.selectedAvatar);
   }, []);
 
   React.useEffect(() => {
     const enterpriseId = tempLocalUserData && tempLocalUserData.enterpriseId;
     callGetEnterpriseById(enterpriseId);
   });
+
+  React.useEffect(() => {
+    setAvatarList(avatarName.sort(() => Math.random() - 0.5));
+    setHeight(window.innerHeight);
+  }, []);
 
   const callGetEnterpriseById = async (enterpriseId: any) => {
     await getEnterpriseById(enterpriseId).then(
@@ -166,6 +194,7 @@ export default function EditProfile({ handleEdit }: Props) {
       phoneNo: phoneNo,
       country: country,
       cityCode: cityCode,
+      selectedAvatar: selectedAvatar,
     };
     await updateUser(emailId, requestBody).then(
       res => {
@@ -245,6 +274,22 @@ export default function EditProfile({ handleEdit }: Props) {
       });
   };
 
+  const onSelectAvatar = (avatarName: string) => {
+    setAvatarError('');
+    setSelectedAvatar(avatarName);
+  };
+
+  const onClickSubmit = () => {
+    if (selectedAvatar === '') {
+      setAvatarError('Please select an avatar.');
+      return;
+    }
+    setSelectedAvatar(selectedAvatar);
+    setOpenAvatarDialog(false);
+  };
+
+  const imaSrc = '/avatars/animals/' + selectedAvatar + '.svg';
+
   return (
     <>
       <Box
@@ -265,9 +310,28 @@ export default function EditProfile({ handleEdit }: Props) {
             flexDirection: 'column',
           }}
         >
-          <img
-            src="/images/user-preview.png"
-            style={{ height: '345px', width: '345px' }}
+          {selectedAvatar ? (
+            <LazyLoadImage
+              className="avatar"
+              style={{
+                height: '345px',
+                width: '345px',
+                borderRadius: '50%',
+                border: '5px solid #f9fbf8',
+              }}
+              src={imaSrc}
+            ></LazyLoadImage>
+          ) : (
+            <img
+              src={'/svgs/DefaultUser.svg'}
+              style={{ height: '345px', width: '345px' }}
+            />
+          )}
+          <TextButton
+            id={'Select_Avatar'}
+            label={'Select Avatar'}
+            size={'small'}
+            onClick={() => setOpenAvatarDialog(true)}
           />
           {firstName === '' && lastName === '' ? (
             <H6RegularTypography label="-" />
@@ -854,6 +918,101 @@ export default function EditProfile({ handleEdit }: Props) {
           </Box>
         </Box>
       </Box>
+      <Dialog
+        open={openAvatarDialog}
+        sx={{
+          height: height - 100,
+        }}
+      >
+        <DialogTitle style={{ padding: '16px' }}>
+          <Grid container sx={{ display: 'flex', alignItems: 'center' }}>
+            <Grid item sm={6}>
+              <Box display="flex" justifyContent="flex-start">
+                <H6RegularTypography
+                  label={'Select Avatar'}
+                  style={{
+                    color: '#4E4E4E',
+                  }}
+                />
+              </Box>
+            </Grid>
+            <Grid item sm={6}>
+              <Box display="flex" justifyContent="flex-end">
+                <Icons.X
+                  size={20}
+                  style={{
+                    cursor: 'pointer',
+                  }}
+                  onClick={() => setOpenAvatarDialog(false)}
+                />
+              </Box>
+            </Grid>
+          </Grid>
+        </DialogTitle>
+        {/* Avatar List */}
+        <Box
+          className="avatarDialog"
+          sx={{
+            height: height / 2,
+          }}
+        >
+          {avatarList.map((avatar: any, index) => (
+            <Avatar
+              key={index}
+              avatar={avatar}
+              className="avatarSvgXs"
+              onClickAvatar={onSelectAvatar}
+              selectedAvatar={selectedAvatar}
+              css={{
+                width: '60px',
+                height: '60px',
+                borderRadius: '50%',
+                margin: '16px',
+              }}
+            ></Avatar>
+          ))}
+        </Box>
+        {/* Error Message */}
+        <Box sx={{ mx: 3, mt: 2 }}>
+          {avatarError !== '' && (
+            <FormHelperText sx={{ color: '#d32f2f', mt: 2 }}>
+              {avatarError}
+            </FormHelperText>
+          )}
+        </Box>
+        {/* Buttons */}
+        <Box sx={{ mx: 3 }}>
+          <Box
+            sx={{
+              width: '100%',
+              display: 'flex',
+              flex: '1 0 auto',
+              alignItems: 'flex-end',
+              justifyContent: 'space-between',
+              my: 2,
+            }}
+          >
+            <OutlinedButton
+              label="Cancel"
+              size={'medium'}
+              onClick={() => setOpenAvatarDialog(false)}
+              style={{
+                minWidth: '75px !important',
+                height: '36px !important',
+              }}
+            />
+            <ContainedButton
+              name="Select"
+              onClick={onClickSubmit}
+              style={{
+                minWidth: '75px !important',
+                height: '36px !important',
+              }}
+              size={'medium'}
+            />
+          </Box>
+        </Box>
+      </Dialog>
     </>
   );
 }

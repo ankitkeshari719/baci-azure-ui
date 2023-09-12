@@ -37,10 +37,13 @@ const LeftBar = () => {
   const [{ user }] = React.useContext(GlobalContext);
   const localUserData = localStorage.getItem('userData');
   const tempLocalUserData = localUserData && JSON.parse(localUserData);
+  const [selectedAvatar, setSelectedAvatar] = React.useState('');
 
   const [path, setPath] = React.useState('');
+  const imaSrc = '/avatars/animals/' + selectedAvatar + '.svg';
 
   React.useEffect(() => {
+    setSelectedAvatar(tempLocalUserData && tempLocalUserData.selectedAvatar);
     if (tempLocalUserData && tempLocalUserData.roleName === REGULAR_USER) {
       setPath('facilitator');
     } else if (
@@ -257,18 +260,19 @@ const LeftBar = () => {
 
           <Tooltip title={user?.name + ''} placement="right-start">
             <span>
-              {user?.avatar ? (
-                <Avatar
-                  avatar={user.avatar}
-                  onClickAvatar={goToProfile}
-                  css={{
-                    width: '48px',
+              {selectedAvatar != '' ? (
+                <LazyLoadImage
+                  className="avatar"
+                  style={{
                     height: '48px',
+                    width: '48px',
                     borderRadius: '50%',
+                    border: '5px solid #f9fbf8',
                     cursor: 'pointer',
-                    border: 'none',
                   }}
-                ></Avatar>
+                  src={imaSrc}
+                  onClick={goToProfile}
+                ></LazyLoadImage>
               ) : (
                 <LazyLoadImage
                   width="48px !important"

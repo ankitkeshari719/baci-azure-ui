@@ -1034,6 +1034,7 @@ export const createUser = async (requestBody: any): Promise<any> => {
       enterpriseName: requestBody.enterpriseName,
       enterprisePhoto: requestBody.enterprisePhoto,
       isActive: requestBody.isActive,
+      selectedAvatar: requestBody.selectedAvatar,
     }),
   };
 
@@ -1071,6 +1072,8 @@ export const updateUser = async (
       enterpriseName: requestBody.enterpriseName,
       isActive: requestBody.isActive,
       isEnterpriserRequested: requestBody.isEnterpriserRequested,
+      selectedAvatar: requestBody.selectedAvatar,
+
     }),
   };
 

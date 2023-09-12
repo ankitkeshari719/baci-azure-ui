@@ -126,6 +126,7 @@ export function UserHeader({ accounts }: Props) {
         country: '',
         role: '',
         isActive: true,
+        selectedAvatar: ''
       };
       await createUser(requestBody).then(
         res => {
