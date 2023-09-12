@@ -162,21 +162,22 @@ const LeftBar = () => {
     navigate(path + '/templates/pulseCheckListTemplate/');
   }
 
-  // Function to navigate on retroListTemplate
+  // Function to navigate to enterprise registration
+  function goToEnterpriseRegistration() {
+    setHoverOnUserMenu(false);
+    navigate(path + '/teams/enterpriseRegistration/');
+  }
+
+  // Function to navigate to get all teams
   function goToAllTeams() {
     setHoverOnUserMenu(false);
     navigate(path + '/teams/allTeams/');
   }
 
-  // Function to navigate on pulseCheckListTemplate
+  // Function to navigate on manage users
   function goToManageUser() {
     setHoverOnUserMenu(false);
-    navigate(path + '/teams/manageTeams/');
-  }
-
-  function goToEnterpriseRegistration() {
-    setHoverOnUserMenu(false);
-    navigate(path + '/teams/enterpriseRegistration/');
+    navigate(path + '/teams/manageUsers/');
   }
 
   // Function to navigate on goToProfile

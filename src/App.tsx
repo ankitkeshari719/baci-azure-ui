@@ -63,6 +63,7 @@ import { JoinRetroEnterprise } from './components/Elements/enterpriseDashboard/J
 import EnterpriseRegistration from './components/Elements/enterpriseDashboard/EnterpriseRegistration';
 import { JoinRetroFacilitator } from './components/Elements/facilitatorDashboard/JoinRetroFacilitator';
 import CreateTeam from './components/Elements/TeamsDashboard/CreateTeam';
+import ManageUser from './components/Elements/enterpriseDashboard/ManageUser';
 
 type AppProps = {
   instance: IPublicClientApplication;
@@ -228,20 +229,17 @@ export default function App({ instance }: AppProps) {
                                     element={<TeamsMainContainer />}
                                   />
                                 </Route>
-                                <Route path="manageTeams">
-                                  <Route
-                                    path=""
-                                    element={<TeamsMainContainer />}
-                                  />
-                                </Route>
-                                <Route path="create">
-                                  <Route path="" element={<CreateTeam />} />
+                                <Route path="manageUsers">
+                                  <Route path="" element={<ManageUser />} />
                                 </Route>
                                 <Route path="enterpriseRegistration">
                                   <Route
                                     path=""
                                     element={<EnterpriseRegistration />}
                                   />
+                                </Route>
+                                <Route path="create">
+                                  <Route path="" element={<CreateTeam />} />
                                 </Route>
                               </Route>
                               <Route path="settings" element={<Settings />} />
@@ -433,20 +431,17 @@ export default function App({ instance }: AppProps) {
                                     element={<TeamsMainContainer />}
                                   />
                                 </Route>
-                                <Route path="manageTeams">
-                                  <Route
-                                    path=""
-                                    element={<TeamsMainContainer />}
-                                  />
-                                </Route>
-                                <Route path="createTeam">
-                                  <Route path="" element={<CreateTeam />} />
+                                <Route path="manageUsers">
+                                  <Route path="" element={<ManageUser />} />
                                 </Route>
                                 <Route path="enterpriseRegistration">
                                   <Route
                                     path=""
                                     element={<EnterpriseRegistration />}
                                   />
+                                </Route>
+                                <Route path="createTeam">
+                                  <Route path="" element={<CreateTeam />} />
                                 </Route>
                               </Route>
                               <Route path="settings" element={<Settings />} />

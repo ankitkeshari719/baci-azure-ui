@@ -35,7 +35,6 @@ export function UserHeader({ accounts }: Props) {
   // Function to check weather this id is present in DB or not
   const checkUser = () => {
     if (accounts && accounts.length != 0) {
-      console.log('checkUser::', accounts);
       localStorage.setItem('userAzureData', JSON.stringify(accounts));
       callGetUserByEmailId(accounts[0].username);
     }
@@ -49,7 +48,6 @@ export function UserHeader({ accounts }: Props) {
           // Create new user in DB
           callGetRoleByName();
         } else {
-          console.log('callGetUserByEmailId::', res);
           // Navigate the user to dashboard according to his role
           localStorage.setItem('userData', JSON.stringify(res));
           if (res.roleName === REGULAR_USER) {
@@ -131,7 +129,6 @@ export function UserHeader({ accounts }: Props) {
       };
       await createUser(requestBody).then(
         res => {
-          console.log('callCreateUser', res);
           if (res != null) {
             localStorage.setItem('userData', JSON.stringify(res));
             checkUser();

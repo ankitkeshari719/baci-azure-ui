@@ -152,7 +152,6 @@ export default function CreateTeam() {
 
     await createTeam(requestBody).then(
       res => {
-        console.log('callCreateTeam response', res);
         dispatch({
           type: ActionType.SET_LOADING,
           payload: { loadingFlag: false },
