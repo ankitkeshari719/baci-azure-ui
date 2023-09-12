@@ -9,6 +9,7 @@ import commonStyles from '../../../style.module.scss';
 import useTable from '../../CustomizedTable/useTable';
 import { TableBody, TableCell, TableRow } from '@material-ui/core';
 import { MagnifyingGlassIcon } from '@heroicons/react/24/outline';
+import { OutlinedButton } from '../../CustomizedButton/OutlinedButton';
 
 const styles = {
   accessCodeTextField: {
@@ -105,6 +106,7 @@ const headCells = [
   { id: 'email', label: 'Employee Address (Personal)', disableSorting: false },
   { id: 'mobile', label: 'Mobile Number', disableSorting: false },
   { id: 'department', label: 'Department', disableSorting: true },
+  { id: 'actions', label: 'Actions', disableSorting: true },
 ];
 
 export default function ManageUser() {
@@ -137,11 +139,16 @@ export default function ManageUser() {
     });
   };
 
+  const handleDeleteUser = (userId: any) => {
+    console.log('userId', userId);
+  };
+
   return (
     <>
       <Box
         sx={{
           width: '100%',
+          height: 'calc(var(--app-height))',
           background: '#F9FBFC',
           padding: '20px',
           display: 'flex',
@@ -160,11 +167,9 @@ export default function ManageUser() {
         <Box
           sx={{
             width: '100%',
-            height: 'calc(var(--app-height)) - 120px',
             background: 'rgb(249 251 252)',
             display: 'flex',
             flexDirection: 'column',
-            overflowY: 'auto',
           }}
         >
           <TextField
@@ -196,6 +201,19 @@ export default function ManageUser() {
                     <TableCell>{item.email}</TableCell>
                     <TableCell>{item.mobile}</TableCell>
                     <TableCell>{item.department}</TableCell>
+                    <TableCell>
+                      <OutlinedButton
+                        id="delete_user"
+                        label="delete"
+                        size={'medium'}
+                        onClick={() => handleDeleteUser(item.id)}
+                        style={{
+                          minWidth: '172px !important',
+                          width: '172px !important',
+                          height: '40px !important',
+                        }}
+                      />
+                    </TableCell>
                   </TableRow>
                 );
               })}
