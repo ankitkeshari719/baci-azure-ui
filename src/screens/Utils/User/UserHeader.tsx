@@ -121,7 +121,7 @@ export function UserHeader({ accounts }: Props) {
         enterpriseId: enterpriseParam && enterpriseParam.organisationId,
         enterpriseName: enterpriseParam && enterpriseParam.organisationName,
         enterprisePhoto: enterpriseParam && enterpriseParam.organisationPhoto,
-        team: '',
+        teams: [],
         plan: '',
         country: '',
         role: '',

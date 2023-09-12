@@ -63,7 +63,7 @@ import { JoinRetroEnterprise } from './components/Elements/enterpriseDashboard/J
 import EnterpriseRegistration from './components/Elements/enterpriseDashboard/EnterpriseRegistration';
 import { JoinRetroFacilitator } from './components/Elements/facilitatorDashboard/JoinRetroFacilitator';
 import CreateTeam from './components/Elements/TeamsDashboard/CreateTeam';
-import ManageUser from './components/Elements/enterpriseDashboard/ManageUser';
+import ManageUsers from './components/Elements/enterpriseDashboard/ManageUsers';
 
 type AppProps = {
   instance: IPublicClientApplication;
@@ -230,7 +230,7 @@ export default function App({ instance }: AppProps) {
                                   />
                                 </Route>
                                 <Route path="manageUsers">
-                                  <Route path="" element={<ManageUser />} />
+                                  <Route path="" element={<ManageUsers />} />
                                 </Route>
                                 <Route path="enterpriseRegistration">
                                   <Route
@@ -432,7 +432,7 @@ export default function App({ instance }: AppProps) {
                                   />
                                 </Route>
                                 <Route path="manageUsers">
-                                  <Route path="" element={<ManageUser />} />
+                                  <Route path="" element={<ManageUsers />} />
                                 </Route>
                                 <Route path="enterpriseRegistration">
                                   <Route

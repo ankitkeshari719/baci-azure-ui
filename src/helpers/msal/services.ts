@@ -1026,7 +1026,7 @@ export const createUser = async (requestBody: any): Promise<any> => {
       country: requestBody.country,
       companyName: requestBody.companyName,
       role: requestBody.role,
-      team: requestBody.team,
+      teams: requestBody.teams,
       plan: requestBody.plan,
       enterpriseId: requestBody.enterpriseId,
       roleId: requestBody.roleId,

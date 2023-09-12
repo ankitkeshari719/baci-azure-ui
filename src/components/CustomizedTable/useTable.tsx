@@ -13,14 +13,14 @@ const useStyles = makeStyles(theme => ({
     marginTop: theme.spacing(3),
     '& thead td': {
       fontWeight: '800',
-      color: theme.palette.primary.main,
-      backgroundColor: theme.palette.primary.light,
+      color: '#343434',
+      backgroundColor: '#CCCCCC',
     },
     '& tbody td': {
       fontWeight: '300',
     },
     '& tbody tr:hover': {
-      backgroundColor: '#fffbf2',
+      backgroundColor: '#CEEFFF',
       cursor: 'pointer',
     },
   },
