@@ -120,7 +120,6 @@ export function UserHeader({ accounts }: Props) {
         roleId: roleParam && roleParam.roleId,
         enterpriseId: enterpriseParam && enterpriseParam.organisationId,
         enterpriseName: enterpriseParam && enterpriseParam.organisationName,
-        enterprisePhoto: enterpriseParam && enterpriseParam.organisationPhoto,
         teams: [],
         plan: '',
         country: '',

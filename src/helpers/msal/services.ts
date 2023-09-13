@@ -1032,7 +1032,6 @@ export const createUser = async (requestBody: any): Promise<any> => {
       roleId: requestBody.roleId,
       roleName: requestBody.roleName,
       enterpriseName: requestBody.enterpriseName,
-      enterprisePhoto: requestBody.enterprisePhoto,
       isActive: requestBody.isActive,
       selectedAvatar: requestBody.selectedAvatar,
     }),
