@@ -20,6 +20,7 @@ import {
   BodyRegularTypography,
   BodySemiBoldTypography,
   H2SemiBoldTypography,
+  H5RegularTypography,
   H5SemiBoldTypography,
 } from '../../CustomizedTypography';
 import commonStyles from '../../../style.module.scss';
@@ -77,6 +78,7 @@ const headCells = [
 export default function ManageUsers() {
   const [global, dispatch] = React.useContext(GlobalContext);
   const [height, setHeight] = React.useState(0);
+  const [isManageUserPage, setIsManageUserPage] = React.useState(false);
   const [openDeleteUserDialog, setOpenDeleteUserDialog] = React.useState(false);
   const [openUpdateRoleDialog, setUpdateRoleDialog] = React.useState(false);
   const [openRevokeRoleDialog, setRevokeRoleDialog] = React.useState(false);
@@ -353,6 +355,14 @@ export default function ManageUsers() {
     );
   };
 
+  const handlePageView = (num: any) => {
+    if (num == 1) {
+      setIsManageUserPage(true);
+    } else {
+      setIsManageUserPage(false);
+    }
+  };
+
   return (
     <>
       <Box
@@ -375,191 +385,411 @@ export default function ManageUsers() {
             marginTop: '16px !important',
           }}
         />
-        {/* Table and Search Box */}
         <Box
           sx={{
             width: '100%',
-            background: 'rgb(249 251 252)',
             display: 'flex',
-            flexDirection: 'column',
+            flexDirection: 'row',
             marginTop: '16px !important',
           }}
         >
+          {/* Left Side */}
           <Box
-            display="flex"
-            flexDirection="row"
-            justifyContent="space-between"
-            alignItems="center"
             sx={{
-              width: '100%',
-              flexDirection: 'row',
+              width: '25%',
+              display: 'flex',
+              flexDirection: 'column',
+              marginRight: '10px',
+              borderRight: '1px solid #E3E3E3',
             }}
           >
-            {/* Search Bar */}
-            <TextField
-              id="outlined-basic"
-              label="Search..."
-              variant="outlined"
-              sx={{ background: 'white', width: '40%' }}
-              onChange={e => {
-                setSearchedVal(e.target.value);
-                handleSearch(e);
-              }}
-              value={searchedVal}
-              InputProps={{
-                startAdornment: (
-                  <InputAdornment position="start">
-                    <MagnifyingGlassIcon width="20px" />
-                  </InputAdornment>
-                ),
-              }}
+            <H5RegularTypography
+              label="Enterprise Dashboard Requests"
+              onClick={() => handlePageView(0)}
             />
-            <Box display="flex" flexDirection="row" alignItems="center">
-              <OutlineButtonWithIconWithNoBorder
-                id={'delete_selected_users'}
-                label={'Delete Users'}
-                iconPath="/svgs/Delete.svg"
-                onClick={handleDeleteSelectedUsers}
-                style={{
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                  color: '#159ADD !important',
-                  textColor: '#159ADD !important',
-                  marginRight: '24px  !important',
-                }}
-              />
-              <TeamSelector
-                enterpriseId={
-                  tempLocalUserData && tempLocalUserData.enterpriseId
-                }
-                selectedTeam={selectedTeam}
-                handleChange={handleChange}
-              />
-            </Box>
+            <H5RegularTypography
+              label="All Users"
+              style={{ marginTop: '24px !important' }}
+              onClick={() => handlePageView(1)}
+            />
           </Box>
-          <TblContainer>
-            <TblHead />
-            <TableBody>
-              {recordAfterPagingAndSorting().map((item: any) => {
-                return (
-                  <TableRow key={item.id}>
-                    <TableCell>
-                      <Checkbox
-                        checked={item.checked}
-                        onChange={e => handleChangeCheckbox(e, item.id)}
-                        inputProps={{ 'aria-label': 'controlled' }}
-                      />
-                    </TableCell>
-                    <TableCell>{item.fullName}</TableCell>
-                    <TableCell>{item.emailId}</TableCell>
-                    <TableCell>
-                      {item.teams.length === 0 ? (
-                        "Team's Not Found"
-                      ) : (
-                        <ul>
-                          {item.teams.map((team: any) => {
-                            return <li key={team}>{team}</li>;
-                          })}
-                        </ul>
-                      )}
-                    </TableCell>
-                    <TableCell>
-                      <FormControl
-                        variant="standard"
-                        sx={{ m: 1, minWidth: 120 }}
-                      >
-                        <Select
-                          fullWidth
-                          id="role-selection"
-                          value={item.roleName}
-                          onClick={() =>
-                            handleChangeUserRolePopUpOpen(
-                              item.roleName,
-                              item.id
-                            )
-                          }
-                          sx={{
-                            fieldset: {
-                              border: 'none',
-                              opacity: 1,
-                              color: '#4E4E4E',
-                            },
-                            '& .MuiSelect-select': {
-                              display: 'flex',
-                              justifyContent: 'center',
-                              alignItems: 'flex-start',
-                              padding: '16px',
-                            },
-                          }}
-                          MenuProps={{
-                            PaperProps: {
-                              sx: {
-                                bgcolor: '#ffffff',
-                                '& .MuiMenuItem-root': {
-                                  padding: 2,
-                                },
-                              },
-                            },
-                          }}
-                        >
-                          <MenuItem value="Regular User">
-                            <Typography
-                              style={{
-                                fontFamily: 'Poppins',
-                                fontStyle: 'normal',
-                                fontWeight: 400,
-                                fontSize: '16px',
-                                lineHeight: '20px',
-                                letterSpacing: '0.6px',
-                                color: '#343434',
-                                whiteSpace: 'nowrap',
-                                overflow: 'hidden',
-                                textOverflow: 'ellipsis',
-                              }}
+          {/* Right Side */}
+          <Box sx={{ width: '70%' }}>
+            {/* Table and Search Box For Manage users*/}
+            {isManageUserPage ? (
+              <Box
+                sx={{
+                  width: '100%',
+                  background: 'rgb(249 251 252)',
+                  display: 'flex',
+                  flexDirection: 'column',
+                }}
+              >
+                <H5RegularTypography label="All Users (Teamwise)" />
+                <Box
+                  display="flex"
+                  flexDirection="row"
+                  justifyContent="space-between"
+                  alignItems="center"
+                  sx={{
+                    width: '100%',
+                    flexDirection: 'row',
+                  }}
+                >
+                  {/* Search Bar */}
+                  <TextField
+                    id="outlined-basic"
+                    label="Search..."
+                    variant="outlined"
+                    sx={{ background: 'white', width: '40%' }}
+                    onChange={e => {
+                      setSearchedVal(e.target.value);
+                      handleSearch(e);
+                    }}
+                    value={searchedVal}
+                    InputProps={{
+                      startAdornment: (
+                        <InputAdornment position="start">
+                          <MagnifyingGlassIcon width="20px" />
+                        </InputAdornment>
+                      ),
+                    }}
+                  />
+                  <Box display="flex" flexDirection="row" alignItems="center">
+                    <OutlineButtonWithIconWithNoBorder
+                      id={'delete_selected_users'}
+                      label={'Delete Users'}
+                      iconPath="/svgs/Delete.svg"
+                      onClick={handleDeleteSelectedUsers}
+                      style={{
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                        color: '#159ADD !important',
+                        textColor: '#159ADD !important',
+                        marginRight: '24px  !important',
+                      }}
+                    />
+                    <TeamSelector
+                      enterpriseId={
+                        tempLocalUserData && tempLocalUserData.enterpriseId
+                      }
+                      selectedTeam={selectedTeam}
+                      handleChange={handleChange}
+                    />
+                  </Box>
+                </Box>
+                <TblContainer>
+                  <TblHead />
+                  <TableBody>
+                    {recordAfterPagingAndSorting().map((item: any) => {
+                      return (
+                        <TableRow key={item.id}>
+                          <TableCell>
+                            <Checkbox
+                              checked={item.checked}
+                              onChange={e => handleChangeCheckbox(e, item.id)}
+                              inputProps={{ 'aria-label': 'controlled' }}
+                            />
+                          </TableCell>
+                          <TableCell>{item.fullName}</TableCell>
+                          <TableCell>{item.emailId}</TableCell>
+                          <TableCell>
+                            {item.teams.length === 0 ? (
+                              "Team's Not Found"
+                            ) : (
+                              <ul>
+                                {item.teams.map((team: any) => {
+                                  return <li key={team}>{team}</li>;
+                                })}
+                              </ul>
+                            )}
+                          </TableCell>
+                          <TableCell>
+                            <FormControl
+                              variant="standard"
+                              sx={{ m: 1, minWidth: 120 }}
                             >
-                              Basic
-                            </Typography>
-                          </MenuItem>
-                          <br />
-                          <MenuItem value="Regular Enterprise">
-                            <Typography
+                              <Select
+                                fullWidth
+                                id="role-selection"
+                                value={item.roleName}
+                                onClick={() =>
+                                  handleChangeUserRolePopUpOpen(
+                                    item.roleName,
+                                    item.id
+                                  )
+                                }
+                                sx={{
+                                  fieldset: {
+                                    border: 'none',
+                                    opacity: 1,
+                                    color: '#4E4E4E',
+                                  },
+                                  '& .MuiSelect-select': {
+                                    display: 'flex',
+                                    justifyContent: 'center',
+                                    alignItems: 'flex-start',
+                                    padding: '16px',
+                                  },
+                                }}
+                                MenuProps={{
+                                  PaperProps: {
+                                    sx: {
+                                      bgcolor: '#ffffff',
+                                      '& .MuiMenuItem-root': {
+                                        padding: 2,
+                                      },
+                                    },
+                                  },
+                                }}
+                              >
+                                <MenuItem value="Regular User">
+                                  <Typography
+                                    style={{
+                                      fontFamily: 'Poppins',
+                                      fontStyle: 'normal',
+                                      fontWeight: 400,
+                                      fontSize: '16px',
+                                      lineHeight: '20px',
+                                      letterSpacing: '0.6px',
+                                      color: '#343434',
+                                      whiteSpace: 'nowrap',
+                                      overflow: 'hidden',
+                                      textOverflow: 'ellipsis',
+                                    }}
+                                  >
+                                    Basic
+                                  </Typography>
+                                </MenuItem>
+                                <br />
+                                <MenuItem value="Regular Enterprise">
+                                  <Typography
+                                    style={{
+                                      fontFamily: 'Poppins',
+                                      fontStyle: 'normal',
+                                      fontWeight: 400,
+                                      fontSize: '16px',
+                                      lineHeight: '20px',
+                                      letterSpacing: '0.6px',
+                                      color: '#343434',
+                                      whiteSpace: 'nowrap',
+                                      overflow: 'hidden',
+                                      textOverflow: 'ellipsis',
+                                    }}
+                                  >
+                                    Enterprise
+                                  </Typography>
+                                </MenuItem>
+                              </Select>
+                            </FormControl>
+                          </TableCell>
+                          <TableCell>{item.createdAt}</TableCell>
+                          <TableCell>
+                            <Icons.TrashOutline
+                              size={20}
                               style={{
-                                fontFamily: 'Poppins',
-                                fontStyle: 'normal',
-                                fontWeight: 400,
-                                fontSize: '16px',
-                                lineHeight: '20px',
-                                letterSpacing: '0.6px',
-                                color: '#343434',
-                                whiteSpace: 'nowrap',
-                                overflow: 'hidden',
-                                textOverflow: 'ellipsis',
+                                cursor: 'pointer',
+                                color: '#4E4E4E',
                               }}
+                              onClick={() => handleDeleteUserPopUpOpen(item.id)}
+                            />
+                          </TableCell>
+                        </TableRow>
+                      );
+                    })}
+                  </TableBody>
+                </TblContainer>
+                <TblPagination />
+              </Box>
+            ) : (
+              <Box
+                sx={{
+                  width: '100%',
+                  background: 'rgb(249 251 252)',
+                  display: 'flex',
+                  flexDirection: 'column',
+                }}
+              >
+                <H5RegularTypography label="Requests for Enterprise Dashboard" />
+                <Box
+                  display="flex"
+                  flexDirection="row"
+                  justifyContent="space-between"
+                  alignItems="center"
+                  sx={{
+                    width: '100%',
+                    flexDirection: 'row',
+                  }}
+                >
+                  {/* Search Bar */}
+                  <TextField
+                    id="outlined-basic"
+                    label="Search..."
+                    variant="outlined"
+                    sx={{ background: 'white', width: '40%' }}
+                    onChange={e => {
+                      setSearchedVal(e.target.value);
+                      handleSearch(e);
+                    }}
+                    value={searchedVal}
+                    InputProps={{
+                      startAdornment: (
+                        <InputAdornment position="start">
+                          <MagnifyingGlassIcon width="20px" />
+                        </InputAdornment>
+                      ),
+                    }}
+                  />
+                  <Box display="flex" flexDirection="row" alignItems="center">
+                    <OutlineButtonWithIconWithNoBorder
+                      id={'delete_selected_users'}
+                      label={'Delete Users'}
+                      iconPath="/svgs/Delete.svg"
+                      onClick={handleDeleteSelectedUsers}
+                      style={{
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                        color: '#159ADD !important',
+                        textColor: '#159ADD !important',
+                        marginRight: '24px  !important',
+                      }}
+                    />
+                    <TeamSelector
+                      enterpriseId={
+                        tempLocalUserData && tempLocalUserData.enterpriseId
+                      }
+                      selectedTeam={selectedTeam}
+                      handleChange={handleChange}
+                    />
+                  </Box>
+                </Box>
+                <TblContainer>
+                  <TblHead />
+                  <TableBody>
+                    {recordAfterPagingAndSorting().map((item: any) => {
+                      return (
+                        <TableRow key={item.id}>
+                          <TableCell>
+                            <Checkbox
+                              checked={item.checked}
+                              onChange={e => handleChangeCheckbox(e, item.id)}
+                              inputProps={{ 'aria-label': 'controlled' }}
+                            />
+                          </TableCell>
+                          <TableCell>{item.fullName}</TableCell>
+                          <TableCell>{item.emailId}</TableCell>
+                          <TableCell>
+                            {item.teams.length === 0 ? (
+                              "Team's Not Found"
+                            ) : (
+                              <ul>
+                                {item.teams.map((team: any) => {
+                                  return <li key={team}>{team}</li>;
+                                })}
+                              </ul>
+                            )}
+                          </TableCell>
+                          <TableCell>
+                            <FormControl
+                              variant="standard"
+                              sx={{ m: 1, minWidth: 120 }}
                             >
-                              Enterprise
-                            </Typography>
-                          </MenuItem>
-                        </Select>
-                      </FormControl>
-                    </TableCell>
-                    <TableCell>{item.createdAt}</TableCell>
-                    <TableCell>
-                      <Icons.TrashOutline
-                        size={20}
-                        style={{
-                          cursor: 'pointer',
-                          color: '#4E4E4E',
-                        }}
-                        onClick={() => handleDeleteUserPopUpOpen(item.id)}
-                      />
-                    </TableCell>
-                  </TableRow>
-                );
-              })}
-            </TableBody>
-          </TblContainer>
-          <TblPagination />
+                              <Select
+                                fullWidth
+                                id="role-selection"
+                                value={item.roleName}
+                                onClick={() =>
+                                  handleChangeUserRolePopUpOpen(
+                                    item.roleName,
+                                    item.id
+                                  )
+                                }
+                                sx={{
+                                  fieldset: {
+                                    border: 'none',
+                                    opacity: 1,
+                                    color: '#4E4E4E',
+                                  },
+                                  '& .MuiSelect-select': {
+                                    display: 'flex',
+                                    justifyContent: 'center',
+                                    alignItems: 'flex-start',
+                                    padding: '16px',
+                                  },
+                                }}
+                                MenuProps={{
+                                  PaperProps: {
+                                    sx: {
+                                      bgcolor: '#ffffff',
+                                      '& .MuiMenuItem-root': {
+                                        padding: 2,
+                                      },
+                                    },
+                                  },
+                                }}
+                              >
+                                <MenuItem value="Regular User">
+                                  <Typography
+                                    style={{
+                                      fontFamily: 'Poppins',
+                                      fontStyle: 'normal',
+                                      fontWeight: 400,
+                                      fontSize: '16px',
+                                      lineHeight: '20px',
+                                      letterSpacing: '0.6px',
+                                      color: '#343434',
+                                      whiteSpace: 'nowrap',
+                                      overflow: 'hidden',
+                                      textOverflow: 'ellipsis',
+                                    }}
+                                  >
+                                    Basic
+                                  </Typography>
+                                </MenuItem>
+                                <br />
+                                <MenuItem value="Regular Enterprise">
+                                  <Typography
+                                    style={{
+                                      fontFamily: 'Poppins',
+                                      fontStyle: 'normal',
+                                      fontWeight: 400,
+                                      fontSize: '16px',
+                                      lineHeight: '20px',
+                                      letterSpacing: '0.6px',
+                                      color: '#343434',
+                                      whiteSpace: 'nowrap',
+                                      overflow: 'hidden',
+                                      textOverflow: 'ellipsis',
+                                    }}
+                                  >
+                                    Enterprise
+                                  </Typography>
+                                </MenuItem>
+                              </Select>
+                            </FormControl>
+                          </TableCell>
+                          <TableCell>{item.createdAt}</TableCell>
+                          <TableCell>
+                            <Icons.TrashOutline
+                              size={20}
+                              style={{
+                                cursor: 'pointer',
+                                color: '#4E4E4E',
+                              }}
+                              onClick={() => handleDeleteUserPopUpOpen(item.id)}
+                            />
+                          </TableCell>
+                        </TableRow>
+                      );
+                    })}
+                  </TableBody>
+                </TblContainer>
+                <TblPagination />
+              </Box>
+            )}
+          </Box>
         </Box>
       </Box>
       {/* Delete User Pop Up */}
