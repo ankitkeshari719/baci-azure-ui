@@ -63,7 +63,7 @@ import { JoinRetroEnterprise } from './components/Elements/enterpriseDashboard/J
 import EnterpriseRegistration from './components/Elements/enterpriseDashboard/EnterpriseRegistration';
 import { JoinRetroFacilitator } from './components/Elements/facilitatorDashboard/JoinRetroFacilitator';
 import CreateTeam from './components/Elements/TeamsDashboard/CreateTeam';
-import ManageUsers from './components/Elements/enterpriseDashboard/ManageUsers';
+import ManageUsers from './components/Elements/ManageUsers/ManageUsers';
 
 type AppProps = {
   instance: IPublicClientApplication;

@@ -109,7 +109,7 @@ const headCells = [
   { id: 'actions', label: 'Actions', disableSorting: true },
 ];
 
-export default function ManageUser() {
+export default function Employees() {
   const [records, setRecords] = React.useState(EMPLOYEES);
   const [searchedVal, setSearchedVal] = React.useState('');
   const [filterFn, setFilterFn] = React.useState<any>({
