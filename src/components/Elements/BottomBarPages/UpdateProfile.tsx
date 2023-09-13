@@ -691,7 +691,7 @@ export default function UpdateProfile({ handleEdit }: Props) {
                     ) : (
                       <ul>
                         {teams.map((team: any) => {
-                          return <li>{team}</li>;
+                          return <li key={team}>{team}</li>;
                         })}
                       </ul>
                     )
