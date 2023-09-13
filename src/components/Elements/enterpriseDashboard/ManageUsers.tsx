@@ -237,6 +237,7 @@ export default function ManageUsers() {
         });
         setUpdateRoleDialog(false);
         setRevokeRoleDialog(false);
+        localStorage.setItem('userData', JSON.stringify(res));
       },
       err => {
         console.log('err', err);

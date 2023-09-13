@@ -19,6 +19,7 @@ import { GlobalContext, ActionType } from '../../../contexts/GlobalContext';
 import { getEnterpriseById, updateUser } from '../../../helpers/msal/services';
 import OutlineButtonWithIconWithNoBorder from '../../CustomizedButton/OutlineButtonWithIconWithNoBorder';
 import { LazyLoadImage } from 'react-lazy-load-image-component';
+import { REGULAR_USER } from '../../../constants/applicationConst';
 
 const styles = {
   accessCodeTextField: {
@@ -58,17 +59,35 @@ export default function UpdateProfile({ handleEdit }: Props) {
   const [global, dispatch] = React.useContext(GlobalContext);
   const localUserData = localStorage.getItem('userData');
   const tempLocalUserData = localUserData && JSON.parse(localUserData);
-  const [selectedAvatar, setSelectedAvatar] = React.useState('');
+  const [selectedAvatar, setSelectedAvatar] = React.useState(
+    tempLocalUserData && tempLocalUserData.selectedAvatar
+  );
 
-  const [firstName, setFirstName] = React.useState('');
-  const [lastName, setLastName] = React.useState('');
-  const [emailId, setEmailId] = React.useState('');
-  const [phoneNo, setPhoneNo] = React.useState('');
-  const [country, setCountry] = React.useState('');
-  const [cityCode, setCityCode] = React.useState('');
-  const [companyName, setCompanyName] = React.useState('');
+  const [firstName, setFirstName] = React.useState(
+    tempLocalUserData && tempLocalUserData.firstName
+  );
+  const [lastName, setLastName] = React.useState(
+    tempLocalUserData && tempLocalUserData.lastName
+  );
+  const [emailId, setEmailId] = React.useState(
+    tempLocalUserData && tempLocalUserData.emailId
+  );
+  const [phoneNo, setPhoneNo] = React.useState(
+    tempLocalUserData && tempLocalUserData.phoneNo
+  );
+  const [country, setCountry] = React.useState(
+    tempLocalUserData && tempLocalUserData.country
+  );
+  const [cityCode, setCityCode] = React.useState(
+    tempLocalUserData && tempLocalUserData.cityCode
+  );
+  const [companyName, setCompanyName] = React.useState(
+    tempLocalUserData && tempLocalUserData.enterpriseName
+  );
   const [role, setRole] = React.useState('');
-  const [team, setTeam] = React.useState('');
+  const [team, setTeam] = React.useState(
+    tempLocalUserData && tempLocalUserData.team
+  );
   const [isEnterpriserRequested, setIsEnterpriserRequested] =
     React.useState(false);
   const [codeFirstNameError, setFirstNameCodeError] = React.useState('');
@@ -87,7 +106,12 @@ export default function UpdateProfile({ handleEdit }: Props) {
     setCountry(tempLocalUserData && tempLocalUserData.country);
     setCityCode(tempLocalUserData && tempLocalUserData.cityCode);
     setCompanyName(tempLocalUserData && tempLocalUserData.enterpriseName);
-    setRole(tempLocalUserData && tempLocalUserData.role);
+    let roleName = tempLocalUserData && tempLocalUserData.roleName;
+    if (roleName === REGULAR_USER) {
+      setRole('Basic');
+    } else {
+      setRole('Enterprise');
+    }
     setTeam(tempLocalUserData && tempLocalUserData.team);
     setIsEnterpriserRequested(
       tempLocalUserData && tempLocalUserData.isEnterpriserRequested
@@ -98,7 +122,7 @@ export default function UpdateProfile({ handleEdit }: Props) {
   React.useEffect(() => {
     const enterpriseId = tempLocalUserData && tempLocalUserData.enterpriseId;
     callGetEnterpriseById(enterpriseId);
-  });
+  }, []);
 
   const callGetEnterpriseById = async (enterpriseId: any) => {
     await getEnterpriseById(enterpriseId).then(
@@ -636,52 +660,6 @@ export default function UpdateProfile({ handleEdit }: Props) {
                 />
               </Box>
             </FormControl>
-            {/* Role */}
-            <FormControl
-              style={{
-                display: 'flex',
-                width: '600px',
-                justifyContent: 'flex-start',
-                alignItems: 'center',
-              }}
-            >
-              <Box
-                sx={{
-                  display: 'flex',
-                  flexDirection: 'row',
-                  justifyContent: 'flex-start',
-                  alignItems: 'center',
-                  width: '100%',
-                }}
-              >
-                <TextField
-                  label="Role"
-                  variant="filled"
-                  sx={{
-                    width: '400px',
-                    ...styles.accessCodeTextField,
-                  }}
-                  value={role}
-                  onChange={e => {
-                    setRole(e.currentTarget.value);
-                  }}
-                  InputProps={{
-                    readOnly: true,
-                  }}
-                />
-              </Box>
-            </FormControl>
-          </Box>
-          <Box
-            sx={{
-              width: '100%',
-              display: 'flex',
-              justifyContent: 'flex-start',
-              alignItems: 'flex-start',
-              flexDirection: 'row',
-              marginTop: '24px',
-            }}
-          >
             {/* Team */}
             <FormControl
               style={{
@@ -718,17 +696,52 @@ export default function UpdateProfile({ handleEdit }: Props) {
               </Box>
             </FormControl>
           </Box>
-          {/* Request Enterprise Admin */}
           <Box
             sx={{
               width: '100%',
               display: 'flex',
               justifyContent: 'flex-start',
-              alignItems: 'center',
+              alignItems: 'flex-start',
               flexDirection: 'row',
               marginTop: '24px',
             }}
           >
+            {/* Role */}
+            <FormControl
+              style={{
+                display: 'flex',
+                width: '484px',
+                justifyContent: 'flex-start',
+                alignItems: 'center',
+              }}
+            >
+              <Box
+                sx={{
+                  display: 'flex',
+                  flexDirection: 'row',
+                  justifyContent: 'flex-start',
+                  alignItems: 'center',
+                  width: '100%',
+                }}
+              >
+                <TextField
+                  label="Role"
+                  variant="filled"
+                  sx={{
+                    width: '400px',
+                    ...styles.accessCodeTextField,
+                  }}
+                  value={role}
+                  onChange={e => {
+                    setRole(e.currentTarget.value);
+                  }}
+                  InputProps={{
+                    readOnly: true,
+                  }}
+                />
+              </Box>
+            </FormControl>
+            {/* Request Enterprise Admin */}
             {isEnterpriserRequested ? (
               <Box display="flex" flexDirection="column">
                 <Box display="flex" flexDirection="row" alignItems="center">
