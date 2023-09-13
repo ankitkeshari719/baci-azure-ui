@@ -1073,7 +1073,6 @@ export const updateUser = async (
       isActive: requestBody.isActive,
       isEnterpriserRequested: requestBody.isEnterpriserRequested,
       selectedAvatar: requestBody.selectedAvatar,
-
     }),
   };
 
@@ -1113,6 +1112,25 @@ export const authenticateUser = async (requestBody: any): Promise<any> => {
   };
 
   await fetch(API_URL + `/users/authenticate`, requestOptions)
+    .then(response => response.json())
+    .then(response => {
+      data = response.data;
+    });
+  return data;
+};
+
+// Create User
+export const deleteManyUsers = async (requestBody: any): Promise<any> => {
+  let data: any;
+  const requestOptions = {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({
+      emailIds: requestBody.emailIds,
+    }),
+  };
+
+  await fetch(API_URL + `/users/deleteMany`, requestOptions)
     .then(response => response.json())
     .then(response => {
       data = response.data;

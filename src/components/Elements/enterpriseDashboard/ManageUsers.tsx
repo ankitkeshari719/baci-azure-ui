@@ -6,20 +6,27 @@ import {
   Select,
   MenuItem,
   Checkbox,
+  Typography,
+  Dialog,
+  DialogTitle,
+  Grid,
 } from '@mui/material';
 import * as React from 'react';
 import * as Icons from 'heroicons-react';
 import moment from 'moment';
 
 import {
+  BodyRegularTypography,
   BodySemiBoldTypography,
   H2SemiBoldTypography,
+  H5SemiBoldTypography,
 } from '../../CustomizedTypography';
 import commonStyles from '../../../style.module.scss';
 import useTable from '../../CustomizedTable/useTable';
 import { TableBody, TableCell, TableRow } from '@material-ui/core';
 import { MagnifyingGlassIcon } from '@heroicons/react/24/outline';
 import {
+  deleteManyUsers,
   deleteUserById,
   getAllUsersByEnterpriseId,
   updateUser,
@@ -31,6 +38,25 @@ import {
   REGULAR_USER,
   REGULAR_USER_ID,
 } from '../../../constants/applicationConst';
+import { ContainedButton } from '../../CustomizedButton/ContainedButton';
+import { OutlinedButton } from '../../CustomizedButton/OutlinedButton';
+import { TextButton } from '../../CustomizedButton/TextButton';
+import OutlineButtonWithIconWithNoBorder from '../../CustomizedButton/OutlineButtonWithIconWithNoBorder';
+
+const ITEM_HEIGHT = 48;
+const ITEM_PADDING_TOP = 8;
+const MenuProps = {
+  PaperProps: {
+    style: {
+      maxHeight: ITEM_HEIGHT * 4.5 + ITEM_PADDING_TOP,
+      width: 200,
+      background: '#FFFFFF',
+      border: '1px solid #CCCCCC',
+      boxShadow: '0px 1px 10px rgba(0, 0, 0, 0.15)',
+      borderRadius: '10px',
+    },
+  },
+};
 
 const headCells = [
   { id: 'check', label: '', disableSorting: true },
@@ -48,6 +74,13 @@ const headCells = [
 
 export default function ManageUsers() {
   const [global, dispatch] = React.useContext(GlobalContext);
+  const [height, setHeight] = React.useState(0);
+  const [openDeleteUserDialog, setOpenDeleteUserDialog] = React.useState(false);
+  const [openUpdateRoleDialog, setUpdateRoleDialog] = React.useState(false);
+  const [openRevokeRoleDialog, setRevokeRoleDialog] = React.useState(false);
+
+  const [tempStoreUserId, setTempStoreUserId] = React.useState<any>('');
+  const [tempStoreRoleName, setTempStoreRoleName] = React.useState<any>('');
 
   const localUserData = localStorage.getItem('userData');
   const tempLocalUserData = localUserData && JSON.parse(localUserData);
@@ -62,6 +95,7 @@ export default function ManageUsers() {
     useTable(records, headCells, filterFn);
 
   React.useEffect(() => {
+    setHeight(window.innerHeight);
     callGetAllUsersByEnterpriseId(
       tempLocalUserData && tempLocalUserData.enterpriseId
     );
@@ -120,19 +154,32 @@ export default function ManageUsers() {
     });
   };
 
+  // Open Delete User Pop Up
+  const handleDeleteUserPopUpOpen = (userId: any) => {
+    setTempStoreUserId(userId);
+    setOpenDeleteUserDialog(true);
+  };
+
+  // Open Delete User Pop Up
+  const handleDeleteUserPopUpClose = () => {
+    setOpenDeleteUserDialog(false);
+    setTempStoreUserId('');
+  };
+
   // Delete User
-  const handleDeleteUser = async (userId: any) => {
+  const handleDeleteUser = async () => {
     dispatch({
       type: ActionType.SET_LOADING,
       payload: { loadingFlag: true },
     });
-    await deleteUserById(userId).then(
+    await deleteUserById(tempStoreUserId).then(
       res => {
         callGetAllUsersByEnterpriseId(tempLocalUserData.enterpriseId);
         dispatch({
           type: ActionType.SET_LOADING,
           payload: { loadingFlag: false },
         });
+        handleDeleteUserPopUpClose();
       },
       err => {
         console.log('err', err);
@@ -140,18 +187,36 @@ export default function ManageUsers() {
           type: ActionType.SET_LOADING,
           payload: { loadingFlag: false },
         });
+        handleDeleteUserPopUpClose();
       }
     );
   };
 
-  const handleChangeUserRole = async (roleName: any, userId: any) => {
+  const handleChangeUserRolePopUpOpen = (roleName: any, userId: any) => {
+    setTempStoreUserId(userId);
+    setTempStoreRoleName(roleName);
+    if (roleName === REGULAR_USER) {
+      setUpdateRoleDialog(true);
+    } else {
+      setRevokeRoleDialog(true);
+    }
+  };
+
+  const handleChangeUserRolePopUpClose = () => {
+    setTempStoreUserId('');
+    setTempStoreRoleName('');
+    setUpdateRoleDialog(false);
+    setRevokeRoleDialog(false);
+  };
+
+  const handleChangeUserRole = async () => {
     dispatch({
       type: ActionType.SET_LOADING,
       payload: { loadingFlag: true },
     });
 
     let requestBody;
-    if (roleName === REGULAR_USER) {
+    if (tempStoreRoleName === REGULAR_USER) {
       requestBody = {
         roleId: REGULAR_ENTERPRISE_ID,
         roleName: REGULAR_ENTERPRISE,
@@ -163,26 +228,31 @@ export default function ManageUsers() {
       };
     }
 
-    await updateUser(userId, requestBody).then(
+    await updateUser(tempStoreUserId, requestBody).then(
       res => {
         callGetAllUsersByEnterpriseId(tempLocalUserData.enterpriseId);
         dispatch({
           type: ActionType.SET_LOADING,
           payload: { loadingFlag: false },
         });
+        setUpdateRoleDialog(false);
+        setRevokeRoleDialog(false);
       },
       err => {
         console.log('err', err);
+        callGetAllUsersByEnterpriseId(tempLocalUserData.enterpriseId);
         dispatch({
           type: ActionType.SET_LOADING,
           payload: { loadingFlag: false },
         });
+        setUpdateRoleDialog(false);
+        setRevokeRoleDialog(false);
       }
     );
   };
 
   // Handle Checkbox
-  const handleChange = (
+  const handleChangeCheckbox = (
     event: React.ChangeEvent<HTMLInputElement>,
     userId: any
   ) => {
@@ -193,6 +263,38 @@ export default function ManageUsers() {
       return record;
     });
     setRecords(newRecord);
+  };
+
+  const handleDeleteSelectedUsers = async () => {
+    dispatch({
+      type: ActionType.SET_LOADING,
+      payload: { loadingFlag: true },
+    });
+    const selectedUsersId = records
+      .filter((record: any) => record.checked)
+      .map((data: any) => data.id);
+
+    const requestBody = {
+      emailIds: selectedUsersId,
+    };
+
+    await deleteManyUsers(requestBody).then(
+      res => {
+        dispatch({
+          type: ActionType.SET_LOADING,
+          payload: { loadingFlag: false },
+        });
+        callGetAllUsersByEnterpriseId(tempLocalUserData.enterpriseId);
+      },
+      err => {
+        console.log('err', err);
+        dispatch({
+          type: ActionType.SET_LOADING,
+          payload: { loadingFlag: false },
+        });
+        callGetAllUsersByEnterpriseId(tempLocalUserData.enterpriseId);
+      }
+    );
   };
 
   return (
@@ -227,25 +329,50 @@ export default function ManageUsers() {
             marginTop: '16px !important',
           }}
         >
-          {/* Search Bar */}
-          <TextField
-            id="outlined-basic"
-            label="Search..."
-            variant="outlined"
-            sx={{ background: 'white', width: '50%' }}
-            onChange={e => {
-              setSearchedVal(e.target.value);
-              handleSearch(e);
+          <Box
+            display="flex"
+            flexDirection="row"
+            justifyContent="space-between"
+            alignItems="center"
+            sx={{
+              width: '100%',
+              flexDirection: 'row',
             }}
-            value={searchedVal}
-            InputProps={{
-              startAdornment: (
-                <InputAdornment position="start">
-                  <MagnifyingGlassIcon width="20px" />
-                </InputAdornment>
-              ),
-            }}
-          />
+          >
+            {/* Search Bar */}
+            <TextField
+              id="outlined-basic"
+              label="Search..."
+              variant="outlined"
+              sx={{ background: 'white', width: '40%' }}
+              onChange={e => {
+                setSearchedVal(e.target.value);
+                handleSearch(e);
+              }}
+              value={searchedVal}
+              InputProps={{
+                startAdornment: (
+                  <InputAdornment position="start">
+                    <MagnifyingGlassIcon width="20px" />
+                  </InputAdornment>
+                ),
+              }}
+            />
+            <OutlineButtonWithIconWithNoBorder
+              id={'delete_selected_users'}
+              label={'Delete Users'}
+              iconPath="/svgs/Delete.svg"
+              onClick={handleDeleteSelectedUsers}
+              style={{
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                color: '#159ADD !important',
+                textColor: '#159ADD !important',
+              }}
+            />
+          </Box>
+
           <TblContainer>
             <TblHead />
             <TableBody>
@@ -255,7 +382,7 @@ export default function ManageUsers() {
                     <TableCell>
                       <Checkbox
                         checked={item.checked}
-                        onChange={e => handleChange(e, item.id)}
+                        onChange={e => handleChangeCheckbox(e, item.id)}
                         inputProps={{ 'aria-label': 'controlled' }}
                       />
                     </TableCell>
@@ -281,7 +408,10 @@ export default function ManageUsers() {
                           id="role-selection"
                           value={item.roleName}
                           onClick={() =>
-                            handleChangeUserRole(item.roleName, item.id)
+                            handleChangeUserRolePopUpOpen(
+                              item.roleName,
+                              item.id
+                            )
                           }
                           sx={{
                             fieldset: {
@@ -290,11 +420,44 @@ export default function ManageUsers() {
                               color: '#4E4E4E',
                             },
                           }}
+                          MenuProps={MenuProps}
                         >
-                          <MenuItem value="Regular User">Basic</MenuItem>
+                          <MenuItem value="Regular User">
+                            <Typography
+                              style={{
+                                fontFamily: 'Poppins',
+                                fontStyle: 'normal',
+                                fontWeight: 400,
+                                fontSize: '16px',
+                                lineHeight: '20px',
+                                letterSpacing: '0.6px',
+                                color: '#343434',
+                                whiteSpace: 'nowrap',
+                                overflow: 'hidden',
+                                textOverflow: 'ellipsis',
+                              }}
+                            >
+                              Basic
+                            </Typography>
+                          </MenuItem>
                           <br />
                           <MenuItem value="Regular Enterprise">
-                            Enterprise
+                            <Typography
+                              style={{
+                                fontFamily: 'Poppins',
+                                fontStyle: 'normal',
+                                fontWeight: 400,
+                                fontSize: '16px',
+                                lineHeight: '20px',
+                                letterSpacing: '0.6px',
+                                color: '#343434',
+                                whiteSpace: 'nowrap',
+                                overflow: 'hidden',
+                                textOverflow: 'ellipsis',
+                              }}
+                            >
+                              Enterprise
+                            </Typography>
                           </MenuItem>
                         </Select>
                       </FormControl>
@@ -307,7 +470,7 @@ export default function ManageUsers() {
                           cursor: 'pointer',
                           color: '#4E4E4E',
                         }}
-                        onClick={() => handleDeleteUser(item.id)}
+                        onClick={() => handleDeleteUserPopUpOpen(item.id)}
                       />
                     </TableCell>
                   </TableRow>
@@ -318,6 +481,270 @@ export default function ManageUsers() {
           <TblPagination />
         </Box>
       </Box>
+      {/* Delete User Pop Up */}
+      <Dialog open={openDeleteUserDialog}>
+        <DialogTitle
+          style={{ padding: '20px', borderBottom: '1px solid #EA4335' }}
+        >
+          <Grid container sx={{ display: 'flex', alignItems: 'center' }}>
+            <Grid item sm={6}>
+              <Box
+                display="flex"
+                justifyContent="flex-start"
+                alignItems="center"
+              >
+                <Icons.ExclamationCircleOutline
+                  size={32}
+                  style={{
+                    color: '#EA4335',
+                    fontSize: '32px',
+                  }}
+                />
+                <H5SemiBoldTypography
+                  label={'Delete User'}
+                  style={{
+                    color: '#343434',
+                    marginLeft: '12px !important',
+                  }}
+                />
+              </Box>
+            </Grid>
+            <Grid item sm={6}>
+              <Box display="flex" justifyContent="flex-end">
+                <Icons.X
+                  size={20}
+                  style={{
+                    cursor: 'pointer',
+                  }}
+                  onClick={handleDeleteUserPopUpClose}
+                />
+              </Box>
+            </Grid>
+          </Grid>
+        </DialogTitle>
+        <Box
+          sx={{
+            width: '410px',
+            minWidth: '400px',
+            height: height / 4,
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+          }}
+        >
+          <BodyRegularTypography label="Are you sure you want to delete user?" />
+        </Box>
+        {/* Buttons */}
+        <Box sx={{ mx: 3 }}>
+          <Box
+            sx={{
+              width: '100%',
+              display: 'flex',
+              flex: '1 0 auto',
+              alignItems: 'flex-end',
+              justifyContent: 'flex-end',
+              my: 2,
+            }}
+          >
+            <OutlinedButton
+              label="Cancel"
+              size={'medium'}
+              onClick={handleDeleteUserPopUpClose}
+              style={{
+                minWidth: '75px !important',
+                height: '36px !important',
+                marginRight: '20px !important',
+              }}
+            />
+            <ContainedButton
+              name="Yes"
+              onClick={() => handleDeleteUser()}
+              style={{
+                minWidth: '75px !important',
+                height: '36px !important',
+                background: '#EA4335 !important',
+              }}
+              size={'medium'}
+            />
+          </Box>
+        </Box>
+      </Dialog>
+      {/* Update User Role Pop Up */}
+      <Dialog open={openUpdateRoleDialog}>
+        <DialogTitle
+          style={{ padding: '20px', borderBottom: '1px solid #4285F4' }}
+        >
+          <Grid container sx={{ display: 'flex', alignItems: 'center' }}>
+            <Grid item sm={6}>
+              <Box
+                display="flex"
+                justifyContent="flex-start"
+                alignItems="center"
+              >
+                <Icons.ExclamationCircleOutline
+                  size={32}
+                  style={{
+                    color: '#4285F4',
+                    fontSize: '32px',
+                  }}
+                />
+                <H5SemiBoldTypography
+                  label={'Update Role'}
+                  style={{
+                    color: '#343434',
+                    marginLeft: '12px !important',
+                  }}
+                />
+              </Box>
+            </Grid>
+            <Grid item sm={6}>
+              <Box display="flex" justifyContent="flex-end">
+                <Icons.X
+                  size={20}
+                  style={{
+                    cursor: 'pointer',
+                  }}
+                  onClick={handleChangeUserRolePopUpClose}
+                />
+              </Box>
+            </Grid>
+          </Grid>
+        </DialogTitle>
+        <Box
+          sx={{
+            width: '450px',
+            minWidth: '450px',
+            height: height / 4,
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+          }}
+        >
+          <BodyRegularTypography label="Are you sure you want to update role to Enterprise?" />
+        </Box>
+        {/* Buttons */}
+        <Box sx={{ mx: 3 }}>
+          <Box
+            sx={{
+              width: '100%',
+              display: 'flex',
+              flex: '1 0 auto',
+              alignItems: 'flex-end',
+              justifyContent: 'flex-end',
+              my: 2,
+            }}
+          >
+            <OutlinedButton
+              label="Cancel"
+              size={'medium'}
+              onClick={handleChangeUserRolePopUpClose}
+              style={{
+                minWidth: '75px !important',
+                height: '36px !important',
+                marginRight: '20px !important',
+              }}
+            />
+            <ContainedButton
+              name="Yes"
+              onClick={handleChangeUserRole}
+              style={{
+                minWidth: '75px !important',
+                height: '36px !important',
+                background: '#159ADD !important',
+              }}
+              size={'medium'}
+            />
+          </Box>
+        </Box>
+      </Dialog>
+      {/* Revoke User Role Pop Up */}
+      <Dialog open={openRevokeRoleDialog}>
+        <DialogTitle
+          style={{ padding: '20px', borderBottom: '1px solid #4285F4' }}
+        >
+          <Grid container sx={{ display: 'flex', alignItems: 'center' }}>
+            <Grid item sm={6}>
+              <Box
+                display="flex"
+                justifyContent="flex-start"
+                alignItems="center"
+              >
+                <Icons.ShieldExclamationOutline
+                  size={32}
+                  style={{
+                    color: '#FBBC05',
+                    fontSize: '32px',
+                  }}
+                />
+                <H5SemiBoldTypography
+                  label={'Revoke Role'}
+                  style={{
+                    color: '#343434',
+                    marginLeft: '12px !important',
+                  }}
+                />
+              </Box>
+            </Grid>
+            <Grid item sm={6}>
+              <Box display="flex" justifyContent="flex-end">
+                <Icons.X
+                  size={20}
+                  style={{
+                    cursor: 'pointer',
+                  }}
+                  onClick={handleChangeUserRolePopUpClose}
+                />
+              </Box>
+            </Grid>
+          </Grid>
+        </DialogTitle>
+        <Box
+          sx={{
+            width: '450px',
+            minWidth: '450px',
+            height: height / 4,
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+          }}
+        >
+          <BodyRegularTypography label="Are you sure you want to revoke role to Basic?" />
+        </Box>
+        {/* Buttons */}
+        <Box sx={{ mx: 3 }}>
+          <Box
+            sx={{
+              width: '100%',
+              display: 'flex',
+              flex: '1 0 auto',
+              alignItems: 'flex-end',
+              justifyContent: 'flex-end',
+              my: 2,
+            }}
+          >
+            <OutlinedButton
+              label="Cancel"
+              size={'medium'}
+              onClick={handleChangeUserRolePopUpClose}
+              style={{
+                minWidth: '75px !important',
+                height: '36px !important',
+                marginRight: '20px !important',
+              }}
+            />
+            <ContainedButton
+              name="Yes"
+              onClick={handleChangeUserRole}
+              style={{
+                minWidth: '75px !important',
+                height: '36px !important',
+                background: '#159ADD !important',
+              }}
+              size={'medium'}
+            />
+          </Box>
+        </Box>
+      </Dialog>
     </>
   );
 }
