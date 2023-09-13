@@ -80,7 +80,7 @@ export default function ManageUsers() {
   const [openDeleteUserDialog, setOpenDeleteUserDialog] = React.useState(false);
   const [openUpdateRoleDialog, setUpdateRoleDialog] = React.useState(false);
   const [openRevokeRoleDialog, setRevokeRoleDialog] = React.useState(false);
-   const [tempStoreUserId, setTempStoreUserId] = React.useState<any>('');
+  const [tempStoreUserId, setTempStoreUserId] = React.useState<any>('');
   const [tempStoreRoleName, setTempStoreRoleName] = React.useState<any>('');
   const localUserData = localStorage.getItem('userData');
   const tempLocalUserData = localUserData && JSON.parse(localUserData);
@@ -102,7 +102,7 @@ export default function ManageUsers() {
     );
   }, []);
 
-  // Get All Users
+  // Get All Users By Enterprise
   const callGetAllUsersByEnterpriseId = async (enterpriseId: any) => {
     dispatch({
       type: ActionType.SET_LOADING,
@@ -300,11 +300,57 @@ export default function ManageUsers() {
   };
 
   // Teams Selector
-  const [selectedTeam, setSelectedTeam] = React.useState('');
+  const [selectedTeam, setSelectedTeam] = React.useState('all');
   const handleChange = (event: SelectChangeEvent) => {
     setSelectedTeam(event.target.value as string);
-    console.log('records:::::::::', records);
-    
+    callGetAllUsersByEnterpriseIdAndTeamId(
+      tempLocalUserData && tempLocalUserData.enterpriseId,
+      event.target.value as string
+    );
+  };
+
+  const callGetAllUsersByEnterpriseIdAndTeamId = async (
+    enterpriseId: any,
+    teamId: any
+  ) => {
+    dispatch({
+      type: ActionType.SET_LOADING,
+      payload: { loadingFlag: true },
+    });
+    await getAllUsersByEnterpriseId(enterpriseId).then(
+      res => {
+        let tempRes = res.map((user: any) => {
+          return {
+            id: user.emailId,
+            fullName: user.firstName + ' ' + user.lastName,
+            emailId: user.emailId,
+            teams: user.teams,
+            roleName: user.roleName,
+            createdAt: moment(user.createdAt).format('Do MMM YYYY'),
+            checked: false,
+          };
+        });
+        const newRecord = tempRes.filter((record: any) =>
+          record.teams.includes(teamId)
+        );
+        if (teamId === 'all') {
+          setRecords(tempRes);
+        } else {
+          setRecords(newRecord);
+        }
+        dispatch({
+          type: ActionType.SET_LOADING,
+          payload: { loadingFlag: false },
+        });
+      },
+      err => {
+        console.log('err', err);
+        dispatch({
+          type: ActionType.SET_LOADING,
+          payload: { loadingFlag: false },
+        });
+      }
+    );
   };
 
   return (
@@ -413,7 +459,7 @@ export default function ManageUsers() {
                       ) : (
                         <ul>
                           {item.teams.map((team: any) => {
-                            return <li>{team}</li>;
+                            return <li key={team}>{team}</li>;
                           })}
                         </ul>
                       )}
@@ -438,6 +484,12 @@ export default function ManageUsers() {
                               border: 'none',
                               opacity: 1,
                               color: '#4E4E4E',
+                            },
+                            '& .MuiSelect-select': {
+                              display: 'flex',
+                              justifyContent: 'center',
+                              alignItems: 'flex-start',
+                              padding: '16px',
                             },
                           }}
                           MenuProps={{

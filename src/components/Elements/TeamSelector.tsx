@@ -39,12 +39,8 @@ export default function TeamSelector({
   return (
     <Box m={3} sx={{ minWidth: 240 }}>
       <FormControl fullWidth>
-        <InputLabel id="demo-simple-select-label">Select Team</InputLabel>
         <Select
-          labelId="demo-simple-select-label"
-          id="demo-simple-select"
           value={selectedTeam}
-          label="Age"
           onChange={handleChange}
           MenuProps={{
             PaperProps: {
@@ -57,7 +53,18 @@ export default function TeamSelector({
               },
             },
           }}
+          sx={{
+            '& .MuiSelect-select': {
+              display: 'flex',
+              justifyContent: 'center',
+              alignItems: 'flex-start',
+              padding: '16px',
+            },
+          }}
         >
+          <MenuItem value="all" key="all">
+            All
+          </MenuItem>
           {teams.map((team: any) => {
             return (
               <MenuItem value={team.teamId} key={team.teamId}>
