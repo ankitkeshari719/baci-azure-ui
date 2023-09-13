@@ -110,22 +110,22 @@ export function UserHeader({ accounts }: Props) {
     let requestBody;
     if (roleParam && enterpriseParam && accounts) {
       requestBody = {
-        emailId: accounts[0].username,
-        name: accounts[0].name,
         firstName: '',
         lastName: '',
+        emailId: accounts[0].username,
         phoneNo: '',
+        name: accounts[0].name,
+        country: '',
         cityCode: '',
-        roleName: roleParam && roleParam.roleName,
+        plan: '',
         roleId: roleParam && roleParam.roleId,
+        roleName: roleParam && roleParam.roleName,
         enterpriseId: enterpriseParam && enterpriseParam.organisationId,
         enterpriseName: enterpriseParam && enterpriseParam.organisationName,
+        selectedAvatar: '',
+        isEnterpriserRequested: false,
         teams: [],
-        plan: '',
-        country: '',
-        role: '',
         isActive: true,
-        selectedAvatar: ''
       };
       await createUser(requestBody).then(
         res => {

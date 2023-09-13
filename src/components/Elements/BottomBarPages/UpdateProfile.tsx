@@ -85,8 +85,8 @@ export default function UpdateProfile({ handleEdit }: Props) {
     tempLocalUserData && tempLocalUserData.enterpriseName
   );
   const [role, setRole] = React.useState('');
-  const [team, setTeam] = React.useState(
-    tempLocalUserData && tempLocalUserData.team
+  const [teams, setTeams] = React.useState(
+    tempLocalUserData && tempLocalUserData.teams
   );
   const [isEnterpriserRequested, setIsEnterpriserRequested] =
     React.useState(false);
@@ -112,7 +112,7 @@ export default function UpdateProfile({ handleEdit }: Props) {
     } else {
       setRole('Enterprise');
     }
-    setTeam(tempLocalUserData && tempLocalUserData.team);
+    setTeams(tempLocalUserData && tempLocalUserData.teams);
     setIsEnterpriserRequested(
       tempLocalUserData && tempLocalUserData.isEnterpriserRequested
     );
@@ -685,10 +685,17 @@ export default function UpdateProfile({ handleEdit }: Props) {
                     width: '400px',
                     ...styles.accessCodeTextField,
                   }}
-                  value={team}
-                  onChange={e => {
-                    setTeam(e.currentTarget.value);
-                  }}
+                  value={
+                    teams.length === 0 ? (
+                      "Team's Not Found"
+                    ) : (
+                      <ul>
+                        {teams.map((team: any) => {
+                          return <li>{team}</li>;
+                        })}
+                      </ul>
+                    )
+                  }
                   InputProps={{
                     readOnly: true,
                   }}

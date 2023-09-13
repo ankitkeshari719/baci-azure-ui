@@ -10,6 +10,7 @@ import {
   Dialog,
   DialogTitle,
   Grid,
+  SelectChangeEvent,
 } from '@mui/material';
 import * as React from 'react';
 import * as Icons from 'heroicons-react';
@@ -42,6 +43,7 @@ import { ContainedButton } from '../../CustomizedButton/ContainedButton';
 import { OutlinedButton } from '../../CustomizedButton/OutlinedButton';
 import { TextButton } from '../../CustomizedButton/TextButton';
 import OutlineButtonWithIconWithNoBorder from '../../CustomizedButton/OutlineButtonWithIconWithNoBorder';
+import TeamSelector from '../TeamSelector';
 
 const ITEM_HEIGHT = 48;
 const ITEM_PADDING_TOP = 8;
@@ -78,10 +80,8 @@ export default function ManageUsers() {
   const [openDeleteUserDialog, setOpenDeleteUserDialog] = React.useState(false);
   const [openUpdateRoleDialog, setUpdateRoleDialog] = React.useState(false);
   const [openRevokeRoleDialog, setRevokeRoleDialog] = React.useState(false);
-
-  const [tempStoreUserId, setTempStoreUserId] = React.useState<any>('');
+   const [tempStoreUserId, setTempStoreUserId] = React.useState<any>('');
   const [tempStoreRoleName, setTempStoreRoleName] = React.useState<any>('');
-
   const localUserData = localStorage.getItem('userData');
   const tempLocalUserData = localUserData && JSON.parse(localUserData);
   const [records, setRecords] = React.useState<any>([]);
@@ -91,6 +91,7 @@ export default function ManageUsers() {
       return items;
     },
   });
+
   const { TblContainer, TblHead, TblPagination, recordAfterPagingAndSorting } =
     useTable(records, headCells, filterFn);
 
@@ -298,6 +299,14 @@ export default function ManageUsers() {
     );
   };
 
+  // Teams Selector
+  const [selectedTeam, setSelectedTeam] = React.useState('');
+  const handleChange = (event: SelectChangeEvent) => {
+    setSelectedTeam(event.target.value as string);
+    console.log('records:::::::::', records);
+    
+  };
+
   return (
     <>
       <Box
@@ -359,21 +368,30 @@ export default function ManageUsers() {
                 ),
               }}
             />
-            <OutlineButtonWithIconWithNoBorder
-              id={'delete_selected_users'}
-              label={'Delete Users'}
-              iconPath="/svgs/Delete.svg"
-              onClick={handleDeleteSelectedUsers}
-              style={{
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                color: '#159ADD !important',
-                textColor: '#159ADD !important',
-              }}
-            />
+            <Box display="flex" flexDirection="row" alignItems="center">
+              <OutlineButtonWithIconWithNoBorder
+                id={'delete_selected_users'}
+                label={'Delete Users'}
+                iconPath="/svgs/Delete.svg"
+                onClick={handleDeleteSelectedUsers}
+                style={{
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  color: '#159ADD !important',
+                  textColor: '#159ADD !important',
+                  marginRight: '24px  !important',
+                }}
+              />
+              <TeamSelector
+                enterpriseId={
+                  tempLocalUserData && tempLocalUserData.enterpriseId
+                }
+                selectedTeam={selectedTeam}
+                handleChange={handleChange}
+              />
+            </Box>
           </Box>
-
           <TblContainer>
             <TblHead />
             <TableBody>
@@ -393,11 +411,11 @@ export default function ManageUsers() {
                       {item.teams.length === 0 ? (
                         "Team's Not Found"
                       ) : (
-                        <ol>
+                        <ul>
                           {item.teams.map((team: any) => {
-                            return <li>{team.name}</li>;
+                            return <li>{team}</li>;
                           })}
-                        </ol>
+                        </ul>
                       )}
                     </TableCell>
                     <TableCell>
@@ -406,6 +424,7 @@ export default function ManageUsers() {
                         sx={{ m: 1, minWidth: 120 }}
                       >
                         <Select
+                          fullWidth
                           id="role-selection"
                           value={item.roleName}
                           onClick={() =>
@@ -421,7 +440,16 @@ export default function ManageUsers() {
                               color: '#4E4E4E',
                             },
                           }}
-                          MenuProps={MenuProps}
+                          MenuProps={{
+                            PaperProps: {
+                              sx: {
+                                bgcolor: '#ffffff',
+                                '& .MuiMenuItem-root': {
+                                  padding: 2,
+                                },
+                              },
+                            },
+                          }}
                         >
                           <MenuItem value="Regular User">
                             <Typography
