@@ -38,7 +38,7 @@ import {
   REGULAR_ENTERPRISE,
   REGULAR_ENTERPRISE_ID,
   BASIC,
-  REGULAR_USER_ID,
+  BASIC_USER_ID,
 } from '../../../constants/applicationConst';
 import { ContainedButton } from '../../CustomizedButton/ContainedButton';
 import { OutlinedButton } from '../../CustomizedButton/OutlinedButton';
@@ -239,7 +239,7 @@ export default function ManageUsers() {
       };
     } else {
       requestBody = {
-        roleId: REGULAR_USER_ID,
+        roleId: BASIC_USER_ID,
         roleName: BASIC,
       };
     }

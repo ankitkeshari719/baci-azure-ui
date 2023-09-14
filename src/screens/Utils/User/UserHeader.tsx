@@ -12,7 +12,7 @@ import {
   BASIC,
   ENTERPRISE_ADMIN,
   REGULAR_ENTERPRISE,
-  REGULAR_USER_ID,
+  BASIC_USER_ID,
 } from '../../../constants/applicationConst';
 import { Dialog, DialogTitle, Grid, Box } from '@mui/material';
 import { ContainedButton } from '../../../components';
@@ -119,7 +119,7 @@ export function UserHeader({ accounts }: Props) {
         country: '',
         cityCode: '',
         plan: '',
-        roleId: REGULAR_USER_ID,
+        roleId: BASIC_USER_ID,
         roleName: BASIC,
         enterpriseId: enterpriseId,
         enterpriseName: enterpriseName,
