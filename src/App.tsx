@@ -1,3 +1,4 @@
+import * as React from 'react';
 import { BrowserRouter, Outlet, Route, Routes } from 'react-router-dom';
 import { SnackMessage } from './components/Elements/SnackMessage';
 import { ThemeProvider } from '@mui/material/styles';
@@ -65,6 +66,7 @@ import { JoinRetroFacilitator } from './components/Elements/facilitatorDashboard
 import CreateTeam from './components/Elements/TeamsDashboard/CreateTeam';
 import ManageUsers from './components/Elements/ManageUsers/ManageUsers';
 import { BasicUserMainContainer } from './components/Elements/BasicUserDashboardPages/BasicUserMainContainer';
+import { BASIC, BASIC_USER_ID } from './constants/applicationConst';
 
 type AppProps = {
   instance: IPublicClientApplication;
@@ -83,6 +85,14 @@ export default function App({ instance }: AppProps) {
   const localUserData = localStorage.getItem('userData');
   const tempLocalUserData = localUserData && JSON.parse(localUserData);
   const isXsUp = useMediaQuery('(max-width:768px)');
+
+  React.useEffect(() => {
+    let userData = {
+      roleName: BASIC,
+      roleId: BASIC_USER_ID,
+    };
+    localStorage.setItem('userData', JSON.stringify(userData));
+  }, []);
 
   return (
     <ErrorProvider>
