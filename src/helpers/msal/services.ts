@@ -174,6 +174,21 @@ export const getDeploymentData = async (): Promise<any> => {
   return deploymentData;
 };
 
+export const createRetroSummary=async(columns:any,retroId:string)=>{
+  let groupData = '';
+  const requestOptions = {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ columns: columns,retroId:retroId }),
+  };
+  await fetch(API_URL + '/createRetroSummary', requestOptions)
+    .then(response => response.json())
+    .then(data => {
+      groupData = data;
+    });
+  return groupData;
+}
+
 export const groupSuggestion = async (
   retroId: string,
   column: any
@@ -191,6 +206,7 @@ export const groupSuggestion = async (
     });
   return groupData;
 };
+
 
 export const keywordExtraction = async (
   retroId: string,

@@ -360,9 +360,12 @@ export function RetroCardGroup({
                 global?.expandColumn !== -1 &&
                 global.user.userType === 2 &&
                 !location.pathname.includes('report') ? (
+                  
                   <Grid>
+                  
                     <Button
                       className="containedButton"
+                      variant="contained"
                       sx={{
                         borderRadius: '0px!important',
                         color: 'white!important',
@@ -373,7 +376,7 @@ export function RetroCardGroup({
                     </Button>
                   </Grid>
                 ) : (
-                  <Grid></Grid>
+                  <Grid> </Grid>
                 )}
 
                 <Grid
