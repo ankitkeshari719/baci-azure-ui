@@ -80,6 +80,8 @@ function MainContent() {
 
 export default function App({ instance }: AppProps) {
   const isXsUp = useMediaQuery('(max-width:768px)');
+  const localUserData = localStorage.getItem('userData');
+  const tempLocalUserData = localUserData && JSON.parse(localUserData);
 
   return (
     <ErrorProvider>
@@ -92,7 +94,7 @@ export default function App({ instance }: AppProps) {
                   <ThemeProvider theme={theme}>
                     <MsalProvider instance={instance}>
                       <Box display="flex" height="calc(var(--app-height))">
-                        {!isXsUp && <LeftBar />}
+                        {!isXsUp && tempLocalUserData != null && <LeftBar />}
                         <Box display="flex" width="calc(100% - 72px)">
                           <Routes>
                             <Route

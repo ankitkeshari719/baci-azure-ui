@@ -27,7 +27,6 @@ export default function TeamSelector({
   const callGetAllTeamsByEnterpriseId = async () => {
     await getAllTeamsByEnterpriseId(enterpriseId).then(
       res => {
-        console.log('callGetAllTeamsByEnterpriseId response', res);
         setTeams(res);
       },
       err => {

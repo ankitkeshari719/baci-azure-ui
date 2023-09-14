@@ -194,7 +194,6 @@ export default function TeamsDashboard() {
       type: ActionType.SET_LOADING,
       payload: { loadingFlag: true },
     });
-    console.log('tempStoreTeamId', tempStoreTeamId);
     return;
     await deleteTeamById(tempStoreTeamId).then(
       res => {
