@@ -174,6 +174,21 @@ export const getDeploymentData = async (): Promise<any> => {
   return deploymentData;
 };
 
+export const createRetroSummary=async(columns:any,retroId:string)=>{
+  let groupData = '';
+  const requestOptions = {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ columns: columns,retroId:retroId }),
+  };
+  await fetch(API_URL + '/createRetroSummary', requestOptions)
+    .then(response => response.json())
+    .then(data => {
+      groupData = data;
+    });
+  return groupData;
+}
+
 export const groupSuggestion = async (
   retroId: string,
   column: any
@@ -191,6 +206,7 @@ export const groupSuggestion = async (
     });
   return groupData;
 };
+
 
 export const keywordExtraction = async (
   retroId: string,
@@ -239,7 +255,7 @@ export const getJiraToken = async (jiraCode: string): Promise<string> => {
   return jiraAccessToken;
 };
 
-export const listJiraProjects = async (jiraCode: string): Promise<string[]> => {
+export const listJiraProjects = async (jiraCode: string): Promise<any> => {
   let jiraProjects: any[] = [];
   const requestOptions = {
     method: 'GET',
@@ -475,37 +491,683 @@ export const getEnterpriseLevelSentimentsMoods = async (
 
   return enterpriseLevelSentimentsMoodsData;
 };
+// ---------------------------------------- Roles API's -----------------------------------------------
 
-/* 
-export const onSnapshotRetroActions = (socket: Socket<DefaultEventsMap, DefaultEventsMap>,id: string, userId: string, fromTimestamp: number | undefined, callback: (([]) => void)): () => void => {
-        const unsubscribe = socket.on('newMessage',(snapshot: { retroId: string; action: any; }[]) => {
-        const results = [] as any[];
-        snapshot.forEach((change: { retroId: string; action: any; }) => {
-           // if ((change.type === "modified" || change.type === "added") && !change.doc.metadata.hasPendingWrites) {
-            if (change.retroId === id) {    
-                const data = change.action;
-                if (!data.onlyVisibleBy || data.onlyVisibleBy.includes(userId)) {
-                    results.push(data);
-                }
-            }
-            // }
-        });
-        callback(
-            results.sort(
-            (a: any, b: any) =>
-                a.sourceActionTimestamp.toMillis() !== b.sourceActionTimestamp.toMillis() ?
-                    a.sourceActionTimestamp.toMillis() - b.sourceActionTimestamp.toMillis() :
-                    a.timestamp.toMillis() - b.timestamp.toMillis())
-            .map((action) =>
-            ({
-                ...action,
-                timestamp: action.timestamp?.toMillis(),
-                date: action.timestamp?.toDate() || new Date(),
-                sourceActionTimestamp: action.sourceActionTimestamp?.toMillis(),
-            })));
+// Create Role
+export const createRole = async (roleName: string): Promise<any> => {
+  let data: any;
+  const requestOptions = {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({
+      roleName,
+    }),
+  };
+
+  await fetch(API_URL + `/roles/create`, requestOptions)
+    .then(response => response.json())
+    .then(response => {
+      data = response.data;
     });
-    const id2 = Math.random();
-    return () => {
-        unsubscribe;
-    };
-} */
+  return data;
+};
+
+// Get All Roles
+export const getAllRoles = async (): Promise<any> => {
+  let roles: any[] = [];
+  const requestOptions = {
+    method: 'GET',
+    headers: { 'Content-Type': 'application/json' },
+  };
+  await fetch(API_URL + `/roles/`, requestOptions)
+    .then(response => response.json())
+    .then(response => {
+      if (response && response.data) {
+        roles = response.data;
+      }
+    })
+    .catch(err => console.log(err));
+
+  return roles;
+};
+
+// Get By Id Role
+export const getRoleById = async (roleId: string): Promise<any> => {
+  let role;
+  const requestOptions = {
+    method: 'GET',
+    headers: { 'Content-Type': 'application/json' },
+  };
+  await fetch(API_URL + `/roles/${roleId}`, requestOptions)
+    .then(response => response.json())
+    .then(response => {
+      if (response) {
+        role = response.data;
+      }
+    })
+    .catch(err => console.log(err));
+  return role;
+};
+
+// Get By Role Name
+export const getRoleByName = async (roleName: string): Promise<any> => {
+  let role;
+  const requestOptions = {
+    method: 'GET',
+    headers: { 'Content-Type': 'application/json' },
+  };
+  await fetch(API_URL + `/roles/getByName/${roleName}`, requestOptions)
+    .then(response => response.json())
+    .then(response => {
+      if (response) {
+        role = response.data;
+      }
+    })
+    .catch(err => console.log(err));
+  return role;
+};
+
+// Update Role
+export const updateRole = async (
+  roleId: string,
+  roleName: string
+): Promise<any> => {
+  let message: any = '';
+  const requestOptions = {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({
+      roleName,
+    }),
+  };
+
+  await fetch(API_URL + `/roles/update/${roleId}`, requestOptions)
+    .then(response => response.json())
+    .then(response => {
+      message = response.message;
+    });
+  return message;
+};
+
+// Delete Role
+export const deleteRoleById = async (roleId: string): Promise<any> => {
+  let message;
+  const requestOptions = {
+    method: 'DELETE',
+    headers: { 'Content-Type': 'application/json' },
+  };
+  await fetch(API_URL + `/roles/${roleId}`, requestOptions)
+    .then(response => response.json())
+    .then(response => {
+      message = response.message;
+    });
+  return message;
+};
+
+// ---------------------------------------- Teams API's -----------------------------------------------
+
+// Create Team
+export const createTeam = async (requestBody: any): Promise<any> => {
+  let data: any;
+  const requestOptions = {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({
+      teamName: requestBody.teamName,
+      teamDescription: requestBody.teamDescription,
+      teamDepartment: requestBody.teamDepartment,
+      createdBy: requestBody.createdBy,
+      userEmailIds: requestBody.userEmailIds,
+      enterpriseId: requestBody.enterpriseId,
+      isActive: requestBody.isActive,
+    }),
+  };
+
+  await fetch(API_URL + `/teams/create`, requestOptions)
+    .then(response => response.json())
+    .then(response => {
+      data = response.data;
+    });
+  return data;
+};
+
+// Get All Teams
+export const getAllTeams = async (): Promise<any> => {
+  let teams: any[] = [];
+  const requestOptions = {
+    method: 'GET',
+    headers: { 'Content-Type': 'application/json' },
+  };
+  await fetch(API_URL + `/teams/`, requestOptions)
+    .then(response => response.json())
+    .then(response => {
+      if (response && response.data) {
+        teams = response.data;
+      }
+    })
+    .catch(err => console.log(err));
+
+  return teams;
+};
+
+// Get By Id Team
+export const getTeamById = async (teamId: string): Promise<any> => {
+  let team;
+  const requestOptions = {
+    method: 'GET',
+    headers: { 'Content-Type': 'application/json' },
+  };
+  await fetch(API_URL + `/teams/${teamId}`, requestOptions)
+    .then(response => response.json())
+    .then(response => {
+      if (response) {
+        team = response.data;
+      }
+    })
+    .catch(err => console.log(err));
+  return team;
+};
+
+// Update Team
+export const updateTeam = async (
+  teamId: string,
+  requestBody: any
+): Promise<any> => {
+  let data: any;
+  const requestOptions = {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({
+      teamName: requestBody.teamName,
+      teamDescription: requestBody.teamDescription,
+      enterpriseId: requestBody.enterpriseId,
+      createdBy: requestBody.createdBy,
+      isActive: requestBody.isActive,
+      userEmailIds: requestBody.userEmailIds,
+    }),
+  };
+
+  await fetch(API_URL + `/teams/update/${teamId}`, requestOptions)
+    .then(response => response.json())
+    .then(response => {
+      data = response.data;
+    });
+  return data;
+};
+
+// Delete Role
+export const deleteTeamById = async (teamId: string): Promise<any> => {
+  let message;
+  const requestOptions = {
+    method: 'DELETE',
+    headers: { 'Content-Type': 'application/json' },
+  };
+  await fetch(API_URL + `/teams/${teamId}`, requestOptions)
+    .then(response => response.json())
+    .then(response => {
+      message = response.message;
+    });
+  return message;
+};
+
+// Get All Teams By EnterpriseId
+export const getAllTeamsByEnterpriseId = async (
+  enterpriseId: string
+): Promise<any> => {
+  let teams: any[] = [];
+  const requestOptions = {
+    method: 'GET',
+    headers: { 'Content-Type': 'application/json' },
+  };
+  await fetch(
+    API_URL + `/teams/getAllTeamsByEnterpriseId/${enterpriseId}`,
+    requestOptions
+  )
+    .then(response => response.json())
+    .then(response => {
+      if (response && response.data) {
+        teams = response.data;
+      }
+    })
+    .catch(err => console.log(err));
+  return teams;
+};
+
+// Get All Teams data for Table
+export const getTeamDataForTable = async (requestBody: any): Promise<any> => {
+  let data: any;
+  const requestOptions = {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({
+      userId: requestBody.userId,
+      roleName: requestBody.roleName,
+      enterpriseId: requestBody.enterpriseId,
+    }),
+  };
+
+  await fetch(API_URL + `/analytics/getTeamDataForTable`, requestOptions)
+    .then(response => response.json())
+    .then(response => {
+      data = response.data;
+    });
+  return data;
+};
+
+// ---------------------------------------- Enterprise API's -----------------------------------------------
+// Create Enterprise
+export const createEnterprise = async (requestBody: any): Promise<any> => {
+  let data: any;
+  const requestOptions = {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({
+      organisationName: requestBody.organisationName,
+      organisationDomain: requestBody.organisationDomain,
+      organisationCountry: requestBody.organisationCountry,
+      organisationPhoto: requestBody.organisationPhoto,
+      isActive: requestBody.isActive,
+    }),
+  };
+
+  await fetch(API_URL + `/enterprises/create`, requestOptions)
+    .then(response => response.json())
+    .then(response => {
+      data = response.data;
+    });
+  return data;
+};
+
+// Get All Enterprises
+export const getAllEnterprises = async (): Promise<any> => {
+  let enterprises: any[] = [];
+  const requestOptions = {
+    method: 'GET',
+    headers: { 'Content-Type': 'application/json' },
+  };
+  await fetch(API_URL + `/enterprises/`, requestOptions)
+    .then(response => response.json())
+    .then(response => {
+      if (response && response.data) {
+        enterprises = response.data;
+      }
+    })
+    .catch(err => console.log(err));
+
+  return enterprises;
+};
+
+// Get By Id Enterprise
+export const getEnterpriseById = async (enterpriseId: string): Promise<any> => {
+  let enterprise;
+  const requestOptions = {
+    method: 'GET',
+    headers: { 'Content-Type': 'application/json' },
+  };
+  await fetch(API_URL + `/enterprises/${enterpriseId}`, requestOptions)
+    .then(response => response.json())
+    .then(response => {
+      if (response) {
+        enterprise = response.data;
+      }
+    })
+    .catch(err => console.log(err));
+  return enterprise;
+};
+
+// Update Enterprise
+export const updateEnterprise = async (
+  enterpriseId: string,
+  requestBody: any
+): Promise<any> => {
+  let data: any;
+  const requestOptions = {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({
+      enterpriseName: requestBody.enterpriseName,
+      enterpriseDomain: requestBody.enterpriseDomain,
+      enterpriseAddress: requestBody.enterpriseAddress,
+      isActive: requestBody.isActive,
+    }),
+  };
+
+  await fetch(API_URL + `/enterprises/update/${enterpriseId}`, requestOptions)
+    .then(response => response.json())
+    .then(response => {
+      data = response.data;
+    });
+  return data;
+};
+
+// Delete Role
+export const deleteEnterpriseById = async (
+  enterpriseId: string
+): Promise<any> => {
+  let message;
+  const requestOptions = {
+    method: 'DELETE',
+    headers: { 'Content-Type': 'application/json' },
+  };
+  await fetch(API_URL + `/enterprises/${enterpriseId}`, requestOptions)
+    .then(response => response.json())
+    .then(response => {
+      message = response.message;
+    });
+  return message;
+};
+
+// ---------------------------------------- Actions API's -----------------------------------------------
+// Create Action
+export const createAction = async (requestBody: any): Promise<any> => {
+  let data: any;
+  const requestOptions = {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({
+      actionName: requestBody.actionName,
+      jiraId: requestBody.jiraId,
+      retroId: requestBody.retroId,
+      assignedTo: requestBody.assignedTo,
+      createdBy: requestBody.createdBy,
+      status: requestBody.status,
+      isActive: requestBody.isActive,
+    }),
+  };
+
+  await fetch(API_URL + `/actions/create`, requestOptions)
+    .then(response => response.json())
+    .then(response => {
+      data = response.data;
+    });
+  return data;
+};
+
+// Get All Actions
+export const getAllActions = async (): Promise<any> => {
+  let actions: any[] = [];
+  const requestOptions = {
+    method: 'GET',
+    headers: { 'Content-Type': 'application/json' },
+  };
+  await fetch(API_URL + `/actions/`, requestOptions)
+    .then(response => response.json())
+    .then(response => {
+      if (response && response.data) {
+        actions = response.data;
+      }
+    })
+    .catch(err => console.log(err));
+
+  return actions;
+};
+
+// Get By Id Action
+export const getActionById = async (actionId: string): Promise<any> => {
+  let action;
+  const requestOptions = {
+    method: 'GET',
+    headers: { 'Content-Type': 'application/json' },
+  };
+  await fetch(API_URL + `/actions/${actionId}`, requestOptions)
+    .then(response => response.json())
+    .then(response => {
+      if (response) {
+        action = response.data;
+      }
+    })
+    .catch(err => console.log(err));
+  return action;
+};
+
+// Update Action
+export const updateAction = async (
+  actionId: string,
+  requestBody: any
+): Promise<any> => {
+  let data: any;
+  const requestOptions = {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({
+      actionName: requestBody.actionName,
+      jiraId: requestBody.jiraId,
+      retroId: requestBody.retroId,
+      assignedTo: requestBody.assignedTo,
+      createdBy: requestBody.createdBy,
+      status: requestBody.status,
+      isActive: requestBody.isActive,
+    }),
+  };
+
+  await fetch(API_URL + `/actions/update/${actionId}`, requestOptions)
+    .then(response => response.json())
+    .then(response => {
+      data = response.data;
+    });
+  return data;
+};
+
+// Delete Role
+export const deleteActionById = async (actionId: string): Promise<any> => {
+  let message;
+  const requestOptions = {
+    method: 'DELETE',
+    headers: { 'Content-Type': 'application/json' },
+  };
+  await fetch(API_URL + `/actions/${actionId}`, requestOptions)
+    .then(response => response.json())
+    .then(response => {
+      message = response.message;
+    });
+  return message;
+};
+
+// ---------------------------------------- Users API's -----------------------------------------------
+// Get All Users
+export const getAllUsers = async (): Promise<any> => {
+  let users: any[] = [];
+  const requestOptions = {
+    method: 'GET',
+    headers: { 'Content-Type': 'application/json' },
+  };
+  await fetch(API_URL + `/users/`, requestOptions)
+    .then(response => response.json())
+    .then(response => {
+      if (response && response.data) {
+        users = response.data;
+      }
+    })
+    .catch(err => console.log(err));
+
+  return users;
+};
+
+// Get By Id User
+export const getUserByEmailId = async (emailId: string): Promise<any> => {
+  let user;
+  const requestOptions = {
+    method: 'GET',
+    headers: { 'Content-Type': 'application/json' },
+  };
+  await fetch(API_URL + `/users/${emailId}`, requestOptions)
+    .then(response => response.json())
+    .then(response => {
+      if (response) {
+        user = response.data;
+      }
+    })
+    .catch(err => console.log(err));
+  return user;
+};
+
+// Get All Users By Email Ids
+export const getAllUsersByEmails = async (emails: any): Promise<any> => {
+  let users: any[] = [];
+  const requestOptions = {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({
+      emails: emails,
+    }),
+  };
+  await fetch(API_URL + `/users/`, requestOptions)
+    .then(response => response.json())
+    .then(response => {
+      if (response && response.data) {
+        users = response.data;
+      }
+    })
+    .catch(err => console.log(err));
+
+  return users;
+};
+
+// Get All Users By Enterprise Id
+export const getAllUsersByEnterpriseId = async (
+  enterpriseId: string
+): Promise<any> => {
+  let users: any[] = [];
+  const requestOptions = {
+    method: 'GET',
+    headers: { 'Content-Type': 'application/json' },
+  };
+  await fetch(
+    API_URL + `/users/getAllUsersByEnterpriseId/${enterpriseId}`,
+    requestOptions
+  )
+    .then(response => response.json())
+    .then(response => {
+      if (response && response.data) {
+        users = response.data;
+      }
+    })
+    .catch(err => console.log(err));
+
+  return users;
+};
+
+// Create User
+export const createUser = async (requestBody: any): Promise<any> => {
+  let data: any;
+  const requestOptions = {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({
+      firstName: requestBody.firstName,
+      lastName: requestBody.lastName,
+      emailId: requestBody.emailId,
+      phoneNo: requestBody.phoneNo,
+      name: requestBody.name,
+      country: requestBody.country,
+      cityCode: requestBody.cityCode,
+      plan: requestBody.plan,
+      roleId: requestBody.roleId,
+      roleName: requestBody.roleName,
+      enterpriseId: requestBody.enterpriseId,
+      enterpriseName: requestBody.enterpriseName,
+      selectedAvatar: requestBody.selectedAvatar,
+      isEnterpriserRequested: requestBody.isEnterpriserRequested,
+      teams: requestBody.teams,
+      isActive: requestBody.isActive,
+    }),
+  };
+
+  await fetch(API_URL + `/users/create`, requestOptions)
+    .then(response => response.json())
+    .then(response => {
+      data = response.data;
+    });
+  return data;
+};
+
+// Update User
+export const updateUser = async (
+  emailId: string,
+  requestBody: any
+): Promise<any> => {
+  let data: any;
+  const requestOptions = {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({
+      firstName: requestBody.firstName,
+      lastName: requestBody.lastName,
+      emailId: requestBody.emailId,
+      phoneNo: requestBody.phoneNo,
+      name: requestBody.name,
+      country: requestBody.country,
+      cityCode: requestBody.cityCode,
+      plan: requestBody.plan,
+      roleId: requestBody.roleId,
+      roleName: requestBody.roleName,
+      enterpriseId: requestBody.enterpriseId,
+      enterpriseName: requestBody.enterpriseName,
+      selectedAvatar: requestBody.selectedAvatar,
+      isEnterpriserRequested: requestBody.isEnterpriserRequested,
+      team: requestBody.team,
+      isActive: requestBody.isActive,
+    }),
+  };
+
+  await fetch(API_URL + `/users/update/${emailId}`, requestOptions)
+    .then(response => response.json())
+    .then(response => {
+      data = response.data;
+    });
+  return data;
+};
+
+// Delete Role
+export const deleteUserById = async (userId: string): Promise<any> => {
+  let message;
+  const requestOptions = {
+    method: 'DELETE',
+    headers: { 'Content-Type': 'application/json' },
+  };
+  await fetch(API_URL + `/users/${userId}`, requestOptions)
+    .then(response => response.json())
+    .then(response => {
+      message = response.message;
+    });
+  return message;
+};
+
+// Authenticate user
+export const authenticateUser = async (requestBody: any): Promise<any> => {
+  let data: any;
+  const requestOptions = {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({
+      emailId: requestBody.emailId,
+      password: requestBody.password,
+    }),
+  };
+
+  await fetch(API_URL + `/users/authenticate`, requestOptions)
+    .then(response => response.json())
+    .then(response => {
+      data = response.data;
+    });
+  return data;
+};
+
+// Create User
+export const deleteManyUsers = async (requestBody: any): Promise<any> => {
+  let data: any;
+  const requestOptions = {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({
+      emailIds: requestBody.emailIds,
+    }),
+  };
+
+  await fetch(API_URL + `/users/deleteMany`, requestOptions)
+    .then(response => response.json())
+    .then(response => {
+      data = response.data;
+    });
+  return data;
+};

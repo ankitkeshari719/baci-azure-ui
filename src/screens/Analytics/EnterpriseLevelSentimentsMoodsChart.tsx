@@ -264,7 +264,7 @@ export default function EnterpriseLevelSentimentsMoodsChart({
             }}
           >
             <Link to={'/facilitator/analytics/'}>Analytics </Link>&nbsp;\
-            Participants Mood
+            Sentiments - Mood
           </Grid>
           {/* Back Button & Chart Title */}
           <Grid
@@ -287,7 +287,7 @@ export default function EnterpriseLevelSentimentsMoodsChart({
               onClick={() => navigate(-1)}
             />
             <H2SemiBoldTypography
-              label="Participants Mood"
+              label="Sentiments - Mood"
               style={{ color: '#2C69A1', marginLeft: '16px' }}
             />
           </Grid>

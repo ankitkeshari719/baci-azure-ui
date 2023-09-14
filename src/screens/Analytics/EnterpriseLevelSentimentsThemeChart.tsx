@@ -354,7 +354,7 @@ export default function EnterpriseLevelSentimentsThemeChart({
               onClick={() => navigate(-1)}
             />
             <H2SemiBoldTypography
-              label="Key themes heatmap"
+              label="Sentiments - Key Themes Heatmap"
               style={{ color: '#2C69A1', marginLeft: '16px' }}
             />
           </Grid>

@@ -46,7 +46,8 @@ import EnterpriseLevelSentimentsMoodsChart from '../../../screens/Analytics/Ente
 
 import TeamLevelActionsCountChart from '../../../screens/Analytics/TeamLevelActionsCountChart';
 
-import { retro } from '../../../helpers/DemoConst';
+import { retro } from '../../../constants/DemoConst';
+import { TextButton } from '../../CustomizedButton/TextButton';
 
 import EnterpriseLevelSentimentsThemeChart from '../../../screens/Analytics/EnterpriseLevelSentimentsThemeChart';
 import DateSelector from './DateSelector';
@@ -61,6 +62,9 @@ import {
 } from '../../../helpers/msal/services';
 import { OutlinedButton } from '../../CustomizedButton/OutlinedButton';
 import AverageRetroChart from '../../../screens/Analytics/AverageRetroChart';
+import DummyEnterpriseDashboard from './DummyEnterpriseDashboard';
+import { styled } from '@mui/material/styles';
+import Tooltip, { TooltipProps, tooltipClasses } from '@mui/material/Tooltip';
 
 const theme = createTheme({
   palette: {
@@ -75,6 +79,17 @@ const theme = createTheme({
     },
   },
 });
+
+const BootstrapTooltip = styled(({ className, ...props }: TooltipProps) => (
+  <Tooltip {...props} arrow classes={{ popper: className }} />
+))(({ theme }) => ({
+  [`& .${tooltipClasses.arrow}`]: {
+    color: theme.palette.common.black,
+  },
+  [`& .${tooltipClasses.tooltip}`]: {
+    backgroundColor: theme.palette.common.black,
+  },
+}));
 
 function EnterpriseDashboard() {
   const navigate = useNavigate();
@@ -245,31 +260,29 @@ function EnterpriseDashboard() {
   };
 
   const getTeamNameOnSelect = (selectId: string) => {
-    let teamName = "";
-    if(selectId === "0"){
-      teamName = "All Teams Analytics";
-    }else if(selectId === "1"){
-      teamName = "Mobile Experience Team Analytics";
-    }else if(selectId === "2"){
-      teamName = "Superannuation Product Team Analytics";
-    }else if(selectId === "3"){
-      teamName = "Insurance Team Analytics";
+    let teamName = '';
+    if (selectId === '0') {
+      teamName = 'All Teams Analytics';
+    } else if (selectId === '1') {
+      teamName = 'Mobile Experience Team Analytics';
+    } else if (selectId === '2') {
+      teamName = 'Superannuation Product Team Analytics';
+    } else if (selectId === '3') {
+      teamName = 'Insurance Team Analytics';
     }
     return teamName;
   };
 
-  const getTeamReportOnSelect = (selectId: string) => {
-    let teamName = "";
-    if(selectId === "0"){
-      teamName = "All Teams Report Overview";
-    }else if(selectId === "1"){
-      teamName = "Mobile Experience Team Report Overview";
-    }else if(selectId === "2"){
-      teamName = "Superannuation Product Team Report Overview";
-    }else if(selectId === "3"){
-      teamName = "Insurance Team Report Overview";
-    }
-    return teamName;
+  const goToAnalyticsLearnMorePage = (url: string) => {
+    navigate(url);
+  };
+
+  const navigateToJoinSession = () => {
+    navigate('/facilitator/joinRetro/');
+  };
+
+  const navigateToCreateSession = () => {
+    navigate('/facilitator/createRetro/');
   };
 
   return (
@@ -281,6 +294,7 @@ function EnterpriseDashboard() {
         height="100%"
         padding="10px"
       >
+        <DummyEnterpriseDashboard />
         {/* Label and Button */}
         <Box
           display="flex"
@@ -305,6 +319,7 @@ function EnterpriseDashboard() {
                 variant="contained"
                 color="primary"
                 sx={{ borderRadius: '10px' }}
+                onClick={navigateToJoinSession}
               >
                 JOIN SESSION
               </Button>
@@ -312,6 +327,7 @@ function EnterpriseDashboard() {
                 variant="contained"
                 color="secondary"
                 sx={{ marginLeft: '20px', borderRadius: '10px' }}
+                onClick={navigateToCreateSession}
               >
                 <span style={{ color: 'white' }}>NEW SESSION</span>
               </Button>
@@ -678,27 +694,119 @@ function EnterpriseDashboard() {
                 </Box>
               </Box>
               {/* Enterprise Level Actions Count Chart */}
-              <Box
-                className="chartCard"
-                onClick={() => {
-                  navigate('/enterprise/analytics/enterpriseLevelActionsCount');
-                }}
-              >
-                <EnterpriseLevelActionsCountChart
-                  dashboard={true}
-                  team={selectId}
-                />
-                <BodySemiBoldTypography label="Count of All Actions (Assigned vs Completed)" />
+              <Box className="chartCard">
+                <Box
+                  display="flex"
+                  flexDirection="row"
+                  alignItems="center"
+                  justifyContent="flex-start"
+                >
+                  <BodySemiBoldTypography label="Count of All Actions (Assigned vs Completed)" />
+                  <BootstrapTooltip
+                    title="Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vivamus in ex a est finibus fermentum aliquet at urna. Vivamus ac aliquet mi. Morbi laoreet tortor metus, ac vehicula turpis imperdiet et."
+                    arrow
+                    placement="right"
+                  >
+                    <Icons.InformationCircleOutline
+                      size={24}
+                      color="#4E4E4E"
+                      style={{
+                        cursor: 'pointer',
+                        marginLeft: '5px',
+                      }}
+                    />
+                  </BootstrapTooltip>
+                </Box>
+                <Box
+                  onClick={() => {
+                    navigate(
+                      '/enterprise/analytics/enterpriseLevelActionsCount'
+                    );
+                  }}
+                >
+                  <EnterpriseLevelActionsCountChart
+                    dashboard={true}
+                    team={selectId}
+                  />
+                </Box>
+                {/* <Box
+                  display="flex"
+                  flexDirection="row"
+                  alignItems="center"
+                  justifyContent="flex-start"
+                  width="100%"
+                >
+                  <TextButton
+                    id={'Learn_More'}
+                    label={'Learn More'}
+                    size={'small'}
+                    style={{
+                      paddingLeft: '0px !important',
+                      textDecorationLine: 'underline !important',
+                      backgroundColor: 'transparent !important',
+                    }}
+                    onClick={() =>
+                      goToAnalyticsLearnMorePage(
+                        '/enterprise/analytics/enterpriseLevelActionsCountLearnMore'
+                      )
+                    }
+                  />
+                </Box> */}
               </Box>
               {/* Team Level Actions Count Chart */}
-              <Box
-                className="chartCard"
-                onClick={() => {
-                  navigate('/enterprise/analytics/teamLevelActionsCount');
-                }}
-              >
-                <TeamLevelActionsCountChart dashboard={true} />
-                <BodySemiBoldTypography label="Count of Team Actions (Assigned vs Completed)" />
+              <Box className="chartCard">
+                <Box
+                  display="flex"
+                  flexDirection="row"
+                  alignItems="center"
+                  justifyContent="flex-start"
+                >
+                  <BodySemiBoldTypography label="Count of Team Actions (Assigned vs Completed)" />
+                  <BootstrapTooltip
+                    title="Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vivamus in ex a est finibus fermentum aliquet at urna. Vivamus ac aliquet mi. Morbi laoreet tortor metus, ac vehicula turpis imperdiet et."
+                    arrow
+                    placement="right"
+                  >
+                    <Icons.InformationCircleOutline
+                      size={24}
+                      color="#4E4E4E"
+                      style={{
+                        cursor: 'pointer',
+                        marginLeft: '5px',
+                      }}
+                    />
+                  </BootstrapTooltip>
+                </Box>
+                <Box
+                  onClick={() => {
+                    navigate('/enterprise/analytics/teamLevelActionsCount');
+                  }}
+                >
+                  <TeamLevelActionsCountChart dashboard={true} />
+                </Box>
+                {/* <Box
+                  display="flex"
+                  flexDirection="row"
+                  alignItems="center"
+                  justifyContent="flex-start"
+                  width="100%"
+                >
+                  <TextButton
+                    id={'Learn_More'}
+                    label={'Learn More'}
+                    size={'small'}
+                    style={{
+                      paddingLeft: '0px !important',
+                      textDecorationLine: 'underline !important',
+                      backgroundColor: 'transparent !important',
+                    }}
+                    onClick={() =>
+                      goToAnalyticsLearnMorePage(
+                        '/enterprise/analytics/teamLevelActionsCountLearnMore'
+                      )
+                    }
+                  />
+                </Box> */}
               </Box>
               {/* ------------------------Page Header ----------------------------- */}
               <Grid
@@ -732,7 +840,7 @@ function EnterpriseDashboard() {
                       flexDirection="column"
                     >
                       <CaptionRegularTypography
-                        label={getTeamReportOnSelect(selectId)}
+                        label="All Teams Report Overview"
                         style={{ color: '#159ADD' }}
                       />
                       <a
@@ -757,26 +865,118 @@ function EnterpriseDashboard() {
                 </Box>
               </Grid>
               {/* Average Participant Chart */}
-              <Box
-                className="chartCard"
-                onClick={() => {
-                  navigate(
-                    '/enterprise/analytics/enterpriseLevelParticipantsCount'
-                  );
-                }}
-              >
-                <AverageParticipantChart dashboard={true} team={selectId} />
-                <BodySemiBoldTypography label="Count of All Participants Over Time" />
+              <Box className="chartCard">
+                <Box
+                  display="flex"
+                  flexDirection="row"
+                  alignItems="center"
+                  justifyContent="flex-start"
+                >
+                  <BodySemiBoldTypography label="Count of All Participants Over Time" />
+                  <BootstrapTooltip
+                    title="Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vivamus in ex a est finibus fermentum aliquet at urna. Vivamus ac aliquet mi. Morbi laoreet tortor metus, ac vehicula turpis imperdiet et."
+                    arrow
+                    placement="right"
+                  >
+                    <Icons.InformationCircleOutline
+                      size={24}
+                      color="#4E4E4E"
+                      style={{
+                        cursor: 'pointer',
+                        marginLeft: '5px',
+                      }}
+                    />
+                  </BootstrapTooltip>
+                </Box>
+                <Box
+                  onClick={() => {
+                    navigate(
+                      '/enterprise/analytics/enterpriseLevelParticipantsCount'
+                    );
+                  }}
+                >
+                  <AverageParticipantChart dashboard={true} team={selectId} />
+                </Box>
+                {/* <Box
+                  display="flex"
+                  flexDirection="row"
+                  alignItems="center"
+                  justifyContent="flex-start"
+                  width="100%"
+                >
+                  <TextButton
+                    id={'Learn_More'}
+                    label={'Learn More'}
+                    size={'small'}
+                    style={{
+                      paddingLeft: '0px !important',
+                      textDecorationLine: 'underline !important',
+                      backgroundColor: 'transparent !important',
+                    }}
+                    onClick={() =>
+                      goToAnalyticsLearnMorePage(
+                        '/enterprise/analytics/enterpriseLevelParticipantsCountLearnMore'
+                      )
+                    }
+                  />
+                </Box> */}
               </Box>
               {/* Average Sessions Counts Chart Print*/}
-              <Box
-                className="chartCard"
-                onClick={() => {
-                  navigate('/enterprise/analytics/enterpriseLevelRetrosCount');
-                }}
-              >
-                <AverageRetroChart dashboard={true} team={selectId} />
-                <BodySemiBoldTypography label="Count of All Sessions" />
+              <Box className="chartCard">
+                <Box
+                  display="flex"
+                  flexDirection="row"
+                  alignItems="center"
+                  justifyContent="flex-start"
+                >
+                  <BodySemiBoldTypography label="Count of All Sessions" />
+                  <BootstrapTooltip
+                    title="Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vivamus in ex a est finibus fermentum aliquet at urna. Vivamus ac aliquet mi. Morbi laoreet tortor metus, ac vehicula turpis imperdiet et."
+                    arrow
+                    placement="right"
+                  >
+                    <Icons.InformationCircleOutline
+                      size={24}
+                      color="#4E4E4E"
+                      style={{
+                        cursor: 'pointer',
+                        marginLeft: '5px',
+                      }}
+                    />
+                  </BootstrapTooltip>
+                </Box>
+                <Box
+                  onClick={() => {
+                    navigate(
+                      '/enterprise/analytics/enterpriseLevelRetrosCount'
+                    );
+                  }}
+                >
+                  <AverageRetroChart dashboard={true} team={selectId} />
+                </Box>
+                {/* <Box
+                  display="flex"
+                  flexDirection="row"
+                  alignItems="center"
+                  justifyContent="flex-start"
+                  width="100%"
+                >
+                  <TextButton
+                    id={'Learn_More'}
+                    label={'Learn More'}
+                    size={'small'}
+                    style={{
+                      paddingLeft: '0px !important',
+                      textDecorationLine: 'underline !important',
+                      backgroundColor: 'transparent !important',
+                    }}
+                    onClick={() =>
+                      goToAnalyticsLearnMorePage(
+                        '/enterprise/analytics/enterpriseLevelRetrosCountLearnMore'
+                      )
+                    }
+                  />
+                </Box> */}
               </Box>
               {/* ------------------------Page Header ----------------------------- */}
               <Grid
@@ -810,7 +1010,7 @@ function EnterpriseDashboard() {
                       flexDirection="column"
                     >
                       <CaptionRegularTypography
-                        label={getTeamReportOnSelect(selectId)}
+                        label="All Teams Report Overview"
                         style={{ color: '#159ADD' }}
                       />
                       <a
@@ -835,34 +1035,124 @@ function EnterpriseDashboard() {
                 </Box>
               </Grid>
               {/* Enterprise Level Sentiments Theme Chart */}
-              <Box
-                className="chartCard"
-                onClick={() => {
-                  navigate(
-                    '/enterprise/analytics/enterpriseLevelSentimentsThemes'
-                  );
-                }}
-              >
-                <EnterpriseLevelSentimentsThemeChart
-                  dashboard={true}
-                  team={selectId}
-                />
-                <BodySemiBoldTypography label="Enterprise Level - Sentiments - Key Themes Heatmap" />
+              <Box className="chartCard">
+                <Box
+                  display="flex"
+                  flexDirection="row"
+                  alignItems="center"
+                  justifyContent="flex-start"
+                >
+                  <BodySemiBoldTypography label="Enterprise Level - Sentiments - Key Themes Heatmap" />
+                  <BootstrapTooltip
+                    title="Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vivamus in ex a est finibus fermentum aliquet at urna. Vivamus ac aliquet mi. Morbi laoreet tortor metus, ac vehicula turpis imperdiet et."
+                    arrow
+                    placement="right"
+                  >
+                    <Icons.InformationCircleOutline
+                      size={24}
+                      color="#4E4E4E"
+                      style={{
+                        cursor: 'pointer',
+                        marginLeft: '5px',
+                      }}
+                    />
+                  </BootstrapTooltip>
+                </Box>
+                <Box
+                  onClick={() => {
+                    navigate(
+                      '/enterprise/analytics/enterpriseLevelSentimentsThemes'
+                    );
+                  }}
+                >
+                  <EnterpriseLevelSentimentsThemeChart
+                    dashboard={true}
+                    team={selectId}
+                  />
+                </Box>
+                {/* <Box
+                  display="flex"
+                  flexDirection="row"
+                  alignItems="center"
+                  justifyContent="flex-start"
+                  width="100%"
+                >
+                  <TextButton
+                    id={'Learn_More'}
+                    label={'Learn More'}
+                    size={'small'}
+                    style={{
+                      paddingLeft: '0px !important',
+                      textDecorationLine: 'underline !important',
+                      backgroundColor: 'transparent !important',
+                    }}
+                    onClick={() =>
+                      goToAnalyticsLearnMorePage(
+                        '/enterprise/analytics/enterpriseLevelSentimentsThemesLearnMore'
+                      )
+                    }
+                  />
+                </Box> */}
               </Box>
               {/* Enterprise Level Sentiments Moods Chart */}
-              <Box
-                className="chartCard"
-                onClick={() => {
-                  navigate(
-                    '/enterprise/analytics/enterpriseLevelSentimentsMoods'
-                  );
-                }}
-              >
-                <EnterpriseLevelSentimentsMoodsChart
-                  dashboard={true}
-                  team={selectId}
-                />
-                <BodySemiBoldTypography label="Participants Sentiments - Moods" />
+              <Box className="chartCard">
+                <Box
+                  display="flex"
+                  flexDirection="row"
+                  alignItems="center"
+                  justifyContent="flex-start"
+                >
+                  <BodySemiBoldTypography label="Sentiments - Moods" />
+                  <BootstrapTooltip
+                    title="Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vivamus in ex a est finibus fermentum aliquet at urna. Vivamus ac aliquet mi. Morbi laoreet tortor metus, ac vehicula turpis imperdiet et."
+                    arrow
+                    placement="right"
+                  >
+                    <Icons.InformationCircleOutline
+                      size={24}
+                      color="#4E4E4E"
+                      style={{
+                        cursor: 'pointer',
+                        marginLeft: '5px',
+                      }}
+                    />
+                  </BootstrapTooltip>
+                </Box>
+                <Box
+                  onClick={() => {
+                    navigate(
+                      '/enterprise/analytics/enterpriseLevelSentimentsMoods'
+                    );
+                  }}
+                >
+                  <EnterpriseLevelSentimentsMoodsChart
+                    dashboard={true}
+                    team={selectId}
+                  />
+                </Box>
+                {/* <Box
+                  display="flex"
+                  flexDirection="row"
+                  alignItems="center"
+                  justifyContent="flex-start"
+                  width="100%"
+                >
+                  <TextButton
+                    id={'Learn_More'}
+                    label={'Learn More'}
+                    size={'small'}
+                    style={{
+                      paddingLeft: '0px !important',
+                      textDecorationLine: 'underline !important',
+                      backgroundColor: 'transparent !important',
+                    }}
+                    onClick={() =>
+                      goToAnalyticsLearnMorePage(
+                        '/enterprise/analytics/enterpriseLevelSentimentsMoodsLearnMore'
+                      )
+                    }
+                  />
+                </Box> */}
               </Box>
               {/* ------------------------Page Header ----------------------------- */}
               <Grid
@@ -896,7 +1186,7 @@ function EnterpriseDashboard() {
                       flexDirection="column"
                     >
                       <CaptionRegularTypography
-                        label={getTeamReportOnSelect(selectId)}
+                        label="All Teams Report Overview"
                         style={{ color: '#159ADD' }}
                       />
                       <a
@@ -921,19 +1211,64 @@ function EnterpriseDashboard() {
                 </Box>
               </Grid>
               {/* Enterprise Level Sentiments Summary Chart */}
-              <Box
-                className="chartCard"
-                onClick={() => {
-                  navigate(
-                    '/enterprise/analytics/enterpriseLevelSentimentsSummary'
-                  );
-                }}
-              >
-                <EnterpriseLevelSentimentsSummaryChart
-                  dashboard={true}
-                  team={selectId}
-                />
-                <BodySemiBoldTypography label="Enterprise Level - Overall Summary" />
+              <Box className="chartCard">
+                <Box
+                  display="flex"
+                  flexDirection="row"
+                  alignItems="center"
+                  justifyContent="flex-start"
+                >
+                  <BodySemiBoldTypography label="Enterprise Level - Overall Summary" />
+                  <BootstrapTooltip
+                    title="Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vivamus in ex a est finibus fermentum aliquet at urna. Vivamus ac aliquet mi. Morbi laoreet tortor metus, ac vehicula turpis imperdiet et."
+                    arrow
+                    placement="right"
+                  >
+                    <Icons.InformationCircleOutline
+                      size={24}
+                      color="#4E4E4E"
+                      style={{
+                        cursor: 'pointer',
+                        marginLeft: '5px',
+                      }}
+                    />
+                  </BootstrapTooltip>
+                </Box>
+                <Box
+                  onClick={() => {
+                    navigate(
+                      '/enterprise/analytics/enterpriseLevelSentimentsSummary'
+                    );
+                  }}
+                >
+                  <EnterpriseLevelSentimentsSummaryChart
+                    dashboard={true}
+                    team={selectId}
+                  />
+                </Box>
+                {/* <Box
+                  display="flex"
+                  flexDirection="row"
+                  alignItems="center"
+                  justifyContent="flex-start"
+                  width="100%"
+                >
+                  <TextButton
+                    id={'Learn_More'}
+                    label={'Learn More'}
+                    size={'small'}
+                    style={{
+                      paddingLeft: '0px !important',
+                      textDecorationLine: 'underline !important',
+                      backgroundColor: 'transparent !important',
+                    }}
+                    onClick={() =>
+                      goToAnalyticsLearnMorePage(
+                        '/enterprise/analytics/enterpriseLevelSentimentsSummaryLearnMore'
+                      )
+                    }
+                  />
+                </Box> */}
               </Box>
             </Box>
           </Box>

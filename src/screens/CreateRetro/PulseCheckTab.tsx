@@ -20,6 +20,10 @@ import * as Icons from 'heroicons-react';
 import { createUseStyles } from 'react-jss';
 import theme from '../../helpers/theme/theme';
 import { LearnMorePulseCheck } from './LearnMorePulseCheck';
+import {
+  H6RegularTypography,
+  H5SemiBoldTypography,
+} from '../../components/CustomizedTypography';
 
 function SampleNextArrow(props: any) {
   const { className, style, onClick } = props;
@@ -156,7 +160,14 @@ export function PulseCheckTab({
                   color: '#4E4E4E !important',
                 }}
               >
-                {selectedPulseCheck?.name + ' Pulse Check'}
+                <H6RegularTypography label="Pulse Check" />
+              </Box>
+              <Box
+                sx={{
+                  ml: 2,
+                }}
+              >
+                <H5SemiBoldTypography label={selectedPulseCheck?.name} />
               </Box>
             </>
           ) : (
@@ -283,7 +294,6 @@ export function PulseCheckTab({
                             disabled={pulseCheck.isComingSoon}
                             onClick={handleLearnMoreDialog}
                           />
-                          
                         </CardActions>
                       )}
                     </Card>

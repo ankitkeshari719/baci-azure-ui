@@ -10,7 +10,7 @@ type Props = {
 
 export function H5RegularTypography({ label, onClick, style }: Props) {
   return (
-    <Typography className="h5Regular" component="span" sx={{ ...style }}>
+    <Typography className="h5Regular" component="span" sx={{ ...style }} onClick={onClick}>
       {label}
     </Typography>
   );

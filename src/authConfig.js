@@ -12,22 +12,22 @@ import { LogLevel } from "@azure/msal-browser";
  */
 export const b2cPolicies = {
     names: {
-        signUpSignIn: "B2C_1_signupsignin1",
-        forgotPassword: "b2c_1_reset",
+        signUpSignIn: "B2C_1_EvoltechBACI",
+        forgotPassword: "B2C_1_ResetPassword",
         editProfile: "B2C_1_edit_profile_v2"
     },
     authorities: {
         signUpSignIn: {
-            authority: "https://bacib2c.b2clogin.com/bacib2c.onmicrosoft.com/B2C_1_signupsignin1",
+            authority: "https://EvoltechBACIB2C.b2clogin.com/EvoltechBACIB2C.onmicrosoft.com/B2C_1_EvoltechBACI",
         },
         forgotPassword: {
-            authority: "https://bacib2c.b2clogin.com/bacib2c.onmicrosoft.com/b2c_1_reset",
+            authority: "https://EvoltechBACIB2C.b2clogin.com/EvoltechBACIB2C.onmicrosoft.com/B2C_1_ResetPassword",
         },
         editProfile: {
-            authority: "https://bacib2c.b2clogin.com/bacib2c.onmicrosoft.com/B2C_1_edit_profile_v2"
+            authority: "https://EvoltechBACIB2C.b2clogin.com/EvoltechBACIB2C.onmicrosoft.com/B2C_1_edit_profile_v2"
         }
     },
-    authorityDomain: "bacib2c.b2clogin.com"
+    authorityDomain: "EvoltechBACIB2C.b2clogin.com"
 }
 
 
@@ -38,7 +38,7 @@ export const b2cPolicies = {
  */
 export const msalConfig = {
     auth: {
-        clientId: "739f140e-ceb5-416c-a6cf-a9e7d75fac66", // This is the ONLY mandatory field that you need to supply.
+        clientId: "3ac39f82-6a9c-49af-934e-2db2f437d8bc", // This is the ONLY mandatory field that you need to supply.
         authority: b2cPolicies.authorities.signUpSignIn.authority, // Choose SUSI as your default authority.
         knownAuthorities: [b2cPolicies.authorityDomain], // Mark your B2C tenant's domain as trusted.
         redirectUri: "http://localhost:3000", // You must register this URI on Azure Portal/App Registration. Defaults to window.location.origin

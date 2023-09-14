@@ -10,7 +10,7 @@ type Props = {
 
 export function TinyTextTypography({ label, onClick, style }: Props) {
   return (
-    <Typography className="tinyText" component="span" sx={{ ...style }}>
+    <Typography className="tinyText" component="span" sx={{ ...style }} onClick={onClick}>
       {label}
     </Typography>
   );

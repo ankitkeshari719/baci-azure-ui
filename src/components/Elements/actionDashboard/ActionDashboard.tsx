@@ -12,7 +12,7 @@ import {
   ActionList,
   jiraActionStatus,
   users,
-} from '../../../helpers/DemoConst';
+} from '../../../constants/DemoConst';
 import {
   Box,
   Checkbox,
@@ -95,11 +95,11 @@ const columns: Column[] = [
   },
 ];
 const columns2: any[] = [
-  {id:'r1',displayName:''},
-  {id:'r2',displayName:''},
-  
+  { id: 'r1', displayName: '' },
+  { id: 'r2', displayName: '' },
+
   { id: 'teamName', label: 'Team', minWidth: 200, displayName: '' },
-  { id: 'jiraId', label: 'JIRA ID', minWidth: 200, displayName: ''},
+  { id: 'jiraId', label: 'JIRA ID', minWidth: 200, displayName: '' },
   { id: 'action.value', label: 'Action', minWidth: 300, displayName: '' },
   {
     id: 'initialSession',
@@ -127,7 +127,6 @@ const columns2: any[] = [
     minWidth: 90,
     displayName: '',
   },
-
 ];
 
 const StyledTableRow = styled(TableRow)(({ theme }) => ({
@@ -177,6 +176,7 @@ export default function ActionDashboard() {
 
   const [actionCount, setActionCount] = React.useState<any[]>(ActionCount);
   const navigate = useNavigate();
+
   React.useEffect(() => {
     const localActionList = localStorage.getItem('actionList');
     var tempActionList: any[] = [];
@@ -310,31 +310,33 @@ export default function ActionDashboard() {
     setOrderDirection(orderDirection === 'asc' ? 'desc' : 'asc');
   };
 
-  React.useEffect(()=>{
-    let initialData=[]
-    console.log(new Date().toLocaleString()+"","date")
-    initialData.push({r1:'Date : ',r2:new Date().toLocaleString()+""});
+  React.useEffect(() => {
+    let initialData = [];
+    initialData.push({ r1: 'Date : ', r2: new Date().toLocaleString() + '' });
 
-    actionCount.forEach(action=>{
-      if(action.selected){
-        initialData.push({r1:action.label,r2:action.count})
+    actionCount.forEach(action => {
+      if (action.selected) {
+        initialData.push({ r1: action.label, r2: action.count });
       }
-    })
+    });
 
-initialData.push(
+    initialData.push({
+      teamName: 'Team',
+      jiraId: 'JIRA ID',
+      'action.value': 'Action',
+      initialSession: 'Initial Session',
+      'action.assigneeName': 'Assignee',
+      startDate: 'Start Date',
+      status: 'Status',
+      teamId: 'Action',
+    });
 
-  {teamName:'Team', jiraId:'JIRA ID',"action.value":"Action",initialSession:'Initial Session', "action.assigneeName":'Assignee',startDate:"Start Date",status:'Status',
-teamId:'Action'}
-)
-
-    displayJiraRows.forEach((element:any )=> {
+    displayJiraRows.forEach((element: any) => {
       initialData.push(element);
     });
 
     setCsvData([...initialData]);
-
-   
-  },[displayJiraRows])
+  }, [displayJiraRows]);
   return (
     <>
       <Paper
@@ -354,7 +356,6 @@ teamId:'Action'}
           label="All Actions"
           style={{ color: commonStyles.PrimaryDark }}
         />
-        {/* {React.useMemo(()=>{ */}
         <Box display="flex" flexDirection="row">
           {actionCount.map((action, index) => {
             return (
@@ -405,9 +406,6 @@ teamId:'Action'}
             );
           })}
         </Box>
-        {/* } */}
-        {/* // ,[actionCount])} */}
-
         <Box
           display="flex"
           flexDirection="row"
@@ -429,31 +427,28 @@ teamId:'Action'}
               ),
             }}
           />
-    
-            <CsvDownloader
-              filename="BACI Action List"
-              extension=".csv"
-              separator=";"
-              wrapColumnChar=""
-              columns={columns2}
-              datas={csvData}
-              text="Export To CSV"
-              noHeader={true}
-              style={{
-                background:"#3498db",
-                color:"white",
-                padding:'10px 20px',
-                border:'none',
-                cursor:'pointer',
-                fontSize:'16px',
-                borderRadius:'10px'
 
-              }}
-            />
-     
+          <CsvDownloader
+            filename="BACI Action List"
+            extension=".csv"
+            separator=";"
+            wrapColumnChar=""
+            columns={columns2}
+            datas={csvData}
+            text="Export To CSV"
+            noHeader={true}
+            style={{
+              background: '#3498db',
+              color: 'white',
+              padding: '10px 20px',
+              border: 'none',
+              cursor: 'pointer',
+              fontSize: '16px',
+              borderRadius: '10px',
+            }}
+          />
           {/* <FunnelIcon width="32px" style={{ cursor: 'pointer' }} /> */}
         </Box>
-
         <TableContainer sx={{ height: 'calc(100% - 280px)' }}>
           <Table stickyHeader aria-label="sticky table">
             <TableHead>
@@ -509,12 +504,12 @@ teamId:'Action'}
                               sx={{
                                 color: 'rgba(0, 0, 238, 1)',
                                 minWidth: '100px',
-                                cursor:'pointer'
+                                cursor: 'pointer',
                               }}
-                         
                             >
-                              <a href={row["url"]} target="_blank">
-                              {value}</a>
+                              <a href={row['url']} target="_blank">
+                                {value}
+                              </a>
                             </TableCell>
                           );
                         } else if (column.id == 'action.assigneeId') {

@@ -21,68 +21,110 @@ import Avatar from '../Avatar';
 import { GlobalContext } from '../../../contexts/GlobalContext';
 
 import { LazyLoadImage } from 'react-lazy-load-image-component';
-import { useNavigate, useSearchParams } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
+import { BodyRegularTypography } from '../../CustomizedTypography';
+import {
+  BASIC,
+  ENTERPRISE_ADMIN,
+  REGULAR_ENTERPRISE,
+} from '../../../constants/applicationConst';
 
 const LeftBar = () => {
   const navigate = useNavigate();
+  const [hoverOnMenu, setHoverOnMenu] = React.useState<Boolean>(false);
+  const [hoverOnUserMenu, setHoverOnUserMenu] = React.useState<Boolean>(false);
   const [selectedMenu, setSelectedMenu] = React.useState('');
-  const [searchParams] = useSearchParams();
   const [{ user }] = React.useContext(GlobalContext);
-  const [path,setPath]=React.useState(location.pathname.includes('facilitator')?"facilitator":location.pathname.includes('enterprise')?"enterprise":"facilitator");
+  const localUserData = localStorage.getItem('userData');
+  const tempLocalUserData = localUserData && JSON.parse(localUserData);
+  const [selectedAvatar, setSelectedAvatar] = React.useState('');
+
+  const [path, setPath] = React.useState('');
+  const imaSrc = '/avatars/animals/' + selectedAvatar + '.svg';
+
+  React.useEffect(() => {
+    if (tempLocalUserData && tempLocalUserData.roleName === BASIC) {
+      setPath('basic');
+    } else if (
+      tempLocalUserData &&
+      tempLocalUserData.roleName === REGULAR_ENTERPRISE
+    ) {
+      setPath('facilitator');
+    } else if (
+      tempLocalUserData &&
+      tempLocalUserData.roleName === ENTERPRISE_ADMIN
+    ) {
+      setPath('enterprise');
+    }
+    setSelectedAvatar(tempLocalUserData && tempLocalUserData.selectedAvatar);
+  }, [tempLocalUserData]);
 
   const menuArray = [
     {
       id: 1,
       label: 'Home',
       icon: HomeIcon,
-      routeTo: path+'/dashboard',
+      routeTo: path + '/dashboard/',
       disabled: false,
+      isVisibleToBasic:
+        tempLocalUserData && tempLocalUserData.roleName === BASIC,
     },
     {
       id: 2,
       label: 'Actions',
       icon: ClipboardDocumentCheckIcon,
-      routeTo: path+'/actions',
+      routeTo: path + '/actions/',
       disabled: false,
+      isVisibleToBasic:
+        tempLocalUserData && tempLocalUserData.roleName === BASIC,
     },
 
     {
       id: 3,
       label: 'Analytics',
       icon: ChartBarIcon,
-      routeTo: path+'/analytics/',
-      disabled: true,
+      routeTo: path + '/analytics/',
+      disabled: false,
+      isVisibleToBasic:
+        tempLocalUserData && tempLocalUserData.roleName === BASIC,
     },
 
     {
       id: 4,
-      label: 'Retros',
+      label: 'Sessions',
       icon: ViewColumnsIcon,
-      routeTo: '',
-      disabled: true,
+      routeTo: path + '/sessions',
+      disabled: false,
+      isVisibleToBasic:
+        tempLocalUserData && tempLocalUserData.roleName === BASIC,
     },
     {
       id: 5,
       label: 'Templates',
       icon: Square3Stack3DIcon,
-      routeTo: '',
+      routeTo: path + '/templates/',
       disabled: true,
+      isVisibleToBasic:
+        tempLocalUserData && tempLocalUserData.roleName === BASIC,
     },
 
     {
       id: 6,
       label: 'Users',
       icon: UserGroupIcon,
-      routeTo: '',
+      routeTo: path + '/teams/',
       disabled: true,
+      isVisibleToBasic:
+        !tempLocalUserData && tempLocalUserData.roleName === BASIC,
     },
-
     {
       id: 7,
       label: 'Settings',
       icon: Cog8ToothIcon,
-      routeTo: '',
-      disabled: true,
+      routeTo: path + '/settings/',
+      disabled: false,
+      isVisibleToBasic:
+        tempLocalUserData && tempLocalUserData.roleName === BASIC,
     },
   ];
 
@@ -91,21 +133,32 @@ const LeftBar = () => {
       id: 8,
       label: 'Help',
       icon: QuestionMarkCircleIcon,
-      routeTo: '',
-      disabled: true,
+      routeTo: path + '/help',
+      disabled: false,
+      isVisibleToBasic:
+        tempLocalUserData && tempLocalUserData.roleName === BASIC,
     },
     {
       id: 9,
       label: 'Notifications',
       icon: BellIcon,
-      routeTo: '',
-      disabled: true,
+      routeTo: path + '/notifications',
+      disabled: false,
+      isVisibleToBasic:
+        tempLocalUserData && tempLocalUserData.roleName === BASIC,
     },
   ];
+
   useEffect(() => {
     if (location.pathname.includes('dashboard')) {
       setSelectedMenu(menuArray[0].label);
-      setPath(location.pathname.includes('facilitator')?"facilitator":location.pathname.includes('enterprise')?"enterprise":"facilitator")
+      setPath(
+        location.pathname.includes('facilitator')
+          ? 'facilitator'
+          : location.pathname.includes('enterprise')
+          ? 'enterprise'
+          : 'basic'
+      );
     } else if (location.pathname.includes('analytics')) {
       setSelectedMenu(menuArray[2].label);
     } else if (location.pathname.includes('actions')) {
@@ -117,50 +170,114 @@ const LeftBar = () => {
     location.pathname.includes('enterprise/dashboard'),
     location.pathname.includes('enterprise'),
   ]);
+
+  // Function to navigate on retroListTemplate
+  function goToRetroList() {
+    setHoverOnMenu(false);
+    navigate(path + '/templates/retroListTemplate/');
+  }
+
+  // Function to navigate on pulseCheckListTemplate
+  function goToPulseCheckList() {
+    setHoverOnMenu(false);
+    navigate(path + '/templates/pulseCheckListTemplate/');
+  }
+
+  // Function to navigate to enterprise registration
+  function goToEnterpriseRegistration() {
+    setHoverOnUserMenu(false);
+    navigate(path + '/teams/enterpriseRegistration/');
+  }
+
+  // Function to navigate to get all teams
+  function goToAllTeams() {
+    setHoverOnUserMenu(false);
+    navigate(path + '/teams/allTeams/');
+  }
+
+  // Function to navigate on manage users
+  function goToManageUser() {
+    setHoverOnUserMenu(false);
+    navigate(path + '/teams/manageUsers/');
+  }
+
+  // Function to navigate on goToProfile
+  function goToProfile() {
+    navigate(path + '/profile');
+  }
+
   return (
     <>
       <Box
         className="leftBarContainer"
         sx={{
-          display: location.pathname.includes('facilitator')||location.pathname.includes('enterprise') ? 'flex' : 'none',
+          display:
+            location.pathname.includes('basic') ||
+            location.pathname.includes('facilitator') ||
+            location.pathname.includes('enterprise')
+              ? 'flex'
+              : 'none',
         }}
       >
         <Box className="topContainer">
-          <Box sx={{cursor:'pointer'}} onClick={()=>{
-            navigate("/")
-          }}>
+          <Box
+            sx={{ cursor: 'pointer' }}
+            onClick={() => {
+              navigate('/');
+            }}
+          >
             <img src="/../images/r_MenuHeader.png" style={{ width: '56px' }} />
           </Box>
-
           {menuArray.map((menu, index) => {
-            return (
-              <Tooltip title={menu.label} key={menu.label} >
-                <menu.icon
-                  className={
-                    menu.label == selectedMenu ? 'menuIconSelected' : 'menuIcon'
-                  }
-                  onClick={() => {
-                    if (!menu.disabled) {
-                      setSelectedMenu(menu.label);
-                      navigate(menu.routeTo);
+            {
+              let a = menu.isVisibleToBasic ? (
+                <Tooltip title={menu.label} key={menu.label} placement="right">
+                  <menu.icon
+                    className={
+                      menu.label == selectedMenu
+                        ? 'menuIconSelected'
+                        : 'menuIcon'
                     }
-                  }}
-                />
-              </Tooltip>
-            );
+                    onClick={() => {
+                      if (!menu.disabled) {
+                        setSelectedMenu(menu.label);
+                        navigate(menu.routeTo);
+                      }
+                    }}
+                    onMouseEnter={() => {
+                      if (menu.label === 'Templates') {
+                        setHoverOnMenu(true);
+                      } else if (menu.label != 'Templates') {
+                        setHoverOnMenu(false);
+                      }
+
+                      if (menu.label === 'Users') {
+                        setHoverOnUserMenu(true);
+                      } else if (menu.label != 'Users') {
+                        setHoverOnUserMenu(false);
+                      }
+                    }}
+                    onMouseLeave={() => {}}
+                  />
+                </Tooltip>
+              ) : (
+                <></>
+              );
+              return a;
+            }
           })}
         </Box>
-
         <Box className="bottomContainer">
           {bottomMenuArray.map((menu, index) => {
             return (
-              <Tooltip title={menu.label} key={menu.label} >
+              <Tooltip title={menu.label} key={menu.label} placement="right">
                 <menu.icon
                   className={
                     menu.label == selectedMenu ? 'menuIconSelected' : 'menuIcon'
                   }
                   onClick={() => {
                     setSelectedMenu(menu.label);
+                    navigate(menu.routeTo);
                   }}
                 />
               </Tooltip>
@@ -169,43 +286,132 @@ const LeftBar = () => {
 
           <Tooltip title={user?.name + ''} placement="right-start">
             <span>
-              {user?.avatar ? (
-                <Avatar
-                  avatar={user.avatar}
-                  onClickAvatar={() => {}}
-                  css={{
-                    width: '48px',
-
+              {selectedAvatar != '' ? (
+                <LazyLoadImage
+                  className="avatar"
+                  style={{
                     height: '48px',
-
+                    width: '48px',
                     borderRadius: '50%',
-
-                    border: 'none',
+                    border: '5px solid #f9fbf8',
+                    cursor: 'pointer',
                   }}
-                ></Avatar>
+                  src={imaSrc}
+                  onClick={goToProfile}
+                ></LazyLoadImage>
               ) : (
                 <LazyLoadImage
                   width="48px !important"
                   height="48px !important"
                   style={{
                     borderRadius: '50%',
-
+                    cursor: 'pointer',
                     border: 'none',
                   }}
                   src={'/svgs/DefaultUser.svg'}
+                  onClick={goToProfile}
                 ></LazyLoadImage>
               )}
             </span>
           </Tooltip>
         </Box>
       </Box>
-
-      {/* <Box sx={{ display: 'flex', position: 'abosolute', left: '72px', zIndex: '1000', background: 'white' }}>
-
-
-
-as
-        </Box> */}
+      <Box
+        sx={{
+          position: 'absolute',
+          zIndex: 4,
+          left: '80px',
+          bottom: '400px',
+          width: '320px',
+          padding: '10px 1px',
+          flexDirection: 'column',
+          alignItems: 'flex-start',
+          display: hoverOnMenu ? 'flex' : 'none',
+          borderRadius: '10px',
+          border: '1px solid #CCC',
+          background: '#FFF',
+          boxShadow: '0px 1px 10px 0px rgba(0, 0, 0, 0.15);',
+        }}
+      >
+        <Box
+          sx={{
+            display: 'flex',
+            padding: '10px 24px',
+            alignItems: 'center',
+            gap: '12px',
+            cursor: 'pointer',
+          }}
+          onClick={goToRetroList}
+        >
+          <BodyRegularTypography label="Retro Templates" />
+        </Box>
+        <Box
+          sx={{
+            display: 'flex',
+            padding: '10px 24px',
+            alignItems: 'center',
+            gap: '12px',
+            cursor: 'pointer',
+          }}
+          onClick={goToPulseCheckList}
+        >
+          <BodyRegularTypography label="Pulse Check Template" />
+        </Box>
+      </Box>
+      <Box
+        sx={{
+          position: 'absolute',
+          zIndex: 4,
+          left: '80px',
+          bottom: '300px',
+          width: '320px',
+          padding: '10px 1px',
+          flexDirection: 'column',
+          alignItems: 'flex-start',
+          display: hoverOnUserMenu ? 'flex' : 'none',
+          borderRadius: '10px',
+          border: '1px solid #CCC',
+          background: '#FFF',
+          boxShadow: '0px 1px 10px 0px rgba(0, 0, 0, 0.15);',
+        }}
+      >
+        <Box
+          sx={{
+            display: 'flex',
+            padding: '10px 24px',
+            alignItems: 'center',
+            gap: '12px',
+            cursor: 'pointer',
+          }}
+          onClick={goToEnterpriseRegistration}
+        >
+          <BodyRegularTypography label="Organisation Details" />
+        </Box>
+        <Box
+          sx={{
+            display: 'flex',
+            padding: '10px 24px',
+            alignItems: 'center',
+            gap: '12px',
+            cursor: 'pointer',
+          }}
+          onClick={goToManageUser}
+        >
+          <BodyRegularTypography label="Manage Users" />
+        </Box>
+        <Box
+          sx={{
+            display: 'flex',
+            padding: '10px 24px',
+            alignItems: 'center',
+            gap: '12px',
+            cursor: 'pointer',
+          }}
+          onClick={goToAllTeams}
+        >
+          <BodyRegularTypography label="All Teams" />
+        </Box>
+      </Box>
     </>
   );
 };

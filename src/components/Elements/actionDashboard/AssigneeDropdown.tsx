@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { users } from '../../../helpers/DemoConst';
+import { users } from '../../../constants/DemoConst';
 import { Box, Button, Menu, MenuItem } from '@mui/material';
 import Avatar from '../Avatar';
 import { ChevronDownIcon } from '@heroicons/react/24/outline';

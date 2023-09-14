@@ -1,4 +1,4 @@
-import { JiraActionInterface, User } from './types';
+import { JiraActionInterface, User } from '../helpers/types';
 
 export interface Team {
   teamId: string;

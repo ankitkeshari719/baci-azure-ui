@@ -345,7 +345,7 @@ export function CreateRetroWithTemplatePage({
     >
       {!isRetroStart ? (
         <Box component="div" whiteSpace="normal" className="createRetroText">
-          Create new BACI retro
+          Create A New Session
         </Box>
       ) : (
         <Box component="div" whiteSpace="normal" className="createRetroText">

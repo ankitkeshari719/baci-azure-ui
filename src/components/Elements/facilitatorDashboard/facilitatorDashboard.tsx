@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { Box, Button, ThemeProvider, createTheme } from '@mui/material';
+import { Box, Button, ThemeProvider, createTheme, styled } from '@mui/material';
 import {
   ButtonLabelTypography,
   CaptionRegularTypography,
@@ -14,11 +14,14 @@ import {
   EllipsisVerticalIcon,
   ArrowRightCircleIcon,
 } from '@heroicons/react/24/outline';
+import * as Icons from 'heroicons-react';
 import Avatar from '../Avatar';
 import AverageParticipantChart from '../../../screens/Analytics/AverageParticipantChart';
 import EnterpriseLevelActionsCountChart from '../../../screens/Analytics/EnterpriseLevelActionsCountChart';
 import { useNavigate } from 'react-router-dom';
 import EnterpriseLevelSentimentsMoodsChart from '../../../screens/Analytics/EnterpriseLevelSentimentsMoodsChart';
+import Tooltip, { TooltipProps, tooltipClasses } from '@mui/material/Tooltip';
+import { TextButton } from '../../CustomizedButton/TextButton';
 
 const theme = createTheme({
   palette: {
@@ -31,6 +34,17 @@ const theme = createTheme({
     },
   },
 });
+
+const BootstrapTooltip = styled(({ className, ...props }: TooltipProps) => (
+  <Tooltip {...props} arrow classes={{ popper: className }} />
+))(({ theme }) => ({
+  [`& .${tooltipClasses.arrow}`]: {
+    color: theme.palette.common.black,
+  },
+  [`& .${tooltipClasses.tooltip}`]: {
+    backgroundColor: theme.palette.common.black,
+  },
+}));
 
 function FacilitatorDashboard() {
   const navigate = useNavigate();
@@ -116,6 +130,18 @@ function FacilitatorDashboard() {
     },
   ];
 
+  const navigateToJoinSession = () => {
+    navigate('/facilitator/joinRetro/');
+  };
+
+  const navigateToCreateSession = () => {
+    navigate('/facilitator/createRetro/');
+  };
+
+  const goToAnalyticsLearnMorePage = (url: string) => {
+    navigate(url);
+  };
+
   return (
     <>
       <Box
@@ -145,6 +171,7 @@ function FacilitatorDashboard() {
                 variant="contained"
                 color="primary"
                 sx={{ borderRadius: '10px' }}
+                onClick={navigateToJoinSession}
               >
                 JOIN SESSION
               </Button>
@@ -154,6 +181,7 @@ function FacilitatorDashboard() {
                 variant="contained"
                 color="secondary"
                 sx={{ marginLeft: '20px', borderRadius: '10px' }}
+                onClick={navigateToCreateSession}
               >
                 <span style={{ color: 'white' }}>NEW SESSION</span>
               </Button>
@@ -342,17 +370,65 @@ function FacilitatorDashboard() {
                   padding: '10px',
                   cursor: 'pointer',
                 }}
-                onClick={() => {
-                  navigate(
-                    '/facilitator/analytics/enterpriseLevelActionsCount'
-                  );
-                }}
               >
-                <EnterpriseLevelActionsCountChart
-                  dashboard={true}
-                  team={selectId}
-                />
-                <CaptionRegularTypography label="Count of actions (Assigned vs Completed)" />
+                <Box
+                  display="flex"
+                  flexDirection="row"
+                  alignItems="center"
+                  justifyContent="flex-start"
+                  width="100%"
+                >
+                  <CaptionRegularTypography label="Count of actions (Assigned vs Completed)" />
+                  <BootstrapTooltip
+                    title="Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vivamus in ex a est finibus fermentum aliquet at urna. Vivamus ac aliquet mi. Morbi laoreet tortor metus, ac vehicula turpis imperdiet et."
+                    arrow
+                    placement="right"
+                  >
+                    <Icons.InformationCircleOutline
+                      size={24}
+                      color="#4E4E4E"
+                      style={{
+                        cursor: 'pointer',
+                        marginLeft: '5px',
+                      }}
+                    />
+                  </BootstrapTooltip>
+                </Box>
+                <Box
+                  onClick={() => {
+                    navigate(
+                      '/facilitator/analytics/enterpriseLevelActionsCount'
+                    );
+                  }}
+                >
+                  <EnterpriseLevelActionsCountChart
+                    dashboard={true}
+                    team={selectId}
+                  />
+                </Box>
+                {/* <Box
+                  display="flex"
+                  flexDirection="row"
+                  alignItems="center"
+                  justifyContent="flex-start"
+                  width="100%"
+                >
+                  <TextButton
+                    id={'Learn_More'}
+                    label={'Learn More'}
+                    size={'small'}
+                    style={{
+                      paddingLeft: '0px !important',
+                      textDecorationLine: 'underline !important',
+                      backgroundColor: 'transparent !important',
+                    }}
+                    onClick={() =>
+                      goToAnalyticsLearnMorePage(
+                        '/facilitator/analytics/enterpriseLevelActionsCountLearnMore'
+                      )
+                    }
+                  />
+                </Box> */}
               </Box>
               {/* Average Participant Chart */}
               <Box
@@ -365,14 +441,62 @@ function FacilitatorDashboard() {
                   padding: '10px',
                   cursor: 'pointer',
                 }}
-                onClick={() => {
-                  navigate(
-                    '/facilitator/analytics/enterpriseLevelParticipantsCount'
-                  );
-                }}
               >
-                <AverageParticipantChart dashboard={true} team={selectId} />
-                <CaptionRegularTypography label="Count of all participants over time" />
+                <Box
+                  display="flex"
+                  flexDirection="row"
+                  alignItems="center"
+                  justifyContent="flex-start"
+                  width="100%"
+                >
+                  <CaptionRegularTypography label="Count of all participants over time" />
+                  <BootstrapTooltip
+                    title="Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vivamus in ex a est finibus fermentum aliquet at urna. Vivamus ac aliquet mi. Morbi laoreet tortor metus, ac vehicula turpis imperdiet et."
+                    arrow
+                    placement="right"
+                  >
+                    <Icons.InformationCircleOutline
+                      size={24}
+                      color="#4E4E4E"
+                      style={{
+                        cursor: 'pointer',
+                        marginLeft: '5px',
+                      }}
+                    />
+                  </BootstrapTooltip>
+                </Box>
+                <Box
+                  onClick={() => {
+                    navigate(
+                      '/facilitator/analytics/enterpriseLevelParticipantsCount'
+                    );
+                  }}
+                >
+                  <AverageParticipantChart dashboard={true} team={selectId} />
+                </Box>
+                {/* <Box
+                  display="flex"
+                  flexDirection="row"
+                  alignItems="center"
+                  justifyContent="flex-start"
+                  width="100%"
+                >
+                  <TextButton
+                    id={'Learn_More'}
+                    label={'Learn More'}
+                    size={'small'}
+                    style={{
+                      paddingLeft: '0px !important',
+                      textDecorationLine: 'underline !important',
+                      backgroundColor: 'transparent !important',
+                    }}
+                    onClick={() =>
+                      goToAnalyticsLearnMorePage(
+                        '/facilitator/analytics/enterpriseLevelParticipantsCountLearnMore'
+                      )
+                    }
+                  />
+                </Box> */}
               </Box>
               {/* Enterprise Level Sentiments Moods Chart */}
               <Box
@@ -385,17 +509,65 @@ function FacilitatorDashboard() {
                   padding: '10px',
                   cursor: 'pointer',
                 }}
-                onClick={() => {
-                  navigate(
-                    '/facilitator/analytics/enterpriseLevelParticipantsCount'
-                  );
-                }}
               >
-                <EnterpriseLevelSentimentsMoodsChart
-                  dashboard={true}
-                  team={selectId}
-                />
-                <CaptionRegularTypography label=" Participants Sentiments - Moods" />
+                <Box
+                  display="flex"
+                  flexDirection="row"
+                  alignItems="center"
+                  justifyContent="flex-start"
+                  width="100%"
+                >
+                  <CaptionRegularTypography label="Sentiments - Moods" />
+                  <BootstrapTooltip
+                    title="Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vivamus in ex a est finibus fermentum aliquet at urna. Vivamus ac aliquet mi. Morbi laoreet tortor metus, ac vehicula turpis imperdiet et."
+                    arrow
+                    placement="right"
+                  >
+                    <Icons.InformationCircleOutline
+                      size={24}
+                      color="#4E4E4E"
+                      style={{
+                        cursor: 'pointer',
+                        marginLeft: '5px',
+                      }}
+                    />
+                  </BootstrapTooltip>
+                </Box>
+                <Box
+                  onClick={() => {
+                    navigate(
+                      '/facilitator/analytics/enterpriseLevelParticipantsCount'
+                    );
+                  }}
+                >
+                  <EnterpriseLevelSentimentsMoodsChart
+                    dashboard={true}
+                    team={selectId}
+                  />
+                </Box>
+                {/* <Box
+                  display="flex"
+                  flexDirection="row"
+                  alignItems="center"
+                  justifyContent="flex-start"
+                  width="100%"
+                >
+                  <TextButton
+                    id={'Learn_More'}
+                    label={'Learn More'}
+                    size={'small'}
+                    style={{
+                      paddingLeft: '0px !important',
+                      textDecorationLine: 'underline !important',
+                      backgroundColor: 'transparent !important',
+                    }}
+                    onClick={() =>
+                      goToAnalyticsLearnMorePage(
+                        '/facilitator/analytics/enterpriseLevelParticipantsCountLearnMore'
+                      )
+                    }
+                  />
+                </Box> */}
               </Box>
             </Box>
           </Box>

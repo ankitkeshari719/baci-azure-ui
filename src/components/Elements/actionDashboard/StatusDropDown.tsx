@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { Theme, useTheme } from '@mui/material/styles';
 import MenuItem from '@mui/material/MenuItem';
-import { jiraActionStatus } from '../../../helpers/DemoConst';
+import { jiraActionStatus } from '../../../constants/DemoConst';
 import { Box, Button, Menu } from '@mui/material';
 import { ChevronDownIcon } from '@heroicons/react/24/outline';
 

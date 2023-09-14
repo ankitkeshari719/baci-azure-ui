@@ -9,9 +9,7 @@ import {
   TextField,
   useMediaQuery,
 } from '@mui/material';
-import theme from '../../helpers/theme/theme';
 import './../../global.scss';
-import commonStyles from './../../style.module.scss';
 import { useNavigate, useParams } from 'react-router-dom';
 import { azureToUser, useAzureAuth } from '../../helpers/msal/azureauth';
 import { Dayjs } from 'dayjs';
@@ -19,16 +17,31 @@ import { LandingLayout } from './LandingLayout';
 import { Retro as RetroType } from '../../helpers/types';
 import { useRetro } from '../../helpers';
 import { ActionType, GlobalContext } from '../../contexts/GlobalContext';
-import { addDeploymentData } from '../../helpers/msal/services';
+import {
+  addDeploymentData,
+  getAllEnterprises,
+  getAllRoles,
+} from '../../helpers/msal/services';
 import { AddDeploymentDataDialog } from '../Utils/Dialogs/AddDeploymentDataDialog';
 import { DeploymentPopUp } from '../Utils/Alerts/DeploymentPopUp';
 import { PrivacyAndRetentionDialog } from '../Utils/Dialogs/PrivacyAndRetentionDialog';
+import BACILogo from '../../assets/img/bacilogobeta.svg';
 import {
+  BodyRegularTypography,
   H2RegularTypography,
   H4RegularTypography,
+  TinyTextTypography,
 } from '../../components/CustomizedTypography';
-import { ContainedButton, TextButton } from '../../components';
-import LeftBar from '../../components/Elements/leftBar/LeftBar';
+import {
+  ContainedButton,
+  OutlinedButton,
+  OutlinedButtonWithIcon,
+  TextButton,
+} from '../../components';
+import { UnauthenticatedTemplate, useMsal } from '@azure/msal-react';
+import { loginRequest } from '../../authConfig';
+import { UserHeader } from '../Utils/User/UserHeader';
+import { IN_PROGRESS_NONE } from '../../constants/applicationConst';
 
 const BootstrapDialog = styled(Dialog)(({ theme }) => ({
   '& .MuiDialogContent-root': {
@@ -46,26 +59,28 @@ const styles = {
       fontSize: '14px',
     },
   },
+  logoImage: {
+    height: '49.5px',
+    marginTop: '25px',
+  },
 };
 
 export function LandingPage({ isDemo }: { isDemo?: boolean }) {
   const { id } = useParams();
   const retro = useRetro();
   const navigate = useNavigate();
+  const { accounts, instance, inProgress } = useMsal();
+
+  let activeAccount;
 
   const [humanId, setHumanId] = React.useState(id || '');
   const [codeError, setCodeError] = React.useState('');
   const [height, setHeight] = React.useState(0);
   const [global, dispatch] = React.useContext(GlobalContext);
-  // const isXsUp = useMediaQuery(theme.breakpoints.between('xs', 'sm'));
   const isXsUp = useMediaQuery('(max-width:768px)');
   const isSmUp = useMediaQuery('(min-width:1024px)');
-  // const isSmUp = useMediaQuery(theme.breakpoints.only('sm'));
   const [isAddDeploymentDataDialogOpen, setIsAddDeploymentDataDialogOpen] =
     React.useState(false);
-  // const [isDemo,setIsDemo]=React.useState<boolean>(false);
-
-  useAzureAuth();
 
   React.useEffect(() => {
     sessionStorage.removeItem('BoardContext');
@@ -74,6 +89,7 @@ export function LandingPage({ isDemo }: { isDemo?: boolean }) {
     sessionStorage.removeItem('showManual');
     localStorage.removeItem('selectedTemplate');
     localStorage.removeItem('tempSelectedTemplateData');
+    localStorage.removeItem('userAzureData');
   }, []);
 
   React.useEffect(() => {
@@ -82,6 +98,36 @@ export function LandingPage({ isDemo }: { isDemo?: boolean }) {
       type: ActionType.CLOSE_CURRENT_RETRO,
     });
   }, []);
+
+  if (instance) {
+    activeAccount = instance.getActiveAccount();
+  }
+
+  useAzureAuth();
+
+  // Handle Login Button
+  const handleLoginRedirect = () => {
+    dispatch({
+      type: ActionType.SET_LOADING,
+      payload: { loadingFlag: true },
+    });
+    instance
+      .loginRedirect(loginRequest)
+      .then(res => {
+        console.log('res::::::', res);
+        dispatch({
+          type: ActionType.SET_LOADING,
+          payload: { loadingFlag: false },
+        });
+      })
+      .catch(error => {
+        console.log(error);
+        dispatch({
+          type: ActionType.SET_LOADING,
+          payload: { loadingFlag: false },
+        });
+      });
+  };
 
   // Function to add deployment data
   const handleAddDeploymentData = async (
@@ -110,7 +156,6 @@ export function LandingPage({ isDemo }: { isDemo?: boolean }) {
           });
         },
         err => {
-          console.log('err', err);
           dispatch({
             type: ActionType.SET_LOADING,
             payload: { loadingFlag: false },
@@ -127,10 +172,6 @@ export function LandingPage({ isDemo }: { isDemo?: boolean }) {
         }
       );
     }
-  };
-
-  const handleAddDeploymentDataOpen = () => {
-    setIsAddDeploymentDataDialogOpen(true);
   };
 
   const handleAddDeploymentDataClose = () => {
@@ -170,25 +211,21 @@ export function LandingPage({ isDemo }: { isDemo?: boolean }) {
     setCodeError('');
     navigate('/create/');
   }
-  const setDummyUser = () => {
-    dispatch({
-      type: ActionType.SET_USER,
-      payload: { user: azureToUser('03649325-7314-44c3-9608-48878cab6e56') },
-    });
 
-    dispatch({
-      type: ActionType.SET_PREFERRED_NICKNAME,
-      payload: {
-        preferredNickname: 'Sean Woon',
-        avatar: 'Animals-avatar_12avatar',
-        userType: 2,
-      },
-    });
+  // Navigate To Private Policy
+  const navigateToPrivatePolicy = () => {
+    navigate('/privatePolicy/');
+  };
+
+  // Navigate To Term And Condition
+  const navigateToTermAndCondition = () => {
+    navigate('/termAndCondition/');
   };
 
   return (
     <>
       {isXsUp ? (
+        // Mobile user
         <Box
           sx={{
             height: 'calc(var(--app-height))',
@@ -205,7 +242,6 @@ export function LandingPage({ isDemo }: { isDemo?: boolean }) {
               display: 'flex',
               alignItems: 'center',
               flexDirection: 'column',
-              // justifyContent: 'center',
               width: '100%',
               overflowY: 'auto',
             }}
@@ -214,11 +250,8 @@ export function LandingPage({ isDemo }: { isDemo?: boolean }) {
               sx={{
                 display: 'flex',
                 alignItems: 'center',
-                // justifyContent: 'flex-start',
                 flexDirection: 'column',
-                // margin: '16px',
                 width: 'calc(100% - 40px)',
-
                 padding: '20px',
               }}
             >
@@ -280,201 +313,261 @@ export function LandingPage({ isDemo }: { isDemo?: boolean }) {
           </Box>
         </Box>
       ) : (
-        <Box
-          sx={{
-            display: 'flex',
-            flexDirection: 'row',
-            height: 'calc(var(--app-height))',
-            width: '100%',
-          }}
-        >
-          {/* <Box sx={{ display: 'flex', width: '72px', height: '100%' }}>
-            <LeftBar />
-          </Box> */}
-          <Grid
-            container
-            spacing={0}
-            height="calc(var(--app-height))"
-            sx={{ overflowY: 'auto' }}
-          >
-            <DeploymentPopUp />
-            <Grid item xs={6} height="calc(var(--app-height))">
-              <LandingLayout></LandingLayout>
-            </Grid>
-            <Grid
-              item
-              xs={6}
-              display="flex"
-              justifyContent="center"
-              alignItems="center"
-              minHeight="400px !important"
-              flexDirection="column"
-              height="100%"
-              // marginLeft="10px"
-              // marginRight="10px"
-            >
-              {isDemo ? (
-                <>
+        // Desktop User
+        <>
+          {accounts &&
+            accounts.length === 0 &&
+            inProgress === IN_PROGRESS_NONE && (
+              <Box
+                sx={{
+                  display: 'flex',
+                  flexDirection: 'row',
+                  height: 'calc(var(--app-height))',
+                  width: '100%',
+                }}
+              >
+                <Grid
+                  container
+                  spacing={0}
+                  height="calc(var(--app-height))"
+                  sx={{ overflowY: 'auto' }}
+                >
+                  <DeploymentPopUp />
+                  <Grid item xs={6} height="calc(var(--app-height))">
+                    <LandingLayout></LandingLayout>
+                  </Grid>
                   <Grid
                     item
-                    xs={12}
-                    marginRight="50px"
-                    marginLeft="50px"
+                    xs={6}
                     display="flex"
+                    justifyContent="center"
+                    alignItems="center"
+                    minHeight="400px !important"
                     flexDirection="column"
                     height="100%"
-                    justifyContent="center"
                   >
-                    <H2RegularTypography
-                      label={'What BACI retro are you joining today?'}
-                      style={{
-                        color: '#2C69A1',
-                      }}
-                    />
-                    <Box component="span" mt="50px" />
-                    <TextField
-                      autoFocus
-                      variant="standard"
-                      label="Retro access code"
-                      error={!!codeError}
-                      sx={styles.accessCodeTextField}
-                      onKeyDown={e => {
-                        if (e.keyCode === 13) {
-                          joinRetro();
-                        }
-                      }}
-                      value={humanId}
-                      onChange={e => {
-                        setHumanId(e.currentTarget.value);
-                        setCodeError('');
-                      }}
-                    />
-                    {codeError !== '' && (
-                      <FormHelperText
-                        style={{ color: '#d32f2f', marginLeft: '5px' }}
+                    {isDemo ? (
+                      // For Demo
+                      <Grid
+                        item
+                        xs={12}
+                        marginRight="50px"
+                        marginLeft="50px"
+                        display="flex"
+                        flexDirection="column"
+                        height="100%"
+                        justifyContent="center"
                       >
-                        {codeError}
-                      </FormHelperText>
+                        <Box>
+                          <img
+                            src={BACILogo}
+                            alt="Logo"
+                            style={styles.logoImage}
+                          />
+                        </Box>
+                        <H2RegularTypography
+                          label={'What BACI retro are you joining today?'}
+                          style={{
+                            color: '#2C69A1',
+                            marginTop: '48px',
+                          }}
+                        />
+                        <Box component="span" mt="32px" />
+                        <TextField
+                          autoFocus
+                          variant="standard"
+                          label="Retro access code"
+                          error={!!codeError}
+                          sx={styles.accessCodeTextField}
+                          onKeyDown={e => {
+                            if (e.keyCode === 13) {
+                              joinRetro();
+                            }
+                          }}
+                          value={humanId}
+                          onChange={e => {
+                            setHumanId(e.currentTarget.value);
+                            setCodeError('');
+                          }}
+                        />
+                        {codeError !== '' && (
+                          <FormHelperText
+                            style={{ color: '#d32f2f', marginLeft: '5px' }}
+                          >
+                            {codeError}
+                          </FormHelperText>
+                        )}
+                        <Box
+                          display="flex"
+                          flexDirection="column"
+                          alignItems="center"
+                          justifyContent="start"
+                          sx={{ maxWidth: '350px' }}
+                        >
+                          <ContainedButton
+                            id={'join_retro_button_desktop'}
+                            name={'join retro'}
+                            onClick={() => joinRetro()}
+                            style={{
+                              width: '100%',
+                              marginTop: '60px',
+                              padding: '10px 18px',
+                              gap: '8px',
+                            }}
+                            size={'medium'}
+                          />
+                          <OutlinedButton
+                            id={'create_new__retro_button_desktop'}
+                            label={'Create New Retro'}
+                            onClick={() => CreateNewRetro()}
+                            size={'medium'}
+                            style={{
+                              width: '100%',
+                              marginTop: '8px',
+                              padding: '10px 18px',
+                              gap: '8px',
+                            }}
+                          />
+                          <Box
+                            display="flex"
+                            alignItems="center"
+                            justifyContent="center"
+                          >
+                            <BodyRegularTypography
+                              label="OR"
+                              style={{
+                                color: '#808080',
+                                marginTop: '32px',
+                                marginBottom: '32px',
+                              }}
+                            />
+                          </Box>
+                          <UnauthenticatedTemplate>
+                            <OutlinedButtonWithIcon
+                              id={'signin_button_desktop'}
+                              label={'Continue using Email'}
+                              size={'medium'}
+                              iconPath="/svgs/envelop.svg"
+                              style={{ width: '100%' }}
+                              onClick={() => handleLoginRedirect()}
+                            />
+                          </UnauthenticatedTemplate>
+                        </Box>
+                        <Box sx={{ marginTop: '60px' }}>
+                          <TinyTextTypography label="By proceeding, I accept BACI’s " />
+                          <TinyTextTypography
+                            label="T&C "
+                            style={{
+                              textDecorationLine: 'underline',
+                              color: '#159ADD',
+                              cursor: 'pointer',
+                            }}
+                            onClick={() => navigateToTermAndCondition()}
+                          />
+                          <TinyTextTypography label="& " />
+                          <TinyTextTypography
+                            label="Privacy Policy "
+                            style={{
+                              textDecorationLine: 'underline',
+                              color: '#159ADD',
+                              cursor: 'pointer',
+                            }}
+                            onClick={() => navigateToPrivatePolicy()}
+                          />
+                        </Box>
+                      </Grid>
+                    ) : (
+                      // For Normal
+                      <Grid
+                        item
+                        xs={12}
+                        marginRight="50px"
+                        marginLeft="50px"
+                        display="flex"
+                        flexDirection="column"
+                        height="100%"
+                        justifyContent="center"
+                      >
+                        <H2RegularTypography
+                          label={'What BACI retro are you joining today?'}
+                          style={{
+                            color: '#2C69A1',
+                          }}
+                        />
+                        <Box component="span" mt="50px" />
+                        <TextField
+                          autoFocus
+                          variant="standard"
+                          label="Retro access code"
+                          error={!!codeError}
+                          sx={styles.accessCodeTextField}
+                          onKeyDown={e => {
+                            if (e.keyCode === 13) {
+                              joinRetro();
+                            }
+                          }}
+                          value={humanId}
+                          onChange={e => {
+                            setHumanId(e.currentTarget.value);
+                            setCodeError('');
+                          }}
+                        />
+                        {codeError !== '' && (
+                          <FormHelperText
+                            style={{ color: '#d32f2f', marginLeft: '5px' }}
+                          >
+                            {codeError}
+                          </FormHelperText>
+                        )}
+                        <Box>
+                          <ContainedButton
+                            id={'join_retro_button_desktop'}
+                            name={'Go on..'}
+                            onClick={() => joinRetro()}
+                            style={{
+                              marginTop: '80px',
+                              padding: '10px 20px',
+                              gap: '8px',
+                            }}
+                            size={'medium'}
+                          />
+                          {isSmUp && (
+                            <>
+                              <TextButton
+                                id={'create_new__retro_button_desktop'}
+                                label={'Create New Retro'}
+                                onClick={() => CreateNewRetro()}
+                                style={{
+                                  marginTop: '42px',
+                                  textDecorationLine: 'underline',
+                                }}
+                                size={'medium'}
+                              />
+                              <UnauthenticatedTemplate>
+                                <ContainedButton
+                                  id={'signin_button_desktop'}
+                                  name={'Sign In'}
+                                  onClick={() => handleLoginRedirect()}
+                                  style={{
+                                    marginTop: '42px',
+                                    textDecorationLine: 'underline',
+                                  }}
+                                  size={'medium'}
+                                />
+                              </UnauthenticatedTemplate>
+                            </>
+                          )}
+                        </Box>
+                      </Grid>
                     )}
-                    <Box>
-                      <Box display="flex" flexDirection="row">
-                        <ContainedButton
-                          id={'join_retro_button_desktop'}
-                          name={'Go on..'}
-                          onClick={() => joinRetro()}
-                          style={{
-                            // // width: '100%',
-                            marginTop: '80px',
-                            padding: '10px 20px',
-                            gap: '8px',
-                          }}
-                          size={'medium'}
-                        />
-                        <ContainedButton
-                          id={'login_as_enterprise'}
-                          name={'Go to Dashboard'}
-                          onClick={() => {
-                            setDummyUser();
-                            navigate('enterprise/dashboard/');
-                          }}
-                          style={{
-                            width: '40%',
-                            marginTop: '80px',
-                            marginLeft: '24px',
-                            padding: '10px 20px',
-                            gap: '8px',
-                          }}
-                          size={'medium'}
-                        />
-                      </Box>
-                      {isSmUp && (
-                        <TextButton
-                          id={'create_new__retro_button_desktop'}
-                          label={'Create New Retro'}
-                          onClick={() => CreateNewRetro()}
-                          style={{
-                            marginTop: '20px',
-                            textDecorationLine: 'underline',
-                          }}
-                          size={'medium'}
-                        />
-                      )}
-                    </Box>
                   </Grid>
-                </>
-              ) : (
-                <Grid
-                  item
-                  xs={12}
-                  marginRight="50px"
-                  marginLeft="50px"
-                  display="flex"
-                  flexDirection="column"
-                  height="100%"
-                  justifyContent="center"
-                >
-                  <H2RegularTypography
-                    label={'What BACI retro are you joining today?'}
-                    style={{
-                      color: '#2C69A1',
-                    }}
-                  />
-                  <Box component="span" mt="50px" />
-                  <TextField
-                    autoFocus
-                    variant="standard"
-                    label="Retro access code"
-                    error={!!codeError}
-                    sx={styles.accessCodeTextField}
-                    onKeyDown={e => {
-                      if (e.keyCode === 13) {
-                        joinRetro();
-                      }
-                    }}
-                    value={humanId}
-                    onChange={e => {
-                      setHumanId(e.currentTarget.value);
-                      setCodeError('');
-                    }}
-                  />
-                  {codeError !== '' && (
-                    <FormHelperText
-                      style={{ color: '#d32f2f', marginLeft: '5px' }}
-                    >
-                      {codeError}
-                    </FormHelperText>
-                  )}
-                  <Box>
-                    <ContainedButton
-                      id={'join_retro_button_desktop'}
-                      name={'Go on..'}
-                      onClick={() => joinRetro()}
-                      style={{
-                        // width: '100%',
-                        marginTop: '80px',
-                        padding: '10px 20px',
-                        gap: '8px',
-                      }}
-                      size={'medium'}
-                    />
-                    {isSmUp && (
-                      <TextButton
-                        id={'create_new__retro_button_desktop'}
-                        label={'Create New Retro'}
-                        onClick={() => CreateNewRetro()}
-                        style={{
-                          marginTop: '42px',
-                          textDecorationLine: 'underline',
-                        }}
-                        size={'medium'}
-                      />
-                    )}
-                  </Box>
                 </Grid>
-              )}
-            </Grid>
-          </Grid>
-        </Box>
+              </Box>
+            )}
+          {accounts && accounts.length != 0 && (
+            <UserHeader accounts={accounts} />
+          )}
+        </>
       )}
       <BootstrapDialog
         open={isAddDeploymentDataDialogOpen}

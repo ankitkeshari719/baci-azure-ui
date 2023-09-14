@@ -34,7 +34,11 @@ import { Row, Col } from 'react-bootstrap';
 import { LazyLoadImage } from 'react-lazy-load-image-component';
 import { OutlinedButton } from '../CustomizedButton/OutlinedButton';
 import CustomizedDialog from '../CustomizedDialog/CustomizedDialog';
-
+import {
+  groupSuggestion,
+  keywordExtraction,
+  createRetroSummary,
+} from '../../helpers/msal/services';
 const Toolbar = (props: any) => {
   const isXsUp = useMediaQuery(theme.breakpoints.only('xs'));
   const navigate = useNavigate();
@@ -44,7 +48,15 @@ const Toolbar = (props: any) => {
     React.useContext(GlobalContext);
   const [global, dispatch] = React.useContext(GlobalContext);
   const {
-    state: { retroName, retroDuration, ended, users, actionsData },
+    state: {
+      retroName,
+      retroDuration,
+      ended,
+      users,
+      actionsData,
+      columns,
+      retroId,
+    },
     commitAction,
   } = React.useContext(BoardContext);
   const reloadPage = () => {
@@ -245,17 +257,19 @@ const Toolbar = (props: any) => {
             </Link>
           </>
         ) : (
-          isXsUp&&<Link href="/">
-            <img
-              src={BACILogo}
-              alt="Logo"
-              style={{
-                width: isXsUp ? '53px' : '108px',
-                height: isXsUp ? '18px' : '48px',
-              }}
-              onClick={reloadPage}
-            />
-          </Link>
+          isXsUp && (
+            <Link href="/">
+              <img
+                src={BACILogo}
+                alt="Logo"
+                style={{
+                  width: isXsUp ? '53px' : '108px',
+                  height: isXsUp ? '18px' : '48px',
+                }}
+                onClick={reloadPage}
+              />
+            </Link>
+          )
         )}
 
         {/* Retro Name*/}
@@ -425,7 +439,40 @@ const Toolbar = (props: any) => {
                 <ContainedButton
                   id="finishRetro"
                   name="FINISH RETRO"
-                  onClick={() => setOpenDialog(true)}
+                  onClick={async () => {
+                    setOpenDialog(true);
+
+                    let columnString: string = '';
+                    columns.forEach(column => {
+                      const columnName = column.name;
+                      columnString = columnString + columnName;
+
+                      column.groups.forEach(group => {
+                        const groupName = group.name;
+                        columnString = columnString + ' : ' + groupName;
+
+                        group.cards.forEach(card => {
+                          const cardValue = card.value;
+
+                          columnString = columnString + ' : ' + cardValue;
+                        });
+                      });
+                    });
+
+                    await createRetroSummary(columnString, retroId).then(
+                      (res: any) => {
+                        const data = res.response;
+                        if (data) {
+                          console.log(data);
+                        } else {
+                          alert('Please try again');
+                        }
+                      },
+                      error => {
+                        console.log(error);
+                      }
+                    );
+                  }}
                   style={{
                     minWidth: '150px !important',
                     width: '150px !important',

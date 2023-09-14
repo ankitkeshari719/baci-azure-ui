@@ -88,8 +88,6 @@ export function LandingLayout() {
 
   React.useEffect(() => {
     const isPortrait = window.matchMedia('(orientation: portrait)').matches;
-
-    console.log(isPortrait);
     console.log('-------- closing socket ----------');
     socket.close();
   }, []);
@@ -109,8 +107,6 @@ export function LandingLayout() {
     }
   }, []);
 
-
-
   return (
     <>
       {isXsUp ? (
@@ -119,7 +115,7 @@ export function LandingLayout() {
             position: 'relative',
             display: 'flex',
             flexDirection: 'column',
-            width:'100%'
+            width: '100%',
           }}
         >
           <img
@@ -133,7 +129,6 @@ export function LandingLayout() {
               alignItems: 'center',
               justifyContent: 'center',
               position: 'absolute',
-              // height: '48vh',
               width: '100%',
               top: '0px',
             }}
