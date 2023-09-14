@@ -41,7 +41,7 @@ import {
 import { UnauthenticatedTemplate, useMsal } from '@azure/msal-react';
 import { loginRequest } from '../../authConfig';
 import { UserHeader } from '../Utils/User/UserHeader';
-import { IN_PROGRESS_NONE } from '../../constants/applicationConst';
+import { BASIC, IN_PROGRESS_NONE, BASIC_USER_ID } from '../../constants/applicationConst';
 
 const BootstrapDialog = styled(Dialog)(({ theme }) => ({
   '& .MuiDialogContent-root': {
@@ -90,6 +90,11 @@ export function LandingPage({ isDemo }: { isDemo?: boolean }) {
     localStorage.removeItem('selectedTemplate');
     localStorage.removeItem('tempSelectedTemplateData');
     localStorage.removeItem('userAzureData');
+    let userData = {
+      roleName: BASIC,
+      roleId: BASIC_USER_ID,
+    };
+    localStorage.setItem('userData', JSON.stringify(userData));
   }, []);
 
   React.useEffect(() => {
