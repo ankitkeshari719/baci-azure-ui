@@ -21,7 +21,7 @@ export default function EnterpriseLevelActionsCountChartLearnMore() {
   // Function to navigate on analytics
   function goToDashboard() {
     if (tempLocalUserData && tempLocalUserData.roleName === REGULAR_USER) {
-      navigate('/facilitator/analytics');
+      navigate('/basic/analytics');
     } else if (
       tempLocalUserData &&
       tempLocalUserData.roleName === ENTERPRISE_ADMIN
@@ -31,7 +31,7 @@ export default function EnterpriseLevelActionsCountChartLearnMore() {
       tempLocalUserData &&
       tempLocalUserData.roleName === REGULAR_ENTERPRISE
     ) {
-      navigate('/enterprise/analytics');
+      navigate('/facilitator/analytics');
     }
   }
 

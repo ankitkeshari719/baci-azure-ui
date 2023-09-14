@@ -37,7 +37,7 @@ export default function TemplatesListContainer() {
   function goToRetroTemplateLearnMore() {
     if (tempLocalUserData && tempLocalUserData.roleName === REGULAR_USER) {
       navigate(
-        '/facilitator/templates/retroListTemplate/RetroTemplateDetails/'
+        '/basic/templates/retroListTemplate/RetroTemplateDetails/'
       );
     } else if (
       tempLocalUserData &&
@@ -48,7 +48,7 @@ export default function TemplatesListContainer() {
       tempLocalUserData &&
       tempLocalUserData.roleName === REGULAR_ENTERPRISE
     ) {
-      navigate('/enterprise/templates/retroListTemplate/RetroTemplateDetails/');
+      navigate('/facilitator/templates/retroListTemplate/RetroTemplateDetails/');
     }
   }
 

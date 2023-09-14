@@ -24,7 +24,7 @@ export default function PrivacyPolicy() {
   // Function to navigate on create new retro page
   function goToLanding() {
     if (tempLocalUserData && tempLocalUserData.roleName === REGULAR_USER) {
-      navigate('/facilitator/joinRetro/');
+      navigate('/basic/joinRetro/');
     } else if (
       tempLocalUserData &&
       tempLocalUserData.roleName === ENTERPRISE_ADMIN
@@ -34,7 +34,7 @@ export default function PrivacyPolicy() {
       tempLocalUserData &&
       tempLocalUserData.roleName === REGULAR_ENTERPRISE
     ) {
-      navigate('/enterprise/joinRetro/');
+      navigate('/facilitator/joinRetro/');
     } else {
       navigate(`/`);
     }

@@ -37,7 +37,7 @@ export default function PulseCheckListContainer() {
   function goToPulseCheckLearnMore() {
     if (tempLocalUserData && tempLocalUserData.roleName === REGULAR_USER) {
       navigate(
-        '/facilitator/templates/pulseCheckListTemplate/pulseCheckTemplateDetails/'
+        '/basic/templates/pulseCheckListTemplate/pulseCheckTemplateDetails/'
       );
     } else if (
       tempLocalUserData &&
@@ -51,7 +51,7 @@ export default function PulseCheckListContainer() {
       tempLocalUserData.roleName === REGULAR_ENTERPRISE
     ) {
       navigate(
-        '/enterprise/templates/pulseCheckListTemplate/pulseCheckTemplateDetails/'
+        '/facilitator/templates/pulseCheckListTemplate/pulseCheckTemplateDetails/'
       );
     }
   }

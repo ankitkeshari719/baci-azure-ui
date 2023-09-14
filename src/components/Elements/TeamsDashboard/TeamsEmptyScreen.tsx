@@ -27,7 +27,7 @@ export default function TeamsEmptyScreen() {
   // Function to navigate on create new team page
   function CreateNewTeam() {
     if (tempLocalUserData && tempLocalUserData.roleName === REGULAR_USER) {
-      navigate('/facilitator/teams/create/');
+      navigate('/basic/teams/create/');
     } else if (
       tempLocalUserData &&
       tempLocalUserData.roleName === ENTERPRISE_ADMIN
@@ -37,7 +37,7 @@ export default function TeamsEmptyScreen() {
       tempLocalUserData &&
       tempLocalUserData.roleName === REGULAR_ENTERPRISE
     ) {
-      navigate('/enterprise/teams/create/');
+      navigate('/facilitator/teams/create/');
     }
   }
 

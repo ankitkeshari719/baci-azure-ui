@@ -71,7 +71,7 @@ export default function CreateTeam() {
   // Function to navigate on all team
   function goToAllTeam() {
     if (tempLocalUserData && tempLocalUserData.roleName === REGULAR_USER) {
-      navigate('/facilitator/teams/allTeams/');
+      navigate('/basic/teams/allTeams/');
     } else if (
       tempLocalUserData &&
       tempLocalUserData.roleName === ENTERPRISE_ADMIN
@@ -81,7 +81,7 @@ export default function CreateTeam() {
       tempLocalUserData &&
       tempLocalUserData.roleName === REGULAR_ENTERPRISE
     ) {
-      navigate('/enterprise/teams/allTeams/');
+      navigate('/facilitator/teams/allTeams/');
     }
   }
 

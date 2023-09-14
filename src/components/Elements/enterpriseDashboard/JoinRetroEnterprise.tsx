@@ -74,7 +74,7 @@ export function JoinRetroEnterprise() {
     });
     setCodeError('');
     if (tempLocalUserData && tempLocalUserData.roleName === REGULAR_USER) {
-      navigate('/facilitator/createRetro/');
+      navigate('/basic/createRetro/');
     } else if (
       tempLocalUserData &&
       tempLocalUserData.roleName === ENTERPRISE_ADMIN
@@ -84,7 +84,7 @@ export function JoinRetroEnterprise() {
       tempLocalUserData &&
       tempLocalUserData.roleName === REGULAR_ENTERPRISE
     ) {
-      navigate('/enterprise/createRetro/');
+      navigate('/facilitator/createRetro/');
     }
   }
 

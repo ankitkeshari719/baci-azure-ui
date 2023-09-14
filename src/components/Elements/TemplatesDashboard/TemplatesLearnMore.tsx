@@ -20,7 +20,7 @@ export default function TemplatesLearnMore() {
   // Function to navigate on retroListTemplate
   function goToRetroList() {
     if (tempLocalUserData && tempLocalUserData.roleName === REGULAR_USER) {
-      navigate('/facilitator/templates/retroListTemplate/');
+      navigate('/basic/templates/retroListTemplate/');
     } else if (
       tempLocalUserData &&
       tempLocalUserData.roleName === ENTERPRISE_ADMIN
@@ -30,7 +30,7 @@ export default function TemplatesLearnMore() {
       tempLocalUserData &&
       tempLocalUserData.roleName === REGULAR_ENTERPRISE
     ) {
-      navigate('/enterprise/templates/retroListTemplate/');
+      navigate('/facilitator/templates/retroListTemplate/');
     }
   }
 

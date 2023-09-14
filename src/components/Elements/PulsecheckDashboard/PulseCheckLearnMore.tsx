@@ -21,7 +21,7 @@ export default function PulseCheckLearnMore() {
   // Function to navigate on pulseCheckListTemplate
   function goToPulseCheckList() {
     if (tempLocalUserData && tempLocalUserData.roleName === REGULAR_USER) {
-      navigate('/facilitator/templates/pulseCheckListTemplate/');
+      navigate('/basic/templates/pulseCheckListTemplate/');
     } else if (
       tempLocalUserData &&
       tempLocalUserData.roleName === ENTERPRISE_ADMIN
@@ -31,7 +31,7 @@ export default function PulseCheckLearnMore() {
       tempLocalUserData &&
       tempLocalUserData.roleName === REGULAR_ENTERPRISE
     ) {
-      navigate('/enterprise/templates/pulseCheckListTemplate/');
+      navigate('/facilitator/templates/pulseCheckListTemplate/');
     }
   }
 

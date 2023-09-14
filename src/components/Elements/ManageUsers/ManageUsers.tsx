@@ -48,18 +48,6 @@ import TeamSelector from '../TeamSelector';
 
 const ITEM_HEIGHT = 48;
 const ITEM_PADDING_TOP = 8;
-const MenuProps = {
-  PaperProps: {
-    style: {
-      maxHeight: ITEM_HEIGHT * 4.5 + ITEM_PADDING_TOP,
-      width: 200,
-      background: '#FFFFFF',
-      border: '1px solid #CCCCCC',
-      boxShadow: '0px 1px 10px rgba(0, 0, 0, 0.15)',
-      borderRadius: '10px',
-    },
-  },
-};
 
 const headCells = [
   { id: 'check', label: '', disableSorting: true },
