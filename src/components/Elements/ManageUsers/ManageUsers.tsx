@@ -573,7 +573,7 @@ export default function ManageUsers() {
                                   },
                                 }}
                               >
-                                <MenuItem value="Regular User">
+                                <MenuItem value={REGULAR_USER}>
                                   <Typography
                                     style={{
                                       fontFamily: 'Poppins',
@@ -592,7 +592,7 @@ export default function ManageUsers() {
                                   </Typography>
                                 </MenuItem>
                                 <br />
-                                <MenuItem value="Regular Enterprise">
+                                <MenuItem value={REGULAR_ENTERPRISE}>
                                   <Typography
                                     style={{
                                       fontFamily: 'Poppins',
@@ -765,7 +765,7 @@ export default function ManageUsers() {
                                   },
                                 }}
                               >
-                                <MenuItem value="Regular User">
+                                <MenuItem value={REGULAR_USER}>
                                   <Typography
                                     style={{
                                       fontFamily: 'Poppins',
@@ -784,7 +784,7 @@ export default function ManageUsers() {
                                   </Typography>
                                 </MenuItem>
                                 <br />
-                                <MenuItem value="Regular Enterprise">
+                                <MenuItem value={REGULAR_ENTERPRISE}>
                                   <Typography
                                     style={{
                                       fontFamily: 'Poppins',
