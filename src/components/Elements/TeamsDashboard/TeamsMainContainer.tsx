@@ -1,7 +1,9 @@
 import * as React from 'react';
 import TeamsDashboard from './TeamsDashboard';
 import TeamsEmptyScreen from './TeamsEmptyScreen';
-import { getAllTeams } from '../../../helpers/msal/services';
+import {
+  getTeamDataForTable,
+} from '../../../helpers/msal/services';
 import { GlobalContext, ActionType } from '../../../contexts/GlobalContext';
 
 export const TeamsMainContainer = () => {
@@ -10,41 +12,38 @@ export const TeamsMainContainer = () => {
 
   // API will hit here to get the Teams list
   React.useEffect(() => {
-    callGetAllTeams();
+    callGetTeamDataForTable();
   }, []);
 
   // Function to get all teams data
-  const callGetAllTeams = async () => {
+  const callGetTeamDataForTable = async () => {
     dispatch({
       type: ActionType.SET_LOADING,
       payload: { loadingFlag: true },
     });
-    
-    await getAllTeams().then(
+    const requestBody = {
+      userId: 'ujala.kashyap@evoltech.com.au',
+      roleName: 'Enterprise Admin',
+      enterpriseId: 'evoltech0.0751886606959975',
+    };
+
+    await getTeamDataForTable(requestBody).then(
       res => {
-        setTeams(res);
         dispatch({
           type: ActionType.SET_LOADING,
           payload: { loadingFlag: false },
         });
+        setTeams(res);
       },
       err => {
-        console.log('err', err);
         dispatch({
           type: ActionType.SET_LOADING,
           payload: { loadingFlag: false },
         });
+        console.log('err', err);
       }
     );
   };
 
-  return (
-    <>
-      {teams.length === 0 ? (
-        <TeamsEmptyScreen />
-      ) : (
-        <TeamsDashboard teams={teams} />
-      )}
-    </>
-  );
+  return <>{teams.length === 0 ? <TeamsEmptyScreen /> : <TeamsDashboard />}</>;
 };

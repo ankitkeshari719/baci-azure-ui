@@ -694,7 +694,7 @@ export const deleteTeamById = async (teamId: string): Promise<any> => {
   return message;
 };
 
-// Get All Teams
+// Get All Teams By EnterpriseId
 export const getAllTeamsByEnterpriseId = async (
   enterpriseId: string
 ): Promise<any> => {
@@ -715,6 +715,27 @@ export const getAllTeamsByEnterpriseId = async (
     })
     .catch(err => console.log(err));
   return teams;
+};
+
+// Get All Teams data for Table
+export const getTeamDataForTable = async (requestBody: any): Promise<any> => {
+  let data: any;
+  const requestOptions = {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({
+      userId: requestBody.userId,
+      roleName: requestBody.roleName,
+      enterpriseId: requestBody.enterpriseId,
+    }),
+  };
+
+  await fetch(API_URL + `/analytics/getTeamDataForTable`, requestOptions)
+    .then(response => response.json())
+    .then(response => {
+      data = response.data;
+    });
+  return data;
 };
 
 // ---------------------------------------- Enterprise API's -----------------------------------------------

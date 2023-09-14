@@ -1,176 +1,142 @@
+import {
+  Paper,
+  Box,
+  TextField,
+  InputAdornment,
+  Checkbox,
+  Dialog,
+  DialogTitle,
+  Grid,
+} from '@mui/material';
 import * as React from 'react';
-import Paper from '@mui/material/Paper';
-import Table from '@mui/material/Table';
-import TableBody from '@mui/material/TableBody';
-import TableCell from '@mui/material/TableCell';
-import TableContainer from '@mui/material/TableContainer';
-import TableHead from '@mui/material/TableHead';
-import { styled } from '@mui/material/styles';
-import TablePagination from '@mui/material/TablePagination';
-import TableRow from '@mui/material/TableRow';
-import { users } from '../../../constants/DemoConst';
-import { Box, InputAdornment, TextField, TableSortLabel } from '@mui/material';
 
 import {
+  BodyRegularTypography,
   BodySemiBoldTypography,
   H2SemiBoldTypography,
+  H5SemiBoldTypography,
+  TinyTextTypography,
 } from '../../CustomizedTypography';
 import commonStyles from '../../../style.module.scss';
+import useTable from '../../CustomizedTable/useTable';
+import { TableBody, TableCell, TableRow } from '@material-ui/core';
 import { MagnifyingGlassIcon } from '@heroicons/react/24/outline';
-import { useNavigate } from 'react-router-dom';
-import { ContainedButtonWithIcon } from '../../CustomizedButton/ContainedButtonWithIcon';
+import moment from 'moment';
+import * as Icons from 'heroicons-react';
 import {
-  REGULAR_USER,
   ENTERPRISE_ADMIN,
   REGULAR_ENTERPRISE,
+  REGULAR_USER,
 } from '../../../constants/applicationConst';
+import { useNavigate } from 'react-router-dom';
+import { ContainedButtonWithIcon } from '../../CustomizedButton/ContainedButtonWithIcon';
+import { LazyLoadImage } from 'react-lazy-load-image-component';
+import Avatar from '../Avatar';
+import {
+  deleteTeamById,
+  getTeamDataForTable,
+} from '../../../helpers/msal/services';
+import { ActionType, GlobalContext } from '../../../contexts/GlobalContext';
+import { ContainedButton } from '../../CustomizedButton/ContainedButton';
+import { OutlinedButton } from '../../CustomizedButton/OutlinedButton';
 
-interface Column {
-  id:
-    | 'teamName'
-    | 'createdBy'
-    | 'members'
-    | 'teamDepartment'
-    | 'sessions'
-    | 'actions'
-    | 'createdAt'
-    | 'action';
-  label: string;
-  minWidth?: number;
-  align?: 'right';
-  displayName?: string;
-  format?: (value: number) => string;
-}
-
-const columns: Column[] = [
-  {
-    id: 'teamName',
-    label: 'Team Name',
-    minWidth: 200,
-    displayName: 'Team Name',
-  },
-  { id: 'createdBy', label: 'Creator', minWidth: 200, displayName: 'Creator' },
-  {
-    id: 'members',
-    label: 'Members',
-    minWidth: 300,
-    displayName: 'Members',
-  },
-  {
-    id: 'teamDepartment',
-    label: 'Department',
-    minWidth: 250,
-    displayName: 'Department',
-  },
-  {
-    id: 'sessions',
-    label: 'Sessions',
-    minWidth: 90,
-    displayName: 'Sessions',
-  },
-  {
-    id: 'actions',
-    label: 'Actions',
-    minWidth: 90,
-    displayName: 'Actions',
-  },
-  {
-    id: 'createdAt',
-    label: 'Created on',
-    minWidth: 90,
-    displayName: 'Created on',
-  },
-  {
-    id: 'action',
-    label: 'Action',
-    minWidth: 20,
-    displayName: 'Action',
-  },
+const headCells = [
+  { id: 'check', label: '', disableSorting: true },
+  { id: 'teamName', label: 'Team', disableSorting: false },
+  { id: 'createdBy', label: 'Creator', disableSorting: false },
+  { id: 'users', label: 'Members', disableSorting: true },
+  { id: 'department', label: 'Department', disableSorting: true },
+  { id: 'retroCount', label: 'Sessions', disableSorting: false },
+  { id: 'actionsCount', label: 'Actions', disableSorting: false },
+  { id: 'createdAt', label: 'Created on', disableSorting: false },
+  { id: 'actions', label: 'Actions', disableSorting: true },
 ];
 
-const StyledTableRow = styled(TableRow)(({ theme }) => ({
-  '&:nth-of-type(odd)': {
-    backgroundColor: theme.palette.action.hover,
-  },
-  '&:last-child td, &:last-child th': {
-    border: 0,
-  },
-}));
-
-type Props = {
-  teams: any;
-};
-
-export default function TeamsDashboard({ teams }: Props) {
+export default function TeamsDashboard() {
   const navigate = useNavigate();
+  const [height, setHeight] = React.useState(0);
+  const [global, dispatch] = React.useContext(GlobalContext);
   const localUserData = localStorage.getItem('userData');
   const tempLocalUserData = localUserData && JSON.parse(localUserData);
-  const [page, setPage] = React.useState(0);
-  const [orderDirection, setOrderDirection] = React.useState('asc');
-  const [rowsPerPage, setRowsPerPage] = React.useState(10);
+  const [openDeleteTeamDialog, setOpenDeleteTeamDialog] = React.useState(false);
+  const [isSelectAllChecked, setIsSelectAllChecked] = React.useState(false);
+  const [tempStoreTeamId, setTempStoreTeamId] = React.useState<any>('');
+  const [tempStoreTeamName, setTempStoreTeamName] = React.useState<any>('');
+  const [records, setRecords] = React.useState<any>([]);
   const [searchedVal, setSearchedVal] = React.useState('');
-  const [teamsTableData, setTeamsTableData] = React.useState(teams);
+  const [filterFn, setFilterFn] = React.useState<any>({
+    fn: (items: any) => {
+      return items;
+    },
+  });
 
+  const handleSelectAllCheckbox = () => {
+    setIsSelectAllChecked(!isSelectAllChecked);
+    const newRecord = records.map((record: any) => {
+      record.checked = !isSelectAllChecked;
+      return record;
+    });
+    setRecords(newRecord);
+  };
+
+  const { TblContainer, TblHead, TblPagination, recordAfterPagingAndSorting } =
+    useTable(
+      records,
+      headCells,
+      filterFn,
+      isSelectAllChecked,
+      handleSelectAllCheckbox
+    );
+
+  // API will hit here to get the Teams list
   React.useEffect(() => {
-    setTeamsTableData(teams);
+    setHeight(window.innerHeight);
+    callGetTeamDataForTable();
   }, []);
 
-  const handleChangePage = (event: unknown, newPage: number) => {
-    setPage(newPage);
-  };
-
-  const handleChangeRowsPerPage = (
-    event: React.ChangeEvent<HTMLInputElement>
-  ) => {
-    setRowsPerPage(+event.target.value);
-    setPage(0);
-  };
-
-  const searchFunction = (row1: any) => {
-    const columns = [
-      'teamName',
-      'createdBy',
-      'members',
-      'teamDepartment',
-      'sessions',
-      'actions',
-      'createdAt',
-      'action',
-    ];
-    var fullRow = '';
-    columns.forEach((column, index) => {
-      if (index == 0) fullRow = fullRow + row1[column];
-      else if (column == 'action.assigneeId') {
-        const user = users.find(user => user.id == row1[column]);
-        fullRow = fullRow + ' ' + user?.name;
-      } else fullRow = fullRow + ' ' + row1[column];
+  // Function to get all teams data
+  const callGetTeamDataForTable = async () => {
+    dispatch({
+      type: ActionType.SET_LOADING,
+      payload: { loadingFlag: true },
     });
+    const requestBody = {
+      userId: 'ujala.kashyap@evoltech.com.au',
+      roleName: 'Enterprise Admin',
+      enterpriseId: 'evoltech0.0751886606959975',
+    };
 
-    return (
-      !searchedVal.length ||
-      fullRow
-        .toString()
-        .toLowerCase()
-        .includes(searchedVal.toString().toLowerCase())
+    await getTeamDataForTable(requestBody).then(
+      res => {
+        dispatch({
+          type: ActionType.SET_LOADING,
+          payload: { loadingFlag: false },
+        });
+        const teamRecord = res.map((team: any) => {
+          return {
+            id: team.teamId,
+            teamName: team.teamName,
+            createdBy: team.createdBy,
+            createdByObj: team && team.createdByObj && team.createdByObj[0],
+            users: team.users,
+            department: team.teamDepartment,
+            retroCount: team.retroCount,
+            actionsCount: team.actionsCount,
+            createdAt: team.createdAt,
+            checked: false,
+          };
+        });
+        setRecords(teamRecord);
+      },
+      err => {
+        dispatch({
+          type: ActionType.SET_LOADING,
+          payload: { loadingFlag: false },
+        });
+        console.log('err', err);
+        setRecords([]);
+      }
     );
-  };
-
-  const sortArray = (arr: any, orderBy: any, idInput: string) => {
-    var id = idInput;
-    if (id == 'action.assigneeId') {
-      id = 'action.assigneeName';
-    }
-    switch (orderBy) {
-      case 'asc':
-      default:
-        return arr.sort((a: any, b: any) => a[id].localeCompare(b[id]));
-      case 'desc':
-        return arr.sort((a: any, b: any) => b[id].localeCompare(a[id]));
-    }
-  };
-
-  const handleSortRequest = (id: string, jira: any) => {
-    setOrderDirection(orderDirection === 'asc' ? 'desc' : 'asc');
   };
 
   // Function to navigate on create new team page
@@ -189,26 +155,96 @@ export default function TeamsDashboard({ teams }: Props) {
       navigate('/enterprise/teams/create/');
     }
   }
+
+  const handleSearch = (e: any) => {
+    let target = e.target;
+    setFilterFn({
+      fn: (items: any) => {
+        if (target.value === '') {
+          return items;
+        } else {
+          let temp = items.filter((x: any) => {
+            return x.teamName
+              .toLowerCase()
+              .includes(target.value.toLowerCase());
+          });
+          return temp;
+        }
+      },
+    });
+  };
+
+  // Open Delete Team Pop Up
+  const handleDeleteTeamPopUpOpen = (teamId: any, teamName: any) => {
+    setTempStoreTeamId(teamId);
+    setTempStoreTeamName(teamName);
+    setOpenDeleteTeamDialog(true);
+  };
+
+  // Open Delete Team Pop Up
+  const handleDeleteTeamPopUpClose = () => {
+    setOpenDeleteTeamDialog(false);
+    setTempStoreTeamId('');
+    setTempStoreTeamName('');
+  };
+
+  // Delete Team
+  const handleDeleteTeam = async () => {
+    dispatch({
+      type: ActionType.SET_LOADING,
+      payload: { loadingFlag: true },
+    });
+    console.log('tempStoreTeamId', tempStoreTeamId);
+    return;
+    await deleteTeamById(tempStoreTeamId).then(
+      res => {
+        console.log('callDeleteTeamById response', res);
+        callGetTeamDataForTable();
+        dispatch({
+          type: ActionType.SET_LOADING,
+          payload: { loadingFlag: false },
+        });
+        handleDeleteTeamPopUpClose();
+      },
+      err => {
+        console.log('err', err);
+        dispatch({
+          type: ActionType.SET_LOADING,
+          payload: { loadingFlag: false },
+        });
+        handleDeleteTeamPopUpClose();
+      }
+    );
+  };
+
+  // Handle Checkbox
+  const handleChangeCheckbox = (
+    event: React.ChangeEvent<HTMLInputElement>,
+    teamId: any
+  ) => {
+    const newRecord = records.map((record: any) => {
+      if (record.id === teamId) {
+        record.checked = !record.checked;
+      }
+      return record;
+    });
+    setRecords(newRecord);
+  };
+
   return (
     <>
-      <Paper
+      <Box
         sx={{
           width: '100%',
-          background: 'rgb(249 251 252)',
+          height: 'calc(var(--app-height))',
+          background: '#F9FBFC',
           padding: '20px',
           display: 'flex',
           flexDirection: 'column',
+          overflowY: 'auto',
         }}
       >
-        <BodySemiBoldTypography
-          label="Teams"
-          style={{ marginBottom: '10px' }}
-        />
-        <H2SemiBoldTypography
-          label="My Teams"
-          style={{ color: commonStyles.PrimaryDark }}
-        />
-        {/* Search */}
+        <BodySemiBoldTypography label="Teams" />
         <Box
           display="flex"
           flexDirection="row"
@@ -216,20 +252,40 @@ export default function TeamsDashboard({ teams }: Props) {
           alignItems="center"
           sx={{
             width: '100%',
-            flexDirection: 'row',
-            marginTop: '20px',
-            marginBottom: '20px',
+            marginTop: '16px',
+          }}
+        >
+          <H2SemiBoldTypography
+            label="My Teams"
+            style={{ color: commonStyles.PrimaryDark }}
+          />
+          <ContainedButtonWithIcon
+            id={'create_new_Team'}
+            label={'New Team'}
+            size={'medium'}
+            iconPath="/svgs/plusSmall.svg"
+            style={{ width: '200px', textAlign: 'center' }}
+            onClick={() => createNewTeam()}
+          />
+        </Box>
+        <Box
+          sx={{
+            width: '100%',
+            background: 'rgb(249 251 252)',
+            display: 'flex',
+            flexDirection: 'column',
+            marginTop: '16px',
           }}
         >
           <TextField
             id="outlined-basic"
             label="Search..."
             variant="outlined"
-            sx={{
-              background: 'white',
-              width: '450px',
+            sx={{ background: 'white', width: '40%' }}
+            onChange={e => {
+              setSearchedVal(e.target.value);
+              handleSearch(e);
             }}
-            onChange={e => setSearchedVal(e.target.value)}
             value={searchedVal}
             InputProps={{
               startAdornment: (
@@ -239,84 +295,214 @@ export default function TeamsDashboard({ teams }: Props) {
               ),
             }}
           />
-          <ContainedButtonWithIcon
-            id={'create_new__retro_button_desktop'}
-            label={'New Team'}
-            size={'medium'}
-            iconPath="/svgs/plusSmall.svg"
-            style={{ width: '200px', textAlign: 'center' }}
-            onClick={() => createNewTeam()}
+          <TblContainer>
+            <TblHead />
+            <TableBody>
+              {recordAfterPagingAndSorting().map((item: any) => {
+                return (
+                  <TableRow key={item.id}>
+                    <TableCell>
+                      <Checkbox
+                        checked={item.checked}
+                        onChange={e => handleChangeCheckbox(e, item.id)}
+                        inputProps={{ 'aria-label': 'controlled' }}
+                      />
+                    </TableCell>
+                    <TableCell>{item.teamName}</TableCell>
+                    <TableCell>
+                      <LazyLoadImage
+                        className="avatar"
+                        style={{
+                          width: '40px',
+                          height: '40px',
+                          borderRadius: '50%',
+                          border: 'none',
+                        }}
+                        src={
+                          '/avatars/animals/' +
+                          item.createdByObj.selectedAvatar +
+                          '.svg'
+                        }
+                      ></LazyLoadImage>
+                      {' ' +
+                        item.createdByObj.firstName +
+                        ' ' +
+                        item.createdByObj.lastName}
+                    </TableCell>
+                    <TableCell>
+                      {item.users.length < 5 ? (
+                        <Box
+                          display="flex"
+                          flexDirection="row"
+                          alignItems="center"
+                          justifyContent="center"
+                        >
+                          {item.users?.map(
+                            (user: any, index: any) =>
+                              index < 4 && (
+                                <Avatar
+                                  key={user.userId}
+                                  avatar={user.selectedAvatar}
+                                  css={{
+                                    width: '40px',
+                                    height: '40px',
+                                    marginLeft: '0',
+                                    marginRight: '-16px',
+                                    border: '3px solid transparent',
+                                  }}
+                                />
+                              )
+                          )}
+                        </Box>
+                      ) : (
+                        <Box
+                          display="flex"
+                          flexDirection="row"
+                          alignItems="center"
+                          justifyContent="center"
+                        >
+                          {item.users?.map(
+                            (user: any, index: any) =>
+                              index < 4 && (
+                                <Avatar
+                                  key={user.userId}
+                                  avatar={user.selectedAvatar}
+                                  css={{
+                                    width: '40px',
+                                    height: '40px',
+                                    marginLeft: '0',
+                                    marginRight: '-16px',
+                                    border: '3px solid transparent',
+                                  }}
+                                />
+                              )
+                          )}
+                          <TinyTextTypography
+                            label={'+' + (item.users.length - 4).toString()}
+                            style={{
+                              marginLeft: '20px !important',
+                              color: '#808080',
+                            }}
+                          />
+                        </Box>
+                      )}
+                    </TableCell>
+                    <TableCell>{item.department}</TableCell>
+                    <TableCell>{item.retroCount}</TableCell>
+                    <TableCell>{item.actionsCount}</TableCell>
+                    <TableCell>
+                      {moment(item.createdAt).format('Do MMM YYYY')}
+                    </TableCell>
+                    <TableCell>
+                      <Icons.TrashOutline
+                        size={20}
+                        style={{
+                          cursor: 'pointer',
+                          color: '#4E4E4E',
+                        }}
+                        onClick={() =>
+                          handleDeleteTeamPopUpOpen(item.id, item.teamName)
+                        }
+                      />
+                    </TableCell>
+                  </TableRow>
+                );
+              })}
+            </TableBody>
+          </TblContainer>
+          <TblPagination />
+        </Box>
+      </Box>
+      {/* Delete Team Pop Up */}
+      <Dialog open={openDeleteTeamDialog}>
+        <DialogTitle
+          style={{ padding: '20px', borderBottom: '1px solid #EA4335' }}
+        >
+          <Grid container sx={{ display: 'flex', alignItems: 'center' }}>
+            <Grid item sm={6}>
+              <Box
+                display="flex"
+                justifyContent="flex-start"
+                alignItems="center"
+              >
+                <Icons.ExclamationCircleOutline
+                  size={32}
+                  style={{
+                    color: '#EA4335',
+                    fontSize: '32px',
+                  }}
+                />
+                <H5SemiBoldTypography
+                  label={'Delete Team'}
+                  style={{
+                    color: '#343434',
+                    marginLeft: '12px !important',
+                  }}
+                />
+              </Box>
+            </Grid>
+            <Grid item sm={6}>
+              <Box display="flex" justifyContent="flex-end">
+                <Icons.X
+                  size={20}
+                  style={{
+                    cursor: 'pointer',
+                  }}
+                  onClick={handleDeleteTeamPopUpClose}
+                />
+              </Box>
+            </Grid>
+          </Grid>
+        </DialogTitle>
+        <Box
+          sx={{
+            width: '600px',
+            minWidth: '600px',
+            height: height / 4,
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+          }}
+        >
+          <BodyRegularTypography
+            label={`Are you sure you want to delete team ${tempStoreTeamName}?`}
           />
         </Box>
-        {/* Main Table  */}
-        <TableContainer sx={{ height: 'calc(100% - 280px)' }}>
-          <Table stickyHeader aria-label="sticky table">
-            <TableHead>
-              <TableRow>
-                {columns.map(column => (
-                  <TableCell
-                    key={column.id}
-                    align={column.align}
-                    sx={{ borderBottom: '2px solid gray' }}
-                    // onClick={() =>
-                    //   column.id != 'teamId' &&
-                    //   handleSortRequest(column.id, displayJiraRows)
-                    // }
-                  >
-                    <TableSortLabel
-                      active={true}
-                      direction={orderDirection === 'asc' ? 'asc' : 'desc'}
-                    >
-                      <BodySemiBoldTypography label={column.label} />
-                    </TableSortLabel>
-                  </TableCell>
-                ))}
-              </TableRow>
-            </TableHead>
-            <TableBody>
-              {teamsTableData
-                .filter((row1: any) => searchFunction(row1))
-                .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-                .map((row: any, index: number) => {
-                  return (
-                    <StyledTableRow
-                      hover
-                      role="checkbox"
-                      tabIndex={-1}
-                      key={index}
-                    >
-                      {columns.map(column => {
-                        const value = row[column.id];
-                        return (
-                          <TableCell
-                            key={column.id}
-                            align={column.align}
-                            sx={{ maxWidth: '250px' }}
-                          >
-                            {value}
-                          </TableCell>
-                        );
-                      })}
-                    </StyledTableRow>
-                  );
-                })}
-            </TableBody>
-          </Table>
-        </TableContainer>
-        {/* Table Pagination */}
-        <TablePagination
-          rowsPerPageOptions={[10, 25, 100]}
-          component="div"
-          count={
-            0
-            // displayJiraRows.filter((row1: any) => searchFunction(row1)).length
-          }
-          rowsPerPage={rowsPerPage}
-          page={page}
-          onPageChange={handleChangePage}
-          onRowsPerPageChange={handleChangeRowsPerPage}
-        />
-      </Paper>
+        {/* Buttons */}
+        <Box sx={{ mx: 3 }}>
+          <Box
+            sx={{
+              width: '100%',
+              display: 'flex',
+              flex: '1 0 auto',
+              alignItems: 'flex-end',
+              justifyContent: 'flex-end',
+              my: 2,
+            }}
+          >
+            <OutlinedButton
+              label="Cancel"
+              size={'medium'}
+              onClick={handleDeleteTeamPopUpClose}
+              style={{
+                minWidth: '75px !important',
+                height: '36px !important',
+                marginRight: '20px !important',
+              }}
+            />
+            <ContainedButton
+              name="Yes"
+              onClick={() => handleDeleteTeam()}
+              style={{
+                minWidth: '75px !important',
+                height: '36px !important',
+                background: '#EA4335 !important',
+              }}
+              size={'medium'}
+            />
+          </Box>
+        </Box>
+      </Dialog>
     </>
   );
 }

@@ -69,7 +69,7 @@ const headCells = [
     label: 'Email',
     disableSorting: false,
   },
-  { id: 'teams', label: 'Team', disableSorting: false },
+  { id: 'teams', label: 'Team', disableSorting: true },
   { id: 'roleName', label: 'Role', disableSorting: true },
   { id: 'createdAt', label: 'Date Joined', disableSorting: false },
   { id: 'actions', label: 'Actions', disableSorting: true },
@@ -79,10 +79,12 @@ export default function ManageUsers() {
   const [global, dispatch] = React.useContext(GlobalContext);
   const [height, setHeight] = React.useState(0);
   const [isManageUserPage, setIsManageUserPage] = React.useState(false);
+  const [isSelectAllChecked, setIsSelectAllChecked] = React.useState(false);
   const [openDeleteUserDialog, setOpenDeleteUserDialog] = React.useState(false);
   const [openUpdateRoleDialog, setUpdateRoleDialog] = React.useState(false);
   const [openRevokeRoleDialog, setRevokeRoleDialog] = React.useState(false);
   const [tempStoreUserId, setTempStoreUserId] = React.useState<any>('');
+  const [tempStoreUserName, setTempStoreUserName] = React.useState<any>('');
   const [tempStoreRoleName, setTempStoreRoleName] = React.useState<any>('');
   const localUserData = localStorage.getItem('userData');
   const tempLocalUserData = localUserData && JSON.parse(localUserData);
@@ -94,8 +96,23 @@ export default function ManageUsers() {
     },
   });
 
+  const handleSelectAllCheckbox = () => {
+    setIsSelectAllChecked(!isSelectAllChecked);
+    const newRecord = records.map((record: any) => {
+      record.checked = !isSelectAllChecked;
+      return record;
+    });
+    setRecords(newRecord);
+  };
+
   const { TblContainer, TblHead, TblPagination, recordAfterPagingAndSorting } =
-    useTable(records, headCells, filterFn);
+    useTable(
+      records,
+      headCells,
+      filterFn,
+      isSelectAllChecked,
+      handleSelectAllCheckbox
+    );
 
   React.useEffect(() => {
     setHeight(window.innerHeight);
@@ -158,14 +175,16 @@ export default function ManageUsers() {
   };
 
   // Open Delete User Pop Up
-  const handleDeleteUserPopUpOpen = (userId: any) => {
+  const handleDeleteUserPopUpOpen = (userId: any, userName: any) => {
     setTempStoreUserId(userId);
+    setTempStoreUserName(userName);
     setOpenDeleteUserDialog(true);
   };
 
   // Open Delete User Pop Up
   const handleDeleteUserPopUpClose = () => {
     setOpenDeleteUserDialog(false);
+    setTempStoreUserName('');
     setTempStoreUserId('');
   };
 
@@ -195,9 +214,14 @@ export default function ManageUsers() {
     );
   };
 
-  const handleChangeUserRolePopUpOpen = (roleName: any, userId: any) => {
+  const handleChangeUserRolePopUpOpen = (
+    roleName: any,
+    userId: any,
+    userName: any
+  ) => {
     setTempStoreUserId(userId);
     setTempStoreRoleName(roleName);
+    setTempStoreUserName(userName);
     if (roleName === REGULAR_USER) {
       setUpdateRoleDialog(true);
     } else {
@@ -208,6 +232,7 @@ export default function ManageUsers() {
   const handleChangeUserRolePopUpClose = () => {
     setTempStoreUserId('');
     setTempStoreRoleName('');
+    setTempStoreUserName('');
     setUpdateRoleDialog(false);
     setRevokeRoleDialog(false);
   };
@@ -406,10 +431,14 @@ export default function ManageUsers() {
             <H5RegularTypography
               label="Enterprise Dashboard Requests"
               onClick={() => handlePageView(0)}
+              style={{ color: !isManageUserPage ? '#159ADD' : '#676767' }}
             />
             <H5RegularTypography
               label="All Users"
-              style={{ marginTop: '24px !important' }}
+              style={{
+                marginTop: '24px !important',
+                color: isManageUserPage ? '#159ADD' : '#676767',
+              }}
               onClick={() => handlePageView(1)}
             />
           </Box>
@@ -433,7 +462,6 @@ export default function ManageUsers() {
                   alignItems="center"
                   sx={{
                     width: '100%',
-                    flexDirection: 'row',
                   }}
                 >
                   {/* Search Bar */}
@@ -517,7 +545,8 @@ export default function ManageUsers() {
                                 onClick={() =>
                                   handleChangeUserRolePopUpOpen(
                                     item.roleName,
-                                    item.id
+                                    item.id,
+                                    item.fullName
                                   )
                                 }
                                 sx={{
@@ -592,7 +621,12 @@ export default function ManageUsers() {
                                 cursor: 'pointer',
                                 color: '#4E4E4E',
                               }}
-                              onClick={() => handleDeleteUserPopUpOpen(item.id)}
+                              onClick={() =>
+                                handleDeleteUserPopUpOpen(
+                                  item.id,
+                                  item.fullName
+                                )
+                              }
                             />
                           </TableCell>
                         </TableRow>
@@ -703,7 +737,8 @@ export default function ManageUsers() {
                                 onClick={() =>
                                   handleChangeUserRolePopUpOpen(
                                     item.roleName,
-                                    item.id
+                                    item.id,
+                                    item.fullName
                                   )
                                 }
                                 sx={{
@@ -778,7 +813,12 @@ export default function ManageUsers() {
                                 cursor: 'pointer',
                                 color: '#4E4E4E',
                               }}
-                              onClick={() => handleDeleteUserPopUpOpen(item.id)}
+                              onClick={() =>
+                                handleDeleteUserPopUpOpen(
+                                  item.id,
+                                  item.fullName
+                                )
+                              }
                             />
                           </TableCell>
                         </TableRow>
@@ -835,15 +875,17 @@ export default function ManageUsers() {
         </DialogTitle>
         <Box
           sx={{
-            width: '410px',
-            minWidth: '400px',
+            width: '650px',
+            minWidth: '600px',
             height: height / 4,
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'center',
           }}
         >
-          <BodyRegularTypography label="Are you sure you want to delete user?" />
+          <BodyRegularTypography
+            label={`Are you sure you want to delete user ${tempStoreUserName} ?`}
+          />
         </Box>
         {/* Buttons */}
         <Box sx={{ mx: 3 }}>
@@ -923,15 +965,17 @@ export default function ManageUsers() {
         </DialogTitle>
         <Box
           sx={{
-            width: '450px',
-            minWidth: '450px',
+            width: '600px',
+            minWidth: '600px',
             height: height / 4,
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'center',
           }}
         >
-          <BodyRegularTypography label="Are you sure you want to update role to Enterprise?" />
+          <BodyRegularTypography
+            label={`Are you sure you want to update ${tempStoreUserName} role to Enterprise?`}
+          />
         </Box>
         {/* Buttons */}
         <Box sx={{ mx: 3 }}>
@@ -1011,15 +1055,17 @@ export default function ManageUsers() {
         </DialogTitle>
         <Box
           sx={{
-            width: '450px',
-            minWidth: '450px',
+            width: '600px',
+            minWidth: '600px',
             height: height / 4,
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'center',
           }}
         >
-          <BodyRegularTypography label="Are you sure you want to revoke role to Basic?" />
+          <BodyRegularTypography
+            label={`Are you sure you want to revoke ${tempStoreUserName} role to Basic?`}
+          />
         </Box>
         {/* Buttons */}
         <Box sx={{ mx: 3 }}>

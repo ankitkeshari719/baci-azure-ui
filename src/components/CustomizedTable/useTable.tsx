@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { Table, TableCell } from '@mui/material';
+import { Checkbox, Table, TableCell } from '@mui/material';
 import {
   TableHead,
   TablePagination,
@@ -14,7 +14,7 @@ const useStyles = makeStyles(theme => ({
     '& thead td': {
       fontWeight: '800',
       color: '#343434',
-      backgroundColor: '#CCCCCC',
+      backgroundColor: '#ffffff',
     },
     '& tbody td': {
       fontWeight: '300',
@@ -29,7 +29,10 @@ const useStyles = makeStyles(theme => ({
 export default function useTable(
   records?: any,
   headCells?: any,
-  filterFn?: any
+  filterFn?: any,
+  isSelectAllChecked?:any,
+  handleSelectAllCheckbox?:any,
+
 ) {
   const classes = useStyles();
 
@@ -61,18 +64,32 @@ export default function useTable(
                 key={headCell.id}
                 sortDirection={orderBy === headCell.id ? order : false}
               >
-                {headCell.disableSorting ? (
-                  headCell.label
+                {headCell.id === 'check' ? (
+                  <>
+                    <TableCell>
+                      <Checkbox
+                        checked={isSelectAllChecked}
+                        onChange={handleSelectAllCheckbox}
+                        inputProps={{ 'aria-label': 'controlled' }}
+                      />
+                    </TableCell>
+                  </>
                 ) : (
-                  <TableSortLabel
-                    active={orderBy === headCell.id}
-                    direction={orderBy === headCell.id ? order : 'asc'}
-                    onClick={() => {
-                      handleSortRequest(headCell.id);
-                    }}
-                  >
-                    {headCell.label}
-                  </TableSortLabel>
+                  <>
+                    {headCell.disableSorting ? (
+                      headCell.label
+                    ) : (
+                      <TableSortLabel
+                        active={orderBy === headCell.id}
+                        direction={orderBy === headCell.id ? order : 'asc'}
+                        onClick={() => {
+                          handleSortRequest(headCell.id);
+                        }}
+                      >
+                        {headCell.label}
+                      </TableSortLabel>
+                    )}
+                  </>
                 )}
               </TableCell>
             );
