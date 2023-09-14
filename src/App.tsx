@@ -105,7 +105,7 @@ export default function App({ instance }: AppProps) {
                   <ThemeProvider theme={theme}>
                     <MsalProvider instance={instance}>
                       <Box display="flex" height="calc(var(--app-height))">
-                        {!isXsUp && <LeftBar />}
+                        {!isXsUp && tempLocalUserData != null && <LeftBar />}
                         <Box
                           display="flex"
                           width={
