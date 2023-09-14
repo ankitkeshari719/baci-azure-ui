@@ -90,7 +90,6 @@ export function LandingPage({ isDemo }: { isDemo?: boolean }) {
     localStorage.removeItem('selectedTemplate');
     localStorage.removeItem('tempSelectedTemplateData');
     localStorage.removeItem('userAzureData');
-    localStorage.removeItem('userData');
   }, []);
 
   React.useEffect(() => {

@@ -284,8 +284,6 @@ export default function EditProfile({ handleEdit }: Props) {
     instance
       .logoutRedirect()
       .then(() => {
-        localStorage.removeItem('userAzureData');
-        localStorage.removeItem('userData');
         dispatch({
           type: ActionType.SET_LOADING,
           payload: { loadingFlag: false },

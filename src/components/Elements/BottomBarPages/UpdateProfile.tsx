@@ -154,8 +154,6 @@ export default function UpdateProfile({ handleEdit }: Props) {
   };
 
   const handleLogoutRedirect = () => {
-    localStorage.removeItem('userAzureData');
-    localStorage.removeItem('userData');
     dispatch({
       type: ActionType.SET_LOADING,
       payload: { loadingFlag: true },

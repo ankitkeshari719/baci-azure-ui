@@ -162,8 +162,6 @@ export function UserHeader({ accounts }: Props) {
           payload: { loadingFlag: false },
         });
         setOpenEnterpriseNotExistDialog(false);
-        localStorage.removeItem('userAzureData');
-        localStorage.removeItem('userData');
       })
       .catch(error => {
         console.log(error);
