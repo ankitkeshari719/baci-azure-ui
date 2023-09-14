@@ -22,7 +22,7 @@ const theme = createTheme({
   },
 });
 
-export default function BasicDashboard() {
+export default function BasicDashboardWithoutEnterprise() {
   const navigate = useNavigate();
 
   // Function to navigate on create new retro page
