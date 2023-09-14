@@ -43,20 +43,20 @@ const LeftBar = () => {
   const imaSrc = '/avatars/animals/' + selectedAvatar + '.svg';
 
   React.useEffect(() => {
-    setSelectedAvatar(tempLocalUserData && tempLocalUserData.selectedAvatar);
     if (tempLocalUserData && tempLocalUserData.roleName === REGULAR_USER) {
-      setPath('facilitator');
+      setPath('basic');
     } else if (
       tempLocalUserData &&
       tempLocalUserData.roleName === ENTERPRISE_ADMIN
     ) {
-      setPath('enterprise');
+      setPath('facilitator');
     } else if (
       tempLocalUserData &&
       tempLocalUserData.roleName === REGULAR_ENTERPRISE
     ) {
       setPath('enterprise');
     }
+    setSelectedAvatar(tempLocalUserData && tempLocalUserData.selectedAvatar);
   }, [tempLocalUserData]);
 
   const menuArray = [
@@ -64,14 +64,14 @@ const LeftBar = () => {
       id: 1,
       label: 'Home',
       icon: HomeIcon,
-      routeTo: path + '/dashboard',
+      routeTo: path + '/dashboard/',
       disabled: false,
     },
     {
       id: 2,
       label: 'Actions',
       icon: ClipboardDocumentCheckIcon,
-      routeTo: path + '/actions',
+      routeTo: path + '/actions/',
       disabled: false,
     },
 
@@ -94,7 +94,7 @@ const LeftBar = () => {
       id: 5,
       label: 'Templates',
       icon: Square3Stack3DIcon,
-      routeTo: path + '/templates',
+      routeTo: path + '/templates/',
       disabled: true,
     },
 
@@ -102,14 +102,14 @@ const LeftBar = () => {
       id: 6,
       label: 'Users',
       icon: UserGroupIcon,
-      routeTo: path + '/teams',
+      routeTo: path + '/teams/',
       disabled: true,
     },
     {
       id: 7,
       label: 'Settings',
       icon: Cog8ToothIcon,
-      routeTo: path + '/settings',
+      routeTo: path + '/settings/',
       disabled: false,
     },
   ];
@@ -194,6 +194,7 @@ const LeftBar = () => {
         className="leftBarContainer"
         sx={{
           display:
+            location.pathname.includes('basic') ||
             location.pathname.includes('facilitator') ||
             location.pathname.includes('enterprise')
               ? 'flex'

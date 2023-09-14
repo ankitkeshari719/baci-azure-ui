@@ -5,7 +5,6 @@ import { AuthenticatedTemplate, useMsal } from '@azure/msal-react';
 import {
   createUser,
   getAllEnterprises,
-  getRoleByName,
   getUserByEmailId,
 } from '../../../helpers/msal/services';
 import * as Icons from 'heroicons-react';
@@ -13,6 +12,7 @@ import {
   REGULAR_USER,
   ENTERPRISE_ADMIN,
   REGULAR_ENTERPRISE,
+  REGULAR_USER_ID,
 } from '../../../constants/applicationConst';
 import { Dialog, DialogTitle, Grid, Box } from '@mui/material';
 import { ContainedButton } from '../../../components';
@@ -29,9 +29,6 @@ type Props = {
 export function UserHeader({ accounts }: Props) {
   const navigate = useNavigate();
   const [height, setHeight] = React.useState(0);
-  const [enterpriseCom, setEnterpriseCom] = React.useState<any>();
-  const [userRole, setUserRole] = React.useState<any>();
-  const [userEnterprise, setUserEnterprise] = React.useState<any>();
   const [openEnterpriseNotExistDialog, setOpenEnterpriseNotExistDialog] =
     React.useState(false);
   const [global, dispatch] = React.useContext(GlobalContext);
@@ -49,7 +46,6 @@ export function UserHeader({ accounts }: Props) {
   // Function to check weather this id is present in DB or not
   const checkUser = () => {
     if (accounts && accounts.length != 0) {
-      localStorage.setItem('userAzureData', JSON.stringify(accounts));
       callGetUserByEmailId(accounts[0].username);
     }
   };
@@ -60,15 +56,16 @@ export function UserHeader({ accounts }: Props) {
       res => {
         if (res === null) {
           // Create new user in DB
-          callGetRoleByName();
+          callGetAllEnterprises();
         } else {
           // Navigate the user to dashboard according to his role
           localStorage.setItem('userData', JSON.stringify(res));
+          localStorage.setItem('userAzureData', JSON.stringify(accounts));
           if (res.roleName === REGULAR_USER) {
+            navigate('/basic/');
+          } else if (res.roleName === REGULAR_ENTERPRISE) {
             navigate('/facilitator/');
           } else if (res.roleName === ENTERPRISE_ADMIN) {
-            navigate('/enterprise/');
-          } else if (res.roleName === REGULAR_ENTERPRISE) {
             navigate('/enterprise/');
           }
         }
@@ -79,39 +76,23 @@ export function UserHeader({ accounts }: Props) {
     );
   };
 
-  // Function to get regular user role data
-  const callGetRoleByName = async () => {
-    await getRoleByName(REGULAR_USER).then(
-      res => {
-        setUserRole(res);
-        callGetAllEnterprises(res);
-      },
-      err => {
-        console.log('err', err);
-      }
-    );
-  };
-
   // Function to get all user enterprises
-  const callGetAllEnterprises = async (roleParam: any) => {
+  const callGetAllEnterprises = async () => {
     await getAllEnterprises().then(
       res => {
         const com =
           accounts && accounts[0] && accounts[0].username.split('@')[1];
         let enterpriseFlag = 0;
-        setEnterpriseCom(com);
         if (res) {
+          console.log('res', res);
           for (let i = 0; i < res.length; i++) {
             if (res[i].organisationDomain.includes(com)) {
-              setUserEnterprise(res[i]);
-              callCreateUser(roleParam, res[i]);
               enterpriseFlag = 1;
+              callCreateUser(res[i].organisationId, res[i].organisationName);
             }
           }
           if (enterpriseFlag == 0) {
-            // user is not from any enterprise
-            setOpenEnterpriseNotExistDialog(true);
-            localStorage.setItem('userData', JSON.stringify(null));
+            callCreateUser('', '');
           }
         }
       },
@@ -122,9 +103,13 @@ export function UserHeader({ accounts }: Props) {
   };
 
   // Function to create new user
-  const callCreateUser = async (roleParam: any, enterpriseParam: any) => {
+  const callCreateUser = async (enterpriseId: any, enterpriseName: any) => {
     let requestBody;
-    if (roleParam && enterpriseParam && accounts) {
+    dispatch({
+      type: ActionType.SET_LOADING,
+      payload: { loadingFlag: true },
+    });
+    if (accounts) {
       requestBody = {
         firstName: '',
         lastName: '',
@@ -134,10 +119,10 @@ export function UserHeader({ accounts }: Props) {
         country: '',
         cityCode: '',
         plan: '',
-        roleId: roleParam && roleParam.roleId,
-        roleName: roleParam && roleParam.roleName,
-        enterpriseId: enterpriseParam && enterpriseParam.organisationId,
-        enterpriseName: enterpriseParam && enterpriseParam.organisationName,
+        roleId: REGULAR_USER_ID,
+        roleName: REGULAR_USER,
+        enterpriseId: enterpriseId,
+        enterpriseName: enterpriseName,
         selectedAvatar: '',
         isEnterpriserRequested: false,
         teams: [],
@@ -146,17 +131,24 @@ export function UserHeader({ accounts }: Props) {
       await createUser(requestBody).then(
         res => {
           if (res != null) {
+            dispatch({
+              type: ActionType.SET_LOADING,
+              payload: { loadingFlag: false },
+            });
             localStorage.setItem('userData', JSON.stringify(res));
             checkUser();
           }
         },
         err => {
+          dispatch({
+            type: ActionType.SET_LOADING,
+            payload: { loadingFlag: false },
+          });
           console.log('err', err);
         }
       );
     }
   };
-
   const handleLogoutRedirect = () => {
     dispatch({
       type: ActionType.SET_LOADING,
