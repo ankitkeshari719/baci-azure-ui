@@ -82,7 +82,6 @@ function MainContent() {
 export default function App({ instance }: AppProps) {
   const localUserData = localStorage.getItem('userData');
   const tempLocalUserData = localUserData && JSON.parse(localUserData);
-  console.log('tempLocalUserData', tempLocalUserData);
   const isXsUp = useMediaQuery('(max-width:768px)');
 
   return (

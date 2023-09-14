@@ -96,7 +96,6 @@ export default function UpdateProfile({ handleEdit }: Props) {
   const [codePhoneNoError, setPhoneNoError] = React.useState('');
   const [codeCountryError, setCountryCodeError] = React.useState('');
   const [codeCityCodeError, setCityCodeCodeError] = React.useState('');
-  const [enterpriseDetails, setEnterpriseDetails] = React.useState<any>(null);
 
   React.useEffect(() => {
     setFirstName(tempLocalUserData && tempLocalUserData.firstName);
@@ -118,22 +117,6 @@ export default function UpdateProfile({ handleEdit }: Props) {
     );
     setSelectedAvatar(tempLocalUserData && tempLocalUserData.selectedAvatar);
   }, []);
-
-  React.useEffect(() => {
-    const enterpriseId = tempLocalUserData && tempLocalUserData.enterpriseId;
-    callGetEnterpriseById(enterpriseId);
-  }, []);
-
-  const callGetEnterpriseById = async (enterpriseId: any) => {
-    await getEnterpriseById(enterpriseId).then(
-      res => {
-        setEnterpriseDetails(res);
-      },
-      err => {
-        console.log('err', err);
-      }
-    );
-  };
 
   const requestEnterpriseAdmin = () => {
     // Call API to request for Admin Role
@@ -749,76 +732,82 @@ export default function UpdateProfile({ handleEdit }: Props) {
               </Box>
             </FormControl>
             {/* Request Enterprise Admin */}
-            {isEnterpriserRequested ? (
-              <Box display="flex" flexDirection="column">
-                <Box display="flex" flexDirection="row" alignItems="center">
-                  <ContainedButton
-                    id={'request_enterprise_admin'}
-                    name={'Cancel Request'}
-                    onClick={() => updateIsEnterpriserRequested()}
-                    style={{
-                      padding: '10px 18px',
-                      gap: '8px',
-                      background: '#EA4335 !important',
-                    }}
-                    size={'medium'}
-                  />
-                  <BootstrapTooltip
-                    title="Enterprise Admin get Additional Analytics Insights from each team. If your organisation needs an enterprise admin account contact sales@baci.com"
-                    placement="right"
-                  >
-                    <Icons.InformationCircleOutline
-                      size={24}
-                      color="#4E4E4E"
-                      style={{
-                        cursor: 'pointer',
-                        marginLeft: '5px',
-                      }}
-                    />
-                  </BootstrapTooltip>
-                </Box>
-                <Box
-                  display="flex"
-                  flexDirection="column"
-                  sx={{
-                    marginTop: '24px',
-                    padding: '12px',
-                    background: '#CEEFFF',
-                  }}
-                >
-                  <BodySemiBoldTypography label="Your Request for Enterprise Admin Dashboard is sent" />
-                  <CaptionRegularTypography
-                    label="Waiting for Admin to accept your request."
-                    style={{ marginTop: '16px' }}
-                  />
-                </Box>
-              </Box>
+            {tempLocalUserData && tempLocalUserData.enterpriseName === '' ? (
+              <></>
             ) : (
-              <Box display="flex" flexDirection="row" alignItems="center">
-                <ContainedButton
-                  id={'request_enterprise_admin'}
-                  name={'Request Enterprise Admin'}
-                  onClick={() => requestEnterpriseAdmin()}
-                  style={{
-                    padding: '10px 18px',
-                    gap: '8px',
-                  }}
-                  size={'medium'}
-                />
-                <BootstrapTooltip
-                  title="Enterprise Admin get Additional Analytics Insights from each team. If your organisation needs an enterprise admin account contact sales@baci.com"
-                  placement="right"
-                >
-                  <Icons.InformationCircleOutline
-                    size={24}
-                    color="#4E4E4E"
-                    style={{
-                      cursor: 'pointer',
-                      marginLeft: '5px',
-                    }}
-                  />
-                </BootstrapTooltip>
-              </Box>
+              <>
+                {isEnterpriserRequested ? (
+                  <Box display="flex" flexDirection="column">
+                    <Box display="flex" flexDirection="row" alignItems="center">
+                      <ContainedButton
+                        id={'request_enterprise_admin'}
+                        name={'Cancel Request'}
+                        onClick={() => updateIsEnterpriserRequested()}
+                        style={{
+                          padding: '10px 18px',
+                          gap: '8px',
+                          background: '#EA4335 !important',
+                        }}
+                        size={'medium'}
+                      />
+                      <BootstrapTooltip
+                        title="Enterprise Admin get Additional Analytics Insights from each team. If your organisation needs an enterprise admin account contact sales@baci.com"
+                        placement="right"
+                      >
+                        <Icons.InformationCircleOutline
+                          size={24}
+                          color="#4E4E4E"
+                          style={{
+                            cursor: 'pointer',
+                            marginLeft: '5px',
+                          }}
+                        />
+                      </BootstrapTooltip>
+                    </Box>
+                    <Box
+                      display="flex"
+                      flexDirection="column"
+                      sx={{
+                        marginTop: '24px',
+                        padding: '12px',
+                        background: '#CEEFFF',
+                      }}
+                    >
+                      <BodySemiBoldTypography label="Your Request for Enterprise Admin Dashboard is sent" />
+                      <CaptionRegularTypography
+                        label="Waiting for Admin to accept your request."
+                        style={{ marginTop: '16px' }}
+                      />
+                    </Box>
+                  </Box>
+                ) : (
+                  <Box display="flex" flexDirection="row" alignItems="center">
+                    <ContainedButton
+                      id={'request_enterprise_admin'}
+                      name={'Request Enterprise Admin'}
+                      onClick={() => requestEnterpriseAdmin()}
+                      style={{
+                        padding: '10px 18px',
+                        gap: '8px',
+                      }}
+                      size={'medium'}
+                    />
+                    <BootstrapTooltip
+                      title="Enterprise Admin get Additional Analytics Insights from each team. If your organisation needs an enterprise admin account contact sales@baci.com"
+                      placement="right"
+                    >
+                      <Icons.InformationCircleOutline
+                        size={24}
+                        color="#4E4E4E"
+                        style={{
+                          cursor: 'pointer',
+                          marginLeft: '5px',
+                        }}
+                      />
+                    </BootstrapTooltip>
+                  </Box>
+                )}
+              </>
             )}
           </Box>
         </Box>
