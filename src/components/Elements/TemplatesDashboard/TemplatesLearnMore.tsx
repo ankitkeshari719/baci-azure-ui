@@ -7,7 +7,7 @@ import {
   H2SemiBoldTypography,
 } from '../../CustomizedTypography';
 import {
-  REGULAR_USER,
+  BASIC,
   ENTERPRISE_ADMIN,
   REGULAR_ENTERPRISE,
 } from '../../../constants/applicationConst';
@@ -19,7 +19,7 @@ export default function TemplatesLearnMore() {
 
   // Function to navigate on retroListTemplate
   function goToRetroList() {
-    if (tempLocalUserData && tempLocalUserData.roleName === REGULAR_USER) {
+    if (tempLocalUserData && tempLocalUserData.roleName === BASIC) {
       navigate('/basic/templates/retroListTemplate/');
     } else if (
       tempLocalUserData &&

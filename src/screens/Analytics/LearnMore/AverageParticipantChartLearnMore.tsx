@@ -8,7 +8,7 @@ import {
 } from '../../../components/CustomizedTypography';
 import * as React from 'react';
 import {
-  REGULAR_USER,
+  BASIC,
   ENTERPRISE_ADMIN,
   REGULAR_ENTERPRISE,
 } from '../../../constants/applicationConst';
@@ -20,7 +20,7 @@ export default function AverageParticipantChartLearnMore() {
 
   // Function to navigate on analytics
   function goToDashboard() {
-    if (tempLocalUserData && tempLocalUserData.roleName === REGULAR_USER) {
+    if (tempLocalUserData && tempLocalUserData.roleName === BASIC) {
       navigate('/basic/analytics');
     } else if (
       tempLocalUserData &&

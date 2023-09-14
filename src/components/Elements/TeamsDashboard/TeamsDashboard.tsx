@@ -26,7 +26,7 @@ import * as Icons from 'heroicons-react';
 import {
   ENTERPRISE_ADMIN,
   REGULAR_ENTERPRISE,
-  REGULAR_USER,
+  BASIC,
 } from '../../../constants/applicationConst';
 import { useNavigate } from 'react-router-dom';
 import { ContainedButtonWithIcon } from '../../CustomizedButton/ContainedButtonWithIcon';
@@ -141,7 +141,7 @@ export default function TeamsDashboard() {
 
   // Function to navigate on create new team page
   function createNewTeam() {
-    if (tempLocalUserData && tempLocalUserData.roleName === REGULAR_USER) {
+    if (tempLocalUserData && tempLocalUserData.roleName === BASIC) {
       navigate('/basic/teams/create/');
     } else if (
       tempLocalUserData &&

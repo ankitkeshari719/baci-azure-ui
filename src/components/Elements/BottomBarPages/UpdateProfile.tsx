@@ -19,7 +19,7 @@ import { GlobalContext, ActionType } from '../../../contexts/GlobalContext';
 import { getEnterpriseById, updateUser } from '../../../helpers/msal/services';
 import OutlineButtonWithIconWithNoBorder from '../../CustomizedButton/OutlineButtonWithIconWithNoBorder';
 import { LazyLoadImage } from 'react-lazy-load-image-component';
-import { REGULAR_USER } from '../../../constants/applicationConst';
+import { BASIC } from '../../../constants/applicationConst';
 
 const styles = {
   accessCodeTextField: {
@@ -106,7 +106,7 @@ export default function UpdateProfile({ handleEdit }: Props) {
     setCityCode(tempLocalUserData && tempLocalUserData.cityCode);
     setCompanyName(tempLocalUserData && tempLocalUserData.enterpriseName);
     let roleName = tempLocalUserData && tempLocalUserData.roleName;
-    if (roleName === REGULAR_USER) {
+    if (roleName === BASIC) {
       setRole('Basic');
     } else {
       setRole('Enterprise');

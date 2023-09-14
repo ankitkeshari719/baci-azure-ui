@@ -8,7 +8,7 @@ import {
   H2SemiBoldTypography,
 } from '../../CustomizedTypography';
 import {
-  REGULAR_USER,
+  BASIC,
   ENTERPRISE_ADMIN,
   REGULAR_ENTERPRISE,
 } from '../../../constants/applicationConst';
@@ -20,7 +20,7 @@ export default function PulseCheckLearnMore() {
 
   // Function to navigate on pulseCheckListTemplate
   function goToPulseCheckList() {
-    if (tempLocalUserData && tempLocalUserData.roleName === REGULAR_USER) {
+    if (tempLocalUserData && tempLocalUserData.roleName === BASIC) {
       navigate('/basic/templates/pulseCheckListTemplate/');
     } else if (
       tempLocalUserData &&

@@ -34,7 +34,7 @@ import OutlineButtonWithIconWithNoBorder from '../../CustomizedButton/OutlineBut
 import { avatarName } from '../../../constants/AvatarName';
 import Avatar from '../Avatar';
 import { LazyLoadImage } from 'react-lazy-load-image-component';
-import { REGULAR_USER } from '../../../constants/applicationConst';
+import { BASIC } from '../../../constants/applicationConst';
 
 const styles = {
   accessCodeTextField: {
@@ -126,7 +126,7 @@ export default function EditProfile({ handleEdit }: Props) {
     setCityCode(tempLocalUserData && tempLocalUserData.cityCode);
     setCompanyName(tempLocalUserData && tempLocalUserData.enterpriseName);
     let roleName = tempLocalUserData && tempLocalUserData.roleName;
-    if (roleName === REGULAR_USER) {
+    if (roleName === BASIC) {
       setRole('Basic');
     } else {
       setRole('Enterprise');

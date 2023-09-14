@@ -1,7 +1,7 @@
 // Roles
 export const ENTERPRISE_ADMIN = 'Enterprise Admin';
 export const REGULAR_ENTERPRISE = 'Regular Enterprise';
-export const REGULAR_USER = 'Regular User';
+export const BASIC = 'Regular User';
 
 // Roles Id
 export const ENTERPRISE_ADMIN_ID = 'enterprise_admin0.2998369833503478';

@@ -37,7 +37,7 @@ import { ActionType, GlobalContext } from '../../../contexts/GlobalContext';
 import {
   REGULAR_ENTERPRISE,
   REGULAR_ENTERPRISE_ID,
-  REGULAR_USER,
+  BASIC,
   REGULAR_USER_ID,
 } from '../../../constants/applicationConst';
 import { ContainedButton } from '../../CustomizedButton/ContainedButton';
@@ -210,7 +210,7 @@ export default function ManageUsers() {
     setTempStoreUserId(userId);
     setTempStoreRoleName(roleName);
     setTempStoreUserName(userName);
-    if (roleName === REGULAR_USER) {
+    if (roleName === BASIC) {
       setUpdateRoleDialog(true);
     } else {
       setRevokeRoleDialog(true);
@@ -232,7 +232,7 @@ export default function ManageUsers() {
     });
 
     let requestBody;
-    if (tempStoreRoleName === REGULAR_USER) {
+    if (tempStoreRoleName === BASIC) {
       requestBody = {
         roleId: REGULAR_ENTERPRISE_ID,
         roleName: REGULAR_ENTERPRISE,
@@ -240,7 +240,7 @@ export default function ManageUsers() {
     } else {
       requestBody = {
         roleId: REGULAR_USER_ID,
-        roleName: REGULAR_USER,
+        roleName: BASIC,
       };
     }
 
@@ -561,7 +561,7 @@ export default function ManageUsers() {
                                   },
                                 }}
                               >
-                                <MenuItem value={REGULAR_USER}>
+                                <MenuItem value={BASIC}>
                                   <Typography
                                     style={{
                                       fontFamily: 'Poppins',
@@ -753,7 +753,7 @@ export default function ManageUsers() {
                                   },
                                 }}
                               >
-                                <MenuItem value={REGULAR_USER}>
+                                <MenuItem value={BASIC}>
                                   <Typography
                                     style={{
                                       fontFamily: 'Poppins',

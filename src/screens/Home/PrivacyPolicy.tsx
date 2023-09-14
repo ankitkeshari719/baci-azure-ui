@@ -11,7 +11,7 @@ import {
 import { useNavigate } from 'react-router-dom';
 import * as Icons from 'heroicons-react';
 import {
-  REGULAR_USER,
+  BASIC,
   ENTERPRISE_ADMIN,
   REGULAR_ENTERPRISE,
 } from '../../constants/applicationConst';
@@ -23,7 +23,7 @@ export default function PrivacyPolicy() {
 
   // Function to navigate on create new retro page
   function goToLanding() {
-    if (tempLocalUserData && tempLocalUserData.roleName === REGULAR_USER) {
+    if (tempLocalUserData && tempLocalUserData.roleName === BASIC) {
       navigate('/basic/joinRetro/');
     } else if (
       tempLocalUserData &&

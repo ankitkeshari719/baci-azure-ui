@@ -24,7 +24,7 @@ import { LazyLoadImage } from 'react-lazy-load-image-component';
 import { useNavigate } from 'react-router-dom';
 import { BodyRegularTypography } from '../../CustomizedTypography';
 import {
-  REGULAR_USER,
+  BASIC,
   ENTERPRISE_ADMIN,
   REGULAR_ENTERPRISE,
 } from '../../../constants/applicationConst';
@@ -43,16 +43,16 @@ const LeftBar = () => {
   const imaSrc = '/avatars/animals/' + selectedAvatar + '.svg';
 
   React.useEffect(() => {
-    if (tempLocalUserData && tempLocalUserData.roleName === REGULAR_USER) {
+    if (tempLocalUserData && tempLocalUserData.roleName === BASIC) {
       setPath('basic');
     } else if (
       tempLocalUserData &&
-      tempLocalUserData.roleName === ENTERPRISE_ADMIN
+      tempLocalUserData.roleName === REGULAR_ENTERPRISE
     ) {
       setPath('facilitator');
     } else if (
       tempLocalUserData &&
-      tempLocalUserData.roleName === REGULAR_ENTERPRISE
+      tempLocalUserData.roleName === ENTERPRISE_ADMIN
     ) {
       setPath('enterprise');
     }
@@ -66,6 +66,8 @@ const LeftBar = () => {
       icon: HomeIcon,
       routeTo: path + '/dashboard/',
       disabled: false,
+      isVisibleToBasic:
+        tempLocalUserData && tempLocalUserData.roleName === BASIC,
     },
     {
       id: 2,
@@ -73,6 +75,8 @@ const LeftBar = () => {
       icon: ClipboardDocumentCheckIcon,
       routeTo: path + '/actions/',
       disabled: false,
+      isVisibleToBasic:
+        tempLocalUserData && tempLocalUserData.roleName === BASIC,
     },
 
     {
@@ -81,6 +85,8 @@ const LeftBar = () => {
       icon: ChartBarIcon,
       routeTo: path + '/analytics/',
       disabled: false,
+      isVisibleToBasic:
+        tempLocalUserData && tempLocalUserData.roleName === BASIC,
     },
 
     {
@@ -89,6 +95,8 @@ const LeftBar = () => {
       icon: ViewColumnsIcon,
       routeTo: path + '/sessions',
       disabled: false,
+      isVisibleToBasic:
+        tempLocalUserData && tempLocalUserData.roleName === BASIC,
     },
     {
       id: 5,
@@ -96,6 +104,8 @@ const LeftBar = () => {
       icon: Square3Stack3DIcon,
       routeTo: path + '/templates/',
       disabled: true,
+      isVisibleToBasic:
+        tempLocalUserData && tempLocalUserData.roleName === BASIC,
     },
 
     {
@@ -104,6 +114,8 @@ const LeftBar = () => {
       icon: UserGroupIcon,
       routeTo: path + '/teams/',
       disabled: true,
+      isVisibleToBasic:
+        !tempLocalUserData && tempLocalUserData.roleName === BASIC,
     },
     {
       id: 7,
@@ -111,6 +123,8 @@ const LeftBar = () => {
       icon: Cog8ToothIcon,
       routeTo: path + '/settings/',
       disabled: false,
+      isVisibleToBasic:
+        tempLocalUserData && tempLocalUserData.roleName === BASIC,
     },
   ];
 
@@ -121,6 +135,8 @@ const LeftBar = () => {
       icon: QuestionMarkCircleIcon,
       routeTo: path + '/help',
       disabled: false,
+      isVisibleToBasic:
+        tempLocalUserData && tempLocalUserData.roleName === BASIC,
     },
     {
       id: 9,
@@ -128,6 +144,8 @@ const LeftBar = () => {
       icon: BellIcon,
       routeTo: path + '/notifications',
       disabled: false,
+      isVisibleToBasic:
+        tempLocalUserData && tempLocalUserData.roleName === BASIC,
     },
   ];
 
@@ -139,7 +157,7 @@ const LeftBar = () => {
           ? 'facilitator'
           : location.pathname.includes('enterprise')
           ? 'enterprise'
-          : 'facilitator'
+          : 'basic'
       );
     } else if (location.pathname.includes('analytics')) {
       setSelectedMenu(menuArray[2].label);
@@ -211,35 +229,42 @@ const LeftBar = () => {
             <img src="/../images/r_MenuHeader.png" style={{ width: '56px' }} />
           </Box>
           {menuArray.map((menu, index) => {
-            return (
-              <Tooltip title={menu.label} key={menu.label} placement="right">
-                <menu.icon
-                  className={
-                    menu.label == selectedMenu ? 'menuIconSelected' : 'menuIcon'
-                  }
-                  onClick={() => {
-                    if (!menu.disabled) {
-                      setSelectedMenu(menu.label);
-                      navigate(menu.routeTo);
+            {
+              let a = menu.isVisibleToBasic ? (
+                <Tooltip title={menu.label} key={menu.label} placement="right">
+                  <menu.icon
+                    className={
+                      menu.label == selectedMenu
+                        ? 'menuIconSelected'
+                        : 'menuIcon'
                     }
-                  }}
-                  onMouseEnter={() => {
-                    if (menu.label === 'Templates') {
-                      setHoverOnMenu(true);
-                    } else if (menu.label != 'Templates') {
-                      setHoverOnMenu(false);
-                    }
+                    onClick={() => {
+                      if (!menu.disabled) {
+                        setSelectedMenu(menu.label);
+                        navigate(menu.routeTo);
+                      }
+                    }}
+                    onMouseEnter={() => {
+                      if (menu.label === 'Templates') {
+                        setHoverOnMenu(true);
+                      } else if (menu.label != 'Templates') {
+                        setHoverOnMenu(false);
+                      }
 
-                    if (menu.label === 'Users') {
-                      setHoverOnUserMenu(true);
-                    } else if (menu.label != 'Users') {
-                      setHoverOnUserMenu(false);
-                    }
-                  }}
-                  onMouseLeave={() => {}}
-                />
-              </Tooltip>
-            );
+                      if (menu.label === 'Users') {
+                        setHoverOnUserMenu(true);
+                      } else if (menu.label != 'Users') {
+                        setHoverOnUserMenu(false);
+                      }
+                    }}
+                    onMouseLeave={() => {}}
+                  />
+                </Tooltip>
+              ) : (
+                <></>
+              );
+              return a;
+            }
           })}
         </Box>
         <Box className="bottomContainer">

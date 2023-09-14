@@ -22,7 +22,7 @@ import { pulseChecksData } from './const';
 import {
   ENTERPRISE_ADMIN,
   REGULAR_ENTERPRISE,
-  REGULAR_USER,
+  BASIC,
 } from '../../../constants/applicationConst';
 
 export default function PulseCheckListContainer() {
@@ -35,7 +35,7 @@ export default function PulseCheckListContainer() {
 
   // Function to navigate on retroListTemplate
   function goToPulseCheckLearnMore() {
-    if (tempLocalUserData && tempLocalUserData.roleName === REGULAR_USER) {
+    if (tempLocalUserData && tempLocalUserData.roleName === BASIC) {
       navigate(
         '/basic/templates/pulseCheckListTemplate/pulseCheckTemplateDetails/'
       );

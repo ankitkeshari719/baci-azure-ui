@@ -16,7 +16,7 @@ import commonStyles from '../../../style.module.scss';
 import { useNavigate } from 'react-router-dom';
 import * as Icons from 'heroicons-react';
 import {
-  REGULAR_USER,
+  BASIC,
   ENTERPRISE_ADMIN,
   REGULAR_ENTERPRISE,
 } from '../../../constants/applicationConst';
@@ -70,7 +70,7 @@ export default function CreateTeam() {
 
   // Function to navigate on all team
   function goToAllTeam() {
-    if (tempLocalUserData && tempLocalUserData.roleName === REGULAR_USER) {
+    if (tempLocalUserData && tempLocalUserData.roleName === BASIC) {
       navigate('/basic/teams/allTeams/');
     } else if (
       tempLocalUserData &&

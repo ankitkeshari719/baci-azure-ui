@@ -12,7 +12,7 @@ import { useNavigate } from 'react-router-dom';
 import { ContainedButtonWithIcon } from '../../CustomizedButton/ContainedButtonWithIcon';
 import { ActionType, GlobalContext } from '../../../contexts/GlobalContext';
 import {
-  REGULAR_USER,
+  BASIC,
   ENTERPRISE_ADMIN,
   REGULAR_ENTERPRISE,
 } from '../../../constants/applicationConst';
@@ -26,7 +26,7 @@ export default function TeamsEmptyScreen() {
 
   // Function to navigate on create new team page
   function CreateNewTeam() {
-    if (tempLocalUserData && tempLocalUserData.roleName === REGULAR_USER) {
+    if (tempLocalUserData && tempLocalUserData.roleName === BASIC) {
       navigate('/basic/teams/create/');
     } else if (
       tempLocalUserData &&

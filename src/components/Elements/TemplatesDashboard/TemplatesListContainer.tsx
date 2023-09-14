@@ -20,7 +20,7 @@ import theme from '../../../helpers/theme/theme';
 import { TextButton } from '../../CustomizedButton/TextButton';
 import { templatesDataOne, templatesDataTwo } from './const';
 import {
-  REGULAR_USER,
+  BASIC,
   ENTERPRISE_ADMIN,
   REGULAR_ENTERPRISE,
 } from '../../../constants/applicationConst';
@@ -35,7 +35,7 @@ export default function TemplatesListContainer() {
 
   // Function to navigate on retroListTemplate
   function goToRetroTemplateLearnMore() {
-    if (tempLocalUserData && tempLocalUserData.roleName === REGULAR_USER) {
+    if (tempLocalUserData && tempLocalUserData.roleName === BASIC) {
       navigate(
         '/basic/templates/retroListTemplate/RetroTemplateDetails/'
       );

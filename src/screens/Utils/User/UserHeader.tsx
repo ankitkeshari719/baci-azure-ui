@@ -9,7 +9,7 @@ import {
 } from '../../../helpers/msal/services';
 import * as Icons from 'heroicons-react';
 import {
-  REGULAR_USER,
+  BASIC,
   ENTERPRISE_ADMIN,
   REGULAR_ENTERPRISE,
   REGULAR_USER_ID,
@@ -61,7 +61,7 @@ export function UserHeader({ accounts }: Props) {
           // Navigate the user to dashboard according to his role
           localStorage.setItem('userData', JSON.stringify(res));
           localStorage.setItem('userAzureData', JSON.stringify(accounts));
-          if (res.roleName === REGULAR_USER) {
+          if (res.roleName === BASIC) {
             navigate('/basic/');
           } else if (res.roleName === REGULAR_ENTERPRISE) {
             navigate('/facilitator/');
@@ -120,7 +120,7 @@ export function UserHeader({ accounts }: Props) {
         cityCode: '',
         plan: '',
         roleId: REGULAR_USER_ID,
-        roleName: REGULAR_USER,
+        roleName: BASIC,
         enterpriseId: enterpriseId,
         enterpriseName: enterpriseName,
         selectedAvatar: '',

@@ -14,7 +14,7 @@ import {
 import { Retro as RetroType } from '../../../helpers/types';
 import { OutlinedButton } from '../../CustomizedButton/OutlinedButton';
 import {
-  REGULAR_USER,
+  BASIC,
   ENTERPRISE_ADMIN,
   REGULAR_ENTERPRISE,
 } from '../../../constants/applicationConst';
@@ -74,7 +74,7 @@ export function JoinRetroFacilitator() {
       payload: { retroCreateState: true },
     });
     setCodeError('');
-    if (tempLocalUserData && tempLocalUserData.roleName === REGULAR_USER) {
+    if (tempLocalUserData && tempLocalUserData.roleName === BASIC) {
       navigate('/basic/createRetro/');
     } else if (
       tempLocalUserData &&
