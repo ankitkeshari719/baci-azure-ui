@@ -64,7 +64,7 @@ import EnterpriseRegistration from './components/Elements/enterpriseDashboard/En
 import { JoinRetroFacilitator } from './components/Elements/facilitatorDashboard/JoinRetroFacilitator';
 import CreateTeam from './components/Elements/TeamsDashboard/CreateTeam';
 import ManageUsers from './components/Elements/ManageUsers/ManageUsers';
-import BasicDashboard from './components/Elements/BasicUserDashboardPages/BasicDashboard';
+import { BasicUserMainContainer } from './components/Elements/BasicUserDashboardPages/BasicUserMainContainer';
 
 type AppProps = {
   instance: IPublicClientApplication;
@@ -172,10 +172,13 @@ export default function App({ instance }: AppProps) {
                             />
                             {/* Basic Routes */}
                             <Route path="/basic/">
-                              <Route path="" element={<BasicDashboard />} />
+                              <Route
+                                path=""
+                                element={<BasicUserMainContainer />}
+                              />
                               <Route
                                 path="dashboard"
-                                element={<BasicDashboard />}
+                                element={<BasicUserMainContainer />}
                               />
                               <Route
                                 path="actions"
