@@ -63,6 +63,7 @@ export enum BoardActionType {
   DELETE_ACTION = 'deleteAction',
   POST_MESSAGE_FOR_PARTICIPANTS_FLAG = 'postMessageForParticipantsFlag',
   UPDATE_MESSAGE_FOR_PARTICIPANTS = 'updateMessageForParticipant',
+  UPDATE_RETRO_SUMMARY="updateRetroSummary",
 }
 
 export const BOARD_STATE_MACHINE_VERSION = 1;
@@ -597,6 +598,8 @@ export const validateAction = (
         parameters.order,
         userId
       );
+      case BoardActionType.UPDATE_RETRO_SUMMARY:
+        return true;
     case BoardActionType.ADD_NEW_CARD:
       return isAddNewCardValid(
         parameters.groupId,
@@ -919,6 +922,10 @@ export const processAction = (
       });
     }
   };
+
+  const updateRetroSummary=()=>{
+
+  }
 
   const createGroupAsSuggested = (
     columnId: string,
@@ -1582,6 +1589,9 @@ export const processAction = (
         false
       );
       break;
+      case BoardActionType.UPDATE_RETRO_SUMMARY:
+        updateRetroSummary();
+        break;
     case BoardActionType.ADD_NEW_CARD:
       addNewCard(
         parameters.groupId,
