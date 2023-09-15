@@ -10,7 +10,7 @@ import {
 import { WithContext as ReactTags } from 'react-tag-input';
 import './react_tags_style.css';
 
-import { ContainedButton } from '../../../components';
+import { ContainedButton } from '../..';
 
 import {
   BodySemiBoldTypography,

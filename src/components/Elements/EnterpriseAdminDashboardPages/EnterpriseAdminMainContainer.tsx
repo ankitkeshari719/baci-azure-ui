@@ -1,9 +1,9 @@
 import * as React from 'react';
 import { getAllTeams } from '../../../helpers/msal/services';
-import EmptyEnterpriseDashboard from './EmptyEnterpriseDashboard';
-import EnterpriseDashboard from './EnterpriseDashboard';
+import EmptyEnterpriseAdminDashboard from './EmptyEnterpriseAdminDashboard';
+import EnterpriseAdminDashboard from './EnterpriseAdminDashboard';
 
-export const EnterpriseMainContainer = () => {
+export const EnterpriseAdminMainContainer = () => {
   const [sessions, setSessions] = React.useState<any>([]);
   const [enterprise, setEnterprise] = React.useState<any>(1);
 
@@ -27,9 +27,9 @@ export const EnterpriseMainContainer = () => {
   return (
     <>
       {enterprise === 0 ? (
-        <EmptyEnterpriseDashboard />
+        <EmptyEnterpriseAdminDashboard />
       ) : (
-        <EnterpriseDashboard />
+        <EnterpriseAdminDashboard />
       )}
     </>
   );

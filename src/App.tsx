@@ -6,6 +6,7 @@ import theme from './helpers/theme/theme';
 import { MsalProvider, useMsal } from '@azure/msal-react';
 import { IPublicClientApplication } from '@azure/msal-browser';
 
+// Context
 import { BoardProvider } from './contexts/BoardContext';
 import { ConfirmProvider } from './contexts/ConfirmContext';
 import { ErrorBoundary } from './contexts/ErrorBoundary';
@@ -13,6 +14,7 @@ import { ErrorProvider } from './contexts/ErrorContext';
 import { GlobalProvider } from './contexts/GlobalContext';
 import { SocketProvider } from './contexts/SocketProvider';
 
+// Screens
 import { Offboarding } from './screens/Others/Offboarding';
 import { RetroDetails } from './screens/Board/RetroDetails';
 import { ParticipantWaitingPage } from './screens/Board/ParticipantWaitingPage';
@@ -35,22 +37,6 @@ import EnterpriseLevelSentimentsSummaryChart from './screens/Analytics/Enterpris
 import EnterpriseLevelSentimentsThemeChart from './screens/Analytics/EnterpriseLevelSentimentsThemeChart';
 import TeamLevelActionsCountChart from './screens/Analytics/TeamLevelActionsCountChart';
 import EnterpriseLevelActionsCountChart from './screens/Analytics/EnterpriseLevelActionsCountChart';
-import LeftBar from './components/Elements/leftBar/LeftBar';
-
-import { ActionsMainContainer } from './components/Elements/actionDashboard/ActionsMainContainer';
-import { SessionsMainContainer } from './components/Elements/SessionDashboard/SessionsMainContainer';
-import { TeamsMainContainer } from './components/Elements/TeamsDashboard/TeamsMainContainer';
-import PageNotFound from './screens/Others/PageNotFound';
-import TemplatesListContainer from './components/Elements/TemplatesDashboard/TemplatesListContainer';
-import TemplatesLearnMore from './components/Elements/TemplatesDashboard/TemplatesLearnMore';
-import PulseCheckListContainer from './components/Elements/PulsecheckDashboard/PulseCheckListContainer';
-import PulseCheckLearnMore from './components/Elements/PulsecheckDashboard/PulseCheckLearnMore';
-import Settings from './components/Elements/BottomBarPages/Settings';
-import Help from './components/Elements/BottomBarPages/Help';
-import Notifications from './components/Elements/BottomBarPages/Notifications';
-import Profile from './components/Elements/BottomBarPages/Profile';
-import { EnterpriseMainContainer } from './components/Elements/enterpriseDashboard/EnterpriseMainContainer';
-import { FacilitatorMainContainer } from './components/Elements/facilitatorDashboard/FacilitatorMainContainer';
 import PrivacyPolicy from './screens/Home/PrivacyPolicy';
 import TermsAndConditions from './screens/Home/TermsAndConditions';
 import AverageParticipantChartLearnMore from './screens/Analytics/LearnMore/AverageParticipantChartLearnMore';
@@ -60,13 +46,36 @@ import EnterpriseLevelSentimentsMoodsChartLearnMore from './screens/Analytics/Le
 import EnterpriseLevelSentimentsSummaryChartLearnMore from './screens/Analytics/LearnMore/EnterpriseLevelSentimentsSummaryChartLearnMore';
 import EnterpriseLevelSentimentsThemeChartLearnMore from './screens/Analytics/LearnMore/EnterpriseLevelSentimentsThemeChartLearnMore';
 import TeamLevelActionsCountChartLearnMore from './screens/Analytics/LearnMore/TeamLevelActionsCountChartLearnMore';
-import { JoinRetroEnterprise } from './components/Elements/enterpriseDashboard/JoinRetroEnterprise';
-import EnterpriseRegistration from './components/Elements/enterpriseDashboard/EnterpriseRegistration';
-import { JoinRetroFacilitator } from './components/Elements/facilitatorDashboard/JoinRetroFacilitator';
+
+// Common Component - Element
+import LeftBar from './components/Elements/leftBar/LeftBar';
+import { ActionsMainContainer } from './components/Elements/actionDashboard/ActionsMainContainer';
+import { SessionsMainContainer } from './components/Elements/SessionDashboard/SessionsMainContainer';
+import { TeamsMainContainer } from './components/Elements/TeamsDashboard/TeamsMainContainer';
+import TemplatesListContainer from './components/Elements/TemplatesDashboard/TemplatesListContainer';
+import TemplatesLearnMore from './components/Elements/TemplatesDashboard/TemplatesLearnMore';
+import PulseCheckListContainer from './components/Elements/PulsecheckDashboard/PulseCheckListContainer';
+import PulseCheckLearnMore from './components/Elements/PulsecheckDashboard/PulseCheckLearnMore';
+import Settings from './components/Elements/BottomBarPages/Settings';
+import Help from './components/Elements/BottomBarPages/Help';
+import Notifications from './components/Elements/BottomBarPages/Notifications';
+import Profile from './components/Elements/BottomBarPages/Profile';
 import CreateTeam from './components/Elements/TeamsDashboard/CreateTeam';
 import ManageUsers from './components/Elements/ManageUsers/ManageUsers';
+
+// Basic User Component
 import { BasicUserMainContainer } from './components/Elements/BasicUserDashboardPages/BasicUserMainContainer';
-import { BASIC, BASIC_USER_ID } from './constants/applicationConst';
+
+// Enterprise User Component
+import { EnterpriseMainContainer } from './components/Elements/EnterpriseDashboardPages/EnterpriseMainContainer';
+import { JoinRetroEnterprise } from './components/Elements/EnterpriseDashboardPages/JoinRetroEnterprise';
+
+// Enterprise Admin Component
+import { EnterpriseAdminMainContainer } from './components/Elements/EnterpriseAdminDashboardPages/EnterpriseAdminMainContainer';
+import { JoinRetroEnterpriseAdmin } from './components/Elements/EnterpriseAdminDashboardPages/JoinRetroEnterpriseAdmin';
+import EnterpriseRegistration from './components/Elements/EnterpriseAdminDashboardPages/EnterpriseRegistration';
+
+import PageNotFound from './screens/Others/PageNotFound';
 
 type AppProps = {
   instance: IPublicClientApplication;
@@ -349,7 +358,7 @@ export default function App({ instance }: AppProps) {
                               <Route path="profile" element={<Profile />} />
                               <Route
                                 path="joinRetro"
-                                element={<JoinRetroFacilitator />}
+                                element={<JoinRetroEnterprise />}
                               />
                               <Route
                                 path="createRetro"
@@ -374,11 +383,11 @@ export default function App({ instance }: AppProps) {
                             <Route path="/enterprise/">
                               <Route
                                 path=""
-                                element={<FacilitatorMainContainer />}
+                                element={<EnterpriseMainContainer />}
                               />
                               <Route
                                 path="dashboard"
-                                element={<FacilitatorMainContainer />}
+                                element={<EnterpriseMainContainer />}
                               />
                               <Route
                                 path="actions"
@@ -547,7 +556,7 @@ export default function App({ instance }: AppProps) {
                               <Route path="profile" element={<Profile />} />
                               <Route
                                 path="joinRetro"
-                                element={<JoinRetroFacilitator />}
+                                element={<JoinRetroEnterprise />}
                               />
                               <Route
                                 path="createRetro"
@@ -572,11 +581,11 @@ export default function App({ instance }: AppProps) {
                             <Route path="/enterpriseAdmin/">
                               <Route
                                 path=""
-                                element={<EnterpriseMainContainer />}
+                                element={<EnterpriseAdminMainContainer />}
                               />
                               <Route
                                 path="dashboard"
-                                element={<EnterpriseMainContainer />}
+                                element={<EnterpriseAdminMainContainer />}
                               />
                               <Route
                                 path="actions"
@@ -747,7 +756,7 @@ export default function App({ instance }: AppProps) {
 
                               <Route
                                 path="joinRetro"
-                                element={<JoinRetroEnterprise />}
+                                element={<JoinRetroEnterpriseAdmin />}
                               />
                               <Route
                                 path="createRetro"

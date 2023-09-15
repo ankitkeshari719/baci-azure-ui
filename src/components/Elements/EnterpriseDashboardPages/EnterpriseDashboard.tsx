@@ -50,7 +50,6 @@ import { retro } from '../../../constants/DemoConst';
 import { TextButton } from '../../CustomizedButton/TextButton';
 
 import EnterpriseLevelSentimentsThemeChart from '../../../screens/Analytics/EnterpriseLevelSentimentsThemeChart';
-import DateSelector from './DateSelector';
 import { useState } from 'react';
 import { ActionType, GlobalContext } from '../../../contexts/GlobalContext';
 import EnterpriseLevelSentimentsSummaryChart from '../../../screens/Analytics/EnterpriseLevelSentimentsSummaryChart';
@@ -62,9 +61,9 @@ import {
 } from '../../../helpers/msal/services';
 import { OutlinedButton } from '../../CustomizedButton/OutlinedButton';
 import AverageRetroChart from '../../../screens/Analytics/AverageRetroChart';
-import DummyEnterpriseDashboard from './DummyEnterpriseDashboard';
 import { styled } from '@mui/material/styles';
 import Tooltip, { TooltipProps, tooltipClasses } from '@mui/material/Tooltip';
+import DateSelector from '../EnterpriseAdminDashboardPages/DateSelector';
 
 const theme = createTheme({
   palette: {
@@ -91,7 +90,7 @@ const BootstrapTooltip = styled(({ className, ...props }: TooltipProps) => (
   },
 }));
 
-function EnterpriseDashboard() {
+function EnterpriseAdminDashboard() {
   const navigate = useNavigate();
 
   const [hoverOnMenu, setHoverOnMenu] = React.useState<Boolean>(false);
@@ -294,7 +293,7 @@ function EnterpriseDashboard() {
         height="100%"
         padding="10px"
       >
-        <DummyEnterpriseDashboard />
+        {' '}
         {/* Label and Button */}
         <Box
           display="flex"
@@ -1278,4 +1277,4 @@ function EnterpriseDashboard() {
   );
 }
 
-export default EnterpriseDashboard;
+export default EnterpriseAdminDashboard;

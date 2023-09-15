@@ -1,9 +1,9 @@
 import * as React from 'react';
 import { getAllTeams } from '../../../helpers/msal/services';
-import EmptyFacilitatorDashboard from './EmptyFacilitatorDashboard';
-import FacilitatorDashboard from './facilitatorDashboard';
+import EmptyEnterpriseDashboard from './EmptyEnterpriseDashboard';
+import EnterpriseDashboard from './EnterpriseDashboard';
 
-export const FacilitatorMainContainer = () => {
+export const EnterpriseMainContainer = () => {
   const [sessions, setSessions] = React.useState<any>([]);
   const [facilitator, setFacilitator] = React.useState<any>(1);
 
@@ -27,9 +27,9 @@ export const FacilitatorMainContainer = () => {
   return (
     <>
       {facilitator === 0 ? (
-        <EmptyFacilitatorDashboard />
+        <EmptyEnterpriseDashboard />
       ) : (
-        <FacilitatorDashboard />
+        <EnterpriseDashboard />
       )}
     </>
   );

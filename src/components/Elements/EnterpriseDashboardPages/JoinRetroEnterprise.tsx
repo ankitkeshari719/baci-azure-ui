@@ -32,7 +32,7 @@ const styles = {
   },
 };
 
-export function JoinRetroFacilitator() {
+export function JoinRetroEnterprise() {
   const { id } = useParams();
   const retro = useRetro();
   const navigate = useNavigate();
@@ -81,10 +81,7 @@ export function JoinRetroFacilitator() {
       tempLocalUserData.roleName === ENTERPRISE_ADMIN
     ) {
       navigate('/enterpriseAdmin/createRetro/');
-    } else if (
-      tempLocalUserData &&
-      tempLocalUserData.roleName === ENTERPRISE
-    ) {
+    } else if (tempLocalUserData && tempLocalUserData.roleName === ENTERPRISE) {
       navigate('/enterprise/createRetro/');
     }
   }

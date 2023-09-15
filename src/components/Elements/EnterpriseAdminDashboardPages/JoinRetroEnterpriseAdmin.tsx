@@ -32,7 +32,7 @@ const styles = {
   },
 };
 
-export function JoinRetroEnterprise() {
+export function JoinRetroEnterpriseAdmin() {
   const { id } = useParams();
   const retro = useRetro();
   const navigate = useNavigate();
