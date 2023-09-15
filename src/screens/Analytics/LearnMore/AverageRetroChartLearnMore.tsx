@@ -9,7 +9,6 @@ import {
 import * as React from 'react';
 import {
   BASIC,
-  ENTERPRISE_ADMIN,
   ENTERPRISE,
 } from '../../../constants/applicationConst';
 
@@ -22,11 +21,6 @@ export default function AverageRetroChartLearnMore() {
   function goToDashboard() {
     if (tempLocalUserData && tempLocalUserData.roleName === BASIC) {
       navigate('/basic/analytics');
-    } else if (
-      tempLocalUserData &&
-      tempLocalUserData.roleName === ENTERPRISE_ADMIN
-    ) {
-      navigate('/enterpriseAdmin/analytics');
     } else if (
       tempLocalUserData &&
       tempLocalUserData.roleName === ENTERPRISE

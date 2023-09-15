@@ -13,11 +13,7 @@ import {
 } from '../../CustomizedTypography';
 import { Retro as RetroType } from '../../../helpers/types';
 import { OutlinedButton } from '../../CustomizedButton/OutlinedButton';
-import {
-  BASIC,
-  ENTERPRISE_ADMIN,
-  ENTERPRISE,
-} from '../../../constants/applicationConst';
+import { BASIC, ENTERPRISE } from '../../../constants/applicationConst';
 
 const styles = {
   accessCodeTextField: {
@@ -76,11 +72,6 @@ export function JoinRetroEnterprise() {
     setCodeError('');
     if (tempLocalUserData && tempLocalUserData.roleName === BASIC) {
       navigate('/basic/createRetro/');
-    } else if (
-      tempLocalUserData &&
-      tempLocalUserData.roleName === ENTERPRISE_ADMIN
-    ) {
-      navigate('/enterpriseAdmin/createRetro/');
     } else if (tempLocalUserData && tempLocalUserData.roleName === ENTERPRISE) {
       navigate('/enterprise/createRetro/');
     }

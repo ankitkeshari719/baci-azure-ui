@@ -15,11 +15,7 @@ import {
 import commonStyles from '../../../style.module.scss';
 import { useNavigate } from 'react-router-dom';
 import * as Icons from 'heroicons-react';
-import {
-  BASIC,
-  ENTERPRISE_ADMIN,
-  ENTERPRISE,
-} from '../../../constants/applicationConst';
+import { BASIC, ENTERPRISE } from '../../../constants/applicationConst';
 import { OutlinedButton } from '../../CustomizedButton/OutlinedButton';
 import { createTeam } from '../../../helpers/msal/services';
 import { ActionType, GlobalContext } from '../../../contexts/GlobalContext';
@@ -72,15 +68,7 @@ export default function CreateTeam() {
   function goToAllTeam() {
     if (tempLocalUserData && tempLocalUserData.roleName === BASIC) {
       navigate('/basic/teams/allTeams/');
-    } else if (
-      tempLocalUserData &&
-      tempLocalUserData.roleName === ENTERPRISE_ADMIN
-    ) {
-      navigate('/enterpriseAdmin/teams/allTeams/');
-    } else if (
-      tempLocalUserData &&
-      tempLocalUserData.roleName === ENTERPRISE
-    ) {
+    } else if (tempLocalUserData && tempLocalUserData.roleName === ENTERPRISE) {
       navigate('/enterprise/teams/allTeams/');
     }
   }

@@ -20,7 +20,6 @@ import theme from '../../../helpers/theme/theme';
 import { TextButton } from '../../CustomizedButton/TextButton';
 import { pulseChecksData } from './const';
 import {
-  ENTERPRISE_ADMIN,
   ENTERPRISE,
   BASIC,
 } from '../../../constants/applicationConst';
@@ -38,13 +37,6 @@ export default function PulseCheckListContainer() {
     if (tempLocalUserData && tempLocalUserData.roleName === BASIC) {
       navigate(
         '/basic/templates/pulseCheckListTemplate/pulseCheckTemplateDetails/'
-      );
-    } else if (
-      tempLocalUserData &&
-      tempLocalUserData.roleName === ENTERPRISE_ADMIN
-    ) {
-      navigate(
-        '/enterpriseAdmin/templates/pulseCheckListTemplate/pulseCheckTemplateDetails/'
       );
     } else if (
       tempLocalUserData &&

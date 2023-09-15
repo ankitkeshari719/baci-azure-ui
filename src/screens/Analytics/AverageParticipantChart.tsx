@@ -28,11 +28,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import * as Icons from 'heroicons-react';
 import { MONTH_SELECTORS, MenuProps } from './const';
 import { GlobalContext } from '../../contexts/GlobalContext';
-import {
-  BASIC,
-  ENTERPRISE,
-  ENTERPRISE_ADMIN,
-} from '../../constants/applicationConst';
+import { BASIC, ENTERPRISE } from '../../constants/applicationConst';
 
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
   [`&.${tableCellClasses.head}`]: {
@@ -85,11 +81,6 @@ export default function AverageParticipantChart({
       setPath('basic');
     } else if (tempLocalUserData && tempLocalUserData.roleName === ENTERPRISE) {
       setPath('enterprise');
-    } else if (
-      tempLocalUserData &&
-      tempLocalUserData.roleName === ENTERPRISE_ADMIN
-    ) {
-      setPath('enterpriseAdmin');
     }
   }, [tempLocalUserData]);
 

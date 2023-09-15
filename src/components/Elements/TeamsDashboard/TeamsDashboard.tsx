@@ -23,11 +23,7 @@ import { TableBody, TableCell, TableRow } from '@material-ui/core';
 import { MagnifyingGlassIcon } from '@heroicons/react/24/outline';
 import moment from 'moment';
 import * as Icons from 'heroicons-react';
-import {
-  ENTERPRISE_ADMIN,
-  ENTERPRISE,
-  BASIC,
-} from '../../../constants/applicationConst';
+import { ENTERPRISE, BASIC } from '../../../constants/applicationConst';
 import { useNavigate } from 'react-router-dom';
 import { ContainedButtonWithIcon } from '../../CustomizedButton/ContainedButtonWithIcon';
 import { LazyLoadImage } from 'react-lazy-load-image-component';
@@ -144,15 +140,7 @@ export default function TeamsDashboard() {
   function createNewTeam() {
     if (tempLocalUserData && tempLocalUserData.roleName === BASIC) {
       navigate('/basic/teams/create/');
-    } else if (
-      tempLocalUserData &&
-      tempLocalUserData.roleName === ENTERPRISE_ADMIN
-    ) {
-      navigate('/enterpriseAdmin/teams/create/');
-    } else if (
-      tempLocalUserData &&
-      tempLocalUserData.roleName === ENTERPRISE
-    ) {
+    } else if (tempLocalUserData && tempLocalUserData.roleName === ENTERPRISE) {
       navigate('/enterprise/teams/create/');
     }
   }

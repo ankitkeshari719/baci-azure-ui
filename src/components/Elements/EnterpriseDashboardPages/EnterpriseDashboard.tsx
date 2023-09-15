@@ -63,7 +63,7 @@ import { OutlinedButton } from '../../CustomizedButton/OutlinedButton';
 import AverageRetroChart from '../../../screens/Analytics/AverageRetroChart';
 import { styled } from '@mui/material/styles';
 import Tooltip, { TooltipProps, tooltipClasses } from '@mui/material/Tooltip';
-import DateSelector from '../EnterpriseAdminDashboardPages/DateSelector';
+import DateSelector from './DateSelector';
 
 const theme = createTheme({
   palette: {
@@ -90,7 +90,7 @@ const BootstrapTooltip = styled(({ className, ...props }: TooltipProps) => (
   },
 }));
 
-function EnterpriseAdminDashboard() {
+function EnterpriseDashboard() {
   const navigate = useNavigate();
 
   const [hoverOnMenu, setHoverOnMenu] = React.useState<Boolean>(false);
@@ -1277,4 +1277,4 @@ function EnterpriseAdminDashboard() {
   );
 }
 
-export default EnterpriseAdminDashboard;
+export default EnterpriseDashboard;

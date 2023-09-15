@@ -27,7 +27,7 @@ import {
 import * as Icons from 'heroicons-react';
 import { MONTH_SELECTORS, MenuProps } from './const';
 import { GlobalContext } from '../../contexts/GlobalContext';
-import { BASIC, ENTERPRISE, ENTERPRISE_ADMIN } from '../../constants/applicationConst';
+import { BASIC, ENTERPRISE } from '../../constants/applicationConst';
 
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
   [`&.${tableCellClasses.head}`]: {
@@ -63,7 +63,6 @@ export default function AverageRetroChart({
     global.chartEndDate ? global.chartEndDate : '16'
   );
 
-
   const [selectedFromDate, setSelectedFromDate] = useState<string>();
   const [selectedToDate, setSelectedToDate] = useState<string>();
   const [totalAverageSessions, setTotalAverageSessions] = useState<number>();
@@ -78,14 +77,9 @@ export default function AverageRetroChart({
       setPath('basic');
     } else if (tempLocalUserData && tempLocalUserData.roleName === ENTERPRISE) {
       setPath('enterprise');
-    } else if (
-      tempLocalUserData &&
-      tempLocalUserData.roleName === ENTERPRISE_ADMIN
-    ) {
-      setPath('enterpriseAdmin');
     }
   }, [tempLocalUserData]);
-  
+
   const getChartWidth = () => {
     switch (true) {
       case windowWidth.current <= 1051:
@@ -121,7 +115,7 @@ export default function AverageRetroChart({
       setToDate(toDateInput);
     }
   }, [global.chartStartDate, global.chartEndDate]);
-  
+
   React.useEffect(() => {
     const tempSelectedFromDate = MONTH_SELECTORS.filter(
       monthSelector => monthSelector.id === Number(fromDate)
@@ -275,8 +269,8 @@ export default function AverageRetroChart({
               justifyContent: 'flex-start',
             }}
           >
-            <Link to={path + '/analytics/'}>Analytics </Link>&nbsp;\ Count
-            of all Sessions
+            <Link to={path + '/analytics/'}>Analytics </Link>&nbsp;\ Count of
+            all Sessions
           </Grid>
           {/* Back Button & Chart Title */}
           <Grid

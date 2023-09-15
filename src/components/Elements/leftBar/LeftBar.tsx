@@ -20,11 +20,7 @@ import { GlobalContext } from '../../../contexts/GlobalContext';
 import { LazyLoadImage } from 'react-lazy-load-image-component';
 import { useNavigate } from 'react-router-dom';
 import { BodyRegularTypography } from '../../CustomizedTypography';
-import {
-  BASIC,
-  ENTERPRISE_ADMIN,
-  ENTERPRISE,
-} from '../../../constants/applicationConst';
+import { BASIC, ENTERPRISE } from '../../../constants/applicationConst';
 
 const LeftBar = () => {
   const navigate = useNavigate();
@@ -43,16 +39,8 @@ const LeftBar = () => {
   React.useEffect(() => {
     if (tempLocalUserData && tempLocalUserData.roleName === BASIC) {
       setPath('basic');
-    } else if (
-      tempLocalUserData &&
-      tempLocalUserData.roleName === ENTERPRISE
-    ) {
+    } else if (tempLocalUserData && tempLocalUserData.roleName === ENTERPRISE) {
       setPath('enterprise');
-    } else if (
-      tempLocalUserData &&
-      tempLocalUserData.roleName === ENTERPRISE_ADMIN
-    ) {
-      setPath('enterpriseAdmin');
     }
     setSelectedAvatar(tempLocalUserData && tempLocalUserData.selectedAvatar);
     setUserRoleName(tempLocalUserData && tempLocalUserData.roleName);
@@ -65,10 +53,7 @@ const LeftBar = () => {
       icon: HomeIcon,
       routeTo: path + '/dashboard/',
       disabled: false,
-      isVisibleToBasic:
-        userRoleName === BASIC ||
-        userRoleName === ENTERPRISE ||
-        userRoleName === ENTERPRISE_ADMIN,
+      isVisibleToBasic: userRoleName === BASIC || userRoleName === ENTERPRISE,
     },
     {
       id: 2,
@@ -76,10 +61,7 @@ const LeftBar = () => {
       icon: ClipboardDocumentCheckIcon,
       routeTo: path + '/actions/',
       disabled: false,
-      isVisibleToBasic:
-        userRoleName === BASIC ||
-        userRoleName === ENTERPRISE ||
-        userRoleName === ENTERPRISE_ADMIN,
+      isVisibleToBasic: userRoleName === BASIC || userRoleName === ENTERPRISE,
     },
 
     {
@@ -88,10 +70,7 @@ const LeftBar = () => {
       icon: ChartBarIcon,
       routeTo: path + '/analytics/',
       disabled: false,
-      isVisibleToBasic:
-        userRoleName === BASIC ||
-        userRoleName === ENTERPRISE ||
-        userRoleName === ENTERPRISE_ADMIN,
+      isVisibleToBasic: userRoleName === BASIC || userRoleName === ENTERPRISE,
     },
 
     {
@@ -100,10 +79,7 @@ const LeftBar = () => {
       icon: ViewColumnsIcon,
       routeTo: path + '/sessions',
       disabled: false,
-      isVisibleToBasic:
-        userRoleName === BASIC ||
-        userRoleName === ENTERPRISE ||
-        userRoleName === ENTERPRISE_ADMIN,
+      isVisibleToBasic: userRoleName === BASIC || userRoleName === ENTERPRISE,
     },
     {
       id: 5,
@@ -111,10 +87,7 @@ const LeftBar = () => {
       icon: Square3Stack3DIcon,
       routeTo: path + '/templates/',
       disabled: true,
-      isVisibleToBasic:
-        userRoleName === BASIC ||
-        userRoleName === ENTERPRISE ||
-        userRoleName === ENTERPRISE_ADMIN,
+      isVisibleToBasic: userRoleName === BASIC || userRoleName === ENTERPRISE,
     },
     {
       id: 6,
@@ -122,10 +95,7 @@ const LeftBar = () => {
       icon: UserGroupIcon,
       routeTo: path + '/teams/',
       disabled: true,
-      isVisibleToBasic:
-        userRoleName === BASIC ||
-        userRoleName === ENTERPRISE ||
-        userRoleName === ENTERPRISE_ADMIN,
+      isVisibleToBasic: userRoleName === BASIC || userRoleName === ENTERPRISE,
     },
     {
       id: 7,
@@ -133,10 +103,7 @@ const LeftBar = () => {
       icon: Cog8ToothIcon,
       routeTo: path + '/settings/',
       disabled: false,
-      isVisibleToBasic:
-        userRoleName === BASIC ||
-        userRoleName === ENTERPRISE ||
-        userRoleName === ENTERPRISE_ADMIN,
+      isVisibleToBasic: userRoleName === BASIC || userRoleName === ENTERPRISE,
     },
   ];
 
@@ -147,10 +114,7 @@ const LeftBar = () => {
       icon: QuestionMarkCircleIcon,
       routeTo: path + '/help',
       disabled: false,
-      isVisibleToBasic:
-        userRoleName === BASIC ||
-        userRoleName === ENTERPRISE ||
-        userRoleName === ENTERPRISE_ADMIN,
+      isVisibleToBasic: userRoleName === BASIC || userRoleName === ENTERPRISE,
     },
     {
       id: 9,
@@ -158,10 +122,7 @@ const LeftBar = () => {
       icon: BellIcon,
       routeTo: path + '/notifications',
       disabled: false,
-      isVisibleToBasic:
-        userRoleName === BASIC ||
-        userRoleName === ENTERPRISE ||
-        userRoleName === ENTERPRISE_ADMIN,
+      isVisibleToBasic: userRoleName === BASIC || userRoleName === ENTERPRISE,
     },
   ];
 
@@ -169,11 +130,7 @@ const LeftBar = () => {
     if (location.pathname.includes('dashboard')) {
       setSelectedMenu(menuArray[0].label);
       setPath(
-        location.pathname.includes('enterprise')
-          ? 'enterprise'
-          : location.pathname.includes('enterpriseAdmin')
-          ? 'enterpriseAdmin'
-          : 'basic'
+        location.pathname.includes('enterprise') ? 'enterprise' : 'basic'
       );
     } else if (location.pathname.includes('analytics')) {
       setSelectedMenu(menuArray[2].label);
@@ -183,7 +140,6 @@ const LeftBar = () => {
   }, [
     location.pathname.includes('analytics'),
     location.pathname.includes('enterprise/dashboard'),
-    location.pathname.includes('enterpriseAdmin/dashboard'),
     location.pathname.includes('enterprise'),
   ]);
 
@@ -393,7 +349,7 @@ const LeftBar = () => {
           boxShadow: '0px 1px 10px 0px rgba(0, 0, 0, 0.15);',
         }}
       >
-        {userRoleName === ENTERPRISE_ADMIN && (
+        {userRoleName === ENTERPRISE && (
           <>
             <Box
               sx={{

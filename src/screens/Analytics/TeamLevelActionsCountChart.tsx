@@ -30,7 +30,6 @@ import { GlobalContext } from '../../contexts/GlobalContext';
 import {
   BASIC,
   ENTERPRISE,
-  ENTERPRISE_ADMIN,
 } from '../../constants/applicationConst';
 
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
@@ -80,11 +79,6 @@ export default function TeamLevelActionsCountChart({
       setPath('basic');
     } else if (tempLocalUserData && tempLocalUserData.roleName === ENTERPRISE) {
       setPath('enterprise');
-    } else if (
-      tempLocalUserData &&
-      tempLocalUserData.roleName === ENTERPRISE_ADMIN
-    ) {
-      setPath('enterpriseAdmin');
     }
   }, [tempLocalUserData]);
 

@@ -28,7 +28,6 @@ import { GlobalContext } from '../../contexts/GlobalContext';
 import {
   BASIC,
   ENTERPRISE,
-  ENTERPRISE_ADMIN,
 } from '../../constants/applicationConst';
 
 export interface Word {
@@ -65,12 +64,7 @@ export default function EnterpriseLevelSentimentsSummaryChart({
       setPath('basic');
     } else if (tempLocalUserData && tempLocalUserData.roleName === ENTERPRISE) {
       setPath('enterprise');
-    } else if (
-      tempLocalUserData &&
-      tempLocalUserData.roleName === ENTERPRISE_ADMIN
-    ) {
-      setPath('enterpriseAdmin');
-    }
+    } 
   }, [tempLocalUserData]);
 
   const navigate = useNavigate();

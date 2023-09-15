@@ -36,7 +36,7 @@ import {
 import { ActionType, GlobalContext } from '../../../contexts/GlobalContext';
 import {
   ENTERPRISE,
-  REGULAR_ENTERPRISE_ID,
+  ENTERPRISE_USER_ID,
   BASIC,
   BASIC_USER_ID,
 } from '../../../constants/applicationConst';
@@ -234,7 +234,7 @@ export default function ManageUsers() {
     let requestBody;
     if (tempStoreRoleName === BASIC) {
       requestBody = {
-        roleId: REGULAR_ENTERPRISE_ID,
+        roleId: ENTERPRISE_USER_ID,
         roleName: ENTERPRISE,
       };
     } else {

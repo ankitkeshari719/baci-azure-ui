@@ -7,11 +7,7 @@ import {
   BodySemiBoldTypography,
   H2SemiBoldTypography,
 } from '../../CustomizedTypography';
-import {
-  BASIC,
-  ENTERPRISE_ADMIN,
-  ENTERPRISE,
-} from '../../../constants/applicationConst';
+import { BASIC, ENTERPRISE } from '../../../constants/applicationConst';
 
 export default function PulseCheckLearnMore() {
   const navigate = useNavigate();
@@ -22,15 +18,7 @@ export default function PulseCheckLearnMore() {
   function goToPulseCheckList() {
     if (tempLocalUserData && tempLocalUserData.roleName === BASIC) {
       navigate('/basic/templates/pulseCheckListTemplate/');
-    } else if (
-      tempLocalUserData &&
-      tempLocalUserData.roleName === ENTERPRISE_ADMIN
-    ) {
-      navigate('/enterpriseAdmin/templates/pulseCheckListTemplate/');
-    } else if (
-      tempLocalUserData &&
-      tempLocalUserData.roleName === ENTERPRISE
-    ) {
+    } else if (tempLocalUserData && tempLocalUserData.roleName === ENTERPRISE) {
       navigate('/enterprise/templates/pulseCheckListTemplate/');
     }
   }

@@ -65,7 +65,7 @@ export default function DummyEnterpriseDashboard() {
 
   // ---------------------------------------- Roles API's -----------------------------------------------
   const callCreateRole = async () => {
-    const roleName = 'Enterprise Admin';
+    const roleName = 'Enterprise';
     await createRole(roleName).then(
       res => {
         console.log('callCreateRole response', res);
@@ -100,7 +100,7 @@ export default function DummyEnterpriseDashboard() {
   };
 
   const callUpdateRole = async () => {
-    const roleName = 'Enterprise Admin';
+    const roleName = 'Enterprise';
     const roleId = 'regular_user0.8981389442061536';
     await updateRole(roleId, roleName).then(
       res => {
