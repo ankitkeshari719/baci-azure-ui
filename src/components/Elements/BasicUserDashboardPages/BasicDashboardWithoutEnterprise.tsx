@@ -27,7 +27,7 @@ export default function BasicDashboardWithoutEnterprise() {
 
   // Function to navigate on create new retro page
   function CreateNewRetro() {
-    navigate('/create/');
+    navigate('/basic/createRetro/');
   }
 
   return (
@@ -61,6 +61,7 @@ export default function BasicDashboardWithoutEnterprise() {
                 variant="contained"
                 color="secondary"
                 sx={{ marginLeft: '20px', borderRadius: '10px' }}
+                onClick={CreateNewRetro}
               >
                 <span style={{ color: 'white' }}>NEW SESSION</span>
               </Button>

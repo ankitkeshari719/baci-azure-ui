@@ -1,14 +1,14 @@
 import * as React from 'react';
 import TeamsDashboard from './TeamsDashboard';
 import TeamsEmptyScreen from './TeamsEmptyScreen';
-import {
-  getTeamDataForTable,
-} from '../../../helpers/msal/services';
+import { getTeamDataForTable } from '../../../helpers/msal/services';
 import { GlobalContext, ActionType } from '../../../contexts/GlobalContext';
 
 export const TeamsMainContainer = () => {
   const [global, dispatch] = React.useContext(GlobalContext);
   const [teams, setTeams] = React.useState<any>([]);
+  const localUserData = localStorage.getItem('userData');
+  const tempLocalUserData = localUserData && JSON.parse(localUserData);
 
   // API will hit here to get the Teams list
   React.useEffect(() => {
@@ -22,9 +22,9 @@ export const TeamsMainContainer = () => {
       payload: { loadingFlag: true },
     });
     const requestBody = {
-      userId: 'ujala.kashyap@evoltech.com.au',
-      roleName: 'Enterprise Admin',
-      enterpriseId: 'evoltech0.0751886606959975',
+      userId: tempLocalUserData && tempLocalUserData.userId,
+      roleName: tempLocalUserData && tempLocalUserData.roleName,
+      enterpriseId: tempLocalUserData && tempLocalUserData.enterpriseId,
     };
 
     await getTeamDataForTable(requestBody).then(

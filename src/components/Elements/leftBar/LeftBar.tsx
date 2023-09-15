@@ -15,9 +15,6 @@ import {
 } from '@heroicons/react/24/outline';
 
 import React, { useEffect } from 'react';
-
-import Avatar from '../Avatar';
-
 import { GlobalContext } from '../../../contexts/GlobalContext';
 
 import { LazyLoadImage } from 'react-lazy-load-image-component';
@@ -25,7 +22,7 @@ import { useNavigate } from 'react-router-dom';
 import { BodyRegularTypography } from '../../CustomizedTypography';
 import {
   BASIC,
-ENTERPRISE_ADMIN,
+  ENTERPRISE_ADMIN,
   REGULAR_ENTERPRISE,
 } from '../../../constants/applicationConst';
 
@@ -49,7 +46,7 @@ const LeftBar = () => {
     } else if (
       tempLocalUserData &&
       tempLocalUserData.roleName === REGULAR_ENTERPRISE
-) {
+    ) {
       setPath('facilitator');
     } else if (
       tempLocalUserData &&
@@ -69,7 +66,9 @@ const LeftBar = () => {
       routeTo: path + '/dashboard/',
       disabled: false,
       isVisibleToBasic:
-        userRoleName === BASIC || userRoleName === REGULAR_ENTERPRISE,
+        userRoleName === BASIC ||
+        userRoleName === REGULAR_ENTERPRISE ||
+        userRoleName === ENTERPRISE_ADMIN,
     },
     {
       id: 2,
@@ -78,7 +77,9 @@ const LeftBar = () => {
       routeTo: path + '/actions/',
       disabled: false,
       isVisibleToBasic:
-        userRoleName === BASIC || userRoleName === REGULAR_ENTERPRISE,
+        userRoleName === BASIC ||
+        userRoleName === REGULAR_ENTERPRISE ||
+        userRoleName === ENTERPRISE_ADMIN,
     },
 
     {
@@ -88,7 +89,9 @@ const LeftBar = () => {
       routeTo: path + '/analytics/',
       disabled: false,
       isVisibleToBasic:
-        userRoleName === BASIC || userRoleName === REGULAR_ENTERPRISE,
+        userRoleName === BASIC ||
+        userRoleName === REGULAR_ENTERPRISE ||
+        userRoleName === ENTERPRISE_ADMIN,
     },
 
     {
@@ -98,7 +101,9 @@ const LeftBar = () => {
       routeTo: path + '/sessions',
       disabled: false,
       isVisibleToBasic:
-        userRoleName === BASIC || userRoleName === REGULAR_ENTERPRISE,
+        userRoleName === BASIC ||
+        userRoleName === REGULAR_ENTERPRISE ||
+        userRoleName === ENTERPRISE_ADMIN,
     },
     {
       id: 5,
@@ -107,16 +112,20 @@ const LeftBar = () => {
       routeTo: path + '/templates/',
       disabled: true,
       isVisibleToBasic:
-        userRoleName === BASIC || userRoleName === REGULAR_ENTERPRISE,
+        userRoleName === BASIC ||
+        userRoleName === REGULAR_ENTERPRISE ||
+        userRoleName === ENTERPRISE_ADMIN,
     },
-
     {
       id: 6,
       label: 'Users',
       icon: UserGroupIcon,
       routeTo: path + '/teams/',
       disabled: true,
-      isVisibleToBasic: userRoleName != BASIC,
+      isVisibleToBasic:
+        userRoleName === BASIC ||
+        userRoleName === REGULAR_ENTERPRISE ||
+        userRoleName === ENTERPRISE_ADMIN,
     },
     {
       id: 7,
@@ -125,7 +134,9 @@ const LeftBar = () => {
       routeTo: path + '/settings/',
       disabled: false,
       isVisibleToBasic:
-        userRoleName === BASIC || userRoleName === REGULAR_ENTERPRISE,
+        userRoleName === BASIC ||
+        userRoleName === REGULAR_ENTERPRISE ||
+        userRoleName === ENTERPRISE_ADMIN,
     },
   ];
 
@@ -137,7 +148,9 @@ const LeftBar = () => {
       routeTo: path + '/help',
       disabled: false,
       isVisibleToBasic:
-        userRoleName === BASIC || userRoleName === REGULAR_ENTERPRISE,
+        userRoleName === BASIC ||
+        userRoleName === REGULAR_ENTERPRISE ||
+        userRoleName === ENTERPRISE_ADMIN,
     },
     {
       id: 9,
@@ -146,7 +159,9 @@ const LeftBar = () => {
       routeTo: path + '/notifications',
       disabled: false,
       isVisibleToBasic:
-        userRoleName === BASIC || userRoleName === REGULAR_ENTERPRISE,
+        userRoleName === BASIC ||
+        userRoleName === REGULAR_ENTERPRISE ||
+        userRoleName === ENTERPRISE_ADMIN,
     },
   ];
 
@@ -317,6 +332,7 @@ const LeftBar = () => {
           </Tooltip>
         </Box>
       </Box>
+      {/* Retro Templates Hover Menu */}
       <Box
         sx={{
           position: 'absolute',
@@ -359,6 +375,7 @@ const LeftBar = () => {
           <BodyRegularTypography label="Pulse Check Template" />
         </Box>
       </Box>
+      {/* Manage Users Hover Menu */}
       <Box
         sx={{
           position: 'absolute',
@@ -376,30 +393,35 @@ const LeftBar = () => {
           boxShadow: '0px 1px 10px 0px rgba(0, 0, 0, 0.15);',
         }}
       >
-        <Box
-          sx={{
-            display: 'flex',
-            padding: '10px 24px',
-            alignItems: 'center',
-            gap: '12px',
-            cursor: 'pointer',
-          }}
-          onClick={goToEnterpriseRegistration}
-        >
-          <BodyRegularTypography label="Organisation Details" />
-        </Box>
-        <Box
-          sx={{
-            display: 'flex',
-            padding: '10px 24px',
-            alignItems: 'center',
-            gap: '12px',
-            cursor: 'pointer',
-          }}
-          onClick={goToManageUser}
-        >
-          <BodyRegularTypography label="Manage Users" />
-        </Box>
+        {userRoleName === ENTERPRISE_ADMIN && (
+          <>
+            <Box
+              sx={{
+                display: 'flex',
+                padding: '10px 24px',
+                alignItems: 'center',
+                gap: '12px',
+                cursor: 'pointer',
+              }}
+              onClick={goToEnterpriseRegistration}
+            >
+              <BodyRegularTypography label="Organisation Details" />
+            </Box>
+            <Box
+              sx={{
+                display: 'flex',
+                padding: '10px 24px',
+                alignItems: 'center',
+                gap: '12px',
+                cursor: 'pointer',
+              }}
+              onClick={goToManageUser}
+            >
+              <BodyRegularTypography label="Manage Users" />
+            </Box>
+          </>
+        )}
+
         <Box
           sx={{
             display: 'flex',
