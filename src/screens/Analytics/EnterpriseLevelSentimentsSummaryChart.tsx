@@ -25,6 +25,11 @@ import WordCloud from '../../components/Elements/WordCloud';
 import { MenuProps, SELECTED_FORMATS } from './const';
 import { OutlinedButton } from '../../components';
 import { GlobalContext } from '../../contexts/GlobalContext';
+import {
+  BASIC,
+  ENTERPRISE,
+  ENTERPRISE_ADMIN,
+} from '../../constants/applicationConst';
 
 export interface Word {
   text: string;
@@ -50,6 +55,23 @@ export default function EnterpriseLevelSentimentsSummaryChart({
   );
   const [totalParticipant, setTotalParticipant] = useState<Number>();
   const [totalRetros, setTotalRetros] = useState<Number>();
+
+  const localUserData = localStorage.getItem('userData');
+  const tempLocalUserData = localUserData && JSON.parse(localUserData);
+  const [path, setPath] = React.useState('');
+
+  React.useEffect(() => {
+    if (tempLocalUserData && tempLocalUserData.roleName === BASIC) {
+      setPath('basic');
+    } else if (tempLocalUserData && tempLocalUserData.roleName === ENTERPRISE) {
+      setPath('enterprise');
+    } else if (
+      tempLocalUserData &&
+      tempLocalUserData.roleName === ENTERPRISE_ADMIN
+    ) {
+      setPath('enterpriseAdmin');
+    }
+  }, [tempLocalUserData]);
 
   const navigate = useNavigate();
 
@@ -109,7 +131,6 @@ export default function EnterpriseLevelSentimentsSummaryChart({
     if (toDateInput != '' && toDateInput != undefined && toDateInput != null) {
       setToDate(toDateInput);
       generateSummary();
-
     }
   }, [global.chartStartDate, global.chartEndDate]);
 
@@ -202,7 +223,7 @@ export default function EnterpriseLevelSentimentsSummaryChart({
               height: '20px !important',
             }}
           >
-            <Link to={'/facilitator/analytics/'}>Analytics </Link>&nbsp;\
+            <Link to={path + '/analytics/'}>Analytics </Link>&nbsp;\ Count
             Overall summary
           </Grid>
           {/* Back Button & Chart Title */}

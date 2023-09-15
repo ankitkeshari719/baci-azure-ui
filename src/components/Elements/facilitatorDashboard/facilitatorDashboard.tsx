@@ -131,11 +131,11 @@ function FacilitatorDashboard() {
   ];
 
   const navigateToJoinSession = () => {
-    navigate('/facilitator/joinRetro/');
+    navigate('/enterprise/joinRetro/');
   };
 
   const navigateToCreateSession = () => {
-    navigate('/facilitator/createRetro/');
+    navigate('/enterprise/createRetro/');
   };
 
   const goToAnalyticsLearnMorePage = (url: string) => {
@@ -397,7 +397,7 @@ function FacilitatorDashboard() {
                 <Box
                   onClick={() => {
                     navigate(
-                      '/facilitator/analytics/enterpriseLevelActionsCount'
+                      '/enterprise/analytics/enterpriseLevelActionsCount'
                     );
                   }}
                 >
@@ -424,7 +424,7 @@ function FacilitatorDashboard() {
                     }}
                     onClick={() =>
                       goToAnalyticsLearnMorePage(
-                        '/facilitator/analytics/enterpriseLevelActionsCountLearnMore'
+                        '/enterprise/analytics/enterpriseLevelActionsCountLearnMore'
                       )
                     }
                   />
@@ -468,7 +468,7 @@ function FacilitatorDashboard() {
                 <Box
                   onClick={() => {
                     navigate(
-                      '/facilitator/analytics/enterpriseLevelParticipantsCount'
+                      '/enterprise/analytics/enterpriseLevelParticipantsCount'
                     );
                   }}
                 >
@@ -492,7 +492,7 @@ function FacilitatorDashboard() {
                     }}
                     onClick={() =>
                       goToAnalyticsLearnMorePage(
-                        '/facilitator/analytics/enterpriseLevelParticipantsCountLearnMore'
+                        '/enterprise/analytics/enterpriseLevelParticipantsCountLearnMore'
                       )
                     }
                   />
@@ -536,7 +536,7 @@ function FacilitatorDashboard() {
                 <Box
                   onClick={() => {
                     navigate(
-                      '/facilitator/analytics/enterpriseLevelParticipantsCount'
+                      '/enterprise/analytics/enterpriseLevelParticipantsCount'
                     );
                   }}
                 >
@@ -563,7 +563,7 @@ function FacilitatorDashboard() {
                     }}
                     onClick={() =>
                       goToAnalyticsLearnMorePage(
-                        '/facilitator/analytics/enterpriseLevelParticipantsCountLearnMore'
+                        '/enterprise/analytics/enterpriseLevelParticipantsCountLearnMore'
                       )
                     }
                   />

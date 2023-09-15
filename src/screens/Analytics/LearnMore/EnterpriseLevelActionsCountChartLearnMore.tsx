@@ -26,12 +26,12 @@ export default function EnterpriseLevelActionsCountChartLearnMore() {
       tempLocalUserData &&
       tempLocalUserData.roleName === ENTERPRISE_ADMIN
     ) {
-      navigate('/enterprise/analytics');
+      navigate('/enterpriseAdmin/analytics');
     } else if (
       tempLocalUserData &&
       tempLocalUserData.roleName === ENTERPRISE
     ) {
-      navigate('/facilitator/analytics');
+      navigate('/enterprise/analytics');
     }
   }
 

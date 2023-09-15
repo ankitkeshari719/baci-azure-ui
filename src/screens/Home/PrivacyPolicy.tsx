@@ -29,12 +29,12 @@ export default function PrivacyPolicy() {
       tempLocalUserData &&
       tempLocalUserData.roleName === ENTERPRISE_ADMIN
     ) {
-      navigate('/enterprise/joinRetro/');
+      navigate('/enterpriseAdmin/joinRetro/');
     } else if (
       tempLocalUserData &&
       tempLocalUserData.roleName === ENTERPRISE
     ) {
-      navigate('/facilitator/joinRetro/');
+      navigate('/enterprise/joinRetro/');
     } else {
       navigate(`/`);
     }

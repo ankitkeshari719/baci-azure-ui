@@ -32,12 +32,12 @@ export default function TeamsEmptyScreen() {
       tempLocalUserData &&
       tempLocalUserData.roleName === ENTERPRISE_ADMIN
     ) {
-      navigate('/enterprise/teams/create/');
+      navigate('/enterpriseAdmin/teams/create/');
     } else if (
       tempLocalUserData &&
       tempLocalUserData.roleName === ENTERPRISE
     ) {
-      navigate('/facilitator/teams/create/');
+      navigate('/enterprise/teams/create/');
     }
   }
 

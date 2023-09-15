@@ -30,12 +30,12 @@ export default function TermsAndConditions() {
       tempLocalUserData &&
       tempLocalUserData.roleName === ENTERPRISE_ADMIN
     ) {
-      navigate('/enterprise/joinRetro/');
+      navigate('/enterpriseAdmin/joinRetro/');
     } else if (
       tempLocalUserData &&
       tempLocalUserData.roleName === ENTERPRISE
     ) {
-      navigate('/facilitator/joinRetro/');
+      navigate('/enterprise/joinRetro/');
     } else {
       navigate(`/`);
     }

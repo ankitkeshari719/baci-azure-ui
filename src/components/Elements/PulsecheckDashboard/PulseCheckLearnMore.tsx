@@ -26,12 +26,12 @@ export default function PulseCheckLearnMore() {
       tempLocalUserData &&
       tempLocalUserData.roleName === ENTERPRISE_ADMIN
     ) {
-      navigate('/enterprise/templates/pulseCheckListTemplate/');
+      navigate('/enterpriseAdmin/templates/pulseCheckListTemplate/');
     } else if (
       tempLocalUserData &&
       tempLocalUserData.roleName === ENTERPRISE
     ) {
-      navigate('/facilitator/templates/pulseCheckListTemplate/');
+      navigate('/enterprise/templates/pulseCheckListTemplate/');
     }
   }
 

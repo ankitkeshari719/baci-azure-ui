@@ -107,11 +107,11 @@ function EnterpriseDashboard() {
   const currentDate = moment(new Date()).format('Do MMM YYYY');
 
   const [path, setPath] = React.useState(
-    location.pathname.includes('facilitator')
-      ? 'facilitator'
+    location.pathname.includes('enterprise')
+      ? 'enterprise'
       : location.pathname.includes('enterprise')
       ? 'enterprise'
-      : 'facilitator'
+      : 'enterprise'
   );
 
   const [global, dispatch] = React.useContext(GlobalContext);
@@ -278,11 +278,11 @@ function EnterpriseDashboard() {
   };
 
   const navigateToJoinSession = () => {
-    navigate('/facilitator/joinRetro/');
+    navigate('/enterprise/joinRetro/');
   };
 
   const navigateToCreateSession = () => {
-    navigate('/facilitator/createRetro/');
+    navigate('/enterprise/createRetro/');
   };
 
   return (

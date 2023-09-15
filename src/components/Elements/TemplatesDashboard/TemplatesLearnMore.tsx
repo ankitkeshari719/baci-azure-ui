@@ -25,12 +25,12 @@ export default function TemplatesLearnMore() {
       tempLocalUserData &&
       tempLocalUserData.roleName === ENTERPRISE_ADMIN
     ) {
-      navigate('/enterprise/templates/retroListTemplate/');
+      navigate('/enterpriseAdmin/templates/retroListTemplate/');
     } else if (
       tempLocalUserData &&
       tempLocalUserData.roleName === ENTERPRISE
     ) {
-      navigate('/facilitator/templates/retroListTemplate/');
+      navigate('/enterprise/templates/retroListTemplate/');
     }
   }
 

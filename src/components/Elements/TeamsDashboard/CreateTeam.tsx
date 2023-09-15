@@ -76,12 +76,12 @@ export default function CreateTeam() {
       tempLocalUserData &&
       tempLocalUserData.roleName === ENTERPRISE_ADMIN
     ) {
-      navigate('/enterprise/teams/allTeams/');
+      navigate('/enterpriseAdmin/teams/allTeams/');
     } else if (
       tempLocalUserData &&
       tempLocalUserData.roleName === ENTERPRISE
     ) {
-      navigate('/facilitator/teams/allTeams/');
+      navigate('/enterprise/teams/allTeams/');
     }
   }
 

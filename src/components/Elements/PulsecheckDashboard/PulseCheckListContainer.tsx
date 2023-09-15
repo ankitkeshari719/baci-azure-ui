@@ -44,14 +44,14 @@ export default function PulseCheckListContainer() {
       tempLocalUserData.roleName === ENTERPRISE_ADMIN
     ) {
       navigate(
-        '/enterprise/templates/pulseCheckListTemplate/pulseCheckTemplateDetails/'
+        '/enterpriseAdmin/templates/pulseCheckListTemplate/pulseCheckTemplateDetails/'
       );
     } else if (
       tempLocalUserData &&
       tempLocalUserData.roleName === ENTERPRISE
     ) {
       navigate(
-        '/facilitator/templates/pulseCheckListTemplate/pulseCheckTemplateDetails/'
+        '/enterprise/templates/pulseCheckListTemplate/pulseCheckTemplateDetails/'
       );
     }
   }

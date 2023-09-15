@@ -64,9 +64,9 @@ export function UserHeader({ accounts }: Props) {
           if (res.roleName === BASIC) {
             navigate('/basic/');
           } else if (res.roleName === ENTERPRISE) {
-            navigate('/facilitator/');
-          } else if (res.roleName === ENTERPRISE_ADMIN) {
             navigate('/enterprise/');
+          } else if (res.roleName === ENTERPRISE_ADMIN) {
+            navigate('/enterpriseAdmin/');
           }
         }
       },

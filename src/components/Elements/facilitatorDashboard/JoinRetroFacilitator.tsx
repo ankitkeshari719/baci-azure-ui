@@ -80,21 +80,21 @@ export function JoinRetroFacilitator() {
       tempLocalUserData &&
       tempLocalUserData.roleName === ENTERPRISE_ADMIN
     ) {
-      navigate('/enterprise/createRetro/');
+      navigate('/enterpriseAdmin/createRetro/');
     } else if (
       tempLocalUserData &&
       tempLocalUserData.roleName === ENTERPRISE
     ) {
-      navigate('/facilitator/createRetro/');
+      navigate('/enterprise/createRetro/');
     }
   }
 
   const navigateToPrivatePolicy = () => {
-    navigate('/facilitator/privatePolicy/');
+    navigate('/enterprise/privatePolicy/');
   };
 
   const navigateToTermAndCondition = () => {
-    navigate('/facilitator/termAndCondition/');
+    navigate('/enterprise/termAndCondition/');
   };
 
   return (

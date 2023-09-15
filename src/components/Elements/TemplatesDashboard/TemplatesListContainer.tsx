@@ -43,12 +43,12 @@ export default function TemplatesListContainer() {
       tempLocalUserData &&
       tempLocalUserData.roleName === ENTERPRISE_ADMIN
     ) {
-      navigate('/enterprise/templates/retroListTemplate/RetroTemplateDetails/');
+      navigate('/enterpriseAdmin/templates/retroListTemplate/RetroTemplateDetails/');
     } else if (
       tempLocalUserData &&
       tempLocalUserData.roleName === ENTERPRISE
     ) {
-      navigate('/facilitator/templates/retroListTemplate/RetroTemplateDetails/');
+      navigate('/enterprise/templates/retroListTemplate/RetroTemplateDetails/');
     }
   }
 

@@ -20,13 +20,16 @@ import { Link, useNavigate } from 'react-router-dom';
 import * as Icons from 'heroicons-react';
 import { MONTH_SELECTORS, MenuProps } from './const';
 import { GlobalContext } from '../../contexts/GlobalContext';
+import {
+  BASIC,
+  ENTERPRISE,
+  ENTERPRISE_ADMIN,
+} from '../../constants/applicationConst';
 
 export default function EnterpriseLevelSentimentsMoodsChart({
-
   dashboard,
-  team
+  team,
 }: {
-
   dashboard?: boolean;
   team: string;
 }) {
@@ -39,10 +42,31 @@ export default function EnterpriseLevelSentimentsMoodsChart({
   const [happyMoodPercentage, setHappyMoodPercentage] = useState<number>();
   const [months, setMonths] = useState([]);
   const [global, dispatch] = React.useContext(GlobalContext);
-  const [fromDate, setFromDate] = useState<string>(global.chartStartDate?global.chartStartDate:'10');
-  const [toDate, setToDate] = useState<string>(global.chartEndDate?global.chartEndDate: '16');
+  const [fromDate, setFromDate] = useState<string>(
+    global.chartStartDate ? global.chartStartDate : '10'
+  );
+  const [toDate, setToDate] = useState<string>(
+    global.chartEndDate ? global.chartEndDate : '16'
+  );
   const navigate = useNavigate();
   const windowWidth = React.useRef(window.innerWidth);
+
+  const localUserData = localStorage.getItem('userData');
+  const tempLocalUserData = localUserData && JSON.parse(localUserData);
+  const [path, setPath] = React.useState('');
+
+  React.useEffect(() => {
+    if (tempLocalUserData && tempLocalUserData.roleName === BASIC) {
+      setPath('basic');
+    } else if (tempLocalUserData && tempLocalUserData.roleName === ENTERPRISE) {
+      setPath('enterprise');
+    } else if (
+      tempLocalUserData &&
+      tempLocalUserData.roleName === ENTERPRISE_ADMIN
+    ) {
+      setPath('enterpriseAdmin');
+    }
+  }, [tempLocalUserData]);
 
   const getChartWidth = () => {
     switch (true) {
@@ -65,24 +89,20 @@ export default function EnterpriseLevelSentimentsMoodsChart({
     }
   };
 
-
-  React.useEffect(()=>{
-   
+  React.useEffect(() => {
     const fromDateInput = global.chartStartDate;
-    const toDateInput=global.chartEndDate;
-    if(fromDateInput!=""&&fromDateInput!=undefined&&fromDateInput!=null){
+    const toDateInput = global.chartEndDate;
+    if (
+      fromDateInput != '' &&
+      fromDateInput != undefined &&
+      fromDateInput != null
+    ) {
       setFromDate(fromDateInput);
     }
-     if(toDateInput!=""&&toDateInput!=undefined&&toDateInput!=null){
+    if (toDateInput != '' && toDateInput != undefined && toDateInput != null) {
       setToDate(toDateInput);
     }
-  },[
-    global.chartStartDate,
-    global.chartEndDate
-    
-    
-  ])
-
+  }, [global.chartStartDate, global.chartEndDate]);
 
   React.useEffect(() => {
     handleGetEnterpriseLevelSentimentsMoods();
@@ -93,7 +113,7 @@ export default function EnterpriseLevelSentimentsMoodsChart({
   }, [team]);
 
   const handleGetEnterpriseLevelSentimentsMoods = async () => {
-    await getEnterpriseLevelSentimentsMoods(fromDate, toDate,team).then(
+    await getEnterpriseLevelSentimentsMoods(fromDate, toDate, team).then(
       res => {
         if (res && res.result) {
           setMoods(res.result);
@@ -263,7 +283,7 @@ export default function EnterpriseLevelSentimentsMoodsChart({
               justifyContent: 'flex-start',
             }}
           >
-            <Link to={'/facilitator/analytics/'}>Analytics </Link>&nbsp;\
+            <Link to={path + '/analytics/'}>Analytics </Link>&nbsp;\ Count
             Sentiments - Mood
           </Grid>
           {/* Back Button & Chart Title */}

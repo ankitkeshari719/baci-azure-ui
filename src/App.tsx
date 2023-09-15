@@ -371,7 +371,7 @@ export default function App({ instance }: AppProps) {
                               />
                             </Route>
                             {/* Facilitator Routes */}
-                            <Route path="/facilitator/">
+                            <Route path="/enterprise/">
                               <Route
                                 path=""
                                 element={<FacilitatorMainContainer />}
@@ -569,7 +569,7 @@ export default function App({ instance }: AppProps) {
                               />
                             </Route>
                             {/* Enterprise Routes */}
-                            <Route path="/enterprise/">
+                            <Route path="/enterpriseAdmin/">
                               <Route
                                 path=""
                                 element={<EnterpriseMainContainer />}

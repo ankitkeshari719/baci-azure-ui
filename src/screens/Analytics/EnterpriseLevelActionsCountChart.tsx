@@ -27,6 +27,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import * as Icons from 'heroicons-react';
 import { MONTH_SELECTORS, MenuProps } from './const';
 import { GlobalContext } from '../../contexts/GlobalContext';
+import { BASIC, ENTERPRISE, ENTERPRISE_ADMIN } from '../../constants/applicationConst';
 
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
   [`&.${tableCellClasses.head}`]: {
@@ -63,6 +64,23 @@ export default function EnterpriseLevelActionsCountChart({
   const [selectedToDate, setSelectedToDate] = useState<string>();
   const navigate = useNavigate();
   const windowWidth = React.useRef(window.innerWidth);
+
+  const localUserData = localStorage.getItem('userData');
+  const tempLocalUserData = localUserData && JSON.parse(localUserData);
+  const [path, setPath] = React.useState('');
+
+  React.useEffect(() => {
+    if (tempLocalUserData && tempLocalUserData.roleName === BASIC) {
+      setPath('basic');
+    } else if (tempLocalUserData && tempLocalUserData.roleName === ENTERPRISE) {
+      setPath('enterprise');
+    } else if (
+      tempLocalUserData &&
+      tempLocalUserData.roleName === ENTERPRISE_ADMIN
+    ) {
+      setPath('enterpriseAdmin');
+    }
+  }, [tempLocalUserData]);
 
   const getChartWidth = () => {
     switch (true) {
@@ -276,7 +294,7 @@ export default function EnterpriseLevelActionsCountChart({
               justifyContent: 'flex-start',
             }}
           >
-            <Link to={'/facilitator/analytics/'}>Analytics </Link>&nbsp;\ Count
+            <Link to={path + '/analytics/'}>Analytics </Link>&nbsp;\ Count
             of actions
           </Grid>
           {/* Back Button & Chart Title */}

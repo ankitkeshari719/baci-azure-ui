@@ -84,7 +84,7 @@ export function JoinRetroEnterprise() {
       tempLocalUserData &&
       tempLocalUserData.roleName === ENTERPRISE
     ) {
-      navigate('/facilitator/createRetro/');
+      navigate('/enterprise/createRetro/');
     }
   }
 

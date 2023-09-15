@@ -47,12 +47,12 @@ const LeftBar = () => {
       tempLocalUserData &&
       tempLocalUserData.roleName === ENTERPRISE
     ) {
-      setPath('facilitator');
+      setPath('enterprise');
     } else if (
       tempLocalUserData &&
       tempLocalUserData.roleName === ENTERPRISE_ADMIN
     ) {
-      setPath('enterprise');
+      setPath('enterpriseAdmin');
     }
     setSelectedAvatar(tempLocalUserData && tempLocalUserData.selectedAvatar);
     setUserRoleName(tempLocalUserData && tempLocalUserData.roleName);
@@ -169,10 +169,10 @@ const LeftBar = () => {
     if (location.pathname.includes('dashboard')) {
       setSelectedMenu(menuArray[0].label);
       setPath(
-        location.pathname.includes('facilitator')
-          ? 'facilitator'
-          : location.pathname.includes('enterprise')
+        location.pathname.includes('enterprise')
           ? 'enterprise'
+          : location.pathname.includes('enterpriseAdmin')
+          ? 'enterpriseAdmin'
           : 'basic'
       );
     } else if (location.pathname.includes('analytics')) {
@@ -182,8 +182,8 @@ const LeftBar = () => {
     }
   }, [
     location.pathname.includes('analytics'),
-    location.pathname.includes('facilitator/dashboard'),
     location.pathname.includes('enterprise/dashboard'),
+    location.pathname.includes('enterpriseAdmin/dashboard'),
     location.pathname.includes('enterprise'),
   ]);
 
@@ -229,7 +229,7 @@ const LeftBar = () => {
         sx={{
           display:
             location.pathname.includes('basic') ||
-            location.pathname.includes('facilitator') ||
+            location.pathname.includes('enterprise') ||
             location.pathname.includes('enterprise')
               ? 'flex'
               : 'none',
