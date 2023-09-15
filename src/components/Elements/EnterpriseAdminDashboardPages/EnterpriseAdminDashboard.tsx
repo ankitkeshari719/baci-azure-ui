@@ -105,14 +105,6 @@ function EnterpriseAdminDashboard() {
 
   const currentDate = moment(new Date()).format('Do MMM YYYY');
 
-  const [path, setPath] = React.useState(
-    location.pathname.includes('enterprise')
-      ? 'enterprise'
-      : location.pathname.includes('enterprise')
-      ? 'enterprise'
-      : 'enterprise'
-  );
-
   const [global, dispatch] = React.useContext(GlobalContext);
 
   const [fromDate, setFromDate] = useState<string>(
@@ -277,11 +269,11 @@ function EnterpriseAdminDashboard() {
   };
 
   const navigateToJoinSession = () => {
-    navigate('/enterprise/joinRetro/');
+    navigate('/enterpriseAdmin/joinRetro/');
   };
 
   const navigateToCreateSession = () => {
-    navigate('/enterprise/createRetro/');
+    navigate('/enterpriseAdmin/createRetro/');
   };
 
   return (
@@ -292,7 +284,9 @@ function EnterpriseAdminDashboard() {
         width="100%"
         height="100%"
         padding="10px"
-      >        {/* Label and Button */}
+      >
+        {' '}
+        {/* Label and Button */}
         <Box
           display="flex"
           flexDirection="row"
@@ -717,7 +711,7 @@ function EnterpriseAdminDashboard() {
                 <Box
                   onClick={() => {
                     navigate(
-                      '/enterprise/analytics/enterpriseLevelActionsCount'
+                      '/enterpriseAdmin/analytics/enterpriseLevelActionsCount'
                     );
                   }}
                 >
@@ -744,7 +738,7 @@ function EnterpriseAdminDashboard() {
                     }}
                     onClick={() =>
                       goToAnalyticsLearnMorePage(
-                        '/enterprise/analytics/enterpriseLevelActionsCountLearnMore'
+                        '/enterpriseAdmin/analytics/enterpriseLevelActionsCountLearnMore'
                       )
                     }
                   />
@@ -776,7 +770,9 @@ function EnterpriseAdminDashboard() {
                 </Box>
                 <Box
                   onClick={() => {
-                    navigate('/enterprise/analytics/teamLevelActionsCount');
+                    navigate(
+                      '/enterpriseAdmin/analytics/teamLevelActionsCount'
+                    );
                   }}
                 >
                   <TeamLevelActionsCountChart dashboard={true} />
@@ -799,7 +795,7 @@ function EnterpriseAdminDashboard() {
                     }}
                     onClick={() =>
                       goToAnalyticsLearnMorePage(
-                        '/enterprise/analytics/teamLevelActionsCountLearnMore'
+                        '/enterpriseAdmin/analytics/teamLevelActionsCountLearnMore'
                       )
                     }
                   />
@@ -888,7 +884,7 @@ function EnterpriseAdminDashboard() {
                 <Box
                   onClick={() => {
                     navigate(
-                      '/enterprise/analytics/enterpriseLevelParticipantsCount'
+                      '/enterpriseAdmin/analytics/enterpriseLevelParticipantsCount'
                     );
                   }}
                 >
@@ -912,7 +908,7 @@ function EnterpriseAdminDashboard() {
                     }}
                     onClick={() =>
                       goToAnalyticsLearnMorePage(
-                        '/enterprise/analytics/enterpriseLevelParticipantsCountLearnMore'
+                        '/enterpriseAdmin/analytics/enterpriseLevelParticipantsCountLearnMore'
                       )
                     }
                   />
@@ -945,7 +941,7 @@ function EnterpriseAdminDashboard() {
                 <Box
                   onClick={() => {
                     navigate(
-                      '/enterprise/analytics/enterpriseLevelRetrosCount'
+                      '/enterpriseAdmin/analytics/enterpriseLevelRetrosCount'
                     );
                   }}
                 >
@@ -969,7 +965,7 @@ function EnterpriseAdminDashboard() {
                     }}
                     onClick={() =>
                       goToAnalyticsLearnMorePage(
-                        '/enterprise/analytics/enterpriseLevelRetrosCountLearnMore'
+                        '/enterpriseAdmin/analytics/enterpriseLevelRetrosCountLearnMore'
                       )
                     }
                   />
@@ -1058,7 +1054,7 @@ function EnterpriseAdminDashboard() {
                 <Box
                   onClick={() => {
                     navigate(
-                      '/enterprise/analytics/enterpriseLevelSentimentsThemes'
+                      '/enterpriseAdmin/analytics/enterpriseLevelSentimentsThemes'
                     );
                   }}
                 >
@@ -1085,7 +1081,7 @@ function EnterpriseAdminDashboard() {
                     }}
                     onClick={() =>
                       goToAnalyticsLearnMorePage(
-                        '/enterprise/analytics/enterpriseLevelSentimentsThemesLearnMore'
+                        '/enterpriseAdmin/analytics/enterpriseLevelSentimentsThemesLearnMore'
                       )
                     }
                   />
@@ -1118,7 +1114,7 @@ function EnterpriseAdminDashboard() {
                 <Box
                   onClick={() => {
                     navigate(
-                      '/enterprise/analytics/enterpriseLevelSentimentsMoods'
+                      '/enterpriseAdmin/analytics/enterpriseLevelSentimentsMoods'
                     );
                   }}
                 >
@@ -1145,7 +1141,7 @@ function EnterpriseAdminDashboard() {
                     }}
                     onClick={() =>
                       goToAnalyticsLearnMorePage(
-                        '/enterprise/analytics/enterpriseLevelSentimentsMoodsLearnMore'
+                        '/enterpriseAdmin/analytics/enterpriseLevelSentimentsMoodsLearnMore'
                       )
                     }
                   />
@@ -1234,7 +1230,7 @@ function EnterpriseAdminDashboard() {
                 <Box
                   onClick={() => {
                     navigate(
-                      '/enterprise/analytics/enterpriseLevelSentimentsSummary'
+                      '/enterpriseAdmin/analytics/enterpriseLevelSentimentsSummary'
                     );
                   }}
                 >
@@ -1261,7 +1257,7 @@ function EnterpriseAdminDashboard() {
                     }}
                     onClick={() =>
                       goToAnalyticsLearnMorePage(
-                        '/enterprise/analytics/enterpriseLevelSentimentsSummaryLearnMore'
+                        '/enterpriseAdmin/analytics/enterpriseLevelSentimentsSummaryLearnMore'
                       )
                     }
                   />

@@ -131,11 +131,11 @@ function BasicDashboardWithEnterprise() {
   ];
 
   const navigateToJoinSession = () => {
-    navigate('/enterprise/joinRetro/');
+    navigate('/basic/joinRetro/');
   };
 
   const navigateToCreateSession = () => {
-    navigate('/enterprise/createRetro/');
+    navigate('/basic/createRetro/');
   };
 
   const goToAnalyticsLearnMorePage = (url: string) => {
@@ -397,7 +397,7 @@ function BasicDashboardWithEnterprise() {
                 <Box
                   onClick={() => {
                     navigate(
-                      '/enterprise/analytics/enterpriseLevelActionsCount'
+                      '/basic/analytics/enterpriseLevelActionsCount'
                     );
                   }}
                 >
@@ -424,7 +424,7 @@ function BasicDashboardWithEnterprise() {
                     }}
                     onClick={() =>
                       goToAnalyticsLearnMorePage(
-                        '/enterprise/analytics/enterpriseLevelActionsCountLearnMore'
+                        '/basic/analytics/enterpriseLevelActionsCountLearnMore'
                       )
                     }
                   />
@@ -468,7 +468,7 @@ function BasicDashboardWithEnterprise() {
                 <Box
                   onClick={() => {
                     navigate(
-                      '/enterprise/analytics/enterpriseLevelParticipantsCount'
+                      '/basic/analytics/enterpriseLevelParticipantsCount'
                     );
                   }}
                 >
@@ -492,7 +492,7 @@ function BasicDashboardWithEnterprise() {
                     }}
                     onClick={() =>
                       goToAnalyticsLearnMorePage(
-                        '/enterprise/analytics/enterpriseLevelParticipantsCountLearnMore'
+                        '/basic/analytics/enterpriseLevelParticipantsCountLearnMore'
                       )
                     }
                   />
@@ -536,7 +536,7 @@ function BasicDashboardWithEnterprise() {
                 <Box
                   onClick={() => {
                     navigate(
-                      '/enterprise/analytics/enterpriseLevelParticipantsCount'
+                      '/basic/analytics/enterpriseLevelParticipantsCount'
                     );
                   }}
                 >
@@ -563,7 +563,7 @@ function BasicDashboardWithEnterprise() {
                     }}
                     onClick={() =>
                       goToAnalyticsLearnMorePage(
-                        '/enterprise/analytics/enterpriseLevelParticipantsCountLearnMore'
+                        '/basic/analytics/enterpriseLevelParticipantsCountLearnMore'
                       )
                     }
                   />
