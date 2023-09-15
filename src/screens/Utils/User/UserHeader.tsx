@@ -97,9 +97,9 @@ export function UserHeader({ accounts }: Props) {
           localStorage.setItem('userAzureData', JSON.stringify(accounts));
           localStorage.setItem('userData', JSON.stringify(res));
           if (res.roleName === BASIC) {
-            navigate('/basic/');
+            navigate('basic');
           } else if (res.roleName === ENTERPRISE) {
-            navigate('/enterprise/');
+            navigate('enterprise');
           }
         }
       },
@@ -234,7 +234,7 @@ export function UserHeader({ accounts }: Props) {
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'center',
-            padding: '10px'
+            padding: '10px',
           }}
         >
           <BodyRegularTypography

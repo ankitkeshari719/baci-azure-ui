@@ -175,6 +175,9 @@ const LeftBar = () => {
     navigate(path + '/profile/');
   }
 
+  const isDisplay =
+    location.pathname.includes('basic') ||
+    location.pathname.includes('enterprise');
   return (
     <>
       <Box
@@ -182,7 +185,6 @@ const LeftBar = () => {
         sx={{
           display:
             location.pathname.includes('basic') ||
-            location.pathname.includes('enterprise') ||
             location.pathname.includes('enterprise')
               ? 'flex'
               : 'none',
@@ -252,7 +254,6 @@ const LeftBar = () => {
               </Tooltip>
             );
           })}
-
           <Tooltip title={user?.name + ''} placement="right-start">
             <span>
               {selectedAvatar != '' ? (
@@ -286,51 +287,53 @@ const LeftBar = () => {
         </Box>
       </Box>
       {/* Retro Templates Hover Menu */}
-      <Box
-        sx={{
-          position: 'absolute',
-          zIndex: 4,
-          left: '80px',
-          bottom: '400px',
-          width: '320px',
-          padding: '10px 1px',
-          flexDirection: 'column',
-          alignItems: 'flex-start',
-          display: hoverOnMenu ? 'flex' : 'none',
-          borderRadius: '10px',
-          border: '1px solid #CCC',
-          background: '#FFF',
-          boxShadow: '0px 1px 10px 0px rgba(0, 0, 0, 0.15);',
-        }}
-      >
+      {hoverOnMenu && (
         <Box
           sx={{
-            display: 'flex',
-            padding: '10px 24px',
-            alignItems: 'center',
-            gap: '12px',
-            cursor: 'pointer',
+            position: 'absolute',
+            zIndex: 4,
+            left: '80px',
+            bottom: '400px',
+            width: '320px',
+            padding: '10px 1px',
+            flexDirection: 'column',
+            alignItems: 'flex-start',
+            display: hoverOnMenu ? 'flex' : 'none',
+            borderRadius: '10px',
+            border: '1px solid #CCC',
+            background: '#FFF',
+            boxShadow: '0px 1px 10px 0px rgba(0, 0, 0, 0.15);',
           }}
-          onClick={goToRetroList}
         >
-          <BodyRegularTypography label="Retro Templates" />
+          <Box
+            sx={{
+              display: 'flex',
+              padding: '10px 24px',
+              alignItems: 'center',
+              gap: '12px',
+              cursor: 'pointer',
+            }}
+            onClick={goToRetroList}
+          >
+            <BodyRegularTypography label="Retro Templates" />
+          </Box>
+          <Box
+            sx={{
+              display: 'flex',
+              padding: '10px 24px',
+              alignItems: 'center',
+              gap: '12px',
+              cursor: 'pointer',
+            }}
+            onClick={goToPulseCheckList}
+          >
+            <BodyRegularTypography label="Pulse Check Template" />
+          </Box>
         </Box>
-        <Box
-          sx={{
-            display: 'flex',
-            padding: '10px 24px',
-            alignItems: 'center',
-            gap: '12px',
-            cursor: 'pointer',
-          }}
-          onClick={goToPulseCheckList}
-        >
-          <BodyRegularTypography label="Pulse Check Template" />
-        </Box>
-      </Box>
-      {/* Manage Users Hover Menu */}
+      )}
 
-      {userRoleName === ENTERPRISE && (
+      {/* Manage Users Hover Menu */}
+      {userRoleName === ENTERPRISE && hoverOnUserMenu && (
         <Box
           sx={{
             position: 'absolute',
