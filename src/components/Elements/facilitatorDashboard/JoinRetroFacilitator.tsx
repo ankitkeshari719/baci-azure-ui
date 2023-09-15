@@ -16,7 +16,7 @@ import { OutlinedButton } from '../../CustomizedButton/OutlinedButton';
 import {
   BASIC,
   ENTERPRISE_ADMIN,
-  REGULAR_ENTERPRISE,
+  ENTERPRISE,
 } from '../../../constants/applicationConst';
 
 const styles = {
@@ -83,7 +83,7 @@ export function JoinRetroFacilitator() {
       navigate('/enterprise/createRetro/');
     } else if (
       tempLocalUserData &&
-      tempLocalUserData.roleName === REGULAR_ENTERPRISE
+      tempLocalUserData.roleName === ENTERPRISE
     ) {
       navigate('/facilitator/createRetro/');
     }

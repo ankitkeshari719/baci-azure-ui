@@ -10,7 +10,7 @@ import * as React from 'react';
 import {
   BASIC,
   ENTERPRISE_ADMIN,
-  REGULAR_ENTERPRISE,
+  ENTERPRISE,
 } from '../../../constants/applicationConst';
 
 export default function EnterpriseLevelSentimentsThemeChartLearnMore() {
@@ -29,7 +29,7 @@ export default function EnterpriseLevelSentimentsThemeChartLearnMore() {
       navigate('/enterprise/analytics');
     } else if (
       tempLocalUserData &&
-      tempLocalUserData.roleName === REGULAR_ENTERPRISE
+      tempLocalUserData.roleName === ENTERPRISE
     ) {
       navigate('/facilitator/analytics');
     }

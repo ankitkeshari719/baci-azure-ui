@@ -23,7 +23,7 @@ import { BodyRegularTypography } from '../../CustomizedTypography';
 import {
   BASIC,
   ENTERPRISE_ADMIN,
-  REGULAR_ENTERPRISE,
+  ENTERPRISE,
 } from '../../../constants/applicationConst';
 
 const LeftBar = () => {
@@ -45,7 +45,7 @@ const LeftBar = () => {
       setPath('basic');
     } else if (
       tempLocalUserData &&
-      tempLocalUserData.roleName === REGULAR_ENTERPRISE
+      tempLocalUserData.roleName === ENTERPRISE
     ) {
       setPath('facilitator');
     } else if (
@@ -67,7 +67,7 @@ const LeftBar = () => {
       disabled: false,
       isVisibleToBasic:
         userRoleName === BASIC ||
-        userRoleName === REGULAR_ENTERPRISE ||
+        userRoleName === ENTERPRISE ||
         userRoleName === ENTERPRISE_ADMIN,
     },
     {
@@ -78,7 +78,7 @@ const LeftBar = () => {
       disabled: false,
       isVisibleToBasic:
         userRoleName === BASIC ||
-        userRoleName === REGULAR_ENTERPRISE ||
+        userRoleName === ENTERPRISE ||
         userRoleName === ENTERPRISE_ADMIN,
     },
 
@@ -90,7 +90,7 @@ const LeftBar = () => {
       disabled: false,
       isVisibleToBasic:
         userRoleName === BASIC ||
-        userRoleName === REGULAR_ENTERPRISE ||
+        userRoleName === ENTERPRISE ||
         userRoleName === ENTERPRISE_ADMIN,
     },
 
@@ -102,7 +102,7 @@ const LeftBar = () => {
       disabled: false,
       isVisibleToBasic:
         userRoleName === BASIC ||
-        userRoleName === REGULAR_ENTERPRISE ||
+        userRoleName === ENTERPRISE ||
         userRoleName === ENTERPRISE_ADMIN,
     },
     {
@@ -113,7 +113,7 @@ const LeftBar = () => {
       disabled: true,
       isVisibleToBasic:
         userRoleName === BASIC ||
-        userRoleName === REGULAR_ENTERPRISE ||
+        userRoleName === ENTERPRISE ||
         userRoleName === ENTERPRISE_ADMIN,
     },
     {
@@ -124,7 +124,7 @@ const LeftBar = () => {
       disabled: true,
       isVisibleToBasic:
         userRoleName === BASIC ||
-        userRoleName === REGULAR_ENTERPRISE ||
+        userRoleName === ENTERPRISE ||
         userRoleName === ENTERPRISE_ADMIN,
     },
     {
@@ -135,7 +135,7 @@ const LeftBar = () => {
       disabled: false,
       isVisibleToBasic:
         userRoleName === BASIC ||
-        userRoleName === REGULAR_ENTERPRISE ||
+        userRoleName === ENTERPRISE ||
         userRoleName === ENTERPRISE_ADMIN,
     },
   ];
@@ -149,7 +149,7 @@ const LeftBar = () => {
       disabled: false,
       isVisibleToBasic:
         userRoleName === BASIC ||
-        userRoleName === REGULAR_ENTERPRISE ||
+        userRoleName === ENTERPRISE ||
         userRoleName === ENTERPRISE_ADMIN,
     },
     {
@@ -160,7 +160,7 @@ const LeftBar = () => {
       disabled: false,
       isVisibleToBasic:
         userRoleName === BASIC ||
-        userRoleName === REGULAR_ENTERPRISE ||
+        userRoleName === ENTERPRISE ||
         userRoleName === ENTERPRISE_ADMIN,
     },
   ];

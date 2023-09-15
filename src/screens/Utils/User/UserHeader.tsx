@@ -11,7 +11,7 @@ import * as Icons from 'heroicons-react';
 import {
   BASIC,
   ENTERPRISE_ADMIN,
-  REGULAR_ENTERPRISE,
+  ENTERPRISE,
   BASIC_USER_ID,
 } from '../../../constants/applicationConst';
 import { Dialog, DialogTitle, Grid, Box } from '@mui/material';
@@ -63,7 +63,7 @@ export function UserHeader({ accounts }: Props) {
           localStorage.setItem('userAzureData', JSON.stringify(accounts));
           if (res.roleName === BASIC) {
             navigate('/basic/');
-          } else if (res.roleName === REGULAR_ENTERPRISE) {
+          } else if (res.roleName === ENTERPRISE) {
             navigate('/facilitator/');
           } else if (res.roleName === ENTERPRISE_ADMIN) {
             navigate('/enterprise/');

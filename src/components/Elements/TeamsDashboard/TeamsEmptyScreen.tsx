@@ -14,7 +14,7 @@ import { ActionType, GlobalContext } from '../../../contexts/GlobalContext';
 import {
   BASIC,
   ENTERPRISE_ADMIN,
-  REGULAR_ENTERPRISE,
+  ENTERPRISE,
 } from '../../../constants/applicationConst';
 
 export default function TeamsEmptyScreen() {
@@ -35,7 +35,7 @@ export default function TeamsEmptyScreen() {
       navigate('/enterprise/teams/create/');
     } else if (
       tempLocalUserData &&
-      tempLocalUserData.roleName === REGULAR_ENTERPRISE
+      tempLocalUserData.roleName === ENTERPRISE
     ) {
       navigate('/facilitator/teams/create/');
     }

@@ -25,7 +25,7 @@ import moment from 'moment';
 import * as Icons from 'heroicons-react';
 import {
   ENTERPRISE_ADMIN,
-  REGULAR_ENTERPRISE,
+  ENTERPRISE,
   BASIC,
 } from '../../../constants/applicationConst';
 import { useNavigate } from 'react-router-dom';
@@ -151,7 +151,7 @@ export default function TeamsDashboard() {
       navigate('/enterprise/teams/create/');
     } else if (
       tempLocalUserData &&
-      tempLocalUserData.roleName === REGULAR_ENTERPRISE
+      tempLocalUserData.roleName === ENTERPRISE
     ) {
       navigate('/facilitator/teams/create/');
     }

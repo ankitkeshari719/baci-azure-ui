@@ -13,7 +13,7 @@ import * as Icons from 'heroicons-react';
 import {
   BASIC,
   ENTERPRISE_ADMIN,
-  REGULAR_ENTERPRISE,
+  ENTERPRISE,
 } from '../../constants/applicationConst';
 
 export default function PrivacyPolicy() {
@@ -32,7 +32,7 @@ export default function PrivacyPolicy() {
       navigate('/enterprise/joinRetro/');
     } else if (
       tempLocalUserData &&
-      tempLocalUserData.roleName === REGULAR_ENTERPRISE
+      tempLocalUserData.roleName === ENTERPRISE
     ) {
       navigate('/facilitator/joinRetro/');
     } else {

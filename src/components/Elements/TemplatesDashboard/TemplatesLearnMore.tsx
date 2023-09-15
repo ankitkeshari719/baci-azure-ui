@@ -9,7 +9,7 @@ import {
 import {
   BASIC,
   ENTERPRISE_ADMIN,
-  REGULAR_ENTERPRISE,
+  ENTERPRISE,
 } from '../../../constants/applicationConst';
 
 export default function TemplatesLearnMore() {
@@ -28,7 +28,7 @@ export default function TemplatesLearnMore() {
       navigate('/enterprise/templates/retroListTemplate/');
     } else if (
       tempLocalUserData &&
-      tempLocalUserData.roleName === REGULAR_ENTERPRISE
+      tempLocalUserData.roleName === ENTERPRISE
     ) {
       navigate('/facilitator/templates/retroListTemplate/');
     }

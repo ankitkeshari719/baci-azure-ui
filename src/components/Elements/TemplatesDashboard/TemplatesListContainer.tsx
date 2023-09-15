@@ -22,7 +22,7 @@ import { templatesDataOne, templatesDataTwo } from './const';
 import {
   BASIC,
   ENTERPRISE_ADMIN,
-  REGULAR_ENTERPRISE,
+  ENTERPRISE,
 } from '../../../constants/applicationConst';
 
 export default function TemplatesListContainer() {
@@ -46,7 +46,7 @@ export default function TemplatesListContainer() {
       navigate('/enterprise/templates/retroListTemplate/RetroTemplateDetails/');
     } else if (
       tempLocalUserData &&
-      tempLocalUserData.roleName === REGULAR_ENTERPRISE
+      tempLocalUserData.roleName === ENTERPRISE
     ) {
       navigate('/facilitator/templates/retroListTemplate/RetroTemplateDetails/');
     }

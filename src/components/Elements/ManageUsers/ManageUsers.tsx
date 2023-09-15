@@ -35,7 +35,7 @@ import {
 } from '../../../helpers/msal/services';
 import { ActionType, GlobalContext } from '../../../contexts/GlobalContext';
 import {
-  REGULAR_ENTERPRISE,
+  ENTERPRISE,
   REGULAR_ENTERPRISE_ID,
   BASIC,
   BASIC_USER_ID,
@@ -235,7 +235,7 @@ export default function ManageUsers() {
     if (tempStoreRoleName === BASIC) {
       requestBody = {
         roleId: REGULAR_ENTERPRISE_ID,
-        roleName: REGULAR_ENTERPRISE,
+        roleName: ENTERPRISE,
       };
     } else {
       requestBody = {
@@ -580,7 +580,7 @@ export default function ManageUsers() {
                                   </Typography>
                                 </MenuItem>
                                 <br />
-                                <MenuItem value={REGULAR_ENTERPRISE}>
+                                <MenuItem value={ENTERPRISE}>
                                   <Typography
                                     style={{
                                       fontFamily: 'Poppins',
@@ -772,7 +772,7 @@ export default function ManageUsers() {
                                   </Typography>
                                 </MenuItem>
                                 <br />
-                                <MenuItem value={REGULAR_ENTERPRISE}>
+                                <MenuItem value={ENTERPRISE}>
                                   <Typography
                                     style={{
                                       fontFamily: 'Poppins',

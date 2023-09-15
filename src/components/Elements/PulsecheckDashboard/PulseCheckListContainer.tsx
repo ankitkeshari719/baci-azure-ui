@@ -21,7 +21,7 @@ import { TextButton } from '../../CustomizedButton/TextButton';
 import { pulseChecksData } from './const';
 import {
   ENTERPRISE_ADMIN,
-  REGULAR_ENTERPRISE,
+  ENTERPRISE,
   BASIC,
 } from '../../../constants/applicationConst';
 
@@ -48,7 +48,7 @@ export default function PulseCheckListContainer() {
       );
     } else if (
       tempLocalUserData &&
-      tempLocalUserData.roleName === REGULAR_ENTERPRISE
+      tempLocalUserData.roleName === ENTERPRISE
     ) {
       navigate(
         '/facilitator/templates/pulseCheckListTemplate/pulseCheckTemplateDetails/'

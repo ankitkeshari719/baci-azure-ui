@@ -10,7 +10,7 @@ import {
 import {
   BASIC,
   ENTERPRISE_ADMIN,
-  REGULAR_ENTERPRISE,
+  ENTERPRISE,
 } from '../../../constants/applicationConst';
 
 export default function PulseCheckLearnMore() {
@@ -29,7 +29,7 @@ export default function PulseCheckLearnMore() {
       navigate('/enterprise/templates/pulseCheckListTemplate/');
     } else if (
       tempLocalUserData &&
-      tempLocalUserData.roleName === REGULAR_ENTERPRISE
+      tempLocalUserData.roleName === ENTERPRISE
     ) {
       navigate('/facilitator/templates/pulseCheckListTemplate/');
     }
