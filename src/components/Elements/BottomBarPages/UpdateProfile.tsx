@@ -19,7 +19,7 @@ import { GlobalContext, ActionType } from '../../../contexts/GlobalContext';
 import { getEnterpriseById, updateUser } from '../../../helpers/msal/services';
 import OutlineButtonWithIconWithNoBorder from '../../CustomizedButton/OutlineButtonWithIconWithNoBorder';
 import { LazyLoadImage } from 'react-lazy-load-image-component';
-import { BASIC } from '../../../constants/applicationConst';
+import { BASIC, ENTERPRISE } from '../../../constants/applicationConst';
 
 const styles = {
   accessCodeTextField: {
@@ -730,7 +730,7 @@ export default function UpdateProfile({ handleEdit }: Props) {
               </Box>
             </FormControl>
             {/* Request Enterprise */}
-            {tempLocalUserData && tempLocalUserData.enterpriseName === '' ? (
+            {tempLocalUserData && tempLocalUserData.roleName === ENTERPRISE ? (
               <></>
             ) : (
               <>

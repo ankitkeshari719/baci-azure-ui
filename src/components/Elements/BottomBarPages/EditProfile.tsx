@@ -863,7 +863,7 @@ export default function EditProfile({ handleEdit }: Props) {
                 />
               </Box>
             </FormControl>
-            {/* Request Enterprise Admin */}
+            {/* Request Enterprise Button*/}
             {isEnterpriserRequested ? (
               <Box display="flex" flexDirection="column">
                 <Box display="flex" flexDirection="row" alignItems="center">
@@ -879,7 +879,7 @@ export default function EditProfile({ handleEdit }: Props) {
                     size={'medium'}
                   />
                   <BootstrapTooltip
-                    title="Enterprise Admin get Additional Analytics Insights from each team. If your organisation needs an enterprise admin account contact sales@baci.com"
+                    title="Enterprise get Additional Analytics Insights from each team. If your organisation needs an enterprise account contact sales@baci.com"
                     placement="right"
                   >
                     <Icons.InformationCircleOutline
@@ -901,7 +901,7 @@ export default function EditProfile({ handleEdit }: Props) {
                     background: '#CEEFFF',
                   }}
                 >
-                  <BodySemiBoldTypography label="Your Request for Enterprise Admin Dashboard is sent" />
+                  <BodySemiBoldTypography label="Your Request for Enterprise Dashboard is sent" />
                   <CaptionRegularTypography
                     label="Waiting for Admin to accept your request."
                     style={{ marginTop: '16px' }}
@@ -912,7 +912,7 @@ export default function EditProfile({ handleEdit }: Props) {
               <Box display="flex" flexDirection="row" alignItems="center">
                 <ContainedButton
                   id={'request_enterprise_admin'}
-                  name={'Request Enterprise Admin'}
+                  name={'Request Enterprise'}
                   onClick={() => requestEnterpriseAdmin()}
                   style={{
                     padding: '10px 18px',
@@ -921,7 +921,7 @@ export default function EditProfile({ handleEdit }: Props) {
                   size={'medium'}
                 />
                 <BootstrapTooltip
-                  title="Enterprise Admin get Additional Analytics Insights from each team. If your organisation needs an enterprise admin account contact sales@baci.com"
+                  title="Enterprise get Additional Analytics Insights from each team. If your organisation needs an enterprise account contact sales@baci.com"
                   placement="right"
                 >
                   <Icons.InformationCircleOutline
