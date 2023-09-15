@@ -100,10 +100,11 @@ export default function TeamsDashboard() {
       type: ActionType.SET_LOADING,
       payload: { loadingFlag: true },
     });
+
     const requestBody = {
-      userId: 'ujala.kashyap@evoltech.com.au',
-      roleName: 'Enterprise Admin',
-      enterpriseId: 'evoltech0.0751886606959975',
+      userId: tempLocalUserData && tempLocalUserData.userId,
+      roleName: tempLocalUserData && tempLocalUserData.roleName,
+      enterpriseId: tempLocalUserData && tempLocalUserData.enterpriseId,
     };
 
     await getTeamDataForTable(requestBody).then(

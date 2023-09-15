@@ -149,6 +149,7 @@ export function UserHeader({ accounts }: Props) {
       );
     }
   };
+
   const handleLogoutRedirect = () => {
     dispatch({
       type: ActionType.SET_LOADING,

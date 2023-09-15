@@ -25,7 +25,7 @@ import { useNavigate } from 'react-router-dom';
 import { BodyRegularTypography } from '../../CustomizedTypography';
 import {
   BASIC,
-  ENTERPRISE_ADMIN,
+ENTERPRISE_ADMIN,
   REGULAR_ENTERPRISE,
 } from '../../../constants/applicationConst';
 
@@ -38,6 +38,7 @@ const LeftBar = () => {
   const localUserData = localStorage.getItem('userData');
   const tempLocalUserData = localUserData && JSON.parse(localUserData);
   const [selectedAvatar, setSelectedAvatar] = React.useState('');
+  const [userRoleName, setUserRoleName] = React.useState('');
 
   const [path, setPath] = React.useState('');
   const imaSrc = '/avatars/animals/' + selectedAvatar + '.svg';
@@ -48,7 +49,7 @@ const LeftBar = () => {
     } else if (
       tempLocalUserData &&
       tempLocalUserData.roleName === REGULAR_ENTERPRISE
-    ) {
+) {
       setPath('facilitator');
     } else if (
       tempLocalUserData &&
@@ -57,6 +58,7 @@ const LeftBar = () => {
       setPath('enterprise');
     }
     setSelectedAvatar(tempLocalUserData && tempLocalUserData.selectedAvatar);
+    setUserRoleName(tempLocalUserData && tempLocalUserData.roleName);
   }, [tempLocalUserData]);
 
   const menuArray = [
@@ -67,7 +69,7 @@ const LeftBar = () => {
       routeTo: path + '/dashboard/',
       disabled: false,
       isVisibleToBasic:
-        tempLocalUserData && tempLocalUserData.roleName === BASIC,
+        userRoleName === BASIC || userRoleName === REGULAR_ENTERPRISE,
     },
     {
       id: 2,
@@ -76,7 +78,7 @@ const LeftBar = () => {
       routeTo: path + '/actions/',
       disabled: false,
       isVisibleToBasic:
-        tempLocalUserData && tempLocalUserData.roleName === BASIC,
+        userRoleName === BASIC || userRoleName === REGULAR_ENTERPRISE,
     },
 
     {
@@ -86,7 +88,7 @@ const LeftBar = () => {
       routeTo: path + '/analytics/',
       disabled: false,
       isVisibleToBasic:
-        tempLocalUserData && tempLocalUserData.roleName === BASIC,
+        userRoleName === BASIC || userRoleName === REGULAR_ENTERPRISE,
     },
 
     {
@@ -96,7 +98,7 @@ const LeftBar = () => {
       routeTo: path + '/sessions',
       disabled: false,
       isVisibleToBasic:
-        tempLocalUserData && tempLocalUserData.roleName === BASIC,
+        userRoleName === BASIC || userRoleName === REGULAR_ENTERPRISE,
     },
     {
       id: 5,
@@ -105,7 +107,7 @@ const LeftBar = () => {
       routeTo: path + '/templates/',
       disabled: true,
       isVisibleToBasic:
-        tempLocalUserData && tempLocalUserData.roleName === BASIC,
+        userRoleName === BASIC || userRoleName === REGULAR_ENTERPRISE,
     },
 
     {
@@ -114,8 +116,7 @@ const LeftBar = () => {
       icon: UserGroupIcon,
       routeTo: path + '/teams/',
       disabled: true,
-      isVisibleToBasic:
-        !tempLocalUserData && tempLocalUserData.roleName === BASIC,
+      isVisibleToBasic: userRoleName != BASIC,
     },
     {
       id: 7,
@@ -124,7 +125,7 @@ const LeftBar = () => {
       routeTo: path + '/settings/',
       disabled: false,
       isVisibleToBasic:
-        tempLocalUserData && tempLocalUserData.roleName === BASIC,
+        userRoleName === BASIC || userRoleName === REGULAR_ENTERPRISE,
     },
   ];
 
@@ -136,7 +137,7 @@ const LeftBar = () => {
       routeTo: path + '/help',
       disabled: false,
       isVisibleToBasic:
-        tempLocalUserData && tempLocalUserData.roleName === BASIC,
+        userRoleName === BASIC || userRoleName === REGULAR_ENTERPRISE,
     },
     {
       id: 9,
@@ -145,7 +146,7 @@ const LeftBar = () => {
       routeTo: path + '/notifications',
       disabled: false,
       isVisibleToBasic:
-        tempLocalUserData && tempLocalUserData.roleName === BASIC,
+        userRoleName === BASIC || userRoleName === REGULAR_ENTERPRISE,
     },
   ];
 

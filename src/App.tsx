@@ -86,14 +86,6 @@ export default function App({ instance }: AppProps) {
   const tempLocalUserData = localUserData && JSON.parse(localUserData);
   const isXsUp = useMediaQuery('(max-width:768px)');
 
-  React.useEffect(() => {
-    let userData = {
-      roleName: BASIC,
-      roleId: BASIC_USER_ID,
-    };
-    localStorage.setItem('userData', JSON.stringify(userData));
-  }, []);
-
   return (
     <ErrorProvider>
       <ErrorBoundary>
@@ -105,7 +97,7 @@ export default function App({ instance }: AppProps) {
                   <ThemeProvider theme={theme}>
                     <MsalProvider instance={instance}>
                       <Box display="flex" height="calc(var(--app-height))">
-                        {!isXsUp && tempLocalUserData != null && <LeftBar />}
+                        {!isXsUp && <LeftBar />}
                         <Box
                           display="flex"
                           width={
