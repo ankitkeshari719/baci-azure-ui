@@ -77,7 +77,7 @@ const LeftBar = () => {
       id: 4,
       label: 'Sessions',
       icon: ViewColumnsIcon,
-      routeTo: path + '/sessions',
+      routeTo: path + '/sessions/',
       disabled: false,
       isVisibleToBasic: userRoleName === BASIC || userRoleName === ENTERPRISE,
     },
@@ -94,7 +94,7 @@ const LeftBar = () => {
       label: 'Users',
       icon: UserGroupIcon,
       routeTo: path + '/teams/',
-      disabled: true,
+      disabled: userRoleName === ENTERPRISE,
       isVisibleToBasic: userRoleName === BASIC || userRoleName === ENTERPRISE,
     },
     {
@@ -129,18 +129,15 @@ const LeftBar = () => {
   useEffect(() => {
     if (location.pathname.includes('dashboard')) {
       setSelectedMenu(menuArray[0].label);
-      setPath(
-        location.pathname.includes('enterprise') ? 'enterprise' : 'basic'
-      );
     } else if (location.pathname.includes('analytics')) {
       setSelectedMenu(menuArray[2].label);
     } else if (location.pathname.includes('actions')) {
       setSelectedMenu(menuArray[1].label);
     }
   }, [
+    location.pathname.includes('enterprise'),
     location.pathname.includes('analytics'),
     location.pathname.includes('enterprise/dashboard'),
-    location.pathname.includes('enterprise'),
   ]);
 
   // Function to navigate on retroListTemplate
@@ -175,7 +172,7 @@ const LeftBar = () => {
 
   // Function to navigate on goToProfile
   function goToProfile() {
-    navigate(path + '/profile');
+    navigate(path + '/profile/');
   }
 
   return (
@@ -332,65 +329,68 @@ const LeftBar = () => {
         </Box>
       </Box>
       {/* Manage Users Hover Menu */}
-      <Box
-        sx={{
-          position: 'absolute',
-          zIndex: 4,
-          left: '80px',
-          bottom: '300px',
-          width: '320px',
-          padding: '10px 1px',
-          flexDirection: 'column',
-          alignItems: 'flex-start',
-          display: hoverOnUserMenu ? 'flex' : 'none',
-          borderRadius: '10px',
-          border: '1px solid #CCC',
-          background: '#FFF',
-          boxShadow: '0px 1px 10px 0px rgba(0, 0, 0, 0.15);',
-        }}
-      >
-        {userRoleName === ENTERPRISE && (
-          <>
-            <Box
-              sx={{
-                display: 'flex',
-                padding: '10px 24px',
-                alignItems: 'center',
-                gap: '12px',
-                cursor: 'pointer',
-              }}
-              onClick={goToEnterpriseRegistration}
-            >
-              <BodyRegularTypography label="Organisation Details" />
-            </Box>
-            <Box
-              sx={{
-                display: 'flex',
-                padding: '10px 24px',
-                alignItems: 'center',
-                gap: '12px',
-                cursor: 'pointer',
-              }}
-              onClick={goToManageUser}
-            >
-              <BodyRegularTypography label="Manage Users" />
-            </Box>
-          </>
-        )}
 
+      {userRoleName === ENTERPRISE && (
         <Box
           sx={{
-            display: 'flex',
-            padding: '10px 24px',
-            alignItems: 'center',
-            gap: '12px',
-            cursor: 'pointer',
+            position: 'absolute',
+            zIndex: 4,
+            left: '80px',
+            bottom: '300px',
+            width: '320px',
+            padding: '10px 1px',
+            flexDirection: 'column',
+            alignItems: 'flex-start',
+            display: hoverOnUserMenu ? 'flex' : 'none',
+            borderRadius: '10px',
+            border: '1px solid #CCC',
+            background: '#FFF',
+            boxShadow: '0px 1px 10px 0px rgba(0, 0, 0, 0.15);',
           }}
-          onClick={goToAllTeams}
         >
-          <BodyRegularTypography label="All Teams" />
+          {userRoleName === ENTERPRISE && (
+            <>
+              <Box
+                sx={{
+                  display: 'flex',
+                  padding: '10px 24px',
+                  alignItems: 'center',
+                  gap: '12px',
+                  cursor: 'pointer',
+                }}
+                onClick={goToEnterpriseRegistration}
+              >
+                <BodyRegularTypography label="Organisation Details" />
+              </Box>
+              <Box
+                sx={{
+                  display: 'flex',
+                  padding: '10px 24px',
+                  alignItems: 'center',
+                  gap: '12px',
+                  cursor: 'pointer',
+                }}
+                onClick={goToManageUser}
+              >
+                <BodyRegularTypography label="Manage Users" />
+              </Box>
+            </>
+          )}
+
+          <Box
+            sx={{
+              display: 'flex',
+              padding: '10px 24px',
+              alignItems: 'center',
+              gap: '12px',
+              cursor: 'pointer',
+            }}
+            onClick={goToAllTeams}
+          >
+            <BodyRegularTypography label="All Teams" />
+          </Box>
         </Box>
-      </Box>
+      )}
     </>
   );
 };

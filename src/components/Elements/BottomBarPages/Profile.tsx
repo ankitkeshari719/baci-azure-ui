@@ -21,7 +21,6 @@ export default function Profile() {
     <>
       <Box
         sx={{
-          width: '100%',
           background: '#F9FBFC',
           padding: '20px',
           display: 'flex',

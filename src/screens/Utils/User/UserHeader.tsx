@@ -57,7 +57,6 @@ export function UserHeader({ accounts }: Props) {
           accounts && accounts[0] && accounts[0].username.split('@')[1];
         let enterpriseFlag = 0;
         if (res) {
-          console.log('res', res);
           for (let i = 0; i < res.length; i++) {
             if (res[i].organisationDomain.includes(com)) {
               enterpriseFlag = 1;
@@ -192,7 +191,7 @@ export function UserHeader({ accounts }: Props) {
           style={{ padding: '20px', borderBottom: '1px solid #EA4335' }}
         >
           <Grid container sx={{ display: 'flex', alignItems: 'center' }}>
-            <Grid item sm={6}>
+            <Grid item sm={10}>
               <Box
                 display="flex"
                 justifyContent="flex-start"
@@ -206,11 +205,22 @@ export function UserHeader({ accounts }: Props) {
                   }}
                 />
                 <H5SemiBoldTypography
-                  label={'Enterprise Not Exist'}
+                  label={'Enterprise Domain Not Available'}
                   style={{
                     color: '#343434',
                     marginLeft: '12px !important',
                   }}
+                />
+              </Box>
+            </Grid>
+            <Grid item sm={2}>
+              <Box display="flex" justifyContent="flex-end">
+                <Icons.X
+                  size={20}
+                  style={{
+                    cursor: 'pointer',
+                  }}
+                  onClick={() => handleLogoutRedirect()}
                 />
               </Box>
             </Grid>
@@ -224,10 +234,11 @@ export function UserHeader({ accounts }: Props) {
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'center',
+            padding: '10px'
           }}
         >
           <BodyRegularTypography
-            label={`Are you sure your company using BACI?`}
+            label={`BACI Accounts is currently available only for Enterprise. Contact Sales for more details.`}
           />
         </Box>
         {/* Buttons */}
@@ -237,20 +248,19 @@ export function UserHeader({ accounts }: Props) {
               width: '100%',
               display: 'flex',
               flex: '1 0 auto',
-              alignItems: 'flex-end',
-              justifyContent: 'flex-end',
+              alignItems: 'center',
+              justifyContent: 'center',
               my: 2,
             }}
           >
             <AuthenticatedTemplate>
               <ContainedButton
                 id={'signin_button_desktop'}
-                name={'Logout'}
+                name={'Close'}
                 onClick={() => handleLogoutRedirect()}
                 style={{
                   marginTop: '42px',
-                  textDecorationLine: 'underline',
-                  background: '#EA4335 !important',
+                  background: '#159ADD !important',
                 }}
                 size={'medium'}
               />
