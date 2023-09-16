@@ -1,4 +1,3 @@
-import * as React from 'react';
 import { BrowserRouter, Outlet, Route, Routes } from 'react-router-dom';
 import { SnackMessage } from './components/Elements/SnackMessage';
 import { ThemeProvider } from '@mui/material/styles';
@@ -47,7 +46,7 @@ import EnterpriseLevelSentimentsSummaryChartLearnMore from './screens/Analytics/
 import EnterpriseLevelSentimentsThemeChartLearnMore from './screens/Analytics/LearnMore/EnterpriseLevelSentimentsThemeChartLearnMore';
 import TeamLevelActionsCountChartLearnMore from './screens/Analytics/LearnMore/TeamLevelActionsCountChartLearnMore';
 
-// Common Component - Element
+// Common Component for Basic and Enterprise User- Element
 import LeftBar from './components/Elements/leftBar/LeftBar';
 import { ActionsMainContainer } from './components/Elements/actionDashboard/ActionsMainContainer';
 import { SessionsMainContainer } from './components/Elements/SessionDashboard/SessionsMainContainer';
@@ -64,7 +63,7 @@ import CreateTeam from './components/Elements/TeamsDashboard/CreateTeam';
 import ManageUsers from './components/Elements/ManageUsers/ManageUsers';
 
 // Basic User Component
-import { BasicUserMainContainer } from './components/Elements/BasicUserDashboardPages/BasicUserMainContainer';
+import BasicDashboardWithEnterprise from './components/Elements/BasicUserDashboardPages/BasicDashboardWithEnterprise';
 
 // Enterprise User Component
 import { EnterpriseMainContainer } from './components/Elements/EnterpriseDashboardPages/EnterpriseMainContainer';
@@ -72,7 +71,6 @@ import { JoinRetroEnterprise } from './components/Elements/EnterpriseDashboardPa
 import EnterpriseRegistration from './components/Elements/EnterpriseDashboardPages/EnterpriseRegistration';
 
 import PageNotFound from './screens/Others/PageNotFound';
-import BasicDashboardWithEnterprise from './components/Elements/BasicUserDashboardPages/BasicDashboardWithEnterprise';
 
 type AppProps = {
   instance: IPublicClientApplication;
@@ -88,8 +86,6 @@ function MainContent() {
 }
 
 export default function App({ instance }: AppProps) {
-  const localUserData = localStorage.getItem('userData');
-  const tempLocalUserData = localUserData && JSON.parse(localUserData);
   const isXsUp = useMediaQuery('(max-width:768px)');
 
   return (
@@ -104,14 +100,7 @@ export default function App({ instance }: AppProps) {
                     <MsalProvider instance={instance}>
                       <Box display="flex" height="calc(var(--app-height))">
                         {!isXsUp && <LeftBar />}
-                        <Box
-                          display="flex"
-                          width={
-                            tempLocalUserData === null
-                              ? '100%'
-                              : 'calc(100% - 72px)'
-                          }
-                        >
+                        <Box display="flex" width={'calc(100% - 72px)'}>
                           <Routes>
                             <Route
                               path="/"
