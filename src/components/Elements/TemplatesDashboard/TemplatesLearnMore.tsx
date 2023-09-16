@@ -6,11 +6,7 @@ import {
   BodySemiBoldTypography,
   H2SemiBoldTypography,
 } from '../../CustomizedTypography';
-import {
-  BASIC,
-  ENTERPRISE_ADMIN,
-  REGULAR_ENTERPRISE,
-} from '../../../constants/applicationConst';
+import { BASIC, ENTERPRISE } from '../../../constants/applicationConst';
 
 export default function TemplatesLearnMore() {
   const navigate = useNavigate();
@@ -21,16 +17,8 @@ export default function TemplatesLearnMore() {
   function goToRetroList() {
     if (tempLocalUserData && tempLocalUserData.roleName === BASIC) {
       navigate('/basic/templates/retroListTemplate/');
-    } else if (
-      tempLocalUserData &&
-      tempLocalUserData.roleName === ENTERPRISE_ADMIN
-    ) {
+    } else if (tempLocalUserData && tempLocalUserData.roleName === ENTERPRISE) {
       navigate('/enterprise/templates/retroListTemplate/');
-    } else if (
-      tempLocalUserData &&
-      tempLocalUserData.roleName === REGULAR_ENTERPRISE
-    ) {
-      navigate('/facilitator/templates/retroListTemplate/');
     }
   }
 

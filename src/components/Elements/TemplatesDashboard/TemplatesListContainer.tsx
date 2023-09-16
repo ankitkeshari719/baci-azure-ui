@@ -19,11 +19,7 @@ import commonStyles from '../../../style.module.scss';
 import theme from '../../../helpers/theme/theme';
 import { TextButton } from '../../CustomizedButton/TextButton';
 import { templatesDataOne, templatesDataTwo } from './const';
-import {
-  BASIC,
-  ENTERPRISE_ADMIN,
-  REGULAR_ENTERPRISE,
-} from '../../../constants/applicationConst';
+import { BASIC, ENTERPRISE } from '../../../constants/applicationConst';
 
 export default function TemplatesListContainer() {
   const navigate = useNavigate();
@@ -36,19 +32,9 @@ export default function TemplatesListContainer() {
   // Function to navigate on retroListTemplate
   function goToRetroTemplateLearnMore() {
     if (tempLocalUserData && tempLocalUserData.roleName === BASIC) {
-      navigate(
-        '/basic/templates/retroListTemplate/RetroTemplateDetails/'
-      );
-    } else if (
-      tempLocalUserData &&
-      tempLocalUserData.roleName === ENTERPRISE_ADMIN
-    ) {
+      navigate('/basic/templates/retroListTemplate/RetroTemplateDetails/');
+    } else if (tempLocalUserData && tempLocalUserData.roleName === ENTERPRISE) {
       navigate('/enterprise/templates/retroListTemplate/RetroTemplateDetails/');
-    } else if (
-      tempLocalUserData &&
-      tempLocalUserData.roleName === REGULAR_ENTERPRISE
-    ) {
-      navigate('/facilitator/templates/retroListTemplate/RetroTemplateDetails/');
     }
   }
 

@@ -20,6 +20,7 @@ import * as Icons from 'heroicons-react';
 import { MONTH_SELECTORS, MenuProps } from './const';
 import { getEnterpriseLevelSentimentsTheme } from '../../helpers/msal/services';
 import { GlobalContext } from '../../contexts/GlobalContext';
+import { BASIC, ENTERPRISE } from '../../constants/applicationConst';
 
 export default function EnterpriseLevelSentimentsThemeChart({
   dashboard,
@@ -42,6 +43,18 @@ export default function EnterpriseLevelSentimentsThemeChart({
   const [toDate, setToDate] = useState<string>(
     global.chartEndDate ? global.chartEndDate : '16'
   );
+
+  const localUserData = localStorage.getItem('userData');
+  const tempLocalUserData = localUserData && JSON.parse(localUserData);
+  const [path, setPath] = React.useState('');
+
+  React.useEffect(() => {
+    if (tempLocalUserData && tempLocalUserData.roleName === BASIC) {
+      setPath('basic');
+    } else if (tempLocalUserData && tempLocalUserData.roleName === ENTERPRISE) {
+      setPath('enterprise');
+    } 
+  }, [tempLocalUserData]);
 
   const getChartWidth = () => {
     switch (true) {
@@ -330,7 +343,7 @@ export default function EnterpriseLevelSentimentsThemeChart({
               justifyContent: 'flex-start',
             }}
           >
-            <Link to={'/facilitator/analytics/'}>Analytics </Link>&nbsp;\ Key
+            <Link to={path + '/analytics/'}>Analytics </Link>&nbsp;\ Count
             themes heatmap
           </Grid>
           {/* Back Button & Chart Title */}

@@ -1,21 +1,16 @@
 import * as React from 'react';
 import Paper from '@mui/material/Paper';
-import { Box, InputAdornment, TextField } from '@mui/material';
+import { Box } from '@mui/material';
 
 import {
   BodySemiBoldTypography,
   H2SemiBoldTypography,
 } from '../../CustomizedTypography';
 import commonStyles from '../../../style.module.scss';
-import { MagnifyingGlassIcon } from '@heroicons/react/24/outline';
 import { useNavigate } from 'react-router-dom';
 import { ContainedButtonWithIcon } from '../../CustomizedButton/ContainedButtonWithIcon';
-import { ActionType, GlobalContext } from '../../../contexts/GlobalContext';
-import {
-  BASIC,
-  ENTERPRISE_ADMIN,
-  REGULAR_ENTERPRISE,
-} from '../../../constants/applicationConst';
+import { GlobalContext } from '../../../contexts/GlobalContext';
+import { BASIC, ENTERPRISE } from '../../../constants/applicationConst';
 
 export default function TeamsEmptyScreen() {
   const [global, dispatch] = React.useContext(GlobalContext);
@@ -28,16 +23,8 @@ export default function TeamsEmptyScreen() {
   function CreateNewTeam() {
     if (tempLocalUserData && tempLocalUserData.roleName === BASIC) {
       navigate('/basic/teams/create/');
-    } else if (
-      tempLocalUserData &&
-      tempLocalUserData.roleName === ENTERPRISE_ADMIN
-    ) {
+    } else if (tempLocalUserData && tempLocalUserData.roleName === ENTERPRISE) {
       navigate('/enterprise/teams/create/');
-    } else if (
-      tempLocalUserData &&
-      tempLocalUserData.roleName === REGULAR_ENTERPRISE
-    ) {
-      navigate('/facilitator/teams/create/');
     }
   }
 

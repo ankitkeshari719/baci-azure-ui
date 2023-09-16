@@ -9,8 +9,7 @@ import {
 import * as React from 'react';
 import {
   BASIC,
-  ENTERPRISE_ADMIN,
-  REGULAR_ENTERPRISE,
+  ENTERPRISE,
 } from '../../../constants/applicationConst';
 
 export default function EnterpriseLevelSentimentsSummaryChartLearnMore() {
@@ -24,14 +23,9 @@ export default function EnterpriseLevelSentimentsSummaryChartLearnMore() {
       navigate('/basic/analytics');
     } else if (
       tempLocalUserData &&
-      tempLocalUserData.roleName === ENTERPRISE_ADMIN
+      tempLocalUserData.roleName === ENTERPRISE
     ) {
       navigate('/enterprise/analytics');
-    } else if (
-      tempLocalUserData &&
-      tempLocalUserData.roleName === REGULAR_ENTERPRISE
-    ) {
-      navigate('/facilitator/analytics');
     }
   }
 

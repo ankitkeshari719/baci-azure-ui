@@ -22,6 +22,7 @@ import {
   BodyRegularTypography,
   BodySemiBoldTypography,
   CaptionRegularTypography,
+  CaptionSemiBoldTypography,
   H3SemiBoldTypography,
   H4SemiBoldTypography,
   H6RegularTypography,
@@ -793,28 +794,48 @@ export default function EditProfile({ handleEdit }: Props) {
                   width: '100%',
                 }}
               >
-                <TextField
-                  label="Team"
-                  variant="filled"
-                  sx={{
-                    width: '400px',
-                    ...styles.accessCodeTextField,
-                  }}
-                  value={
-                    teams.length === 0 ? (
-                      "Team's Not Found"
-                    ) : (
-                      <ul>
-                        {teams.map((team: any) => {
-                          return <li key={team}>{team}</li>;
-                        })}
-                      </ul>
-                    )
-                  }
-                  InputProps={{
-                    readOnly: true,
-                  }}
-                />
+                {teams.length === 0 ? (
+                  "Team's Not Found"
+                ) : (
+                  <Box
+                    sx={{
+                      width: '400px',
+                      backgroundColor: 'rgba(0, 0, 0, 0.06)',
+                    }}
+                  >
+                    <CaptionRegularTypography
+                      label="Teams"
+                      style={{
+                        marginBottom: '24px',
+                        color: 'rgba(0, 0, 0, 0.6)',
+                      }}
+                    />
+                    {teams.map((team: any) => {
+                      return (
+                        <Box
+                          key={team.teamId}
+                          sx={{
+                            width: '150px',
+                            height: '32px',
+                            minWidth: '150px',
+                            minHeight: '32px',
+                            borderRadius: '4px',
+                            background: '#CEEFFF',
+                            textAlign: 'center',
+                            display: 'flex',
+                            alignItems: 'center',
+                            justifyContent: 'center',
+                          }}
+                        >
+                          <CaptionSemiBoldTypography
+                            label={team.teamName}
+                            style={{ color: '#159ADD !important' }}
+                          />
+                        </Box>
+                      );
+                    })}
+                  </Box>
+                )}
               </Box>
             </FormControl>
           </Box>
@@ -863,7 +884,7 @@ export default function EditProfile({ handleEdit }: Props) {
                 />
               </Box>
             </FormControl>
-            {/* Request Enterprise Admin */}
+            {/* Request Enterprise Button*/}
             {isEnterpriserRequested ? (
               <Box display="flex" flexDirection="column">
                 <Box display="flex" flexDirection="row" alignItems="center">
@@ -879,7 +900,7 @@ export default function EditProfile({ handleEdit }: Props) {
                     size={'medium'}
                   />
                   <BootstrapTooltip
-                    title="Enterprise Admin get Additional Analytics Insights from each team. If your organisation needs an enterprise admin account contact sales@baci.com"
+                    title="Enterprise get Additional Analytics Insights from each team. If your organisation needs an enterprise account contact sales@baci.com"
                     placement="right"
                   >
                     <Icons.InformationCircleOutline
@@ -901,7 +922,7 @@ export default function EditProfile({ handleEdit }: Props) {
                     background: '#CEEFFF',
                   }}
                 >
-                  <BodySemiBoldTypography label="Your Request for Enterprise Admin Dashboard is sent" />
+                  <BodySemiBoldTypography label="Your Request for Enterprise Dashboard is sent" />
                   <CaptionRegularTypography
                     label="Waiting for Admin to accept your request."
                     style={{ marginTop: '16px' }}
@@ -912,7 +933,7 @@ export default function EditProfile({ handleEdit }: Props) {
               <Box display="flex" flexDirection="row" alignItems="center">
                 <ContainedButton
                   id={'request_enterprise_admin'}
-                  name={'Request Enterprise Admin'}
+                  name={'Request Enterprise'}
                   onClick={() => requestEnterpriseAdmin()}
                   style={{
                     padding: '10px 18px',
@@ -921,7 +942,7 @@ export default function EditProfile({ handleEdit }: Props) {
                   size={'medium'}
                 />
                 <BootstrapTooltip
-                  title="Enterprise Admin get Additional Analytics Insights from each team. If your organisation needs an enterprise admin account contact sales@baci.com"
+                  title="Enterprise get Additional Analytics Insights from each team. If your organisation needs an enterprise account contact sales@baci.com"
                   placement="right"
                 >
                   <Icons.InformationCircleOutline

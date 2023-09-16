@@ -13,11 +13,7 @@ import {
 } from '../../CustomizedTypography';
 import { Retro as RetroType } from '../../../helpers/types';
 import { OutlinedButton } from '../../CustomizedButton/OutlinedButton';
-import {
-  BASIC,
-  ENTERPRISE_ADMIN,
-  REGULAR_ENTERPRISE,
-} from '../../../constants/applicationConst';
+import { BASIC, ENTERPRISE } from '../../../constants/applicationConst';
 
 const styles = {
   accessCodeTextField: {
@@ -39,6 +35,7 @@ export function JoinRetroEnterprise() {
   const [global, dispatch] = React.useContext(GlobalContext);
   const localUserData = localStorage.getItem('userData');
   const tempLocalUserData = localUserData && JSON.parse(localUserData);
+
   const [humanId, setHumanId] = React.useState(id || '');
   const [codeError, setCodeError] = React.useState('');
 
@@ -75,16 +72,8 @@ export function JoinRetroEnterprise() {
     setCodeError('');
     if (tempLocalUserData && tempLocalUserData.roleName === BASIC) {
       navigate('/basic/createRetro/');
-    } else if (
-      tempLocalUserData &&
-      tempLocalUserData.roleName === ENTERPRISE_ADMIN
-    ) {
+    } else if (tempLocalUserData && tempLocalUserData.roleName === ENTERPRISE) {
       navigate('/enterprise/createRetro/');
-    } else if (
-      tempLocalUserData &&
-      tempLocalUserData.roleName === REGULAR_ENTERPRISE
-    ) {
-      navigate('/facilitator/createRetro/');
     }
   }
 

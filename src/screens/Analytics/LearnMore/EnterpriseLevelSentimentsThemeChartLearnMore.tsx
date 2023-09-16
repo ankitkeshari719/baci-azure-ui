@@ -1,16 +1,14 @@
 import commonStyles from '../../../style.module.scss';
-import { Box, Grid, List, ListItem, Paper, Typography } from '@mui/material';
+import { Box, Grid, Paper, Typography } from '@mui/material';
 import * as Icons from 'heroicons-react';
 import { useNavigate } from 'react-router-dom';
 import {
   BodySemiBoldTypography,
   H2SemiBoldTypography,
 } from '../../../components/CustomizedTypography';
-import * as React from 'react';
 import {
   BASIC,
-  ENTERPRISE_ADMIN,
-  REGULAR_ENTERPRISE,
+  ENTERPRISE,
 } from '../../../constants/applicationConst';
 
 export default function EnterpriseLevelSentimentsThemeChartLearnMore() {
@@ -22,16 +20,11 @@ export default function EnterpriseLevelSentimentsThemeChartLearnMore() {
   function goToDashboard() {
     if (tempLocalUserData && tempLocalUserData.roleName === BASIC) {
       navigate('/basic/analytics');
-    } else if (
+    }  else if (
       tempLocalUserData &&
-      tempLocalUserData.roleName === ENTERPRISE_ADMIN
+      tempLocalUserData.roleName === ENTERPRISE
     ) {
       navigate('/enterprise/analytics');
-    } else if (
-      tempLocalUserData &&
-      tempLocalUserData.roleName === REGULAR_ENTERPRISE
-    ) {
-      navigate('/facilitator/analytics');
     }
   }
 

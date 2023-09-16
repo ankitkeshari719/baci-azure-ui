@@ -50,7 +50,6 @@ import { retro } from '../../../constants/DemoConst';
 import { TextButton } from '../../CustomizedButton/TextButton';
 
 import EnterpriseLevelSentimentsThemeChart from '../../../screens/Analytics/EnterpriseLevelSentimentsThemeChart';
-import DateSelector from './DateSelector';
 import { useState } from 'react';
 import { ActionType, GlobalContext } from '../../../contexts/GlobalContext';
 import EnterpriseLevelSentimentsSummaryChart from '../../../screens/Analytics/EnterpriseLevelSentimentsSummaryChart';
@@ -62,9 +61,9 @@ import {
 } from '../../../helpers/msal/services';
 import { OutlinedButton } from '../../CustomizedButton/OutlinedButton';
 import AverageRetroChart from '../../../screens/Analytics/AverageRetroChart';
-import DummyEnterpriseDashboard from './DummyEnterpriseDashboard';
 import { styled } from '@mui/material/styles';
 import Tooltip, { TooltipProps, tooltipClasses } from '@mui/material/Tooltip';
+import DateSelector from './DateSelector';
 
 const theme = createTheme({
   palette: {
@@ -107,11 +106,11 @@ function EnterpriseDashboard() {
   const currentDate = moment(new Date()).format('Do MMM YYYY');
 
   const [path, setPath] = React.useState(
-    location.pathname.includes('facilitator')
-      ? 'facilitator'
+    location.pathname.includes('enterprise')
+      ? 'enterprise'
       : location.pathname.includes('enterprise')
       ? 'enterprise'
-      : 'facilitator'
+      : 'enterprise'
   );
 
   const [global, dispatch] = React.useContext(GlobalContext);
@@ -278,11 +277,11 @@ function EnterpriseDashboard() {
   };
 
   const navigateToJoinSession = () => {
-    navigate('/facilitator/joinRetro/');
+    navigate('/enterprise/joinRetro/');
   };
 
   const navigateToCreateSession = () => {
-    navigate('/facilitator/createRetro/');
+    navigate('/enterprise/createRetro/');
   };
 
   return (
@@ -294,7 +293,7 @@ function EnterpriseDashboard() {
         height="100%"
         padding="10px"
       >
-        <DummyEnterpriseDashboard />
+        {' '}
         {/* Label and Button */}
         <Box
           display="flex"

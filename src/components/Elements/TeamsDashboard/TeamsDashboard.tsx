@@ -23,11 +23,7 @@ import { TableBody, TableCell, TableRow } from '@material-ui/core';
 import { MagnifyingGlassIcon } from '@heroicons/react/24/outline';
 import moment from 'moment';
 import * as Icons from 'heroicons-react';
-import {
-  ENTERPRISE_ADMIN,
-  REGULAR_ENTERPRISE,
-  BASIC,
-} from '../../../constants/applicationConst';
+import { ENTERPRISE, BASIC } from '../../../constants/applicationConst';
 import { useNavigate } from 'react-router-dom';
 import { ContainedButtonWithIcon } from '../../CustomizedButton/ContainedButtonWithIcon';
 import { LazyLoadImage } from 'react-lazy-load-image-component';
@@ -100,10 +96,11 @@ export default function TeamsDashboard() {
       type: ActionType.SET_LOADING,
       payload: { loadingFlag: true },
     });
+
     const requestBody = {
-      userId: 'ujala.kashyap@evoltech.com.au',
-      roleName: 'Enterprise Admin',
-      enterpriseId: 'evoltech0.0751886606959975',
+      userId: tempLocalUserData && tempLocalUserData.userId,
+      roleName: tempLocalUserData && tempLocalUserData.roleName,
+      enterpriseId: tempLocalUserData && tempLocalUserData.enterpriseId,
     };
 
     await getTeamDataForTable(requestBody).then(
@@ -143,16 +140,8 @@ export default function TeamsDashboard() {
   function createNewTeam() {
     if (tempLocalUserData && tempLocalUserData.roleName === BASIC) {
       navigate('/basic/teams/create/');
-    } else if (
-      tempLocalUserData &&
-      tempLocalUserData.roleName === ENTERPRISE_ADMIN
-    ) {
+    } else if (tempLocalUserData && tempLocalUserData.roleName === ENTERPRISE) {
       navigate('/enterprise/teams/create/');
-    } else if (
-      tempLocalUserData &&
-      tempLocalUserData.roleName === REGULAR_ENTERPRISE
-    ) {
-      navigate('/facilitator/teams/create/');
     }
   }
 

@@ -20,8 +20,7 @@ import theme from '../../../helpers/theme/theme';
 import { TextButton } from '../../CustomizedButton/TextButton';
 import { pulseChecksData } from './const';
 import {
-  ENTERPRISE_ADMIN,
-  REGULAR_ENTERPRISE,
+  ENTERPRISE,
   BASIC,
 } from '../../../constants/applicationConst';
 
@@ -41,17 +40,10 @@ export default function PulseCheckListContainer() {
       );
     } else if (
       tempLocalUserData &&
-      tempLocalUserData.roleName === ENTERPRISE_ADMIN
+      tempLocalUserData.roleName === ENTERPRISE
     ) {
       navigate(
         '/enterprise/templates/pulseCheckListTemplate/pulseCheckTemplateDetails/'
-      );
-    } else if (
-      tempLocalUserData &&
-      tempLocalUserData.roleName === REGULAR_ENTERPRISE
-    ) {
-      navigate(
-        '/facilitator/templates/pulseCheckListTemplate/pulseCheckTemplateDetails/'
       );
     }
   }

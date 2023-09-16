@@ -28,6 +28,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import * as Icons from 'heroicons-react';
 import { MONTH_SELECTORS, MenuProps } from './const';
 import { GlobalContext } from '../../contexts/GlobalContext';
+import { BASIC, ENTERPRISE } from '../../constants/applicationConst';
 
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
   [`&.${tableCellClasses.head}`]: {
@@ -70,6 +71,18 @@ export default function AverageParticipantChart({
     useState<number>();
   const navigate = useNavigate();
   const windowWidth = React.useRef(window.innerWidth);
+
+  const localUserData = localStorage.getItem('userData');
+  const tempLocalUserData = localUserData && JSON.parse(localUserData);
+  const [path, setPath] = React.useState('');
+
+  React.useEffect(() => {
+    if (tempLocalUserData && tempLocalUserData.roleName === BASIC) {
+      setPath('basic');
+    } else if (tempLocalUserData && tempLocalUserData.roleName === ENTERPRISE) {
+      setPath('enterprise');
+    }
+  }, [tempLocalUserData]);
 
   const getChartWidth = () => {
     switch (true) {
@@ -263,8 +276,8 @@ export default function AverageParticipantChart({
               justifyContent: 'flex-start',
             }}
           >
-            <Link to={'/facilitator/analytics/'}>Analytics </Link>&nbsp;\ Count
-            of participants
+            <Link to={path + '/analytics/'}>Analytics </Link>&nbsp;\ Count of
+            participants
           </Grid>
           {/* Back Button & Chart Title */}
           <Grid

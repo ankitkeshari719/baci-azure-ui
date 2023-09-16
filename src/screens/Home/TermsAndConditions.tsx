@@ -11,11 +11,7 @@ import {
 } from '../../components/CustomizedTypography';
 import { useNavigate } from 'react-router-dom';
 import * as Icons from 'heroicons-react';
-import {
-  BASIC,
-  ENTERPRISE_ADMIN,
-  REGULAR_ENTERPRISE,
-} from '../../constants/applicationConst';
+import { BASIC, ENTERPRISE } from '../../constants/applicationConst';
 
 export default function TermsAndConditions() {
   const navigate = useNavigate();
@@ -26,16 +22,8 @@ export default function TermsAndConditions() {
   function goToLanding() {
     if (tempLocalUserData && tempLocalUserData.roleName === BASIC) {
       navigate('/basic/joinRetro/');
-    } else if (
-      tempLocalUserData &&
-      tempLocalUserData.roleName === ENTERPRISE_ADMIN
-    ) {
+    } else if (tempLocalUserData && tempLocalUserData.roleName === ENTERPRISE) {
       navigate('/enterprise/joinRetro/');
-    } else if (
-      tempLocalUserData &&
-      tempLocalUserData.roleName === REGULAR_ENTERPRISE
-    ) {
-      navigate('/facilitator/joinRetro/');
     } else {
       navigate(`/`);
     }

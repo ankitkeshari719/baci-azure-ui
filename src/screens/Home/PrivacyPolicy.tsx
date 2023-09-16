@@ -12,8 +12,7 @@ import { useNavigate } from 'react-router-dom';
 import * as Icons from 'heroicons-react';
 import {
   BASIC,
-  ENTERPRISE_ADMIN,
-  REGULAR_ENTERPRISE,
+  ENTERPRISE,
 } from '../../constants/applicationConst';
 
 export default function PrivacyPolicy() {
@@ -25,16 +24,11 @@ export default function PrivacyPolicy() {
   function goToLanding() {
     if (tempLocalUserData && tempLocalUserData.roleName === BASIC) {
       navigate('/basic/joinRetro/');
-    } else if (
+    }  else if (
       tempLocalUserData &&
-      tempLocalUserData.roleName === ENTERPRISE_ADMIN
+      tempLocalUserData.roleName === ENTERPRISE
     ) {
       navigate('/enterprise/joinRetro/');
-    } else if (
-      tempLocalUserData &&
-      tempLocalUserData.roleName === REGULAR_ENTERPRISE
-    ) {
-      navigate('/facilitator/joinRetro/');
     } else {
       navigate(`/`);
     }

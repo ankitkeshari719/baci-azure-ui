@@ -22,7 +22,7 @@ const theme = createTheme({
   },
 });
 
-export default function EmptyFacilitatorDashboard() {
+export default function EmptyEnterpriseDashboard() {
   const navigate = useNavigate();
 
   // Function to navigate on create new retro page

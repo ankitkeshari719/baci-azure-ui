@@ -10,8 +10,7 @@ import {
 import * as Icons from 'heroicons-react';
 import {
   BASIC,
-  ENTERPRISE_ADMIN,
-  REGULAR_ENTERPRISE,
+  ENTERPRISE,
   BASIC_USER_ID,
 } from '../../../constants/applicationConst';
 import { Dialog, DialogTitle, Grid, Box } from '@mui/material';
@@ -46,34 +45,8 @@ export function UserHeader({ accounts }: Props) {
   // Function to check weather this id is present in DB or not
   const checkUser = () => {
     if (accounts && accounts.length != 0) {
-      callGetUserByEmailId(accounts[0].username);
+      callGetAllEnterprises();
     }
-  };
-
-  // Function to get user by email
-  const callGetUserByEmailId = async (emailId: string) => {
-    await getUserByEmailId(emailId).then(
-      res => {
-        if (res === null) {
-          // Create new user in DB
-          callGetAllEnterprises();
-        } else {
-          // Navigate the user to dashboard according to his role
-          localStorage.setItem('userData', JSON.stringify(res));
-          localStorage.setItem('userAzureData', JSON.stringify(accounts));
-          if (res.roleName === BASIC) {
-            navigate('/basic/');
-          } else if (res.roleName === REGULAR_ENTERPRISE) {
-            navigate('/facilitator/');
-          } else if (res.roleName === ENTERPRISE_ADMIN) {
-            navigate('/enterprise/');
-          }
-        }
-      },
-      err => {
-        console.log('err', err);
-      }
-    );
   };
 
   // Function to get all user enterprises
@@ -84,15 +57,49 @@ export function UserHeader({ accounts }: Props) {
           accounts && accounts[0] && accounts[0].username.split('@')[1];
         let enterpriseFlag = 0;
         if (res) {
-          console.log('res', res);
           for (let i = 0; i < res.length; i++) {
             if (res[i].organisationDomain.includes(com)) {
               enterpriseFlag = 1;
-              callCreateUser(res[i].organisationId, res[i].organisationName);
+              // Check where the user is exist or not in DB
+              callGetUserByEmailId(
+                res[i].organisationId,
+                res[i].organisationName,
+                accounts[0].username
+              );
             }
           }
+
           if (enterpriseFlag == 0) {
-            callCreateUser('', '');
+            // Pop Up
+            setOpenEnterpriseNotExistDialog(true);
+          }
+        }
+      },
+      err => {
+        console.log('err', err);
+      }
+    );
+  };
+
+  // Function to get user by email
+  const callGetUserByEmailId = async (
+    enterpriseId: any,
+    enterpriseName: any,
+    emailId: string
+  ) => {
+    await getUserByEmailId(emailId).then(
+      res => {
+        if (res === null) {
+          // If user is not exist in DB then create new DB
+          callCreateUser(enterpriseId, enterpriseName, emailId);
+        } else {
+          // Navigate the user to dashboard according to his role
+          localStorage.setItem('userAzureData', JSON.stringify(accounts));
+          localStorage.setItem('userData', JSON.stringify(res));
+          if (res.roleName === BASIC) {
+            navigate('basic');
+          } else if (res.roleName === ENTERPRISE) {
+            navigate('enterprise');
           }
         }
       },
@@ -103,7 +110,11 @@ export function UserHeader({ accounts }: Props) {
   };
 
   // Function to create new user
-  const callCreateUser = async (enterpriseId: any, enterpriseName: any) => {
+  const callCreateUser = async (
+    enterpriseId: any,
+    enterpriseName: any,
+    emailId: string
+  ) => {
     let requestBody;
     dispatch({
       type: ActionType.SET_LOADING,
@@ -113,7 +124,7 @@ export function UserHeader({ accounts }: Props) {
       requestBody = {
         firstName: '',
         lastName: '',
-        emailId: accounts[0].username,
+        emailId: emailId,
         phoneNo: '',
         name: accounts[0].name,
         country: '',
@@ -149,6 +160,7 @@ export function UserHeader({ accounts }: Props) {
       );
     }
   };
+
   const handleLogoutRedirect = () => {
     dispatch({
       type: ActionType.SET_LOADING,
@@ -179,7 +191,7 @@ export function UserHeader({ accounts }: Props) {
           style={{ padding: '20px', borderBottom: '1px solid #EA4335' }}
         >
           <Grid container sx={{ display: 'flex', alignItems: 'center' }}>
-            <Grid item sm={6}>
+            <Grid item sm={10}>
               <Box
                 display="flex"
                 justifyContent="flex-start"
@@ -193,11 +205,22 @@ export function UserHeader({ accounts }: Props) {
                   }}
                 />
                 <H5SemiBoldTypography
-                  label={'Enterprise Not Exist'}
+                  label={'Enterprise Domain Not Available'}
                   style={{
                     color: '#343434',
                     marginLeft: '12px !important',
                   }}
+                />
+              </Box>
+            </Grid>
+            <Grid item sm={2}>
+              <Box display="flex" justifyContent="flex-end">
+                <Icons.X
+                  size={20}
+                  style={{
+                    cursor: 'pointer',
+                  }}
+                  onClick={() => handleLogoutRedirect()}
                 />
               </Box>
             </Grid>
@@ -211,10 +234,11 @@ export function UserHeader({ accounts }: Props) {
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'center',
+            padding: '10px',
           }}
         >
           <BodyRegularTypography
-            label={`Are you sure your company using BACI?`}
+            label={`BACI Accounts is currently available only for Enterprise. Contact Sales for more details.`}
           />
         </Box>
         {/* Buttons */}
@@ -224,20 +248,19 @@ export function UserHeader({ accounts }: Props) {
               width: '100%',
               display: 'flex',
               flex: '1 0 auto',
-              alignItems: 'flex-end',
-              justifyContent: 'flex-end',
+              alignItems: 'center',
+              justifyContent: 'center',
               my: 2,
             }}
           >
             <AuthenticatedTemplate>
               <ContainedButton
                 id={'signin_button_desktop'}
-                name={'Logout'}
+                name={'Close'}
                 onClick={() => handleLogoutRedirect()}
                 style={{
                   marginTop: '42px',
-                  textDecorationLine: 'underline',
-                  background: '#EA4335 !important',
+                  background: '#159ADD !important',
                 }}
                 size={'medium'}
               />

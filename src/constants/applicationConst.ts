@@ -1,12 +1,10 @@
 // Roles
-export const ENTERPRISE_ADMIN = 'Enterprise Admin';
-export const REGULAR_ENTERPRISE = 'Regular Enterprise';
-export const BASIC = 'Regular User';
+export const ENTERPRISE = 'Enterprise';
+export const BASIC = 'Basic';
 
 // Roles Id
-export const ENTERPRISE_ADMIN_ID = 'enterprise_admin0.2998369833503478';
-export const REGULAR_ENTERPRISE_ID = 'regular_enterprise0.45201882573159047';
-export const BASIC_USER_ID = 'regular_user0.673870751618382';
+export const ENTERPRISE_USER_ID = 'enterprise0.9280169812171823';
+export const BASIC_USER_ID = 'basic0.19002859861323018';
 
 // Msal inProgress Status
 export const IN_PROGRESS_NONE = 'none';

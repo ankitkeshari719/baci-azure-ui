@@ -15,19 +15,12 @@ import {
 } from '@heroicons/react/24/outline';
 
 import React, { useEffect } from 'react';
-
-import Avatar from '../Avatar';
-
 import { GlobalContext } from '../../../contexts/GlobalContext';
 
 import { LazyLoadImage } from 'react-lazy-load-image-component';
 import { useNavigate } from 'react-router-dom';
 import { BodyRegularTypography } from '../../CustomizedTypography';
-import {
-  BASIC,
-  ENTERPRISE_ADMIN,
-  REGULAR_ENTERPRISE,
-} from '../../../constants/applicationConst';
+import { BASIC, ENTERPRISE } from '../../../constants/applicationConst';
 
 const LeftBar = () => {
   const navigate = useNavigate();
@@ -38,6 +31,7 @@ const LeftBar = () => {
   const localUserData = localStorage.getItem('userData');
   const tempLocalUserData = localUserData && JSON.parse(localUserData);
   const [selectedAvatar, setSelectedAvatar] = React.useState('');
+  const [userRoleName, setUserRoleName] = React.useState('');
 
   const [path, setPath] = React.useState('');
   const imaSrc = '/avatars/animals/' + selectedAvatar + '.svg';
@@ -45,18 +39,11 @@ const LeftBar = () => {
   React.useEffect(() => {
     if (tempLocalUserData && tempLocalUserData.roleName === BASIC) {
       setPath('basic');
-    } else if (
-      tempLocalUserData &&
-      tempLocalUserData.roleName === REGULAR_ENTERPRISE
-    ) {
-      setPath('facilitator');
-    } else if (
-      tempLocalUserData &&
-      tempLocalUserData.roleName === ENTERPRISE_ADMIN
-    ) {
+    } else if (tempLocalUserData && tempLocalUserData.roleName === ENTERPRISE) {
       setPath('enterprise');
     }
     setSelectedAvatar(tempLocalUserData && tempLocalUserData.selectedAvatar);
+    setUserRoleName(tempLocalUserData && tempLocalUserData.roleName);
   }, [tempLocalUserData]);
 
   const menuArray = [
@@ -66,8 +53,7 @@ const LeftBar = () => {
       icon: HomeIcon,
       routeTo: path + '/dashboard/',
       disabled: false,
-      isVisibleToBasic:
-        tempLocalUserData && tempLocalUserData.roleName === BASIC,
+      isVisibleToBasic: userRoleName === BASIC || userRoleName === ENTERPRISE,
     },
     {
       id: 2,
@@ -75,8 +61,7 @@ const LeftBar = () => {
       icon: ClipboardDocumentCheckIcon,
       routeTo: path + '/actions/',
       disabled: false,
-      isVisibleToBasic:
-        tempLocalUserData && tempLocalUserData.roleName === BASIC,
+      isVisibleToBasic: userRoleName === BASIC || userRoleName === ENTERPRISE,
     },
 
     {
@@ -85,18 +70,16 @@ const LeftBar = () => {
       icon: ChartBarIcon,
       routeTo: path + '/analytics/',
       disabled: false,
-      isVisibleToBasic:
-        tempLocalUserData && tempLocalUserData.roleName === BASIC,
+      isVisibleToBasic: userRoleName === BASIC || userRoleName === ENTERPRISE,
     },
 
     {
       id: 4,
       label: 'Sessions',
       icon: ViewColumnsIcon,
-      routeTo: path + '/sessions',
+      routeTo: path + '/sessions/',
       disabled: false,
-      isVisibleToBasic:
-        tempLocalUserData && tempLocalUserData.roleName === BASIC,
+      isVisibleToBasic: userRoleName === BASIC || userRoleName === ENTERPRISE,
     },
     {
       id: 5,
@@ -104,18 +87,15 @@ const LeftBar = () => {
       icon: Square3Stack3DIcon,
       routeTo: path + '/templates/',
       disabled: true,
-      isVisibleToBasic:
-        tempLocalUserData && tempLocalUserData.roleName === BASIC,
+      isVisibleToBasic: userRoleName === BASIC || userRoleName === ENTERPRISE,
     },
-
     {
       id: 6,
       label: 'Users',
       icon: UserGroupIcon,
       routeTo: path + '/teams/',
-      disabled: true,
-      isVisibleToBasic:
-        !tempLocalUserData && tempLocalUserData.roleName === BASIC,
+      disabled: userRoleName === ENTERPRISE,
+      isVisibleToBasic: userRoleName === BASIC || userRoleName === ENTERPRISE,
     },
     {
       id: 7,
@@ -123,8 +103,7 @@ const LeftBar = () => {
       icon: Cog8ToothIcon,
       routeTo: path + '/settings/',
       disabled: false,
-      isVisibleToBasic:
-        tempLocalUserData && tempLocalUserData.roleName === BASIC,
+      isVisibleToBasic: userRoleName === BASIC || userRoleName === ENTERPRISE,
     },
   ];
 
@@ -135,8 +114,7 @@ const LeftBar = () => {
       icon: QuestionMarkCircleIcon,
       routeTo: path + '/help',
       disabled: false,
-      isVisibleToBasic:
-        tempLocalUserData && tempLocalUserData.roleName === BASIC,
+      isVisibleToBasic: userRoleName === BASIC || userRoleName === ENTERPRISE,
     },
     {
       id: 9,
@@ -144,31 +122,22 @@ const LeftBar = () => {
       icon: BellIcon,
       routeTo: path + '/notifications',
       disabled: false,
-      isVisibleToBasic:
-        tempLocalUserData && tempLocalUserData.roleName === BASIC,
+      isVisibleToBasic: userRoleName === BASIC || userRoleName === ENTERPRISE,
     },
   ];
 
   useEffect(() => {
     if (location.pathname.includes('dashboard')) {
       setSelectedMenu(menuArray[0].label);
-      setPath(
-        location.pathname.includes('facilitator')
-          ? 'facilitator'
-          : location.pathname.includes('enterprise')
-          ? 'enterprise'
-          : 'basic'
-      );
     } else if (location.pathname.includes('analytics')) {
       setSelectedMenu(menuArray[2].label);
     } else if (location.pathname.includes('actions')) {
       setSelectedMenu(menuArray[1].label);
     }
   }, [
-    location.pathname.includes('analytics'),
-    location.pathname.includes('facilitator/dashboard'),
-    location.pathname.includes('enterprise/dashboard'),
     location.pathname.includes('enterprise'),
+    location.pathname.includes('analytics'),
+    location.pathname.includes('enterprise/dashboard'),
   ]);
 
   // Function to navigate on retroListTemplate
@@ -203,20 +172,18 @@ const LeftBar = () => {
 
   // Function to navigate on goToProfile
   function goToProfile() {
-    navigate(path + '/profile');
+    navigate(path + '/profile/');
   }
 
+  const isDisplay =
+    location.pathname.includes('basic') ||
+    location.pathname.includes('enterprise');
   return (
     <>
       <Box
         className="leftBarContainer"
         sx={{
-          display:
-            location.pathname.includes('basic') ||
-            location.pathname.includes('facilitator') ||
-            location.pathname.includes('enterprise')
-              ? 'flex'
-              : 'none',
+          display: isDisplay ? 'flex' : 'none',
         }}
       >
         <Box className="topContainer">
@@ -283,7 +250,6 @@ const LeftBar = () => {
               </Tooltip>
             );
           })}
-
           <Tooltip title={user?.name + ''} placement="right-start">
             <span>
               {selectedAvatar != '' ? (
@@ -316,102 +282,114 @@ const LeftBar = () => {
           </Tooltip>
         </Box>
       </Box>
-      <Box
-        sx={{
-          position: 'absolute',
-          zIndex: 4,
-          left: '80px',
-          bottom: '400px',
-          width: '320px',
-          padding: '10px 1px',
-          flexDirection: 'column',
-          alignItems: 'flex-start',
-          display: hoverOnMenu ? 'flex' : 'none',
-          borderRadius: '10px',
-          border: '1px solid #CCC',
-          background: '#FFF',
-          boxShadow: '0px 1px 10px 0px rgba(0, 0, 0, 0.15);',
-        }}
-      >
+      {/* Retro Templates Hover Menu */}
+      {hoverOnMenu && (
         <Box
           sx={{
-            display: 'flex',
-            padding: '10px 24px',
-            alignItems: 'center',
-            gap: '12px',
-            cursor: 'pointer',
+            position: 'absolute',
+            zIndex: 4,
+            left: '80px',
+            bottom: '400px',
+            width: '320px',
+            padding: '10px 1px',
+            flexDirection: 'column',
+            alignItems: 'flex-start',
+            display: hoverOnMenu ? 'flex' : 'none',
+            borderRadius: '10px',
+            border: '1px solid #CCC',
+            background: '#FFF',
+            boxShadow: '0px 1px 10px 0px rgba(0, 0, 0, 0.15);',
           }}
-          onClick={goToRetroList}
         >
-          <BodyRegularTypography label="Retro Templates" />
+          <Box
+            sx={{
+              display: 'flex',
+              padding: '10px 24px',
+              alignItems: 'center',
+              gap: '12px',
+              cursor: 'pointer',
+            }}
+            onClick={goToRetroList}
+          >
+            <BodyRegularTypography label="Retro Templates" />
+          </Box>
+          <Box
+            sx={{
+              display: 'flex',
+              padding: '10px 24px',
+              alignItems: 'center',
+              gap: '12px',
+              cursor: 'pointer',
+            }}
+            onClick={goToPulseCheckList}
+          >
+            <BodyRegularTypography label="Pulse Check Template" />
+          </Box>
         </Box>
+      )}
+
+      {/* Manage Users Hover Menu */}
+      {userRoleName === ENTERPRISE && hoverOnUserMenu && (
         <Box
           sx={{
-            display: 'flex',
-            padding: '10px 24px',
-            alignItems: 'center',
-            gap: '12px',
-            cursor: 'pointer',
+            position: 'absolute',
+            zIndex: 4,
+            left: '80px',
+            bottom: '300px',
+            width: '320px',
+            padding: '10px 1px',
+            flexDirection: 'column',
+            alignItems: 'flex-start',
+            display: hoverOnUserMenu ? 'flex' : 'none',
+            borderRadius: '10px',
+            border: '1px solid #CCC',
+            background: '#FFF',
+            boxShadow: '0px 1px 10px 0px rgba(0, 0, 0, 0.15);',
           }}
-          onClick={goToPulseCheckList}
         >
-          <BodyRegularTypography label="Pulse Check Template" />
+          {userRoleName === ENTERPRISE && (
+            <>
+              <Box
+                sx={{
+                  display: 'flex',
+                  padding: '10px 24px',
+                  alignItems: 'center',
+                  gap: '12px',
+                  cursor: 'pointer',
+                }}
+                onClick={goToEnterpriseRegistration}
+              >
+                <BodyRegularTypography label="Organisation Details" />
+              </Box>
+              <Box
+                sx={{
+                  display: 'flex',
+                  padding: '10px 24px',
+                  alignItems: 'center',
+                  gap: '12px',
+                  cursor: 'pointer',
+                }}
+                onClick={goToManageUser}
+              >
+                <BodyRegularTypography label="Manage Users" />
+              </Box>
+            </>
+          )}
+
+          <Box
+            sx={{
+              display: 'flex',
+              padding: '10px 24px',
+              alignItems: 'center',
+              gap: '12px',
+              cursor: 'pointer',
+            }}
+            onClick={goToAllTeams}
+          >
+            <BodyRegularTypography label="All Teams" />
+          </Box>
         </Box>
-      </Box>
-      <Box
-        sx={{
-          position: 'absolute',
-          zIndex: 4,
-          left: '80px',
-          bottom: '300px',
-          width: '320px',
-          padding: '10px 1px',
-          flexDirection: 'column',
-          alignItems: 'flex-start',
-          display: hoverOnUserMenu ? 'flex' : 'none',
-          borderRadius: '10px',
-          border: '1px solid #CCC',
-          background: '#FFF',
-          boxShadow: '0px 1px 10px 0px rgba(0, 0, 0, 0.15);',
-        }}
-      >
-        <Box
-          sx={{
-            display: 'flex',
-            padding: '10px 24px',
-            alignItems: 'center',
-            gap: '12px',
-            cursor: 'pointer',
-          }}
-          onClick={goToEnterpriseRegistration}
-        >
-          <BodyRegularTypography label="Organisation Details" />
-        </Box>
-        <Box
-          sx={{
-            display: 'flex',
-            padding: '10px 24px',
-            alignItems: 'center',
-            gap: '12px',
-            cursor: 'pointer',
-          }}
-          onClick={goToManageUser}
-        >
-          <BodyRegularTypography label="Manage Users" />
-        </Box>
-        <Box
-          sx={{
-            display: 'flex',
-            padding: '10px 24px',
-            alignItems: 'center',
-            gap: '12px',
-            cursor: 'pointer',
-          }}
-          onClick={goToAllTeams}
-        >
-          <BodyRegularTypography label="All Teams" />
-        </Box>
-      </Box>
+      )}
     </>
   );
 };

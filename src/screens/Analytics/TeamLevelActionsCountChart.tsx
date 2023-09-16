@@ -27,6 +27,10 @@ import { Link, useNavigate } from 'react-router-dom';
 import * as Icons from 'heroicons-react';
 import { MONTH_SELECTORS, MenuProps } from './const';
 import { GlobalContext } from '../../contexts/GlobalContext';
+import {
+  BASIC,
+  ENTERPRISE,
+} from '../../constants/applicationConst';
 
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
   [`&.${tableCellClasses.head}`]: {
@@ -45,10 +49,8 @@ const StyledTableCell = styled(TableCell)(({ theme }) => ({
 }));
 
 export default function TeamLevelActionsCountChart({
-
   dashboard,
 }: {
-
   dashboard?: boolean;
 }) {
   const [global, dispatch] = React.useContext(GlobalContext);
@@ -57,12 +59,28 @@ export default function TeamLevelActionsCountChart({
   const [completedActions, setCompletedActions] = useState<any>([]);
   const [completedPercentage, setCompletedPercentage] = useState<Number>();
   const [months, setMonths] = useState<any>([]);
-  const [fromDate, setFromDate] = useState<string>(global.chartStartDate?global.chartStartDate:'10');
-  const [toDate, setToDate] = useState<string>(global.chartEndDate?global.chartEndDate: '16');
+  const [fromDate, setFromDate] = useState<string>(
+    global.chartStartDate ? global.chartStartDate : '10'
+  );
+  const [toDate, setToDate] = useState<string>(
+    global.chartEndDate ? global.chartEndDate : '16'
+  );
   const [selectedFromDate, setSelectedFromDate] = useState<string>();
   const [selectedToDate, setSelectedToDate] = useState<string>();
   const navigate = useNavigate();
   const windowWidth = React.useRef(window.innerWidth);
+
+  const localUserData = localStorage.getItem('userData');
+  const tempLocalUserData = localUserData && JSON.parse(localUserData);
+  const [path, setPath] = React.useState('');
+
+  React.useEffect(() => {
+    if (tempLocalUserData && tempLocalUserData.roleName === BASIC) {
+      setPath('basic');
+    } else if (tempLocalUserData && tempLocalUserData.roleName === ENTERPRISE) {
+      setPath('enterprise');
+    }
+  }, [tempLocalUserData]);
 
   const getChartWidth = () => {
     switch (true) {
@@ -182,22 +200,20 @@ export default function TeamLevelActionsCountChart({
       }
     );
   };
-  React.useEffect(()=>{
-   
+  React.useEffect(() => {
     const fromDateInput = global.chartStartDate;
-    const toDateInput=global.chartEndDate;
-    if(fromDateInput!=""&&fromDateInput!=undefined&&fromDateInput!=null){
+    const toDateInput = global.chartEndDate;
+    if (
+      fromDateInput != '' &&
+      fromDateInput != undefined &&
+      fromDateInput != null
+    ) {
       setFromDate(fromDateInput);
     }
-     if(toDateInput!=""&&toDateInput!=undefined&&toDateInput!=null){
+    if (toDateInput != '' && toDateInput != undefined && toDateInput != null) {
       setToDate(toDateInput);
     }
-  },[
-    global.chartStartDate,
-    global.chartEndDate
-    
-    
-  ])
+  }, [global.chartStartDate, global.chartEndDate]);
 
   const series = [
     //data on the y-axis
@@ -315,8 +331,7 @@ export default function TeamLevelActionsCountChart({
               justifyContent: 'flex-start',
             }}
           >
-            <Link to={'/facilitator/analytics/'}>Analytics </Link>&nbsp;\ Team
-            Level
+            <Link to={path + '/analytics/'}>Analytics </Link>&nbsp;\ Count Level
           </Grid>
           {/* Back Button & Chart Title */}
           <Grid
