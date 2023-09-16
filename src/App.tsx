@@ -72,6 +72,7 @@ import { JoinRetroEnterprise } from './components/Elements/EnterpriseDashboardPa
 import EnterpriseRegistration from './components/Elements/EnterpriseDashboardPages/EnterpriseRegistration';
 
 import PageNotFound from './screens/Others/PageNotFound';
+import BasicDashboardWithEnterprise from './components/Elements/BasicUserDashboardPages/BasicDashboardWithEnterprise';
 
 type AppProps = {
   instance: IPublicClientApplication;
@@ -181,11 +182,11 @@ export default function App({ instance }: AppProps) {
                             <Route path="/basic/">
                               <Route
                                 path=""
-                                element={<BasicUserMainContainer />}
+                                element={<BasicDashboardWithEnterprise />}
                               />
                               <Route
                                 path="dashboard"
-                                element={<BasicUserMainContainer />}
+                                element={<BasicDashboardWithEnterprise />}
                               />
                               <Route
                                 path="actions"
@@ -558,19 +559,14 @@ export default function App({ instance }: AppProps) {
                               />
                               <Route
                                 path="termAndCondition"
-                                element={
-                                  <TermsAndConditions/>
-                                }
+                                element={<TermsAndConditions />}
                               />
                               <Route
                                 path="privatePolicy"
-                                element={<PrivacyPolicy/>}
+                                element={<PrivacyPolicy />}
                               />
-                              <Route
-                                path="*"
-                                element={<PageNotFound/>}
-                              />
-                            </Route>                           
+                              <Route path="*" element={<PageNotFound />} />
+                            </Route>
                             <Route
                               path="*"
                               element={<PageNotFound></PageNotFound>}

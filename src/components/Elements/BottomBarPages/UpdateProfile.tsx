@@ -673,13 +673,14 @@ export default function UpdateProfile({ handleEdit }: Props) {
                     <CaptionRegularTypography
                       label="Teams"
                       style={{
-                        marginBottom: '16px',
+                        marginBottom: '24px',
                         color: 'rgba(0, 0, 0, 0.6)',
                       }}
                     />
                     {teams.map((team: any) => {
                       return (
                         <Box
+                          key={team.teamId}
                           sx={{
                             width: '150px',
                             height: '32px',
