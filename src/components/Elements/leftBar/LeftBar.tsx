@@ -183,11 +183,7 @@ const LeftBar = () => {
       <Box
         className="leftBarContainer"
         sx={{
-          display:
-            location.pathname.includes('basic') ||
-            location.pathname.includes('enterprise')
-              ? 'flex'
-              : 'none',
+          display: isDisplay ? 'flex' : 'none',
         }}
       >
         <Box className="topContainer">

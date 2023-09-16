@@ -11,8 +11,10 @@ import {
   BodyRegularTypography,
   BodySemiBoldTypography,
   CaptionRegularTypography,
+  CaptionSemiBoldTypography,
   H3SemiBoldTypography,
   H4SemiBoldTypography,
+  H5RegularTypography,
   H6RegularTypography,
 } from '../../CustomizedTypography';
 import { GlobalContext, ActionType } from '../../../contexts/GlobalContext';
@@ -659,28 +661,47 @@ export default function UpdateProfile({ handleEdit }: Props) {
                   width: '100%',
                 }}
               >
-                <TextField
-                  label="Team"
-                  variant="filled"
-                  sx={{
-                    width: '400px',
-                    ...styles.accessCodeTextField,
-                  }}
-                  value={
-                    teams.length === 0 ? (
-                      "Team's Not Found"
-                    ) : (
-                      <ul>
-                        {teams.map((team: any) => {
-                          return <li key={team}>{team}</li>;
-                        })}
-                      </ul>
-                    )
-                  }
-                  InputProps={{
-                    readOnly: true,
-                  }}
-                />
+                {teams.length === 0 ? (
+                  "Team's Not Found"
+                ) : (
+                  <Box
+                    sx={{
+                      width: '400px',
+                      backgroundColor: 'rgba(0, 0, 0, 0.06)',
+                    }}
+                  >
+                    <CaptionRegularTypography
+                      label="Teams"
+                      style={{
+                        marginBottom: '16px',
+                        color: 'rgba(0, 0, 0, 0.6)',
+                      }}
+                    />
+                    {teams.map((team: any) => {
+                      return (
+                        <Box
+                          sx={{
+                            width: '150px',
+                            height: '32px',
+                            minWidth: '150px',
+                            minHeight: '32px',
+                            borderRadius: '4px',
+                            background: '#CEEFFF',
+                            textAlign: 'center',
+                            display: 'flex',
+                            alignItems: 'center',
+                            justifyContent: 'center',
+                          }}
+                        >
+                          <CaptionSemiBoldTypography
+                            label={team.teamName}
+                            style={{ color: '#159ADD !important' }}
+                          />
+                        </Box>
+                      );
+                    })}
+                  </Box>
+                )}
               </Box>
             </FormControl>
           </Box>
