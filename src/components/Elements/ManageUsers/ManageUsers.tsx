@@ -19,6 +19,7 @@ import moment from 'moment';
 import {
   BodyRegularTypography,
   BodySemiBoldTypography,
+  CaptionSemiBoldTypography,
   H2SemiBoldTypography,
   H5RegularTypography,
   H5SemiBoldTypography,
@@ -706,11 +707,46 @@ export default function ManageUsers() {
                             {item.teams.length === 0 ? (
                               "Team's Not Found"
                             ) : (
-                              <ul>
-                                {item.teams.map((team: any) => {
-                                  return <li key={team}>{team}</li>;
-                                })}
-                              </ul>
+                              <>
+                                <Box
+                                  sx={{
+                                    width: '100%',
+                                    display: 'grid',
+                                    gridTemplateColumns: 'repeat(2, 1fr)',
+                                    flexDirection: 'row',
+                                    alignItems: 'center',
+                                    justifyContent: 'flex-start',
+                                  }}
+                                >
+                                  {item.teams.map((team: any) => {
+                                    return (
+                                      <Box
+                                        key={team}
+                                        sx={{
+                                          width: '150px',
+                                          height: '32px',
+                                          minWidth: '150px',
+                                          minHeight: '32px',
+                                          borderRadius: '4px',
+                                          background: '#63bcfd',
+                                          textAlign: 'center',
+                                          display: 'flex',
+                                          alignItems: 'center',
+                                          justifyContent: 'center',
+                                          margin: '4px',
+                                        }}
+                                      >
+                                        <CaptionSemiBoldTypography
+                                          label={team}
+                                          style={{
+                                            color: '#ffffff !important',
+                                          }}
+                                        />
+                                      </Box>
+                                    );
+                                  })}
+                                </Box>
+                              </>
                             )}
                           </TableCell>
                           <TableCell>

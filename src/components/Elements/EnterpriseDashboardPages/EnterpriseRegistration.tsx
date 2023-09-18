@@ -14,11 +14,16 @@ import { ContainedButton } from '../..';
 
 import {
   BodySemiBoldTypography,
+  CaptionSemiBoldTypography,
   H2SemiBoldTypography,
 } from '../../CustomizedTypography';
 import commonStyles from '../../../style.module.scss';
 import * as Icons from 'heroicons-react';
-import { createEnterprise } from '../../../helpers/msal/services';
+import {
+  createEnterprise,
+  getEnterpriseById,
+  updateEnterprise,
+} from '../../../helpers/msal/services';
 import { ActionType, GlobalContext } from '../../../contexts/GlobalContext';
 
 const styles = {
@@ -40,15 +45,39 @@ const delimiters = [KeyCodes.comma, KeyCodes.enter];
 
 export default function EnterpriseRegistration() {
   const [global, dispatch] = React.useContext(GlobalContext);
+  const localUserData = localStorage.getItem('userData');
+  const tempLocalUserData = localUserData && JSON.parse(localUserData);
+
+  const [organisationPhoto, setOrganisationPhoto] = React.useState<any>('');
   const [organisationName, setOrganisationName] = React.useState('');
   const [tags, setTags] = React.useState<{ id: string; text: string }[]>([]); // For Organisation Domains
   const [organisationCountry, setOrganisationCountry] = React.useState('');
-  const [organisationPhoto, setOrganisationPhoto] = React.useState<any>('');
+  const [domains, setDomains] = React.useState<any>([]);
+  const [codeImageError, setCodeImageError] = React.useState('');
   const [codeOrganisationNameError, setOrganisationNameCodeError] =
     React.useState('');
   const [codeCountryError, setCountryCodeError] = React.useState('');
   const [codeDomainError, setDomainCodeError] = React.useState('');
-  const [codeImageError, setCodeImageError] = React.useState('');
+
+  React.useEffect(() => {
+    callGetEnterpriseById();
+  }, []);
+
+  const callGetEnterpriseById = async () => {
+    const organisationId = tempLocalUserData && tempLocalUserData.enterpriseId;
+    await getEnterpriseById(organisationId).then(
+      res => {
+        console.log('callGetEnterpriseById response', res);
+        setOrganisationPhoto(res.organisationPhoto);
+        setOrganisationName(res.organisationName);
+        setOrganisationCountry(res.organisationCountry);
+        setDomains(res.organisationDomain);
+      },
+      err => {
+        console.log('err', err);
+      }
+    );
+  };
 
   const handlePhoto = (e: any) => {
     let reader = new FileReader();
@@ -107,7 +136,7 @@ export default function EnterpriseRegistration() {
     } else {
       setOrganisationNameCodeError('');
     }
-    if (tags.length === 0) {
+    if (tags.length === 0 && domains.length === 0) {
       setDomainCodeError('Please enter at least one organisation domain');
     } else {
       setDomainCodeError('');
@@ -121,7 +150,7 @@ export default function EnterpriseRegistration() {
 
     if (
       organisationName === '' ||
-      tags.length === 0 ||
+      (tags.length === 0 && domains.length === 0) ||
       organisationCountry === '' ||
       organisationPhoto === '' ||
       organisationPhoto === null
@@ -149,35 +178,45 @@ export default function EnterpriseRegistration() {
     const organisationDomains = tags.map(tag => {
       return tag.text;
     });
+
+    const finalDomains = domains.concat(organisationDomains);
+    console.log('organisationDomains::::::::', organisationDomains);
+    console.log('finalDomains::::::::', finalDomains);
     const requestBody = {
       organisationName: organisationName,
-      organisationDomain: organisationDomains,
+      organisationDomain: finalDomains,
       organisationCountry: organisationCountry,
       organisationPhoto: organisationPhoto,
       isActive: true,
     };
 
-    await createEnterprise(requestBody).then(
+    console.log(
+      'requestBody:::::::::::',
+      tempLocalUserData && tempLocalUserData.enterpriseId,
+      requestBody
+    );
+
+    await updateEnterprise(
+      tempLocalUserData && tempLocalUserData.enterpriseId,
+      requestBody
+    ).then(
       res => {
+        console.log('callUpdateEnterprise response', res);
         dispatch({
           type: ActionType.SET_LOADING,
           payload: { loadingFlag: false },
         });
-        setOrganisationName('');
         setTags([]);
-        setOrganisationCountry('');
-        setOrganisationPhoto('');
+        callGetEnterpriseById();
       },
       err => {
-        console.log('err', err);
-        setOrganisationName('');
-        setTags([]);
-        setOrganisationCountry('');
-        setOrganisationPhoto('');
         dispatch({
           type: ActionType.SET_LOADING,
           payload: { loadingFlag: false },
         });
+        console.log('err', err);
+        setTags([]);
+        callGetEnterpriseById();
       }
     );
   };
@@ -245,7 +284,7 @@ export default function EnterpriseRegistration() {
                     width: '600px',
                     justifyContent: 'flex-start',
                     alignItems: 'center',
-                    marginTop: '46px',
+                    marginTop: '16px',
                   }}
                 >
                   <Box
@@ -307,7 +346,7 @@ export default function EnterpriseRegistration() {
                     width: '600px',
                     justifyContent: 'flex-start',
                     alignItems: 'center',
-                    marginTop: '46px',
+                    marginTop: '16px',
                   }}
                 >
                   <Box
@@ -368,7 +407,7 @@ export default function EnterpriseRegistration() {
                 width: '600px',
                 justifyContent: 'flex-start',
                 alignItems: 'center',
-                marginTop: '46px',
+                marginTop: '24px',
               }}
             >
               <Box
@@ -423,6 +462,7 @@ export default function EnterpriseRegistration() {
                 }}
               >
                 <ReactTags
+                  autofocus={false}
                   inputFieldPosition="top"
                   tags={tags}
                   delimiters={delimiters}
@@ -447,6 +487,46 @@ export default function EnterpriseRegistration() {
                 </FormHelperText>
               )}
             </FormControl>
+            <Box
+              sx={{
+                width: '600px',
+                display: 'grid',
+                gridTemplateColumns: 'repeat(4, 1fr)',
+                flexDirection: 'row',
+                alignItems: 'center',
+                justifyContent: 'flex-start',
+                marginTop: '16px',
+              }}
+            >
+              {domains.map((team: any) => {
+                return (
+                  <Box
+                    key={team}
+                    sx={{
+                      width: '150px',
+                      height: '32px',
+                      minWidth: '150px',
+                      minHeight: '32px',
+                      borderRadius: '4px',
+                      background: '#63bcfd',
+                      textAlign: 'center',
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                      margin: '4px',
+                    }}
+                  >
+                    <CaptionSemiBoldTypography
+                      label={team}
+                      style={{
+                        color: '#ffffff !important',
+                        fontSize: '12px !important',
+                      }}
+                    />
+                  </Box>
+                );
+              })}
+            </Box>
             {/* Country */}
             <FormControl
               style={{
@@ -494,7 +574,7 @@ export default function EnterpriseRegistration() {
               name={'Update'}
               onClick={() => submitEnterpriseRegistration()}
               style={{
-                marginTop: '24px',
+                marginTop: '16px',
                 padding: '10px 18px',
                 gap: '8px',
               }}
