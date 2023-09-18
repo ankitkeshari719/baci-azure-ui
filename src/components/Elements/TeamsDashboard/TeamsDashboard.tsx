@@ -7,6 +7,7 @@ import {
   Dialog,
   DialogTitle,
   Grid,
+  Tooltip,
 } from '@mui/material';
 import * as React from 'react';
 
@@ -328,17 +329,23 @@ export default function TeamsDashboard() {
                           {item.users?.map(
                             (user: any, index: any) =>
                               index < 4 && (
-                                <Avatar
+                                <Tooltip
                                   key={user.userId}
-                                  avatar={user.selectedAvatar}
-                                  css={{
-                                    width: '40px',
-                                    height: '40px',
-                                    marginLeft: '0',
-                                    marginRight: '-16px',
-                                    border: '3px solid transparent',
-                                  }}
-                                />
+                                  placement="right"
+                                  title={user?.firstName + '' + user?.firstName}
+                                >
+                                  <Avatar
+                                    key={user.userId}
+                                    avatar={user.selectedAvatar}
+                                    css={{
+                                      width: '40px',
+                                      height: '40px',
+                                      marginLeft: '0',
+                                      marginRight: '-16px',
+                                      border: '3px solid transparent',
+                                    }}
+                                  />
+                                </Tooltip>
                               )
                           )}
                         </Box>
@@ -352,17 +359,23 @@ export default function TeamsDashboard() {
                           {item.users?.map(
                             (user: any, index: any) =>
                               index < 4 && (
-                                <Avatar
+                                <Tooltip
                                   key={user.userId}
-                                  avatar={user.selectedAvatar}
-                                  css={{
-                                    width: '40px',
-                                    height: '40px',
-                                    marginLeft: '0',
-                                    marginRight: '-16px',
-                                    border: '3px solid transparent',
-                                  }}
-                                />
+                                  placement="right"
+                                  title={user?.firstName + '' + user?.firstName}
+                                >
+                                  <Avatar
+                                    key={user.userId}
+                                    avatar={user.selectedAvatar}
+                                    css={{
+                                      width: '40px',
+                                      height: '40px',
+                                      marginLeft: '0',
+                                      marginRight: '-16px',
+                                      border: '3px solid transparent',
+                                    }}
+                                  />
+                                </Tooltip>
                               )
                           )}
                           <TinyTextTypography
