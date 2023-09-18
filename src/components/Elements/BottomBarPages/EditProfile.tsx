@@ -820,7 +820,7 @@ export default function EditProfile({ handleEdit }: Props) {
                             minWidth: '150px',
                             minHeight: '32px',
                             borderRadius: '4px',
-                            background: '#CEEFFF',
+                            background: '#63bcfd',
                             textAlign: 'center',
                             display: 'flex',
                             alignItems: 'center',
@@ -829,7 +829,7 @@ export default function EditProfile({ handleEdit }: Props) {
                         >
                           <CaptionSemiBoldTypography
                             label={team.teamName}
-                            style={{ color: '#159ADD !important' }}
+                            style={{ color: '#ffffff !important' }}
                           />
                         </Box>
                       );
