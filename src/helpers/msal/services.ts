@@ -174,12 +174,12 @@ export const getDeploymentData = async (): Promise<any> => {
   return deploymentData;
 };
 
-export const createRetroSummary = async (columns: any, retroId: string) => {
+export const createRetroSummary=async(columns:any, cards:any[],retroId:string)=>{
   let groupData = '';
   const requestOptions = {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ columns: columns, retroId: retroId }),
+    body: JSON.stringify({ columns: columns,cards:cards,retroId:retroId }),
   };
   await fetch(API_URL + '/createRetroSummary', requestOptions)
     .then(response => response.json())
@@ -187,7 +187,7 @@ export const createRetroSummary = async (columns: any, retroId: string) => {
       groupData = data;
     });
   return groupData;
-};
+}
 
 export const groupSuggestion = async (
   retroId: string,
@@ -206,6 +206,11 @@ export const groupSuggestion = async (
     });
   return groupData;
 };
+
+
+
+
+
 
 export const keywordExtraction = async (
   retroId: string,

@@ -37,7 +37,7 @@ import CustomizedDialog from '../CustomizedDialog/CustomizedDialog';
 import {
   groupSuggestion,
   keywordExtraction,
-  createRetroSummary,
+  // createRetroSummary,
 } from '../../helpers/msal/services';
 const Toolbar = (props: any) => {
   const isXsUp = useMediaQuery(theme.breakpoints.only('xs'));
@@ -442,36 +442,36 @@ const Toolbar = (props: any) => {
                   onClick={async () => {
                     setOpenDialog(true);
 
-                    let columnString: string = '';
-                    columns.forEach(column => {
-                      const columnName = column.name;
-                      columnString = columnString + columnName;
+                    // let columnString: string = '';
+                    // columns.forEach(column => {
+                    //   const columnName = column.name;
+                    //   columnString = columnString + columnName;
 
-                      column.groups.forEach(group => {
-                        const groupName = group.name;
-                        columnString = columnString + ' : ' + groupName;
+                    //   column.groups.forEach(group => {
+                    //     const groupName = group.name;
+                    //     columnString = columnString + ' : ' + groupName;
 
-                        group.cards.forEach(card => {
-                          const cardValue = card.value;
+                    //     group.cards.forEach(card => {
+                    //       const cardValue = card.value;
 
-                          columnString = columnString + ' : ' + cardValue;
-                        });
-                      });
-                    });
+                    //       columnString = columnString + ' : ' + cardValue;
+                    //     });
+                    //   });
+                    // });
 
-                    await createRetroSummary(columnString, retroId).then(
-                      (res: any) => {
-                        const data = res.response;
-                        if (data) {
-                          console.log(data);
-                        } else {
-                          alert('Please try again');
-                        }
-                      },
-                      error => {
-                        console.log(error);
-                      }
-                    );
+                    // await createRetroSummary(columnString, retroId).then(
+                    //   (res: any) => {
+                    //     const data = res.response;
+                    //     if (data) {
+                    //       console.log(data);
+                    //     } else {
+                    //       alert('Please try again');
+                    //     }
+                    //   },
+                    //   error => {
+                    //     console.log(error);
+                    //   }
+                    // );
                   }}
                   style={{
                     minWidth: '150px !important',
