@@ -107,17 +107,17 @@ export default function UpdateProfile({ handleEdit }: Props) {
     setCountry(tempLocalUserData && tempLocalUserData.country);
     setCityCode(tempLocalUserData && tempLocalUserData.cityCode);
     setCompanyName(tempLocalUserData && tempLocalUserData.enterpriseName);
+    setTeams(tempLocalUserData && tempLocalUserData.teams);
+    setIsEnterpriserRequested(
+      tempLocalUserData && tempLocalUserData.isEnterpriserRequested
+    );
+    setSelectedAvatar(tempLocalUserData && tempLocalUserData.selectedAvatar);
     let roleName = tempLocalUserData && tempLocalUserData.roleName;
     if (roleName === BASIC) {
       setRole('Basic');
     } else {
       setRole('Enterprise');
     }
-    setTeams(tempLocalUserData && tempLocalUserData.teams);
-    setIsEnterpriserRequested(
-      tempLocalUserData && tempLocalUserData.isEnterpriserRequested
-    );
-    setSelectedAvatar(tempLocalUserData && tempLocalUserData.selectedAvatar);
   }, []);
 
   const requestEnterpriseAdmin = () => {

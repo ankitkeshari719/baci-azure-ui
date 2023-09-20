@@ -126,18 +126,18 @@ export default function EditProfile({ handleEdit }: Props) {
     setCountry(tempLocalUserData && tempLocalUserData.country);
     setCityCode(tempLocalUserData && tempLocalUserData.cityCode);
     setCompanyName(tempLocalUserData && tempLocalUserData.enterpriseName);
+    setTeams(tempLocalUserData && tempLocalUserData.teams);
+    setIsEnterpriserRequested(
+      tempLocalUserData && tempLocalUserData.isEnterpriserRequested
+    );
+    setSelectedAvatar(tempLocalUserData && tempLocalUserData.selectedAvatar);
+
     let roleName = tempLocalUserData && tempLocalUserData.roleName;
     if (roleName === BASIC) {
       setRole('Basic');
     } else {
       setRole('Enterprise');
     }
-
-    setTeams(tempLocalUserData && tempLocalUserData.teams);
-    setIsEnterpriserRequested(
-      tempLocalUserData && tempLocalUserData.isEnterpriserRequested
-    );
-    setSelectedAvatar(tempLocalUserData && tempLocalUserData.selectedAvatar);
   }, []);
 
   React.useEffect(() => {
@@ -215,12 +215,15 @@ export default function EditProfile({ handleEdit }: Props) {
       type: ActionType.SET_LOADING,
       payload: { loadingFlag: true },
     });
+
+    const teamsIds = teams.map((team:any) => team.teamId);
     const requestBody = {
       firstName: firstName,
       lastName: lastName,
       phoneNo: phoneNo,
       country: country,
       cityCode: cityCode,
+      teams: teamsIds,
       selectedAvatar: selectedAvatar,
     };
     await updateUser(emailId, requestBody).then(
