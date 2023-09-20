@@ -40,6 +40,7 @@ import { OutlinedButton } from '../../components';
 import useReRoute from '../../helpers/hooks/useReRoute';
 import ActionMainContainer from '../ManageActions/ActionMainContainer';
 import LeftBar from '../../components/Elements/leftBar/LeftBar';
+import { createRetroSummary } from '../../helpers/msal/services';
 
 interface StyledTabsProps {
   children?: React.ReactNode;
@@ -150,7 +151,16 @@ export default function RetroBoard() {
   const isSmUp = useMediaQuery(theme.breakpoints.only('sm'));
   const [global, dispatch] = React.useContext(GlobalContext);
   const {
-    state: { startedDate, endedDate, lastStateUpdate, columns, users, ended },
+    state: {
+      startedDate,
+      endedDate,
+      lastStateUpdate,
+      columns,
+      users,
+      ended,
+      actionsData,
+      retroId,
+    },
     commitAction,
   } = React.useContext(BoardContext);
 
@@ -221,34 +231,34 @@ export default function RetroBoard() {
   const getProcessedColumns = () =>
     columns
       ? columns.map(
-        column => {
-          const groups = [...column.groups];
-          return {
-            ...column,
-            groups: groups
-              .map(group => {
-                const cards = group.cards.filter(card =>
-                  global.user?.userType !== 2
-                    ? card
-                    : global.usersSelected?.some(user => {
-                      return user?.userId === card?.createdBy;
-                    })
-                );
-                return {
-                  ...group,
-                  cards,
-                };
-              })
-              .filter(
-                group =>
-                  !justMyCards ||
-                  group.name === UNGROUPED ||
-                  group.cards.length !== 0
-              ),
-          };
-        }
-        // }
-      )
+          column => {
+            const groups = [...column.groups];
+            return {
+              ...column,
+              groups: groups
+                .map(group => {
+                  const cards = group.cards.filter(card =>
+                    global.user?.userType !== 2
+                      ? card
+                      : global.usersSelected?.some(user => {
+                          return user?.userId === card?.createdBy;
+                        })
+                  );
+                  return {
+                    ...group,
+                    cards,
+                  };
+                })
+                .filter(
+                  group =>
+                    !justMyCards ||
+                    group.name === UNGROUPED ||
+                    group.cards.length !== 0
+                ),
+            };
+          }
+          // }
+        )
       : [];
 
   const totalPanels = columns
@@ -317,7 +327,8 @@ export default function RetroBoard() {
     });
   };
   // Finish Retro
-  const finishRetro = () => {
+  // Finish Retrox
+  const finishRetro = async () => {
     if (global.user.userType == 2) {
       sessionStorage.removeItem('retoname');
 
@@ -327,7 +338,7 @@ export default function RetroBoard() {
       });
 
       //remove unconfirmed groups from array;
-      const groupIdArray: string[] = [];
+      // const groupIdArray: string[] = [];
 
       columns.forEach(column => {
         const groupIdArray: string[] = [];
@@ -336,9 +347,49 @@ export default function RetroBoard() {
             groupIdArray.push(group.id);
           }
         });
-
-        deleteUnconfirmedGroup(groupIdArray);
+        if (groupIdArray.length > 0) deleteUnconfirmedGroup(groupIdArray);
       });
+
+      let columnString: string = '';
+      let cards: any[] = [];
+      columns.forEach(column => {
+        const columnName = column.name;
+        columnString = columnString + columnName;
+
+        column.groups.forEach(group => {
+          const groupName = group.name;
+          if (!group.suggested) {
+            columnString = columnString + ' : ' + groupName;
+          }
+
+          group.cards.forEach(card => {
+            const cardValue = card.value;
+            columnString = columnString + ' : ' + cardValue;
+            cards.push(card.value);
+          });
+        });
+      });
+
+      if (actionsData != undefined && actionsData.actions.length != 0) {
+        actionsData.actions.forEach(action => {
+          columnString = columnString + ' : ' +action.value;
+          cards.push(action.value);
+        });
+      }
+      console.log(cards, JSON.stringify(cards));
+      await createRetroSummary(columnString, cards, retroId).then(
+        (res: any) => {
+          const data = res;
+          if (data) {
+            console.log(data);
+          } else {
+            alert('Please try again');
+          }
+        },
+        error => {
+          console.log(error);
+        }
+      );
 
       sessionStorage.removeItem('pulseCheckState');
 
@@ -387,11 +438,11 @@ export default function RetroBoard() {
         {/* <Box width='72px' display="flex">
         <LeftBar />
         </Box> */}
-        <Box display='flex' width="calc(100%)">
+        <Box display="flex" width="calc(100%)">
           <Box
             style={{
               // flexGrow: 1,
-              width:"100%",
+              width: '100%',
               display: 'flex',
               flexDirection: 'column',
               overflowY: 'auto',
@@ -472,7 +523,11 @@ export default function RetroBoard() {
                   <></>
                 )}
                 <div
-                  style={{ display: 'flex', flexDirection: 'row', width: '100%' }}
+                  style={{
+                    display: 'flex',
+                    flexDirection: 'row',
+                    width: '100%',
+                  }}
                 >
                   {useMemo(
                     () =>
@@ -487,67 +542,70 @@ export default function RetroBoard() {
                                 (global.expandColumn == -1 ||
                                   (column &&
                                     +column.id == global.expandColumn)))) && (
-                                <ColumnContainer totalPanels={1} key={index + '1'}>
-                                  {!!column ? (
-                                    <>
-                                      {getProcessedColumns().length == 3 ? (
-                                        <>
-                                          {column.id != '2' &&
-                                            global.expandColumn != 10 ? (
-                                            <RetroColumn
-                                              leftHeaderComponent={
-                                                <LeftContainer index={index} />
-                                              }
-                                              rightHeaderComponent={
-                                                <RightContainer index={index} />
-                                              }
-                                              column={column}
-                                              columnId={column.id}
-                                              noHeader={false}
-                                              showEditBox={showEditBox}
-                                              setShowEditBox={setShowEditBox}
-                                              setIslanded={setIsLanded}
-                                              cardGroups={column.groups}
-                                              columnIndex={index}
-                                            />
-                                          ) : (
-                                            column.id == '2' && (
-                                              <ActionMainContainer />
-                                            )
-                                          )}
-                                        </>
-                                      ) : (
-                                        <RetroColumn
-                                          leftHeaderComponent={
-                                            <LeftContainer index={index} />
-                                          }
-                                          rightHeaderComponent={
-                                            <RightContainer index={index} />
-                                          }
-                                          column={column}
-                                          columnId={column.id}
-                                          noHeader={false}
-                                          showEditBox={showEditBox}
-                                          setShowEditBox={setShowEditBox}
-                                          setIslanded={setIsLanded}
-                                          cardGroups={column.groups}
-                                          columnIndex={index}
-                                        />
-                                      )}
-                                    </>
-                                  ) : (
-                                    <FeedbackColumn
-                                      noHeader={isXsUp}
-                                      leftHeaderComponent={
-                                        <LeftContainer index={index} />
-                                      }
-                                      rightHeaderComponent={
-                                        <RightContainer index={index} />
-                                      }
-                                    />
-                                  )}
-                                </ColumnContainer>
-                              )}
+                              <ColumnContainer
+                                totalPanels={1}
+                                key={index + '1'}
+                              >
+                                {!!column ? (
+                                  <>
+                                    {getProcessedColumns().length == 3 ? (
+                                      <>
+                                        {column.id != '2' &&
+                                        global.expandColumn != 10 ? (
+                                          <RetroColumn
+                                            leftHeaderComponent={
+                                              <LeftContainer index={index} />
+                                            }
+                                            rightHeaderComponent={
+                                              <RightContainer index={index} />
+                                            }
+                                            column={column}
+                                            columnId={column.id}
+                                            noHeader={false}
+                                            showEditBox={showEditBox}
+                                            setShowEditBox={setShowEditBox}
+                                            setIslanded={setIsLanded}
+                                            cardGroups={column.groups}
+                                            columnIndex={index}
+                                          />
+                                        ) : (
+                                          column.id == '2' && (
+                                            <ActionMainContainer />
+                                          )
+                                        )}
+                                      </>
+                                    ) : (
+                                      <RetroColumn
+                                        leftHeaderComponent={
+                                          <LeftContainer index={index} />
+                                        }
+                                        rightHeaderComponent={
+                                          <RightContainer index={index} />
+                                        }
+                                        column={column}
+                                        columnId={column.id}
+                                        noHeader={false}
+                                        showEditBox={showEditBox}
+                                        setShowEditBox={setShowEditBox}
+                                        setIslanded={setIsLanded}
+                                        cardGroups={column.groups}
+                                        columnIndex={index}
+                                      />
+                                    )}
+                                  </>
+                                ) : (
+                                  <FeedbackColumn
+                                    noHeader={isXsUp}
+                                    leftHeaderComponent={
+                                      <LeftContainer index={index} />
+                                    }
+                                    rightHeaderComponent={
+                                      <RightContainer index={index} />
+                                    }
+                                  />
+                                )}
+                              </ColumnContainer>
+                            )}
                           </React.Fragment>
                         );
                       }),
@@ -653,7 +711,11 @@ export default function RetroBoard() {
               </Row>
               {/* Retro Column */}
               <div
-                style={{ display: 'flex', flexDirection: 'column', width: '100%' }}
+                style={{
+                  display: 'flex',
+                  flexDirection: 'column',
+                  width: '100%',
+                }}
               >
                 {useMemo(
                   () =>
@@ -668,32 +730,32 @@ export default function RetroBoard() {
                               (global.expandColumn == -1 ||
                                 (column &&
                                   +column.id == global.expandColumn)))) && (
-                              <PrintColumnContainer
-                                totalPanels={totalPanels}
-                                key={index + '1'}
-                              >
-                                {!!column && (
-                                  <>
-                                    <PrintRetroColumn
-                                      leftHeaderComponent={
-                                        <LeftContainer index={index} />
-                                      }
-                                      rightHeaderComponent={
-                                        <RightContainer index={index} />
-                                      }
-                                      column={column}
-                                      columnId={column.id}
-                                      noHeader={false}
-                                      showEditBox={showEditBox}
-                                      setShowEditBox={setShowEditBox}
-                                      setIslanded={setIsLanded}
-                                      cardGroups={column.groups}
-                                      columnIndex={index}
-                                    />
-                                  </>
-                                )}
-                              </PrintColumnContainer>
-                            )}
+                            <PrintColumnContainer
+                              totalPanels={totalPanels}
+                              key={index + '1'}
+                            >
+                              {!!column && (
+                                <>
+                                  <PrintRetroColumn
+                                    leftHeaderComponent={
+                                      <LeftContainer index={index} />
+                                    }
+                                    rightHeaderComponent={
+                                      <RightContainer index={index} />
+                                    }
+                                    column={column}
+                                    columnId={column.id}
+                                    noHeader={false}
+                                    showEditBox={showEditBox}
+                                    setShowEditBox={setShowEditBox}
+                                    setIslanded={setIsLanded}
+                                    cardGroups={column.groups}
+                                    columnIndex={index}
+                                  />
+                                </>
+                              )}
+                            </PrintColumnContainer>
+                          )}
                         </React.Fragment>
                       );
                     }),
