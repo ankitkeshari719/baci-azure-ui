@@ -845,7 +845,7 @@ export const updateEnterprise = async (
   return data;
 };
 
-// Delete Role
+// Delete Enterprise
 export const deleteEnterpriseById = async (
   enterpriseId: string
 ): Promise<any> => {
@@ -1066,7 +1066,6 @@ export const createUser = async (requestBody: any): Promise<any> => {
       name: requestBody.name,
       country: requestBody.country,
       cityCode: requestBody.cityCode,
-      plan: requestBody.plan,
       roleId: requestBody.roleId,
       roleName: requestBody.roleName,
       enterpriseId: requestBody.enterpriseId,
@@ -1103,14 +1102,13 @@ export const updateUser = async (
       name: requestBody.name,
       country: requestBody.country,
       cityCode: requestBody.cityCode,
-      plan: requestBody.plan,
       roleId: requestBody.roleId,
       roleName: requestBody.roleName,
       enterpriseId: requestBody.enterpriseId,
       enterpriseName: requestBody.enterpriseName,
       selectedAvatar: requestBody.selectedAvatar,
       isEnterpriserRequested: requestBody.isEnterpriserRequested,
-      team: requestBody.team,
+      teams: requestBody.teams,
       isActive: requestBody.isActive,
     }),
   };
@@ -1175,4 +1173,122 @@ export const deleteManyUsers = async (requestBody: any): Promise<any> => {
       data = response.data;
     });
   return data;
+};
+
+// ---------------------------------------- Enterprise Request API's -----------------------------------------------
+// Create Enterprise
+export const createEnterpriseRequest = async (
+  requestBody: any
+): Promise<any> => {
+  let data: any;
+  const requestOptions = {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({
+      organisationId: requestBody.enterpriseRequestParam.organisationId,
+      fromName: requestBody.enterpriseRequestParam.fromName,
+      fromEmail: requestBody.enterpriseRequestParam.fromEmail,
+      fromTeams: requestBody.enterpriseRequestParam.fromTeams,
+      toEmails: requestBody.enterpriseRequestParam.toEmails,
+      isApproved: requestBody.enterpriseRequestParam.isApproved,
+    }),
+  };
+
+  await fetch(API_URL + `/enterpriseRequests/create`, requestOptions)
+    .then(response => response.json())
+    .then(response => {
+      data = response.data;
+    });
+  return data;
+};
+
+// Get All Enterprise Request
+export const getAllByEnterpriseId = async (
+  organisationId: string
+): Promise<any> => {
+  let enterpriseRequests: any[] = [];
+  const requestOptions = {
+    method: 'GET',
+    headers: { 'Content-Type': 'application/json' },
+  };
+  await fetch(API_URL + `/enterpriseRequests/${organisationId}`, requestOptions)
+    .then(response => response.json())
+    .then(response => {
+      if (response && response.data) {
+        enterpriseRequests = response.data;
+      }
+    })
+    .catch(err => console.log(err));
+
+  return enterpriseRequests;
+};
+
+// Get By Id Enterprise Request
+export const getByEnterpriseRequestId = async (
+  enterpriseRequestId: string
+): Promise<any> => {
+  let enterpriseRequest;
+  const requestOptions = {
+    method: 'GET',
+    headers: { 'Content-Type': 'application/json' },
+  };
+  await fetch(
+    API_URL + `/enterpriseRequests/${enterpriseRequestId}`,
+    requestOptions
+  )
+    .then(response => response.json())
+    .then(response => {
+      if (response) {
+        enterpriseRequest = response.data;
+      }
+    })
+    .catch(err => console.log(err));
+  return enterpriseRequest;
+};
+
+// Update Enterprise Request
+export const updateEnterpriseRequest = async (
+  enterpriseRequestId: string,
+  requestBody: any
+): Promise<any> => {
+  let data: any;
+  const requestOptions = {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({
+      organisationId: requestBody.enterpriseRequestParam.organisationId,
+      fromName: requestBody.enterpriseRequestParam.fromName,
+      fromEmail: requestBody.enterpriseRequestParam.fromEmail,
+      fromTeams: requestBody.enterpriseRequestParam.fromTeams,
+      toEmails: requestBody.enterpriseRequestParam.toEmails,
+      isApproved: requestBody.enterpriseRequestParam.isApproved,
+    }),
+  };
+
+  await fetch(
+    API_URL + `/enterpriseRequests/update/${enterpriseRequestId}`,
+    requestOptions
+  )
+    .then(response => response.json())
+    .then(response => {
+      data = response.data;
+    });
+  return data;
+};
+
+// Delete Enterprise Request
+export const deleteEnterpriseRequestById = async (
+  enterpriseId: string
+): Promise<any> => {
+  let message;
+  const requestOptions = {
+    method: 'DELETE',
+    headers: { 'Content-Type': 'application/json' },
+  };
+  await fetch(API_URL + `/enterpriseRequests/${enterpriseId}`, requestOptions)
+    .then(response => response.json())
+    .then(response => {
+      message = response.message;
+    });
+  return message;
 };
