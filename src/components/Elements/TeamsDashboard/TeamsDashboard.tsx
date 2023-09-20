@@ -1,5 +1,4 @@
 import {
-  Paper,
   Box,
   TextField,
   InputAdornment,
@@ -7,7 +6,6 @@ import {
   Dialog,
   DialogTitle,
   Grid,
-  Tooltip,
 } from '@mui/material';
 import * as React from 'react';
 
@@ -30,8 +28,8 @@ import { ContainedButtonWithIcon } from '../../CustomizedButton/ContainedButtonW
 import { LazyLoadImage } from 'react-lazy-load-image-component';
 import Avatar from '../Avatar';
 import {
-  deleteTeamById,
   getTeamDataForTable,
+  updateTeam,
 } from '../../../helpers/msal/services';
 import { ActionType, GlobalContext } from '../../../contexts/GlobalContext';
 import { ContainedButton } from '../../CustomizedButton/ContainedButton';
@@ -67,6 +65,7 @@ export default function TeamsDashboard() {
     },
   });
 
+  // Select All
   const handleSelectAllCheckbox = () => {
     setIsSelectAllChecked(!isSelectAllChecked);
     const newRecord = records.map((record: any) => {
@@ -184,10 +183,13 @@ export default function TeamsDashboard() {
       type: ActionType.SET_LOADING,
       payload: { loadingFlag: true },
     });
-    return;
-    await deleteTeamById(tempStoreTeamId).then(
+    console.log('tempStoreTeamId::::', tempStoreTeamId);
+    const requestBody = {
+      isActive: false,
+    };
+    await updateTeam(tempStoreTeamId, requestBody).then(
       res => {
-        console.log('callDeleteTeamById response', res);
+        console.log('callUpdateTeam response', res);
         callGetTeamDataForTable();
         dispatch({
           type: ActionType.SET_LOADING,
@@ -329,23 +331,17 @@ export default function TeamsDashboard() {
                           {item.users?.map(
                             (user: any, index: any) =>
                               index < 4 && (
-                                <Tooltip
-                                  key={user.userId}
-                                  placement="right"
-                                  title={user?.firstName + '' + user?.firstName}
-                                >
-                                  <Avatar
-                                    key={user.userId}
-                                    avatar={user.selectedAvatar}
-                                    css={{
-                                      width: '40px',
-                                      height: '40px',
-                                      marginLeft: '0',
-                                      marginRight: '-16px',
-                                      border: '3px solid transparent',
-                                    }}
-                                  />
-                                </Tooltip>
+                                <Avatar
+                                  key={index}
+                                  avatar={user.selectedAvatar}
+                                  css={{
+                                    width: '40px',
+                                    height: '40px',
+                                    marginLeft: '0',
+                                    marginRight: '-16px',
+                                    border: '3px solid transparent',
+                                  }}
+                                />
                               )
                           )}
                         </Box>
@@ -359,23 +355,17 @@ export default function TeamsDashboard() {
                           {item.users?.map(
                             (user: any, index: any) =>
                               index < 4 && (
-                                <Tooltip
-                                  key={user.userId}
-                                  placement="right"
-                                  title={user?.firstName + '' + user?.firstName}
-                                >
-                                  <Avatar
-                                    key={user.userId}
-                                    avatar={user.selectedAvatar}
-                                    css={{
-                                      width: '40px',
-                                      height: '40px',
-                                      marginLeft: '0',
-                                      marginRight: '-16px',
-                                      border: '3px solid transparent',
-                                    }}
-                                  />
-                                </Tooltip>
+                                <Avatar
+                                  key={index}
+                                  avatar={user.selectedAvatar}
+                                  css={{
+                                    width: '40px',
+                                    height: '40px',
+                                    marginLeft: '0',
+                                    marginRight: '-16px',
+                                    border: '3px solid transparent',
+                                  }}
+                                />
                               )
                           )}
                           <TinyTextTypography

@@ -55,7 +55,7 @@ const headCells = [
     label: 'Email',
     disableSorting: false,
   },
-  { id: 'fromTeams', label: 'Team', disableSorting: true },
+  { id: 'fromTeams', label: 'Teams', disableSorting: true },
   { id: 'createdAt', label: 'Requested on', disableSorting: false },
   { id: 'actions', label: 'Actions', disableSorting: true },
 ];
@@ -122,14 +122,16 @@ export default function EnterpriseRequests() {
     });
     await getAllByEnterpriseId(enterpriseId).then(
       res => {
-        let tempRes = res.map((user: any) => {
+        let tempRes = res.map((enterpriseRequest: any) => {
           return {
-            id: user.enterpriseRequestId,
-            organisationId: user.organisationId,
-            fromName: user.fromName,
-            fromEmail: user.fromEmail,
-            fromTeams: user.fromTeams,
-            createdAt: moment(user.createdAt).format('Do MMM YYYY'),
+            id: enterpriseRequest.enterpriseRequest.enterpriseRequestId,
+            organisationId: enterpriseRequest.enterpriseRequest.organisationId,
+            fromName: enterpriseRequest.enterpriseRequest.fromName,
+            fromEmail: enterpriseRequest.enterpriseRequest.fromEmail,
+            fromTeams: enterpriseRequest.enterpriseRequest.teamInfo,
+            createdAt: moment(
+              enterpriseRequest.enterpriseRequest.createdAt
+            ).format('Do MMM YYYY'),
             checked: false,
           };
         });
@@ -295,18 +297,18 @@ export default function EnterpriseRequests() {
             <TableBody>
               {recordAfterPagingAndSorting().map((item: any) => {
                 return (
-                  <TableRow key={item.id}>
+                  <TableRow key={item?.id}>
                     <TableCell>
                       <Checkbox
-                        checked={item.checked}
+                        checked={item?.checked}
                         onChange={e => handleChangeCheckbox(e, item.id)}
                         inputProps={{ 'aria-label': 'controlled' }}
                       />
                     </TableCell>
-                    <TableCell>{item.fromName}</TableCell>
-                    <TableCell>{item.fromEmail}</TableCell>
+                    <TableCell>{item?.fromName}</TableCell>
+                    <TableCell>{item?.fromEmail}</TableCell>
                     <TableCell>
-                      {item.fromTeams.length === 0 ? (
+                      {item?.fromTeams.length === 0 ? (
                         "Team's Not Found"
                       ) : (
                         <>
@@ -314,7 +316,7 @@ export default function EnterpriseRequests() {
                             sx={{
                               width: '100%',
                               display: 'grid',
-                              gridTemplateColumns: 'repeat(2, 1fr)',
+                              gridTemplateColumns: 'repeat(1, 1fr)',
                               flexDirection: 'row',
                               alignItems: 'center',
                               justifyContent: 'flex-start',
@@ -323,7 +325,7 @@ export default function EnterpriseRequests() {
                             {item.fromTeams.map((team: any) => {
                               return (
                                 <Box
-                                  key={team}
+                                  key={team?.teamId}
                                   sx={{
                                     width: '150px',
                                     height: '32px',
@@ -339,7 +341,7 @@ export default function EnterpriseRequests() {
                                   }}
                                 >
                                   <CaptionSemiBoldTypography
-                                    label={team}
+                                    label={team?.teamName}
                                     style={{
                                       color: '#ffffff !important',
                                     }}

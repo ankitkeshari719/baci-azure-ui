@@ -54,7 +54,7 @@ const headCells = [
     label: 'Email',
     disableSorting: false,
   },
-  { id: 'teams', label: 'Team', disableSorting: true },
+  { id: 'teams', label: 'Teams', disableSorting: true },
   { id: 'roleName', label: 'Role', disableSorting: true },
   { id: 'createdAt', label: 'Date Joined', disableSorting: false },
   { id: 'actions', label: 'Actions', disableSorting: true },
@@ -241,7 +241,12 @@ export default function AllUsers() {
       type: ActionType.SET_LOADING,
       payload: { loadingFlag: true },
     });
-    await deleteUserById(tempStoreUserId).then(
+
+    const requestBody = {
+      isActive: false,
+    };
+
+    await updateUser(tempStoreUserId, requestBody).then(
       res => {
         callGetAllUsersByEnterpriseId(tempLocalUserData.enterpriseId);
         dispatch({
@@ -257,6 +262,7 @@ export default function AllUsers() {
           payload: { loadingFlag: false },
         });
         handleDeleteUserPopUpClose();
+        callGetAllUsersByEnterpriseId(tempLocalUserData.enterpriseId);
       }
     );
   };
@@ -463,7 +469,7 @@ export default function AllUsers() {
                             sx={{
                               width: '100%',
                               display: 'grid',
-                              gridTemplateColumns: 'repeat(2, 1fr)',
+                              gridTemplateColumns: 'repeat(1, 1fr)',
                               flexDirection: 'row',
                               alignItems: 'center',
                               justifyContent: 'flex-start',
