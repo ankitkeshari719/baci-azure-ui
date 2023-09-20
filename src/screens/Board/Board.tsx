@@ -372,14 +372,14 @@ export default function RetroBoard() {
 
       if (actionsData != undefined && actionsData.actions.length != 0) {
         actionsData.actions.forEach(action => {
-          columnString = action.value;
+          columnString = columnString + ' : ' +action.value;
           cards.push(action.value);
         });
       }
-
+      console.log(cards, JSON.stringify(cards));
       await createRetroSummary(columnString, cards, retroId).then(
         (res: any) => {
-          const data = res.response;
+          const data = res;
           if (data) {
             console.log(data);
           } else {
