@@ -1294,12 +1294,12 @@ export const updateEnterpriseRequest = async (
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({
-      organisationId: requestBody.enterpriseRequestParam.organisationId,
-      fromName: requestBody.enterpriseRequestParam.fromName,
-      fromEmail: requestBody.enterpriseRequestParam.fromEmail,
-      fromTeams: requestBody.enterpriseRequestParam.fromTeams,
-      toEmails: requestBody.enterpriseRequestParam.toEmails,
-      isApproved: requestBody.enterpriseRequestParam.isApproved,
+      organisationId: requestBody.organisationId,
+      fromName: requestBody.fromName,
+      fromEmail: requestBody.fromEmail,
+      fromTeams: requestBody.fromTeams,
+      toEmails: requestBody.toEmails,
+      isApproved: requestBody.isApproved,
     }),
   };
 
