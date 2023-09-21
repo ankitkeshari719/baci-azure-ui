@@ -11,6 +11,7 @@ import {
   DialogTitle,
   Grid,
   SelectChangeEvent,
+  Button,
 } from '@mui/material';
 import * as React from 'react';
 import * as Icons from 'heroicons-react';
@@ -19,6 +20,7 @@ import moment from 'moment';
 import {
   BodyRegularTypography,
   BodySemiBoldTypography,
+  ButtonLabelTypography,
   CaptionSemiBoldTypography,
   H2SemiBoldTypography,
   H5RegularTypography,
@@ -69,9 +71,12 @@ export default function EnterpriseRequests() {
   const [selectedTeam, setSelectedTeam] = React.useState('all');
   const [isSelectAllChecked, setIsSelectAllChecked] = React.useState(false);
   const [tempStoreUserName, setTempStoreUserName] = React.useState<any>('');
-  const [tempStoreRoleName, setTempStoreRoleName] = React.useState<any>('');
-  const [tempStoreUserId, setTempStoreUserId] = React.useState<any>('');
-  const [openDeleteUserDialog, setOpenDeleteUserDialog] = React.useState(false);
+  const [tempEnterpriseRequestId, setTempEnterpriseRequestId] =
+    React.useState<any>('');
+  const [openDeclineRequestDialog, setOpenDeclineRequestDialog] =
+    React.useState(false);
+  const [openDeclineRequestsDialog, setOpenDeclineRequestsDialog] =
+    React.useState(false);
 
   const [records, setRecords] = React.useState<any>([]);
   const [searchedVal, setSearchedVal] = React.useState('');
@@ -151,6 +156,7 @@ export default function EnterpriseRequests() {
     );
   };
 
+  // handle search
   const handleSearch = (e: any) => {
     let target = e.target;
     setFilterFn({
@@ -183,18 +189,92 @@ export default function EnterpriseRequests() {
     setRecords(newRecord);
   };
 
-  // Open Delete User Pop Up
-  const handleDeleteUserPopUpOpen = (userId: any, userName: any) => {
-    setTempStoreUserId(userId);
+  // Approve User
+  const handleApprovedUser = (enterpriseRequestId: any, userName: any) => {
+    console.log(enterpriseRequestId, userName);
     setTempStoreUserName(userName);
-    setOpenDeleteUserDialog(true);
+    setTempEnterpriseRequestId(enterpriseRequestId);
   };
 
-  const handleDeleteSelectedUsers = async () => {
+  // ---------------------------------------------- Request ----------------------------------------------
+
+  // Open Decline Enterprise Request Pop Up
+  const openDeclinedRequestPopUp = (
+    enterpriseRequestId: any,
+    userName: any
+  ) => {
+    setTempStoreUserName(userName);
+    setTempEnterpriseRequestId(enterpriseRequestId);
+    setOpenDeclineRequestDialog(true);
+  };
+
+  // Close Decline Request Pop Up
+  const closeDeclinedRequestPopUp = () => {
+    setTempStoreUserName('');
+    setTempEnterpriseRequestId('');
+    setOpenDeclineRequestDialog(false);
+  };
+
+  // Decline Enterprise Request
+  const handleDeclinedRequest = () => {
+    // call
+  };
+
+  // ---------------------------------------------- Requests ----------------------------------------------
+  // Open Decline Enterprise Request Pop Up
+  const openDeclinedRequestsPopUp = () => {
+    setOpenDeclineRequestsDialog(true);
+  };
+
+  // Close Decline Request Pop Up
+  const closeDeclinedRequestsPopUp = () => {
+    setOpenDeclineRequestsDialog(false);
+  };
+
+  // Decline selected enterprise requests
+  const handleDeclineSelectedUsers = async () => {
     dispatch({
       type: ActionType.SET_LOADING,
       payload: { loadingFlag: true },
     });
+    const selectedUsersId = records
+      .filter((record: any) => record.checked)
+      .map((data: any) => data.id);
+
+    const requestBody = {
+      emailIds: selectedUsersId,
+    };
+
+    await deleteManyUsers(requestBody).then(
+      res => {
+        dispatch({
+          type: ActionType.SET_LOADING,
+          payload: { loadingFlag: false },
+        });
+        callGetAllEnterpriseRequestByEnterpriseId(
+          tempLocalUserData.enterpriseId
+        );
+      },
+      err => {
+        console.log('err', err);
+        dispatch({
+          type: ActionType.SET_LOADING,
+          payload: { loadingFlag: false },
+        });
+        callGetAllEnterpriseRequestByEnterpriseId(
+          tempLocalUserData.enterpriseId
+        );
+      }
+    );
+  };
+
+  // Approved selected enterprise requests
+  const handleApproveSelected = async () => {
+    dispatch({
+      type: ActionType.SET_LOADING,
+      payload: { loadingFlag: true },
+    });
+
     const selectedUsersId = records
       .filter((record: any) => record.checked)
       .map((data: any) => data.id);
@@ -254,7 +334,7 @@ export default function EnterpriseRequests() {
               id="outlined-basic"
               label="Search..."
               variant="outlined"
-              sx={{ background: 'white', width: '40%' }}
+              sx={{ background: 'white', width: '30%' }}
               onChange={e => {
                 setSearchedVal(e.target.value);
                 handleSearch(e);
@@ -271,9 +351,23 @@ export default function EnterpriseRequests() {
             <Box display="flex" flexDirection="row" alignItems="center">
               <OutlineButtonWithIconWithNoBorder
                 id={'delete_selected_users'}
-                label={'Delete Users'}
+                label={'Approve selected'}
                 iconPath="/svgs/Delete.svg"
-                onClick={handleDeleteSelectedUsers}
+                onClick={handleApproveSelected}
+                style={{
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  color: '#159ADD !important',
+                  textColor: '#159ADD !important',
+                  marginRight: '24px  !important',
+                }}
+              />
+              <OutlineButtonWithIconWithNoBorder
+                id={'delete_selected_users'}
+                label={'Decline selected'}
+                iconPath="/svgs/Delete.svg"
+                onClick={openDeclinedRequestsPopUp}
                 style={{
                   display: 'flex',
                   alignItems: 'center',
@@ -336,19 +430,73 @@ export default function EnterpriseRequests() {
                         </>
                       )}
                     </TableCell>
-
                     <TableCell>{item.createdAt}</TableCell>
                     <TableCell>
-                      <Icons.TrashOutline
-                        size={20}
-                        style={{
-                          cursor: 'pointer',
-                          color: '#4E4E4E',
-                        }}
-                        onClick={() =>
-                          handleDeleteUserPopUpOpen(item.id, item.fullName)
-                        }
-                      />
+                      <Box
+                        display="flex"
+                        flexDirection="row"
+                        justifyContent="space-between"
+                      >
+                        <Button
+                          variant="contained"
+                          sx={{
+                            display: 'flex !important',
+                            width: '142px !important',
+                            height: '32px !important',
+                            padding: '12px !important',
+                            justifyContent: 'center !important',
+                            alignItems: 'center !important',
+                            gap: '8px !important',
+                            flexShrink: 0,
+                            borderRadius: ' 24px !important',
+                            background: '#159ADD !important',
+                          }}
+                          onClick={() =>
+                            handleApprovedUser(item?.id, item?.fromName)
+                          }
+                        >
+                          <Icons.CheckOutline
+                            size={20}
+                            style={{
+                              color: '#FFFFFF',
+                            }}
+                          />
+                          <ButtonLabelTypography
+                            label="Approve"
+                            style={{ color: '#FFFFFF' }}
+                          />
+                        </Button>
+                        <Button
+                          variant="contained"
+                          sx={{
+                            display: 'flex !important',
+                            width: '142px !important',
+                            height: '32px !important',
+                            padding: '12px !important',
+                            justifyContent: 'center !important',
+                            alignItems: 'center !important',
+                            gap: '8px !important',
+                            flexShrink: 0,
+                            borderRadius: ' 24px !important',
+                            border: ' 1px solid #EA4335 !important',
+                            marginLeft: '8px !important',
+                          }}
+                          onClick={() =>
+                            openDeclinedRequestPopUp(item?.id, item?.fromName)
+                          }
+                        >
+                          <Icons.XOutline
+                            size={20}
+                            style={{
+                              color: '#EA4335',
+                            }}
+                          />
+                          <ButtonLabelTypography
+                            label="Decline"
+                            style={{ color: '#EA4335' }}
+                          />
+                        </Button>
+                      </Box>
                     </TableCell>
                   </TableRow>
                 );
@@ -358,6 +506,185 @@ export default function EnterpriseRequests() {
           <TblPagination />
         </Box>
       </Box>
+      {/* Delete User Pop Up */}
+      <Dialog open={openDeclineRequestDialog}>
+        <DialogTitle
+          style={{ padding: '20px', borderBottom: '1px solid #EA4335' }}
+        >
+          <Grid container sx={{ display: 'flex', alignItems: 'center' }}>
+            <Grid item sm={6}>
+              <Box
+                display="flex"
+                justifyContent="flex-start"
+                alignItems="center"
+              >
+                <Icons.ExclamationCircleOutline
+                  size={32}
+                  style={{
+                    color: '#EA4335',
+                    fontSize: '32px',
+                  }}
+                />
+                <H5SemiBoldTypography
+                  label={'Decline Request'}
+                  style={{
+                    color: '#343434',
+                    marginLeft: '12px !important',
+                  }}
+                />
+              </Box>
+            </Grid>
+            <Grid item sm={6}>
+              <Box display="flex" justifyContent="flex-end">
+                <Icons.X
+                  size={20}
+                  style={{
+                    cursor: 'pointer',
+                  }}
+                  onClick={closeDeclinedRequestPopUp}
+                />
+              </Box>
+            </Grid>
+          </Grid>
+        </DialogTitle>
+        <Box
+          sx={{
+            width: '650px',
+            minWidth: '600px',
+            height: height / 4,
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+          }}
+        >
+          <BodyRegularTypography
+            label={`Are you sure you want to delete user ${tempStoreUserName} request for Enterprise Dashboard?`}
+          />
+        </Box>
+        {/* Buttons */}
+        <Box sx={{ mx: 3 }}>
+          <Box
+            sx={{
+              width: '100%',
+              display: 'flex',
+              flex: '1 0 auto',
+              alignItems: 'flex-end',
+              justifyContent: 'flex-end',
+              my: 2,
+            }}
+          >
+            <OutlinedButton
+              label="Cancel"
+              size={'medium'}
+              onClick={closeDeclinedRequestPopUp}
+              style={{
+                minWidth: '75px !important',
+                height: '36px !important',
+                marginRight: '20px !important',
+              }}
+            />
+            <ContainedButton
+              name="Yes"
+              onClick={() => handleDeclinedRequest()}
+              style={{
+                minWidth: '75px !important',
+                height: '36px !important',
+                background: '#EA4335 !important',
+              }}
+              size={'medium'}
+            />
+          </Box>
+        </Box>
+      </Dialog>
+      <Dialog open={openDeclineRequestsDialog}>
+        <DialogTitle
+          style={{ padding: '20px', borderBottom: '1px solid #EA4335' }}
+        >
+          <Grid container sx={{ display: 'flex', alignItems: 'center' }}>
+            <Grid item sm={6}>
+              <Box
+                display="flex"
+                justifyContent="flex-start"
+                alignItems="center"
+              >
+                <Icons.ExclamationCircleOutline
+                  size={32}
+                  style={{
+                    color: '#EA4335',
+                    fontSize: '32px',
+                  }}
+                />
+                <H5SemiBoldTypography
+                  label={'Decline Requests'}
+                  style={{
+                    color: '#343434',
+                    marginLeft: '12px !important',
+                  }}
+                />
+              </Box>
+            </Grid>
+            <Grid item sm={6}>
+              <Box display="flex" justifyContent="flex-end">
+                <Icons.X
+                  size={20}
+                  style={{
+                    cursor: 'pointer',
+                  }}
+                  onClick={closeDeclinedRequestsPopUp}
+                />
+              </Box>
+            </Grid>
+          </Grid>
+        </DialogTitle>
+        <Box
+          sx={{
+            width: '650px',
+            minWidth: '600px',
+            height: height / 4,
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+          }}
+        >
+          <BodyRegularTypography
+            label={`Are you sure you want to delete all selected user’s request for Enterprise Dashboard?`}
+          />
+        </Box>
+        {/* Buttons */}
+        <Box sx={{ mx: 3 }}>
+          <Box
+            sx={{
+              width: '100%',
+              display: 'flex',
+              flex: '1 0 auto',
+              alignItems: 'flex-end',
+              justifyContent: 'flex-end',
+              my: 2,
+            }}
+          >
+            <OutlinedButton
+              label="Cancel"
+              size={'medium'}
+              onClick={closeDeclinedRequestsPopUp}
+              style={{
+                minWidth: '75px !important',
+                height: '36px !important',
+                marginRight: '20px !important',
+              }}
+            />
+            <ContainedButton
+              name="Yes"
+              onClick={() => handleDeclineSelectedUsers()}
+              style={{
+                minWidth: '75px !important',
+                height: '36px !important',
+                background: '#EA4335 !important',
+              }}
+              size={'medium'}
+            />
+          </Box>
+        </Box>
+      </Dialog>
     </>
   );
 }

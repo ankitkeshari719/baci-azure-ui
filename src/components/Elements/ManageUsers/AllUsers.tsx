@@ -18,20 +18,14 @@ import moment from 'moment';
 
 import {
   BodyRegularTypography,
-  BodySemiBoldTypography,
-  CaptionSemiBoldTypography,
-  H2SemiBoldTypography,
   H5RegularTypography,
   H5SemiBoldTypography,
 } from '../../CustomizedTypography';
-import commonStyles from '../../../style.module.scss';
 import useTable from '../../CustomizedTable/useTable';
 import { TableBody, TableCell, TableRow } from '@material-ui/core';
 import { MagnifyingGlassIcon } from '@heroicons/react/24/outline';
 import {
   deactivateMultipleByIds,
-  deleteManyUsers,
-  deleteUserById,
   getAllUsersByEnterpriseId,
   updateUser,
 } from '../../../helpers/msal/services';
