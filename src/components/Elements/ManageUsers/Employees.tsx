@@ -139,9 +139,7 @@ export default function Employees() {
     });
   };
 
-  const handleDeleteUser = (userId: any) => {
-    console.log('userId', userId);
-  };
+  const handleDeleteUser = (userId: any) => {};
 
   return (
     <>

@@ -3,6 +3,7 @@ import './../../../global.scss';
 import { useNavigate } from 'react-router-dom';
 import { AuthenticatedTemplate, useMsal } from '@azure/msal-react';
 import {
+  checkUserExistOrNot,
   createUser,
   getAllEnterprises,
   getUserByEmailId,
@@ -61,14 +62,13 @@ export function UserHeader({ accounts }: Props) {
             if (res[i].organisationDomain.includes(com)) {
               enterpriseFlag = 1;
               // Check where the user is exist or not in DB
-              callGetUserByEmailId(
+              callCheckUserExistOrNot(
                 res[i].organisationId,
                 res[i].organisationName,
                 accounts[0].username
               );
             }
           }
-
           if (enterpriseFlag == 0) {
             // Pop Up
             setOpenEnterpriseNotExistDialog(true);
@@ -81,26 +81,37 @@ export function UserHeader({ accounts }: Props) {
     );
   };
 
-  // Function to get user by email
-  const callGetUserByEmailId = async (
+  // Function to check whether the user is exist or not
+  const callCheckUserExistOrNot = async (
     enterpriseId: any,
     enterpriseName: any,
     emailId: string
   ) => {
-    await getUserByEmailId(emailId).then(
+    await checkUserExistOrNot(emailId).then(
       res => {
         if (res === null) {
           // If user is not exist in DB then create new DB
           callCreateUser(enterpriseId, enterpriseName, emailId);
         } else {
-          // Navigate the user to dashboard according to his role
-          localStorage.setItem('userAzureData', JSON.stringify(accounts));
-          localStorage.setItem('userData', JSON.stringify(res));
-          if (res.roleName === BASIC) {
-            navigate('basic');
-          } else if (res.roleName === ENTERPRISE) {
-            navigate('enterprise');
-          }
+          callGetUserByEmailId(emailId);
+        }
+      },
+      err => {
+        console.log('err', err);
+      }
+    );
+  };
+
+  // Function to get user by email
+  const callGetUserByEmailId = async (emailId: string) => {
+    await getUserByEmailId(emailId).then(
+      res => {
+        localStorage.setItem('userAzureData', JSON.stringify(accounts));
+        localStorage.setItem('userData', JSON.stringify(res));
+        if (res.roleName === BASIC) {
+          navigate('basic');
+        } else if (res.roleName === ENTERPRISE) {
+          navigate('enterprise');
         }
       },
       err => {
@@ -115,13 +126,12 @@ export function UserHeader({ accounts }: Props) {
     enterpriseName: any,
     emailId: string
   ) => {
-    let requestBody;
     dispatch({
       type: ActionType.SET_LOADING,
       payload: { loadingFlag: true },
     });
     if (accounts) {
-      requestBody = {
+      const requestBody = {
         firstName: '',
         lastName: '',
         emailId: emailId,
@@ -139,6 +149,8 @@ export function UserHeader({ accounts }: Props) {
         teams: [],
         isActive: true,
       };
+
+
       await createUser(requestBody).then(
         res => {
           if (res != null) {

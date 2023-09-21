@@ -67,7 +67,6 @@ export default function EnterpriseRegistration() {
     const organisationId = tempLocalUserData && tempLocalUserData.enterpriseId;
     await getEnterpriseById(organisationId).then(
       res => {
-        console.log('callGetEnterpriseById response', res);
         setOrganisationPhoto(res.organisationPhoto);
         setOrganisationName(res.organisationName);
         setOrganisationCountry(res.organisationCountry);
@@ -180,8 +179,6 @@ export default function EnterpriseRegistration() {
     });
 
     const finalDomains = domains.concat(organisationDomains);
-    console.log('organisationDomains::::::::', organisationDomains);
-    console.log('finalDomains::::::::', finalDomains);
     const requestBody = {
       organisationName: organisationName,
       organisationDomain: finalDomains,
@@ -190,18 +187,11 @@ export default function EnterpriseRegistration() {
       isActive: true,
     };
 
-    console.log(
-      'requestBody:::::::::::',
-      tempLocalUserData && tempLocalUserData.enterpriseId,
-      requestBody
-    );
-
     await updateEnterprise(
       tempLocalUserData && tempLocalUserData.enterpriseId,
       requestBody
     ).then(
       res => {
-        console.log('callUpdateEnterprise response', res);
         dispatch({
           type: ActionType.SET_LOADING,
           payload: { loadingFlag: false },

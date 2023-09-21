@@ -216,7 +216,7 @@ export default function EditProfile({ handleEdit }: Props) {
       payload: { loadingFlag: true },
     });
 
-    const teamsIds = teams.map((team:any) => team.teamId);
+    const teamsIds = teams.map((team: any) => team.teamId);
     const requestBody = {
       firstName: firstName,
       lastName: lastName,
@@ -813,30 +813,16 @@ export default function EditProfile({ handleEdit }: Props) {
                         color: 'rgba(0, 0, 0, 0.6)',
                       }}
                     />
-                    {teams.map((team: any) => {
-                      return (
-                        <Box
-                          key={team.teamId}
-                          sx={{
-                            width: '150px',
-                            height: '32px',
-                            minWidth: '150px',
-                            minHeight: '32px',
-                            borderRadius: '4px',
-                            background: '#63bcfd',
-                            textAlign: 'center',
-                            display: 'flex',
-                            alignItems: 'center',
-                            justifyContent: 'center',
-                          }}
-                        >
-                          <CaptionSemiBoldTypography
-                            label={team.teamName}
-                            style={{ color: '#ffffff !important' }}
-                          />
-                        </Box>
-                      );
-                    })}
+                    <Box>
+                      {teams.map((team: any, index: number) => {
+                        return (
+                          <>
+                            {team.teamName}
+                            {index < teams.length - 1 ? ', ' : ''}
+                          </>
+                        );
+                      })}
+                    </Box>
                   </Box>
                 )}
               </Box>

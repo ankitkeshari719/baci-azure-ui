@@ -119,7 +119,6 @@ export function LandingPage({ isDemo }: { isDemo?: boolean }) {
     instance
       .loginRedirect(loginRequest)
       .then(res => {
-        console.log('res::::::', res);
         dispatch({
           type: ActionType.SET_LOADING,
           payload: { loadingFlag: false },
@@ -227,6 +226,7 @@ export function LandingPage({ isDemo }: { isDemo?: boolean }) {
     navigate('/termAndCondition/');
   };
 
+  console.log('accounts::::', accounts);
   return (
     <>
       {isXsUp ? (

@@ -18,19 +18,14 @@ import moment from 'moment';
 
 import {
   BodyRegularTypography,
-  BodySemiBoldTypography,
-  CaptionSemiBoldTypography,
-  H2SemiBoldTypography,
   H5RegularTypography,
   H5SemiBoldTypography,
 } from '../../CustomizedTypography';
-import commonStyles from '../../../style.module.scss';
 import useTable from '../../CustomizedTable/useTable';
 import { TableBody, TableCell, TableRow } from '@material-ui/core';
 import { MagnifyingGlassIcon } from '@heroicons/react/24/outline';
 import {
-  deleteManyUsers,
-  deleteUserById,
+  deactivateMultipleByIds,
   getAllUsersByEnterpriseId,
   updateUser,
 } from '../../../helpers/msal/services';
@@ -97,7 +92,6 @@ export default function AllUsers() {
     });
     await getAllUsersByEnterpriseId(enterpriseId).then(
       res => {
-        console.log('res =>>>>>>>>>>>>>>>>>>>>', res);
         let tempRes = res.map((user: any) => {
           return {
             id: user.user.emailId,
@@ -125,6 +119,7 @@ export default function AllUsers() {
     );
   };
 
+  // Select All Functionality
   const handleSelectAllCheckbox = () => {
     setIsSelectAllChecked(!isSelectAllChecked);
     const newRecord = records.map((record: any) => {
@@ -203,6 +198,7 @@ export default function AllUsers() {
     );
   };
 
+  // Handle Search
   const handleSearch = (e: any) => {
     let target = e.target;
     setFilterFn({
@@ -221,7 +217,21 @@ export default function AllUsers() {
     });
   };
 
-  // Open Delete User Pop Up
+  // Handle Checkbox
+  const handleChangeCheckbox = (
+    event: React.ChangeEvent<HTMLInputElement>,
+    userId: any
+  ) => {
+    const newRecord = records.map((record: any) => {
+      if (record.emailId === userId) {
+        record.checked = !record.checked;
+      }
+      return record;
+    });
+    setRecords(newRecord);
+  };
+
+  // Close Delete User Pop Up
   const handleDeleteUserPopUpOpen = (userId: any, userName: any) => {
     setTempStoreUserId(userId);
     setTempStoreUserName(userName);
@@ -267,6 +277,7 @@ export default function AllUsers() {
     );
   };
 
+  // Open Change User Role Pop up
   const handleChangeUserRolePopUpOpen = (
     roleName: any,
     userId: any,
@@ -282,6 +293,7 @@ export default function AllUsers() {
     }
   };
 
+  // Close Change User Role Pop up
   const handleChangeUserRolePopUpClose = () => {
     setTempStoreUserId('');
     setTempStoreRoleName('');
@@ -290,6 +302,7 @@ export default function AllUsers() {
     setRevokeRoleDialog(false);
   };
 
+  // Change User Role
   const handleChangeUserRole = async () => {
     dispatch({
       type: ActionType.SET_LOADING,
@@ -333,20 +346,7 @@ export default function AllUsers() {
     );
   };
 
-  // Handle Checkbox
-  const handleChangeCheckbox = (
-    event: React.ChangeEvent<HTMLInputElement>,
-    userId: any
-  ) => {
-    const newRecord = records.map((record: any) => {
-      if (record.emailId === userId) {
-        record.checked = !record.checked;
-      }
-      return record;
-    });
-    setRecords(newRecord);
-  };
-
+  // Delete Multiple Users
   const handleDeleteSelectedUsers = async () => {
     dispatch({
       type: ActionType.SET_LOADING,
@@ -360,7 +360,7 @@ export default function AllUsers() {
       emailIds: selectedUsersId,
     };
 
-    await deleteManyUsers(requestBody).then(
+    await deactivateMultipleByIds(requestBody).then(
       res => {
         dispatch({
           type: ActionType.SET_LOADING,
@@ -475,31 +475,12 @@ export default function AllUsers() {
                               justifyContent: 'flex-start',
                             }}
                           >
-                            {item.teams.map((team: any) => {
+                            {item.teams.map((team: any, index: number) => {
                               return (
-                                <Box
-                                  key={team.teamId}
-                                  sx={{
-                                    width: '150px',
-                                    height: '32px',
-                                    minWidth: '150px',
-                                    minHeight: '32px',
-                                    borderRadius: '4px',
-                                    background: '#63bcfd',
-                                    textAlign: 'center',
-                                    display: 'flex',
-                                    alignItems: 'center',
-                                    justifyContent: 'center',
-                                    margin: '4px',
-                                  }}
-                                >
-                                  <CaptionSemiBoldTypography
-                                    label={team.teamName}
-                                    style={{
-                                      color: '#ffffff !important',
-                                    }}
-                                  />
-                                </Box>
+                                <>
+                                  {team.teamName}
+                                  {index < item.teams.length - 1 ? ', ' : ''}
+                                </>
                               );
                             })}
                           </Box>

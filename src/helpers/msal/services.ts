@@ -174,12 +174,16 @@ export const getDeploymentData = async (): Promise<any> => {
   return deploymentData;
 };
 
-export const createRetroSummary=async(columns:any, cards:any[],retroId:string)=>{
+export const createRetroSummary = async (
+  columns: any,
+  cards: any[],
+  retroId: string
+) => {
   let groupData = '';
   const requestOptions = {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ columns: columns,cards:cards,retroId:retroId }),
+    body: JSON.stringify({ columns: columns, cards: cards, retroId: retroId }),
   };
   await fetch(API_URL + '/createRetroSummary', requestOptions)
     .then(response => response.json())
@@ -187,7 +191,7 @@ export const createRetroSummary=async(columns:any, cards:any[],retroId:string)=>
       groupData = data;
     });
   return groupData;
-}
+};
 
 export const groupSuggestion = async (
   retroId: string,
@@ -206,11 +210,6 @@ export const groupSuggestion = async (
     });
   return groupData;
 };
-
-
-
-
-
 
 export const keywordExtraction = async (
   retroId: string,
@@ -1043,7 +1042,7 @@ export const updateAction = async (
   return data;
 };
 
-// Delete Role
+// Delete Action By Id
 export const deleteActionById = async (actionId: string): Promise<any> => {
   let message;
   const requestOptions = {
@@ -1086,6 +1085,24 @@ export const getUserByEmailId = async (emailId: string): Promise<any> => {
     headers: { 'Content-Type': 'application/json' },
   };
   await fetch(API_URL + `/users/${emailId}`, requestOptions)
+    .then(response => response.json())
+    .then(response => {
+      if (response) {
+        user = response.data;
+      }
+    })
+    .catch(err => console.log(err));
+  return user;
+};
+
+// Get By Id User
+export const checkUserExistOrNot = async (emailId: string): Promise<any> => {
+  let user;
+  const requestOptions = {
+    method: 'GET',
+    headers: { 'Content-Type': 'application/json' },
+  };
+  await fetch(API_URL + `/users/checkUserExistOrNot/${emailId}`, requestOptions)
     .then(response => response.json())
     .then(response => {
       if (response) {
@@ -1246,7 +1263,7 @@ export const authenticateUser = async (requestBody: any): Promise<any> => {
   return data;
 };
 
-// Create User
+// Delete Many Users
 export const deleteManyUsers = async (requestBody: any): Promise<any> => {
   let data: any;
   const requestOptions = {
@@ -1258,6 +1275,27 @@ export const deleteManyUsers = async (requestBody: any): Promise<any> => {
   };
 
   await fetch(API_URL + `/users/deleteMany`, requestOptions)
+    .then(response => response.json())
+    .then(response => {
+      data = response.data;
+    });
+  return data;
+};
+
+// Deactivate Multiple Users By Ids
+export const deactivateMultipleByIds = async (
+  requestBody: any
+): Promise<any> => {
+  let data: any;
+  const requestOptions = {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({
+      emailIds: requestBody.emailIds,
+    }),
+  };
+
+  await fetch(API_URL + `/users/deactivateMultiple`, requestOptions)
     .then(response => response.json())
     .then(response => {
       data = response.data;
@@ -1346,12 +1384,12 @@ export const updateEnterpriseRequest = async (
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({
-      organisationId: requestBody.enterpriseRequestParam.organisationId,
-      fromName: requestBody.enterpriseRequestParam.fromName,
-      fromEmail: requestBody.enterpriseRequestParam.fromEmail,
-      fromTeams: requestBody.enterpriseRequestParam.fromTeams,
-      toEmails: requestBody.enterpriseRequestParam.toEmails,
-      isApproved: requestBody.enterpriseRequestParam.isApproved,
+      organisationId: requestBody.organisationId,
+      fromName: requestBody.fromName,
+      fromEmail: requestBody.fromEmail,
+      fromTeams: requestBody.fromTeams,
+      toEmails: requestBody.toEmails,
+      isApproved: requestBody.isApproved,
     }),
   };
 
