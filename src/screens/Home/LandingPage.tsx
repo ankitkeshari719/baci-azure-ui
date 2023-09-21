@@ -226,6 +226,7 @@ export function LandingPage({ isDemo }: { isDemo?: boolean }) {
     navigate('/termAndCondition/');
   };
 
+  console.log('accounts::::', accounts);
   return (
     <>
       {isXsUp ? (
