@@ -322,31 +322,14 @@ export default function EnterpriseRequests() {
                               justifyContent: 'flex-start',
                             }}
                           >
-                            {item.fromTeams.map((team: any) => {
+                            {item.fromTeams.map((team: any, index: number) => {
                               return (
-                                <Box
-                                  key={team?.teamId}
-                                  sx={{
-                                    width: '150px',
-                                    height: '32px',
-                                    minWidth: '150px',
-                                    minHeight: '32px',
-                                    borderRadius: '4px',
-                                    background: '#63bcfd',
-                                    textAlign: 'center',
-                                    display: 'flex',
-                                    alignItems: 'center',
-                                    justifyContent: 'center',
-                                    margin: '4px',
-                                  }}
-                                >
-                                  <CaptionSemiBoldTypography
-                                    label={team?.teamName}
-                                    style={{
-                                      color: '#ffffff !important',
-                                    }}
-                                  />
-                                </Box>
+                                <>
+                                  {team.teamName}
+                                  {index < item.fromTeams.length - 1
+                                    ? ', '
+                                    : ''}
+                                </>
                               );
                             })}
                           </Box>
