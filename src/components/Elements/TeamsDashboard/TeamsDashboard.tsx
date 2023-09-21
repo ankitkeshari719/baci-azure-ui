@@ -383,16 +383,32 @@ export default function TeamsDashboard() {
                       {moment(item.createdAt).format('Do MMM YYYY')}
                     </TableCell>
                     <TableCell>
-                      <Icons.TrashOutline
-                        size={20}
-                        style={{
-                          cursor: 'pointer',
-                          color: '#4E4E4E',
+                      <Box
+                        sx={{
+                          display: 'flex',
+                          flexDirection: 'row',
+                          justifyContent: 'space-evenly',
                         }}
-                        onClick={() =>
-                          handleDeleteTeamPopUpOpen(item.id, item.teamName)
-                        }
-                      />
+                      >
+                        <Icons.PencilAltOutline
+                          size={20}
+                          style={{
+                            cursor: 'pointer',
+                            color: '#4E4E4E',
+                          }}
+                          onClick={() => createNewTeam()}
+                        />
+                        <Icons.TrashOutline
+                          size={20}
+                          style={{
+                            cursor: 'pointer',
+                            color: '#4E4E4E',
+                          }}
+                          onClick={() =>
+                            handleDeleteTeamPopUpOpen(item.id, item.teamName)
+                          }
+                        />
+                      </Box>
                     </TableCell>
                   </TableRow>
                 );
