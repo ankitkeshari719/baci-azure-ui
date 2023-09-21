@@ -183,13 +183,11 @@ export default function TeamsDashboard() {
       type: ActionType.SET_LOADING,
       payload: { loadingFlag: true },
     });
-    console.log('tempStoreTeamId::::', tempStoreTeamId);
     const requestBody = {
       isActive: false,
     };
     await updateTeam(tempStoreTeamId, requestBody).then(
       res => {
-        console.log('callUpdateTeam response', res);
         callGetTeamDataForTable();
         dispatch({
           type: ActionType.SET_LOADING,

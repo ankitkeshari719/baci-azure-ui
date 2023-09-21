@@ -376,7 +376,6 @@ export default function RetroBoard() {
           cards.push(action.value);
         });
       }
-      console.log(cards, JSON.stringify(cards));
       await createRetroSummary(columnString, cards, retroId).then(
         (res: any) => {
           const data = res;
