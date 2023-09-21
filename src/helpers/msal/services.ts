@@ -1005,6 +1005,24 @@ export const getUserByEmailId = async (emailId: string): Promise<any> => {
   return user;
 };
 
+// Get By Id User
+export const checkUserExistOrNot = async (emailId: string): Promise<any> => {
+  let user;
+  const requestOptions = {
+    method: 'GET',
+    headers: { 'Content-Type': 'application/json' },
+  };
+  await fetch(API_URL + `/users/checkUserExistOrNot/${emailId}`, requestOptions)
+    .then(response => response.json())
+    .then(response => {
+      if (response) {
+        user = response.data;
+      }
+    })
+    .catch(err => console.log(err));
+  return user;
+};
+
 // Get All Users By Email Ids
 export const getAllUsersByEmails = async (emails: any): Promise<any> => {
   let users: any[] = [];
