@@ -119,7 +119,6 @@ export function LandingPage({ isDemo }: { isDemo?: boolean }) {
     instance
       .loginRedirect(loginRequest)
       .then(res => {
-        console.log('res::::::', res);
         dispatch({
           type: ActionType.SET_LOADING,
           payload: { loadingFlag: false },

@@ -271,7 +271,6 @@ const Toolbar = (props: any) => {
             </Link>
           )
         )}
-
         {/* Retro Name*/}
         {currentRetro?.name &&
           !location.pathname.includes('startRetro') &&
