@@ -115,13 +115,18 @@ function EnterpriseDashboard() {
 
   const [global, dispatch] = React.useContext(GlobalContext);
 
-  const [fromDate, setFromDate] = useState<string>(
-    global.chartStartDate ? global.chartStartDate : '10'
-  );
+  // const [fromDate, setFromDate] = useState<string>(
+  //   global.chartStartDate ? global.chartStartDate : '10'
+  // );
 
-  const [toDate, setToDate] = useState<string>(
-    global.chartEndDate ? global.chartEndDate : '16'
-  );
+  const [fromDate,setFromDate]=useState<string>(
+    global.chartStartDate ? global.chartStartDate : new Date().getFullYear().toString()  + '-' +  '0' + (new Date().getMonth() ).toString().slice(-2));
+  const [toDate,setToDate]=useState<string>( 
+    global.chartEndDate ? global.chartEndDate :new Date().getFullYear().toString()  + '-' +  '0' + (new Date().getMonth() + 1).toString().slice(-2));
+
+  // const [toDate, setToDate] = useState<string>(
+  //   global.chartEndDate ? global.chartEndDate : '16'
+  // );
 
   const [fromDateString, setFromDateString] = useState<string>('');
 
@@ -184,17 +189,7 @@ function EnterpriseDashboard() {
     },
   ];
 
-  // Function to get To and From Date in string format
-  React.useEffect(() => {
-    const tempFromDateString = MONTH_SELECTORS.filter(
-      month => month.id === Number(fromDate)
-    );
-    const tempToDateString = MONTH_SELECTORS.filter(
-      month => month.id === Number(toDate)
-    );
-    setFromDateString(tempFromDateString && tempFromDateString[0].month);
-    setToDateString(tempToDateString && tempToDateString[0].month);
-  }, [fromDate, toDate]);
+
 
   // Call function to get Sessions
   React.useEffect(() => {
@@ -753,6 +748,8 @@ function EnterpriseDashboard() {
                 </Box> */}
               </Box>
               {/* Team Level Actions Count Chart */}
+
+
               <Box className="chartCard">
                 <Box
                   display="flex"
@@ -783,31 +780,14 @@ function EnterpriseDashboard() {
                 >
                   <TeamLevelActionsCountChart dashboard={true} />
                 </Box>
-                {/* <Box
-                  display="flex"
-                  flexDirection="row"
-                  alignItems="center"
-                  justifyContent="flex-start"
-                  width="100%"
-                >
-                  <TextButton
-                    id={'Learn_More'}
-                    label={'Learn More'}
-                    size={'small'}
-                    style={{
-                      paddingLeft: '0px !important',
-                      textDecorationLine: 'underline !important',
-                      backgroundColor: 'transparent !important',
-                    }}
-                    onClick={() =>
-                      goToAnalyticsLearnMorePage(
-                        '/enterprise/analytics/teamLevelActionsCountLearnMore'
-                      )
-                    }
-                  />
-                </Box> */}
+              
               </Box>
+
+
               {/* ------------------------Page Header ----------------------------- */}
+             
+             
+             
               <Grid
                 id="page_header_1"
                 item
@@ -863,7 +843,12 @@ function EnterpriseDashboard() {
                   </Grid>
                 </Box>
               </Grid>
+
+
               {/* Average Participant Chart */}
+             
+             
+             
               <Box className="chartCard">
                 <Box
                   display="flex"
@@ -896,32 +881,15 @@ function EnterpriseDashboard() {
                 >
                   <AverageParticipantChart dashboard={true} team={selectId} />
                 </Box>
-                {/* <Box
-                  display="flex"
-                  flexDirection="row"
-                  alignItems="center"
-                  justifyContent="flex-start"
-                  width="100%"
-                >
-                  <TextButton
-                    id={'Learn_More'}
-                    label={'Learn More'}
-                    size={'small'}
-                    style={{
-                      paddingLeft: '0px !important',
-                      textDecorationLine: 'underline !important',
-                      backgroundColor: 'transparent !important',
-                    }}
-                    onClick={() =>
-                      goToAnalyticsLearnMorePage(
-                        '/enterprise/analytics/enterpriseLevelParticipantsCountLearnMore'
-                      )
-                    }
-                  />
-                </Box> */}
+              
               </Box>
+
+
               {/* Average Sessions Counts Chart Print*/}
-              <Box className="chartCard">
+             
+             
+             
+              {/* <Box className="chartCard">
                 <Box
                   display="flex"
                   flexDirection="row"
@@ -953,32 +921,17 @@ function EnterpriseDashboard() {
                 >
                   <AverageRetroChart dashboard={true} team={selectId} />
                 </Box>
-                {/* <Box
-                  display="flex"
-                  flexDirection="row"
-                  alignItems="center"
-                  justifyContent="flex-start"
-                  width="100%"
-                >
-                  <TextButton
-                    id={'Learn_More'}
-                    label={'Learn More'}
-                    size={'small'}
-                    style={{
-                      paddingLeft: '0px !important',
-                      textDecorationLine: 'underline !important',
-                      backgroundColor: 'transparent !important',
-                    }}
-                    onClick={() =>
-                      goToAnalyticsLearnMorePage(
-                        '/enterprise/analytics/enterpriseLevelRetrosCountLearnMore'
-                      )
-                    }
-                  />
-                </Box> */}
-              </Box>
+              </Box> */}
+
+
+
+
               {/* ------------------------Page Header ----------------------------- */}
-              <Grid
+
+
+
+
+              {/* <Grid
                 id="page_header_1"
                 item
                 xs={12}
@@ -1032,9 +985,14 @@ function EnterpriseDashboard() {
                     </Box>
                   </Grid>
                 </Box>
-              </Grid>
+              </Grid> */}
+
+
+
               {/* Enterprise Level Sentiments Theme Chart */}
-              <Box className="chartCard">
+            
+            
+              {/* <Box className="chartCard">
                 <Box
                   display="flex"
                   flexDirection="row"
@@ -1069,32 +1027,16 @@ function EnterpriseDashboard() {
                     team={selectId}
                   />
                 </Box>
-                {/* <Box
-                  display="flex"
-                  flexDirection="row"
-                  alignItems="center"
-                  justifyContent="flex-start"
-                  width="100%"
-                >
-                  <TextButton
-                    id={'Learn_More'}
-                    label={'Learn More'}
-                    size={'small'}
-                    style={{
-                      paddingLeft: '0px !important',
-                      textDecorationLine: 'underline !important',
-                      backgroundColor: 'transparent !important',
-                    }}
-                    onClick={() =>
-                      goToAnalyticsLearnMorePage(
-                        '/enterprise/analytics/enterpriseLevelSentimentsThemesLearnMore'
-                      )
-                    }
-                  />
-                </Box> */}
-              </Box>
+               
+              </Box> */}
+           
+           
+           
+           
               {/* Enterprise Level Sentiments Moods Chart */}
-              <Box className="chartCard">
+              
+              
+              {/* <Box className="chartCard">
                 <Box
                   display="flex"
                   flexDirection="row"
@@ -1129,32 +1071,14 @@ function EnterpriseDashboard() {
                     team={selectId}
                   />
                 </Box>
-                {/* <Box
-                  display="flex"
-                  flexDirection="row"
-                  alignItems="center"
-                  justifyContent="flex-start"
-                  width="100%"
-                >
-                  <TextButton
-                    id={'Learn_More'}
-                    label={'Learn More'}
-                    size={'small'}
-                    style={{
-                      paddingLeft: '0px !important',
-                      textDecorationLine: 'underline !important',
-                      backgroundColor: 'transparent !important',
-                    }}
-                    onClick={() =>
-                      goToAnalyticsLearnMorePage(
-                        '/enterprise/analytics/enterpriseLevelSentimentsMoodsLearnMore'
-                      )
-                    }
-                  />
-                </Box> */}
-              </Box>
+              </Box> */}
+
+
+
               {/* ------------------------Page Header ----------------------------- */}
-              <Grid
+            
+            
+              {/* <Grid
                 id="page_header_1"
                 item
                 xs={12}
@@ -1208,9 +1132,13 @@ function EnterpriseDashboard() {
                     </Box>
                   </Grid>
                 </Box>
-              </Grid>
+              </Grid> */}
+           
+           
               {/* Enterprise Level Sentiments Summary Chart */}
-              <Box className="chartCard">
+            
+            
+              {/* <Box className="chartCard">
                 <Box
                   display="flex"
                   flexDirection="row"
@@ -1245,30 +1173,8 @@ function EnterpriseDashboard() {
                     team={selectId}
                   />
                 </Box>
-                {/* <Box
-                  display="flex"
-                  flexDirection="row"
-                  alignItems="center"
-                  justifyContent="flex-start"
-                  width="100%"
-                >
-                  <TextButton
-                    id={'Learn_More'}
-                    label={'Learn More'}
-                    size={'small'}
-                    style={{
-                      paddingLeft: '0px !important',
-                      textDecorationLine: 'underline !important',
-                      backgroundColor: 'transparent !important',
-                    }}
-                    onClick={() =>
-                      goToAnalyticsLearnMorePage(
-                        '/enterprise/analytics/enterpriseLevelSentimentsSummaryLearnMore'
-                      )
-                    }
-                  />
-                </Box> */}
-              </Box>
+              
+              </Box> */}
             </Box>
           </Box>
         </Box>

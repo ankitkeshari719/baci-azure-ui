@@ -2,15 +2,14 @@ import {
   Box,
   FormControl,
   Grid,
+  Input,
   MenuItem,
   Select,
   SelectChangeEvent,
 } from '@mui/material';
 import { ButtonLabelTypography } from '../../CustomizedTypography';
-
-import * as Icons from 'heroicons-react';
-import { MONTH_SELECTORS, MenuProps } from '../../../screens/Analytics/const';
-import { useState } from 'react';
+import { ActionType, GlobalContext } from '../../../contexts/GlobalContext';
+import React from 'react';
 
 function DateSelector({
   fromDate,
@@ -20,9 +19,11 @@ function DateSelector({
 }: {
   fromDate: string;
   toDate: string;
-  handleToDate: (event: SelectChangeEvent) => void;
-  handleFromDate: (event: SelectChangeEvent) => void;
+  handleToDate: (event: any) => void;
+  handleFromDate: (event: any) => void;
 }) {
+
+  const [global, dispatch] = React.useContext(GlobalContext);
   return (
     <Grid
       item
@@ -33,6 +34,7 @@ function DateSelector({
         flexDirection: 'row',
         alignItems: 'center',
         justifyContent: 'center',
+       marginRight:'30px'
       }}
     >
       {/* Select Range Title */}
@@ -43,43 +45,15 @@ function DateSelector({
         }}
       />
       {/* From Date */}
-      <Box sx={{ minWidth: 240, marginLeft: '16px', marginRight: '16px' }}>
+      <Box sx={{ minWidth: 180, marginLeft: '16px', marginRight: '16px' }}>
+      
         <FormControl fullWidth>
-          <Select
-            sx={{
-              fieldset: {
-                border: 'none',
-                opacity: 1,
-                color: '#4E4E4E',
-              },
-            }}
-            labelId="from-Date"
-            id="from_date"
-            value={fromDate}
-            label="From"
-            onChange={handleFromDate}
-            IconComponent={props => (
-              <Icons.ChevronDownOutline
-                size={24}
-                color="#4E4E4E"
-                style={{
-                  cursor: 'pointer',
-                  position: 'absolute',
-                  top: 'calc(50% - 0.8em)',
-                }}
-                {...props}
-              />
-            )}
-            MenuProps={MenuProps}
-          >
-            {MONTH_SELECTORS.map(month_selector => {
-              return (
-                <MenuItem value={month_selector.id} key={month_selector.id}>
-                  {month_selector.month}
-                </MenuItem>
-              );
-            })}
-          </Select>
+        <Input type="month" id="fromDate" name="fromDate" value={fromDate} onChange={(e)=>{
+            dispatch({
+              type: ActionType.CHART_START_DATE,
+              payload: { startDate: e.target.value },
+            });
+          handleFromDate(e)}} />
         </FormControl>
       </Box>
       <ButtonLabelTypography
@@ -89,43 +63,15 @@ function DateSelector({
         }}
       />
       {/*To Date */}
-      <Box sx={{ minWidth: 240, marginLeft: '16px' }}>
+      <Box sx={{ minWidth: 180, marginLeft: '16px' }}>
+  
         <FormControl fullWidth>
-          <Select
-            sx={{
-              fieldset: {
-                border: 'none',
-                opacity: 1,
-                color: '#4E4E4E',
-              },
-            }}
-            labelId="to-Date"
-            id="to_date"
-            value={toDate}
-            label="To"
-            onChange={handleToDate}
-            IconComponent={props => (
-              <Icons.ChevronDownOutline
-                size={24}
-                color="#4E4E4E"
-                style={{
-                  cursor: 'pointer',
-                  position: 'absolute',
-                  top: 'calc(50% - 0.8em)',
-                }}
-                {...props}
-              />
-            )}
-            MenuProps={MenuProps}
-          >
-            {MONTH_SELECTORS.map(month_selector => {
-              return (
-                <MenuItem value={month_selector.id} key={month_selector.id}>
-                  {month_selector.month}
-                </MenuItem>
-              );
-            })}
-          </Select>
+        <Input type="month" id="toDate" name="toDate" value={toDate} onChange={(e)=>{
+           dispatch({
+            type: ActionType.CHART_END_DATE,
+            payload: { endDate: e.target.value },
+          });
+          handleToDate(e)}} />
         </FormControl>
       </Box>
     </Grid>

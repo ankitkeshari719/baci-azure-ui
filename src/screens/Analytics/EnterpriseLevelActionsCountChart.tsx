@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { getEnterpriseLevelActionsCounts } from '../../helpers/msal/services';
+import { chartInputType, formatDateForAPI, formatDateToMonthYear, getActionsChartData, getEnterpriseLevelActionsCounts } from '../../helpers/msal/services';
 import ReactApexChart from 'react-apexcharts';
 import { ApexOptions } from 'apexcharts';
 import {
@@ -28,6 +28,7 @@ import * as Icons from 'heroicons-react';
 import { MONTH_SELECTORS, MenuProps } from './const';
 import { GlobalContext } from '../../contexts/GlobalContext';
 import { BASIC, ENTERPRISE } from '../../constants/applicationConst';
+import DateSelector from '../../components/Elements/EnterpriseDashboardPages/DateSelector';
 
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
   [`&.${tableCellClasses.head}`]: {
@@ -59,13 +60,13 @@ export default function EnterpriseLevelActionsCountChart({
   const [months, setMonths] = useState<any>([]);
   const [global, dispatch] = React.useContext(GlobalContext);
   const [fromDate, setFromDate] = useState<string>(
-    global.chartStartDate ? global.chartStartDate : '10'
+    global.chartStartDate ? global.chartStartDate : 
+
+    new Date().getFullYear().toString()  + '-' +  '0' + (new Date().getMonth() ).toString().slice(-2)
   );
   const [toDate, setToDate] = useState<string>(
-    global.chartEndDate ? global.chartEndDate : '16'
+    global.chartEndDate ? global.chartEndDate :  new Date().getFullYear().toString()  + '-' +  '0' + (new Date().getMonth() + 1).toString().slice(-2)
   );
-  const [selectedFromDate, setSelectedFromDate] = useState<string>();
-  const [selectedToDate, setSelectedToDate] = useState<string>();
   const navigate = useNavigate();
   const windowWidth = React.useRef(window.innerWidth);
 
@@ -105,23 +106,7 @@ export default function EnterpriseLevelActionsCountChart({
     }
   };
 
-  React.useEffect(() => {
-    const tempSelectedFromDate = MONTH_SELECTORS.filter(
-      monthSelector => monthSelector.id === Number(fromDate)
-    );
-    const tempSelectedToDate = MONTH_SELECTORS.filter(
-      monthSelector => monthSelector.id === Number(toDate)
-    );
 
-    setSelectedFromDate(
-      tempSelectedFromDate &&
-        tempSelectedFromDate[0] &&
-        tempSelectedFromDate[0].month
-    );
-    setSelectedToDate(
-      tempSelectedToDate && tempSelectedToDate[0] && tempSelectedToDate[0].month
-    );
-  }, [fromDate, toDate]);
 
   React.useEffect(() => {
     handleEnterpriseLevelActionsCountData();
@@ -131,31 +116,41 @@ export default function EnterpriseLevelActionsCountChart({
     handleEnterpriseLevelActionsCountData();
   }, [team]);
 
+
+
+
   const handleEnterpriseLevelActionsCountData = async () => {
-    await getEnterpriseLevelActionsCounts(fromDate, toDate, team).then(
-      res => {
-        if (res && res.result) {
-          let tempCompletedPercentage = 0;
-          setEnterpriseLevelActions(res.result);
-          setAssignedActions(res.result?.map((item: any) => item.assigned));
-          setCompletedActions(res.result?.map((item: any) => item.completed));
-          setMonths(res.result?.map((item: any) => item.month));
-          for (let i = 0; i < res.result.length; i++) {
-            tempCompletedPercentage =
-              tempCompletedPercentage +
-              (res.result[i].completed /
-                (res.result[i].completed + res.result[i].assigned)) *
-                100;
-          }
-          setCompletedPercentage(
-            Math.round(tempCompletedPercentage / res.result.length)
-          );
-        }
-      },
-      err => {
-        console.log('err', err);
-      }
-    );
+
+    const chartInput :chartInputType ={
+      userId:"vishal.gawande@evoltech.com.au",
+      roleName:"Enterprise",
+      enterpriseId:"evoltech0.0751886606959975",
+      teamId:"0",
+      fromDate: formatDateForAPI(fromDate),
+      toDate:formatDateForAPI(toDate)
+    }
+     await getActionsChartData(chartInput).then(res=>{
+      console.log(res,"response")
+      setEnterpriseLevelActions(res.chartData);
+      setAssignedActions(res.chartData?.map((item: any) => item.pending))
+      setCompletedActions(res.chartData?.map((item: any) => item.completed))
+      setMonths(res.chartData?.map((item: any) => formatDateToMonthYear(item.month) ));
+      var tempCompletedPercentage=0
+      var tempcompletedActions=0;
+      var allActions=0;
+      res.chartData?.forEach((item:any)=>{
+        allActions= allActions+item.pending+item.completed;
+        tempcompletedActions=tempcompletedActions+item.completed;
+        // tempCompletedPercentage=tempCompletedPercentage +  +(item.completedInPer.toFixed(2));
+      })
+      tempCompletedPercentage= +((tempcompletedActions/allActions)*100).toFixed(2) ;
+
+      setCompletedPercentage(tempCompletedPercentage)
+     },
+     err=>{
+      console.log('err', err);
+     })
+
   };
 
   const series = [
@@ -245,6 +240,7 @@ export default function EnterpriseLevelActionsCountChart({
   };
 
   const handleFromDate = (event: SelectChangeEvent) => {
+    console.log(event.target.value)
     setFromDate(event.target.value as string);
   };
 
@@ -332,120 +328,8 @@ export default function EnterpriseLevelActionsCountChart({
             }}
           >
             {/* Selector */}
-            <Box
-              sx={{
-                display: 'flex',
-                flexDirection: 'row',
-                alignItems: 'center',
-                justifyContent: 'start',
-              }}
-            >
-              {/* Select Range Title */}
-              <ButtonLabelTypography
-                label="Select Range:"
-                style={{
-                  color: '#343434',
-                }}
-              />
-              {/* From Date */}
-              <Box
-                sx={{
-                  minWidth: 120,
-                  marginLeft: '16px',
-                  marginRight: '16px',
-                }}
-              >
-                <FormControl fullWidth>
-                  <Select
-                    sx={{
-                      fieldset: {
-                        border: 'none',
-                        opacity: 1,
-                        color: '#4E4E4E',
-                      },
-                    }}
-                    labelId="from-Date"
-                    id="from_date"
-                    value={fromDate}
-                    label="From"
-                    onChange={handleFromDate}
-                    IconComponent={props => (
-                      <Icons.ChevronDownOutline
-                        size={24}
-                        color="#4E4E4E"
-                        style={{
-                          cursor: 'pointer',
-                          position: 'absolute',
-                          top: 'calc(50% - 0.8em)',
-                        }}
-                        {...props}
-                      />
-                    )}
-                    MenuProps={MenuProps}
-                  >
-                    {MONTH_SELECTORS.map(month_selector => {
-                      return (
-                        <MenuItem
-                          value={month_selector.id}
-                          key={month_selector.id}
-                        >
-                          {month_selector.month}
-                        </MenuItem>
-                      );
-                    })}
-                  </Select>
-                </FormControl>
-              </Box>
-              <ButtonLabelTypography
-                label="To"
-                style={{
-                  color: '#343434',
-                }}
-              />
-              {/*To Date */}
-              <Box sx={{ minWidth: 120, marginLeft: '24px' }}>
-                <FormControl fullWidth>
-                  <Select
-                    sx={{
-                      fieldset: {
-                        border: 'none',
-                        opacity: 1,
-                        color: '#4E4E4E',
-                      },
-                    }}
-                    labelId="to-Date"
-                    id="to_date"
-                    value={toDate}
-                    label="To"
-                    onChange={handleToDate}
-                    IconComponent={props => (
-                      <Icons.ChevronDownOutline
-                        size={24}
-                        color="#4E4E4E"
-                        style={{
-                          cursor: 'pointer',
-                          position: 'absolute',
-                          top: 'calc(50% - 0.8em)',
-                        }}
-                        {...props}
-                      />
-                    )}
-                    MenuProps={MenuProps}
-                  >
-                    {MONTH_SELECTORS.map(month_selector => {
-                      return (
-                        <MenuItem
-                          value={month_selector.id}
-                          key={month_selector.id}
-                        >
-                          {month_selector.month}
-                        </MenuItem>
-                      );
-                    })}
-                  </Select>
-                </FormControl>
-              </Box>
-            </Box>
+            <Box>
+         <DateSelector fromDate={fromDate} toDate={toDate} handleFromDate={handleFromDate} handleToDate={handleToDate}/> </Box>
             {/* Table */}
             <Box sx={{ marginTop: '32px' }}>
               <TableContainer style={{ borderCollapse: 'collapse' }}>
@@ -460,29 +344,24 @@ export default function EnterpriseLevelActionsCountChart({
                   </TableRow>
                 </TableHead>
                 <TableBody>
-                  {enterpriseLevelActions.map((enterpriseLevelAction: any) => {
+                  {enterpriseLevelActions.map((enterpriseLevelAction: any,index:number) => {
                     return (
-                      <TableRow key={enterpriseLevelAction.id}>
+                      <TableRow key={enterpriseLevelAction.month+index}>
                         <StyledTableCell
                           component="th"
                           scope="row"
                           align="center"
                         >
-                          {enterpriseLevelAction.month}
+                          {formatDateToMonthYear(enterpriseLevelAction.month)}
                         </StyledTableCell>
                         <StyledTableCell align="center">
-                          {enterpriseLevelAction.assigned}
+                          {enterpriseLevelAction.pending}
                         </StyledTableCell>
                         <StyledTableCell align="center">
                           {enterpriseLevelAction.completed}
                         </StyledTableCell>
                         <StyledTableCell align="center">
-                          {Math.round(
-                            (enterpriseLevelAction.completed /
-                              (enterpriseLevelAction.assigned +
-                                enterpriseLevelAction.completed)) *
-                              100
-                          )}
+                        {+enterpriseLevelAction.completedInPer.toFixed(2)}
                         </StyledTableCell>
                       </TableRow>
                     );
@@ -527,7 +406,7 @@ export default function EnterpriseLevelActionsCountChart({
                 sx={{ padding: '0px !important', marginTop: '10px' }}
               >
                 <BodyRegularTypography
-                  label={selectedFromDate + ' To ' + selectedToDate}
+                  label={formatDateToMonthYear(fromDate) + ' To ' + formatDateToMonthYear(toDate)}
                   style={{ color: '#343434' }}
                 />
               </Grid>

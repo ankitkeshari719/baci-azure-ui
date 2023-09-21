@@ -1,5 +1,11 @@
 import React, { useState } from 'react';
-import { getTeamLevelActionsCounts } from '../../helpers/msal/services';
+import {
+  chartInputType,
+  formatDateForAPI,
+  formatDateToMonthYear,
+  getTeamLevelActionsCounts,
+  getTeamLevelActionsDataForChart,
+} from '../../helpers/msal/services';
 import ReactApexChart from 'react-apexcharts';
 import { ApexOptions } from 'apexcharts';
 import {
@@ -27,10 +33,8 @@ import { Link, useNavigate } from 'react-router-dom';
 import * as Icons from 'heroicons-react';
 import { MONTH_SELECTORS, MenuProps } from './const';
 import { GlobalContext } from '../../contexts/GlobalContext';
-import {
-  BASIC,
-  ENTERPRISE,
-} from '../../constants/applicationConst';
+import { BASIC, ENTERPRISE } from '../../constants/applicationConst';
+import DateSelector from '../../components/Elements/EnterpriseDashboardPages/DateSelector';
 
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
   [`&.${tableCellClasses.head}`]: {
@@ -60,13 +64,23 @@ export default function TeamLevelActionsCountChart({
   const [completedPercentage, setCompletedPercentage] = useState<Number>();
   const [months, setMonths] = useState<any>([]);
   const [fromDate, setFromDate] = useState<string>(
-    global.chartStartDate ? global.chartStartDate : '10'
+    global.chartStartDate
+      ? global.chartStartDate
+      : new Date().getFullYear().toString() +
+          '-' +
+          '0' +
+          new Date().getMonth().toString().slice(-2)
   );
   const [toDate, setToDate] = useState<string>(
-    global.chartEndDate ? global.chartEndDate : '16'
+    global.chartEndDate
+      ? global.chartEndDate
+      : new Date().getFullYear().toString() +
+          '-' +
+          '0' +
+          (new Date().getMonth() + 1).toString().slice(-2)
   );
-  const [selectedFromDate, setSelectedFromDate] = useState<string>();
-  const [selectedToDate, setSelectedToDate] = useState<string>();
+  const [noData, setNoData] = useState<boolean>(true);
+
   const navigate = useNavigate();
   const windowWidth = React.useRef(window.innerWidth);
 
@@ -107,24 +121,6 @@ export default function TeamLevelActionsCountChart({
   };
 
   React.useEffect(() => {
-    const tempSelectedFromDate = MONTH_SELECTORS.filter(
-      monthSelector => monthSelector.id === Number(fromDate)
-    );
-    const tempSelectedToDate = MONTH_SELECTORS.filter(
-      monthSelector => monthSelector.id === Number(toDate)
-    );
-
-    setSelectedFromDate(
-      tempSelectedFromDate &&
-        tempSelectedFromDate[0] &&
-        tempSelectedFromDate[0].month
-    );
-    setSelectedToDate(
-      tempSelectedToDate && tempSelectedToDate[0] && tempSelectedToDate[0].month
-    );
-  }, [fromDate, toDate]);
-
-  React.useEffect(() => {
     handleGetTeamLevelActionsCountsData();
   }, [fromDate, toDate]);
 
@@ -133,70 +129,60 @@ export default function TeamLevelActionsCountChart({
   }
 
   const handleGetTeamLevelActionsCountsData = async () => {
-    await getTeamLevelActionsCounts(fromDate, toDate).then(
+    const chartInput: chartInputType = {
+      userId: 'vishal.gawande@evoltech.com.au',
+      roleName: 'Enterprise',
+      enterpriseId: 'evoltech0.0751886606959975',
+      teamId: '0',
+      fromDate: formatDateForAPI(fromDate),
+      toDate: formatDateForAPI(toDate),
+    };
+
+
+    await getTeamLevelActionsDataForChart(chartInput).then(
       res => {
-        if (res && res.result) {
-          const teamsData = res.result.map((item: any, index: number) => {
-            return item.teams;
-          });
-          let nameArray = [];
+        // console.log(res.data);
+        if (res.data.length > 0) {
+          let tempData = [];
           let assignedArray = [];
           let completedArray = [];
           let teamNameArray = [];
-          let tempTeamLevelActions = [];
-          let tempCompletedPercentage = 0;
-          for (let i = 0; i < teamsData.length; i++) {
-            for (let j = 0; j < teamsData[i].length; j++) {
-              nameArray.push(teamsData[i][j].name);
-            }
+          var totalPercentage = 0;
+          var totalCompleted=0;
+          var totalActions=0
+          for (let i = 0; i < res.data.length; i++) {
+            tempData.push({
+              team: res.data[i].teamName,
+              assigned: res.data[i].pending,
+              completed: res.data[i].completed,
+              completedPercentage: +res.data[i].completedInPer.toFixed(2),
+            });
+            totalCompleted=totalCompleted+res.data[i].completed;
+            totalActions=totalActions+res.data[i].completed+res.data[i].pending;
+
+            assignedArray.push(res.data[i].pending);
+            completedArray.push(res.data[i].completed);
+            teamNameArray.push(res.data[i].teamName);
+
           }
-          teamNameArray = removeDuplicates(nameArray);
-          for (let i = 0; i < teamNameArray.length; i++) {
-            assignedArray.push(0);
-            completedArray.push(0);
-          }
-          for (let i = 0; i < teamNameArray.length; i++) {
-            for (let j = 0; j < teamsData.length; j++) {
-              for (let k = 0; k < teamsData[j].length; k++) {
-                if (teamsData[j][k].name === teamNameArray[i]) {
-                  assignedArray[i] =
-                    assignedArray[i] + teamsData[j][k].assigned;
-                  completedArray[i] =
-                    completedArray[i] + teamsData[j][k].completed;
-                }
-              }
-            }
-          }
+          totalPercentage=(totalCompleted/totalActions)*100;
+          setTeamLevelActions(tempData);
           setAssignedActions(assignedArray);
           setCompletedActions(completedArray);
           setMonths(teamNameArray);
-
-          for (let i = 0; i < teamNameArray.length; i++) {
-            tempTeamLevelActions.push({
-              team: teamNameArray[i],
-              assigned: assignedArray[i],
-              completed: completedArray[i],
-              completedPercentage: Math.round(
-                (completedArray[i] / (assignedArray[i] + completedArray[i])) *
-                  100
-              ),
-            });
-          }
-          setTeamLevelActions(tempTeamLevelActions);
-
-          for (let i = 0; i < completedArray.length; i++) {
-            tempCompletedPercentage =
-              tempCompletedPercentage +
-              (completedArray[i] / (completedArray[i] + assignedArray[i])) *
-                100;
-          }
-          setCompletedPercentage(
-            Math.round(tempCompletedPercentage / teamNameArray.length)
-          );
+          setCompletedPercentage(+totalPercentage.toFixed(2));
+          setNoData(false);
+        } else {
+          setTeamLevelActions([]);
+          setAssignedActions([]);
+          setCompletedActions([]);
+          setMonths([]);
+          setCompletedPercentage(0);
+          setNoData(true);
         }
       },
       err => {
-        console.log('err', err);
+        console.log(err);
       }
     );
   };
@@ -372,120 +358,17 @@ export default function TeamLevelActionsCountChart({
             }}
           >
             {/* Selector */}
-            <Box
-              sx={{
-                display: 'flex',
-                flexDirection: 'row',
-                alignItems: 'center',
-                justifyContent: 'start',
-              }}
-            >
-              {/* Select Range Title */}
-              <ButtonLabelTypography
-                label="Select Range:"
-                style={{
-                  color: '#343434',
-                }}
-              />
-              {/* From Date */}
-              <Box
-                sx={{
-                  minWidth: 120,
-                  marginLeft: '16px',
-                  marginRight: '16px',
-                }}
-              >
-                <FormControl fullWidth>
-                  <Select
-                    sx={{
-                      fieldset: {
-                        border: 'none',
-                        opacity: 1,
-                        color: '#4E4E4E',
-                      },
-                    }}
-                    labelId="from-Date"
-                    id="from_date"
-                    value={fromDate}
-                    label="From"
-                    onChange={handleFromDate}
-                    IconComponent={props => (
-                      <Icons.ChevronDownOutline
-                        size={24}
-                        color="#4E4E4E"
-                        style={{
-                          cursor: 'pointer',
-                          position: 'absolute',
-                          top: 'calc(50% - 0.8em)',
-                        }}
-                        {...props}
-                      />
-                    )}
-                    MenuProps={MenuProps}
-                  >
-                    {MONTH_SELECTORS.map(month_selector => {
-                      return (
-                        <MenuItem
-                          value={month_selector.id}
-                          key={month_selector.id}
-                        >
-                          {month_selector.month}
-                        </MenuItem>
-                      );
-                    })}
-                  </Select>
-                </FormControl>
-              </Box>
-              <ButtonLabelTypography
-                label="To"
-                style={{
-                  color: '#343434',
-                }}
-              />
-              {/*To Date */}
-              <Box sx={{ minWidth: 120, marginLeft: '24px' }}>
-                <FormControl fullWidth>
-                  <Select
-                    sx={{
-                      fieldset: {
-                        border: 'none',
-                        opacity: 1,
-                        color: '#4E4E4E',
-                      },
-                    }}
-                    labelId="to-Date"
-                    id="to_date"
-                    value={toDate}
-                    label="To"
-                    onChange={handleToDate}
-                    IconComponent={props => (
-                      <Icons.ChevronDownOutline
-                        size={24}
-                        color="#4E4E4E"
-                        style={{
-                          cursor: 'pointer',
-                          position: 'absolute',
-                          top: 'calc(50% - 0.8em)',
-                        }}
-                        {...props}
-                      />
-                    )}
-                    MenuProps={MenuProps}
-                  >
-                    {MONTH_SELECTORS.map(month_selector => {
-                      return (
-                        <MenuItem
-                          value={month_selector.id}
-                          key={month_selector.id}
-                        >
-                          {month_selector.month}
-                        </MenuItem>
-                      );
-                    })}
-                  </Select>
-                </FormControl>
-              </Box>
+
+            <Box>
+              {' '}
+              <DateSelector
+                fromDate={fromDate}
+                toDate={toDate}
+                handleFromDate={handleFromDate}
+                handleToDate={handleToDate}
+              />{' '}
             </Box>
+
             {/* Table */}
             <Box sx={{ marginTop: '32px' }}>
               <TableContainer style={{ borderCollapse: 'collapse' }}>
@@ -500,28 +383,30 @@ export default function TeamLevelActionsCountChart({
                   </TableRow>
                 </TableHead>
                 <TableBody>
-                  {teamLevelActions.map((teamLevelAction: any) => {
-                    return (
-                      <TableRow key={teamLevelActions.id}>
-                        <StyledTableCell
-                          component="th"
-                          scope="row"
-                          align="center"
-                        >
-                          {teamLevelAction.team}
-                        </StyledTableCell>
-                        <StyledTableCell align="center">
-                          {teamLevelAction.assigned}
-                        </StyledTableCell>
-                        <StyledTableCell align="center">
-                          {teamLevelAction.completed}
-                        </StyledTableCell>
-                        <StyledTableCell align="center">
-                          {teamLevelAction.completedPercentage}
-                        </StyledTableCell>
-                      </TableRow>
-                    );
-                  })}
+                  {teamLevelActions.map(
+                    (teamLevelAction: any, index: number) => {
+                      return (
+                        <TableRow key={'teamLevelActions' + index}>
+                          <StyledTableCell
+                            component="th"
+                            scope="row"
+                            align="center"
+                          >
+                            {teamLevelAction.team}
+                          </StyledTableCell>
+                          <StyledTableCell align="center">
+                            {teamLevelAction.assigned}
+                          </StyledTableCell>
+                          <StyledTableCell align="center">
+                            {teamLevelAction.completed}
+                          </StyledTableCell>
+                          <StyledTableCell align="center">
+                            {teamLevelAction.completedPercentage}
+                          </StyledTableCell>
+                        </TableRow>
+                      );
+                    }
+                  )}
                 </TableBody>
               </TableContainer>
             </Box>
@@ -552,7 +437,7 @@ export default function TeamLevelActionsCountChart({
                 sx={{ padding: '0px !important', marginTop: '10px' }}
               >
                 <H4SemiBoldTypography
-                  label={completedPercentage + '%'}
+                  label={completedPercentage!=undefined? completedPercentage+" % ": 0 +' %'}
                   style={{ color: '#343434' }}
                 />
               </Grid>
@@ -562,7 +447,11 @@ export default function TeamLevelActionsCountChart({
                 sx={{ padding: '0px !important', marginTop: '10px' }}
               >
                 <BodyRegularTypography
-                  label={selectedFromDate + ' To ' + selectedToDate}
+                  label={
+                    formatDateToMonthYear(fromDate) +
+                    ' To ' +
+                    formatDateToMonthYear(toDate)
+                  }
                   style={{ color: '#343434' }}
                 />
               </Grid>
