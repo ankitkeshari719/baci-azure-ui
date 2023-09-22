@@ -393,6 +393,39 @@ export const getTeamLevelActionsDataForChart=async(input:chartInputType):Promise
      return countOfAllParticipantsOverTime;
  }
 
+ export const getCountOfAllSessionsOverTime=async(input:chartInputType):Promise<any>=>{
+  let countOfAllSessionsOverTime;
+   const requestOptions = {
+     method: 'POST',
+     body:JSON.stringify(input),
+     headers: {
+       "Content-type": "application/json; charset=UTF-8"
+   }
+   };
+   await fetch( `http://localhost:8080/analytics/getCountOfAllSessionsOverTime`,requestOptions).then(response =>response.json()).then(
+       data =>{
+        countOfAllSessionsOverTime=data
+       }
+     )
+     return countOfAllSessionsOverTime;
+ }
+
+ export const getEmotionsAsPerCategory=async(input:chartInputType):Promise<any>=>{
+  let emotionsAsPerCategory;
+   const requestOptions = {
+     method: 'POST',
+     body:JSON.stringify(input),
+     headers: {
+       "Content-type": "application/json; charset=UTF-8"
+   }
+   };
+   await fetch( `http://localhost:8080/analytics/getEmotionsAsPerCategory`,requestOptions).then(response =>response.json()).then(
+       data =>{
+        emotionsAsPerCategory=data
+       }
+     )
+     return emotionsAsPerCategory;
+ }
 
 
 export function formatDateToMonthYear(inputDate:string) {

@@ -1,5 +1,11 @@
 import React, { useState } from 'react';
-import { chartInputType, formatDateForAPI, formatDateToMonthYear, getCountOfAllParticipantsOverTime, getParticipantsCount } from '../../helpers/msal/services';
+import {
+  chartInputType,
+  formatDateForAPI,
+  formatDateToMonthYear,
+  getCountOfAllParticipantsOverTime,
+  getParticipantsCount,
+} from '../../helpers/msal/services';
 import ReactApexChart from 'react-apexcharts';
 import { ApexOptions } from 'apexcharts';
 import {
@@ -116,22 +122,20 @@ export default function AverageParticipantChart({
     }
   };
 
-  // React.useEffect(() => {
-  //   const fromDateInput = global.chartStartDate;
-  //   const toDateInput = global.chartEndDate;
-  //   if (
-  //     fromDateInput != '' &&
-  //     fromDateInput != undefined &&
-  //     fromDateInput != null
-  //   ) {
-  //     setFromDate(fromDateInput);
-  //   }
-  //   if (toDateInput != '' && toDateInput != undefined && toDateInput != null) {
-  //     setToDate(toDateInput);
-  //   }
-  // }, [global.chartStartDate, global.chartEndDate]);
-
-
+  React.useEffect(() => {
+    const fromDateInput = global.chartStartDate;
+    const toDateInput = global.chartEndDate;
+    if (
+      fromDateInput != '' &&
+      fromDateInput != undefined &&
+      fromDateInput != null
+    ) {
+      setFromDate(fromDateInput);
+    }
+    if (toDateInput != '' && toDateInput != undefined && toDateInput != null) {
+      setToDate(toDateInput);
+    }
+  }, [global.chartStartDate, global.chartEndDate]);
 
   React.useEffect(() => {
     handleGetParticipantChartData();
@@ -142,10 +146,6 @@ export default function AverageParticipantChart({
   }, [team]);
 
   const handleGetParticipantChartData = async () => {
-
-    
-
-
     const chartInput: chartInputType = {
       userId: 'vishal.gawande@evoltech.com.au',
       roleName: 'Enterprise',
@@ -155,26 +155,25 @@ export default function AverageParticipantChart({
       toDate: formatDateForAPI(toDate),
     };
 
-
     await getCountOfAllParticipantsOverTime(chartInput).then(
       res => {
-        console.log(res)
+        console.log(res);
         setParticipantsCounts(res.data);
-        setAverageParticipants(
-          res.data?.map((item: any) => item.userCount)
+        setAverageParticipants(res.data?.map((item: any) => item.userCount));
+        setMonths(
+          res.data?.map((item: any) => formatDateToMonthYear(item.month))
         );
-        setMonths(res.data?.map((item: any) => formatDateToMonthYear(item.month)));
-        var totalParticipants=0;
-res.data.forEach((item:any)=>{
-  totalParticipants = item.userCount+ totalParticipants
-})
-totalParticipants=totalParticipants/res.data.length;
-        setTotalAverageParticipants(totalParticipants)
-      },err=>{
-        console.log(err)
-      })
-
-  
+        var totalParticipants = 0;
+        res.data.forEach((item: any) => {
+          totalParticipants = item.userCount + totalParticipants;
+        });
+        totalParticipants = totalParticipants / res.data.length;
+        setTotalAverageParticipants(totalParticipants);
+      },
+      err => {
+        console.log(err);
+      }
+    );
   };
 
   const series = [
@@ -348,22 +347,24 @@ totalParticipants=totalParticipants/res.data.length;
                   </TableRow>
                 </TableHead>
                 <TableBody>
-                  {participantsCounts.map((participantsCount: any,index:number) => {
-                    return (
-                      <TableRow key={"participantsCounts"+index}>
-                        <StyledTableCell
-                          component="th"
-                          scope="row"
-                          align="center"
-                        >
-                          {formatDateToMonthYear(participantsCount.month)}
-                        </StyledTableCell>
-                        <StyledTableCell align="center">
-                          {participantsCount.userCount}
-                        </StyledTableCell>
-                      </TableRow>
-                    );
-                  })}
+                  {participantsCounts.map(
+                    (participantsCount: any, index: number) => {
+                      return (
+                        <TableRow key={'participantsCounts' + index}>
+                          <StyledTableCell
+                            component="th"
+                            scope="row"
+                            align="center"
+                          >
+                            {formatDateToMonthYear(participantsCount.month)}
+                          </StyledTableCell>
+                          <StyledTableCell align="center">
+                            {participantsCount.userCount}
+                          </StyledTableCell>
+                        </TableRow>
+                      );
+                    }
+                  )}
                 </TableBody>
               </TableContainer>
             </Box>
@@ -405,7 +406,11 @@ totalParticipants=totalParticipants/res.data.length;
                 sx={{ padding: '0px !important', marginTop: '10px' }}
               >
                 <BodyRegularTypography
-                  label={formatDateToMonthYear(fromDate) + ' To ' + formatDateToMonthYear(toDate)}
+                  label={
+                    formatDateToMonthYear(fromDate) +
+                    ' To ' +
+                    formatDateToMonthYear(toDate)
+                  }
                   style={{ color: '#343434' }}
                 />
               </Grid>

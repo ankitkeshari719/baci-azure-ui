@@ -119,10 +119,22 @@ function EnterpriseDashboard() {
   //   global.chartStartDate ? global.chartStartDate : '10'
   // );
 
-  const [fromDate,setFromDate]=useState<string>(
-    global.chartStartDate ? global.chartStartDate : new Date().getFullYear().toString()  + '-' +  '0' + (new Date().getMonth() ).toString().slice(-2));
-  const [toDate,setToDate]=useState<string>( 
-    global.chartEndDate ? global.chartEndDate :new Date().getFullYear().toString()  + '-' +  '0' + (new Date().getMonth() + 1).toString().slice(-2));
+  const [fromDate, setFromDate] = useState<string>(
+    global.chartStartDate
+      ? global.chartStartDate
+      : new Date().getFullYear().toString() +
+          '-' +
+          '0' +
+          new Date().getMonth().toString().slice(-2)
+  );
+  const [toDate, setToDate] = useState<string>(
+    global.chartEndDate
+      ? global.chartEndDate
+      : new Date().getFullYear().toString() +
+          '-' +
+          '0' +
+          (new Date().getMonth() + 1).toString().slice(-2)
+  );
 
   // const [toDate, setToDate] = useState<string>(
   //   global.chartEndDate ? global.chartEndDate : '16'
@@ -188,8 +200,6 @@ function EnterpriseDashboard() {
       retros: [retroList[3]],
     },
   ];
-
-
 
   // Call function to get Sessions
   React.useEffect(() => {
@@ -553,12 +563,14 @@ function EnterpriseDashboard() {
                   content={() => componentRef.current}
                 />
               </Box>
-              <DateSelector
-                handleFromDate={handleFromDate}
-                handleToDate={handleToDate}
-                fromDate={fromDate}
-                toDate={toDate}
-              />
+              <Box>
+                <DateSelector
+                  handleFromDate={handleFromDate}
+                  handleToDate={handleToDate}
+                  fromDate={fromDate}
+                  toDate={toDate}
+                />
+              </Box>
             </Box>
             {/* Analytics Charts */}
             <Box
@@ -749,7 +761,6 @@ function EnterpriseDashboard() {
               </Box>
               {/* Team Level Actions Count Chart */}
 
-
               <Box className="chartCard">
                 <Box
                   display="flex"
@@ -780,14 +791,10 @@ function EnterpriseDashboard() {
                 >
                   <TeamLevelActionsCountChart dashboard={true} />
                 </Box>
-              
               </Box>
 
-
               {/* ------------------------Page Header ----------------------------- */}
-             
-             
-             
+
               <Grid
                 id="page_header_1"
                 item
@@ -844,11 +851,8 @@ function EnterpriseDashboard() {
                 </Box>
               </Grid>
 
-
               {/* Average Participant Chart */}
-             
-             
-             
+
               <Box className="chartCard">
                 <Box
                   display="flex"
@@ -881,15 +885,11 @@ function EnterpriseDashboard() {
                 >
                   <AverageParticipantChart dashboard={true} team={selectId} />
                 </Box>
-              
               </Box>
 
-
               {/* Average Sessions Counts Chart Print*/}
-             
-             
-             
-              {/* <Box className="chartCard">
+
+              <Box className="chartCard">
                 <Box
                   display="flex"
                   flexDirection="row"
@@ -921,17 +921,11 @@ function EnterpriseDashboard() {
                 >
                   <AverageRetroChart dashboard={true} team={selectId} />
                 </Box>
-              </Box> */}
-
-
-
+              </Box>
 
               {/* ------------------------Page Header ----------------------------- */}
 
-
-
-
-              {/* <Grid
+              <Grid
                 id="page_header_1"
                 item
                 xs={12}
@@ -985,14 +979,11 @@ function EnterpriseDashboard() {
                     </Box>
                   </Grid>
                 </Box>
-              </Grid> */}
-
-
+              </Grid>
 
               {/* Enterprise Level Sentiments Theme Chart */}
-            
-            
-              {/* <Box className="chartCard">
+
+              <Box className="chartCard">
                 <Box
                   display="flex"
                   flexDirection="row"
@@ -1028,14 +1019,10 @@ function EnterpriseDashboard() {
                   />
                 </Box>
                
-              </Box> */}
-           
-           
-           
-           
+              </Box>
+
               {/* Enterprise Level Sentiments Moods Chart */}
-              
-              
+
               {/* <Box className="chartCard">
                 <Box
                   display="flex"
@@ -1073,11 +1060,8 @@ function EnterpriseDashboard() {
                 </Box>
               </Box> */}
 
-
-
               {/* ------------------------Page Header ----------------------------- */}
-            
-            
+
               {/* <Grid
                 id="page_header_1"
                 item
@@ -1133,11 +1117,9 @@ function EnterpriseDashboard() {
                   </Grid>
                 </Box>
               </Grid> */}
-           
-           
+
               {/* Enterprise Level Sentiments Summary Chart */}
-            
-            
+
               {/* <Box className="chartCard">
                 <Box
                   display="flex"
