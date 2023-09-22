@@ -28,10 +28,7 @@ import WordCloud from '../../components/Elements/WordCloud';
 import { MenuProps, SELECTED_FORMATS } from './const';
 import { OutlinedButton } from '../../components';
 import { GlobalContext } from '../../contexts/GlobalContext';
-import {
-  BASIC,
-  ENTERPRISE,
-} from '../../constants/applicationConst';
+import { BASIC, ENTERPRISE } from '../../constants/applicationConst';
 import DateSelector from '../../components/Elements/EnterpriseDashboardPages/DateSelector';
 
 export interface Word {
@@ -78,7 +75,7 @@ export default function EnterpriseLevelSentimentsSummaryChart({
       setPath('basic');
     } else if (tempLocalUserData && tempLocalUserData.roleName === ENTERPRISE) {
       setPath('enterprise');
-    } 
+    }
   }, [tempLocalUserData]);
 
   const navigate = useNavigate();
@@ -154,13 +151,21 @@ export default function EnterpriseLevelSentimentsSummaryChart({
       toDate: formatDateForAPI(toDate),
     };
 
-
-    await getOverAllSummary(chartInput).then(
-      res => {
-        console.log(res,"summary");
-        setSummary(res.data)
-      })
-
+    await getOverAllSummary(chartInput).then(res => {
+      console.log(res, 'summary');
+      setSummary(res.data.summary);
+      let tempKeywords: any[] = [];
+      const keywordsData=res.data.keywords?res.data.keywords:[];
+console.log(keywordsData,"keywordsData")
+      keywordsData.forEach((item: any) => {
+        console.log(item)
+        tempKeywords.push({
+          text: item,
+          size: randomIntFromInterval(45, 120),
+        });
+      });
+      setKeywords(tempKeywords);
+    });
 
     // await getEnterpriseLevelSentimentSummary(selectedFormat, team).then(
     //   res => {
@@ -184,7 +189,7 @@ export default function EnterpriseLevelSentimentsSummaryChart({
   };
 
   const handleGetParticipantChartData = async () => {
-    await getParticipantsCount("10", "16", team).then(
+    await getParticipantsCount('10', '16', team).then(
       res => {
         if (res && res.result) {
           let temp = 0;
@@ -201,7 +206,7 @@ export default function EnterpriseLevelSentimentsSummaryChart({
   };
 
   const handleGetRetroChartData = async () => {
-    await getRetrosCount("10", "16", team).then(
+    await getRetrosCount('10', '16', team).then(
       res => {
         if (res && res.result) {
           let temp = 0;
@@ -327,8 +332,13 @@ export default function EnterpriseLevelSentimentsSummaryChart({
             >
               <ButtonLabelTypography label="Summary of" />
               {/* Selector Menu */}
-            <DateSelector fromDate={fromDate} toDate={toDate} handleFromDate={handleFromDate} handleToDate={handleToDate} disable={true}/>
-
+              <DateSelector
+                fromDate={fromDate}
+                toDate={toDate}
+                handleFromDate={handleFromDate}
+                handleToDate={handleToDate}
+                disable={true}
+              />
             </Box>
             {/* Generate Button */}
             <Box
