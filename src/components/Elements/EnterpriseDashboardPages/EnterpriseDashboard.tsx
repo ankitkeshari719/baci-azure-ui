@@ -1062,7 +1062,7 @@ function EnterpriseDashboard() {
 
               {/* ------------------------Page Header ----------------------------- */}
 
-              {/* <Grid
+              <Grid
                 id="page_header_1"
                 item
                 xs={12}
@@ -1116,11 +1116,11 @@ function EnterpriseDashboard() {
                     </Box>
                   </Grid>
                 </Box>
-              </Grid> */}
+              </Grid>
 
               {/* Enterprise Level Sentiments Summary Chart */}
 
-              {/* <Box className="chartCard">
+              <Box className="chartCard">
                 <Box
                   display="flex"
                   flexDirection="row"
@@ -1156,7 +1156,7 @@ function EnterpriseDashboard() {
                   />
                 </Box>
               
-              </Box> */}
+              </Box>
             </Box>
           </Box>
         </Box>

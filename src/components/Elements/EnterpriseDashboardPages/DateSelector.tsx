@@ -14,11 +14,13 @@ import React from 'react';
 function DateSelector({
   fromDate,
   toDate,
+  disable,
   handleToDate,
   handleFromDate,
 }: {
   fromDate: string;
   toDate: string;
+  disable?:boolean;
   handleToDate: (event: any) => void;
   handleFromDate: (event: any) => void;
 }) {
@@ -38,12 +40,12 @@ function DateSelector({
       }}
     >
       {/* Select Range Title */}
-      <ButtonLabelTypography
+      {!disable&&<ButtonLabelTypography
         label="Select Range:"
         style={{
           color: '#343434',
         }}
-      />
+      />}
       {/* From Date */}
       <Box sx={{ minWidth: 180, marginLeft: '16px', marginRight: '16px' }}>
       

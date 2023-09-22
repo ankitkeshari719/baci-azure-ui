@@ -1,6 +1,9 @@
 import React, { useState } from 'react';
 import {
+  chartInputType,
+  formatDateForAPI,
   getEnterpriseLevelSentimentSummary,
+  getOverAllSummary,
   getParticipantsCount,
   getRetrosCount,
 } from '../../helpers/msal/services';
@@ -29,6 +32,7 @@ import {
   BASIC,
   ENTERPRISE,
 } from '../../constants/applicationConst';
+import DateSelector from '../../components/Elements/EnterpriseDashboardPages/DateSelector';
 
 export interface Word {
   text: string;
@@ -47,10 +51,20 @@ export default function EnterpriseLevelSentimentsSummaryChart({
   const [keywords, setKeywords] = useState<Word[]>([]);
   const [selectedFormat, setSelectedFormat] = useState<string>('17');
   const [fromDate, setFromDate] = useState<string>(
-    global.chartStartDate ? global.chartStartDate : '10'
+    global.chartStartDate
+      ? global.chartStartDate
+      : new Date().getFullYear().toString() +
+          '-' +
+          '0' +
+          new Date().getMonth().toString().slice(-2)
   );
   const [toDate, setToDate] = useState<string>(
-    global.chartEndDate ? global.chartEndDate : '16'
+    global.chartEndDate
+      ? global.chartEndDate
+      : new Date().getFullYear().toString() +
+          '-' +
+          '0' +
+          (new Date().getMonth() + 1).toString().slice(-2)
   );
   const [totalParticipant, setTotalParticipant] = useState<Number>();
   const [totalRetros, setTotalRetros] = useState<Number>();
@@ -131,29 +145,46 @@ export default function EnterpriseLevelSentimentsSummaryChart({
   const handleGetEnterpriseLevelSentimentSummary = async (
     selectedFormat: string
   ) => {
-    await getEnterpriseLevelSentimentSummary(selectedFormat, team).then(
+    const chartInput: chartInputType = {
+      userId: 'vishal.gawande@evoltech.com.au',
+      roleName: 'Enterprise',
+      enterpriseId: 'evoltech0.0751886606959975',
+      teamId: '0',
+      fromDate: formatDateForAPI(fromDate),
+      toDate: formatDateForAPI(toDate),
+    };
+
+
+    await getOverAllSummary(chartInput).then(
       res => {
-        if (res && res.result) {
-          const keywordsData = res.result[0].keywords;
-          setSummary(res.result[0] && res.result[0].summary);
-          let tempKeywords = [];
-          for (let i = 0; i < keywordsData.length; i++) {
-            tempKeywords.push({
-              text: keywordsData[i],
-              size: randomIntFromInterval(45, 120),
-            });
-          }
-          setKeywords(tempKeywords);
-        }
-      },
-      err => {
-        console.log('err', err);
-      }
-    );
+        console.log(res,"summary");
+        setSummary(res.data)
+      })
+
+
+    // await getEnterpriseLevelSentimentSummary(selectedFormat, team).then(
+    //   res => {
+    //     if (res && res.result) {
+    //       const keywordsData = res.result[0].keywords;
+    //       setSummary(res.result[0] && res.result[0].summary);
+    //       let tempKeywords = [];
+    //       for (let i = 0; i < keywordsData.length; i++) {
+    //         tempKeywords.push({
+    //           text: keywordsData[i],
+    //           size: randomIntFromInterval(45, 120),
+    //         });
+    //       }
+    //       setKeywords(tempKeywords);
+    //     }
+    //   },
+    //   err => {
+    //     console.log('err', err);
+    //   }
+    // );
   };
 
   const handleGetParticipantChartData = async () => {
-    await getParticipantsCount(fromDate, toDate, team).then(
+    await getParticipantsCount("10", "16", team).then(
       res => {
         if (res && res.result) {
           let temp = 0;
@@ -170,7 +201,7 @@ export default function EnterpriseLevelSentimentsSummaryChart({
   };
 
   const handleGetRetroChartData = async () => {
-    await getRetrosCount(fromDate, toDate, team).then(
+    await getRetrosCount("10", "16", team).then(
       res => {
         if (res && res.result) {
           let temp = 0;
@@ -188,6 +219,14 @@ export default function EnterpriseLevelSentimentsSummaryChart({
 
   const handleSelectedFormat = (event: SelectChangeEvent) => {
     setSelectedFormat(event.target.value as string);
+  };
+
+  const handleFromDate = (event: SelectChangeEvent) => {
+    setFromDate(event.target.value as string);
+  };
+
+  const handleToDate = (event: SelectChangeEvent) => {
+    setToDate(event.target.value as string);
   };
 
   return (
@@ -288,46 +327,8 @@ export default function EnterpriseLevelSentimentsSummaryChart({
             >
               <ButtonLabelTypography label="Summary of" />
               {/* Selector Menu */}
-              <FormControl fullWidth>
-                <Select
-                  sx={{
-                    fieldset: {
-                      border: 'none',
-                      opacity: 1,
-                      color: '#4E4E4E',
-                    },
-                  }}
-                  labelId="from-Date"
-                  id="from_date"
-                  value={selectedFormat}
-                  label="From"
-                  onChange={handleSelectedFormat}
-                  IconComponent={props => (
-                    <Icons.ChevronDownOutline
-                      size={24}
-                      color="#4E4E4E"
-                      style={{
-                        cursor: 'pointer',
-                        position: 'absolute',
-                        top: 'calc(50% - 0.8em)',
-                      }}
-                      {...props}
-                    />
-                  )}
-                  MenuProps={MenuProps}
-                >
-                  {SELECTED_FORMATS.map(month_selector => {
-                    return (
-                      <MenuItem
-                        value={month_selector.id}
-                        key={month_selector.id}
-                      >
-                        {month_selector.month}
-                      </MenuItem>
-                    );
-                  })}
-                </Select>
-              </FormControl>
+            <DateSelector fromDate={fromDate} toDate={toDate} handleFromDate={handleFromDate} handleToDate={handleToDate} disable={true}/>
+
             </Box>
             {/* Generate Button */}
             <Box

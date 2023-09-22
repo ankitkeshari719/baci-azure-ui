@@ -349,7 +349,7 @@ export const getActionsChartData=async(input:chartInputType):Promise<any>=>{
       "Content-type": "application/json; charset=UTF-8"
   }
   };
-  await fetch( `http://localhost:8080/getActionsChartData`,requestOptions).then(response =>response.json()).then(
+  await fetch( API_URL+`/getActionsChartData`,requestOptions).then(response =>response.json()).then(
       data =>{
         actionsChartData=data
       }
@@ -368,7 +368,7 @@ export const getTeamLevelActionsDataForChart=async(input:chartInputType):Promise
        "Content-type": "application/json; charset=UTF-8"
    }
    };
-   await fetch( `http://localhost:8080/analytics/getTeamLevelActionsDataForChart`,requestOptions).then(response =>response.json()).then(
+   await fetch( API_URL+`/analytics/getTeamLevelActionsDataForChart`,requestOptions).then(response =>response.json()).then(
        data =>{
         teamLevelActionsDataForChart=data
        }
@@ -385,7 +385,7 @@ export const getTeamLevelActionsDataForChart=async(input:chartInputType):Promise
        "Content-type": "application/json; charset=UTF-8"
    }
    };
-   await fetch( `http://localhost:8080/analytics/getCountOfAllParticipantsOverTime`,requestOptions).then(response =>response.json()).then(
+   await fetch( API_URL+`/analytics/getCountOfAllParticipantsOverTime`,requestOptions).then(response =>response.json()).then(
        data =>{
         countOfAllParticipantsOverTime=data
        }
@@ -402,7 +402,7 @@ export const getTeamLevelActionsDataForChart=async(input:chartInputType):Promise
        "Content-type": "application/json; charset=UTF-8"
    }
    };
-   await fetch( `http://localhost:8080/analytics/getCountOfAllSessionsOverTime`,requestOptions).then(response =>response.json()).then(
+   await fetch( API_URL+`/analytics/getCountOfAllSessionsOverTime`,requestOptions).then(response =>response.json()).then(
        data =>{
         countOfAllSessionsOverTime=data
        }
@@ -419,7 +419,7 @@ export const getTeamLevelActionsDataForChart=async(input:chartInputType):Promise
        "Content-type": "application/json; charset=UTF-8"
    }
    };
-   await fetch( `http://localhost:8080/analytics/getEmotionsAsPerCategory`,requestOptions).then(response =>response.json()).then(
+   await fetch( API_URL+`/analytics/getEmotionsAsPerCategory`,requestOptions).then(response =>response.json()).then(
        data =>{
         emotionsAsPerCategory=data
        }
@@ -436,12 +436,29 @@ export const getTeamLevelActionsDataForChart=async(input:chartInputType):Promise
        "Content-type": "application/json; charset=UTF-8"
    }
    };
-   await fetch( `http://localhost:8080/analytics/getParticipantMoodCount`,requestOptions).then(response =>response.json()).then(
+   await fetch( API_URL+`/analytics/getParticipantMoodCount`,requestOptions).then(response =>response.json()).then(
        data =>{
         participantMoodCount=data
        }
      )
      return participantMoodCount;
+ }
+
+ export const getOverAllSummary=async(input:chartInputType):Promise<any>=>{
+  let overAllSummary;
+   const requestOptions = {
+     method: 'POST',
+     body:JSON.stringify(input),
+     headers: {
+       "Content-type": "application/json; charset=UTF-8"
+   }
+   };
+   await fetch( API_URL+`/analytics/getOverAllSummary`,requestOptions).then(response =>response.json()).then(
+       data =>{
+        overAllSummary=data
+       }
+     )
+     return overAllSummary;
  }
 
 
