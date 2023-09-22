@@ -157,7 +157,7 @@ export default function AverageParticipantChart({
 
     await getCountOfAllParticipantsOverTime(chartInput).then(
       res => {
-        console.log(res);
+       
         setParticipantsCounts(res.data);
         setAverageParticipants(res.data?.map((item: any) => item.userCount));
         setMonths(

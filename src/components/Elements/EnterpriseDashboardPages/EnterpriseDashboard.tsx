@@ -1023,7 +1023,7 @@ function EnterpriseDashboard() {
 
               {/* Enterprise Level Sentiments Moods Chart */}
 
-              {/* <Box className="chartCard">
+              <Box className="chartCard">
                 <Box
                   display="flex"
                   flexDirection="row"
@@ -1058,7 +1058,7 @@ function EnterpriseDashboard() {
                     team={selectId}
                   />
                 </Box>
-              </Box> */}
+              </Box>
 
               {/* ------------------------Page Header ----------------------------- */}
 

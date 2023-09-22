@@ -427,6 +427,25 @@ export const getTeamLevelActionsDataForChart=async(input:chartInputType):Promise
      return emotionsAsPerCategory;
  }
 
+ export const getParticipantMoodCount=async(input:chartInputType):Promise<any>=>{
+  let participantMoodCount;
+   const requestOptions = {
+     method: 'POST',
+     body:JSON.stringify(input),
+     headers: {
+       "Content-type": "application/json; charset=UTF-8"
+   }
+   };
+   await fetch( `http://localhost:8080/analytics/getParticipantMoodCount`,requestOptions).then(response =>response.json()).then(
+       data =>{
+        participantMoodCount=data
+       }
+     )
+     return participantMoodCount;
+ }
+
+
+
 
 export function formatDateToMonthYear(inputDate:string) {
   // Parse the input date

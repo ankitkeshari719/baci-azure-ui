@@ -130,7 +130,6 @@ export default function EnterpriseLevelActionsCountChart({
       toDate:formatDateForAPI(toDate)
     }
      await getActionsChartData(chartInput).then(res=>{
-      console.log(res,"response")
       setEnterpriseLevelActions(res.chartData);
       setAssignedActions(res.chartData?.map((item: any) => item.pending))
       setCompletedActions(res.chartData?.map((item: any) => item.completed))

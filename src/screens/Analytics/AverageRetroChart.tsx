@@ -169,7 +169,7 @@ export default function AverageRetroChart({
       toDate: formatDateForAPI(toDate),
     };
     await getCountOfAllSessionsOverTime(chartInput).then(res => {
-      console.log(res.data, 'getCountOfAllSessionsOverTime');
+   
       if(res.data.length>0)
       {setRetrosCounts(res.data);
       var totalRetrocount = 0;
