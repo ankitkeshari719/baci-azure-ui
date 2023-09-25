@@ -676,9 +676,10 @@ export default function UpdateProfile({ handleEdit }: Props) {
                       style={{
                         marginBottom: '24px',
                         color: 'rgba(0, 0, 0, 0.6)',
+                        padding: '4px',
                       }}
                     />
-                    <Box>
+                    <Box sx={{ padding: '4px' }}>
                       {teams.map((team: any, index: number) => {
                         return (
                           <>
