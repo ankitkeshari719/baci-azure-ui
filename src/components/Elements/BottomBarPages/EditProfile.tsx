@@ -25,7 +25,12 @@ import {
   H4SemiBoldTypography,
   H6RegularTypography,
 } from '../../CustomizedTypography';
-import { createEnterpriseRequest, deleteEnterpriseRequestById, getEnterpriseById, updateUser } from '../../../helpers/msal/services';
+import {
+  createEnterpriseRequest,
+  deleteEnterpriseRequestById,
+  getEnterpriseById,
+  updateUser,
+} from '../../../helpers/msal/services';
 import { GlobalContext, ActionType } from '../../../contexts/GlobalContext';
 import { styled } from '@mui/material/styles';
 import Tooltip, { TooltipProps, tooltipClasses } from '@mui/material/Tooltip';
@@ -956,6 +961,7 @@ export default function EditProfile({ handleEdit }: Props) {
                         sx={{
                           width: '400px',
                           backgroundColor: 'rgba(0, 0, 0, 0.06)',
+                          borderBottom: '1px solid',
                         }}
                       >
                         <CaptionRegularTypography
@@ -963,10 +969,10 @@ export default function EditProfile({ handleEdit }: Props) {
                           style={{
                             marginBottom: '24px',
                             color: 'rgba(0, 0, 0, 0.6)',
-                            padding: '8px',
+                            padding: '8px 8px 4px 16px',
                           }}
                         />
-                        <Box sx={{ padding: '8px' }}>
+                        <Box sx={{ padding: '0px 8px 4px 16px' }}>
                           {teams.map((team: any, index: number) => {
                             return (
                               <>
