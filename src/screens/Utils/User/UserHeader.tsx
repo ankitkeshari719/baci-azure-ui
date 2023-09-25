@@ -148,8 +148,8 @@ export function UserHeader({ accounts }: Props) {
         isEnterpriserRequested: false,
         teams: [],
         isActive: true,
+        enterpriseRequestId: '',
       };
-
 
       await createUser(requestBody).then(
         res => {

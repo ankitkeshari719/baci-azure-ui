@@ -239,7 +239,6 @@ export default function EnterpriseLevelActionsCountChart({
   };
 
   const handleFromDate = (event: SelectChangeEvent) => {
-    console.log(event.target.value)
     setFromDate(event.target.value as string);
   };
 
