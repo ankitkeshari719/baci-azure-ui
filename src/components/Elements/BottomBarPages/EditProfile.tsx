@@ -3,7 +3,6 @@ import { AuthenticatedTemplate, useMsal } from '@azure/msal-react';
 
 import {
   Box,
-  Button,
   Dialog,
   DialogTitle,
   FormControl,
@@ -22,7 +21,6 @@ import {
   BodyRegularTypography,
   BodySemiBoldTypography,
   CaptionRegularTypography,
-  CaptionSemiBoldTypography,
   H3SemiBoldTypography,
   H4SemiBoldTypography,
   H6RegularTypography,
@@ -35,7 +33,7 @@ import OutlineButtonWithIconWithNoBorder from '../../CustomizedButton/OutlineBut
 import { avatarName } from '../../../constants/AvatarName';
 import Avatar from '../Avatar';
 import { LazyLoadImage } from 'react-lazy-load-image-component';
-import { BASIC } from '../../../constants/applicationConst';
+import { BASIC, ENTERPRISE } from '../../../constants/applicationConst';
 
 const styles = {
   accessCodeTextField: {
@@ -391,7 +389,6 @@ export default function EditProfile({ handleEdit }: Props) {
               onClick={() => handleLogoutRedirect()}
               style={{
                 marginTop: '42px',
-                textDecorationLine: 'underline',
                 background: '#EA4335 !important',
               }}
               size={'medium'}
@@ -427,13 +424,14 @@ export default function EditProfile({ handleEdit }: Props) {
             <Box display="flex" flexDirection="row">
               <OutlineButtonWithIconWithNoBorder
                 id="go_to_readOnly_mode"
-                label="Back"
+                label="Cancel"
                 iconPath="/svgs/back_outline.svg"
                 onClick={() => handleEdit()}
                 style={{
                   display: 'flex',
                   alignItems: 'center',
                   justifyContent: 'center',
+                  textTransform: 'uppercase',
                 }}
               />
               <OutlineButtonWithIconWithNoBorder
@@ -445,6 +443,7 @@ export default function EditProfile({ handleEdit }: Props) {
                   display: 'flex',
                   alignItems: 'center',
                   justifyContent: 'center',
+                  textTransform: 'uppercase',
                 }}
               />
             </Box>
@@ -811,9 +810,10 @@ export default function EditProfile({ handleEdit }: Props) {
                       style={{
                         marginBottom: '24px',
                         color: 'rgba(0, 0, 0, 0.6)',
+                        padding: '8px',
                       }}
                     />
-                    <Box>
+                    <Box sx={{ padding: '8px' }}>
                       {teams.map((team: any, index: number) => {
                         return (
                           <>
@@ -842,7 +842,7 @@ export default function EditProfile({ handleEdit }: Props) {
             <FormControl
               style={{
                 display: 'flex',
-                width: '484px',
+                width: '600px',
                 justifyContent: 'flex-start',
                 alignItems: 'center',
               }}
@@ -874,77 +874,112 @@ export default function EditProfile({ handleEdit }: Props) {
               </Box>
             </FormControl>
             {/* Request Enterprise Button*/}
-            {isEnterpriserRequested ? (
-              <Box display="flex" flexDirection="column">
-                <Box display="flex" flexDirection="row" alignItems="center">
-                  <ContainedButton
-                    id={'request_enterprise_admin'}
-                    name={'Cancel Request'}
-                    onClick={() => updateIsEnterpriserRequested()}
-                    style={{
-                      padding: '10px 18px',
-                      gap: '8px',
-                      background: '#EA4335 !important',
-                    }}
-                    size={'medium'}
-                  />
-                  <BootstrapTooltip
-                    title="Enterprise get Additional Analytics Insights from each team. If your organisation needs an enterprise account contact sales@baci.com"
-                    placement="right"
-                  >
-                    <Icons.InformationCircleOutline
-                      size={24}
-                      color="#4E4E4E"
-                      style={{
-                        cursor: 'pointer',
-                        marginLeft: '5px',
-                      }}
-                    />
-                  </BootstrapTooltip>
-                </Box>
-                <Box
-                  display="flex"
-                  flexDirection="column"
-                  sx={{
-                    marginTop: '24px',
-                    padding: '12px',
-                    background: '#CEEFFF',
-                  }}
-                >
-                  <BodySemiBoldTypography label="Your Request for Enterprise Dashboard is sent" />
-                  <CaptionRegularTypography
-                    label="Waiting for Admin to accept your request."
-                    style={{ marginTop: '16px' }}
-                  />
-                </Box>
+            {/* Role */}
+            <FormControl
+              style={{
+                display: 'flex',
+                width: '600px',
+                justifyContent: 'flex-start',
+                alignItems: 'center',
+              }}
+            >
+              <Box
+                sx={{
+                  display: 'flex',
+                  flexDirection: 'row',
+                  justifyContent: 'flex-start',
+                  alignItems: 'center',
+                  width: '100%',
+                }}
+              >
+                {tempLocalUserData &&
+                tempLocalUserData.roleName === ENTERPRISE ? (
+                  <></>
+                ) : (
+                  <>
+                    {isEnterpriserRequested ? (
+                      <Box display="flex" flexDirection="column">
+                        <Box
+                          display="flex"
+                          flexDirection="row"
+                          alignItems="center"
+                        >
+                          <ContainedButton
+                            id={'request_enterprise_admin'}
+                            name={'Cancel Request'}
+                            onClick={() => updateIsEnterpriserRequested()}
+                            style={{
+                              padding: '10px 18px',
+                              gap: '8px',
+                              background: '#EA4335 !important',
+                            }}
+                            size={'medium'}
+                          />
+                          <BootstrapTooltip
+                            title="Enterprise get Additional Analytics Insights from each team. If your organisation needs an enterprise account contact sales@baci.com"
+                            placement="right"
+                          >
+                            <Icons.InformationCircleOutline
+                              size={24}
+                              color="#4E4E4E"
+                              style={{
+                                cursor: 'pointer',
+                                marginLeft: '5px',
+                              }}
+                            />
+                          </BootstrapTooltip>
+                        </Box>
+                        <Box
+                          display="flex"
+                          flexDirection="column"
+                          sx={{
+                            marginTop: '24px',
+                            padding: '12px',
+                            background: '#CEEFFF',
+                          }}
+                        >
+                          <BodySemiBoldTypography label="Your Request for Enterprise Dashboard is sent" />
+                          <CaptionRegularTypography
+                            label="Waiting for Admin to accept your request."
+                            style={{ marginTop: '16px' }}
+                          />
+                        </Box>
+                      </Box>
+                    ) : (
+                      <Box
+                        display="flex"
+                        flexDirection="row"
+                        alignItems="center"
+                      >
+                        <ContainedButton
+                          id={'request_enterprise_admin'}
+                          name={'Request Enterprise'}
+                          onClick={() => requestEnterpriseAdmin()}
+                          style={{
+                            padding: '10px 18px',
+                            gap: '8px',
+                          }}
+                          size={'medium'}
+                        />
+                        <BootstrapTooltip
+                          title="Enterprise get Additional Analytics Insights from each team. If your organisation needs an enterprise account contact sales@baci.com"
+                          placement="right"
+                        >
+                          <Icons.InformationCircleOutline
+                            size={24}
+                            color="#4E4E4E"
+                            style={{
+                              cursor: 'pointer',
+                              marginLeft: '5px',
+                            }}
+                          />
+                        </BootstrapTooltip>
+                      </Box>
+                    )}
+                  </>
+                )}
               </Box>
-            ) : (
-              <Box display="flex" flexDirection="row" alignItems="center">
-                <ContainedButton
-                  id={'request_enterprise_admin'}
-                  name={'Request Enterprise'}
-                  onClick={() => requestEnterpriseAdmin()}
-                  style={{
-                    padding: '10px 18px',
-                    gap: '8px',
-                  }}
-                  size={'medium'}
-                />
-                <BootstrapTooltip
-                  title="Enterprise get Additional Analytics Insights from each team. If your organisation needs an enterprise account contact sales@baci.com"
-                  placement="right"
-                >
-                  <Icons.InformationCircleOutline
-                    size={24}
-                    color="#4E4E4E"
-                    style={{
-                      cursor: 'pointer',
-                      marginLeft: '5px',
-                    }}
-                  />
-                </BootstrapTooltip>
-              </Box>
-            )}
+            </FormControl>
           </Box>
         </Box>
       </Box>
