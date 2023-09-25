@@ -841,6 +841,7 @@ export default function UpdateProfile({ handleEdit }: Props) {
                         sx={{
                           width: '400px',
                           backgroundColor: 'rgba(0, 0, 0, 0.06)',
+                          borderBottom: '1px solid',
                         }}
                       >
                         <CaptionRegularTypography
@@ -848,10 +849,10 @@ export default function UpdateProfile({ handleEdit }: Props) {
                           style={{
                             marginBottom: '24px',
                             color: 'rgba(0, 0, 0, 0.6)',
-                            padding: '8px',
+                            padding: '8px 8px 4px 16px',
                           }}
                         />
-                        <Box sx={{ padding: '8px' }}>
+                        <Box sx={{ padding: '0px 8px 4px 16px' }}>
                           {teams.map((team: any, index: number) => {
                             return (
                               <>
