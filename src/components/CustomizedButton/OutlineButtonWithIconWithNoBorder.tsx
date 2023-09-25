@@ -31,10 +31,10 @@ const OutlineButtonWithIconWithNoBorder = ({
           sx={{ ...style }}
           color="error"
         >
-          {iconPath && <img src={iconPath} />}
-          <Box component="span" marginLeft="10px">
+          <Box component="span" marginRight="10px">
             {label}
           </Box>
+          {iconPath && <img src={iconPath} />}
         </Button>
       ) : (
         <Button
@@ -44,10 +44,10 @@ const OutlineButtonWithIconWithNoBorder = ({
           disabled={disabled}
           sx={{ ...style }}
         >
-          {iconPath && <img src={iconPath} />}
-          <Box component="span" marginLeft="10px">
+          <Box component="span" marginRight="10px">
             {label}
           </Box>
+          {iconPath && <img src={iconPath} />}
         </Button>
       )}
     </>

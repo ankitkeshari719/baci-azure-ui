@@ -3,7 +3,6 @@ import { AuthenticatedTemplate, useMsal } from '@azure/msal-react';
 
 import {
   Box,
-  Button,
   Dialog,
   DialogTitle,
   FormControl,
@@ -22,7 +21,6 @@ import {
   BodyRegularTypography,
   BodySemiBoldTypography,
   CaptionRegularTypography,
-  CaptionSemiBoldTypography,
   H3SemiBoldTypography,
   H4SemiBoldTypography,
   H6RegularTypography,

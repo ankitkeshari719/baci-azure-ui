@@ -287,6 +287,7 @@ export default function UpdateProfile({ handleEdit }: Props) {
                 display: 'flex',
                 alignItems: 'center',
                 justifyContent: 'center',
+                textTransform: 'uppercase',
               }}
             />
           </Box>
