@@ -152,11 +152,9 @@ export default function EnterpriseLevelSentimentsSummaryChart({
     };
 
     await getOverAllSummary(chartInput).then(res => {
-      console.log(res, 'summary');
       setSummary(res.data.summary);
       let tempKeywords: any[] = [];
       const keywordsData=res.data.keywords?res.data.keywords:[];
-console.log(keywordsData,"keywordsData")
       keywordsData.forEach((item: any) => {
         console.log(item)
         tempKeywords.push({

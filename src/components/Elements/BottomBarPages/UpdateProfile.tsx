@@ -22,7 +22,11 @@ import {
   H6RegularTypography,
 } from '../../CustomizedTypography';
 import { GlobalContext, ActionType } from '../../../contexts/GlobalContext';
-import { updateUser } from '../../../helpers/msal/services';
+import {
+  createEnterpriseRequest,
+  deleteEnterpriseRequestById,
+  updateUser,
+} from '../../../helpers/msal/services';
 import OutlineButtonWithIconWithNoBorder from '../../CustomizedButton/OutlineButtonWithIconWithNoBorder';
 import { LazyLoadImage } from 'react-lazy-load-image-component';
 import { BASIC, ENTERPRISE } from '../../../constants/applicationConst';
@@ -125,12 +129,62 @@ export default function UpdateProfile({ handleEdit }: Props) {
   }, []);
 
   const requestEnterpriseAdmin = () => {
-    // Call API to request for Admin Role
-    updateIsEnterpriserRequested();
+    handleNewEnterpriseRequest();
+  };
+
+  const handleNewEnterpriseRequest = async () => {
+    dispatch({
+      type: ActionType.SET_LOADING,
+      payload: { loadingFlag: true },
+    });
+    const tempTeams = tempLocalUserData && tempLocalUserData.teams;
+    const teamsIds = tempTeams.map((team: any) => team.teamId);
+
+    const requestBody = {
+      organisationId: tempLocalUserData && tempLocalUserData.enterpriseId,
+      fromName: tempLocalUserData.firstName + ' ' + tempLocalUserData.lastName,
+      fromEmail: tempLocalUserData && tempLocalUserData.emailId,
+      fromTeams: teamsIds,
+      toEmails: [],
+      isApproved: false,
+    };
+
+    await createEnterpriseRequest(requestBody).then(
+      res => {
+        updateIsEnterpriserRequested(
+          res && res.enterpriseRequestId,
+          isEnterpriserRequested
+        );
+      },
+      err => {
+        console.log('err', err);
+      }
+    );
+  };
+
+  // Remove the requested enterprise
+  const cancelEnterpriseRequest = async () => {
+    dispatch({
+      type: ActionType.SET_LOADING,
+      payload: { loadingFlag: true },
+    });
+    const enterpriseRequestId =
+      tempLocalUserData && tempLocalUserData.enterpriseRequestId;
+    await deleteEnterpriseRequestById(enterpriseRequestId).then(
+      res => {
+        updateIsEnterpriserRequested('', isEnterpriserRequested);
+      },
+      err => {
+        console.log('err', err);
+      }
+    );
   };
 
   // Update user data for isEnterpriserRequested
-  const updateIsEnterpriserRequested = async () => {
+  const updateIsEnterpriserRequested = async (
+    enterpriseRequestId: any,
+    isEnterpriserRequested: any
+  ) => {
     dispatch({
       type: ActionType.SET_LOADING,
       payload: { loadingFlag: true },
@@ -138,6 +192,7 @@ export default function UpdateProfile({ handleEdit }: Props) {
 
     const requestBody = {
       isEnterpriserRequested: !isEnterpriserRequested,
+      enterpriseRequestId: enterpriseRequestId,
     };
 
     await updateUser(emailId, requestBody).then(
@@ -912,7 +967,7 @@ export default function UpdateProfile({ handleEdit }: Props) {
                               <ContainedButton
                                 id={'request_enterprise_admin'}
                                 name={'Cancel Request'}
-                                onClick={() => updateIsEnterpriserRequested()}
+                                onClick={() => cancelEnterpriseRequest()}
                                 style={{
                                   padding: '10px 18px',
                                   gap: '8px',
