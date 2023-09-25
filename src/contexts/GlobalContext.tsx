@@ -187,7 +187,7 @@ function GlobalProvider(props: ComponentProps<any>) {
 
         case ActionType.SET_AZURE_USER:
           return saveState({...state,
-            azureUser: action.payload?.azureUser,})
+            azureUser: action.payload?.azureUser})
       case ActionType.CHART_END_DATE:
         return saveState({
           ...state,

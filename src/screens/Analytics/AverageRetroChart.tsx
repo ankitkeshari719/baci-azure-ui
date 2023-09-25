@@ -160,14 +160,15 @@ export default function AverageRetroChart({
   }, [team]);
 
   const handleGetRetroChartData = async () => {
-    const chartInput: chartInputType = {
-      userId: 'vishal.gawande@evoltech.com.au',
-      roleName: 'Enterprise',
-      enterpriseId: 'evoltech0.0751886606959975',
-      teamId: '0',
-      fromDate: formatDateForAPI(fromDate),
-      toDate: formatDateForAPI(toDate),
-    };
+    if(global.azureUser!=undefined){  
+      const chartInput: chartInputType = {
+     userId: global.azureUser?.emailId,
+     roleName: global.azureUser?.roleName,
+     enterpriseId: global.azureUser?.enterpriseId,
+     teamId: '0',
+     fromDate: formatDateForAPI(fromDate),
+     toDate: formatDateForAPI(toDate),
+   };
     await getCountOfAllSessionsOverTime(chartInput).then(res => {
    
       if(res.data.length>0)
@@ -190,7 +191,7 @@ export default function AverageRetroChart({
         setTotalAverageSessions(0)
       }
     });
-
+  }
     // await getRetrosCount('10', '16', team).then(
     //   res => {
     //     if (res && res.result) {

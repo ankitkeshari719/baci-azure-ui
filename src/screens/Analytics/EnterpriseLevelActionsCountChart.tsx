@@ -121,14 +121,15 @@ export default function EnterpriseLevelActionsCountChart({
 
   const handleEnterpriseLevelActionsCountData = async () => {
 
-    const chartInput :chartInputType ={
-      userId:"vishal.gawande@evoltech.com.au",
-      roleName:"Enterprise",
-      enterpriseId:"evoltech0.0751886606959975",
-      teamId:"0",
-      fromDate: formatDateForAPI(fromDate),
-      toDate:formatDateForAPI(toDate)
-    }
+    if(global.azureUser!=undefined){  
+      const chartInput: chartInputType = {
+     userId: global.azureUser?.emailId,
+     roleName: global.azureUser?.roleName,
+     enterpriseId: global.azureUser?.enterpriseId,
+     teamId: '0',
+     fromDate: formatDateForAPI(fromDate),
+     toDate: formatDateForAPI(toDate),
+   };
      await getActionsChartData(chartInput).then(res=>{
       setEnterpriseLevelActions(res.chartData);
       setAssignedActions(res.chartData?.map((item: any) => item.pending))
@@ -149,7 +150,7 @@ export default function EnterpriseLevelActionsCountChart({
      err=>{
       console.log('err', err);
      })
-
+    }
   };
 
   const series = [

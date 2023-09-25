@@ -49,7 +49,7 @@ export default function CreateTeam() {
   const [createdBy, setCreatedBy] = React.useState('');
   const [teamDepartment, setTeamDepartment] = React.useState('');
   const [userEmailIds, setUserEmailIds] = React.useState([
-    'vishal.gawande@evoltech.com',
+    global.azureUser?.emailId,
   ]);
   const [enterpriseId, setEnterpriseId] = React.useState('');
   const [codeTeamNameError, setTeamNameCodeError] = React.useState('');

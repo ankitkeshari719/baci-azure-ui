@@ -146,10 +146,11 @@ export default function AverageParticipantChart({
   }, [team]);
 
   const handleGetParticipantChartData = async () => {
-    const chartInput: chartInputType = {
-      userId: 'vishal.gawande@evoltech.com.au',
-      roleName: 'Enterprise',
-      enterpriseId: 'evoltech0.0751886606959975',
+
+    if(global.azureUser!=undefined){   const chartInput: chartInputType = {
+      userId: global.azureUser?.emailId,
+      roleName: global.azureUser?.roleName,
+      enterpriseId: global.azureUser?.enterpriseId,
       teamId: '0',
       fromDate: formatDateForAPI(fromDate),
       toDate: formatDateForAPI(toDate),
@@ -173,7 +174,8 @@ export default function AverageParticipantChart({
       err => {
         console.log(err);
       }
-    );
+    );}
+ 
   };
 
   const series = [
