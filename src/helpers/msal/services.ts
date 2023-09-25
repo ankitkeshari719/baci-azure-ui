@@ -337,6 +337,165 @@ export const getDummyChartData = async (): Promise<any> => {
 };
 
 // Chart 1: Api to get Enterprise Level ActionsCount
+
+export interface chartInputType {userId:string,roleName:string,enterpriseId:string,teamId:string,fromDate:string,toDate:string}
+
+export const getActionsChartData=async(input:chartInputType):Promise<any>=>{
+ let actionsChartData;
+  const requestOptions = {
+    method: 'POST',
+    body:JSON.stringify(input),
+    headers: {
+      "Content-type": "application/json; charset=UTF-8"
+  }
+  };
+  await fetch( API_URL+`/getActionsChartData`,requestOptions).then(response =>response.json()).then(
+      data =>{
+        actionsChartData=data
+      }
+    )
+    return actionsChartData;
+}
+
+
+
+export const getTeamLevelActionsDataForChart=async(input:chartInputType):Promise<any>=>{
+  let teamLevelActionsDataForChart;
+   const requestOptions = {
+     method: 'POST',
+     body:JSON.stringify(input),
+     headers: {
+       "Content-type": "application/json; charset=UTF-8"
+   }
+   };
+   await fetch( API_URL+`/analytics/getTeamLevelActionsDataForChart`,requestOptions).then(response =>response.json()).then(
+       data =>{
+        teamLevelActionsDataForChart=data
+       }
+     )
+     return teamLevelActionsDataForChart;
+ }
+
+ export const getCountOfAllParticipantsOverTime=async(input:chartInputType):Promise<any>=>{
+  let countOfAllParticipantsOverTime;
+   const requestOptions = {
+     method: 'POST',
+     body:JSON.stringify(input),
+     headers: {
+       "Content-type": "application/json; charset=UTF-8"
+   }
+   };
+   await fetch( API_URL+`/analytics/getCountOfAllParticipantsOverTime`,requestOptions).then(response =>response.json()).then(
+       data =>{
+        countOfAllParticipantsOverTime=data
+       }
+     )
+     return countOfAllParticipantsOverTime;
+ }
+
+ export const getCountOfAllSessionsOverTime=async(input:chartInputType):Promise<any>=>{
+  let countOfAllSessionsOverTime;
+   const requestOptions = {
+     method: 'POST',
+     body:JSON.stringify(input),
+     headers: {
+       "Content-type": "application/json; charset=UTF-8"
+   }
+   };
+   await fetch( API_URL+`/analytics/getCountOfAllSessionsOverTime`,requestOptions).then(response =>response.json()).then(
+       data =>{
+        countOfAllSessionsOverTime=data
+       }
+     )
+     return countOfAllSessionsOverTime;
+ }
+
+ export const getEmotionsAsPerCategory=async(input:chartInputType):Promise<any>=>{
+  let emotionsAsPerCategory;
+   const requestOptions = {
+     method: 'POST',
+     body:JSON.stringify(input),
+     headers: {
+       "Content-type": "application/json; charset=UTF-8"
+   }
+   };
+   await fetch( API_URL+`/analytics/getEmotionsAsPerCategory`,requestOptions).then(response =>response.json()).then(
+       data =>{
+        emotionsAsPerCategory=data
+       }
+     )
+     return emotionsAsPerCategory;
+ }
+
+ export const getParticipantMoodCount=async(input:chartInputType):Promise<any>=>{
+  let participantMoodCount;
+   const requestOptions = {
+     method: 'POST',
+     body:JSON.stringify(input),
+     headers: {
+       "Content-type": "application/json; charset=UTF-8"
+   }
+   };
+   await fetch( API_URL+`/analytics/getParticipantMoodCount`,requestOptions).then(response =>response.json()).then(
+       data =>{
+        participantMoodCount=data
+       }
+     )
+     return participantMoodCount;
+ }
+
+ export const getOverAllSummary=async(input:chartInputType):Promise<any>=>{
+  let overAllSummary;
+   const requestOptions = {
+     method: 'POST',
+     body:JSON.stringify(input),
+     headers: {
+       "Content-type": "application/json; charset=UTF-8"
+   }
+   };
+   await fetch( API_URL+`/analytics/getOverAllSummary`,requestOptions).then(response =>response.json()).then(
+       data =>{
+        overAllSummary=data
+       }
+     )
+     return overAllSummary;
+ }
+
+
+
+
+export function formatDateToMonthYear(inputDate:string) {
+  // Parse the input date
+  const dateParts = inputDate.split('-');
+  const year = dateParts[0];
+  const month = dateParts[1];
+
+  // Define an array of month abbreviations
+  const monthAbbreviations = [
+    'JAN', 'FEB', 'MAR', 'APR', 'MAY', 'JUN',
+    'JUL', 'AUG', 'SEP', 'OCT', 'NOV', 'DEC'
+  ];
+
+  // Get the abbreviation for the month (assuming 1-based index)
+  const monthAbbreviation = monthAbbreviations[parseInt(month, 10) - 1];
+
+  // Format the date as "YYYY MON"
+  const formattedDate = `${monthAbbreviation} ${year} `;
+
+  return formattedDate;
+}
+
+export function formatDateForAPI(inputDate:string){
+
+const parts = inputDate.split("-");
+const formattedDate = `${parts[1]}/01/${parts[0]}`;
+return formattedDate
+}
+
+
+
+
+
 export const getEnterpriseLevelActionsCounts = async (
   fromDate: string,
   toDate: string,

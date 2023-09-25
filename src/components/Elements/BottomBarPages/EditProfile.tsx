@@ -15,7 +15,7 @@ import {
   ContainedButton,
   OutlinedButton,
   TextButton,
-} from '../../../components';
+} from './../../../components';
 import * as Icons from 'heroicons-react';
 
 import {

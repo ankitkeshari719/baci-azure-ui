@@ -1,5 +1,11 @@
 import React, { useState } from 'react';
-import { getParticipantsCount } from '../../helpers/msal/services';
+import {
+  chartInputType,
+  formatDateForAPI,
+  formatDateToMonthYear,
+  getCountOfAllParticipantsOverTime,
+  getParticipantsCount,
+} from '../../helpers/msal/services';
 import ReactApexChart from 'react-apexcharts';
 import { ApexOptions } from 'apexcharts';
 import {
@@ -29,6 +35,7 @@ import * as Icons from 'heroicons-react';
 import { MONTH_SELECTORS, MenuProps } from './const';
 import { GlobalContext } from '../../contexts/GlobalContext';
 import { BASIC, ENTERPRISE } from '../../constants/applicationConst';
+import DateSelector from '../../components/Elements/EnterpriseDashboardPages/DateSelector';
 
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
   [`&.${tableCellClasses.head}`]: {
@@ -60,13 +67,22 @@ export default function AverageParticipantChart({
   const [months, setMonths] = useState([]);
   const [global, dispatch] = React.useContext(GlobalContext);
   const [fromDate, setFromDate] = useState<string>(
-    global.chartStartDate ? global.chartStartDate : '10'
+    global.chartStartDate
+      ? global.chartStartDate
+      : new Date().getFullYear().toString() +
+          '-' +
+          '0' +
+          new Date().getMonth().toString().slice(-2)
   );
   const [toDate, setToDate] = useState<string>(
-    global.chartEndDate ? global.chartEndDate : '16'
+    global.chartEndDate
+      ? global.chartEndDate
+      : new Date().getFullYear().toString() +
+          '-' +
+          '0' +
+          (new Date().getMonth() + 1).toString().slice(-2)
   );
-  const [selectedFromDate, setSelectedFromDate] = useState<string>();
-  const [selectedToDate, setSelectedToDate] = useState<string>();
+
   const [totalAverageParticipants, setTotalAverageParticipants] =
     useState<number>();
   const navigate = useNavigate();
@@ -122,24 +138,6 @@ export default function AverageParticipantChart({
   }, [global.chartStartDate, global.chartEndDate]);
 
   React.useEffect(() => {
-    const tempSelectedFromDate = MONTH_SELECTORS.filter(
-      monthSelector => monthSelector.id === Number(fromDate)
-    );
-    const tempSelectedToDate = MONTH_SELECTORS.filter(
-      monthSelector => monthSelector.id === Number(toDate)
-    );
-
-    setSelectedFromDate(
-      tempSelectedFromDate &&
-        tempSelectedFromDate[0] &&
-        tempSelectedFromDate[0].month
-    );
-    setSelectedToDate(
-      tempSelectedToDate && tempSelectedToDate[0] && tempSelectedToDate[0].month
-    );
-  }, [fromDate, toDate]);
-
-  React.useEffect(() => {
     handleGetParticipantChartData();
   }, [fromDate, toDate]);
 
@@ -148,23 +146,32 @@ export default function AverageParticipantChart({
   }, [team]);
 
   const handleGetParticipantChartData = async () => {
-    await getParticipantsCount(fromDate, toDate, team).then(
+    const chartInput: chartInputType = {
+      userId: 'vishal.gawande@evoltech.com.au',
+      roleName: 'Enterprise',
+      enterpriseId: 'evoltech0.0751886606959975',
+      teamId: '0',
+      fromDate: formatDateForAPI(fromDate),
+      toDate: formatDateForAPI(toDate),
+    };
+
+    await getCountOfAllParticipantsOverTime(chartInput).then(
       res => {
-        if (res && res.result) {
-          setParticipantsCounts(res.result);
-          setAverageParticipants(
-            res.result?.map((item: any) => item.averageParticipants)
-          );
-          setMonths(res.result?.map((item: any) => item.month));
-          let temp = 0;
-          res.result.map((item: any) => {
-            temp = temp + item.averageParticipants;
-          });
-          setTotalAverageParticipants(Math.round(temp / res.result.length));
-        }
+       
+        setParticipantsCounts(res.data);
+        setAverageParticipants(res.data?.map((item: any) => item.userCount));
+        setMonths(
+          res.data?.map((item: any) => formatDateToMonthYear(item.month))
+        );
+        var totalParticipants = 0;
+        res.data.forEach((item: any) => {
+          totalParticipants = item.userCount + totalParticipants;
+        });
+        totalParticipants = totalParticipants / res.data.length;
+        setTotalAverageParticipants(totalParticipants);
       },
       err => {
-        console.log('err', err);
+        console.log(err);
       }
     );
   };
@@ -319,119 +326,14 @@ export default function AverageParticipantChart({
             }}
           >
             {/* Selector */}
-            <Box
-              sx={{
-                display: 'flex',
-                flexDirection: 'row',
-                alignItems: 'center',
-                justifyContent: 'start',
-              }}
-            >
-              {/* Select Range Title */}
-              <ButtonLabelTypography
-                label="Select Range:"
-                style={{
-                  color: '#343434',
-                }}
-              />
-              {/* From Date */}
-              <Box
-                sx={{
-                  minWidth: 120,
-                  marginLeft: '16px',
-                  marginRight: '16px',
-                }}
-              >
-                <FormControl fullWidth>
-                  <Select
-                    sx={{
-                      fieldset: {
-                        border: 'none',
-                        opacity: 1,
-                        color: '#4E4E4E',
-                      },
-                    }}
-                    labelId="from-Date"
-                    id="from_date"
-                    value={fromDate}
-                    label="From"
-                    onChange={handleFromDate}
-                    IconComponent={props => (
-                      <Icons.ChevronDownOutline
-                        size={24}
-                        color="#4E4E4E"
-                        style={{
-                          cursor: 'pointer',
-                          position: 'absolute',
-                          top: 'calc(50% - 0.8em)',
-                        }}
-                        {...props}
-                      />
-                    )}
-                    MenuProps={MenuProps}
-                  >
-                    {MONTH_SELECTORS.map(month_selector => {
-                      return (
-                        <MenuItem
-                          value={month_selector.id}
-                          key={month_selector.id}
-                        >
-                          {month_selector.month}
-                        </MenuItem>
-                      );
-                    })}
-                  </Select>
-                </FormControl>
-              </Box>
-              <ButtonLabelTypography
-                label="To"
-                style={{
-                  color: '#343434',
-                }}
-              />
-              {/*To Date */}
-              <Box sx={{ minWidth: 120, marginLeft: '24px' }}>
-                <FormControl fullWidth>
-                  <Select
-                    sx={{
-                      fieldset: {
-                        border: 'none',
-                        opacity: 1,
-                        color: '#4E4E4E',
-                      },
-                    }}
-                    labelId="to-Date"
-                    id="to_date"
-                    value={toDate}
-                    label="To"
-                    onChange={handleToDate}
-                    IconComponent={props => (
-                      <Icons.ChevronDownOutline
-                        size={24}
-                        color="#4E4E4E"
-                        style={{
-                          cursor: 'pointer',
-                          position: 'absolute',
-                          top: 'calc(50% - 0.8em)',
-                        }}
-                        {...props}
-                      />
-                    )}
-                    MenuProps={MenuProps}
-                  >
-                    {MONTH_SELECTORS.map(month_selector => {
-                      return (
-                        <MenuItem
-                          value={month_selector.id}
-                          key={month_selector.id}
-                        >
-                          {month_selector.month}
-                        </MenuItem>
-                      );
-                    })}
-                  </Select>
-                </FormControl>
-              </Box>
+            <Box>
+              {' '}
+              <DateSelector
+                fromDate={fromDate}
+                toDate={toDate}
+                handleFromDate={handleFromDate}
+                handleToDate={handleToDate}
+              />{' '}
             </Box>
             {/* Table */}
             <Box sx={{ marginTop: '32px' }}>
@@ -445,22 +347,24 @@ export default function AverageParticipantChart({
                   </TableRow>
                 </TableHead>
                 <TableBody>
-                  {participantsCounts.map((participantsCount: any) => {
-                    return (
-                      <TableRow key={participantsCount.id}>
-                        <StyledTableCell
-                          component="th"
-                          scope="row"
-                          align="center"
-                        >
-                          {participantsCount.month}
-                        </StyledTableCell>
-                        <StyledTableCell align="center">
-                          {participantsCount.averageParticipants}
-                        </StyledTableCell>
-                      </TableRow>
-                    );
-                  })}
+                  {participantsCounts.map(
+                    (participantsCount: any, index: number) => {
+                      return (
+                        <TableRow key={'participantsCounts' + index}>
+                          <StyledTableCell
+                            component="th"
+                            scope="row"
+                            align="center"
+                          >
+                            {formatDateToMonthYear(participantsCount.month)}
+                          </StyledTableCell>
+                          <StyledTableCell align="center">
+                            {participantsCount.userCount}
+                          </StyledTableCell>
+                        </TableRow>
+                      );
+                    }
+                  )}
                 </TableBody>
               </TableContainer>
             </Box>
@@ -502,7 +406,11 @@ export default function AverageParticipantChart({
                 sx={{ padding: '0px !important', marginTop: '10px' }}
               >
                 <BodyRegularTypography
-                  label={selectedFromDate + ' To ' + selectedToDate}
+                  label={
+                    formatDateToMonthYear(fromDate) +
+                    ' To ' +
+                    formatDateToMonthYear(toDate)
+                  }
                   style={{ color: '#343434' }}
                 />
               </Grid>

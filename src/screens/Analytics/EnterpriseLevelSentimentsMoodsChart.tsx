@@ -1,5 +1,11 @@
 import React, { useState } from 'react';
-import { getEnterpriseLevelSentimentsMoods } from '../../helpers/msal/services';
+import {
+  chartInputType,
+  formatDateForAPI,
+  formatDateToMonthYear,
+  getEnterpriseLevelSentimentsMoods,
+  getParticipantMoodCount,
+} from '../../helpers/msal/services';
 import ReactApexChart from 'react-apexcharts';
 import { ApexOptions } from 'apexcharts';
 import {
@@ -21,6 +27,7 @@ import * as Icons from 'heroicons-react';
 import { MONTH_SELECTORS, MenuProps } from './const';
 import { GlobalContext } from '../../contexts/GlobalContext';
 import { BASIC, ENTERPRISE } from '../../constants/applicationConst';
+import DateSelector from '../../components/Elements/EnterpriseDashboardPages/DateSelector';
 
 export default function EnterpriseLevelSentimentsMoodsChart({
   dashboard,
@@ -36,13 +43,23 @@ export default function EnterpriseLevelSentimentsMoodsChart({
   const [sadMoodPercentage, setSadMoodPercentage] = useState<number>();
   const [neutralMoodPercentage, setNeutralMoodPercentage] = useState<number>();
   const [happyMoodPercentage, setHappyMoodPercentage] = useState<number>();
-  const [months, setMonths] = useState([]);
+  const [months, setMonths] = useState<any[]>([]);
   const [global, dispatch] = React.useContext(GlobalContext);
   const [fromDate, setFromDate] = useState<string>(
-    global.chartStartDate ? global.chartStartDate : '10'
+    global.chartStartDate
+      ? global.chartStartDate
+      : new Date().getFullYear().toString() +
+          '-' +
+          '0' +
+          new Date().getMonth().toString().slice(-2)
   );
   const [toDate, setToDate] = useState<string>(
-    global.chartEndDate ? global.chartEndDate : '16'
+    global.chartEndDate
+      ? global.chartEndDate
+      : new Date().getFullYear().toString() +
+          '-' +
+          '0' +
+          (new Date().getMonth() + 1).toString().slice(-2)
   );
   const navigate = useNavigate();
   const windowWidth = React.useRef(window.innerWidth);
@@ -104,52 +121,75 @@ export default function EnterpriseLevelSentimentsMoodsChart({
   }, [team]);
 
   const handleGetEnterpriseLevelSentimentsMoods = async () => {
-    await getEnterpriseLevelSentimentsMoods(fromDate, toDate, team).then(
-      res => {
-        if (res && res.result) {
-          setMoods(res.result);
-          setSadMoods(
-            res.result?.map((item: any) =>
-              Math.round(
-                (item.sad / (item.sad + item.neutral + item.happy)) * 100
-              )
-            )
-          );
-          setNeutralMoods(
-            res.result?.map((item: any) =>
-              Math.round(
-                (item.neutral / (item.sad + item.neutral + item.happy)) * 100
-              )
-            )
-          );
-          setHappyMoods(
-            res.result?.map((item: any) =>
-              Math.round(
-                (item.happy / (item.sad + item.neutral + item.happy)) * 100
-              )
-            )
-          );
-          setMonths(res.result?.map((item: any) => item.month));
-          let temp_1 = 0;
-          let temp_2 = 0;
-          let temp_3 = 0;
-          res.result.map((item: any) => {
-            temp_1 = temp_1 + item.sad;
-            temp_2 = temp_2 + item.neutral;
-            temp_3 = temp_3 + item.happy;
-          });
-          const sadData = (temp_1 / (temp_1 + temp_2 + temp_3)) * 100;
-          const neutralData = (temp_2 / (temp_1 + temp_2 + temp_3)) * 100;
-          const happyData = (temp_3 / (temp_1 + temp_2 + temp_3)) * 100;
-          setSadMoodPercentage(Math.round(sadData));
-          setNeutralMoodPercentage(Math.round(neutralData));
-          setHappyMoodPercentage(Math.round(happyData));
-        }
-      },
-      err => {
-        console.log('err', err);
+    const chartInput: chartInputType = {
+      userId: 'vishal.gawande@evoltech.com.au',
+      roleName: 'Enterprise',
+      enterpriseId: 'evoltech0.0751886606959975',
+      teamId: '0',
+      fromDate: formatDateForAPI(fromDate),
+      toDate: formatDateForAPI(toDate),
+    };
+
+    await getParticipantMoodCount(chartInput).then(res => {
+      if (res.data.length > 0) {
+        let chartData: any[] = [];
+        var totalHappyCards = 0;
+        var totalNeutralCards = 0;
+        var totalSadCards = 0;
+        var totalCards = 0;
+        var months: any[] = [];
+        res.data.forEach((item: any, index: number) => {
+          var obj = {
+            happy: item.pulseCheckChartData.happyCards,
+            id: index,
+            month: item.month,
+            neutral: item.pulseCheckChartData.neutralCards,
+            sad: item.pulseCheckChartData.sadCards,
+          };
+          months.push(formatDateToMonthYear(item.month));
+          totalHappyCards =
+            totalHappyCards + item.pulseCheckChartData.happyCards;
+          totalNeutralCards =
+            totalNeutralCards + item.pulseCheckChartData.neutralCards;
+          totalSadCards = totalSadCards + item.pulseCheckChartData.sadCards;
+          chartData.push(obj);
+        });
+        totalCards = totalHappyCards + totalNeutralCards + totalSadCards;
+
+        setMoods(chartData);
+        setMonths(months);
+        setSadMoods(
+          res.data?.map((item: any) =>
+            Math.round(item.pulseCheckChartData.sadCards)
+          )
+        );
+        setNeutralMoods(
+          res.data?.map((item: any) =>
+            Math.round(item.pulseCheckChartData.neutralCards)
+          )
+        );
+        setHappyMoods(
+          res.data?.map((item: any) =>
+            Math.round(item.pulseCheckChartData.happyCards)
+          )
+        );
+        const sadPercent = +((totalSadCards / totalCards) * 100).toFixed(2);
+        const neutralPercent = +(
+          (totalNeutralCards / totalCards) *
+          100
+        ).toFixed(2);
+        const happyPercent = +((totalHappyCards / totalCards) * 100).toFixed(2);
+        setSadMoodPercentage(sadPercent ? sadPercent : 0);
+        setNeutralMoodPercentage(neutralPercent ? neutralPercent : 0);
+        setHappyMoodPercentage(happyPercent ? happyPercent : 0);
+      } else {
+        setMoods([]);
+        setMonths([]);
+        setSadMoods([]);
+        setNeutralMoods([]);
+        setHappyMoods([]);
       }
-    );
+    });
   };
 
   const handleFromDate = (event: SelectChangeEvent) => {
@@ -303,120 +343,16 @@ export default function EnterpriseLevelSentimentsMoodsChart({
             />
           </Grid>
           {/* Selector */}
-          <Grid
-            item
-            xs={12}
-            sx={{
-              padding: '0px !important',
-              display: 'flex',
-              flexDirection: 'row',
-              alignItems: 'center',
-              justifyContent: 'center',
-              marginTop: '16px',
-            }}
-          >
-            {/* Select Range Title */}
-            <ButtonLabelTypography
-              label="Select Range:"
-              style={{
-                color: '#343434',
-              }}
-            />
-            {/* From Date */}
-            <Box
-              sx={{ minWidth: 240, marginLeft: '16px', marginRight: '16px' }}
-            >
-              <FormControl fullWidth>
-                <Select
-                  sx={{
-                    fieldset: {
-                      border: 'none',
-                      opacity: 1,
-                      color: '#4E4E4E',
-                    },
-                  }}
-                  labelId="from-Date"
-                  id="from_date"
-                  value={fromDate}
-                  label="From"
-                  onChange={handleFromDate}
-                  IconComponent={props => (
-                    <Icons.ChevronDownOutline
-                      size={24}
-                      color="#4E4E4E"
-                      style={{
-                        cursor: 'pointer',
-                        position: 'absolute',
-                        top: 'calc(50% - 0.8em)',
-                      }}
-                      {...props}
-                    />
-                  )}
-                  MenuProps={MenuProps}
-                >
-                  {MONTH_SELECTORS.map(month_selector => {
-                    return (
-                      <MenuItem
-                        value={month_selector.id}
-                        key={month_selector.id}
-                      >
-                        {month_selector.month}
-                      </MenuItem>
-                    );
-                  })}
-                </Select>
-              </FormControl>
-            </Box>
-            <ButtonLabelTypography
-              label="To"
-              style={{
-                color: '#343434',
-              }}
-            />
-            {/*To Date */}
-            <Box sx={{ minWidth: 240, marginLeft: '16px' }}>
-              <FormControl fullWidth>
-                <Select
-                  sx={{
-                    fieldset: {
-                      border: 'none',
-                      opacity: 1,
-                      color: '#4E4E4E',
-                    },
-                  }}
-                  labelId="to-Date"
-                  id="to_date"
-                  value={toDate}
-                  label="To"
-                  onChange={handleToDate}
-                  IconComponent={props => (
-                    <Icons.ChevronDownOutline
-                      size={24}
-                      color="#4E4E4E"
-                      style={{
-                        cursor: 'pointer',
-                        position: 'absolute',
-                        top: 'calc(50% - 0.8em)',
-                      }}
-                      {...props}
-                    />
-                  )}
-                  MenuProps={MenuProps}
-                >
-                  {MONTH_SELECTORS.map(month_selector => {
-                    return (
-                      <MenuItem
-                        value={month_selector.id}
-                        key={month_selector.id}
-                      >
-                        {month_selector.month}
-                      </MenuItem>
-                    );
-                  })}
-                </Select>
-              </FormControl>
-            </Box>
-          </Grid>
+          <Box>
+            {' '}
+            <DateSelector
+              fromDate={fromDate}
+              toDate={toDate}
+              handleFromDate={handleFromDate}
+              handleToDate={handleToDate}
+            />{' '}
+          </Box>
+
           {/* Percentage */}
           <Grid
             item

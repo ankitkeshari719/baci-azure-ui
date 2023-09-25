@@ -18,9 +18,15 @@ import {
 import { Link, useNavigate } from 'react-router-dom';
 import * as Icons from 'heroicons-react';
 import { MONTH_SELECTORS, MenuProps } from './const';
-import { getEnterpriseLevelSentimentsTheme } from '../../helpers/msal/services';
+import {
+  chartInputType,
+  formatDateForAPI,
+  getEmotionsAsPerCategory,
+  getEnterpriseLevelSentimentsTheme,
+} from '../../helpers/msal/services';
 import { GlobalContext } from '../../contexts/GlobalContext';
 import { BASIC, ENTERPRISE } from '../../constants/applicationConst';
+import DateSelector from '../../components/Elements/EnterpriseDashboardPages/DateSelector';
 
 export default function EnterpriseLevelSentimentsThemeChart({
   dashboard,
@@ -38,11 +44,22 @@ export default function EnterpriseLevelSentimentsThemeChart({
   const [happyPercentage, setHappyPercentage] = useState<number>();
   const [global, dispatch] = React.useContext(GlobalContext);
   const [fromDate, setFromDate] = useState<string>(
-    global.chartStartDate ? global.chartStartDate : '10'
+    global.chartStartDate
+      ? global.chartStartDate
+      : new Date().getFullYear().toString() +
+          '-' +
+          '0' +
+          new Date().getMonth().toString().slice(-2)
   );
   const [toDate, setToDate] = useState<string>(
-    global.chartEndDate ? global.chartEndDate : '16'
+    global.chartEndDate
+      ? global.chartEndDate
+      : new Date().getFullYear().toString() +
+          '-' +
+          '0' +
+          (new Date().getMonth() + 1).toString().slice(-2)
   );
+  const [cardsPerPercentage, setCardsPerPercentage] = useState<number>(1);
 
   const localUserData = localStorage.getItem('userData');
   const tempLocalUserData = localUserData && JSON.parse(localUserData);
@@ -53,7 +70,7 @@ export default function EnterpriseLevelSentimentsThemeChart({
       setPath('basic');
     } else if (tempLocalUserData && tempLocalUserData.roleName === ENTERPRISE) {
       setPath('enterprise');
-    } 
+    }
   }, [tempLocalUserData]);
 
   const getChartWidth = () => {
@@ -86,19 +103,87 @@ export default function EnterpriseLevelSentimentsThemeChart({
   }, [team]);
 
   const handleGetEnterpriseLevelSentimentsThemes = async () => {
-    await getEnterpriseLevelSentimentsTheme(fromDate, toDate, team).then(
-      res => {
-        if (res && res.result) {
-          setHeatMapData(res.result.series);
-          setSadPercentage(res.result.sadPercentage);
-          setNeutralPercentage(res.result.neutralPercentage);
-          setHappyPercentage(res.result.happyPercentage);
+    const chartInput: chartInputType = {
+      userId: 'vishal.gawande@evoltech.com.au',
+      roleName: 'Enterprise',
+      enterpriseId: 'evoltech0.0751886606959975',
+      teamId: '0',
+      fromDate: formatDateForAPI(fromDate),
+      toDate: formatDateForAPI(toDate),
+    };
+
+    await getEmotionsAsPerCategory(chartInput).then(res => {
+      if (res.data.length > 0) {
+        let data: any[] = [];
+        var totalCards = 0;
+        var totalHappyCards = 0;
+        var totalNeutalCards = 0;
+        var totalSadCards = 0;
+        res.data.forEach((item: any) => {
+          var obj = {
+            name: item.groupName,
+            data: [
+              item.sadCardsLength,
+              item.neutralCardsLength,
+              item.happyCardsLength,
+            ],
+          };
+          totalCards =
+            totalCards +
+            item.sadCardsLength +
+            item.neutralCardsLength +
+            item.happyCardsLength;
+          totalHappyCards = totalHappyCards + item.happyCardsLength;
+          totalNeutalCards = totalNeutalCards + item.neutralCardsLength;
+          totalSadCards = totalSadCards + item.totalSadCards;
+          data.push(obj);
+        });
+        setHeatMapData(data);
+
+        var sadPer =
+          (totalSadCards / totalCards) * 100
+            ? (totalSadCards / totalCards) * 100
+            : 0;
+        var neutralPer =
+          (totalNeutalCards / totalCards) * 100
+            ? (totalNeutalCards / totalCards) * 100
+            : 0;
+        var happyPer =
+          (totalHappyCards / totalCards) * 100
+            ? (totalHappyCards / totalCards) * 100
+            : 0;
+
+        setSadPercentage(+sadPer.toFixed(2));
+        setNeutralPercentage(+neutralPer.toFixed(2));
+        setHappyPercentage(+happyPer.toFixed(2));
+        if (totalCards == 0) {
+          setCardsPerPercentage(1);
+        } else {
+          setCardsPerPercentage(totalCards / 1000);
         }
-      },
-      err => {
-        console.log('err', err);
+      } else {
+        setHeatMapData([]);
+        setSadPercentage(0);
+        setNeutralPercentage(0);
+        setHappyPercentage(0);
+        setCardsPerPercentage(1);
       }
-    );
+    });
+
+    // await getEnterpriseLevelSentimentsTheme("10", "16", team).then(
+    //   res => {
+    //     if (res && res.result) {
+    //       console.log(res.result.series,"--",res.result.sadPercentage,"--",res.result.neutralPercentage,"--",res.result.happyPercentage )
+    //       setHeatMapData(res.result.series);
+    //       setSadPercentage(res.result.sadPercentage);
+    //       setNeutralPercentage(res.result.neutralPercentage);
+    //       setHappyPercentage(res.result.happyPercentage);
+    //     }
+    //   },
+    //   err => {
+    //     console.log('err', err);
+    //   }
+    // );
   };
 
   const handleFromDate = (event: SelectChangeEvent) => {
@@ -186,118 +271,118 @@ export default function EnterpriseLevelSentimentsThemeChart({
         colorScale: {
           ranges: [
             {
-              from: 1,
-              to: 25,
+              from: 1 * cardsPerPercentage,
+              to: 25 * cardsPerPercentage,
               color: '#EBF8FF',
             },
             {
-              from: 26,
-              to: 50,
+              from: 26 * cardsPerPercentage,
+              to: 50 * cardsPerPercentage,
               color: '#D6F1FF',
             },
             {
-              from: 51,
-              to: 75,
+              from: 51 * cardsPerPercentage,
+              to: 75 * cardsPerPercentage,
               color: '#C2EBFF',
             },
             {
-              from: 76,
-              to: 100,
+              from: 76 * cardsPerPercentage,
+              to: 100 * cardsPerPercentage,
               color: '#ADE4FF',
             },
             {
-              from: 100,
-              to: 125,
+              from: 100 * cardsPerPercentage,
+              to: 125 * cardsPerPercentage,
               color: '#99DDFF',
             },
             {
-              from: 126,
-              to: 150,
+              from: 126 * cardsPerPercentage,
+              to: 150 * cardsPerPercentage,
               color: '#7CCBF3',
             },
             {
-              from: 151,
-              to: 200,
+              from: 151 * cardsPerPercentage,
+              to: 200 * cardsPerPercentage,
               color: '#57BDEF',
             },
             {
-              from: 201,
-              to: 250,
+              from: 201 * cardsPerPercentage,
+              to: 250 * cardsPerPercentage,
               color: '#44B5EE',
             },
             {
-              from: 251,
-              to: 300,
+              from: 251 * cardsPerPercentage,
+              to: 300 * cardsPerPercentage,
               color: '#32AEEC',
             },
             {
-              from: 301,
-              to: 350,
+              from: 301 * cardsPerPercentage,
+              to: 350 * cardsPerPercentage,
               color: '#1FA6EA',
             },
             {
-              from: 351,
-              to: 400,
+              from: 351 * cardsPerPercentage,
+              to: 400 * cardsPerPercentage,
               color: '#3296d6',
             },
             {
-              from: 401,
-              to: 450,
+              from: 401 * cardsPerPercentage,
+              to: 450 * cardsPerPercentage,
               color: '#4F91CF',
             },
             {
-              from: 451,
-              to: 500,
+              from: 451 * cardsPerPercentage,
+              to: 500 * cardsPerPercentage,
               color: '#3F87CA',
             },
             {
-              from: 501,
-              to: 550,
+              from: 501 * cardsPerPercentage,
+              to: 550 * cardsPerPercentage,
               color: '#357DC0',
             },
             {
-              from: 551,
-              to: 600,
+              from: 551 * cardsPerPercentage,
+              to: 600 * cardsPerPercentage,
               color: '#3072B0',
             },
             {
-              from: 601,
-              to: 650,
+              from: 601 * cardsPerPercentage,
+              to: 650 * cardsPerPercentage,
               color: '#2C68A0',
             },
             {
-              from: 651,
-              to: 700,
+              from: 651 * cardsPerPercentage,
+              to: 700 * cardsPerPercentage,
               color: '#275E90',
             },
             {
-              from: 701,
-              to: 750,
+              from: 701 * cardsPerPercentage,
+              to: 750 * cardsPerPercentage,
               color: '#235380',
             },
             {
-              from: 751,
-              to: 800,
+              from: 751 * cardsPerPercentage,
+              to: 800 * cardsPerPercentage,
               color: '#1F4970',
             },
             {
-              from: 801,
-              to: 850,
+              from: 801 * cardsPerPercentage,
+              to: 850 * cardsPerPercentage,
               color: '#1A3E60',
             },
             {
-              from: 851,
-              to: 900,
+              from: 851 * cardsPerPercentage,
+              to: 900 * cardsPerPercentage,
               color: '#163450',
             },
             {
-              from: 901,
-              to: 950,
+              from: 901 * cardsPerPercentage,
+              to: 950 * cardsPerPercentage,
               color: '#0C1F31',
             },
             {
-              from: 951,
-              to: 1000,
+              from: 951 * cardsPerPercentage,
+              to: 1000 * cardsPerPercentage,
               color: '#040A10',
             },
           ],
@@ -372,120 +457,15 @@ export default function EnterpriseLevelSentimentsThemeChart({
             />
           </Grid>
           {/* Selector */}
-          <Grid
-            item
-            xs={12}
-            sx={{
-              padding: '0px !important',
-              display: 'flex',
-              flexDirection: 'row',
-              alignItems: 'center',
-              justifyContent: 'center',
-              marginTop: '16px',
-            }}
-          >
-            {/* Select Range Title */}
-            <ButtonLabelTypography
-              label="Select Range:"
-              style={{
-                color: '#343434',
-              }}
-            />
-            {/* From Date */}
-            <Box
-              sx={{ minWidth: 240, marginLeft: '16px', marginRight: '16px' }}
-            >
-              <FormControl fullWidth>
-                <Select
-                  sx={{
-                    fieldset: {
-                      border: 'none',
-                      opacity: 1,
-                      color: '#4E4E4E',
-                    },
-                  }}
-                  labelId="from-Date"
-                  id="from_date"
-                  value={fromDate}
-                  label="From"
-                  onChange={handleFromDate}
-                  IconComponent={props => (
-                    <Icons.ChevronDownOutline
-                      size={24}
-                      color="#4E4E4E"
-                      style={{
-                        cursor: 'pointer',
-                        position: 'absolute',
-                        top: 'calc(50% - 0.8em)',
-                      }}
-                      {...props}
-                    />
-                  )}
-                  MenuProps={MenuProps}
-                >
-                  {MONTH_SELECTORS.map(month_selector => {
-                    return (
-                      <MenuItem
-                        value={month_selector.id}
-                        key={month_selector.id}
-                      >
-                        {month_selector.month}
-                      </MenuItem>
-                    );
-                  })}
-                </Select>
-              </FormControl>
-            </Box>
-            <ButtonLabelTypography
-              label="To"
-              style={{
-                color: '#343434',
-              }}
-            />
-            {/*To Date */}
-            <Box sx={{ minWidth: 240, marginLeft: '16px' }}>
-              <FormControl fullWidth>
-                <Select
-                  sx={{
-                    fieldset: {
-                      border: 'none',
-                      opacity: 1,
-                      color: '#4E4E4E',
-                    },
-                  }}
-                  labelId="to-Date"
-                  id="to_date"
-                  value={toDate}
-                  label="To"
-                  onChange={handleToDate}
-                  IconComponent={props => (
-                    <Icons.ChevronDownOutline
-                      size={24}
-                      color="#4E4E4E"
-                      style={{
-                        cursor: 'pointer',
-                        position: 'absolute',
-                        top: 'calc(50% - 0.8em)',
-                      }}
-                      {...props}
-                    />
-                  )}
-                  MenuProps={MenuProps}
-                >
-                  {MONTH_SELECTORS.map(month_selector => {
-                    return (
-                      <MenuItem
-                        value={month_selector.id}
-                        key={month_selector.id}
-                      >
-                        {month_selector.month}
-                      </MenuItem>
-                    );
-                  })}
-                </Select>
-              </FormControl>
-            </Box>
-          </Grid>
+          <Box>
+            {' '}
+            <DateSelector
+              fromDate={fromDate}
+              toDate={toDate}
+              handleFromDate={handleFromDate}
+              handleToDate={handleToDate}
+            />{' '}
+          </Box>
           {/* Percentage */}
           <Grid
             item

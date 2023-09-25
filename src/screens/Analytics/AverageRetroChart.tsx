@@ -1,5 +1,11 @@
 import React, { useState } from 'react';
-import { getRetrosCount } from '../../helpers/msal/services';
+import {
+  chartInputType,
+  formatDateForAPI,
+  formatDateToMonthYear,
+  getCountOfAllSessionsOverTime,
+  getRetrosCount,
+} from '../../helpers/msal/services';
 import ReactApexChart from 'react-apexcharts';
 import { ApexOptions } from 'apexcharts';
 import { Link, useNavigate } from 'react-router-dom';
@@ -28,6 +34,7 @@ import * as Icons from 'heroicons-react';
 import { MONTH_SELECTORS, MenuProps } from './const';
 import { GlobalContext } from '../../contexts/GlobalContext';
 import { BASIC, ENTERPRISE } from '../../constants/applicationConst';
+import DateSelector from '../../components/Elements/EnterpriseDashboardPages/DateSelector';
 
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
   [`&.${tableCellClasses.head}`]: {
@@ -57,10 +64,20 @@ export default function AverageRetroChart({
   const [months, setMonths] = useState([]);
   const [global, dispatch] = React.useContext(GlobalContext);
   const [fromDate, setFromDate] = useState<string>(
-    global.chartStartDate ? global.chartStartDate : '10'
+    global.chartStartDate
+      ? global.chartStartDate
+      : new Date().getFullYear().toString() +
+          '-' +
+          '0' +
+          new Date().getMonth().toString().slice(-2)
   );
   const [toDate, setToDate] = useState<string>(
-    global.chartEndDate ? global.chartEndDate : '16'
+    global.chartEndDate
+      ? global.chartEndDate
+      : new Date().getFullYear().toString() +
+          '-' +
+          '0' +
+          (new Date().getMonth() + 1).toString().slice(-2)
   );
 
   const [selectedFromDate, setSelectedFromDate] = useState<string>();
@@ -116,23 +133,23 @@ export default function AverageRetroChart({
     }
   }, [global.chartStartDate, global.chartEndDate]);
 
-  React.useEffect(() => {
-    const tempSelectedFromDate = MONTH_SELECTORS.filter(
-      monthSelector => monthSelector.id === Number(fromDate)
-    );
-    const tempSelectedToDate = MONTH_SELECTORS.filter(
-      monthSelector => monthSelector.id === Number(toDate)
-    );
+  // React.useEffect(() => {
+  //   const tempSelectedFromDate = MONTH_SELECTORS.filter(
+  //     monthSelector => monthSelector.id === Number(fromDate)
+  //   );
+  //   const tempSelectedToDate = MONTH_SELECTORS.filter(
+  //     monthSelector => monthSelector.id === Number(toDate)
+  //   );
 
-    setSelectedFromDate(
-      tempSelectedFromDate &&
-        tempSelectedFromDate[0] &&
-        tempSelectedFromDate[0].month
-    );
-    setSelectedToDate(
-      tempSelectedToDate && tempSelectedToDate[0] && tempSelectedToDate[0].month
-    );
-  }, [fromDate, toDate]);
+  //   setSelectedFromDate(
+  //     tempSelectedFromDate &&
+  //       tempSelectedFromDate[0] &&
+  //       tempSelectedFromDate[0].month
+  //   );
+  //   setSelectedToDate(
+  //     tempSelectedToDate && tempSelectedToDate[0] && tempSelectedToDate[0].month
+  //   );
+  // }, [fromDate, toDate]);
 
   React.useEffect(() => {
     handleGetRetroChartData();
@@ -143,23 +160,55 @@ export default function AverageRetroChart({
   }, [team]);
 
   const handleGetRetroChartData = async () => {
-    await getRetrosCount(fromDate, toDate, team).then(
-      res => {
-        if (res && res.result) {
-          setRetrosCounts(res.result);
-          setAverageRetros(res.result?.map((item: any) => item.averageRetros));
-          setMonths(res.result?.map((item: any) => item.month));
-          let temp = 0;
-          res.result.map((item: any) => {
-            temp = temp + item.averageRetros;
-          });
-          setTotalAverageSessions(Math.round(temp / res.result.length));
-        }
-      },
-      err => {
-        console.log('err', err);
+    const chartInput: chartInputType = {
+      userId: 'vishal.gawande@evoltech.com.au',
+      roleName: 'Enterprise',
+      enterpriseId: 'evoltech0.0751886606959975',
+      teamId: '0',
+      fromDate: formatDateForAPI(fromDate),
+      toDate: formatDateForAPI(toDate),
+    };
+    await getCountOfAllSessionsOverTime(chartInput).then(res => {
+   
+      if(res.data.length>0)
+      {setRetrosCounts(res.data);
+      var totalRetrocount = 0;
+      res.data.forEach((element: any) => {
+        totalRetrocount = element.retroCount + totalRetrocount;
+      });
+      totalRetrocount = totalRetrocount / res.data.length;
+
+      setAverageRetros(res.data?.map((item: any) => item.retroCount));
+      setMonths(
+        res.data?.map((item: any) => formatDateToMonthYear(item.month))
+      );
+      setTotalAverageSessions(+totalRetrocount.toFixed(2));}
+      else{
+        setRetrosCounts([]);
+        setAverageRetros([]);
+        setMonths([]);
+        setTotalAverageSessions(0)
       }
-    );
+    });
+
+    // await getRetrosCount('10', '16', team).then(
+    //   res => {
+    //     if (res && res.result) {
+    //       console.log(res.result)
+    //       setRetrosCounts(res.result);
+    //       setAverageRetros(res.result?.map((item: any) => item.averageRetros));
+    //       setMonths(res.result?.map((item: any) => item.month));
+    //       let temp = 0;
+    //       res.result.map((item: any) => {
+    //         temp = temp + item.averageRetros;
+    //       });
+    //       setTotalAverageSessions(Math.round(temp / res.result.length));
+    //     }
+    //   },
+    //   err => {
+    //     console.log('err', err);
+    //   }
+    // );
   };
 
   const series = [
@@ -312,119 +361,13 @@ export default function AverageRetroChart({
             }}
           >
             {/* Selector */}
-            <Box
-              sx={{
-                display: 'flex',
-                flexDirection: 'row',
-                alignItems: 'center',
-                justifyContent: 'start',
-              }}
-            >
-              {/* Select Range Title */}
-              <ButtonLabelTypography
-                label="Select Range:"
-                style={{
-                  color: '#343434',
-                }}
+            <Box>
+              <DateSelector
+                fromDate={fromDate}
+                toDate={toDate}
+                handleFromDate={handleFromDate}
+                handleToDate={handleToDate}
               />
-              {/* From Date */}
-              <Box
-                sx={{
-                  minWidth: 120,
-                  marginLeft: '16px',
-                  marginRight: '16px',
-                }}
-              >
-                <FormControl fullWidth>
-                  <Select
-                    sx={{
-                      fieldset: {
-                        border: 'none',
-                        opacity: 1,
-                        color: '#4E4E4E',
-                      },
-                    }}
-                    labelId="from-Date"
-                    id="from_date"
-                    value={fromDate}
-                    label="From"
-                    onChange={handleFromDate}
-                    IconComponent={props => (
-                      <Icons.ChevronDownOutline
-                        size={24}
-                        color="#4E4E4E"
-                        style={{
-                          cursor: 'pointer',
-                          position: 'absolute',
-                          top: 'calc(50% - 0.8em)',
-                        }}
-                        {...props}
-                      />
-                    )}
-                    MenuProps={MenuProps}
-                  >
-                    {MONTH_SELECTORS.map(month_selector => {
-                      return (
-                        <MenuItem
-                          value={month_selector.id}
-                          key={month_selector.id}
-                        >
-                          {month_selector.month}
-                        </MenuItem>
-                      );
-                    })}
-                  </Select>
-                </FormControl>
-              </Box>
-              <ButtonLabelTypography
-                label="To"
-                style={{
-                  color: '#343434',
-                }}
-              />
-              {/*To Date */}
-              <Box sx={{ minWidth: 120, marginLeft: '16px' }}>
-                <FormControl fullWidth>
-                  <Select
-                    sx={{
-                      fieldset: {
-                        border: 'none',
-                        opacity: 1,
-                        color: '#4E4E4E',
-                      },
-                    }}
-                    labelId="to-Date"
-                    id="to_date"
-                    value={toDate}
-                    label="To"
-                    onChange={handleToDate}
-                    IconComponent={props => (
-                      <Icons.ChevronDownOutline
-                        size={24}
-                        color="#4E4E4E"
-                        style={{
-                          cursor: 'pointer',
-                          position: 'absolute',
-                          top: 'calc(50% - 0.8em)',
-                        }}
-                        {...props}
-                      />
-                    )}
-                    MenuProps={MenuProps}
-                  >
-                    {MONTH_SELECTORS.map(month_selector => {
-                      return (
-                        <MenuItem
-                          value={month_selector.id}
-                          key={month_selector.id}
-                        >
-                          {month_selector.month}
-                        </MenuItem>
-                      );
-                    })}
-                  </Select>
-                </FormControl>
-              </Box>
             </Box>
             {/* Table Container */}
             <Box sx={{ marginTop: '32px' }}>
@@ -438,18 +381,18 @@ export default function AverageRetroChart({
                   </TableRow>
                 </TableHead>
                 <TableBody>
-                  {retrosCounts.map((retrosCount: any) => {
+                  {retrosCounts.map((retrosCount: any, index: number) => {
                     return (
-                      <TableRow key={retrosCount.id}>
+                      <TableRow key={'retroCount' + index}>
                         <StyledTableCell
                           component="th"
                           scope="row"
                           align="center"
                         >
-                          {retrosCount.month}
+                          {formatDateToMonthYear(retrosCount.month)}
                         </StyledTableCell>
                         <StyledTableCell align="center">
-                          {retrosCount.averageRetros}
+                          {retrosCount.retroCount}
                         </StyledTableCell>
                       </TableRow>
                     );
@@ -495,7 +438,11 @@ export default function AverageRetroChart({
                 sx={{ padding: '0px !important', marginTop: '10px' }}
               >
                 <BodyRegularTypography
-                  label={selectedFromDate + ' To ' + selectedToDate}
+                  label={
+                    formatDateToMonthYear(fromDate) +
+                    ' To ' +
+                    formatDateToMonthYear(toDate)
+                  }
                   style={{ color: '#343434' }}
                 />
               </Grid>
