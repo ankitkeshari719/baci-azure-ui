@@ -173,7 +173,6 @@ export default function EnterpriseLevelSentimentsThemeChart({
     // await getEnterpriseLevelSentimentsTheme("10", "16", team).then(
     //   res => {
     //     if (res && res.result) {
-    //       console.log(res.result.series,"--",res.result.sadPercentage,"--",res.result.neutralPercentage,"--",res.result.happyPercentage )
     //       setHeatMapData(res.result.series);
     //       setSadPercentage(res.result.sadPercentage);
     //       setNeutralPercentage(res.result.neutralPercentage);
