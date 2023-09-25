@@ -1,5 +1,6 @@
 import React, { ComponentProps, Dispatch } from 'react';
 import {
+  AzureUser,
   Global,
   PulseCheckSubmitStatus,
   Retro,
@@ -24,8 +25,9 @@ export enum ActionType {
   SET_EMOJI_ID = 'setEmojiId',
   SET_IS_MAINTENANCE_SCHEDULED = 'aetIsMaintenanceScheduled',
   SET_JIRA_CODE = 'setJiraCode',
-  CHART_START_DATE="chartStartDate",
-  CHART_END_DATE='chartEndDate'
+  CHART_START_DATE = 'chartStartDate',
+  CHART_END_DATE = 'chartEndDate',
+  SET_AZURE_USER = 'setAzureUser',
 }
 
 export class ReducerPayload {
@@ -47,8 +49,9 @@ export class ReducerPayload {
   isMaintenanceScheduled?: boolean;
   lastGlobalStateUpdate?: Date | undefined;
   jiraCode?: string;
-  startDate?:string;
-  endDate?:string;
+  startDate?: string;
+  endDate?: string;
+  azureUser?: AzureUser;
 }
 
 type ContextType = [
@@ -176,16 +179,20 @@ function GlobalProvider(props: ComponentProps<any>) {
           ...state,
           jiraCode: action.payload?.jiraCode,
         });
-        case ActionType.CHART_START_DATE:
-          return saveState({
-            ...state,
-            chartStartDate:action.payload?.startDate,
-          });
-          case ActionType.CHART_END_DATE:
-            return saveState({
-              ...state,
-              chartEndDate:action.payload?.endDate,
-            });
+      case ActionType.CHART_START_DATE:
+        return saveState({
+          ...state,
+          chartStartDate: action.payload?.startDate,
+        });
+
+        case ActionType.SET_AZURE_USER:
+          return saveState({...state,
+            azureUser: action.payload?.azureUser,})
+      case ActionType.CHART_END_DATE:
+        return saveState({
+          ...state,
+          chartEndDate: action.payload?.endDate,
+        });
       default:
         noMatch = true;
         break;

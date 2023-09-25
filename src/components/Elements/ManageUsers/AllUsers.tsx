@@ -332,6 +332,10 @@ export default function AllUsers() {
         setUpdateRoleDialog(false);
         setRevokeRoleDialog(false);
         localStorage.setItem('userData', JSON.stringify(res));
+        dispatch({
+          type: ActionType.SET_AZURE_USER,
+          payload: {azureUser :res}
+        });
       },
       err => {
         console.log('err', err);
