@@ -11,6 +11,7 @@ import { ApexOptions } from 'apexcharts';
 import { Link, useNavigate } from 'react-router-dom';
 import {
   Box,
+  CircularProgress,
   FormControl,
   Grid,
   MenuItem,
@@ -63,6 +64,7 @@ export default function AverageRetroChart({
   const [averageRetros, setAverageRetros] = useState([]);
   const [months, setMonths] = useState([]);
   const [global, dispatch] = React.useContext(GlobalContext);
+  const [loading,setLoading]=useState<boolean>(true);
   const [fromDate, setFromDate] = useState<string>(
     global.chartStartDate
       ? global.chartStartDate
@@ -169,8 +171,9 @@ export default function AverageRetroChart({
      fromDate: formatDateForAPI(fromDate),
      toDate: formatDateForAPI(toDate),
    };
+   setLoading(true)
     await getCountOfAllSessionsOverTime(chartInput).then(res => {
-   
+      setLoading(false)
       if(res.data.length>0)
       {setRetrosCounts(res.data);
       var totalRetrocount = 0;
@@ -190,6 +193,8 @@ export default function AverageRetroChart({
         setMonths([]);
         setTotalAverageSessions(0)
       }
+    },err=>{
+      setLoading(false)
     });
   }
     // await getRetrosCount('10', '16', team).then(
@@ -297,6 +302,8 @@ export default function AverageRetroChart({
   };
 
   return (
+<>
+    {loading?<CircularProgress />:
     <>
       {dashboard ? (
         <ReactApexChart
@@ -458,6 +465,6 @@ export default function AverageRetroChart({
           </Grid>
         </Grid>
       )}
-    </>
+    </>}</>
   );
 }

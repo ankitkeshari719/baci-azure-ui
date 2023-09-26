@@ -10,6 +10,7 @@ import ReactApexChart from 'react-apexcharts';
 import { ApexOptions } from 'apexcharts';
 import {
   Box,
+  CircularProgress,
   FormControl,
   Grid,
   MenuItem,
@@ -45,6 +46,7 @@ export default function EnterpriseLevelSentimentsMoodsChart({
   const [happyMoodPercentage, setHappyMoodPercentage] = useState<number>();
   const [months, setMonths] = useState<any[]>([]);
   const [global, dispatch] = React.useContext(GlobalContext);
+  const [loading,setLoading]=useState<boolean>(true);
   const [fromDate, setFromDate] = useState<string>(
     global.chartStartDate
       ? global.chartStartDate
@@ -130,8 +132,10 @@ export default function EnterpriseLevelSentimentsMoodsChart({
      fromDate: formatDateForAPI(fromDate),
      toDate: formatDateForAPI(toDate),
    };
+   setLoading(true);
 
     await getParticipantMoodCount(chartInput).then(res => {
+      setLoading(false)
       if (res.data.length > 0) {
         let chartData: any[] = [];
         var totalHappyCards = 0;
@@ -190,6 +194,8 @@ export default function EnterpriseLevelSentimentsMoodsChart({
         setNeutralMoods([]);
         setHappyMoods([]);
       }
+    },err=>{
+      setLoading(false)
     });}
   };
 
@@ -293,8 +299,14 @@ export default function EnterpriseLevelSentimentsMoodsChart({
   };
 
   return (
+    
+    <>
+  {loading?<CircularProgress />:
+
+
     <>
       {dashboard ? (
+      
         <ReactApexChart
           options={options}
           series={series}
@@ -422,6 +434,8 @@ export default function EnterpriseLevelSentimentsMoodsChart({
           </Grid>
         </Grid>
       )}
+    </>}
+
     </>
   );
 }

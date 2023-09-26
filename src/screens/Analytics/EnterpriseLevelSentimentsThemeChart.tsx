@@ -3,6 +3,7 @@ import ReactApexChart from 'react-apexcharts';
 import { ApexOptions } from 'apexcharts';
 import {
   Box,
+  CircularProgress,
   FormControl,
   Grid,
   MenuItem,
@@ -51,6 +52,7 @@ export default function EnterpriseLevelSentimentsThemeChart({
           '0' +
           new Date().getMonth().toString().slice(-2)
   );
+  const [loading,setLoading]=useState<boolean>(true);
   const [toDate, setToDate] = useState<string>(
     global.chartEndDate
       ? global.chartEndDate
@@ -112,8 +114,10 @@ export default function EnterpriseLevelSentimentsThemeChart({
      fromDate: formatDateForAPI(fromDate),
      toDate: formatDateForAPI(toDate),
    };
+   setLoading(true)
 
     await getEmotionsAsPerCategory(chartInput).then(res => {
+      setLoading(false)
       if (res.data.length > 0) {
         let data: any[] = [];
         var totalCards = 0;
@@ -169,6 +173,8 @@ export default function EnterpriseLevelSentimentsThemeChart({
         setHappyPercentage(0);
         setCardsPerPercentage(1);
       }
+    },error=>{
+      setLoading(false)
     });
   }
     // await getEnterpriseLevelSentimentsTheme("10", "16", team).then(
@@ -406,6 +412,7 @@ export default function EnterpriseLevelSentimentsThemeChart({
     }
   }, [global.chartStartDate, global.chartEndDate]);
   return (
+    <>{loading?<CircularProgress />:
     <>
       {dashboard ? (
         <ReactApexChart
@@ -557,6 +564,6 @@ export default function EnterpriseLevelSentimentsThemeChart({
           </Grid>
         </Grid>
       )}
-    </>
+    </>}</>
   );
 }

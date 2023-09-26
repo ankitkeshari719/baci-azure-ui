@@ -6,17 +6,20 @@ import FormControl from '@mui/material/FormControl';
 import Select, { SelectChangeEvent } from '@mui/material/Select';
 import { getAllTeamsByEnterpriseId } from '../../helpers/msal/services';
 import { MenuProps } from '../../screens/Analytics/const';
+import { H5SemiBoldTypography } from '../CustomizedTypography';
 
 type Props = {
   enterpriseId: string;
   selectedTeam: string;
   handleChange: any;
+  padding?:string
 };
 
 export default function TeamSelector({
   enterpriseId,
   selectedTeam,
   handleChange,
+  padding
 }: Props) {
   const [teams, setTeams] = React.useState<any>([]);
 
@@ -57,18 +60,23 @@ export default function TeamSelector({
               display: 'flex',
               justifyContent: 'center',
               alignItems: 'flex-start',
-              padding: '16px',
+              padding: padding?padding:'16px',
             },
           }}
         >
           <MenuItem value="all" key="all">
-            All
+          <H5SemiBoldTypography 
+           label={"All Teams"} />  
           </MenuItem>
           {teams.map((team: any) => {
             return (
               <MenuItem value={team.teamId} key={team.teamId}>
-                {team.teamName}
+              
+              <H5SemiBoldTypography 
+           label={team.teamName} />  
+                
               </MenuItem>
+              
             );
           })}
         </Select>

@@ -4,6 +4,7 @@ import ReactApexChart from 'react-apexcharts';
 import { ApexOptions } from 'apexcharts';
 import {
   Box,
+  CircularProgress,
   FormControl,
   Grid,
   MenuItem,
@@ -64,6 +65,7 @@ export default function EnterpriseLevelActionsCountChart({
 
     new Date().getFullYear().toString()  + '-' +  '0' + (new Date().getMonth() ).toString().slice(-2)
   );
+  const [loading,setLoading]=useState<boolean>(true);
   const [toDate, setToDate] = useState<string>(
     global.chartEndDate ? global.chartEndDate :  new Date().getFullYear().toString()  + '-' +  '0' + (new Date().getMonth() + 1).toString().slice(-2)
   );
@@ -130,7 +132,9 @@ export default function EnterpriseLevelActionsCountChart({
      fromDate: formatDateForAPI(fromDate),
      toDate: formatDateForAPI(toDate),
    };
+   setLoading(true)
      await getActionsChartData(chartInput).then(res=>{
+      setLoading(false)
       setEnterpriseLevelActions(res.chartData);
       setAssignedActions(res.chartData?.map((item: any) => item.pending))
       setCompletedActions(res.chartData?.map((item: any) => item.completed))
@@ -148,6 +152,7 @@ export default function EnterpriseLevelActionsCountChart({
       setCompletedPercentage(tempCompletedPercentage)
      },
      err=>{
+      setLoading(false);
       console.log('err', err);
      })
     }
@@ -263,6 +268,8 @@ export default function EnterpriseLevelActionsCountChart({
   }, [global.chartStartDate, global.chartEndDate]);
 
   return (
+<>
+    {loading?<CircularProgress />:
     <>
       {dashboard ? (
         <ReactApexChart
@@ -420,6 +427,7 @@ export default function EnterpriseLevelActionsCountChart({
           </Grid>
         </Grid>
       )}
+    </>}
     </>
   );
 }

@@ -64,6 +64,9 @@ import AverageRetroChart from '../../../screens/Analytics/AverageRetroChart';
 import { styled } from '@mui/material/styles';
 import Tooltip, { TooltipProps, tooltipClasses } from '@mui/material/Tooltip';
 import DateSelector from './DateSelector';
+import TeamSelector from '../TeamSelector';
+import { BASIC, ENTERPRISE } from '../../../constants/applicationConst';
+import { ContainedButtonWithIcon } from '../../CustomizedButton/ContainedButtonWithIcon';
 
 const theme = createTheme({
   palette: {
@@ -201,6 +204,16 @@ function EnterpriseDashboard() {
     },
   ];
 
+  function createNewTeam() {
+    if (global.azureUser?.roleName && global.azureUser?.roleName === BASIC) {
+      navigate('/basic/teams/create/');
+    } else if (
+      global.azureUser?.roleName &&
+      global.azureUser?.roleName === ENTERPRISE
+    ) {
+      navigate('/enterprise/teams/create/');
+    }
+  }
   // Call function to get Sessions
   React.useEffect(() => {
     handleGetRetroChartData();
@@ -341,7 +354,7 @@ function EnterpriseDashboard() {
         {/* Bottom container */}
         <Box display="flex" flexDirection="column" sx={{ overflow: 'auto' }}>
           {/* Teams list menu start */}
-          <Box display="flex" flexDirection="row" width="100%" mt="10px">
+          {/* <Box display="flex" flexDirection="row" width="100%" mt="10px">
             {menuList.map((menu, index) => {
               return (
                 <Box
@@ -398,121 +411,9 @@ function EnterpriseDashboard() {
                 </Box>
               );
             })}
-          </Box>
+          </Box> */}
           {/* Retro list starts here after hover */}
-          <Box
-            width="calc(100% - 100px)"
-            height="241px"
-            sx={{
-              background: 'white',
-              display: hoverOnMenu ? 'flex' : 'none',
-              flexDirection: 'row',
-              alignItems: 'center',
-              position: 'absolute',
-              top: '140px',
-              zIndex: '4',
-              cursor: 'pointer',
-              overflowX: 'auto',
-            }}
-          >
-            {/* RetroCard Info */}
-            {menuList[hoverIndex].retros.map((subMenu, index) => {
-              return (
-                <Box
-                  width="297px"
-                  minWidth="297px"
-                  height="185px"
-                  borderRadius="10px"
-                  key={'submenu' + index}
-                  sx={{
-                    border: '1px solid rgba(227, 227, 227, 1)',
 
-                    background: 'white',
-
-                    padding: '16px 16px 0px 16px',
-
-                    display: 'flex',
-
-                    flexDirection: 'column',
-
-                    gap: '12px',
-
-                    mr: '10px',
-
-                    ml: '10px',
-                  }}
-                >
-                  <H6SemiBoldTypography label={subMenu.retroName} />
-
-                  <CaptionRegularTypography
-                    label={
-                      subMenu.retroStatus == 'Done'
-                        ? subMenu.retroDate
-                        : 'Code : ' + subMenu.retroCode
-                    }
-                  />
-
-                  {subMenu.retroStatus == 'Done' ? (
-                    <>
-                      <CaptionSemiBoldTypography
-                        label={subMenu.actions + ' Actions'}
-                        style={{ color: commonStyles.PrimaryMain }}
-                      />
-
-                      <Box>
-                        <CaptionRegularTypography label="Participants " />
-
-                        {subMenu.users.map((user, index) => {
-                          {
-                            return (
-                              index < 4 && (
-                                <Avatar
-                                  key={user.name}
-                                  avatar={user.avatar}
-                                  css={{
-                                    width: '40px',
-
-                                    height: '40px',
-
-                                    marginLeft: '0',
-
-                                    marginRight: '-8px',
-
-                                    border: '0px',
-                                  }}
-                                />
-                              )
-                            );
-                          }
-                        })}
-
-                        <CaptionRegularTypography
-                          style={{ marginLeft: '14px' }}
-                          label={'+' + (subMenu.users.length + 1 - 4)}
-                        />
-                      </Box>
-                    </>
-                  ) : (
-                    <>
-                      <CaptionRegularTypography
-                        label={
-                          'Link : ' + 'http://app.baci.com/' + subMenu.retroCode
-                        }
-                      />
-
-                      <Button
-                        variant="outlined"
-                        sx={{ borderRadius: '24px', fontWeight: '500px' }}
-                        color="primary"
-                      >
-                        <ButtonLabelTypography label="START SESSION" />
-                      </Button>
-                    </>
-                  )}
-                </Box>
-              );
-            })}
-          </Box>
           {/* Analytics start here */}
           <Box
             minHeight="540px"
@@ -547,7 +448,7 @@ function EnterpriseDashboard() {
                 alignItems="center"
                 justifyContent="flex-start"
               >
-                <H4RegularTypography label="Analytics" />
+                {/* <H4RegularTypography label="Analytics" />
                 <ReactToPrint
                   trigger={() => (
                     <OutlinedButton
@@ -561,14 +462,35 @@ function EnterpriseDashboard() {
                     />
                   )}
                   content={() => componentRef.current}
-                />
-              </Box>
-              <Box>
+                /> */}
+
                 <DateSelector
                   handleFromDate={handleFromDate}
                   handleToDate={handleToDate}
                   fromDate={fromDate}
                   toDate={toDate}
+                  disable={true}
+                />
+                <TeamSelector
+                  enterpriseId={
+                    global.azureUser?.enterpriseId
+                      ? global.azureUser?.enterpriseId
+                      : '0'
+                  }
+                  padding="5px"
+                  selectedTeam={'all'}
+                  handleChange={(change: any) => {
+                    console.log(change);
+                  }}
+                />
+
+                <ContainedButtonWithIcon
+                  id={'create_new_Team'}
+                  label={'New Team'}
+                  size={'small'}
+                  iconPath="/svgs/plusSmall.svg"
+                  style={{ width: '200px', textAlign: 'center' }}
+                  onClick={() => createNewTeam()}
                 />
               </Box>
             </Box>
@@ -1018,7 +940,6 @@ function EnterpriseDashboard() {
                     team={selectId}
                   />
                 </Box>
-               
               </Box>
 
               {/* Enterprise Level Sentiments Moods Chart */}
@@ -1155,7 +1076,6 @@ function EnterpriseDashboard() {
                     team={selectId}
                   />
                 </Box>
-              
               </Box>
             </Box>
           </Box>

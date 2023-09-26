@@ -10,6 +10,7 @@ import ReactApexChart from 'react-apexcharts';
 import { ApexOptions } from 'apexcharts';
 import {
   Box,
+  CircularProgress,
   FormControl,
   Grid,
   MenuItem,
@@ -71,6 +72,7 @@ export default function TeamLevelActionsCountChart({
           '0' +
           new Date().getMonth().toString().slice(-2)
   );
+  const [loading,setLoading]=useState<boolean>(true);
   const [toDate, setToDate] = useState<string>(
     global.chartEndDate
       ? global.chartEndDate
@@ -139,10 +141,11 @@ export default function TeamLevelActionsCountChart({
      toDate: formatDateForAPI(toDate),
    };
 
-
+   setLoading(true);
     await getTeamLevelActionsDataForChart(chartInput).then(
       res => {
         // console.log(res.data);
+        setLoading(false);
         if (res.data.length > 0) {
           let tempData = [];
           let assignedArray = [];
@@ -182,8 +185,10 @@ export default function TeamLevelActionsCountChart({
           setNoData(true);
         }
       },
+   
       err => {
         console.log(err);
+        setLoading(false);
       }
     );}
   };
@@ -295,7 +300,8 @@ export default function TeamLevelActionsCountChart({
     setToDate(event.target.value as string);
   };
 
-  return (
+  return (<>
+    {loading?<CircularProgress />:
     <>
       {dashboard ? (
         <ReactApexChart
@@ -467,6 +473,6 @@ export default function TeamLevelActionsCountChart({
           </Grid>
         </Grid>
       )}
-    </>
+    </>}</>
   );
 }

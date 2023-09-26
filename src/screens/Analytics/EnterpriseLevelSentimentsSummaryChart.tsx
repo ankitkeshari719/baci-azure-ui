@@ -157,7 +157,7 @@ export default function EnterpriseLevelSentimentsSummaryChart({
       let tempKeywords: any[] = [];
       const keywordsData=res.data.keywords?res.data.keywords:[];
       keywordsData.forEach((item: any) => {
-        console.log(item)
+
         tempKeywords.push({
           text: item,
           size: randomIntFromInterval(45, 120),
