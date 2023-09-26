@@ -59,7 +59,7 @@ export default function AllUsers() {
   const [global, dispatch] = React.useContext(GlobalContext);
   const [height, setHeight] = React.useState(0);
   const [isManageUserPage, setIsManageUserPage] = React.useState(false);
-  const [selectedTeam, setSelectedTeam] = React.useState('all');
+  const [selectedTeam, setSelectedTeam] = React.useState('0');
   const [isSelectAllChecked, setIsSelectAllChecked] = React.useState(false);
   const [openDeleteUserDialog, setOpenDeleteUserDialog] = React.useState(false);
   const [openUpdateRoleDialog, setUpdateRoleDialog] = React.useState(false);
