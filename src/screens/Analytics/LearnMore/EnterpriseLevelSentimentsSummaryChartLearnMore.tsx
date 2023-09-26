@@ -3,14 +3,13 @@ import { Box, Grid, List, ListItem, Paper, Typography } from '@mui/material';
 import * as Icons from 'heroicons-react';
 import { useNavigate } from 'react-router-dom';
 import {
+  BodyRegularTypography,
   BodySemiBoldTypography,
   H2SemiBoldTypography,
+  H6RegularTypography,
 } from '../../../components/CustomizedTypography';
 import * as React from 'react';
-import {
-  BASIC,
-  ENTERPRISE,
-} from '../../../constants/applicationConst';
+import { BASIC, ENTERPRISE } from '../../../constants/applicationConst';
 
 export default function EnterpriseLevelSentimentsSummaryChartLearnMore() {
   const navigate = useNavigate();
@@ -21,30 +20,26 @@ export default function EnterpriseLevelSentimentsSummaryChartLearnMore() {
   function goToDashboard() {
     if (tempLocalUserData && tempLocalUserData.roleName === BASIC) {
       navigate('/basic/analytics');
-    } else if (
-      tempLocalUserData &&
-      tempLocalUserData.roleName === ENTERPRISE
-    ) {
+    } else if (tempLocalUserData && tempLocalUserData.roleName === ENTERPRISE) {
       navigate('/enterprise/analytics');
     }
   }
 
   return (
-    <>
-      <Paper
-        sx={{
-          width: '100%',
-          background: 'rgb(249 251 252)',
-          padding: '20px',
-          display: 'flex',
-          flexDirection: 'column',
-          overflowY: 'auto',
-        }}
-      >
-        <Box
-          sx={{ display: 'flex', flexDirection: 'row', marginBottom: '10px' }}
+    <Box
+      sx={{
+        width: '100%',
+        display: 'flex',
+        flexDirection: 'column',
+        background: 'rgb(249 251 252)',
+        padding: '24px 48px',
+        overflowY: 'scroll !important',
+      }}
+    >
+      <Box
+          sx={{ display: 'flex', flexDirection: 'row',  }}
         >
-          <BodySemiBoldTypography
+          <BodyRegularTypography
             label="Analytics "
             style={{
               color: '#00E',
@@ -53,9 +48,9 @@ export default function EnterpriseLevelSentimentsSummaryChartLearnMore() {
             }}
             onClick={goToDashboard}
           />
-          <BodySemiBoldTypography
+          <H6RegularTypography
             label="\  Overall Summary - Paragraph and Word Cloud"
-            style={{}}
+            style={{ color: '#4E4E4E' }}
           />
         </Box>
         <Box
@@ -63,6 +58,7 @@ export default function EnterpriseLevelSentimentsSummaryChartLearnMore() {
           flexDirection="row"
           alignItems="center"
           justifyContent="flex-start"
+          sx={{ marginTop: '12px' }}
         >
           <Icons.ArrowCircleLeftOutline
             size={20}
@@ -82,7 +78,16 @@ export default function EnterpriseLevelSentimentsSummaryChartLearnMore() {
             style={{ color: commonStyles.PrimaryDark, marginLeft: '16px' }}
           />
         </Box>
-        <Grid container spacing={0} className="retroContainer">
+      <Paper
+        sx={{
+          border: ' 1px solid #FAFAFA',
+          background: '#FFF',
+          boxShadow: '10px 10px 40px 20px rgba(21, 154, 221, 0.08)',
+          marginTop: '24px',
+        }}
+      >
+        
+        <Grid container spacing={0} sx={{ padding: '24px' }}>
           {/* About  Overall Summary - Paragraph and Word Cloud */}
           <Grid item xs={12}>
             <Box
@@ -104,7 +109,7 @@ export default function EnterpriseLevelSentimentsSummaryChartLearnMore() {
             }}
           >
             {/* What is Simple  Count of Team Actions (Assigned vs Completed) Template */}
-            <Grid container mt={6}>
+            <Grid container>
               <Grid
                 item
                 xs={12}
@@ -265,6 +270,7 @@ export default function EnterpriseLevelSentimentsSummaryChartLearnMore() {
               alignItems: 'flex-start',
               justifyContent: 'flex-start',
               width: '50%',
+              paddingLeft: '16px',
             }}
           >
             {/* Image */}
@@ -293,6 +299,6 @@ export default function EnterpriseLevelSentimentsSummaryChartLearnMore() {
           </Box>
         </Grid>
       </Paper>
-    </>
+    </Box>
   );
 }

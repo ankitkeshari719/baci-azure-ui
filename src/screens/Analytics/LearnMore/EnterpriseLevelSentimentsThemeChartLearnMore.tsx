@@ -3,13 +3,12 @@ import { Box, Grid, Paper, Typography } from '@mui/material';
 import * as Icons from 'heroicons-react';
 import { useNavigate } from 'react-router-dom';
 import {
+  BodyRegularTypography,
   BodySemiBoldTypography,
   H2SemiBoldTypography,
+  H6RegularTypography,
 } from '../../../components/CustomizedTypography';
-import {
-  BASIC,
-  ENTERPRISE,
-} from '../../../constants/applicationConst';
+import { BASIC, ENTERPRISE } from '../../../constants/applicationConst';
 
 export default function EnterpriseLevelSentimentsThemeChartLearnMore() {
   const navigate = useNavigate();
@@ -20,68 +19,71 @@ export default function EnterpriseLevelSentimentsThemeChartLearnMore() {
   function goToDashboard() {
     if (tempLocalUserData && tempLocalUserData.roleName === BASIC) {
       navigate('/basic/analytics');
-    }  else if (
-      tempLocalUserData &&
-      tempLocalUserData.roleName === ENTERPRISE
-    ) {
+    } else if (tempLocalUserData && tempLocalUserData.roleName === ENTERPRISE) {
       navigate('/enterprise/analytics');
     }
   }
 
   return (
-    <>
+    <Box
+      sx={{
+        width: '100%',
+        display: 'flex',
+        flexDirection: 'column',
+        background: 'rgb(249 251 252)',
+        padding: '24px 48px',
+        overflowY: 'scroll !important',
+      }}
+    >
+      <Box sx={{ display: 'flex', flexDirection: 'row' }}>
+        <BodyRegularTypography
+          label="Analytics "
+          style={{
+            color: '#00E',
+            cursor: 'pointer',
+            textDecorationLine: 'underline',
+          }}
+          onClick={goToDashboard}
+        />
+        <H6RegularTypography
+          label="\  Sentiments - Key Themes Heatmap"
+          style={{ color: '#4E4E4E' }}
+        />
+      </Box>
+      <Box
+        display="flex"
+        flexDirection="row"
+        alignItems="center"
+        justifyContent="flex-start"
+        sx={{ marginTop: '12px' }}
+      >
+        <Icons.ArrowCircleLeftOutline
+          size={20}
+          style={{
+            width: '24px',
+            height: '24px',
+            display: 'block',
+            right: '0px',
+            color: '#159ADD',
+            fontSize: '14px',
+            cursor: 'pointer',
+          }}
+          onClick={goToDashboard}
+        />
+        <H2SemiBoldTypography
+          label=" Sentiments - Key Themes Heatmap"
+          style={{ color: commonStyles.PrimaryDark, marginLeft: '16px' }}
+        />
+      </Box>
       <Paper
         sx={{
-          width: '100%',
-          background: 'rgb(249 251 252)',
-          padding: '20px',
-          display: 'flex',
-          flexDirection: 'column',
-          overflowY: 'auto',
+          border: ' 1px solid #FAFAFA',
+          background: '#FFF',
+          boxShadow: '10px 10px 40px 20px rgba(21, 154, 221, 0.08)',
+          marginTop: '24px',
         }}
       >
-        <Box
-          sx={{ display: 'flex', flexDirection: 'row', marginBottom: '10px' }}
-        >
-          <BodySemiBoldTypography
-            label="Analytics "
-            style={{
-              color: '#00E',
-              cursor: 'pointer',
-              textDecorationLine: 'underline',
-            }}
-            onClick={goToDashboard}
-          />
-          <BodySemiBoldTypography
-            label="\  Sentiments - Key Themes Heatmap"
-            style={{}}
-          />
-        </Box>
-        <Box
-          display="flex"
-          flexDirection="row"
-          alignItems="center"
-          justifyContent="flex-start"
-        >
-          <Icons.ArrowCircleLeftOutline
-            size={20}
-            style={{
-              width: '24px',
-              height: '24px',
-              display: 'block',
-              right: '0px',
-              color: '#159ADD',
-              fontSize: '14px',
-              cursor: 'pointer',
-            }}
-            onClick={goToDashboard}
-          />
-          <H2SemiBoldTypography
-            label=" Sentiments - Key Themes Heatmap"
-            style={{ color: commonStyles.PrimaryDark, marginLeft: '16px' }}
-          />
-        </Box>
-        <Grid container spacing={0} className="retroContainer">
+        <Grid container spacing={0} sx={{ padding: '24px' }}>
           {/* About  Sentiments - Key Themes Heatmap */}
           <Grid item xs={12}>
             <Box
@@ -103,7 +105,7 @@ export default function EnterpriseLevelSentimentsThemeChartLearnMore() {
             }}
           >
             {/* What is Simple  Count of Team Actions (Assigned vs Completed) Template */}
-            <Grid container mt={6}>
+            <Grid container>
               <Grid
                 item
                 xs={12}
@@ -299,6 +301,7 @@ export default function EnterpriseLevelSentimentsThemeChartLearnMore() {
               alignItems: 'flex-start',
               justifyContent: 'flex-start',
               width: '50%',
+              paddingLeft: '16px',
             }}
           >
             {/* Image */}
@@ -323,6 +326,6 @@ export default function EnterpriseLevelSentimentsThemeChartLearnMore() {
           </Box>
         </Grid>
       </Paper>
-    </>
+    </Box>
   );
 }
