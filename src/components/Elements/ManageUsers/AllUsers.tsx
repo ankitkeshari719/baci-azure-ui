@@ -59,7 +59,7 @@ export default function AllUsers() {
   const [global, dispatch] = React.useContext(GlobalContext);
   const [height, setHeight] = React.useState(0);
   const [isManageUserPage, setIsManageUserPage] = React.useState(false);
-  const [selectedTeam, setSelectedTeam] = React.useState('all');
+  const [selectedTeam, setSelectedTeam] = React.useState('0');
   const [isSelectAllChecked, setIsSelectAllChecked] = React.useState(false);
   const [openDeleteUserDialog, setOpenDeleteUserDialog] = React.useState(false);
   const [openUpdateRoleDialog, setUpdateRoleDialog] = React.useState(false);
@@ -334,7 +334,7 @@ export default function AllUsers() {
         localStorage.setItem('userData', JSON.stringify(res));
         dispatch({
           type: ActionType.SET_AZURE_USER,
-          payload: {azureUser :res}
+          payload: { azureUser: res },
         });
       },
       err => {
@@ -645,6 +645,7 @@ export default function AllUsers() {
         >
           <BodyRegularTypography
             label={`Are you sure you want to delete user ${tempStoreUserName} ?`}
+            style={{ textAlign: 'center' }}
           />
         </Box>
         {/* Buttons */}
@@ -725,7 +726,7 @@ export default function AllUsers() {
         </DialogTitle>
         <Box
           sx={{
-            width: '600px',
+            width: '650px',
             minWidth: '600px',
             height: height / 4,
             display: 'flex',
@@ -735,6 +736,7 @@ export default function AllUsers() {
         >
           <BodyRegularTypography
             label={`Are you sure you want to update ${tempStoreUserName} role to Enterprise?`}
+            style={{ textAlign: 'center' }}
           />
         </Box>
         {/* Buttons */}
@@ -815,7 +817,7 @@ export default function AllUsers() {
         </DialogTitle>
         <Box
           sx={{
-            width: '600px',
+            width: '650px',
             minWidth: '600px',
             height: height / 4,
             display: 'flex',
@@ -825,6 +827,7 @@ export default function AllUsers() {
         >
           <BodyRegularTypography
             label={`Are you sure you want to revoke ${tempStoreUserName} role to Basic?`}
+            style={{ textAlign: 'center' }}
           />
         </Box>
         {/* Buttons */}

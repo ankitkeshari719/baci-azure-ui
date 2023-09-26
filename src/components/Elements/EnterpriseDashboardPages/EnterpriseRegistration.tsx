@@ -477,6 +477,7 @@ export default function EnterpriseRegistration() {
                 </FormHelperText>
               )}
             </FormControl>
+            {/* Existing Organisation Domain */}
             <Box
               sx={{
                 width: '600px',
@@ -498,7 +499,7 @@ export default function EnterpriseRegistration() {
                       minWidth: '150px',
                       minHeight: '32px',
                       borderRadius: '4px',
-                      background: '#63bcfd',
+                      background: 'rgba(0, 0, 0, 0.04)',
                       textAlign: 'center',
                       display: 'flex',
                       alignItems: 'center',
@@ -509,7 +510,7 @@ export default function EnterpriseRegistration() {
                     <CaptionSemiBoldTypography
                       label={team}
                       style={{
-                        color: '#ffffff !important',
+                        color: '#4E4E4E !important',
                         fontSize: '12px !important',
                       }}
                     />
@@ -564,7 +565,7 @@ export default function EnterpriseRegistration() {
               name={'Update'}
               onClick={() => submitEnterpriseRegistration()}
               style={{
-                marginTop: '16px',
+                marginTop: '16px !important',
                 padding: '10px 18px',
                 gap: '8px',
               }}
