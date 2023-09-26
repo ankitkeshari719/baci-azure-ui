@@ -49,7 +49,7 @@ export default function CreateTeam() {
   const [createdBy, setCreatedBy] = React.useState('');
   const [teamDepartment, setTeamDepartment] = React.useState('');
   const [userEmailIds, setUserEmailIds] = React.useState([
-    'vishal.gawande@evoltech.com',
+    global.azureUser?.emailId,
   ]);
   const [enterpriseId, setEnterpriseId] = React.useState('');
   const [codeTeamNameError, setTeamNameCodeError] = React.useState('');
@@ -67,9 +67,11 @@ export default function CreateTeam() {
   // Function to navigate on all team
   function goToAllTeam() {
     if (tempLocalUserData && tempLocalUserData.roleName === BASIC) {
-      navigate('/basic/teams/allTeams/');
+      // navigate('/basic/teams/allTeams/');
+      navigate(-1)
     } else if (tempLocalUserData && tempLocalUserData.roleName === ENTERPRISE) {
-      navigate('/enterprise/teams/allTeams/');
+      // navigate('/enterprise/teams/allTeams/');
+      navigate(-1)
     }
   }
 

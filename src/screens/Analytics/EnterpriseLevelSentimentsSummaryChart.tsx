@@ -142,28 +142,29 @@ export default function EnterpriseLevelSentimentsSummaryChart({
   const handleGetEnterpriseLevelSentimentSummary = async (
     selectedFormat: string
   ) => {
-    const chartInput: chartInputType = {
-      userId: 'vishal.gawande@evoltech.com.au',
-      roleName: 'Enterprise',
-      enterpriseId: 'evoltech0.0751886606959975',
-      teamId: '0',
-      fromDate: formatDateForAPI(fromDate),
-      toDate: formatDateForAPI(toDate),
-    };
+    if(global.azureUser!=undefined){  
+      const chartInput: chartInputType = {
+     userId: global.azureUser?.emailId,
+     roleName: global.azureUser?.roleName,
+     enterpriseId: global.azureUser?.enterpriseId,
+     teamId: '0',
+     fromDate: formatDateForAPI(fromDate),
+     toDate: formatDateForAPI(toDate),
+   };
 
     await getOverAllSummary(chartInput).then(res => {
       setSummary(res.data.summary);
       let tempKeywords: any[] = [];
       const keywordsData=res.data.keywords?res.data.keywords:[];
       keywordsData.forEach((item: any) => {
-        console.log(item)
+
         tempKeywords.push({
           text: item,
           size: randomIntFromInterval(45, 120),
         });
       });
       setKeywords(tempKeywords);
-    });
+    });}
 
     // await getEnterpriseLevelSentimentSummary(selectedFormat, team).then(
     //   res => {

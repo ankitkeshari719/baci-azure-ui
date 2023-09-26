@@ -108,6 +108,10 @@ export function UserHeader({ accounts }: Props) {
       res => {
         localStorage.setItem('userAzureData', JSON.stringify(accounts));
         localStorage.setItem('userData', JSON.stringify(res));
+        dispatch({
+          type: ActionType.SET_AZURE_USER,
+          payload: {azureUser :res}
+        });
         if (res.roleName === BASIC) {
           navigate('basic');
         } else if (res.roleName === ENTERPRISE) {
@@ -159,6 +163,10 @@ export function UserHeader({ accounts }: Props) {
               payload: { loadingFlag: false },
             });
             localStorage.setItem('userData', JSON.stringify(res));
+            dispatch({
+              type: ActionType.SET_AZURE_USER,
+              payload: res,
+            });
             checkUser();
           }
         },

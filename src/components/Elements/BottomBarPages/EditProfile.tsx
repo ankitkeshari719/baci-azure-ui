@@ -236,6 +236,10 @@ export default function EditProfile({ handleEdit }: Props) {
           payload: { loadingFlag: false },
         });
         localStorage.setItem('userData', JSON.stringify(res));
+        dispatch({
+          type: ActionType.SET_AZURE_USER,
+          payload: {azureUser :res}
+        });
         handleEdit();
       },
       err => {
@@ -323,6 +327,10 @@ export default function EditProfile({ handleEdit }: Props) {
           payload: { loadingFlag: false },
         });
         localStorage.setItem('userData', JSON.stringify(res));
+        dispatch({
+          type: ActionType.SET_AZURE_USER,
+          payload: {azureUser :res}
+        });
         setIsEnterpriserRequested(!isEnterpriserRequested);
       },
       err => {

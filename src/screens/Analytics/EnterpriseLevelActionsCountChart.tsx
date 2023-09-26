@@ -4,6 +4,7 @@ import ReactApexChart from 'react-apexcharts';
 import { ApexOptions } from 'apexcharts';
 import {
   Box,
+  CircularProgress,
   FormControl,
   Grid,
   MenuItem,
@@ -64,6 +65,7 @@ export default function EnterpriseLevelActionsCountChart({
 
     new Date().getFullYear().toString()  + '-' +  '0' + (new Date().getMonth() ).toString().slice(-2)
   );
+  const [loading,setLoading]=useState<boolean>(true);
   const [toDate, setToDate] = useState<string>(
     global.chartEndDate ? global.chartEndDate :  new Date().getFullYear().toString()  + '-' +  '0' + (new Date().getMonth() + 1).toString().slice(-2)
   );
@@ -121,15 +123,18 @@ export default function EnterpriseLevelActionsCountChart({
 
   const handleEnterpriseLevelActionsCountData = async () => {
 
-    const chartInput :chartInputType ={
-      userId:"vishal.gawande@evoltech.com.au",
-      roleName:"Enterprise",
-      enterpriseId:"evoltech0.0751886606959975",
-      teamId:"0",
-      fromDate: formatDateForAPI(fromDate),
-      toDate:formatDateForAPI(toDate)
-    }
+    if(global.azureUser!=undefined){  
+      const chartInput: chartInputType = {
+     userId: global.azureUser?.emailId,
+     roleName: global.azureUser?.roleName,
+     enterpriseId: global.azureUser?.enterpriseId,
+     teamId: '0',
+     fromDate: formatDateForAPI(fromDate),
+     toDate: formatDateForAPI(toDate),
+   };
+   setLoading(true)
      await getActionsChartData(chartInput).then(res=>{
+      setLoading(false)
       setEnterpriseLevelActions(res.chartData);
       setAssignedActions(res.chartData?.map((item: any) => item.pending))
       setCompletedActions(res.chartData?.map((item: any) => item.completed))
@@ -147,9 +152,10 @@ export default function EnterpriseLevelActionsCountChart({
       setCompletedPercentage(tempCompletedPercentage)
      },
      err=>{
+      setLoading(false);
       console.log('err', err);
      })
-
+    }
   };
 
   const series = [
@@ -262,6 +268,8 @@ export default function EnterpriseLevelActionsCountChart({
   }, [global.chartStartDate, global.chartEndDate]);
 
   return (
+<>
+    {loading?<CircularProgress />:
     <>
       {dashboard ? (
         <ReactApexChart
@@ -419,6 +427,7 @@ export default function EnterpriseLevelActionsCountChart({
           </Grid>
         </Grid>
       )}
+    </>}
     </>
   );
 }

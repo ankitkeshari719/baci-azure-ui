@@ -10,6 +10,7 @@ import ReactApexChart from 'react-apexcharts';
 import { ApexOptions } from 'apexcharts';
 import {
   Box,
+  CircularProgress,
   FormControl,
   Grid,
   MenuItem,
@@ -66,6 +67,7 @@ export default function AverageParticipantChart({
   const [averageParticipants, setAverageParticipants] = useState([]);
   const [months, setMonths] = useState([]);
   const [global, dispatch] = React.useContext(GlobalContext);
+  const [loading,setLoading]=useState<boolean>(true);
   const [fromDate, setFromDate] = useState<string>(
     global.chartStartDate
       ? global.chartStartDate
@@ -146,18 +148,22 @@ export default function AverageParticipantChart({
   }, [team]);
 
   const handleGetParticipantChartData = async () => {
-    const chartInput: chartInputType = {
-      userId: 'vishal.gawande@evoltech.com.au',
-      roleName: 'Enterprise',
-      enterpriseId: 'evoltech0.0751886606959975',
+
+
+    if(global.azureUser!=undefined){  
+       const chartInput: chartInputType = {
+      userId: global.azureUser?.emailId,
+      roleName: global.azureUser?.roleName,
+      enterpriseId: global.azureUser?.enterpriseId,
       teamId: '0',
       fromDate: formatDateForAPI(fromDate),
       toDate: formatDateForAPI(toDate),
     };
+    setLoading(true)
 
     await getCountOfAllParticipantsOverTime(chartInput).then(
       res => {
-       
+        setLoading(false)
         setParticipantsCounts(res.data);
         setAverageParticipants(res.data?.map((item: any) => item.userCount));
         setMonths(
@@ -172,8 +178,10 @@ export default function AverageParticipantChart({
       },
       err => {
         console.log(err);
+        setLoading(false)
       }
-    );
+    );}
+ 
   };
 
   const series = [
@@ -260,7 +268,8 @@ export default function AverageParticipantChart({
     setToDate(event.target.value as string);
   };
 
-  return (
+  return (<>
+    {loading?<CircularProgress />:
     <>
       {dashboard ? (
         <ReactApexChart
@@ -425,6 +434,6 @@ export default function AverageParticipantChart({
           </Grid>
         </Grid>
       )}
-    </>
+    </>}</>
   );
 }

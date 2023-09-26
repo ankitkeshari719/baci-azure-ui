@@ -59,8 +59,15 @@ export class Global {
   isMaintenanceScheduled?: boolean = false;
   lastGlobalStateUpdate: Date | undefined = new Date();
   jiraCode?: string ="";
-  chartStartDate?:string="10";
-  chartEndDate?:string="16"
+  chartStartDate?:string= new Date().getFullYear().toString() +
+  '-' +
+  '0' +
+  new Date().getMonth().toString().slice(-2);
+  chartEndDate?:string=new Date().getFullYear().toString() +
+  '-' +
+  '0' +
+  (new Date().getMonth() + 1).toString().slice(-2);
+  azureUser?:AzureUser;
 }
 
 export class LastRetroName {
@@ -240,3 +247,18 @@ export interface DyanamicDialog {
   agreeLabel:string;
 
 }
+
+export interface AzureUser 
+  {
+    firstName: string;
+    lastName: string;
+    emailId: string;
+    phoneNo: string;
+    name: string;
+    roleName: string;
+    enterpriseId: string;
+    enterpriseName: string;
+    selectedAvatar: string;
+    teams: string[];
+    isActive: boolean;
+  };

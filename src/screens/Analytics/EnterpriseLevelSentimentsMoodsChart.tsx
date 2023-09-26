@@ -10,6 +10,7 @@ import ReactApexChart from 'react-apexcharts';
 import { ApexOptions } from 'apexcharts';
 import {
   Box,
+  CircularProgress,
   FormControl,
   Grid,
   MenuItem,
@@ -45,6 +46,7 @@ export default function EnterpriseLevelSentimentsMoodsChart({
   const [happyMoodPercentage, setHappyMoodPercentage] = useState<number>();
   const [months, setMonths] = useState<any[]>([]);
   const [global, dispatch] = React.useContext(GlobalContext);
+  const [loading,setLoading]=useState<boolean>(true);
   const [fromDate, setFromDate] = useState<string>(
     global.chartStartDate
       ? global.chartStartDate
@@ -121,16 +123,19 @@ export default function EnterpriseLevelSentimentsMoodsChart({
   }, [team]);
 
   const handleGetEnterpriseLevelSentimentsMoods = async () => {
-    const chartInput: chartInputType = {
-      userId: 'vishal.gawande@evoltech.com.au',
-      roleName: 'Enterprise',
-      enterpriseId: 'evoltech0.0751886606959975',
-      teamId: '0',
-      fromDate: formatDateForAPI(fromDate),
-      toDate: formatDateForAPI(toDate),
-    };
+    if(global.azureUser!=undefined){  
+      const chartInput: chartInputType = {
+     userId: global.azureUser?.emailId,
+     roleName: global.azureUser?.roleName,
+     enterpriseId: global.azureUser?.enterpriseId,
+     teamId: '0',
+     fromDate: formatDateForAPI(fromDate),
+     toDate: formatDateForAPI(toDate),
+   };
+   setLoading(true);
 
     await getParticipantMoodCount(chartInput).then(res => {
+      setLoading(false)
       if (res.data.length > 0) {
         let chartData: any[] = [];
         var totalHappyCards = 0;
@@ -189,7 +194,9 @@ export default function EnterpriseLevelSentimentsMoodsChart({
         setNeutralMoods([]);
         setHappyMoods([]);
       }
-    });
+    },err=>{
+      setLoading(false)
+    });}
   };
 
   const handleFromDate = (event: SelectChangeEvent) => {
@@ -292,8 +299,14 @@ export default function EnterpriseLevelSentimentsMoodsChart({
   };
 
   return (
+    
+    <>
+  {loading?<CircularProgress />:
+
+
     <>
       {dashboard ? (
+      
         <ReactApexChart
           options={options}
           series={series}
@@ -421,6 +434,8 @@ export default function EnterpriseLevelSentimentsMoodsChart({
           </Grid>
         </Grid>
       )}
+    </>}
+
     </>
   );
 }

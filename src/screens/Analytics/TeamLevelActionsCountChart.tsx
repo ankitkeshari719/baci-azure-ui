@@ -10,6 +10,7 @@ import ReactApexChart from 'react-apexcharts';
 import { ApexOptions } from 'apexcharts';
 import {
   Box,
+  CircularProgress,
   FormControl,
   Grid,
   MenuItem,
@@ -71,6 +72,7 @@ export default function TeamLevelActionsCountChart({
           '0' +
           new Date().getMonth().toString().slice(-2)
   );
+  const [loading,setLoading]=useState<boolean>(true);
   const [toDate, setToDate] = useState<string>(
     global.chartEndDate
       ? global.chartEndDate
@@ -129,19 +131,21 @@ export default function TeamLevelActionsCountChart({
   }
 
   const handleGetTeamLevelActionsCountsData = async () => {
-    const chartInput: chartInputType = {
-      userId: 'vishal.gawande@evoltech.com.au',
-      roleName: 'Enterprise',
-      enterpriseId: 'evoltech0.0751886606959975',
-      teamId: '0',
-      fromDate: formatDateForAPI(fromDate),
-      toDate: formatDateForAPI(toDate),
-    };
+    if(global.azureUser!=undefined){  
+      const chartInput: chartInputType = {
+     userId: global.azureUser?.emailId,
+     roleName: global.azureUser?.roleName,
+     enterpriseId: global.azureUser?.enterpriseId,
+     teamId: '0',
+     fromDate: formatDateForAPI(fromDate),
+     toDate: formatDateForAPI(toDate),
+   };
 
-
+   setLoading(true);
     await getTeamLevelActionsDataForChart(chartInput).then(
       res => {
         // console.log(res.data);
+        setLoading(false);
         if (res.data.length > 0) {
           let tempData = [];
           let assignedArray = [];
@@ -181,10 +185,12 @@ export default function TeamLevelActionsCountChart({
           setNoData(true);
         }
       },
+   
       err => {
         console.log(err);
+        setLoading(false);
       }
-    );
+    );}
   };
   React.useEffect(() => {
     const fromDateInput = global.chartStartDate;
@@ -294,7 +300,8 @@ export default function TeamLevelActionsCountChart({
     setToDate(event.target.value as string);
   };
 
-  return (
+  return (<>
+    {loading?<CircularProgress />:
     <>
       {dashboard ? (
         <ReactApexChart
@@ -466,6 +473,6 @@ export default function TeamLevelActionsCountChart({
           </Grid>
         </Grid>
       )}
-    </>
+    </>}</>
   );
 }
