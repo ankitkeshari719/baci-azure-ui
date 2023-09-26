@@ -25,7 +25,7 @@ import {
 } from '../../components/CustomizedTypography';
 import { Link, useNavigate } from 'react-router-dom';
 import * as Icons from 'heroicons-react';
-import { MONTH_SELECTORS, MenuProps } from './const';
+import { MONTH_SELECTORS, MenuProps, getChartWidth } from './const';
 import { GlobalContext } from '../../contexts/GlobalContext';
 import { BASIC, ENTERPRISE } from '../../constants/applicationConst';
 import DateSelector from '../../components/Elements/EnterpriseDashboardPages/DateSelector';
@@ -37,7 +37,6 @@ export default function EnterpriseLevelSentimentsMoodsChart({
   dashboard?: boolean;
   team: string;
 }) {
-  const [moods, setMoods] = useState<any>([]);
   const [sadMoods, setSadMoods] = useState([]);
   const [neutralMoods, setNeutralMoods] = useState([]);
   const [happyMoods, setHappyMoods] = useState([]);
@@ -66,38 +65,16 @@ export default function EnterpriseLevelSentimentsMoodsChart({
   const navigate = useNavigate();
   const windowWidth = React.useRef(window.innerWidth);
 
-  const localUserData = localStorage.getItem('userData');
-  const tempLocalUserData = localUserData && JSON.parse(localUserData);
   const [path, setPath] = React.useState('');
 
   React.useEffect(() => {
-    if (tempLocalUserData && tempLocalUserData.roleName === BASIC) {
+    if (global.azureUser?.roleName && global.azureUser?.roleName === BASIC) {
       setPath('basic');
-    } else if (tempLocalUserData && tempLocalUserData.roleName === ENTERPRISE) {
+    } else if (global.azureUser?.roleName && global.azureUser?.roleName === ENTERPRISE) {
       setPath('enterprise');
     }
-  }, [tempLocalUserData]);
+  }, [global.azureUser?.roleName]);
 
-  const getChartWidth = () => {
-    switch (true) {
-      case windowWidth.current <= 1051:
-        return '700';
-      case windowWidth.current > 1051 && windowWidth.current <= 1150:
-        return '750';
-      case windowWidth.current >= 1151 && windowWidth.current <= 1199:
-        return '800';
-      case windowWidth.current >= 1200 && windowWidth.current <= 1300:
-        return '900';
-      case windowWidth.current >= 1301 && windowWidth.current <= 1400:
-        return '1000';
-      case windowWidth.current >= 1401 && windowWidth.current <= 1500:
-        return '1050';
-      case windowWidth.current >= 1500:
-        return '1100';
-      default:
-        return '500';
-    }
-  };
 
   React.useEffect(() => {
     const fromDateInput = global.chartStartDate;
@@ -128,7 +105,7 @@ export default function EnterpriseLevelSentimentsMoodsChart({
      userId: global.azureUser?.emailId,
      roleName: global.azureUser?.roleName,
      enterpriseId: global.azureUser?.enterpriseId,
-     teamId: '0',
+     teamId: team,
      fromDate: formatDateForAPI(fromDate),
      toDate: formatDateForAPI(toDate),
    };
@@ -161,7 +138,7 @@ export default function EnterpriseLevelSentimentsMoodsChart({
         });
         totalCards = totalHappyCards + totalNeutralCards + totalSadCards;
 
-        setMoods(chartData);
+    
         setMonths(months);
         setSadMoods(
           res.data?.map((item: any) =>
@@ -188,7 +165,6 @@ export default function EnterpriseLevelSentimentsMoodsChart({
         setNeutralMoodPercentage(neutralPercent ? neutralPercent : 0);
         setHappyMoodPercentage(happyPercent ? happyPercent : 0);
       } else {
-        setMoods([]);
         setMonths([]);
         setSadMoods([]);
         setNeutralMoods([]);
@@ -428,7 +404,7 @@ export default function EnterpriseLevelSentimentsMoodsChart({
               options={options}
               series={series}
               type="area"
-              width={getChartWidth()}
+              width={getChartWidth(windowWidth.current)}
               height="500"
             />
           </Grid>
