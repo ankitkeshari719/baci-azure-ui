@@ -56,6 +56,7 @@ import EnterpriseLevelSentimentsSummaryChart from '../../../screens/Analytics/En
 import moment from 'moment';
 import { MONTH_SELECTORS } from '../../../screens/Analytics/const';
 import {
+  formatDateToMonthYear,
   getParticipantsCount,
   getRetrosCount,
 } from '../../../helpers/msal/services';
@@ -68,7 +69,6 @@ import TeamSelector from '../TeamSelector';
 import { BASIC, ENTERPRISE } from '../../../constants/applicationConst';
 import { ContainedButtonWithIcon } from '../../CustomizedButton/ContainedButtonWithIcon';
 import { TextButtonWithIcon } from '../../CustomizedButton/TextButtonWithIcon';
-
 
 const theme = createTheme({
   palette: {
@@ -152,60 +152,6 @@ function EnterpriseDashboard() {
   const [totalSessions, setTotalSessions] = useState<Number>();
   const [totalParticipants, setTotalParticipants] = useState<Number>();
 
-  const menuList = [
-    {
-      id: '0',
-
-      label: 'All Teams',
-
-      actions: 'VIEW 15 ACTIONS',
-
-      retros: [
-        retroList[2],
-
-        retroList[1],
-
-        retroList[0],
-
-        retroList[3],
-
-        retroList[4],
-
-        retroList[5],
-      ],
-    },
-
-    {
-      id: '1',
-
-      label: 'Mobile Experience Team',
-
-      actions: 'VIEW 15 ACTIONS',
-
-      retros: [retroList[2], retroList[1], retroList[0]],
-    },
-
-    {
-      id: '2',
-
-      label: 'Superannutation Product Team',
-
-      actions: 'VIEW 5 ACTIONS',
-
-      retros: [retroList[5], retroList[4]],
-    },
-
-    {
-      id: '3',
-
-      label: 'Insurance Team',
-
-      actions: 'VIEW 15 ACTIONS',
-
-      retros: [retroList[3]],
-    },
-  ];
-
   function createNewTeam() {
     if (global.azureUser?.roleName && global.azureUser?.roleName === BASIC) {
       navigate('/basic/teams/create/');
@@ -278,20 +224,6 @@ function EnterpriseDashboard() {
     });
   };
 
-  const getTeamNameOnSelect = (selectId: string) => {
-    let teamName = '';
-    if (selectId === '0') {
-      teamName = 'All Teams Analytics';
-    } else if (selectId === '1') {
-      teamName = 'Mobile Experience Team Analytics';
-    } else if (selectId === '2') {
-      teamName = 'Superannuation Product Team Analytics';
-    } else if (selectId === '3') {
-      teamName = 'Insurance Team Analytics';
-    }
-    return teamName;
-  };
-
   const goToAnalyticsLearnMorePage = (url: string) => {
     navigate(url);
   };
@@ -328,8 +260,15 @@ function EnterpriseDashboard() {
           }}
         >
           {/* Enterprise Dashboard label */}
-          <Box component="span">
-            <H1RegularTypography label="Enterprise Dashboard" />
+          <Box component="span" style={{display:'flex',flexDirection:'row',alignItems:'center'}}>
+            <H1RegularTypography label="Dashboard" />
+
+            <ReactToPrint
+              trigger={() =>
+                <Button style={{marginLeft:'10px'}}>
+                <Icons.Printer color={"#2C69A1"}  fontSize={"32px"}/></Button>}
+              content={() => componentRef.current}
+            />
           </Box>
           {/* JOIN SESSION And NEW SESSION Button */}
           <Box component="span">
@@ -355,65 +294,6 @@ function EnterpriseDashboard() {
         </Box>
         {/* Bottom container */}
         <Box display="flex" flexDirection="column" sx={{ overflow: 'auto' }}>
-          {/* Teams list menu start */}
-          {/* <Box display="flex" flexDirection="row" width="100%" mt="10px">
-            {menuList.map((menu, index) => {
-              return (
-                <Box
-                  onMouseEnter={() => {
-                    setHoverOnMenu(true);
-
-                    setHoverIndex(index);
-                  }}
-                  onMouseLeave={() => {
-                    // setHoverOnMenu(false);
-                    // setHoverIndex(+selectId)
-                  }}
-                  onClick={() => {
-                    setSelectedId(menu.id);
-                  }}
-                  width="330px"
-                  height={menu.id == selectId ? '80px' : '80px'}
-                  border="1px solid rgba(206, 239, 255, 1)"
-                  borderRadius="5px"
-                  boxShadow="6px 10px 20px 4px rgba(21, 154, 221, 0.08)"
-                  padding="16px"
-                  paddingBottom={menu.id == selectId ? '30px' : '16px'}
-                  marginRight="24px"
-                  display="flex"
-                  flexDirection="column"
-                  justifyContent="space-between"
-                  sx={{
-                    background:
-                      menu.id == selectId ? 'rgba(0, 0, 0, 0.04)' : 'white',
-
-                    cursor: 'pointer',
-                  }}
-                  key={'menu' + index}
-                >
-                  <Box
-                    component="span"
-                    display="flex"
-                    justifyContent="space-between"
-                  >
-                    <H6RegularTypography
-                      style={{
-                        width: '274px',
-
-                        color:
-                          menu.id == selectId
-                            ? commonStyles.primaryDark
-                            : 'black',
-                      }}
-                      label={menu.label}
-                    />
-
-                    <EllipsisVerticalIcon width="24px" height="24px" />
-                  </Box>
-                </Box>
-              );
-            })}
-          </Box> */}
           {/* Retro list starts here after hover */}
 
           {/* Analytics start here */}
@@ -450,8 +330,7 @@ function EnterpriseDashboard() {
                 alignItems="center"
                 justifyContent="flex-start"
               >
-                {/* <H4RegularTypography label="Analytics" />
-                <ReactToPrint
+                {/* <ReactToPrint
                   trigger={() => (
                     <OutlinedButton
                       id="downloadBoardPdf"
@@ -482,7 +361,7 @@ function EnterpriseDashboard() {
                   padding="9px"
                   selectedTeam={'0'}
                   handleChange={(change: any) => {
-                    console.log(change.target.value);
+                    setSelectedId(change.target.value);
                   }}
                 />
 
@@ -494,10 +373,19 @@ function EnterpriseDashboard() {
                   style={{ width: '200px', textAlign: 'center' }}
                   onClick={() => createNewTeam()}
                 />
-                <TextButtonWithIcon id="actions"  icon=  {<Icons.ChevronRight fontSize={"16px"} style={{marginLeft:'-16px'}}/>}
-                style={{marginLeft:'20px'}}
-                    label={'Action'}
-                    size={'medium'} onClick={()=>console.log("")}/>
+                <TextButtonWithIcon
+                  id="actions"
+                  icon={
+                    <Icons.ChevronRight
+                      fontSize={'16px'}
+                      style={{ marginLeft: '-16px' }}
+                    />
+                  }
+                  style={{ marginLeft: '20px' }}
+                  label={'Action'}
+                  size={'medium'}
+                  onClick={() => console.log('')}
+                />
               </Box>
             </Box>
             {/* Analytics Charts */}
@@ -572,10 +460,10 @@ function EnterpriseDashboard() {
                         flexDirection: 'column',
                       }}
                     >
-                      <H4SemiBoldTypography
+                      {/* <H4SemiBoldTypography
                         label={getTeamNameOnSelect(selectId)}
                         style={{ color: '#2C69A1' }}
-                      />
+                      /> */}
                       <TinyTextTypography
                         label={'as of ' + currentDate}
                         style={{ color: '#2C69A1', marginTop: '8px' }}
@@ -592,7 +480,11 @@ function EnterpriseDashboard() {
                           }}
                         />
                         <BodyRegularTypography
-                          label={fromDateString + ' - ' + toDateString}
+                          label={
+                            formatDateToMonthYear(fromDate) +
+                            ' - ' +
+                            formatDateToMonthYear(toDate)
+                          }
                           style={{ color: '#2C69A1', marginLeft: '18px' }}
                         />
                       </Box>
@@ -717,7 +609,10 @@ function EnterpriseDashboard() {
                     navigate('/enterprise/analytics/teamLevelActionsCount');
                   }}
                 >
-                  <TeamLevelActionsCountChart dashboard={true}     team={selectId}/>
+                  <TeamLevelActionsCountChart
+                    dashboard={true}
+                    team={selectId}
+                  />
                 </Box>
               </Box>
 
