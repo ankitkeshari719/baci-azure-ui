@@ -87,10 +87,10 @@ const WordCloud: FunctionComponent<WordCloudProps> = ({ data, showOn }) => {
     <svg viewBox="0 0 500 250" width={'100%'} height={'100%'}>
       <g transform={`translate(${250},${125})`}>
         {cloud &&
-          cloud.map(word => {
+          cloud.map((word:any,index:number) => {
             return (
               <text
-                key={word.text}
+                key={word.text+index}
                 style={{
                   fontSize: word.size + 'px',
                   fontFamily: word.font,

@@ -80,7 +80,7 @@ export default function EnterpriseLevelSentimentsThemeChart({
 
   React.useEffect(() => {
     handleGetEnterpriseLevelSentimentsThemes();
-  }, [team]);
+  }, [global.teamId]);
 
   const handleGetEnterpriseLevelSentimentsThemes = async () => {
     if (global.azureUser != undefined) {
@@ -88,7 +88,7 @@ export default function EnterpriseLevelSentimentsThemeChart({
         userId: global.azureUser?.emailId,
         roleName: global.azureUser?.roleName,
         enterpriseId: global.azureUser?.enterpriseId,
-        teamId: team,
+        teamId: global.teamId?global.teamId:"0",
         fromDate: formatDateForAPI(fromDate),
         toDate: formatDateForAPI(toDate),
       };

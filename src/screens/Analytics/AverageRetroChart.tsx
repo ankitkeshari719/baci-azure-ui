@@ -115,11 +115,8 @@ export default function AverageRetroChart({
 
   React.useEffect(() => {
     handleGetRetroChartData();
-  }, [fromDate, toDate]);
+  }, [fromDate, toDate,global.teamId]);
 
-  React.useEffect(() => {
-    handleGetRetroChartData();
-  }, [team]);
 
   const handleGetRetroChartData = async () => {
     if (global.azureUser != undefined) {
@@ -127,7 +124,7 @@ export default function AverageRetroChart({
         userId: global.azureUser?.emailId,
         roleName: global.azureUser?.roleName,
         enterpriseId: global.azureUser?.enterpriseId,
-        teamId: team,
+        teamId: global.teamId?global.teamId:"0",
         fromDate: formatDateForAPI(fromDate),
         toDate: formatDateForAPI(toDate),
       };

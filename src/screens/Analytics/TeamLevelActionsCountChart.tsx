@@ -102,11 +102,13 @@ export default function TeamLevelActionsCountChart({
 
   React.useEffect(() => {
     handleGetTeamLevelActionsCountsData();
-  }, [fromDate, toDate]);
+  }, [fromDate, toDate,global?.teamId]);
 
   function removeDuplicates(arr: string[]) {
     return arr.filter((item, index) => arr.indexOf(item) === index);
   }
+
+
 
   const handleGetTeamLevelActionsCountsData = async () => {
     if (global.azureUser != undefined) {
@@ -114,7 +116,7 @@ export default function TeamLevelActionsCountChart({
         userId: global.azureUser?.emailId,
         roleName: global.azureUser?.roleName,
         enterpriseId: global.azureUser?.enterpriseId,
-        teamId: team ? team : '0',
+        teamId: global.teamId?global.teamId:"0",
         fromDate: formatDateForAPI(fromDate),
         toDate: formatDateForAPI(toDate),
       };

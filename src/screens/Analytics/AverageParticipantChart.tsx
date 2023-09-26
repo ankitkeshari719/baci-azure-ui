@@ -119,12 +119,11 @@ export default function AverageParticipantChart({
   }, [global.chartStartDate, global.chartEndDate]);
 
   React.useEffect(() => {
+    console.log(global.teamId)
     handleGetParticipantChartData();
-  }, [fromDate, toDate]);
+  }, [fromDate, toDate,global.teamId]);
 
-  React.useEffect(() => {
-    handleGetParticipantChartData();
-  }, [team]);
+
 
   const handleGetParticipantChartData = async () => {
     if (global.azureUser != undefined) {
@@ -132,7 +131,7 @@ export default function AverageParticipantChart({
         userId: global.azureUser?.emailId,
         roleName: global.azureUser?.roleName,
         enterpriseId: global.azureUser?.enterpriseId,
-        teamId: team,
+        teamId: global.teamId?global.teamId:"0",
         fromDate: formatDateForAPI(fromDate),
         toDate: formatDateForAPI(toDate),
       };
