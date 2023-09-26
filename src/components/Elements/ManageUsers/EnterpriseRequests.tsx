@@ -62,7 +62,7 @@ export default function EnterpriseRequests() {
   const localUserData = localStorage.getItem('userData');
   const tempLocalUserData = localUserData && JSON.parse(localUserData);
 
-  const [selectedTeam, setSelectedTeam] = React.useState('all');
+  const [selectedTeam, setSelectedTeam] = React.useState('0');
   const [isSelectAllChecked, setIsSelectAllChecked] = React.useState(false);
   const [tempStoreUserName, setTempStoreUserName] = React.useState<any>('');
   const [tempStoreUserEmail, setTempStoreUserEmail] = React.useState<any>('');

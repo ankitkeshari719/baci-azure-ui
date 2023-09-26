@@ -31,6 +31,8 @@ export function UserHeader({ accounts }: Props) {
   const [height, setHeight] = React.useState(0);
   const [openEnterpriseNotExistDialog, setOpenEnterpriseNotExistDialog] =
     React.useState(false);
+  const [openAccountNotActiveDialog, setOpenAccountNotActiveDialog] =
+    React.useState(false);
   const [global, dispatch] = React.useContext(GlobalContext);
   const { instance } = useMsal();
 
@@ -106,16 +108,20 @@ export function UserHeader({ accounts }: Props) {
   const callGetUserByEmailId = async (emailId: string) => {
     await getUserByEmailId(emailId).then(
       res => {
-        localStorage.setItem('userAzureData', JSON.stringify(accounts));
-        localStorage.setItem('userData', JSON.stringify(res));
-        dispatch({
-          type: ActionType.SET_AZURE_USER,
-          payload: {azureUser :res}
-        });
-        if (res.roleName === BASIC) {
-          navigate('basic');
-        } else if (res.roleName === ENTERPRISE) {
-          navigate('enterprise');
+        if (res && res.isActive === true) {
+          localStorage.setItem('userAzureData', JSON.stringify(accounts));
+          localStorage.setItem('userData', JSON.stringify(res));
+          dispatch({
+            type: ActionType.SET_AZURE_USER,
+            payload: { azureUser: res },
+          });
+          if (res.roleName === BASIC) {
+            navigate('basic');
+          } else if (res.roleName === ENTERPRISE) {
+            navigate('enterprise');
+          }
+        }else {
+          setOpenAccountNotActiveDialog(true);
         }
       },
       err => {
@@ -248,8 +254,6 @@ export function UserHeader({ accounts }: Props) {
         </DialogTitle>
         <Box
           sx={{
-            width: '600px',
-            minWidth: '600px',
             height: height / 4,
             display: 'flex',
             alignItems: 'center',
@@ -259,6 +263,90 @@ export function UserHeader({ accounts }: Props) {
         >
           <BodyRegularTypography
             label={`BACI Accounts is currently available only for Enterprise. Contact Sales for more details.`}
+            style={{ textAlign: 'center' }}
+          />
+        </Box>
+        {/* Buttons */}
+        <Box sx={{ mx: 3 }}>
+          <Box
+            sx={{
+              width: '100%',
+              display: 'flex',
+              flex: '1 0 auto',
+              alignItems: 'center',
+              justifyContent: 'center',
+              my: 2,
+            }}
+          >
+            <AuthenticatedTemplate>
+              <ContainedButton
+                id={'signin_button_desktop'}
+                name={'Close'}
+                onClick={() => handleLogoutRedirect()}
+                style={{
+                  marginTop: '42px',
+                  background: '#159ADD !important',
+                }}
+                size={'medium'}
+              />
+            </AuthenticatedTemplate>
+          </Box>
+        </Box>
+      </Dialog>
+      <Dialog open={openAccountNotActiveDialog}>
+        <DialogTitle
+          style={{ padding: '20px', borderBottom: '1px solid #EA4335' }}
+        >
+          <Grid container sx={{ display: 'flex', alignItems: 'center' }}>
+            <Grid item sm={10}>
+              <Box
+                display="flex"
+                justifyContent="flex-start"
+                alignItems="center"
+              >
+                <Icons.ExclamationCircleOutline
+                  size={32}
+                  style={{
+                    color: '#EA4335',
+                    fontSize: '32px',
+                  }}
+                />
+                <H5SemiBoldTypography
+                  label={'Account Deactivated'}
+                  style={{
+                    color: '#343434',
+                    marginLeft: '12px !important',
+                  }}
+                />
+              </Box>
+            </Grid>
+            <Grid item sm={2}>
+              <Box display="flex" justifyContent="flex-end">
+                <Icons.X
+                  size={20}
+                  style={{
+                    cursor: 'pointer',
+                  }}
+                  onClick={() => handleLogoutRedirect()}
+                />
+              </Box>
+            </Grid>
+          </Grid>
+        </DialogTitle>
+        <Box
+          sx={{
+            height: height / 4,
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            padding: '10px',
+          }}
+        >
+          <BodyRegularTypography
+            label={
+              'Your account has been deactivated. Please contact your Enterprise Admin to reactivate your account.'
+            }
+            style={{ textAlign: 'center' }}
           />
         </Box>
         {/* Buttons */}

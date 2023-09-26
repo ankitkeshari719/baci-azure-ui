@@ -1,12 +1,9 @@
 import * as React from 'react';
 import Box from '@mui/material/Box';
-import InputLabel from '@mui/material/InputLabel';
 import MenuItem from '@mui/material/MenuItem';
 import FormControl from '@mui/material/FormControl';
-import Select, { SelectChangeEvent } from '@mui/material/Select';
+import Select from '@mui/material/Select';
 import { getAllTeamsByEnterpriseId } from '../../helpers/msal/services';
-import { MenuProps } from '../../screens/Analytics/const';
-import { H5SemiBoldTypography } from '../CustomizedTypography';
 
 type Props = {
   enterpriseId: string;
@@ -65,16 +62,11 @@ export default function TeamSelector({
           }}
         >
           <MenuItem value="0" key="0">
-            {/* <H5SemiBoldTypography 
-           label={"All Teams"} />   */}
-
             {'All Teams'}
           </MenuItem>
           {teams.map((team: any) => {
             return (
               <MenuItem value={team.teamId} key={team.teamId}>
-                {/* <H5SemiBoldTypography 
-           label= */}
                 {team.teamName}
               </MenuItem>
             );
