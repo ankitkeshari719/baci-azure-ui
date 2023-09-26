@@ -66,17 +66,15 @@ export default function EnterpriseLevelSentimentsSummaryChart({
   const [totalParticipant, setTotalParticipant] = useState<Number>();
   const [totalRetros, setTotalRetros] = useState<Number>();
 
-  const localUserData = localStorage.getItem('userData');
-  const tempLocalUserData = localUserData && JSON.parse(localUserData);
   const [path, setPath] = React.useState('');
 
   React.useEffect(() => {
-    if (tempLocalUserData && tempLocalUserData.roleName === BASIC) {
+    if (global.azureUser?.roleName && global.azureUser?.roleName === BASIC) {
       setPath('basic');
-    } else if (tempLocalUserData && tempLocalUserData.roleName === ENTERPRISE) {
+    } else if (global.azureUser?.roleName && global.azureUser?.roleName === ENTERPRISE) {
       setPath('enterprise');
     }
-  }, [tempLocalUserData]);
+  }, [global.azureUser?.roleName]);
 
   const navigate = useNavigate();
 
@@ -89,21 +87,6 @@ export default function EnterpriseLevelSentimentsSummaryChart({
     handleGetEnterpriseLevelSentimentSummary(selectedFormat);
   }, []);
 
-  React.useEffect(() => {
-    if (Number(selectedFormat) > 0 && Number(selectedFormat) <= 16) {
-      setFromDate(selectedFormat);
-      setToDate(selectedFormat);
-    } else if (Number(selectedFormat) == 17) {
-      setFromDate('14');
-      setToDate('16');
-    } else if (Number(selectedFormat) == 18) {
-      setFromDate('11');
-      setToDate('16');
-    } else if (Number(selectedFormat) == 19) {
-      setFromDate('5');
-      setToDate('16');
-    }
-  }, [selectedFormat]);
 
   // Function to Generate Random number
   function randomIntFromInterval(min: number, max: number) {
@@ -147,7 +130,7 @@ export default function EnterpriseLevelSentimentsSummaryChart({
      userId: global.azureUser?.emailId,
      roleName: global.azureUser?.roleName,
      enterpriseId: global.azureUser?.enterpriseId,
-     teamId: '0',
+     teamId: team,
      fromDate: formatDateForAPI(fromDate),
      toDate: formatDateForAPI(toDate),
    };
@@ -166,25 +149,6 @@ export default function EnterpriseLevelSentimentsSummaryChart({
       setKeywords(tempKeywords);
     });}
 
-    // await getEnterpriseLevelSentimentSummary(selectedFormat, team).then(
-    //   res => {
-    //     if (res && res.result) {
-    //       const keywordsData = res.result[0].keywords;
-    //       setSummary(res.result[0] && res.result[0].summary);
-    //       let tempKeywords = [];
-    //       for (let i = 0; i < keywordsData.length; i++) {
-    //         tempKeywords.push({
-    //           text: keywordsData[i],
-    //           size: randomIntFromInterval(45, 120),
-    //         });
-    //       }
-    //       setKeywords(tempKeywords);
-    //     }
-    //   },
-    //   err => {
-    //     console.log('err', err);
-    //   }
-    // );
   };
 
   const handleGetParticipantChartData = async () => {
@@ -221,9 +185,7 @@ export default function EnterpriseLevelSentimentsSummaryChart({
     );
   };
 
-  const handleSelectedFormat = (event: SelectChangeEvent) => {
-    setSelectedFormat(event.target.value as string);
-  };
+ 
 
   const handleFromDate = (event: SelectChangeEvent) => {
     setFromDate(event.target.value as string);

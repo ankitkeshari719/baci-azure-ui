@@ -1280,7 +1280,7 @@ export const createUser = async (requestBody: any): Promise<any> => {
       isEnterpriserRequested: requestBody.isEnterpriserRequested,
       teams: requestBody.teams,
       isActive: requestBody.isActive,
-      enterpriseRequestId: requestBody.enterpriseRequestId
+      enterpriseRequestId: requestBody.enterpriseRequestId,
     }),
   };
 
@@ -1317,7 +1317,7 @@ export const updateUser = async (
       isEnterpriserRequested: requestBody.isEnterpriserRequested,
       teams: requestBody.teams,
       isActive: requestBody.isActive,
-      enterpriseRequestId: requestBody.enterpriseRequestId
+      enterpriseRequestId: requestBody.enterpriseRequestId,
     }),
   };
 
@@ -1397,6 +1397,30 @@ export const deactivateMultipleByIds = async (
   };
 
   await fetch(API_URL + `/users/deactivateMultiple`, requestOptions)
+    .then(response => response.json())
+    .then(response => {
+      data = response.data;
+    });
+  return data;
+};
+
+// Update Users role on enterprise request approved and declined
+export const updateRoleOnEnterpriseRequest = async (
+  requestBody: any
+): Promise<any> => {
+  let data: any;
+  const requestOptions = {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({
+      emailIds: requestBody.emailIds,
+      roleId: requestBody.roleId,
+      roleName: requestBody.roleName,
+      isEnterpriserRequested: requestBody.isEnterpriserRequested,
+    }),
+  };
+
+  await fetch(API_URL + `/users/updateRoleOnEnterpriseRequest`, requestOptions)
     .then(response => response.json())
     .then(response => {
       data = response.data;
@@ -1514,10 +1538,37 @@ export const deleteEnterpriseRequestById = async (
     method: 'DELETE',
     headers: { 'Content-Type': 'application/json' },
   };
-  await fetch(API_URL + `/enterpriseRequests/${enterpriseRequestId}`, requestOptions)
+  await fetch(
+    API_URL + `/enterpriseRequests/${enterpriseRequestId}`,
+    requestOptions
+  )
     .then(response => response.json())
     .then(response => {
       message = response.message;
     });
   return message;
+};
+
+// Approved Many Users
+export const approvedDeclinedEnterpriseRequestByIds = async (
+  requestBody: any
+): Promise<any> => {
+  let data: any;
+  const requestOptions = {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({
+      enterpriseRequestIds: requestBody.enterpriseRequestIds,
+    }),
+  };
+
+  await fetch(
+    API_URL + `/enterpriseRequests/approvedDeclinedEnterpriseRequests`,
+    requestOptions
+  )
+    .then(response => response.json())
+    .then(response => {
+      data = response.data;
+    });
+  return data;
 };
