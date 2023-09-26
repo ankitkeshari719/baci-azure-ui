@@ -67,6 +67,8 @@ import DateSelector from './DateSelector';
 import TeamSelector from '../TeamSelector';
 import { BASIC, ENTERPRISE } from '../../../constants/applicationConst';
 import { ContainedButtonWithIcon } from '../../CustomizedButton/ContainedButtonWithIcon';
+import { TextButtonWithIcon } from '../../CustomizedButton/TextButtonWithIcon';
+
 
 const theme = createTheme({
   palette: {
@@ -477,21 +479,25 @@ function EnterpriseDashboard() {
                       ? global.azureUser?.enterpriseId
                       : '0'
                   }
-                  padding="5px"
-                  selectedTeam={'all'}
+                  padding="9px"
+                  selectedTeam={'0'}
                   handleChange={(change: any) => {
-                    console.log(change);
+                    console.log(change.target.value);
                   }}
                 />
 
                 <ContainedButtonWithIcon
                   id={'create_new_Team'}
                   label={'New Team'}
-                  size={'small'}
+                  size={'medium'}
                   iconPath="/svgs/plusSmall.svg"
                   style={{ width: '200px', textAlign: 'center' }}
                   onClick={() => createNewTeam()}
                 />
+                <TextButtonWithIcon id="actions"  icon=  {<Icons.ChevronRight fontSize={"16px"} style={{marginLeft:'-16px'}}/>}
+                style={{marginLeft:'20px'}}
+                    label={'Action'}
+                    size={'medium'} onClick={()=>console.log("")}/>
               </Box>
             </Box>
             {/* Analytics Charts */}
@@ -711,7 +717,7 @@ function EnterpriseDashboard() {
                     navigate('/enterprise/analytics/teamLevelActionsCount');
                   }}
                 >
-                  <TeamLevelActionsCountChart dashboard={true} />
+                  <TeamLevelActionsCountChart dashboard={true}     team={selectId}/>
                 </Box>
               </Box>
 

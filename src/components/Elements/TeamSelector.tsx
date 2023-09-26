@@ -12,14 +12,14 @@ type Props = {
   enterpriseId: string;
   selectedTeam: string;
   handleChange: any;
-  padding?:string
+  padding?: string;
 };
 
 export default function TeamSelector({
   enterpriseId,
   selectedTeam,
   handleChange,
-  padding
+  padding,
 }: Props) {
   const [teams, setTeams] = React.useState<any>([]);
 
@@ -60,23 +60,23 @@ export default function TeamSelector({
               display: 'flex',
               justifyContent: 'center',
               alignItems: 'flex-start',
-              padding: padding?padding:'16px',
+              padding: padding ? padding : '16px',
             },
           }}
         >
-          <MenuItem value="all" key="all">
-          <H5SemiBoldTypography 
-           label={"All Teams"} />  
+          <MenuItem value="0" key="0">
+            {/* <H5SemiBoldTypography 
+           label={"All Teams"} />   */}
+
+            {'All Teams'}
           </MenuItem>
           {teams.map((team: any) => {
             return (
               <MenuItem value={team.teamId} key={team.teamId}>
-              
-              <H5SemiBoldTypography 
-           label={team.teamName} />  
-                
+                {/* <H5SemiBoldTypography 
+           label= */}
+                {team.teamName}
               </MenuItem>
-              
             );
           })}
         </Select>
