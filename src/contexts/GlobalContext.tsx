@@ -28,6 +28,8 @@ export enum ActionType {
   CHART_START_DATE = 'chartStartDate',
   CHART_END_DATE = 'chartEndDate',
   SET_AZURE_USER = 'setAzureUser',
+  SET_TEAM_ID="setTeamId"
+  
 }
 
 export class ReducerPayload {
@@ -52,6 +54,7 @@ export class ReducerPayload {
   startDate?: string;
   endDate?: string;
   azureUser?: AzureUser;
+  teamId?:string;
 }
 
 type ContextType = [
@@ -193,6 +196,10 @@ function GlobalProvider(props: ComponentProps<any>) {
           ...state,
           chartEndDate: action.payload?.endDate,
         });
+        case ActionType.SET_TEAM_ID:
+          return saveState({
+            ...state,teamId:action.payload?.teamId 
+          })
       default:
         noMatch = true;
         break;

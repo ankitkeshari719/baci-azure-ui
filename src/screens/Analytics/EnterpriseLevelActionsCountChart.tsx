@@ -101,11 +101,9 @@ export default function EnterpriseLevelActionsCountChart({
 
   React.useEffect(() => {
     handleEnterpriseLevelActionsCountData();
-  }, [fromDate, toDate]);
+  }, [fromDate, toDate,global.teamId]);
 
-  React.useEffect(() => {
-    handleEnterpriseLevelActionsCountData();
-  }, [team]);
+
 
   const handleEnterpriseLevelActionsCountData = async () => {
     if (global.azureUser != undefined) {
@@ -113,7 +111,7 @@ export default function EnterpriseLevelActionsCountChart({
         userId: global.azureUser?.emailId,
         roleName: global.azureUser?.roleName,
         enterpriseId: global.azureUser?.enterpriseId,
-        teamId: team,
+        teamId: global.teamId?global.teamId:"0",
         fromDate: formatDateForAPI(fromDate),
         toDate: formatDateForAPI(toDate),
       };

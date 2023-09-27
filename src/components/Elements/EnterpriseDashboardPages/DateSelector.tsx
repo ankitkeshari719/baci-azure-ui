@@ -68,7 +68,9 @@ function DateSelector({
       <Box sx={{ minWidth: 180, marginLeft: '16px' }}>
   
         <FormControl fullWidth>
-        <Input type="month" id="toDate" name="toDate" value={toDate} onChange={(e)=>{
+        <Input type="month" id="toDate" name="toDate" value={toDate}
+         inputProps={{ min:fromDate }}
+        onChange={(e)=>{
            dispatch({
             type: ActionType.CHART_END_DATE,
             payload: { endDate: e.target.value },

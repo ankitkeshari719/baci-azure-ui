@@ -359,8 +359,13 @@ function EnterpriseDashboard() {
                       : '0'
                   }
                   padding="9px"
-                  selectedTeam={'0'}
+                  selectedTeam={selectId}
                   handleChange={(change: any) => {
+                    dispatch({
+                      type: ActionType.SET_TEAM_ID,
+                      payload: { teamId: change.target.value },
+                    });
+                 
                     setSelectedId(change.target.value);
                   }}
                 />
