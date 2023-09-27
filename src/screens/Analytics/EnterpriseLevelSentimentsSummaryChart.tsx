@@ -101,9 +101,9 @@ export default function EnterpriseLevelSentimentsSummaryChart({
 
   React.useEffect(() => {
     handleGetEnterpriseLevelSentimentSummary(selectedFormat);
-    handleGetParticipantChartData();
-    handleGetRetroChartData();
-  }, [team]);
+    // handleGetParticipantChartData();
+    // handleGetRetroChartData();
+  }, [global.teamId]);
 
   React.useEffect(() => {
     const fromDateInput = global.chartStartDate;
@@ -130,7 +130,7 @@ export default function EnterpriseLevelSentimentsSummaryChart({
      userId: global.azureUser?.emailId,
      roleName: global.azureUser?.roleName,
      enterpriseId: global.azureUser?.enterpriseId,
-     teamId: team,
+     teamId: global.teamId?global.teamId:"0",
      fromDate: formatDateForAPI(fromDate),
      toDate: formatDateForAPI(toDate),
    };

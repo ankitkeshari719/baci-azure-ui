@@ -97,7 +97,7 @@ export default function EnterpriseLevelSentimentsMoodsChart({
 
   React.useEffect(() => {
     handleGetEnterpriseLevelSentimentsMoods();
-  }, [team]);
+  }, [global.teamId]);
 
   const handleGetEnterpriseLevelSentimentsMoods = async () => {
     if(global.azureUser!=undefined){  
@@ -105,7 +105,7 @@ export default function EnterpriseLevelSentimentsMoodsChart({
      userId: global.azureUser?.emailId,
      roleName: global.azureUser?.roleName,
      enterpriseId: global.azureUser?.enterpriseId,
-     teamId: team,
+     teamId: global.teamId?global.teamId:"0",
      fromDate: formatDateForAPI(fromDate),
      toDate: formatDateForAPI(toDate),
    };
