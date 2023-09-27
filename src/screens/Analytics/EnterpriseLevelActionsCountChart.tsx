@@ -56,9 +56,11 @@ const StyledTableCell = styled(TableCell)(({ theme }) => ({
 export default function EnterpriseLevelActionsCountChart({
   dashboard,
   team,
+  count
 }: {
   dashboard?: boolean;
   team: string;
+  count: (count:number) => void;
 }) {
   const [enterpriseLevelActions, setEnterpriseLevelActions] = useState<any>([]);
   const [assignedActions, setAssignedActions] = useState<any>([]);
@@ -124,6 +126,8 @@ export default function EnterpriseLevelActionsCountChart({
           setCompletedActions(
             res.chartData?.map((item: any) => item.completed)
           );
+
+          count(res.actionsData?.length);
           setMonths(
             res.chartData?.map((item: any) => formatDateToMonthYear(item.month))
           );
