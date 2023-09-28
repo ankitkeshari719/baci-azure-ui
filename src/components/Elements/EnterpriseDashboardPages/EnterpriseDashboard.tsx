@@ -22,6 +22,7 @@ import {
   H1RegularTypography,
   H4RegularTypography,
   H4SemiBoldTypography,
+  H5SemiBoldTypography,
   H6RegularTypography,
   H6SemiBoldTypography,
   TinyTextSemiBoldTypography,
@@ -31,10 +32,6 @@ import {
 import commonStyles from './../../../style.module.scss';
 
 import './EnterpriseDashboard.scss';
-
-import { EllipsisVerticalIcon } from '@heroicons/react/24/outline';
-
-import Avatar from '../Avatar';
 
 import AverageParticipantChart from '../../../screens/Analytics/AverageParticipantChart';
 
@@ -46,19 +43,18 @@ import EnterpriseLevelSentimentsMoodsChart from '../../../screens/Analytics/Ente
 
 import TeamLevelActionsCountChart from '../../../screens/Analytics/TeamLevelActionsCountChart';
 
-import { retro } from '../../../constants/DemoConst';
-import { TextButton } from '../../CustomizedButton/TextButton';
-
 import EnterpriseLevelSentimentsThemeChart from '../../../screens/Analytics/EnterpriseLevelSentimentsThemeChart';
 import { useState } from 'react';
 import { ActionType, GlobalContext } from '../../../contexts/GlobalContext';
 import EnterpriseLevelSentimentsSummaryChart from '../../../screens/Analytics/EnterpriseLevelSentimentsSummaryChart';
 import moment from 'moment';
-import { MONTH_SELECTORS } from '../../../screens/Analytics/const';
 import {
+  chartInputType,
+  formatDateForAPI,
   formatDateToMonthYear,
   getParticipantsCount,
   getRetrosCount,
+  getSessionsData,
 } from '../../../helpers/msal/services';
 import { OutlinedButton } from '../../CustomizedButton/OutlinedButton';
 import AverageRetroChart from '../../../screens/Analytics/AverageRetroChart';
@@ -69,6 +65,8 @@ import TeamSelector from '../TeamSelector';
 import { BASIC, ENTERPRISE } from '../../../constants/applicationConst';
 import { ContainedButtonWithIcon } from '../../CustomizedButton/ContainedButtonWithIcon';
 import { TextButtonWithIcon } from '../../CustomizedButton/TextButtonWithIcon';
+import { OutlinedButtonWithIcon } from '../../CustomizedButton/OutlinedButtonWithIcon';
+import RetroCount from '../../../assets/img/RetroCount.png';
 
 const theme = createTheme({
   palette: {
@@ -102,9 +100,11 @@ function EnterpriseDashboard() {
 
   const [hoverIndex, setHoverIndex] = React.useState<number>(0);
 
+  const [sessionCount,setSessionCount]= React.useState<number>(0);
+
   const [selectId, setSelectedId] = React.useState<string>('0');
 
-  const retroList = retro;
+  const [actionCount,setActionCount]=React.useState<number>(0);
 
   let componentRef = React.useRef(null);
 
@@ -119,10 +119,6 @@ function EnterpriseDashboard() {
   );
 
   const [global, dispatch] = React.useContext(GlobalContext);
-
-  // const [fromDate, setFromDate] = useState<string>(
-  //   global.chartStartDate ? global.chartStartDate : '10'
-  // );
 
   const [fromDate, setFromDate] = useState<string>(
     global.chartStartDate
@@ -140,14 +136,6 @@ function EnterpriseDashboard() {
           '0' +
           (new Date().getMonth() + 1).toString().slice(-2)
   );
-
-  // const [toDate, setToDate] = useState<string>(
-  //   global.chartEndDate ? global.chartEndDate : '16'
-  // );
-
-  const [fromDateString, setFromDateString] = useState<string>('');
-
-  const [toDateString, setToDateString] = useState<string>('');
 
   const [totalSessions, setTotalSessions] = useState<Number>();
   const [totalParticipants, setTotalParticipants] = useState<Number>();
@@ -174,6 +162,29 @@ function EnterpriseDashboard() {
 
   // Function to get Sessions
   const handleGetRetroChartData = async () => {
+    if (global.azureUser != undefined) {
+      const chartInput: chartInputType = {
+        userId: global.azureUser?.emailId,
+        roleName: global.azureUser?.roleName,
+        enterpriseId: global.azureUser?.enterpriseId,
+        teamId: global.teamId ? global.teamId : '0',
+        fromDate: formatDateForAPI(fromDate),
+        toDate: formatDateForAPI(toDate),
+      };
+
+      await getSessionsData(chartInput).then(
+        res => {
+          if (res.result != undefined && res.result?.length != undefined) {
+            console.log(res.result?.length);
+            setSessionCount(res.result?.length)
+          } else {
+            setSessionCount(0)
+          }
+        },
+        err => {}
+      );
+    }
+
     await getRetrosCount(fromDate, toDate, selectId).then(
       res => {
         if (res && res.result) {
@@ -260,13 +271,22 @@ function EnterpriseDashboard() {
           }}
         >
           {/* Enterprise Dashboard label */}
-          <Box component="span" style={{display:'flex',flexDirection:'row',alignItems:'center'}}>
+          <Box
+            component="span"
+            style={{
+              display: 'flex',
+              flexDirection: 'row',
+              alignItems: 'center',
+            }}
+          >
             <H1RegularTypography label="Dashboard" />
 
             <ReactToPrint
-              trigger={() =>
-                <Button style={{marginLeft:'10px'}}>
-                <Icons.Printer color={"#2C69A1"}  fontSize={"32px"}/></Button>}
+              trigger={() => (
+                <Button style={{ marginLeft: '10px' }}>
+                  <Icons.Printer color={'#2C69A1'} fontSize={'32px'} />
+                </Button>
+              )}
               content={() => componentRef.current}
             />
           </Box>
@@ -359,13 +379,13 @@ function EnterpriseDashboard() {
                       : '0'
                   }
                   padding="9px"
-                  selectedTeam={selectId}
+                  selectedTeam={global.teamId ? global.teamId : selectId}
                   handleChange={(change: any) => {
                     dispatch({
                       type: ActionType.SET_TEAM_ID,
                       payload: { teamId: change.target.value },
                     });
-                 
+
                     setSelectedId(change.target.value);
                   }}
                 />
@@ -387,10 +407,24 @@ function EnterpriseDashboard() {
                     />
                   }
                   style={{ marginLeft: '20px' }}
-                  label={'Action'}
+                  label={actionCount>1?actionCount+'  Actions':actionCount+'  Actions'}
                   size={'medium'}
                   onClick={() => console.log('')}
                 />
+              </Box>
+
+              <Box padding={'12px'} paddingRight={'18px'} 
+              paddingLeft={'18px'}
+              display={'flex'} marginRight={'20px'} flexDirection={'row'} justifyContent={'space-between'} width={'200px'}
+              border="1px solid #CEEFFF"
+              borderRadius={'5px'}
+              sx={{background:'white', cursor:'pointer'}}
+              >
+                <H5SemiBoldTypography label={sessionCount>1?sessionCount+"  Sessions":sessionCount+"  Session"} />
+
+                <Box>
+                  <img src={RetroCount} style={{width:'20px',height:'18px'}}/>
+                </Box>
               </Box>
             </Box>
             {/* Analytics Charts */}
@@ -558,6 +592,10 @@ function EnterpriseDashboard() {
                   <EnterpriseLevelActionsCountChart
                     dashboard={true}
                     team={selectId}
+                    count={(e)=>{
+               
+                      setActionCount(e)
+                     }}
                   />
                 </Box>
                 {/* <Box

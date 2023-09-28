@@ -198,6 +198,7 @@ export default function App({ instance }: AppProps) {
                                     <EnterpriseLevelActionsCountChart
                                       dashboard={false}
                                       team={'0'}
+                                      count={()=>{}}
                                     />
                                   }
                                 />
@@ -394,6 +395,7 @@ export default function App({ instance }: AppProps) {
                                     <EnterpriseLevelActionsCountChart
                                       dashboard={false}
                                       team={'0'}
+                                      count={()=>{}}
                                     />
                                   }
                                 />

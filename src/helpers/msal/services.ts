@@ -489,6 +489,24 @@ export const getOverAllSummary = async (
   return overAllSummary;
 };
 
+export const getSessionsData=async (input:chartInputType):Promise<any>=>{
+  let sessionsData;
+  const requestOptions = {
+    method: 'POST',
+    body: JSON.stringify(input),
+    headers: {
+      'Content-type': 'application/json; charset=UTF-8',
+    },
+  };
+  await fetch(API_URL + `/getSessionsData`, requestOptions)
+    .then(response => response.json())
+    .then(data => {
+      sessionsData = data;
+    });
+  return sessionsData;
+}
+
+
 export function formatDateToMonthYear(inputDate: string) {
   // Parse the input date
   const dateParts = inputDate.split('-');
