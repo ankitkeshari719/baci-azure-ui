@@ -130,7 +130,7 @@ export default function EnterpriseLevelSentimentsSummaryChart({
         enterpriseId: global.azureUser?.enterpriseId,
         teamId: global.teamId ? global.teamId : '0',
         fromDate: formatDateForAPI(fromDate),
-        toDate: formatDateForAPI(toDate),
+        toDate: formatDateForAPI(toDate,true),
       };
 
       await getOverAllSummary(chartInput).then(res => {

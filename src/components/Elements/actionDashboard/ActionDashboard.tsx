@@ -38,6 +38,14 @@ import {
 } from '@heroicons/react/24/outline';
 import CsvDownloader from 'react-csv-downloader';
 import { useNavigate } from 'react-router-dom';
+import {
+  chartInputType,
+  formatDateForAPI,
+  getActionsDataForTable,
+  getAllUsers,
+  getAllUsersByEnterpriseId,
+} from '../../../helpers/msal/services';
+import { ActionType, GlobalContext } from '../../../contexts/GlobalContext';
 
 interface Column {
   id:
@@ -169,7 +177,7 @@ export default function ActionDashboard() {
   const [jiraRows, setJiraRows] = React.useState<any>([]);
   const [displayJiraRows, setDisplayJiraRows] = React.useState<any>([]);
   const [csvData, setCsvData] = React.useState<any>([]);
-
+  const [global, dispatch] = React.useContext(GlobalContext);
   const [page, setPage] = React.useState(0);
   const [rowsPerPage, setRowsPerPage] = React.useState(10);
   const [searchedVal, setSearchedVal] = React.useState('');
@@ -178,24 +186,57 @@ export default function ActionDashboard() {
   const navigate = useNavigate();
 
   React.useEffect(() => {
-    const localActionList = localStorage.getItem('actionList');
-    var tempActionList: any[] = [];
-    if (
-      localActionList == null ||
-      localActionList == undefined ||
-      localActionList == ''
-    ) {
-      ActionList.map(obj => {
-        tempActionList.push(flattenObject(obj));
-      });
-      const stringifiedActionList = JSON.stringify(tempActionList);
-      localStorage.setItem('actionList', stringifiedActionList);
-    } else {
-      tempActionList = JSON.parse(localActionList);
-    }
-    setJiraRows(tempActionList);
-    updateJiraCount(tempActionList);
+ 
+    getActionsForTable();
   }, []);
+
+  const getActionsForTable = async () => {
+    if (global.azureUser != undefined) {
+      const chartInput: chartInputType = {
+        userId: global.azureUser?.emailId,
+        roleName: global.azureUser?.roleName,
+        enterpriseId: global.azureUser?.enterpriseId,
+        teamId: global.teamId ? global.teamId : '0',
+        fromDate: '0',
+        toDate: '0',
+      };
+      await getAllUsersByEnterpriseId(global.azureUser?.enterpriseId).then((res:any[])=>{
+    
+        dispatch({
+          type: ActionType.SET_USER_LIST_BY_ENT,
+          payload: { users: res },
+        });
+        
+      })
+      await getActionsDataForTable(chartInput).then(res => {
+        console.log(res.data, 'actionTable');
+        if (res.data.length > 0) {
+          let actionsArray:any[] = [];
+          res.data.forEach((action: any) => {
+
+            var day =new Date(action.createdAt).getDate();
+            var month = new Date(action.createdAt).getMonth();
+            var year = new Date(action.createdAt).getFullYear();
+
+
+            var actionObj = action;
+            actionObj['action.value'] = action.actionName;
+            actionObj['action.assigneeName'] =
+              action.assigneeFName + ' ' + action.assigneeLName;
+            actionObj.startDate =  day>9?day:"0"+day + '-' + month + '-' + year;;
+            actionObj["action.assigneeId"]=action.assignedTo;
+
+            actionsArray.push(actionObj);
+          });
+          setJiraRows([...actionsArray]);
+          updateJiraCount([...actionsArray]);
+          setDisplayJiraRows([...actionsArray])
+        }
+      });
+
+   
+    }
+  };
 
   const flattenObject = (ob: any) => {
     const toReturn: any = {};
@@ -311,6 +352,8 @@ export default function ActionDashboard() {
   };
 
   React.useEffect(() => {
+
+
     let initialData = [];
     initialData.push({ r1: 'Date : ', r2: new Date().toLocaleString() + '' });
 
@@ -385,7 +428,7 @@ export default function ActionDashboard() {
                       ac.selected = !action.selected;
                     }
                   });
-
+console.log("click")
                   setActionCount([...newArrayState]);
                 }}
               >
@@ -522,7 +565,8 @@ export default function ActionDashboard() {
                               }}
                             >
                               <AssigneeDropdown
-                                id={value}
+                                id={row["action.assigneeId"]}
+                              
                                 outAssigneeSelected={valueOut => {
                                   setSearchedVal('');
                                   var tempJiraRows = jiraRows;

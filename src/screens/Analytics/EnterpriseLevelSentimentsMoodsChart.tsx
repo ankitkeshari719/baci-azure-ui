@@ -107,7 +107,7 @@ export default function EnterpriseLevelSentimentsMoodsChart({
      enterpriseId: global.azureUser?.enterpriseId,
      teamId: global.teamId?global.teamId:"0",
      fromDate: formatDateForAPI(fromDate),
-     toDate: formatDateForAPI(toDate),
+     toDate: formatDateForAPI(toDate,true),
    };
    setLoading(true);
 
