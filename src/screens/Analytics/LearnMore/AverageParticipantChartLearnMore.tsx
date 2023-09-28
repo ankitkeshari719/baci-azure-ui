@@ -47,7 +47,7 @@ export default function AverageParticipantChartLearnMore() {
           onClick={goToDashboard}
         />
         <H6RegularTypography
-          label="\  Count of all participants over time"
+          label="\  Count of All Participants"
           style={{ color: '#4E4E4E' }}
         />
       </Box>
@@ -72,7 +72,7 @@ export default function AverageParticipantChartLearnMore() {
           onClick={goToDashboard}
         />
         <H2SemiBoldTypography
-          label=" Count of all participants over time"
+          label=" Count of All Participants"
           style={{ color: commonStyles.PrimaryDark, marginLeft: '16px' }}
         />
       </Box>
@@ -85,14 +85,14 @@ export default function AverageParticipantChartLearnMore() {
         }}
       >
         <Grid container spacing={0} sx={{ padding: '24px' }}>
-          {/* About  Count of all participants over time */}
+          {/* About  Count of All Participants */}
           <Grid item xs={12}>
             <Box
               component="div"
               whiteSpace="normal"
               className="createRetroText"
             >
-              About Count of all participants over time
+              About Count of All Participants
             </Box>
           </Grid>
           {/* Data */}
