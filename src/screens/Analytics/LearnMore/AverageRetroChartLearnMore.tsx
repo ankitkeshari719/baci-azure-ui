@@ -47,7 +47,7 @@ export default function AverageRetroChartLearnMore() {
           onClick={goToDashboard}
         />
         <H6RegularTypography
-          label="\  Count of all sessions"
+          label="\  Count of All Sessions"
           style={{ color: '#4E4E4E' }}
         />
       </Box>
@@ -72,7 +72,7 @@ export default function AverageRetroChartLearnMore() {
           onClick={goToDashboard}
         />
         <H2SemiBoldTypography
-          label=" Count of all sessions"
+          label=" Count of All Sessions"
           style={{ color: commonStyles.PrimaryDark, marginLeft: '16px' }}
         />
       </Box>
@@ -85,14 +85,14 @@ export default function AverageRetroChartLearnMore() {
         }}
       >
         <Grid container spacing={0} sx={{ padding: '24px' }}>
-          {/* About  Count of all sessions */}
+          {/* About  Count of All Sessions */}
           <Grid item xs={12}>
             <Box
               component="div"
               whiteSpace="normal"
               className="createRetroText"
             >
-              About Count of all sessions
+              About Count of All Sessions
             </Box>
           </Grid>
           {/* Data */}

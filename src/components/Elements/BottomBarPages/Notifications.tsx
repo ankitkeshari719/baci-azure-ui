@@ -20,11 +20,11 @@ export default function Notifications() {
         }}
       >
         <BodySemiBoldTypography
-          label="Notification"
+          label="Coming Soon"
           style={{ marginBottom: '10px' }}
         />
         <H2SemiBoldTypography
-          label="Notifications"
+          label="Coming Soons"
           style={{ color: commonStyles.PrimaryDark }}
         />
         <Paper
