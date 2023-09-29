@@ -69,6 +69,7 @@ export class Global {
   (new Date().getMonth() + 1).toString().slice(-2);
   azureUser?:AzureUser;
   teamId?:string
+  users?:any[]
 }
 
 export class LastRetroName {

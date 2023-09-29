@@ -506,6 +506,24 @@ export const getSessionsData=async (input:chartInputType):Promise<any>=>{
   return sessionsData;
 }
 
+export const getActionsDataForTable=async (input:chartInputType):Promise<any>=>{
+  let actionsDataForTable;
+  const requestOptions = {
+    method: 'POST',
+    body: JSON.stringify(input),
+    headers: {
+      'Content-type': 'application/json; charset=UTF-8',
+    },
+  };
+  await fetch(API_URL + `/analytics/getActionsDataForTable`, requestOptions)
+    .then(response => response.json())
+    .then(data => {
+      actionsDataForTable = data;
+    });
+  return actionsDataForTable;
+}
+
+
 
 export function formatDateToMonthYear(inputDate: string) {
   // Parse the input date
@@ -538,9 +556,14 @@ export function formatDateToMonthYear(inputDate: string) {
   return formattedDate;
 }
 
-export function formatDateForAPI(inputDate: string) {
+export function formatDateForAPI(inputDate: string,end?:boolean) {
   const parts = inputDate.split('-');
-  const formattedDate = `${parts[1]}/01/${parts[0]}`;
+  var day="01"
+  if(end!=undefined&&end){
+    day=new Date(parseInt(parts[0]), parseInt(parts[1]), 0).getDate() +"";
+  }
+  const formattedDate = `${parts[1]}/${day}/${parts[0]}`;
+
   return formattedDate;
 }
 

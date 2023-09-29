@@ -1,22 +1,32 @@
 import * as React from 'react';
-import { users } from '../../../constants/DemoConst';
+// import { users } from '../../../constants/DemoConst';
 import { Box, Button, Menu, MenuItem } from '@mui/material';
 import Avatar from '../Avatar';
 import { ChevronDownIcon } from '@heroicons/react/24/outline';
+import { GlobalContext } from '../../../contexts/GlobalContext';
 
-export default function AssigneeDropdown({ id,outAssigneeSelected }: { id: string,outAssigneeSelected:(value:any)=>void }) {
+export default function AssigneeDropdown({
+  id,
+  outAssigneeSelected,
+}: {
+  id: string;
+  outAssigneeSelected: (value: any) => void;
+}) {
   const [assigneeId, setAssigneeId] = React.useState<string>(id);
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
+  const [global, dispatch] = React.useContext(GlobalContext);
+  const [users, setUsers] = React.useState<any[]>(
+    global?.users ? global?.users : []
+  );
   const open = Boolean(anchorEl);
 
-
-
   const returnUser = (id: string) => {
-    const user = users.find(user => user.id == id);
+  
+    const user = users.find(user => user.emailId == id);
     return (
       <Box display="flex" flexDirection="row" alignItems="center">
         <Avatar
-          avatar={user?.avatar}
+          avatar={user?.selectedAvatar}
           css={{
             width: '32px',
             height: '32px',
@@ -24,7 +34,7 @@ export default function AssigneeDropdown({ id,outAssigneeSelected }: { id: strin
             marginRight: '5px',
           }}
         />
-        {user?.name}
+        {user?.firstName + ' ' + user?.lastName}
       </Box>
     );
   };
@@ -41,8 +51,7 @@ export default function AssigneeDropdown({ id,outAssigneeSelected }: { id: strin
 
   return (
     <Box display="flex" flexDirection="row">
-      <Box width="130px">
-        {returnUser(assigneeId)}</Box>
+      <Box width="130px">{returnUser(assigneeId)}</Box>
 
       <Button
         aria-controls={open ? 'basic-menu' : undefined}
@@ -72,20 +81,20 @@ export default function AssigneeDropdown({ id,outAssigneeSelected }: { id: strin
         }}
       >
         {users.map(
-          user =>
+          (user,index) =>
             user.id !== assigneeId && (
               <MenuItem
-                key={user.id}
+                key={user.id+index}
                 value={user.id}
                 onClick={() => {
                   handleClose();
-                  outAssigneeSelected(user)
-                  setAssigneeId(user.id);
+                  outAssigneeSelected(user);
+                  setAssigneeId(user.emailId);
                 }}
               >
                 <Box display="flex" flexDirection="row" alignItems="center">
                   <Avatar
-                    avatar={user?.avatar}
+                    avatar={user?.selectedAvatar}
                     css={{
                       width: '32px',
                       height: '32px',
@@ -93,7 +102,7 @@ export default function AssigneeDropdown({ id,outAssigneeSelected }: { id: strin
                       marginRight: '5px',
                     }}
                   />
-                  {user?.name}
+                  {user?.firstName + ' ' + user?.lastName}
                 </Box>
               </MenuItem>
             )
