@@ -92,14 +92,15 @@ export default function AllUsers() {
     });
     await getAllUsersByEnterpriseId(enterpriseId).then(
       res => {
+        console.log('res', res);
         let tempRes = res.map((user: any) => {
           return {
-            id: user.user.emailId,
-            fullName: user.user.firstName + ' ' + user.user.lastName,
-            emailId: user.user.emailId,
-            teams: user.user.teamInfo,
-            roleName: user.user.roleName,
-            createdAt: moment(user.user.createdAt).format('Do MMM YYYY'),
+            id: user.emailId,
+            fullName: user.firstName + ' ' + user.lastName,
+            emailId: user.emailId,
+            teams: user.teamInfo,
+            roleName: user.roleName,
+            createdAt: moment(user.createdAt).format('Do MMM YYYY'),
             checked: false,
           };
         });
@@ -159,12 +160,12 @@ export default function AllUsers() {
       res => {
         let tempRes = res.map((user: any) => {
           return {
-            id: user.user.emailId,
-            fullName: user.user.firstName + ' ' + user.user.lastName,
-            emailId: user.user.emailId,
-            teams: user.user.teamInfo,
-            roleName: user.user.roleName,
-            createdAt: moment(user.user.createdAt).format('Do MMM YYYY'),
+            id: user.emailId,
+            fullName: user.firstName + ' ' + user.lastName,
+            emailId: user.emailId,
+            teams: user.teamInfo,
+            roleName: user.roleName,
+            createdAt: moment(user.createdAt).format('Do MMM YYYY'),
             checked: false,
           };
         });
@@ -178,7 +179,7 @@ export default function AllUsers() {
             }
           }
         }
-        if (teamId === 'all') {
+        if (teamId === '0') {
           setRecords(tempRes);
         } else {
           setRecords(newRecord);
@@ -481,10 +482,10 @@ export default function AllUsers() {
                           >
                             {item.teams.map((team: any, index: number) => {
                               return (
-                                <>
+                                <span id={team.teamId}>
                                   {team.teamName}
                                   {index < item.teams.length - 1 ? ', ' : ''}
-                                </>
+                                </span>
                               );
                             })}
                           </Box>

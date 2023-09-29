@@ -198,7 +198,7 @@ export default function App({ instance }: AppProps) {
                                     <EnterpriseLevelActionsCountChart
                                       dashboard={false}
                                       team={'0'}
-                                      count={()=>{}}
+                                      count={() => {}}
                                     />
                                   }
                                 />
@@ -313,24 +313,9 @@ export default function App({ instance }: AppProps) {
                                 </Route>
                               </Route>
                               <Route path="teams/">
-                                <Route
-                                  path=""
-                                  element={<Notifications />}
-                                />
+                                <Route path="" element={<Notifications />} />
                                 <Route path="allTeams">
-                                  <Route
-                                    path=""
-                                    element={<Notifications />}
-                                  />
-                                </Route>
-                                <Route path="manageUsers">
                                   <Route path="" element={<Notifications />} />
-                                </Route>
-                                <Route path="enterpriseRegistration">
-                                  <Route
-                                    path=""
-                                    element={<Notifications />}
-                                  />
                                 </Route>
                                 <Route path="create">
                                   <Route path="" element={<Notifications />} />
@@ -395,7 +380,7 @@ export default function App({ instance }: AppProps) {
                                     <EnterpriseLevelActionsCountChart
                                       dashboard={false}
                                       team={'0'}
-                                      count={()=>{}}
+                                      count={() => {}}
                                     />
                                   }
                                 />
@@ -510,24 +495,15 @@ export default function App({ instance }: AppProps) {
                                 </Route>
                               </Route>
                               <Route path="teams/">
-                                <Route
-                                  path=""
-                                  element={<Notifications />}
-                                />
+                                <Route path="" element={<Notifications />} />
                                 <Route path="allTeams">
-                                  <Route
-                                    path=""
-                                    element={<Notifications />}
-                                  />
-                                </Route>
-                                <Route path="manageUsers">
                                   <Route path="" element={<Notifications />} />
                                 </Route>
+                                <Route path="manageUsers">
+                                  <Route path="" element={<ManageUsers />} />
+                                </Route>
                                 <Route path="enterpriseRegistration">
-                                  <Route
-                                    path=""
-                                    element={<Notifications />}
-                                  />
+                                  <Route path="" element={<Notifications />} />
                                 </Route>
                                 <Route path="create">
                                   <Route path="" element={<Notifications />} />

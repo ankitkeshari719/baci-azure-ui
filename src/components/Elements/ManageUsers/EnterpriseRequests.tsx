@@ -24,7 +24,6 @@ import { TableBody, TableCell, TableRow } from '@material-ui/core';
 import { MagnifyingGlassIcon } from '@heroicons/react/24/outline';
 import {
   approvedDeclinedEnterpriseRequestByIds,
-  deleteManyUsers,
   getAllByEnterpriseId,
   updateEnterpriseRequest,
   updateRoleOnEnterpriseRequest,
@@ -41,7 +40,6 @@ import { ContainedButton } from '../../CustomizedButton/ContainedButton';
 import { OutlinedButton } from '../../CustomizedButton/OutlinedButton';
 import OutlineButtonWithIconWithNoBorder from '../../CustomizedButton/OutlineButtonWithIconWithNoBorder';
 import TeamSelector from '../TeamSelector';
-import { gridQuickFilterValuesSelector } from '@mui/x-data-grid';
 
 const headCells = [
   { id: 'check', label: '', disableSorting: true },
@@ -88,6 +86,13 @@ export default function EnterpriseRequests() {
     );
   }, []);
 
+  React.useEffect(() => {
+    setHeight(window.innerHeight);
+    callGetAllEnterpriseRequestByEnterpriseId(
+      tempLocalUserData && tempLocalUserData.enterpriseId
+    );
+  }, [selectedTeam]);
+
   // Select All Check Box
   const handleSelectAllCheckbox = () => {
     setIsSelectAllChecked(!isSelectAllChecked);
@@ -122,19 +127,31 @@ export default function EnterpriseRequests() {
     });
     await getAllByEnterpriseId(enterpriseId).then(
       res => {
-        let tempRes = res.map((enterpriseRequest: any) => {
-          return {
-            id: enterpriseRequest.enterpriseRequest.enterpriseRequestId,
-            organisationId: enterpriseRequest.enterpriseRequest.organisationId,
-            fromName: enterpriseRequest.enterpriseRequest.fromName,
-            fromEmail: enterpriseRequest.enterpriseRequest.fromEmail,
-            fromTeams: enterpriseRequest.enterpriseRequest.teamInfo,
-            createdAt: moment(
-              enterpriseRequest.enterpriseRequest.createdAt
-            ).format('Do MMM YYYY'),
-            checked: false,
-          };
-        });
+        let enterpriseDataAfterTeamSelected = [];
+        if (selectedTeam === '0') {
+          enterpriseDataAfterTeamSelected = res;
+        } else {
+          enterpriseDataAfterTeamSelected = res.filter((e: any) =>
+            e.enterpriseRequest.fromTeams.includes(selectedTeam)
+          );
+        }
+
+        let tempRes = enterpriseDataAfterTeamSelected.map(
+          (enterpriseRequest: any) => {
+            return {
+              id: enterpriseRequest.enterpriseRequest.enterpriseRequestId,
+              organisationId:
+                enterpriseRequest.enterpriseRequest.organisationId,
+              fromName: enterpriseRequest.enterpriseRequest.fromName,
+              fromEmail: enterpriseRequest.enterpriseRequest.fromEmail,
+              fromTeams: enterpriseRequest.enterpriseRequest.teamInfo,
+              createdAt: moment(
+                enterpriseRequest.enterpriseRequest.createdAt
+              ).format('Do MMM YYYY'),
+              checked: false,
+            };
+          }
+        );
         setRecords(tempRes);
         dispatch({
           type: ActionType.SET_LOADING,
@@ -339,7 +356,6 @@ export default function EnterpriseRequests() {
       enterpriseRequestIds: selectedEnterpriseRequestIds,
     };
 
-    
     await approvedDeclinedEnterpriseRequestByIds(requestBody).then(
       res => {
         dispatch({
@@ -422,7 +438,6 @@ export default function EnterpriseRequests() {
           tempLocalUserData.enterpriseId
         );
         closeDeclinedAllRequestsPopUp();
-
       }
     );
   };
@@ -580,12 +595,12 @@ export default function EnterpriseRequests() {
                           >
                             {item.fromTeams.map((team: any, index: number) => {
                               return (
-                                <>
+                                <span id={team.teamId}>
                                   {team.teamName}
                                   {index < item.fromTeams.length - 1
                                     ? ', '
                                     : ''}
-                                </>
+                                </span>
                               );
                             })}
                           </Box>
