@@ -19,6 +19,8 @@ import {
   H5RegularTypography,
   BodySemiBoldTypography,
   H6RegularTypography,
+  H4SemiBoldTypography,
+  CaptionSemiBoldTypography,
 } from '../../CustomizedTypography';
 import { ContainedButton, OutlinedButton } from './../../../components';
 import { MagnifyingGlassIcon } from '@heroicons/react/24/outline';
@@ -270,7 +272,7 @@ export default function CreateTeam() {
       teamDepartment: teamDepartment,
       teamDescription: teamDescription,
       enterpriseId: enterpriseId,
-      userEmailIds: userEmailIds,
+      userEmailIds: checkedUserEmails,
       createdBy: createdBy,
       isActive: true,
     };
@@ -706,14 +708,14 @@ export default function CreateTeam() {
           },
         }}
       >
-        <DialogTitle style={{ padding: '16px' }}>
+        <DialogTitle style={{ padding: '0px' }}>
           <Grid container sx={{ display: 'flex', alignItems: 'center' }}>
             <Grid item sm={6}>
               <Box display="flex" justifyContent="flex-start">
-                <H6RegularTypography
+                <H4SemiBoldTypography
                   label={'Add Members'}
                   style={{
-                    color: '#4E4E4E',
+                    color: '#343434',
                   }}
                 />
               </Box>
@@ -731,50 +733,91 @@ export default function CreateTeam() {
             </Grid>
           </Grid>
         </DialogTitle>
+
+        {/* Selected User List */}
+        <Box
+          sx={{
+            width: '600px',
+            display: 'grid',
+            gridTemplateColumns: 'repeat(4, 1fr)',
+            flexDirection: 'row',
+            alignItems: 'center',
+            justifyContent: 'flex-start',
+            marginTop: '16px',
+          }}
+        >
+          {records
+            .filter((r: any) => r.checked)
+            .map((record: any) => {
+              return (
+                <Box
+                  key={record.emailId}
+                  sx={{
+                    width: '150px',
+                    height: '32px',
+                    minWidth: '150px',
+                    minHeight: '32px',
+                    border: '1px solid var(--Info, #4285F4)',
+                    borderRadius: '4px',
+                    background: '#d7e6ff',
+                    textAlign: 'center',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    margin: '4px',
+                  }}
+                >
+                  <CaptionSemiBoldTypography
+                    label={record.fullName}
+                    style={{
+                      color: '#4285F4 !important',
+                      fontSize: '12px !important',
+                    }}
+                  />
+                </Box>
+              );
+            })}
+        </Box>
         {/* Search Bar */}
         <TextField
           id="outlined-basic"
-          label="Find a members"
-          variant="outlined"
-          sx={{ background: 'white', width: '60%' }}
+          variant="standard"
+          placeholder="Find a members"
+          sx={{
+            background: 'white',
+            width: '100%',
+            marginTop: '24px',
+            ...styles.accessCodeTextField,
+          }}
           onChange={e => {
             setSearchedVal(e.target.value);
             handleSearch(e);
           }}
           value={searchedVal}
-          InputProps={{
-            startAdornment: (
-              <InputAdornment position="start">
-                <MagnifyingGlassIcon width="20px" />
-              </InputAdornment>
-            ),
-          }}
         />
         {/* Users List */}
-        <Box className="avatarDialog">
-          <TblContainer>
-            {/* <TblHead /> */}
-            <TableBody>
-              {recordAfterPagingAndSorting().map((item: any) => {
-                return (
-                  <TableRow key={item.id}>
-                    <TableCell>
-                      <Checkbox
-                        checked={item.checked}
-                        onChange={e => handleChangeCheckbox(e, item.id)}
-                        inputProps={{ 'aria-label': 'controlled' }}
-                      />
-                    </TableCell>
-                    <TableCell>{item.fullName}</TableCell>
-                    <TableCell>{item.emailId}</TableCell>
-                  </TableRow>
-                );
-              })}
-            </TableBody>
-          </TblContainer>
-        </Box>
+        <TblContainer>
+          {/* <TblHead /> */}
+          <TableBody>
+            {recordAfterPagingAndSorting().map((item: any) => {
+              return (
+                <TableRow key={item.id}>
+                  <TableCell>{item.fullName}</TableCell>
+                  <TableCell>{item.emailId}</TableCell>
+                  <TableCell>
+                    <Checkbox
+                      checked={item.checked}
+                      onChange={e => handleChangeCheckbox(e, item.id)}
+                      inputProps={{ 'aria-label': 'controlled' }}
+                    />
+                  </TableCell>
+                </TableRow>
+              );
+            })}
+          </TableBody>
+        </TblContainer>
         {/* Buttons */}
-        <Box sx={{ mx: 3 }}>
+        <Box>
           <Box
             sx={{
               width: '100%',
