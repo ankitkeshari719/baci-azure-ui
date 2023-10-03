@@ -10,7 +10,6 @@ import {
   Dialog,
   DialogTitle,
   Grid,
-  SelectChangeEvent,
 } from '@mui/material';
 import * as React from 'react';
 import * as Icons from 'heroicons-react';
@@ -26,7 +25,6 @@ import useTable from '../../CustomizedTable/useTable';
 import { TableBody, TableCell, TableRow } from '@material-ui/core';
 import { MagnifyingGlassIcon } from '@heroicons/react/24/outline';
 import {
-  deactivateMultipleByIds,
   getAllUsersByEnterpriseId,
   updateUser,
 } from '../../../helpers/msal/services';
@@ -40,7 +38,6 @@ import {
 import { ContainedButton } from '../../CustomizedButton/ContainedButton';
 import { OutlinedButton } from '../../CustomizedButton/OutlinedButton';
 import OutlineButtonWithIconWithNoBorder from '../../CustomizedButton/OutlineButtonWithIconWithNoBorder';
-import TeamSelector from '../TeamSelector';
 import { ContainedButtonWithIcon } from '../../CustomizedButton/ContainedButtonWithIcon';
 
 const headCells = [

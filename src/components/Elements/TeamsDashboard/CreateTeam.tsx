@@ -242,27 +242,17 @@ export default function CreateTeam() {
       teamDescription != '' ||
       createdBy != ''
     ) {
-      const userIds = records
-        .filter((r: any) => r.checked)
-        .map((e: any) => e.emailId);
-      setUserEmailIds(userIds);
-      const requestBody = {
-        teamName: teamName,
-        teamDepartment: teamDepartment,
-        teamDescription: teamDescription,
-        enterpriseId: enterpriseId,
-        userEmailIds: userEmailIds,
-        createdBy: createdBy,
-        isActive: true,
-      };
-      console.log('requestBody', requestBody);
-      return;
+      const rrr = records.filter((r: any) => r.checked);
+      const userEmailIdsFromRecord = rrr.map((r: any) => {
+        return r.emailId;
+      });
+
       // Call API to Create team
-      callCreateTeam();
+      callCreateTeam(userEmailIdsFromRecord);
     }
   };
 
-  const callCreateTeam = async () => {
+  const callCreateTeam = async (userEmailIdsFromRecord: any) => {
     dispatch({
       type: ActionType.SET_LOADING,
       payload: { loadingFlag: true },
@@ -272,11 +262,12 @@ export default function CreateTeam() {
       teamDepartment: teamDepartment,
       teamDescription: teamDescription,
       enterpriseId: enterpriseId,
-      userEmailIds: checkedUserEmails,
+      userEmailIds: userEmailIdsFromRecord,
       createdBy: createdBy,
       isActive: true,
     };
-
+    console.log('requestBody::::',requestBody);
+    return;
     await createTeam(requestBody).then(
       res => {
         dispatch({
