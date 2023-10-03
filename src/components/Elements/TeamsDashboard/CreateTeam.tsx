@@ -8,7 +8,7 @@ import {
   DialogTitle,
   Grid,
   Checkbox,
-  InputAdornment,
+  SelectChangeEvent,
 } from '@mui/material';
 import * as React from 'react';
 import moment from 'moment';
@@ -18,12 +18,10 @@ import {
   H2SemiBoldTypography,
   H5RegularTypography,
   BodySemiBoldTypography,
-  H6RegularTypography,
   H4SemiBoldTypography,
   CaptionSemiBoldTypography,
 } from '../../CustomizedTypography';
 import { ContainedButton, OutlinedButton } from './../../../components';
-import { MagnifyingGlassIcon } from '@heroicons/react/24/outline';
 import { TableBody, TableCell, TableRow } from '@material-ui/core';
 import commonStyles from '../../../style.module.scss';
 import { useNavigate } from 'react-router-dom';
@@ -32,12 +30,14 @@ import { BASIC, ENTERPRISE } from '../../../constants/applicationConst';
 import {
   createTeam,
   getAllUsersByEnterpriseId,
+  updateUsersTeamArray,
 } from '../../../helpers/msal/services';
 import { ActionType, GlobalContext } from '../../../contexts/GlobalContext';
 import OutlineButtonWithIconWithNoBorder from '../../CustomizedButton/OutlineButtonWithIconWithNoBorder';
 import { ContainedButtonWithIcon } from '../../CustomizedButton/ContainedButtonWithIcon';
 import useTable from '../../CustomizedTable/useTable';
 import SelectedTeamMembers from './SelectedTeamMembers';
+import UserSelector from '../UserSelector';
 
 const styles = {
   accessCodeTextField: {
@@ -205,6 +205,39 @@ export default function CreateTeam() {
     handleCloseAddMembersDialog();
   };
 
+  const removeUser = (selectedUserId: any) => {
+    const newRecord = records.map((record: any) => {
+      if (record.emailId === selectedUserId) {
+        record.checked = false;
+      }
+      return record;
+    });
+    setRecords(newRecord);
+    const checkRecords = newRecord
+      .filter((e: any) => e.checked)
+      .map((r: any) => r.emailId);
+    setCheckedUserEmails(checkRecords);
+  };
+
+  const removeMultipleUser = (selectedUserIds: any) => {
+    const newRecord = records.map((record: any) => {
+      if (selectedUserIds.includes(record.emailId)) {
+        record.checked = false;
+      }
+      return record;
+    });
+    setRecords(newRecord);
+    const checkRecords = newRecord
+      .filter((e: any) => e.checked)
+      .map((r: any) => r.emailId);
+    setCheckedUserEmails(checkRecords);
+  };
+
+  const handleCreatedByChange = (event: SelectChangeEvent) => {
+    setCreatedBy(event.target.value as string);
+    setCreatedByCodeError('');
+  };
+
   const submitTeam = () => {
     if (teamName === '') {
       setTeamNameCodeError('Please enter team Name');
@@ -266,9 +299,38 @@ export default function CreateTeam() {
       createdBy: createdBy,
       isActive: true,
     };
-    console.log('requestBody::::',requestBody);
-    return;
     await createTeam(requestBody).then(
+      res => {
+        dispatch({
+          type: ActionType.SET_LOADING,
+          payload: { loadingFlag: false },
+        });
+        console.log('res::::', res);
+        updateUsersTeam(res, userEmailIdsFromRecord);
+      },
+      err => {
+        console.log('err', err);
+        dispatch({
+          type: ActionType.SET_LOADING,
+          payload: { loadingFlag: false },
+        });
+      }
+    );
+  };
+
+  // Update users teams array after creating the team
+  const updateUsersTeam = async (teamId: any, userEmailIdsFromRecord: any) => {
+    dispatch({
+      type: ActionType.SET_LOADING,
+      payload: { loadingFlag: true },
+    });
+
+    const requestBody = {
+      teamId: teamId,
+      userEmailIdsFromRecord: userEmailIdsFromRecord,
+    };
+
+    await updateUsersTeamArray(requestBody).then(
       res => {
         dispatch({
           type: ActionType.SET_LOADING,
@@ -285,33 +347,7 @@ export default function CreateTeam() {
     );
   };
 
-  const removeUser = (selectedUserId: any) => {
-    const newRecord = records.map((record: any) => {
-      if (record.emailId === selectedUserId) {
-        record.checked = false;
-      }
-      return record;
-    });
-    setRecords(newRecord);
-    const checkRecords = newRecord
-      .filter((e: any) => e.checked)
-      .map((r: any) => r.emailId);
-    setCheckedUserEmails(checkRecords);
-  };
-
-  const removeMultipleUser = (selectedUserIds: any) => {
-    const newRecord = records.map((record: any) => {
-      if (selectedUserIds.includes(record.emailId)) {
-        record.checked = false;
-      }
-      return record;
-    });
-    setRecords(newRecord);
-    const checkRecords = newRecord
-      .filter((e: any) => e.checked)
-      .map((r: any) => r.emailId);
-    setCheckedUserEmails(checkRecords);
-  };
+  // Clean up the data
 
   return (
     <>
@@ -413,21 +449,31 @@ export default function CreateTeam() {
                     width: '100%',
                   }}
                 >
-                  <TextField
-                    label="Team Name"
-                    autoFocus
-                    variant="standard"
-                    error={!!codeTeamNameError}
+                  <Box
                     sx={{
-                      width: '400px',
-                      ...styles.accessCodeTextField,
+                      display: 'flex',
+                      flexDirection: 'column',
                     }}
-                    value={teamName}
-                    onChange={e => {
-                      setTeamName(e.currentTarget.value);
-                      setTeamNameCodeError('');
-                    }}
-                  />
+                  >
+                    <ButtonLabelTypography
+                      label="Team Name"
+                      style={{ color: '#000000' }}
+                    />
+                    <TextField
+                      autoFocus
+                      variant="standard"
+                      error={!!codeTeamNameError}
+                      sx={{
+                        width: '400px',
+                        ...styles.accessCodeTextField,
+                      }}
+                      value={teamName}
+                      onChange={e => {
+                        setTeamName(e.currentTarget.value);
+                        setTeamNameCodeError('');
+                      }}
+                    />
+                  </Box>
                 </Box>
                 {/* Error message */}
                 {codeTeamNameError !== '' && (
@@ -481,21 +527,35 @@ export default function CreateTeam() {
                     alignItems: 'center',
                   }}
                 >
-                  <TextField
-                    label="Team Description"
-                    maxRows={8}
-                    variant="standard"
-                    error={!!codeTeamDescriptionError}
+                  <Box
                     sx={{
-                      width: '400px',
-                      ...styles.messageTextField,
+                      display: 'flex',
+                      flexDirection: 'column',
                     }}
-                    value={teamDescription}
-                    onChange={e => {
-                      setTeamDescription(e.currentTarget.value);
-                      setTeamDescriptionError('');
-                    }}
-                  />
+                  >
+                    <ButtonLabelTypography
+                      label="Team Description"
+                      style={{ color: '#000000' }}
+                    />
+                    <TextField
+                      multiline
+                      rows={4}
+                      maxRows={8}
+                      placeholder="Enter Description"
+                      variant="standard"
+                      error={!!codeTeamDescriptionError}
+                      sx={{
+                        width: '400px',
+                        ...styles.messageTextField,
+                        background: '#ffffff',
+                      }}
+                      value={teamDescription}
+                      onChange={e => {
+                        setTeamDescription(e.currentTarget.value);
+                        setTeamDescriptionError('');
+                      }}
+                    />
+                  </Box>
                 </Box>
                 {/* Error message */}
                 {codeTeamDescriptionError !== '' && (
@@ -536,20 +596,25 @@ export default function CreateTeam() {
                     width: '100%',
                   }}
                 >
-                  <TextField
-                    label="Created BY"
-                    variant="standard"
-                    error={!!codeCreatedByError}
+                  <Box
                     sx={{
-                      width: '400px',
-                      ...styles.accessCodeTextField,
+                      display: 'flex',
+                      flexDirection: 'column',
                     }}
-                    value={createdBy}
-                    onChange={e => {
-                      setCreatedBy(e.currentTarget.value);
-                      setCreatedByCodeError('');
-                    }}
-                  />
+                  >
+                    <ButtonLabelTypography
+                      label="Created BY"
+                      style={{ color: '#000000' }}
+                    />
+                    <UserSelector
+                      enterpriseId={
+                        tempLocalUserData && tempLocalUserData.enterpriseId
+                      }
+                      selectedUser={createdBy}
+                      handleChange={handleCreatedByChange}
+                      width={400}
+                    />
+                  </Box>
                 </Box>
                 {/* Error message */}
                 {codeCreatedByError !== '' && (
@@ -590,20 +655,30 @@ export default function CreateTeam() {
                     alignItems: 'center',
                   }}
                 >
-                  <TextField
-                    label="Department"
-                    variant="standard"
-                    error={!!codeTeamDepartmentError}
+                  <Box
                     sx={{
-                      width: '400px',
-                      ...styles.accessCodeTextField,
+                      display: 'flex',
+                      flexDirection: 'column',
                     }}
-                    value={teamDepartment}
-                    onChange={e => {
-                      setTeamDepartment(e.currentTarget.value);
-                      setTeamDepartmentCodeError('');
-                    }}
-                  />
+                  >
+                    <ButtonLabelTypography
+                      label="Department"
+                      style={{ color: '#000000' }}
+                    />
+                    <TextField
+                      variant="standard"
+                      error={!!codeTeamDepartmentError}
+                      sx={{
+                        width: '400px',
+                        ...styles.accessCodeTextField,
+                      }}
+                      value={teamDepartment}
+                      onChange={e => {
+                        setTeamDepartment(e.currentTarget.value);
+                        setTeamDepartmentCodeError('');
+                      }}
+                    />
+                  </Box>
                 </Box>
                 {/* Error message */}
                 {codeTeamDepartmentError !== '' && (
