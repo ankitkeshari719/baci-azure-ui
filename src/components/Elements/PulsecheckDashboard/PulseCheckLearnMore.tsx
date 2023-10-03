@@ -4,6 +4,7 @@ import * as Icons from 'heroicons-react';
 import { useNavigate } from 'react-router-dom';
 
 import {
+  BodyRegularTypography,
   BodySemiBoldTypography,
   H2SemiBoldTypography,
 } from '../../CustomizedTypography';
@@ -38,8 +39,8 @@ export default function PulseCheckLearnMore() {
         <Box
           sx={{ display: 'flex', flexDirection: 'row', marginBottom: '10px' }}
         >
-          <BodySemiBoldTypography
-            label="Template "
+          <BodyRegularTypography
+            label="Template"
             style={{
               color: '#00E',
               cursor: 'pointer',
@@ -47,16 +48,28 @@ export default function PulseCheckLearnMore() {
             }}
             onClick={goToPulseCheckList}
           />
-          <BodySemiBoldTypography
-            label="\ Pulse Check Template "
+          <BodyRegularTypography
+            label="\"
+            style={{ marginLeft: '8px !important' }}
+          />
+          <BodyRegularTypography
+            label="Pulse Check Template "
             style={{
               color: '#00E',
               cursor: 'pointer',
               textDecorationLine: 'underline',
+              marginLeft: '8px !important',
             }}
             onClick={goToPulseCheckList}
           />
-          <BodySemiBoldTypography label="\ Simple" style={{}} />
+          <BodyRegularTypography
+            label="\"
+            style={{ marginLeft: '8px !important' }}
+          />
+          <BodyRegularTypography
+            label="Simple"
+            style={{ marginLeft: '8px !important' }}
+          />
         </Box>
         <Box
           display="flex"
