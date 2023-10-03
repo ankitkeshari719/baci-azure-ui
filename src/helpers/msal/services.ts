@@ -338,133 +338,194 @@ export const getDummyChartData = async (): Promise<any> => {
 
 // Chart 1: Api to get Enterprise Level ActionsCount
 
-export interface chartInputType {userId:string,roleName:string,enterpriseId:string,teamId:string,fromDate:string,toDate:string}
+export interface chartInputType {
+  userId: string;
+  roleName: string;
+  enterpriseId: string;
+  teamId: string;
+  fromDate: string;
+  toDate: string;
+}
 
-export const getActionsChartData=async(input:chartInputType):Promise<any>=>{
- let actionsChartData;
+export const getActionsChartData = async (
+  input: chartInputType
+): Promise<any> => {
+  let actionsChartData;
   const requestOptions = {
     method: 'POST',
-    body:JSON.stringify(input),
+    body: JSON.stringify(input),
     headers: {
-      "Content-type": "application/json; charset=UTF-8"
-  }
+      'Content-type': 'application/json; charset=UTF-8',
+    },
   };
-  await fetch( API_URL+`/getActionsChartData`,requestOptions).then(response =>response.json()).then(
-      data =>{
-        actionsChartData=data
-      }
-    )
-    return actionsChartData;
+  await fetch(API_URL + `/getActionsChartData`, requestOptions)
+    .then(response => response.json())
+    .then(data => {
+      actionsChartData = data;
+    });
+  return actionsChartData;
+};
+
+export const getTeamLevelActionsDataForChart = async (
+  input: chartInputType
+): Promise<any> => {
+  let teamLevelActionsDataForChart;
+  const requestOptions = {
+    method: 'POST',
+    body: JSON.stringify(input),
+    headers: {
+      'Content-type': 'application/json; charset=UTF-8',
+    },
+  };
+  await fetch(
+    API_URL + `/analytics/getTeamLevelActionsDataForChart`,
+    requestOptions
+  )
+    .then(response => response.json())
+    .then(data => {
+      teamLevelActionsDataForChart = data;
+    });
+  return teamLevelActionsDataForChart;
+};
+
+export const getCountOfAllParticipantsOverTime = async (
+  input: chartInputType
+): Promise<any> => {
+  let countOfAllParticipantsOverTime;
+  const requestOptions = {
+    method: 'POST',
+    body: JSON.stringify(input),
+    headers: {
+      'Content-type': 'application/json; charset=UTF-8',
+    },
+  };
+  await fetch(
+    API_URL + `/analytics/getCountOfAllParticipantsOverTime`,
+    requestOptions
+  )
+    .then(response => response.json())
+    .then(data => {
+      countOfAllParticipantsOverTime = data;
+    });
+  return countOfAllParticipantsOverTime;
+};
+
+export const getCountOfAllSessionsOverTime = async (
+  input: chartInputType
+): Promise<any> => {
+  let countOfAllSessionsOverTime;
+  const requestOptions = {
+    method: 'POST',
+    body: JSON.stringify(input),
+    headers: {
+      'Content-type': 'application/json; charset=UTF-8',
+    },
+  };
+  await fetch(
+    API_URL + `/analytics/getCountOfAllSessionsOverTime`,
+    requestOptions
+  )
+    .then(response => response.json())
+    .then(data => {
+      countOfAllSessionsOverTime = data;
+    });
+  return countOfAllSessionsOverTime;
+};
+
+export const getEmotionsAsPerCategory = async (
+  input: chartInputType
+): Promise<any> => {
+  let emotionsAsPerCategory;
+  const requestOptions = {
+    method: 'POST',
+    body: JSON.stringify(input),
+    headers: {
+      'Content-type': 'application/json; charset=UTF-8',
+    },
+  };
+  await fetch(API_URL + `/analytics/getEmotionsAsPerCategory`, requestOptions)
+    .then(response => response.json())
+    .then(data => {
+      emotionsAsPerCategory = data;
+    });
+  return emotionsAsPerCategory;
+};
+
+export const getParticipantMoodCount = async (
+  input: chartInputType
+): Promise<any> => {
+  let participantMoodCount;
+  const requestOptions = {
+    method: 'POST',
+    body: JSON.stringify(input),
+    headers: {
+      'Content-type': 'application/json; charset=UTF-8',
+    },
+  };
+  await fetch(API_URL + `/analytics/getParticipantMoodCount`, requestOptions)
+    .then(response => response.json())
+    .then(data => {
+      participantMoodCount = data;
+    });
+  return participantMoodCount;
+};
+
+export const getOverAllSummary = async (
+  input: chartInputType
+): Promise<any> => {
+  let overAllSummary;
+  const requestOptions = {
+    method: 'POST',
+    body: JSON.stringify(input),
+    headers: {
+      'Content-type': 'application/json; charset=UTF-8',
+    },
+  };
+  await fetch(API_URL + `/analytics/getOverAllSummary`, requestOptions)
+    .then(response => response.json())
+    .then(data => {
+      overAllSummary = data;
+    });
+  return overAllSummary;
+};
+
+export const getSessionsData=async (input:chartInputType):Promise<any>=>{
+  let sessionsData;
+  const requestOptions = {
+    method: 'POST',
+    body: JSON.stringify(input),
+    headers: {
+      'Content-type': 'application/json; charset=UTF-8',
+    },
+  };
+  await fetch(API_URL + `/getSessionsData`, requestOptions)
+    .then(response => response.json())
+    .then(data => {
+      sessionsData = data;
+    });
+  return sessionsData;
+}
+
+export const getActionsDataForTable=async (input:chartInputType):Promise<any>=>{
+  let actionsDataForTable;
+  const requestOptions = {
+    method: 'POST',
+    body: JSON.stringify(input),
+    headers: {
+      'Content-type': 'application/json; charset=UTF-8',
+    },
+  };
+  await fetch(API_URL + `/analytics/getActionsDataForTable`, requestOptions)
+    .then(response => response.json())
+    .then(data => {
+      actionsDataForTable = data;
+    });
+  return actionsDataForTable;
 }
 
 
 
-export const getTeamLevelActionsDataForChart=async(input:chartInputType):Promise<any>=>{
-  let teamLevelActionsDataForChart;
-   const requestOptions = {
-     method: 'POST',
-     body:JSON.stringify(input),
-     headers: {
-       "Content-type": "application/json; charset=UTF-8"
-   }
-   };
-   await fetch( API_URL+`/analytics/getTeamLevelActionsDataForChart`,requestOptions).then(response =>response.json()).then(
-       data =>{
-        teamLevelActionsDataForChart=data
-       }
-     )
-     return teamLevelActionsDataForChart;
- }
-
- export const getCountOfAllParticipantsOverTime=async(input:chartInputType):Promise<any>=>{
-  let countOfAllParticipantsOverTime;
-   const requestOptions = {
-     method: 'POST',
-     body:JSON.stringify(input),
-     headers: {
-       "Content-type": "application/json; charset=UTF-8"
-   }
-   };
-   await fetch( API_URL+`/analytics/getCountOfAllParticipantsOverTime`,requestOptions).then(response =>response.json()).then(
-       data =>{
-        countOfAllParticipantsOverTime=data
-       }
-     )
-     return countOfAllParticipantsOverTime;
- }
-
- export const getCountOfAllSessionsOverTime=async(input:chartInputType):Promise<any>=>{
-  let countOfAllSessionsOverTime;
-   const requestOptions = {
-     method: 'POST',
-     body:JSON.stringify(input),
-     headers: {
-       "Content-type": "application/json; charset=UTF-8"
-   }
-   };
-   await fetch( API_URL+`/analytics/getCountOfAllSessionsOverTime`,requestOptions).then(response =>response.json()).then(
-       data =>{
-        countOfAllSessionsOverTime=data
-       }
-     )
-     return countOfAllSessionsOverTime;
- }
-
- export const getEmotionsAsPerCategory=async(input:chartInputType):Promise<any>=>{
-  let emotionsAsPerCategory;
-   const requestOptions = {
-     method: 'POST',
-     body:JSON.stringify(input),
-     headers: {
-       "Content-type": "application/json; charset=UTF-8"
-   }
-   };
-   await fetch( API_URL+`/analytics/getEmotionsAsPerCategory`,requestOptions).then(response =>response.json()).then(
-       data =>{
-        emotionsAsPerCategory=data
-       }
-     )
-     return emotionsAsPerCategory;
- }
-
- export const getParticipantMoodCount=async(input:chartInputType):Promise<any>=>{
-  let participantMoodCount;
-   const requestOptions = {
-     method: 'POST',
-     body:JSON.stringify(input),
-     headers: {
-       "Content-type": "application/json; charset=UTF-8"
-   }
-   };
-   await fetch( API_URL+`/analytics/getParticipantMoodCount`,requestOptions).then(response =>response.json()).then(
-       data =>{
-        participantMoodCount=data
-       }
-     )
-     return participantMoodCount;
- }
-
- export const getOverAllSummary=async(input:chartInputType):Promise<any>=>{
-  let overAllSummary;
-   const requestOptions = {
-     method: 'POST',
-     body:JSON.stringify(input),
-     headers: {
-       "Content-type": "application/json; charset=UTF-8"
-   }
-   };
-   await fetch( API_URL+`/analytics/getOverAllSummary`,requestOptions).then(response =>response.json()).then(
-       data =>{
-        overAllSummary=data
-       }
-     )
-     return overAllSummary;
- }
-
-
-
-
-export function formatDateToMonthYear(inputDate:string) {
+export function formatDateToMonthYear(inputDate: string) {
   // Parse the input date
   const dateParts = inputDate.split('-');
   const year = dateParts[0];
@@ -472,8 +533,18 @@ export function formatDateToMonthYear(inputDate:string) {
 
   // Define an array of month abbreviations
   const monthAbbreviations = [
-    'JAN', 'FEB', 'MAR', 'APR', 'MAY', 'JUN',
-    'JUL', 'AUG', 'SEP', 'OCT', 'NOV', 'DEC'
+    'JAN',
+    'FEB',
+    'MAR',
+    'APR',
+    'MAY',
+    'JUN',
+    'JUL',
+    'AUG',
+    'SEP',
+    'OCT',
+    'NOV',
+    'DEC',
   ];
 
   // Get the abbreviation for the month (assuming 1-based index)
@@ -485,16 +556,16 @@ export function formatDateToMonthYear(inputDate:string) {
   return formattedDate;
 }
 
-export function formatDateForAPI(inputDate:string){
+export function formatDateForAPI(inputDate: string,end?:boolean) {
+  const parts = inputDate.split('-');
+  var day="01"
+  if(end!=undefined&&end){
+    day=new Date(parseInt(parts[0]), parseInt(parts[1]), 0).getDate() +"";
+  }
+  const formattedDate = `${parts[1]}/${day}/${parts[0]}`;
 
-const parts = inputDate.split("-");
-const formattedDate = `${parts[1]}/01/${parts[0]}`;
-return formattedDate
+  return formattedDate;
 }
-
-
-
-
 
 export const getEnterpriseLevelActionsCounts = async (
   fromDate: string,
@@ -1250,6 +1321,7 @@ export const createUser = async (requestBody: any): Promise<any> => {
       isEnterpriserRequested: requestBody.isEnterpriserRequested,
       teams: requestBody.teams,
       isActive: requestBody.isActive,
+      enterpriseRequestId: requestBody.enterpriseRequestId,
     }),
   };
 
@@ -1286,6 +1358,7 @@ export const updateUser = async (
       isEnterpriserRequested: requestBody.isEnterpriserRequested,
       teams: requestBody.teams,
       isActive: requestBody.isActive,
+      enterpriseRequestId: requestBody.enterpriseRequestId,
     }),
   };
 
@@ -1372,6 +1445,30 @@ export const deactivateMultipleByIds = async (
   return data;
 };
 
+// Update Users role on enterprise request approved and declined
+export const updateRoleOnEnterpriseRequest = async (
+  requestBody: any
+): Promise<any> => {
+  let data: any;
+  const requestOptions = {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({
+      emailIds: requestBody.emailIds,
+      roleId: requestBody.roleId,
+      roleName: requestBody.roleName,
+      isEnterpriserRequested: requestBody.isEnterpriserRequested,
+    }),
+  };
+
+  await fetch(API_URL + `/users/updateRoleOnEnterpriseRequest`, requestOptions)
+    .then(response => response.json())
+    .then(response => {
+      data = response.data;
+    });
+  return data;
+};
+
 // ---------------------------------------- Enterprise Request API's -----------------------------------------------
 // Create Enterprise
 export const createEnterpriseRequest = async (
@@ -1382,12 +1479,12 @@ export const createEnterpriseRequest = async (
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({
-      organisationId: requestBody.enterpriseRequestParam.organisationId,
-      fromName: requestBody.enterpriseRequestParam.fromName,
-      fromEmail: requestBody.enterpriseRequestParam.fromEmail,
-      fromTeams: requestBody.enterpriseRequestParam.fromTeams,
-      toEmails: requestBody.enterpriseRequestParam.toEmails,
-      isApproved: requestBody.enterpriseRequestParam.isApproved,
+      organisationId: requestBody.organisationId,
+      fromName: requestBody.fromName,
+      fromEmail: requestBody.fromEmail,
+      fromTeams: requestBody.fromTeams,
+      toEmails: requestBody.toEmails,
+      isApproved: requestBody.isApproved,
     }),
   };
 
@@ -1475,17 +1572,44 @@ export const updateEnterpriseRequest = async (
 
 // Delete Enterprise Request
 export const deleteEnterpriseRequestById = async (
-  enterpriseId: string
+  enterpriseRequestId: string
 ): Promise<any> => {
   let message;
   const requestOptions = {
     method: 'DELETE',
     headers: { 'Content-Type': 'application/json' },
   };
-  await fetch(API_URL + `/enterpriseRequests/${enterpriseId}`, requestOptions)
+  await fetch(
+    API_URL + `/enterpriseRequests/${enterpriseRequestId}`,
+    requestOptions
+  )
     .then(response => response.json())
     .then(response => {
       message = response.message;
     });
   return message;
+};
+
+// Approved Many Users
+export const approvedDeclinedEnterpriseRequestByIds = async (
+  requestBody: any
+): Promise<any> => {
+  let data: any;
+  const requestOptions = {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({
+      enterpriseRequestIds: requestBody.enterpriseRequestIds,
+    }),
+  };
+
+  await fetch(
+    API_URL + `/enterpriseRequests/approvedDeclinedEnterpriseRequests`,
+    requestOptions
+  )
+    .then(response => response.json())
+    .then(response => {
+      data = response.data;
+    });
+  return data;
 };

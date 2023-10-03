@@ -511,6 +511,7 @@ function BasicDashboardWithEnterprise() {
                   <EnterpriseLevelActionsCountChart
                     dashboard={true}
                     team={selectId}
+                    count={(e)=>{console.log(e)}}
                   />
                 </Box>
                 {/* <Box

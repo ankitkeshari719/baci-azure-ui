@@ -23,13 +23,16 @@ import useTable from '../../CustomizedTable/useTable';
 import { TableBody, TableCell, TableRow } from '@material-ui/core';
 import { MagnifyingGlassIcon } from '@heroicons/react/24/outline';
 import {
-  deleteManyUsers,
+  approvedDeclinedEnterpriseRequestByIds,
   getAllByEnterpriseId,
   updateEnterpriseRequest,
+  updateRoleOnEnterpriseRequest,
   updateUser,
 } from '../../../helpers/msal/services';
 import { ActionType, GlobalContext } from '../../../contexts/GlobalContext';
 import {
+  BASIC,
+  BASIC_USER_ID,
   ENTERPRISE,
   ENTERPRISE_USER_ID,
 } from '../../../constants/applicationConst';
@@ -37,7 +40,6 @@ import { ContainedButton } from '../../CustomizedButton/ContainedButton';
 import { OutlinedButton } from '../../CustomizedButton/OutlinedButton';
 import OutlineButtonWithIconWithNoBorder from '../../CustomizedButton/OutlineButtonWithIconWithNoBorder';
 import TeamSelector from '../TeamSelector';
-import { gridQuickFilterValuesSelector } from '@mui/x-data-grid';
 
 const headCells = [
   { id: 'check', label: '', disableSorting: true },
@@ -58,7 +60,7 @@ export default function EnterpriseRequests() {
   const localUserData = localStorage.getItem('userData');
   const tempLocalUserData = localUserData && JSON.parse(localUserData);
 
-  const [selectedTeam, setSelectedTeam] = React.useState('all');
+  const [selectedTeam, setSelectedTeam] = React.useState('0');
   const [isSelectAllChecked, setIsSelectAllChecked] = React.useState(false);
   const [tempStoreUserName, setTempStoreUserName] = React.useState<any>('');
   const [tempStoreUserEmail, setTempStoreUserEmail] = React.useState<any>('');
@@ -83,6 +85,13 @@ export default function EnterpriseRequests() {
       tempLocalUserData && tempLocalUserData.enterpriseId
     );
   }, []);
+
+  React.useEffect(() => {
+    setHeight(window.innerHeight);
+    callGetAllEnterpriseRequestByEnterpriseId(
+      tempLocalUserData && tempLocalUserData.enterpriseId
+    );
+  }, [selectedTeam]);
 
   // Select All Check Box
   const handleSelectAllCheckbox = () => {
@@ -118,19 +127,31 @@ export default function EnterpriseRequests() {
     });
     await getAllByEnterpriseId(enterpriseId).then(
       res => {
-        let tempRes = res.map((enterpriseRequest: any) => {
-          return {
-            id: enterpriseRequest.enterpriseRequest.enterpriseRequestId,
-            organisationId: enterpriseRequest.enterpriseRequest.organisationId,
-            fromName: enterpriseRequest.enterpriseRequest.fromName,
-            fromEmail: enterpriseRequest.enterpriseRequest.fromEmail,
-            fromTeams: enterpriseRequest.enterpriseRequest.teamInfo,
-            createdAt: moment(
-              enterpriseRequest.enterpriseRequest.createdAt
-            ).format('Do MMM YYYY'),
-            checked: false,
-          };
-        });
+        let enterpriseDataAfterTeamSelected = [];
+        if (selectedTeam === '0') {
+          enterpriseDataAfterTeamSelected = res;
+        } else {
+          enterpriseDataAfterTeamSelected = res.filter((e: any) =>
+            e.enterpriseRequest.fromTeams.includes(selectedTeam)
+          );
+        }
+
+        let tempRes = enterpriseDataAfterTeamSelected.map(
+          (enterpriseRequest: any) => {
+            return {
+              id: enterpriseRequest.enterpriseRequest.enterpriseRequestId,
+              organisationId:
+                enterpriseRequest.enterpriseRequest.organisationId,
+              fromName: enterpriseRequest.enterpriseRequest.fromName,
+              fromEmail: enterpriseRequest.enterpriseRequest.fromEmail,
+              fromTeams: enterpriseRequest.enterpriseRequest.teamInfo,
+              createdAt: moment(
+                enterpriseRequest.enterpriseRequest.createdAt
+              ).format('Do MMM YYYY'),
+              checked: false,
+            };
+          }
+        );
         setRecords(tempRes);
         dispatch({
           type: ActionType.SET_LOADING,
@@ -180,6 +201,8 @@ export default function EnterpriseRequests() {
     setRecords(newRecord);
   };
 
+  // ---------------------------------------------- Request ----------------------------------------------
+
   // Approve User
   const handleApprovedUser = async (
     enterpriseRequestId: any,
@@ -203,7 +226,7 @@ export default function EnterpriseRequests() {
           type: ActionType.SET_LOADING,
           payload: { loadingFlag: false },
         });
-        handleChangeUserRole(fromEmail);
+        handleChangeUserRole(fromEmail, ENTERPRISE_USER_ID, ENTERPRISE);
       },
       err => {
         console.log('err', err);
@@ -211,20 +234,28 @@ export default function EnterpriseRequests() {
           type: ActionType.SET_LOADING,
           payload: { loadingFlag: false },
         });
+        callGetAllEnterpriseRequestByEnterpriseId(
+          tempLocalUserData && tempLocalUserData.enterpriseId
+        );
       }
     );
   };
 
-  const handleChangeUserRole = async (fromEmail: any) => {
+  //Change the user role once user request approved and decline
+  const handleChangeUserRole = async (
+    fromEmail: any,
+    roleId: any,
+    roleName: any
+  ) => {
     dispatch({
       type: ActionType.SET_LOADING,
       payload: { loadingFlag: true },
     });
 
     const requestBody = {
-      roleId: ENTERPRISE_USER_ID,
-      roleName: ENTERPRISE,
-      isEnterpriserRequested: gridQuickFilterValuesSelector,
+      roleId: roleId,
+      roleName: roleName,
+      isEnterpriserRequested: false,
     };
 
     await updateUser(fromEmail, requestBody).then(
@@ -249,8 +280,6 @@ export default function EnterpriseRequests() {
       }
     );
   };
-
-  // ---------------------------------------------- Request ----------------------------------------------
 
   // Open Decline Enterprise Request Pop Up
   const openDeclinedRequestPopUp = (
@@ -289,9 +318,7 @@ export default function EnterpriseRequests() {
           type: ActionType.SET_LOADING,
           payload: { loadingFlag: false },
         });
-        callGetAllEnterpriseRequestByEnterpriseId(
-          tempLocalUserData && tempLocalUserData.enterpriseId
-        );
+        handleChangeUserRole(tempStoreUserEmail, BASIC_USER_ID, BASIC);
         closeDeclinedRequestPopUp();
       },
       err => {
@@ -308,14 +335,60 @@ export default function EnterpriseRequests() {
     );
   };
 
-  // ---------------------------------------------- Requests ----------------------------------------------
-  // Open Decline Enterprise Request Pop Up
-  const openDeclinedRequestsPopUp = () => {
+  // ---------------------------------------------- All Requests ----------------------------------------------
+
+  // Approved all selected enterprise requests
+  const handleApproveAllSelected = async () => {
+    dispatch({
+      type: ActionType.SET_LOADING,
+      payload: { loadingFlag: true },
+    });
+
+    const selectedEnterpriseRequestIds = records
+      .filter((record: any) => record.checked)
+      .map((data: any) => data.id);
+
+    const selectedEnterpriseRequestEmailIds = records
+      .filter((record: any) => record.checked)
+      .map((data: any) => data.fromEmail);
+
+    const requestBody = {
+      enterpriseRequestIds: selectedEnterpriseRequestIds,
+    };
+
+    await approvedDeclinedEnterpriseRequestByIds(requestBody).then(
+      res => {
+        dispatch({
+          type: ActionType.SET_LOADING,
+          payload: { loadingFlag: false },
+        });
+        // Update the users table for all the users
+        handleChangeAllUsersRole(
+          selectedEnterpriseRequestEmailIds,
+          ENTERPRISE_USER_ID,
+          ENTERPRISE
+        );
+      },
+      err => {
+        console.log('err', err);
+        dispatch({
+          type: ActionType.SET_LOADING,
+          payload: { loadingFlag: false },
+        });
+        callGetAllEnterpriseRequestByEnterpriseId(
+          tempLocalUserData.enterpriseId
+        );
+      }
+    );
+  };
+
+  // Open all Decline Enterprise Request Pop Up
+  const openDeclinedAllRequestsPopUp = () => {
     setOpenDeclineRequestsDialog(true);
   };
 
-  // Close Decline Request Pop Up
-  const closeDeclinedRequestsPopUp = () => {
+  // Close all Decline Request Pop Up
+  const closeDeclinedAllRequestsPopUp = () => {
     setOpenDeclineRequestsDialog(false);
   };
 
@@ -325,23 +398,35 @@ export default function EnterpriseRequests() {
       type: ActionType.SET_LOADING,
       payload: { loadingFlag: true },
     });
-    const selectedUsersId = records
+
+    const selectedEnterpriseRequestIds = records
       .filter((record: any) => record.checked)
       .map((data: any) => data.id);
 
+    const selectedEnterpriseRequestEmailIds = records
+      .filter((record: any) => record.checked)
+      .map((data: any) => data.fromEmail);
+
     const requestBody = {
-      emailIds: selectedUsersId,
+      enterpriseRequestIds: selectedEnterpriseRequestIds,
     };
 
-    await deleteManyUsers(requestBody).then(
+    await approvedDeclinedEnterpriseRequestByIds(requestBody).then(
       res => {
         dispatch({
           type: ActionType.SET_LOADING,
           payload: { loadingFlag: false },
         });
+        // Update the users table for all the users
+        handleChangeAllUsersRole(
+          selectedEnterpriseRequestEmailIds,
+          BASIC_USER_ID,
+          BASIC
+        );
         callGetAllEnterpriseRequestByEnterpriseId(
           tempLocalUserData.enterpriseId
         );
+        closeDeclinedAllRequestsPopUp();
       },
       err => {
         console.log('err', err);
@@ -352,33 +437,37 @@ export default function EnterpriseRequests() {
         callGetAllEnterpriseRequestByEnterpriseId(
           tempLocalUserData.enterpriseId
         );
+        closeDeclinedAllRequestsPopUp();
       }
     );
   };
 
-  // Approved selected enterprise requests
-  const handleApproveSelected = async () => {
+  //Change all users role once user request approved and decline
+  const handleChangeAllUsersRole = async (
+    fromEmails: any,
+    roleId: any,
+    roleName: any
+  ) => {
     dispatch({
       type: ActionType.SET_LOADING,
       payload: { loadingFlag: true },
     });
 
-    const selectedUsersId = records
-      .filter((record: any) => record.checked)
-      .map((data: any) => data.id);
-
     const requestBody = {
-      emailIds: selectedUsersId,
+      emailIds: fromEmails,
+      roleId: roleId,
+      roleName: roleName,
+      isEnterpriserRequested: false,
     };
 
-    await deleteManyUsers(requestBody).then(
+    await updateRoleOnEnterpriseRequest(requestBody).then(
       res => {
         dispatch({
           type: ActionType.SET_LOADING,
           payload: { loadingFlag: false },
         });
         callGetAllEnterpriseRequestByEnterpriseId(
-          tempLocalUserData.enterpriseId
+          tempLocalUserData && tempLocalUserData.enterpriseId
         );
       },
       err => {
@@ -388,7 +477,7 @@ export default function EnterpriseRequests() {
           payload: { loadingFlag: false },
         });
         callGetAllEnterpriseRequestByEnterpriseId(
-          tempLocalUserData.enterpriseId
+          tempLocalUserData && tempLocalUserData.enterpriseId
         );
       }
     );
@@ -440,8 +529,8 @@ export default function EnterpriseRequests() {
               <OutlineButtonWithIconWithNoBorder
                 id={'delete_selected_users'}
                 label={'Approve selected'}
-                iconPath="/svgs/Delete.svg"
-                onClick={handleApproveSelected}
+                iconPath="/svgs/Check.svg"
+                onClick={handleApproveAllSelected}
                 style={{
                   display: 'flex',
                   alignItems: 'center',
@@ -454,8 +543,8 @@ export default function EnterpriseRequests() {
               <OutlineButtonWithIconWithNoBorder
                 id={'delete_selected_users'}
                 label={'Decline selected'}
-                iconPath="/svgs/Delete.svg"
-                onClick={openDeclinedRequestsPopUp}
+                iconPath="/svgs/xmark.svg"
+                onClick={openDeclinedAllRequestsPopUp}
                 style={{
                   display: 'flex',
                   alignItems: 'center',
@@ -506,12 +595,12 @@ export default function EnterpriseRequests() {
                           >
                             {item.fromTeams.map((team: any, index: number) => {
                               return (
-                                <>
+                                <span id={team.teamId}>
                                   {team.teamName}
                                   {index < item.fromTeams.length - 1
                                     ? ', '
                                     : ''}
-                                </>
+                                </span>
                               );
                             })}
                           </Box>
@@ -602,7 +691,7 @@ export default function EnterpriseRequests() {
           <TblPagination />
         </Box>
       </Box>
-      {/* Delete User Pop Up */}
+      {/* Decline Enterprise Request Pop Up */}
       <Dialog open={openDeclineRequestDialog}>
         <DialogTitle
           style={{ padding: '20px', borderBottom: '1px solid #EA4335' }}
@@ -645,8 +734,6 @@ export default function EnterpriseRequests() {
         </DialogTitle>
         <Box
           sx={{
-            width: '650px',
-            minWidth: '600px',
             height: height / 4,
             display: 'flex',
             alignItems: 'center',
@@ -655,6 +742,7 @@ export default function EnterpriseRequests() {
         >
           <BodyRegularTypography
             label={`Are you sure you want to delete user ${tempStoreUserName} request for Enterprise Dashboard?`}
+            style={{ textAlign: 'center' }}
           />
         </Box>
         {/* Buttons */}
@@ -692,6 +780,8 @@ export default function EnterpriseRequests() {
           </Box>
         </Box>
       </Dialog>
+
+      {/* Decline All Enterprise Requests Pop Up */}
       <Dialog open={openDeclineRequestsDialog}>
         <DialogTitle
           style={{ padding: '20px', borderBottom: '1px solid #EA4335' }}
@@ -726,7 +816,7 @@ export default function EnterpriseRequests() {
                   style={{
                     cursor: 'pointer',
                   }}
-                  onClick={closeDeclinedRequestsPopUp}
+                  onClick={closeDeclinedAllRequestsPopUp}
                 />
               </Box>
             </Grid>
@@ -734,8 +824,6 @@ export default function EnterpriseRequests() {
         </DialogTitle>
         <Box
           sx={{
-            width: '650px',
-            minWidth: '600px',
             height: height / 4,
             display: 'flex',
             alignItems: 'center',
@@ -744,6 +832,7 @@ export default function EnterpriseRequests() {
         >
           <BodyRegularTypography
             label={`Are you sure you want to delete all selected user’s request for Enterprise Dashboard?`}
+            style={{ textAlign: 'center' }}
           />
         </Box>
         {/* Buttons */}
@@ -761,7 +850,7 @@ export default function EnterpriseRequests() {
             <OutlinedButton
               label="Cancel"
               size={'medium'}
-              onClick={closeDeclinedRequestsPopUp}
+              onClick={closeDeclinedAllRequestsPopUp}
               style={{
                 minWidth: '75px !important',
                 height: '36px !important',

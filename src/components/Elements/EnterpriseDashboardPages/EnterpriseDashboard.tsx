@@ -22,6 +22,7 @@ import {
   H1RegularTypography,
   H4RegularTypography,
   H4SemiBoldTypography,
+  H5SemiBoldTypography,
   H6RegularTypography,
   H6SemiBoldTypography,
   TinyTextSemiBoldTypography,
@@ -31,10 +32,6 @@ import {
 import commonStyles from './../../../style.module.scss';
 
 import './EnterpriseDashboard.scss';
-
-import { EllipsisVerticalIcon } from '@heroicons/react/24/outline';
-
-import Avatar from '../Avatar';
 
 import AverageParticipantChart from '../../../screens/Analytics/AverageParticipantChart';
 
@@ -46,24 +43,30 @@ import EnterpriseLevelSentimentsMoodsChart from '../../../screens/Analytics/Ente
 
 import TeamLevelActionsCountChart from '../../../screens/Analytics/TeamLevelActionsCountChart';
 
-import { retro } from '../../../constants/DemoConst';
-import { TextButton } from '../../CustomizedButton/TextButton';
-
 import EnterpriseLevelSentimentsThemeChart from '../../../screens/Analytics/EnterpriseLevelSentimentsThemeChart';
 import { useState } from 'react';
 import { ActionType, GlobalContext } from '../../../contexts/GlobalContext';
 import EnterpriseLevelSentimentsSummaryChart from '../../../screens/Analytics/EnterpriseLevelSentimentsSummaryChart';
 import moment from 'moment';
-import { MONTH_SELECTORS } from '../../../screens/Analytics/const';
 import {
+  chartInputType,
+  formatDateForAPI,
+  formatDateToMonthYear,
   getParticipantsCount,
   getRetrosCount,
+  getSessionsData,
 } from '../../../helpers/msal/services';
 import { OutlinedButton } from '../../CustomizedButton/OutlinedButton';
 import AverageRetroChart from '../../../screens/Analytics/AverageRetroChart';
 import { styled } from '@mui/material/styles';
 import Tooltip, { TooltipProps, tooltipClasses } from '@mui/material/Tooltip';
 import DateSelector from './DateSelector';
+import TeamSelector from '../TeamSelector';
+import { BASIC, ENTERPRISE } from '../../../constants/applicationConst';
+import { ContainedButtonWithIcon } from '../../CustomizedButton/ContainedButtonWithIcon';
+import { TextButtonWithIcon } from '../../CustomizedButton/TextButtonWithIcon';
+import { OutlinedButtonWithIcon } from '../../CustomizedButton/OutlinedButtonWithIcon';
+import RetroCount from '../../../assets/img/RetroCount.png';
 
 const theme = createTheme({
   palette: {
@@ -97,9 +100,11 @@ function EnterpriseDashboard() {
 
   const [hoverIndex, setHoverIndex] = React.useState<number>(0);
 
+  const [sessionCount,setSessionCount]= React.useState<number>(0);
+
   const [selectId, setSelectedId] = React.useState<string>('0');
 
-  const retroList = retro;
+  const [actionCount,setActionCount]=React.useState<number>(0);
 
   let componentRef = React.useRef(null);
 
@@ -114,10 +119,6 @@ function EnterpriseDashboard() {
   );
 
   const [global, dispatch] = React.useContext(GlobalContext);
-
-  // const [fromDate, setFromDate] = useState<string>(
-  //   global.chartStartDate ? global.chartStartDate : '10'
-  // );
 
   const [fromDate, setFromDate] = useState<string>(
     global.chartStartDate
@@ -136,71 +137,19 @@ function EnterpriseDashboard() {
           (new Date().getMonth() + 1).toString().slice(-2)
   );
 
-  // const [toDate, setToDate] = useState<string>(
-  //   global.chartEndDate ? global.chartEndDate : '16'
-  // );
-
-  const [fromDateString, setFromDateString] = useState<string>('');
-
-  const [toDateString, setToDateString] = useState<string>('');
-
   const [totalSessions, setTotalSessions] = useState<Number>();
   const [totalParticipants, setTotalParticipants] = useState<Number>();
 
-  const menuList = [
-    {
-      id: '0',
-
-      label: 'All Teams',
-
-      actions: 'VIEW 15 ACTIONS',
-
-      retros: [
-        retroList[2],
-
-        retroList[1],
-
-        retroList[0],
-
-        retroList[3],
-
-        retroList[4],
-
-        retroList[5],
-      ],
-    },
-
-    {
-      id: '1',
-
-      label: 'Mobile Experience Team',
-
-      actions: 'VIEW 15 ACTIONS',
-
-      retros: [retroList[2], retroList[1], retroList[0]],
-    },
-
-    {
-      id: '2',
-
-      label: 'Superannutation Product Team',
-
-      actions: 'VIEW 5 ACTIONS',
-
-      retros: [retroList[5], retroList[4]],
-    },
-
-    {
-      id: '3',
-
-      label: 'Insurance Team',
-
-      actions: 'VIEW 15 ACTIONS',
-
-      retros: [retroList[3]],
-    },
-  ];
-
+  function createNewTeam() {
+    if (global.azureUser?.roleName && global.azureUser?.roleName === BASIC) {
+      navigate('/basic/teams/create/');
+    } else if (
+      global.azureUser?.roleName &&
+      global.azureUser?.roleName === ENTERPRISE
+    ) {
+      navigate('/enterprise/teams/create/');
+    }
+  }
   // Call function to get Sessions
   React.useEffect(() => {
     handleGetRetroChartData();
@@ -213,6 +162,29 @@ function EnterpriseDashboard() {
 
   // Function to get Sessions
   const handleGetRetroChartData = async () => {
+    if (global.azureUser != undefined) {
+      const chartInput: chartInputType = {
+        userId: global.azureUser?.emailId,
+        roleName: global.azureUser?.roleName,
+        enterpriseId: global.azureUser?.enterpriseId,
+        teamId: global.teamId ? global.teamId : '0',
+        fromDate: formatDateForAPI(fromDate),
+        toDate: formatDateForAPI(toDate,true),
+      };
+
+      await getSessionsData(chartInput).then(
+        res => {
+          if (res.result != undefined && res.result?.length != undefined) {
+            console.log(res.result?.length);
+            setSessionCount(res.result?.length)
+          } else {
+            setSessionCount(0)
+          }
+        },
+        err => {}
+      );
+    }
+
     await getRetrosCount(fromDate, toDate, selectId).then(
       res => {
         if (res && res.result) {
@@ -263,20 +235,6 @@ function EnterpriseDashboard() {
     });
   };
 
-  const getTeamNameOnSelect = (selectId: string) => {
-    let teamName = '';
-    if (selectId === '0') {
-      teamName = 'All Teams Analytics';
-    } else if (selectId === '1') {
-      teamName = 'Mobile Experience Team Analytics';
-    } else if (selectId === '2') {
-      teamName = 'Superannuation Product Team Analytics';
-    } else if (selectId === '3') {
-      teamName = 'Insurance Team Analytics';
-    }
-    return teamName;
-  };
-
   const goToAnalyticsLearnMorePage = (url: string) => {
     navigate(url);
   };
@@ -313,8 +271,24 @@ function EnterpriseDashboard() {
           }}
         >
           {/* Enterprise Dashboard label */}
-          <Box component="span">
-            <H1RegularTypography label="Enterprise Dashboard" />
+          <Box
+            component="span"
+            style={{
+              display: 'flex',
+              flexDirection: 'row',
+              alignItems: 'center',
+            }}
+          >
+            <H1RegularTypography label="Dashboard" />
+
+            <ReactToPrint
+              trigger={() => (
+                <Button style={{ marginLeft: '10px' }}>
+                  <Icons.Printer color={'#2C69A1'} fontSize={'32px'} />
+                </Button>
+              )}
+              content={() => componentRef.current}
+            />
           </Box>
           {/* JOIN SESSION And NEW SESSION Button */}
           <Box component="span">
@@ -340,179 +314,8 @@ function EnterpriseDashboard() {
         </Box>
         {/* Bottom container */}
         <Box display="flex" flexDirection="column" sx={{ overflow: 'auto' }}>
-          {/* Teams list menu start */}
-          <Box display="flex" flexDirection="row" width="100%" mt="10px">
-            {menuList.map((menu, index) => {
-              return (
-                <Box
-                  onMouseEnter={() => {
-                    setHoverOnMenu(true);
-
-                    setHoverIndex(index);
-                  }}
-                  onMouseLeave={() => {
-                    // setHoverOnMenu(false);
-                    // setHoverIndex(+selectId)
-                  }}
-                  onClick={() => {
-                    setSelectedId(menu.id);
-                  }}
-                  width="330px"
-                  height={menu.id == selectId ? '80px' : '80px'}
-                  border="1px solid rgba(206, 239, 255, 1)"
-                  borderRadius="5px"
-                  boxShadow="6px 10px 20px 4px rgba(21, 154, 221, 0.08)"
-                  padding="16px"
-                  paddingBottom={menu.id == selectId ? '30px' : '16px'}
-                  marginRight="24px"
-                  display="flex"
-                  flexDirection="column"
-                  justifyContent="space-between"
-                  sx={{
-                    background:
-                      menu.id == selectId ? 'rgba(0, 0, 0, 0.04)' : 'white',
-
-                    cursor: 'pointer',
-                  }}
-                  key={'menu' + index}
-                >
-                  <Box
-                    component="span"
-                    display="flex"
-                    justifyContent="space-between"
-                  >
-                    <H6RegularTypography
-                      style={{
-                        width: '274px',
-
-                        color:
-                          menu.id == selectId
-                            ? commonStyles.primaryDark
-                            : 'black',
-                      }}
-                      label={menu.label}
-                    />
-
-                    <EllipsisVerticalIcon width="24px" height="24px" />
-                  </Box>
-                </Box>
-              );
-            })}
-          </Box>
           {/* Retro list starts here after hover */}
-          <Box
-            width="calc(100% - 100px)"
-            height="241px"
-            sx={{
-              background: 'white',
-              display: hoverOnMenu ? 'flex' : 'none',
-              flexDirection: 'row',
-              alignItems: 'center',
-              position: 'absolute',
-              top: '140px',
-              zIndex: '4',
-              cursor: 'pointer',
-              overflowX: 'auto',
-            }}
-          >
-            {/* RetroCard Info */}
-            {menuList[hoverIndex].retros.map((subMenu, index) => {
-              return (
-                <Box
-                  width="297px"
-                  minWidth="297px"
-                  height="185px"
-                  borderRadius="10px"
-                  key={'submenu' + index}
-                  sx={{
-                    border: '1px solid rgba(227, 227, 227, 1)',
 
-                    background: 'white',
-
-                    padding: '16px 16px 0px 16px',
-
-                    display: 'flex',
-
-                    flexDirection: 'column',
-
-                    gap: '12px',
-
-                    mr: '10px',
-
-                    ml: '10px',
-                  }}
-                >
-                  <H6SemiBoldTypography label={subMenu.retroName} />
-
-                  <CaptionRegularTypography
-                    label={
-                      subMenu.retroStatus == 'Done'
-                        ? subMenu.retroDate
-                        : 'Code : ' + subMenu.retroCode
-                    }
-                  />
-
-                  {subMenu.retroStatus == 'Done' ? (
-                    <>
-                      <CaptionSemiBoldTypography
-                        label={subMenu.actions + ' Actions'}
-                        style={{ color: commonStyles.PrimaryMain }}
-                      />
-
-                      <Box>
-                        <CaptionRegularTypography label="Participants " />
-
-                        {subMenu.users.map((user, index) => {
-                          {
-                            return (
-                              index < 4 && (
-                                <Avatar
-                                  key={user.name}
-                                  avatar={user.avatar}
-                                  css={{
-                                    width: '40px',
-
-                                    height: '40px',
-
-                                    marginLeft: '0',
-
-                                    marginRight: '-8px',
-
-                                    border: '0px',
-                                  }}
-                                />
-                              )
-                            );
-                          }
-                        })}
-
-                        <CaptionRegularTypography
-                          style={{ marginLeft: '14px' }}
-                          label={'+' + (subMenu.users.length + 1 - 4)}
-                        />
-                      </Box>
-                    </>
-                  ) : (
-                    <>
-                      <CaptionRegularTypography
-                        label={
-                          'Link : ' + 'http://app.baci.com/' + subMenu.retroCode
-                        }
-                      />
-
-                      <Button
-                        variant="outlined"
-                        sx={{ borderRadius: '24px', fontWeight: '500px' }}
-                        color="primary"
-                      >
-                        <ButtonLabelTypography label="START SESSION" />
-                      </Button>
-                    </>
-                  )}
-                </Box>
-              );
-            })}
-          </Box>
           {/* Analytics start here */}
           <Box
             minHeight="540px"
@@ -547,8 +350,7 @@ function EnterpriseDashboard() {
                 alignItems="center"
                 justifyContent="flex-start"
               >
-                <H4RegularTypography label="Analytics" />
-                <ReactToPrint
+                {/* <ReactToPrint
                   trigger={() => (
                     <OutlinedButton
                       id="downloadBoardPdf"
@@ -561,15 +363,68 @@ function EnterpriseDashboard() {
                     />
                   )}
                   content={() => componentRef.current}
-                />
-              </Box>
-              <Box>
+                /> */}
+
                 <DateSelector
                   handleFromDate={handleFromDate}
                   handleToDate={handleToDate}
                   fromDate={fromDate}
                   toDate={toDate}
+                  disable={true}
                 />
+                <TeamSelector
+                  enterpriseId={
+                    global.azureUser?.enterpriseId
+                      ? global.azureUser?.enterpriseId
+                      : '0'
+                  }
+                  padding="9px"
+                  selectedTeam={global.teamId ? global.teamId : selectId}
+                  handleChange={(change: any) => {
+                    dispatch({
+                      type: ActionType.SET_TEAM_ID,
+                      payload: { teamId: change.target.value },
+                    });
+
+                    setSelectedId(change.target.value);
+                  }}
+                />
+
+                <ContainedButtonWithIcon
+                  id={'create_new_Team'}
+                  label={'New Team'}
+                  size={'medium'}
+                  iconPath="/svgs/plusSmall.svg"
+                  style={{ width: '200px', textAlign: 'center' }}
+                  onClick={() => createNewTeam()}
+                />
+                <TextButtonWithIcon
+                  id="actions"
+                  icon={
+                    <Icons.ChevronRight
+                      fontSize={'16px'}
+                      style={{ marginLeft: '-16px' }}
+                    />
+                  }
+                  style={{ marginLeft: '20px' }}
+                  label={actionCount>1?actionCount+'  Actions':actionCount+'  Actions'}
+                  size={'medium'}
+                  onClick={() => console.log('')}
+                />
+              </Box>
+
+              <Box padding={'12px'} paddingRight={'18px'} 
+              paddingLeft={'18px'}
+              display={'flex'} marginRight={'20px'} flexDirection={'row'} justifyContent={'space-between'} width={'200px'}
+              border="1px solid #CEEFFF"
+              borderRadius={'5px'}
+              sx={{background:'white', cursor:'pointer'}}
+              >
+                <H5SemiBoldTypography label={sessionCount>1?sessionCount+"  Sessions":sessionCount+"  Session"} />
+
+                <Box>
+                  <img src={RetroCount} style={{width:'20px',height:'18px'}}/>
+                </Box>
               </Box>
             </Box>
             {/* Analytics Charts */}
@@ -644,10 +499,10 @@ function EnterpriseDashboard() {
                         flexDirection: 'column',
                       }}
                     >
-                      <H4SemiBoldTypography
+                      {/* <H4SemiBoldTypography
                         label={getTeamNameOnSelect(selectId)}
                         style={{ color: '#2C69A1' }}
-                      />
+                      /> */}
                       <TinyTextTypography
                         label={'as of ' + currentDate}
                         style={{ color: '#2C69A1', marginTop: '8px' }}
@@ -664,7 +519,11 @@ function EnterpriseDashboard() {
                           }}
                         />
                         <BodyRegularTypography
-                          label={fromDateString + ' - ' + toDateString}
+                          label={
+                            formatDateToMonthYear(fromDate) +
+                            ' - ' +
+                            formatDateToMonthYear(toDate)
+                          }
                           style={{ color: '#2C69A1', marginLeft: '18px' }}
                         />
                       </Box>
@@ -733,6 +592,10 @@ function EnterpriseDashboard() {
                   <EnterpriseLevelActionsCountChart
                     dashboard={true}
                     team={selectId}
+                    count={(e)=>{
+               
+                      setActionCount(e)
+                     }}
                   />
                 </Box>
                 {/* <Box
@@ -789,7 +652,10 @@ function EnterpriseDashboard() {
                     navigate('/enterprise/analytics/teamLevelActionsCount');
                   }}
                 >
-                  <TeamLevelActionsCountChart dashboard={true} />
+                  <TeamLevelActionsCountChart
+                    dashboard={true}
+                    team={selectId}
+                  />
                 </Box>
               </Box>
 
@@ -1018,7 +884,6 @@ function EnterpriseDashboard() {
                     team={selectId}
                   />
                 </Box>
-               
               </Box>
 
               {/* Enterprise Level Sentiments Moods Chart */}
@@ -1155,7 +1020,6 @@ function EnterpriseDashboard() {
                     team={selectId}
                   />
                 </Box>
-              
               </Box>
             </Box>
           </Box>

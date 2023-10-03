@@ -158,3 +158,28 @@ export const MenuProps = {
     },
   },
 };
+
+
+export const getChartWidth = (windowSize:number) => {
+  switch (true) {
+    case windowSize <= 1051:
+      return '400';
+    case windowSize > 1051 && windowSize <= 1150:
+      return '450';
+    case windowSize >= 1151 && windowSize <= 1199:
+      return '500';
+    case windowSize >= 1200 && windowSize <= 125:
+      return '520';
+    case windowSize >= 1251 && windowSize <= 1300:
+      return '550';
+    case windowSize >= 1301 && windowSize <= 1400:
+      return '600';
+    case windowSize >= 1401 && windowSize <= 1500:
+      return '650';
+    case windowSize >= 1500:
+      return '700';
+
+    default:
+      return '500';
+  }
+};

@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import {
   chartInputType,
   formatDateForAPI,
+  getCountOfAllParticipantsOverTime,
   getEnterpriseLevelSentimentSummary,
   getOverAllSummary,
   getParticipantsCount,
@@ -10,6 +11,7 @@ import {
 
 import {
   Box,
+  CircularProgress,
   FormControl,
   Grid,
   MenuItem,
@@ -46,7 +48,6 @@ export default function EnterpriseLevelSentimentsSummaryChart({
   const [global, dispatch] = React.useContext(GlobalContext);
   const [summary, setSummary] = useState<string>();
   const [keywords, setKeywords] = useState<Word[]>([]);
-  const [selectedFormat, setSelectedFormat] = useState<string>('17');
   const [fromDate, setFromDate] = useState<string>(
     global.chartStartDate
       ? global.chartStartDate
@@ -65,45 +66,25 @@ export default function EnterpriseLevelSentimentsSummaryChart({
   );
   const [totalParticipant, setTotalParticipant] = useState<Number>();
   const [totalRetros, setTotalRetros] = useState<Number>();
-
-  const localUserData = localStorage.getItem('userData');
-  const tempLocalUserData = localUserData && JSON.parse(localUserData);
+  const [loading, setLoading] = useState<boolean>(true);
   const [path, setPath] = React.useState('');
 
   React.useEffect(() => {
-    if (tempLocalUserData && tempLocalUserData.roleName === BASIC) {
+    if (global.azureUser?.roleName && global.azureUser?.roleName === BASIC) {
       setPath('basic');
-    } else if (tempLocalUserData && tempLocalUserData.roleName === ENTERPRISE) {
+    } else if (
+      global.azureUser?.roleName &&
+      global.azureUser?.roleName === ENTERPRISE
+    ) {
       setPath('enterprise');
     }
-  }, [tempLocalUserData]);
+  }, [global.azureUser?.roleName]);
 
   const navigate = useNavigate();
 
   React.useEffect(() => {
-    handleGetParticipantChartData();
-    handleGetRetroChartData();
+    handleGetEnterpriseLevelSentimentSummary();
   }, []);
-
-  React.useEffect(() => {
-    handleGetEnterpriseLevelSentimentSummary(selectedFormat);
-  }, []);
-
-  React.useEffect(() => {
-    if (Number(selectedFormat) > 0 && Number(selectedFormat) <= 16) {
-      setFromDate(selectedFormat);
-      setToDate(selectedFormat);
-    } else if (Number(selectedFormat) == 17) {
-      setFromDate('14');
-      setToDate('16');
-    } else if (Number(selectedFormat) == 18) {
-      setFromDate('11');
-      setToDate('16');
-    } else if (Number(selectedFormat) == 19) {
-      setFromDate('5');
-      setToDate('16');
-    }
-  }, [selectedFormat]);
 
   // Function to Generate Random number
   function randomIntFromInterval(min: number, max: number) {
@@ -111,16 +92,15 @@ export default function EnterpriseLevelSentimentsSummaryChart({
   }
 
   const generateSummary = () => {
-    handleGetEnterpriseLevelSentimentSummary(selectedFormat);
-    handleGetParticipantChartData();
-    handleGetRetroChartData();
+    handleGetEnterpriseLevelSentimentSummary();
+    // handleGetRetroChartData();
   };
 
   React.useEffect(() => {
-    handleGetEnterpriseLevelSentimentSummary(selectedFormat);
-    handleGetParticipantChartData();
-    handleGetRetroChartData();
-  }, [team]);
+    handleGetEnterpriseLevelSentimentSummary();
+    // handleGetParticipantChartData();
+    // handleGetRetroChartData();
+  }, [global.teamId]);
 
   React.useEffect(() => {
     const fromDateInput = global.chartStartDate;
@@ -139,91 +119,51 @@ export default function EnterpriseLevelSentimentsSummaryChart({
     }
   }, [global.chartStartDate, global.chartEndDate]);
 
-  const handleGetEnterpriseLevelSentimentSummary = async (
-    selectedFormat: string
-  ) => {
-    const chartInput: chartInputType = {
-      userId: 'vishal.gawande@evoltech.com.au',
-      roleName: 'Enterprise',
-      enterpriseId: 'evoltech0.0751886606959975',
-      teamId: '0',
-      fromDate: formatDateForAPI(fromDate),
-      toDate: formatDateForAPI(toDate),
-    };
+  const handleGetEnterpriseLevelSentimentSummary = async () => {
+    setLoading(true);
+    setTotalRetros(0);
+    setTotalParticipant(0);
+    if (global.azureUser != undefined) {
+      const chartInput: chartInputType = {
+        userId: global.azureUser?.emailId,
+        roleName: global.azureUser?.roleName,
+        enterpriseId: global.azureUser?.enterpriseId,
+        teamId: global.teamId ? global.teamId : '0',
+        fromDate: formatDateForAPI(fromDate),
+        toDate: formatDateForAPI(toDate,true),
+      };
 
-    await getOverAllSummary(chartInput).then(res => {
-      console.log(res, 'summary');
-      setSummary(res.data.summary);
-      let tempKeywords: any[] = [];
-      const keywordsData=res.data.keywords?res.data.keywords:[];
-console.log(keywordsData,"keywordsData")
-      keywordsData.forEach((item: any) => {
-        console.log(item)
-        tempKeywords.push({
-          text: item,
-          size: randomIntFromInterval(45, 120),
+      await getOverAllSummary(chartInput).then(res => {
+        setSummary(res.data.summary);
+        let tempKeywords: any[] = [];
+        const keywordsData = res.data.keywords ? res.data.keywords : [];
+        keywordsData.forEach((item: any) => {
+          tempKeywords.push({
+            text: item,
+            size: randomIntFromInterval(45, 120),
+          });
         });
+        setKeywords(tempKeywords);
       });
-      setKeywords(tempKeywords);
-    });
 
-    // await getEnterpriseLevelSentimentSummary(selectedFormat, team).then(
-    //   res => {
-    //     if (res && res.result) {
-    //       const keywordsData = res.result[0].keywords;
-    //       setSummary(res.result[0] && res.result[0].summary);
-    //       let tempKeywords = [];
-    //       for (let i = 0; i < keywordsData.length; i++) {
-    //         tempKeywords.push({
-    //           text: keywordsData[i],
-    //           size: randomIntFromInterval(45, 120),
-    //         });
-    //       }
-    //       setKeywords(tempKeywords);
-    //     }
-    //   },
-    //   err => {
-    //     console.log('err', err);
-    //   }
-    // );
-  };
-
-  const handleGetParticipantChartData = async () => {
-    await getParticipantsCount('10', '16', team).then(
-      res => {
-        if (res && res.result) {
-          let temp = 0;
-          for (let i = 0; i < res.result.length; i++) {
-            temp = temp + res.result[i].averageParticipants;
-          }
-          setTotalParticipant(temp);
+      await getCountOfAllParticipantsOverTime(chartInput).then(
+        res => {
+          setLoading(false);
+          var totalParticipants = 0;
+          var totalRetros = 0;
+          res.data.forEach((item: any) => {
+            totalParticipants = item.userCount + totalParticipants;
+            totalRetros = totalRetros + item.retros?.length;
+          });
+          setTotalRetros(totalRetros);
+          setTotalParticipant(totalParticipants);
+        },
+        err => {
+          console.log(err);
+          setLoading(false);
         }
-      },
-      err => {
-        console.log('err', err);
-      }
-    );
-  };
-
-  const handleGetRetroChartData = async () => {
-    await getRetrosCount('10', '16', team).then(
-      res => {
-        if (res && res.result) {
-          let temp = 0;
-          for (let i = 0; i < res.result.length; i++) {
-            temp = temp + res.result[i].averageRetros;
-          }
-          setTotalRetros(temp);
-        }
-      },
-      err => {
-        console.log('err', err);
-      }
-    );
-  };
-
-  const handleSelectedFormat = (event: SelectChangeEvent) => {
-    setSelectedFormat(event.target.value as string);
+      );
+    }
   };
 
   const handleFromDate = (event: SelectChangeEvent) => {
@@ -245,7 +185,7 @@ console.log(keywordsData,"keywordsData")
           flexDirection="row"
           justifyContent="center"
         >
-          <WordCloud data={keywords} showOn="summaryCloud"></WordCloud>
+         {loading? <CircularProgress /> :<WordCloud data={keywords} showOn="summaryCloud"></WordCloud>} 
         </Box>
       ) : (
         <Grid container spacing={2} sx={{ padding: '48px', overflowY: 'auto' }}>
@@ -402,43 +342,70 @@ console.log(keywordsData,"keywordsData")
             </Box>
           </Grid>
           {/* Summary */}
-          <Grid
-            item
-            xs={5}
-            sx={{
-              display: 'flex',
-              alignItems: 'start',
-              justifyContent: 'flex-start',
-              flexDirection: 'column',
-              paddingRight: '48px !important',
-              paddingLeft: '0px !important',
-              paddingTop: '0px !important',
-              paddingBottom: '0px !important',
-            }}
-          >
-            <H4SemiBoldTypography
-              label="Summary"
-              style={{ color: '#343434' }}
-            />
-            <BodyRegularTypography
-              label={summary}
-              style={{ color: '#111111', marginTop: '24px' }}
-            />
-          </Grid>
+          {loading ? (
+            <Grid
+              item
+              sx={{
+                display: 'flex',
+                justifyContent: 'center',
+                alignItems: 'center',
+              }}
+              xs={5}
+            >
+              <CircularProgress />
+            </Grid>
+          ) : (
+            <Grid
+              item
+              xs={5}
+              sx={{
+                display: 'flex',
+                alignItems: 'start',
+                justifyContent: 'flex-start',
+                flexDirection: 'column',
+                paddingRight: '48px !important',
+                paddingLeft: '0px !important',
+                paddingTop: '0px !important',
+                paddingBottom: '0px !important',
+              }}
+            >
+              <H4SemiBoldTypography
+                label="Summary"
+                style={{ color: '#343434' }}
+              />
+              <BodyRegularTypography
+                label={summary}
+                style={{ color: '#111111', marginTop: '24px' }}
+              />
+            </Grid>
+          )}
           {/* Word Cloud */}
-          <Grid
-            item
-            xs={3}
-            sx={{
-              padding: '0px !important',
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'flex-start',
-              background: 'rgba(0, 0, 0, 0.04)',
-            }}
-          >
-            <WordCloud data={keywords} showOn="summaryCloud"></WordCloud>
-          </Grid>
+          {loading ? (
+             <Grid
+             item
+             sx={{
+               display: 'flex',
+               justifyContent: 'center',
+               alignItems: 'center',
+             }}
+             xs={3}
+           >
+           <CircularProgress /></Grid>
+          ) : (
+            <Grid
+              item
+              xs={3}
+              sx={{
+                padding: '0px !important',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'flex-start',
+                background: 'rgba(0, 0, 0, 0.04)',
+              }}
+            >
+              <WordCloud data={keywords} showOn="summaryCloud"></WordCloud>
+            </Grid>
+          )}
         </Grid>
       )}
     </>

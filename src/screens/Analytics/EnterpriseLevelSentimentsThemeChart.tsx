@@ -3,6 +3,7 @@ import ReactApexChart from 'react-apexcharts';
 import { ApexOptions } from 'apexcharts';
 import {
   Box,
+  CircularProgress,
   FormControl,
   Grid,
   MenuItem,
@@ -17,7 +18,7 @@ import {
 } from '../../components/CustomizedTypography';
 import { Link, useNavigate } from 'react-router-dom';
 import * as Icons from 'heroicons-react';
-import { MONTH_SELECTORS, MenuProps } from './const';
+import { MONTH_SELECTORS, MenuProps, getChartWidth } from './const';
 import {
   chartInputType,
   formatDateForAPI,
@@ -33,7 +34,6 @@ export default function EnterpriseLevelSentimentsThemeChart({
   team,
 }: {
   dashboard?: boolean;
-
   team: string;
 }) {
   const navigate = useNavigate();
@@ -51,6 +51,7 @@ export default function EnterpriseLevelSentimentsThemeChart({
           '0' +
           new Date().getMonth().toString().slice(-2)
   );
+  const [loading, setLoading] = useState<boolean>(true);
   const [toDate, setToDate] = useState<string>(
     global.chartEndDate
       ? global.chartEndDate
@@ -60,39 +61,18 @@ export default function EnterpriseLevelSentimentsThemeChart({
           (new Date().getMonth() + 1).toString().slice(-2)
   );
   const [cardsPerPercentage, setCardsPerPercentage] = useState<number>(1);
-
-  const localUserData = localStorage.getItem('userData');
-  const tempLocalUserData = localUserData && JSON.parse(localUserData);
   const [path, setPath] = React.useState('');
 
   React.useEffect(() => {
-    if (tempLocalUserData && tempLocalUserData.roleName === BASIC) {
+    if (global.azureUser?.roleName && global.azureUser?.roleName === BASIC) {
       setPath('basic');
-    } else if (tempLocalUserData && tempLocalUserData.roleName === ENTERPRISE) {
+    } else if (
+      global.azureUser?.roleName &&
+      global.azureUser?.roleName === ENTERPRISE
+    ) {
       setPath('enterprise');
     }
-  }, [tempLocalUserData]);
-
-  const getChartWidth = () => {
-    switch (true) {
-      case windowWidth.current <= 1051:
-        return '700';
-      case windowWidth.current > 1051 && windowWidth.current <= 1150:
-        return '750';
-      case windowWidth.current >= 1151 && windowWidth.current <= 1199:
-        return '800';
-      case windowWidth.current >= 1200 && windowWidth.current <= 1300:
-        return '900';
-      case windowWidth.current >= 1301 && windowWidth.current <= 1400:
-        return '1000';
-      case windowWidth.current >= 1401 && windowWidth.current <= 1500:
-        return '1050';
-      case windowWidth.current >= 1500:
-        return '1100';
-      default:
-        return '500';
-    }
-  };
+  }, [global.azureUser?.roleName]);
 
   React.useEffect(() => {
     handleGetEnterpriseLevelSentimentsThemes();
@@ -100,80 +80,87 @@ export default function EnterpriseLevelSentimentsThemeChart({
 
   React.useEffect(() => {
     handleGetEnterpriseLevelSentimentsThemes();
-  }, [team]);
+  }, [global.teamId]);
 
   const handleGetEnterpriseLevelSentimentsThemes = async () => {
-    const chartInput: chartInputType = {
-      userId: 'vishal.gawande@evoltech.com.au',
-      roleName: 'Enterprise',
-      enterpriseId: 'evoltech0.0751886606959975',
-      teamId: '0',
-      fromDate: formatDateForAPI(fromDate),
-      toDate: formatDateForAPI(toDate),
-    };
+    if (global.azureUser != undefined) {
+      const chartInput: chartInputType = {
+        userId: global.azureUser?.emailId,
+        roleName: global.azureUser?.roleName,
+        enterpriseId: global.azureUser?.enterpriseId,
+        teamId: global.teamId?global.teamId:"0",
+        fromDate: formatDateForAPI(fromDate),
+        toDate: formatDateForAPI(toDate,true),
+      };
+      setLoading(true);
 
-    await getEmotionsAsPerCategory(chartInput).then(res => {
-      if (res.data.length > 0) {
-        let data: any[] = [];
-        var totalCards = 0;
-        var totalHappyCards = 0;
-        var totalNeutalCards = 0;
-        var totalSadCards = 0;
-        res.data.forEach((item: any) => {
-          var obj = {
-            name: item.groupName,
-            data: [
-              item.sadCardsLength,
-              item.neutralCardsLength,
-              item.happyCardsLength,
-            ],
-          };
-          totalCards =
-            totalCards +
-            item.sadCardsLength +
-            item.neutralCardsLength +
-            item.happyCardsLength;
-          totalHappyCards = totalHappyCards + item.happyCardsLength;
-          totalNeutalCards = totalNeutalCards + item.neutralCardsLength;
-          totalSadCards = totalSadCards + item.totalSadCards;
-          data.push(obj);
-        });
-        setHeatMapData(data);
+      await getEmotionsAsPerCategory(chartInput).then(
+        res => {
+          setLoading(false);
+          if (res.data.length > 0) {
+            let data: any[] = [];
+            var totalCards = 0;
+            var totalHappyCards = 0;
+            var totalNeutalCards = 0;
+            var totalSadCards = 0;
+            res.data.forEach((item: any) => {
+              var obj = {
+                name: item.groupName,
+                data: [
+                  item.sadCardsLength,
+                  item.neutralCardsLength,
+                  item.happyCardsLength,
+                ],
+              };
+              totalCards =
+                totalCards +
+                item.sadCardsLength +
+                item.neutralCardsLength +
+                item.happyCardsLength;
+              totalHappyCards = totalHappyCards + item.happyCardsLength;
+              totalNeutalCards = totalNeutalCards + item.neutralCardsLength;
+              totalSadCards = totalSadCards + item.totalSadCards;
+              data.push(obj);
+            });
+            setHeatMapData(data);
 
-        var sadPer =
-          (totalSadCards / totalCards) * 100
-            ? (totalSadCards / totalCards) * 100
-            : 0;
-        var neutralPer =
-          (totalNeutalCards / totalCards) * 100
-            ? (totalNeutalCards / totalCards) * 100
-            : 0;
-        var happyPer =
-          (totalHappyCards / totalCards) * 100
-            ? (totalHappyCards / totalCards) * 100
-            : 0;
+            var sadPer =
+              (totalSadCards / totalCards) * 100
+                ? (totalSadCards / totalCards) * 100
+                : 0;
+            var neutralPer =
+              (totalNeutalCards / totalCards) * 100
+                ? (totalNeutalCards / totalCards) * 100
+                : 0;
+            var happyPer =
+              (totalHappyCards / totalCards) * 100
+                ? (totalHappyCards / totalCards) * 100
+                : 0;
 
-        setSadPercentage(+sadPer.toFixed(2));
-        setNeutralPercentage(+neutralPer.toFixed(2));
-        setHappyPercentage(+happyPer.toFixed(2));
-        if (totalCards == 0) {
-          setCardsPerPercentage(1);
-        } else {
-          setCardsPerPercentage(totalCards / 1000);
+            setSadPercentage(+sadPer.toFixed(2));
+            setNeutralPercentage(+neutralPer.toFixed(2));
+            setHappyPercentage(+happyPer.toFixed(2));
+            if (totalCards == 0) {
+              setCardsPerPercentage(1);
+            } else {
+              setCardsPerPercentage(totalCards / 1000);
+            }
+          } else {
+            setHeatMapData([]);
+            setSadPercentage(0);
+            setNeutralPercentage(0);
+            setHappyPercentage(0);
+            setCardsPerPercentage(1);
+          }
+        },
+        error => {
+          setLoading(false);
         }
-      } else {
-        setHeatMapData([]);
-        setSadPercentage(0);
-        setNeutralPercentage(0);
-        setHappyPercentage(0);
-        setCardsPerPercentage(1);
-      }
-    });
-
+      );
+    }
     // await getEnterpriseLevelSentimentsTheme("10", "16", team).then(
     //   res => {
     //     if (res && res.result) {
-    //       console.log(res.result.series,"--",res.result.sadPercentage,"--",res.result.neutralPercentage,"--",res.result.happyPercentage )
     //       setHeatMapData(res.result.series);
     //       setSadPercentage(res.result.sadPercentage);
     //       setNeutralPercentage(res.result.neutralPercentage);
@@ -407,155 +394,169 @@ export default function EnterpriseLevelSentimentsThemeChart({
   }, [global.chartStartDate, global.chartEndDate]);
   return (
     <>
-      {dashboard ? (
-        <ReactApexChart
-          series={heatMapData}
-          options={options}
-          type="heatmap"
-          width="518"
-          height="320"
-        />
+      {loading ? (
+        <CircularProgress />
       ) : (
-        <Grid container spacing={2} sx={{ padding: '48px', overflowY: 'auto' }}>
-          {/* Route Path */}
-          <Grid
-            item
-            xs={12}
-            sx={{
-              padding: '0px !important',
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'flex-start',
-            }}
-          >
-            <Link to={path + '/analytics/'}>Analytics </Link>&nbsp;\ Count
-            themes heatmap
-          </Grid>
-          {/* Back Button & Chart Title */}
-          <Grid
-            item
-            xs={12}
-            sx={{
-              padding: '0px !important',
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'flex-start',
-              marginTop: '24px',
-            }}
-          >
-            <Icons.ArrowCircleLeftOutline
-              size={32}
-              style={{
-                cursor: 'pointer',
-                color: '#159ADD',
-              }}
-              onClick={() => navigate(-1)}
-            />
-            <H2SemiBoldTypography
-              label="Sentiments - Key Themes Heatmap"
-              style={{ color: '#2C69A1', marginLeft: '16px' }}
-            />
-          </Grid>
-          {/* Selector */}
-          <Box>
-            {' '}
-            <DateSelector
-              fromDate={fromDate}
-              toDate={toDate}
-              handleFromDate={handleFromDate}
-              handleToDate={handleToDate}
-            />{' '}
-          </Box>
-          {/* Percentage */}
-          <Grid
-            item
-            xs={3}
-            sx={{
-              padding: '0px !important',
-              marginTop: '32px',
-            }}
-          ></Grid>
-          <Grid
-            item
-            xs={7}
-            sx={{
-              padding: '0px !important',
-              marginTop: '32px',
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'space-evenly',
-            }}
-          >
-            <Box
-              sx={{
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                flexDirection: 'column',
-              }}
-            >
-              <H4RegularTypography label={sadPercentage?.toString() + '%'} />
-              <BodyRegularTypography label="Sad" />
-            </Box>
-            <Box
-              sx={{
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                flexDirection: 'column',
-              }}
-            >
-              <H4RegularTypography
-                label={neutralPercentage?.toString() + '%'}
-              />
-              <BodyRegularTypography label="Neutral" />
-            </Box>
-            <Box
-              sx={{
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                flexDirection: 'column',
-              }}
-            >
-              <H4RegularTypography label={happyPercentage?.toString() + '%'} />
-              <BodyRegularTypography label="Happy" />
-            </Box>
-          </Grid>
-          {/* Chart  */}
-          <Grid
-            item
-            xs={12}
-            sx={{
-              padding: '0px !important',
-              marginTop: '8px',
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-            }}
-          >
+        <>
+          {dashboard ? (
             <ReactApexChart
-              options={options}
               series={heatMapData}
+              options={options}
               type="heatmap"
-              width={getChartWidth()}
-              height="500"
+              width="518"
+              height="320"
             />
-          </Grid>
-          {/* Color Range Image  */}
-          <Grid
-            item
-            xs={12}
-            sx={{
-              paddingTop: '8px !important',
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-            }}
-          >
-            <img src="/svgs/Range_Image.svg"></img>
-          </Grid>
-        </Grid>
+          ) : (
+            <Grid
+              container
+              spacing={2}
+              sx={{ padding: '48px', overflowY: 'auto' }}
+            >
+              {/* Route Path */}
+              <Grid
+                item
+                xs={12}
+                sx={{
+                  padding: '0px !important',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'flex-start',
+                }}
+              >
+                <Link to={path + '/analytics/'}>Analytics </Link>&nbsp;\ Count
+                themes heatmap
+              </Grid>
+              {/* Back Button & Chart Title */}
+              <Grid
+                item
+                xs={12}
+                sx={{
+                  padding: '0px !important',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'flex-start',
+                  marginTop: '24px',
+                }}
+              >
+                <Icons.ArrowCircleLeftOutline
+                  size={32}
+                  style={{
+                    cursor: 'pointer',
+                    color: '#159ADD',
+                  }}
+                  onClick={() => navigate(-1)}
+                />
+                <H2SemiBoldTypography
+                  label="Sentiments - Key Themes Heatmap"
+                  style={{ color: '#2C69A1', marginLeft: '16px' }}
+                />
+              </Grid>
+              {/* Selector */}
+              <Box>
+                {' '}
+                <DateSelector
+                  fromDate={fromDate}
+                  toDate={toDate}
+                  handleFromDate={handleFromDate}
+                  handleToDate={handleToDate}
+                />{' '}
+              </Box>
+              {/* Percentage */}
+              <Grid
+                item
+                xs={3}
+                sx={{
+                  padding: '0px !important',
+                  marginTop: '32px',
+                }}
+              ></Grid>
+              <Grid
+                item
+                xs={7}
+                sx={{
+                  padding: '0px !important',
+                  marginTop: '32px',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'space-evenly',
+                }}
+              >
+                <Box
+                  sx={{
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    flexDirection: 'column',
+                  }}
+                >
+                  <H4RegularTypography
+                    label={sadPercentage?.toString() + '%'}
+                  />
+                  <BodyRegularTypography label="Sad" />
+                </Box>
+                <Box
+                  sx={{
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    flexDirection: 'column',
+                  }}
+                >
+                  <H4RegularTypography
+                    label={neutralPercentage?.toString() + '%'}
+                  />
+                  <BodyRegularTypography label="Neutral" />
+                </Box>
+                <Box
+                  sx={{
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    flexDirection: 'column',
+                  }}
+                >
+                  <H4RegularTypography
+                    label={happyPercentage?.toString() + '%'}
+                  />
+                  <BodyRegularTypography label="Happy" />
+                </Box>
+              </Grid>
+              {/* Chart  */}
+              <Grid
+                item
+                xs={12}
+                sx={{
+                  padding: '0px !important',
+                  marginTop: '8px',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                }}
+              >
+                <ReactApexChart
+                  options={options}
+                  series={heatMapData}
+                  type="heatmap"
+                  width={getChartWidth(windowWidth.current)}
+                  height="500"
+                />
+              </Grid>
+              {/* Color Range Image  */}
+              <Grid
+                item
+                xs={12}
+                sx={{
+                  paddingTop: '8px !important',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                }}
+              >
+                <img src="/svgs/Range_Image.svg"></img>
+              </Grid>
+            </Grid>
+          )}
+        </>
       )}
     </>
   );

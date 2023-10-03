@@ -3,7 +3,6 @@ import { AuthenticatedTemplate, useMsal } from '@azure/msal-react';
 
 import {
   Box,
-  Button,
   Dialog,
   DialogTitle,
   FormControl,
@@ -15,19 +14,23 @@ import {
   ContainedButton,
   OutlinedButton,
   TextButton,
-} from '../../../components';
+} from './../../../components';
 import * as Icons from 'heroicons-react';
 
 import {
   BodyRegularTypography,
   BodySemiBoldTypography,
   CaptionRegularTypography,
-  CaptionSemiBoldTypography,
   H3SemiBoldTypography,
   H4SemiBoldTypography,
   H6RegularTypography,
 } from '../../CustomizedTypography';
-import { getEnterpriseById, updateUser } from '../../../helpers/msal/services';
+import {
+  createEnterpriseRequest,
+  deleteEnterpriseRequestById,
+  getEnterpriseById,
+  updateUser,
+} from '../../../helpers/msal/services';
 import { GlobalContext, ActionType } from '../../../contexts/GlobalContext';
 import { styled } from '@mui/material/styles';
 import Tooltip, { TooltipProps, tooltipClasses } from '@mui/material/Tooltip';
@@ -35,7 +38,7 @@ import OutlineButtonWithIconWithNoBorder from '../../CustomizedButton/OutlineBut
 import { avatarName } from '../../../constants/AvatarName';
 import Avatar from '../Avatar';
 import { LazyLoadImage } from 'react-lazy-load-image-component';
-import { BASIC } from '../../../constants/applicationConst';
+import { BASIC, ENTERPRISE } from '../../../constants/applicationConst';
 
 const styles = {
   accessCodeTextField: {
@@ -233,6 +236,10 @@ export default function EditProfile({ handleEdit }: Props) {
           payload: { loadingFlag: false },
         });
         localStorage.setItem('userData', JSON.stringify(res));
+        dispatch({
+          type: ActionType.SET_AZURE_USER,
+          payload: {azureUser :res}
+        });
         handleEdit();
       },
       err => {
@@ -245,13 +252,64 @@ export default function EditProfile({ handleEdit }: Props) {
     );
   };
 
+  // Request for new enterprise access
   const requestEnterpriseAdmin = () => {
-    // Call API to request for Admin Role
-    updateIsEnterpriserRequested();
+    handleNewEnterpriseRequest();
+  };
+
+  const handleNewEnterpriseRequest = async () => {
+    dispatch({
+      type: ActionType.SET_LOADING,
+      payload: { loadingFlag: true },
+    });
+    const tempTeams = tempLocalUserData && tempLocalUserData.teams;
+    const teamsIds = tempTeams.map((team: any) => team.teamId);
+
+    const requestBody = {
+      organisationId: tempLocalUserData && tempLocalUserData.enterpriseId,
+      fromName: tempLocalUserData.firstName + ' ' + tempLocalUserData.lastName,
+      fromEmail: tempLocalUserData && tempLocalUserData.emailId,
+      fromTeams: teamsIds,
+      toEmails: [],
+      isApproved: false,
+    };
+
+    await createEnterpriseRequest(requestBody).then(
+      res => {
+        updateIsEnterpriserRequested(
+          res && res.enterpriseRequestId,
+          isEnterpriserRequested
+        );
+      },
+      err => {
+        console.log('err', err);
+      }
+    );
+  };
+
+  // Remove the requested enterprise
+  const cancelEnterpriseRequest = async () => {
+    dispatch({
+      type: ActionType.SET_LOADING,
+      payload: { loadingFlag: true },
+    });
+    const enterpriseRequestId =
+      tempLocalUserData && tempLocalUserData.enterpriseRequestId;
+    await deleteEnterpriseRequestById(enterpriseRequestId).then(
+      res => {
+        updateIsEnterpriserRequested('', isEnterpriserRequested);
+      },
+      err => {
+        console.log('err', err);
+      }
+    );
   };
 
   // Update user data for isEnterpriserRequested
-  const updateIsEnterpriserRequested = async () => {
+  const updateIsEnterpriserRequested = async (
+    enterpriseRequestId: any,
+    isEnterpriserRequested: any
+  ) => {
     dispatch({
       type: ActionType.SET_LOADING,
       payload: { loadingFlag: true },
@@ -259,6 +317,7 @@ export default function EditProfile({ handleEdit }: Props) {
 
     const requestBody = {
       isEnterpriserRequested: !isEnterpriserRequested,
+      enterpriseRequestId: enterpriseRequestId,
     };
 
     await updateUser(emailId, requestBody).then(
@@ -268,6 +327,10 @@ export default function EditProfile({ handleEdit }: Props) {
           payload: { loadingFlag: false },
         });
         localStorage.setItem('userData', JSON.stringify(res));
+        dispatch({
+          type: ActionType.SET_AZURE_USER,
+          payload: {azureUser :res}
+        });
         setIsEnterpriserRequested(!isEnterpriserRequested);
       },
       err => {
@@ -391,7 +454,6 @@ export default function EditProfile({ handleEdit }: Props) {
               onClick={() => handleLogoutRedirect()}
               style={{
                 marginTop: '42px',
-                textDecorationLine: 'underline',
                 background: '#EA4335 !important',
               }}
               size={'medium'}
@@ -427,13 +489,14 @@ export default function EditProfile({ handleEdit }: Props) {
             <Box display="flex" flexDirection="row">
               <OutlineButtonWithIconWithNoBorder
                 id="go_to_readOnly_mode"
-                label="Back"
+                label="Cancel"
                 iconPath="/svgs/back_outline.svg"
                 onClick={() => handleEdit()}
                 style={{
                   display: 'flex',
                   alignItems: 'center',
                   justifyContent: 'center',
+                  textTransform: 'uppercase',
                 }}
               />
               <OutlineButtonWithIconWithNoBorder
@@ -445,279 +508,360 @@ export default function EditProfile({ handleEdit }: Props) {
                   display: 'flex',
                   alignItems: 'center',
                   justifyContent: 'center',
+                  textTransform: 'uppercase',
                 }}
               />
             </Box>
           </Box>
-          <Box
-            sx={{
-              width: '100%',
-              display: 'flex',
-              justifyContent: 'flex-start',
-              alignItems: 'flex-start',
-              flexDirection: 'row',
-              marginTop: '24px',
-            }}
-          >
-            {/* First name */}
-            <FormControl
-              style={{
+          {/* First name & Last name */}
+          <Grid container>
+            <Box
+              sx={{
+                width: '100%',
                 display: 'flex',
-                width: '600px',
                 justifyContent: 'flex-start',
-                alignItems: 'center',
+                alignItems: 'flex-start',
+                flexDirection: 'row',
+                marginTop: '24px',
               }}
             >
-              <Box
+              {/* First name */}
+              <Grid
+                item
+                xs={6}
                 sx={{
                   display: 'flex',
-                  flexDirection: 'row',
-                  justifyContent: 'flex-start',
                   alignItems: 'center',
-                  width: '100%',
+                  justifyContent: 'flex-start',
                 }}
               >
-                <TextField
-                  label="First Name"
-                  autoFocus
-                  variant="standard"
-                  error={!!codeFirstNameError}
-                  sx={{
-                    width: '400px',
-                    ...styles.accessCodeTextField,
+                <FormControl
+                  style={{
+                    display: 'flex',
+                    width: '600px',
+                    justifyContent: 'flex-start',
+                    alignItems: 'center',
                   }}
-                  value={firstName}
-                  onChange={e => {
-                    setFirstName(e.currentTarget.value);
-                    setFirstNameCodeError('');
+                >
+                  <Box
+                    sx={{
+                      display: 'flex',
+                      flexDirection: 'row',
+                      justifyContent: 'flex-start',
+                      alignItems: 'center',
+                      width: '100%',
+                    }}
+                  >
+                    <TextField
+                      label="First Name"
+                      autoFocus
+                      variant="standard"
+                      error={!!codeFirstNameError}
+                      sx={{
+                        width: '400px',
+                        ...styles.accessCodeTextField,
+                      }}
+                      value={firstName}
+                      onChange={e => {
+                        setFirstName(e.currentTarget.value);
+                        setFirstNameCodeError('');
+                      }}
+                    />
+                  </Box>
+                  {/* Error message */}
+                  {codeFirstNameError !== '' && (
+                    <FormHelperText
+                      style={{ color: '#d32f2f', marginLeft: '5px' }}
+                    >
+                      {codeFirstNameError}
+                    </FormHelperText>
+                  )}
+                </FormControl>
+              </Grid>
+              {/* Last name */}
+              <Grid
+                item
+                xs={6}
+                sx={{
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'flex-start',
+                }}
+              >
+                <FormControl
+                  style={{
+                    display: 'flex',
+                    width: '600px',
+                    justifyContent: 'flex-start',
+                    alignItems: 'center',
                   }}
-                />
-              </Box>
-              {/* Error message */}
-              {codeFirstNameError !== '' && (
-                <FormHelperText style={{ color: '#d32f2f', marginLeft: '5px' }}>
-                  {codeFirstNameError}
-                </FormHelperText>
-              )}
-            </FormControl>
-            {/* Last name */}
-            <FormControl
-              style={{
+                >
+                  <Box
+                    sx={{
+                      width: '100%',
+                      display: 'flex',
+                      flexDirection: 'row',
+                      justifyContent: 'flex-start',
+                      alignItems: 'center',
+                    }}
+                  >
+                    <TextField
+                      label="Last Name"
+                      variant="standard"
+                      error={!!codeLastNameError}
+                      sx={{
+                        width: '400px',
+                        ...styles.accessCodeTextField,
+                      }}
+                      value={lastName}
+                      onChange={e => {
+                        setLastName(e.currentTarget.value);
+                        setLastNameCodeError('');
+                      }}
+                    />
+                  </Box>
+                  {/* Error message */}
+                  {codeLastNameError !== '' && (
+                    <FormHelperText
+                      style={{ color: '#d32f2f', marginLeft: '5px' }}
+                    >
+                      {codeLastNameError}
+                    </FormHelperText>
+                  )}
+                </FormControl>
+              </Grid>
+            </Box>
+          </Grid>
+          {/*Email Id & Phone No */}
+          <Grid container>
+            <Box
+              sx={{
+                width: '100%',
                 display: 'flex',
-                width: '600px',
                 justifyContent: 'flex-start',
-                alignItems: 'center',
+                alignItems: 'flex-start',
+                flexDirection: 'row',
+                marginTop: '24px',
               }}
             >
-              <Box
+              {/* Email Id */}
+              <Grid
+                item
+                xs={6}
                 sx={{
-                  width: '100%',
                   display: 'flex',
-                  flexDirection: 'row',
-                  justifyContent: 'flex-start',
                   alignItems: 'center',
+                  justifyContent: 'flex-start',
                 }}
               >
-                <TextField
-                  label="Last Name"
-                  variant="standard"
-                  error={!!codeLastNameError}
-                  sx={{
-                    width: '400px',
-                    ...styles.accessCodeTextField,
+                <FormControl
+                  style={{
+                    display: 'flex',
+                    width: '600px',
+                    justifyContent: 'flex-start',
+                    alignItems: 'center',
                   }}
-                  value={lastName}
-                  onChange={e => {
-                    setLastName(e.currentTarget.value);
-                    setLastNameCodeError('');
+                >
+                  <Box
+                    sx={{
+                      display: 'flex',
+                      flexDirection: 'row',
+                      justifyContent: 'flex-start',
+                      alignItems: 'center',
+                      width: '100%',
+                    }}
+                  >
+                    <TextField
+                      label="Email"
+                      variant="filled"
+                      sx={{
+                        width: '400px',
+                        ...styles.accessCodeTextField,
+                      }}
+                      value={emailId}
+                      onChange={e => {
+                        setEmailId(e.currentTarget.value);
+                      }}
+                      InputProps={{
+                        readOnly: true,
+                      }}
+                    />
+                  </Box>
+                </FormControl>
+              </Grid>
+              {/* Phone No */}
+              <Grid
+                item
+                xs={6}
+                sx={{
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'flex-start',
+                }}
+              >
+                <FormControl
+                  style={{
+                    display: 'flex',
+                    width: '600px',
+                    justifyContent: 'flex-start',
+                    alignItems: 'center',
                   }}
-                />
-              </Box>
-              {/* Error message */}
-              {codeLastNameError !== '' && (
-                <FormHelperText style={{ color: '#d32f2f', marginLeft: '5px' }}>
-                  {codeLastNameError}
-                </FormHelperText>
-              )}
-            </FormControl>
-          </Box>
-          <Box
-            sx={{
-              width: '100%',
-              display: 'flex',
-              justifyContent: 'flex-start',
-              alignItems: 'flex-start',
-              flexDirection: 'row',
-              marginTop: '24px',
-            }}
-          >
-            {/* Email Id */}
-            <FormControl
-              style={{
+                >
+                  <Box
+                    sx={{
+                      display: 'flex',
+                      flexDirection: 'row',
+                      justifyContent: 'flex-start',
+                      alignItems: 'center',
+                      width: '100%',
+                    }}
+                  >
+                    <TextField
+                      label="Phone No"
+                      variant="standard"
+                      error={!!codePhoneNoError}
+                      sx={{
+                        width: '400px',
+                        ...styles.accessCodeTextField,
+                      }}
+                      value={phoneNo}
+                      onChange={e => {
+                        setPhoneNo(e.currentTarget.value);
+                        setPhoneNoError('');
+                      }}
+                    />
+                  </Box>
+                  {/* Error message */}
+                  {codePhoneNoError !== '' && (
+                    <FormHelperText
+                      style={{ color: '#d32f2f', marginLeft: '5px' }}
+                    >
+                      {codePhoneNoError}
+                    </FormHelperText>
+                  )}
+                </FormControl>
+              </Grid>
+            </Box>
+          </Grid>
+          {/*Country & City Code */}
+          <Grid container>
+            <Box
+              sx={{
+                width: '100%',
                 display: 'flex',
-                width: '600px',
                 justifyContent: 'flex-start',
-                alignItems: 'center',
+                alignItems: 'flex-start',
+                flexDirection: 'row',
+                marginTop: '24px',
               }}
             >
-              <Box
+              {/* Country */}
+              <Grid
+                item
+                xs={6}
                 sx={{
                   display: 'flex',
-                  flexDirection: 'row',
-                  justifyContent: 'flex-start',
                   alignItems: 'center',
-                  width: '100%',
+                  justifyContent: 'flex-start',
                 }}
               >
-                <TextField
-                  label="Email"
-                  variant="filled"
-                  sx={{
-                    width: '400px',
-                    ...styles.accessCodeTextField,
+                <FormControl
+                  style={{
+                    display: 'flex',
+                    width: '600px',
+                    justifyContent: 'flex-start',
+                    alignItems: 'center',
                   }}
-                  value={emailId}
-                  onChange={e => {
-                    setEmailId(e.currentTarget.value);
-                  }}
-                  InputProps={{
-                    readOnly: true,
-                  }}
-                />
-              </Box>
-            </FormControl>
-            {/* Phone No */}
-            <FormControl
-              style={{
-                display: 'flex',
-                width: '600px',
-                justifyContent: 'flex-start',
-                alignItems: 'center',
-              }}
-            >
-              <Box
+                >
+                  <Box
+                    sx={{
+                      display: 'flex',
+                      flexDirection: 'row',
+                      justifyContent: 'flex-start',
+                      alignItems: 'center',
+                      width: '100%',
+                    }}
+                  >
+                    <TextField
+                      label="Country"
+                      variant="standard"
+                      error={!!codeCountryError}
+                      sx={{
+                        width: '400px',
+                        ...styles.accessCodeTextField,
+                      }}
+                      value={country}
+                      onChange={e => {
+                        setCountry(e.currentTarget.value);
+                        setCountryCodeError('');
+                      }}
+                    />
+                  </Box>
+                  {/* Error message */}
+                  {codeCountryError !== '' && (
+                    <FormHelperText
+                      style={{ color: '#d32f2f', marginLeft: '5px' }}
+                    >
+                      {codeCountryError}
+                    </FormHelperText>
+                  )}
+                </FormControl>
+              </Grid>
+              {/* City Code */}
+              <Grid
+                item
+                xs={6}
                 sx={{
                   display: 'flex',
-                  flexDirection: 'row',
-                  justifyContent: 'flex-start',
                   alignItems: 'center',
-                  width: '100%',
+                  justifyContent: 'flex-start',
                 }}
               >
-                <TextField
-                  label="Phone No"
-                  variant="standard"
-                  error={!!codePhoneNoError}
-                  sx={{
-                    width: '400px',
-                    ...styles.accessCodeTextField,
+                <FormControl
+                  style={{
+                    display: 'flex',
+                    width: '600px',
+                    justifyContent: 'flex-start',
+                    alignItems: 'center',
                   }}
-                  value={phoneNo}
-                  onChange={e => {
-                    setPhoneNo(e.currentTarget.value);
-                    setPhoneNoError('');
-                  }}
-                />
-              </Box>
-              {/* Error message */}
-              {codePhoneNoError !== '' && (
-                <FormHelperText style={{ color: '#d32f2f', marginLeft: '5px' }}>
-                  {codePhoneNoError}
-                </FormHelperText>
-              )}
-            </FormControl>
-          </Box>
-          <Box
-            sx={{
-              width: '100%',
-              display: 'flex',
-              justifyContent: 'flex-start',
-              alignItems: 'flex-start',
-              flexDirection: 'row',
-              marginTop: '24px',
-            }}
-          >
-            {/* Country */}
-            <FormControl
-              style={{
-                display: 'flex',
-                width: '600px',
-                justifyContent: 'flex-start',
-                alignItems: 'center',
-              }}
-            >
-              <Box
-                sx={{
-                  display: 'flex',
-                  flexDirection: 'row',
-                  justifyContent: 'flex-start',
-                  alignItems: 'center',
-                  width: '100%',
-                }}
-              >
-                <TextField
-                  label="Country"
-                  variant="standard"
-                  error={!!codeCountryError}
-                  sx={{
-                    width: '400px',
-                    ...styles.accessCodeTextField,
-                  }}
-                  value={country}
-                  onChange={e => {
-                    setCountry(e.currentTarget.value);
-                    setCountryCodeError('');
-                  }}
-                />
-              </Box>
-              {/* Error message */}
-              {codeCountryError !== '' && (
-                <FormHelperText style={{ color: '#d32f2f', marginLeft: '5px' }}>
-                  {codeCountryError}
-                </FormHelperText>
-              )}
-            </FormControl>
-            {/* City Code */}
-            <FormControl
-              style={{
-                display: 'flex',
-                width: '600px',
-                justifyContent: 'flex-start',
-                alignItems: 'center',
-              }}
-            >
-              <Box
-                sx={{
-                  display: 'flex',
-                  flexDirection: 'row',
-                  justifyContent: 'flex-start',
-                  alignItems: 'center',
-                  width: '100%',
-                }}
-              >
-                <TextField
-                  label="City Code"
-                  variant="standard"
-                  error={!!codeCityCodeError}
-                  sx={{
-                    width: '400px',
-                    ...styles.accessCodeTextField,
-                  }}
-                  value={cityCode}
-                  onChange={e => {
-                    setCityCode(e.currentTarget.value);
-                    setCityCodeCodeError('');
-                  }}
-                />
-              </Box>
-              {/* Error message */}
-              {codeCityCodeError !== '' && (
-                <FormHelperText style={{ color: '#d32f2f', marginLeft: '5px' }}>
-                  {codeCityCodeError}
-                </FormHelperText>
-              )}
-            </FormControl>
-          </Box>
+                >
+                  <Box
+                    sx={{
+                      display: 'flex',
+                      flexDirection: 'row',
+                      justifyContent: 'flex-start',
+                      alignItems: 'center',
+                      width: '100%',
+                    }}
+                  >
+                    <TextField
+                      label="City Code"
+                      variant="standard"
+                      error={!!codeCityCodeError}
+                      sx={{
+                        width: '400px',
+                        ...styles.accessCodeTextField,
+                      }}
+                      value={cityCode}
+                      onChange={e => {
+                        setCityCode(e.currentTarget.value);
+                        setCityCodeCodeError('');
+                      }}
+                    />
+                  </Box>
+                  {/* Error message */}
+                  {codeCityCodeError !== '' && (
+                    <FormHelperText
+                      style={{ color: '#d32f2f', marginLeft: '5px' }}
+                    >
+                      {codeCityCodeError}
+                    </FormHelperText>
+                  )}
+                </FormControl>
+              </Grid>
+            </Box>
+          </Grid>
+
           {/* Professional Details */}
           <Box
             sx={{
@@ -734,218 +878,300 @@ export default function EditProfile({ handleEdit }: Props) {
               style={{ color: '#000000' }}
             />
           </Box>
-          <Box
-            sx={{
-              width: '100%',
-              display: 'flex',
-              justifyContent: 'flex-start',
-              alignItems: 'flex-start',
-              flexDirection: 'row',
-              marginTop: '24px',
-            }}
-          >
-            {/* Company Name */}
-            <FormControl
-              style={{
+          {/*  Company Name & Team */}
+          <Grid container>
+            <Box
+              sx={{
+                width: '100%',
                 display: 'flex',
-                width: '600px',
                 justifyContent: 'flex-start',
-                alignItems: 'center',
+                alignItems: 'flex-start',
+                flexDirection: 'row',
+                marginTop: '24px',
               }}
             >
-              <Box
+              {/* Company Name */}
+              <Grid
+                item
+                xs={6}
                 sx={{
                   display: 'flex',
-                  flexDirection: 'row',
-                  justifyContent: 'flex-start',
                   alignItems: 'center',
-                  width: '100%',
+                  justifyContent: 'flex-start',
                 }}
               >
-                <TextField
-                  label="Company Name"
-                  variant="filled"
-                  sx={{
-                    width: '400px',
-                    ...styles.accessCodeTextField,
+                <FormControl
+                  style={{
+                    display: 'flex',
+                    width: '600px',
+                    justifyContent: 'flex-start',
+                    alignItems: 'center',
                   }}
-                  value={companyName}
-                  onChange={e => {
-                    setCompanyName(e.currentTarget.value);
-                  }}
-                  InputProps={{
-                    readOnly: true,
-                  }}
-                />
-              </Box>
-            </FormControl>
-            {/* Team */}
-            <FormControl
-              style={{
-                display: 'flex',
-                width: '600px',
-                justifyContent: 'flex-start',
-                alignItems: 'center',
-              }}
-            >
-              <Box
-                sx={{
-                  display: 'flex',
-                  flexDirection: 'row',
-                  justifyContent: 'flex-start',
-                  alignItems: 'center',
-                  width: '100%',
-                }}
-              >
-                {teams.length === 0 ? (
-                  "Team's Not Found"
-                ) : (
+                >
                   <Box
                     sx={{
-                      width: '400px',
-                      backgroundColor: 'rgba(0, 0, 0, 0.06)',
+                      display: 'flex',
+                      flexDirection: 'row',
+                      justifyContent: 'flex-start',
+                      alignItems: 'center',
+                      width: '100%',
                     }}
                   >
-                    <CaptionRegularTypography
-                      label="Teams"
-                      style={{
-                        marginBottom: '24px',
-                        color: 'rgba(0, 0, 0, 0.6)',
+                    <TextField
+                      label="Company Name"
+                      variant="filled"
+                      sx={{
+                        width: '400px',
+                        ...styles.accessCodeTextField,
+                      }}
+                      value={companyName}
+                      onChange={e => {
+                        setCompanyName(e.currentTarget.value);
+                      }}
+                      InputProps={{
+                        readOnly: true,
                       }}
                     />
-                    <Box>
-                      {teams.map((team: any, index: number) => {
-                        return (
-                          <>
-                            {team.teamName}
-                            {index < teams.length - 1 ? ', ' : ''}
-                          </>
-                        );
-                      })}
-                    </Box>
                   </Box>
-                )}
-              </Box>
-            </FormControl>
-          </Box>
-          <Box
-            sx={{
-              width: '100%',
-              display: 'flex',
-              justifyContent: 'flex-start',
-              alignItems: 'flex-start',
-              flexDirection: 'row',
-              marginTop: '24px',
-            }}
-          >
-            {/* Role */}
-            <FormControl
-              style={{
-                display: 'flex',
-                width: '484px',
-                justifyContent: 'flex-start',
-                alignItems: 'center',
-              }}
-            >
-              <Box
+                </FormControl>
+              </Grid>
+              {/* Team */}
+              <Grid
+                item
+                xs={6}
                 sx={{
                   display: 'flex',
-                  flexDirection: 'row',
-                  justifyContent: 'flex-start',
                   alignItems: 'center',
-                  width: '100%',
+                  justifyContent: 'flex-start',
                 }}
               >
-                <TextField
-                  label="Role"
-                  variant="filled"
-                  sx={{
-                    width: '400px',
-                    ...styles.accessCodeTextField,
+                <FormControl
+                  style={{
+                    display: 'flex',
+                    width: '600px',
+                    justifyContent: 'flex-start',
+                    alignItems: 'center',
                   }}
-                  value={role}
-                  onChange={e => {
-                    setRole(e.currentTarget.value);
-                  }}
-                  InputProps={{
-                    readOnly: true,
-                  }}
-                />
-              </Box>
-            </FormControl>
-            {/* Request Enterprise Button*/}
-            {isEnterpriserRequested ? (
-              <Box display="flex" flexDirection="column">
-                <Box display="flex" flexDirection="row" alignItems="center">
-                  <ContainedButton
-                    id={'request_enterprise_admin'}
-                    name={'Cancel Request'}
-                    onClick={() => updateIsEnterpriserRequested()}
-                    style={{
-                      padding: '10px 18px',
-                      gap: '8px',
-                      background: '#EA4335 !important',
+                >
+                  <Box
+                    sx={{
+                      display: 'flex',
+                      flexDirection: 'row',
+                      justifyContent: 'flex-start',
+                      alignItems: 'center',
+                      width: '100%',
                     }}
-                    size={'medium'}
-                  />
-                  <BootstrapTooltip
-                    title="Enterprise get Additional Analytics Insights from each team. If your organisation needs an enterprise account contact sales@baci.com"
-                    placement="right"
                   >
-                    <Icons.InformationCircleOutline
-                      size={24}
-                      color="#4E4E4E"
-                      style={{
-                        cursor: 'pointer',
-                        marginLeft: '5px',
+                    {teams.length === 0 ? (
+                      "Team's Not Found"
+                    ) : (
+                      <Box
+                        sx={{
+                          width: '400px',
+                          backgroundColor: 'rgba(0, 0, 0, 0.06)',
+                          borderBottom: '1px solid',
+                        }}
+                      >
+                        <CaptionRegularTypography
+                          label="Teams"
+                          style={{
+                            marginBottom: '24px',
+                            color: 'rgba(0, 0, 0, 0.6)',
+                            padding: '8px 8px 4px 16px',
+                          }}
+                        />
+                        <Box sx={{ padding: '0px 8px 4px 16px' }}>
+                          {teams.map((team: any, index: number) => {
+                            return (
+                              <>
+                                {team.teamName}
+                                {index < teams.length - 1 ? ', ' : ''}
+                              </>
+                            );
+                          })}
+                        </Box>
+                      </Box>
+                    )}
+                  </Box>
+                </FormControl>
+              </Grid>
+            </Box>
+          </Grid>
+          {/*  Role & Request Enterprise */}
+          <Grid container>
+            <Box
+              sx={{
+                width: '100%',
+                display: 'flex',
+                justifyContent: 'flex-start',
+                alignItems: 'flex-start',
+                flexDirection: 'row',
+                marginTop: '24px',
+              }}
+            >
+              {/* Role */}
+              <Grid
+                item
+                xs={6}
+                sx={{
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'flex-start',
+                }}
+              >
+                <FormControl
+                  style={{
+                    display: 'flex',
+                    width: '600px',
+                    justifyContent: 'flex-start',
+                    alignItems: 'center',
+                  }}
+                >
+                  <Box
+                    sx={{
+                      display: 'flex',
+                      flexDirection: 'row',
+                      justifyContent: 'flex-start',
+                      alignItems: 'center',
+                      width: '100%',
+                    }}
+                  >
+                    <TextField
+                      label="Role"
+                      variant="filled"
+                      sx={{
+                        width: '400px',
+                        ...styles.accessCodeTextField,
+                      }}
+                      value={role}
+                      onChange={e => {
+                        setRole(e.currentTarget.value);
+                      }}
+                      InputProps={{
+                        readOnly: true,
                       }}
                     />
-                  </BootstrapTooltip>
-                </Box>
-                <Box
-                  display="flex"
-                  flexDirection="column"
-                  sx={{
-                    marginTop: '24px',
-                    padding: '12px',
-                    background: '#CEEFFF',
-                  }}
-                >
-                  <BodySemiBoldTypography label="Your Request for Enterprise Dashboard is sent" />
-                  <CaptionRegularTypography
-                    label="Waiting for Admin to accept your request."
-                    style={{ marginTop: '16px' }}
-                  />
-                </Box>
-              </Box>
-            ) : (
-              <Box display="flex" flexDirection="row" alignItems="center">
-                <ContainedButton
-                  id={'request_enterprise_admin'}
-                  name={'Request Enterprise'}
-                  onClick={() => requestEnterpriseAdmin()}
+                  </Box>
+                </FormControl>
+              </Grid>
+              {/* Request Enterprise Button*/}
+              <Grid
+                item
+                xs={6}
+                sx={{
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'flex-start',
+                }}
+              >
+                <FormControl
                   style={{
-                    padding: '10px 18px',
-                    gap: '8px',
+                    display: 'flex',
+                    width: '600px',
+                    justifyContent: 'flex-start',
+                    alignItems: 'center',
                   }}
-                  size={'medium'}
-                />
-                <BootstrapTooltip
-                  title="Enterprise get Additional Analytics Insights from each team. If your organisation needs an enterprise account contact sales@baci.com"
-                  placement="right"
                 >
-                  <Icons.InformationCircleOutline
-                    size={24}
-                    color="#4E4E4E"
-                    style={{
-                      cursor: 'pointer',
-                      marginLeft: '5px',
+                  <Box
+                    sx={{
+                      display: 'flex',
+                      flexDirection: 'row',
+                      justifyContent: 'flex-start',
+                      alignItems: 'center',
+                      width: '100%',
                     }}
-                  />
-                </BootstrapTooltip>
-              </Box>
-            )}
-          </Box>
+                  >
+                    {tempLocalUserData &&
+                    tempLocalUserData.roleName === ENTERPRISE ? (
+                      <></>
+                    ) : (
+                      <>
+                        {isEnterpriserRequested ? (
+                          <Box display="flex" flexDirection="column">
+                            <Box
+                              display="flex"
+                              flexDirection="row"
+                              alignItems="center"
+                            >
+                              <ContainedButton
+                                id={'request_enterprise_admin'}
+                                name={'Cancel Request'}
+                                onClick={() => cancelEnterpriseRequest()}
+                                style={{
+                                  padding: '10px 18px',
+                                  gap: '8px',
+                                  background: '#EA4335 !important',
+                                }}
+                                size={'medium'}
+                              />
+                              <BootstrapTooltip
+                                title="Enterprise user get Additional Analytics Insights from each team. If your organisation needs an enterprise account contact sales@baci.com"
+                                placement="right"
+                              >
+                                <Icons.InformationCircleOutline
+                                  size={24}
+                                  color="#4E4E4E"
+                                  style={{
+                                    cursor: 'pointer',
+                                    marginLeft: '5px',
+                                  }}
+                                />
+                              </BootstrapTooltip>
+                            </Box>
+                            <Box
+                              display="flex"
+                              flexDirection="column"
+                              sx={{
+                                marginTop: '24px',
+                                padding: '12px',
+                                background: '#CEEFFF',
+                              }}
+                            >
+                              <BodySemiBoldTypography label="Your Request for Enterprise Dashboard is sent" />
+                              <CaptionRegularTypography
+                                label="Waiting for Admin to accept your request."
+                                style={{ marginTop: '16px' }}
+                              />
+                            </Box>
+                          </Box>
+                        ) : (
+                          <Box
+                            display="flex"
+                            flexDirection="row"
+                            alignItems="center"
+                          >
+                            <ContainedButton
+                              id={'request_enterprise_admin'}
+                              name={'REQUEST ENTERPRISE ACCOUNT'}
+                              onClick={() => requestEnterpriseAdmin()}
+                              style={{
+                                padding: '10px 18px',
+                                gap: '8px',
+                              }}
+                              size={'medium'}
+                            />
+                            <BootstrapTooltip
+                              title="Enterprise user get Additional Analytics Insights from each team. If your organisation needs an enterprise account contact sales@baci.com"
+                              placement="right"
+                            >
+                              <Icons.InformationCircleOutline
+                                size={24}
+                                color="#4E4E4E"
+                                style={{
+                                  cursor: 'pointer',
+                                  marginLeft: '5px',
+                                }}
+                              />
+                            </BootstrapTooltip>
+                          </Box>
+                        )}
+                      </>
+                    )}
+                  </Box>
+                </FormControl>
+              </Grid>
+            </Box>
+          </Grid>
         </Box>
       </Box>
       <Dialog

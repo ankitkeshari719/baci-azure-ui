@@ -1,22 +1,22 @@
 import * as React from 'react';
 import Box from '@mui/material/Box';
-import InputLabel from '@mui/material/InputLabel';
 import MenuItem from '@mui/material/MenuItem';
 import FormControl from '@mui/material/FormControl';
-import Select, { SelectChangeEvent } from '@mui/material/Select';
+import Select from '@mui/material/Select';
 import { getAllTeamsByEnterpriseId } from '../../helpers/msal/services';
-import { MenuProps } from '../../screens/Analytics/const';
 
 type Props = {
   enterpriseId: string;
   selectedTeam: string;
   handleChange: any;
+  padding?: string;
 };
 
 export default function TeamSelector({
   enterpriseId,
   selectedTeam,
   handleChange,
+  padding,
 }: Props) {
   const [teams, setTeams] = React.useState<any>([]);
 
@@ -57,12 +57,12 @@ export default function TeamSelector({
               display: 'flex',
               justifyContent: 'center',
               alignItems: 'flex-start',
-              padding: '16px',
+              padding: padding ? padding : '16px',
             },
           }}
         >
-          <MenuItem value="all" key="all">
-            All
+          <MenuItem value="0" key="0">
+            {'All Teams'}
           </MenuItem>
           {teams.map((team: any) => {
             return (

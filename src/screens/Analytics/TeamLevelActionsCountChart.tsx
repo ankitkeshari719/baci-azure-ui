@@ -10,6 +10,7 @@ import ReactApexChart from 'react-apexcharts';
 import { ApexOptions } from 'apexcharts';
 import {
   Box,
+  CircularProgress,
   FormControl,
   Grid,
   MenuItem,
@@ -31,7 +32,7 @@ import {
 } from '../../components/CustomizedTypography';
 import { Link, useNavigate } from 'react-router-dom';
 import * as Icons from 'heroicons-react';
-import { MONTH_SELECTORS, MenuProps } from './const';
+import { MONTH_SELECTORS, MenuProps, getChartWidth } from './const';
 import { GlobalContext } from '../../contexts/GlobalContext';
 import { BASIC, ENTERPRISE } from '../../constants/applicationConst';
 import DateSelector from '../../components/Elements/EnterpriseDashboardPages/DateSelector';
@@ -54,8 +55,10 @@ const StyledTableCell = styled(TableCell)(({ theme }) => ({
 
 export default function TeamLevelActionsCountChart({
   dashboard,
+  team,
 }: {
   dashboard?: boolean;
+  team?: string;
 }) {
   const [global, dispatch] = React.useContext(GlobalContext);
   const [teamLevelActions, setTeamLevelActions] = useState<any>([]);
@@ -71,6 +74,7 @@ export default function TeamLevelActionsCountChart({
           '0' +
           new Date().getMonth().toString().slice(-2)
   );
+  const [loading, setLoading] = useState<boolean>(true);
   const [toDate, setToDate] = useState<string>(
     global.chartEndDate
       ? global.chartEndDate
@@ -79,112 +83,93 @@ export default function TeamLevelActionsCountChart({
           '0' +
           (new Date().getMonth() + 1).toString().slice(-2)
   );
-  const [noData, setNoData] = useState<boolean>(true);
 
   const navigate = useNavigate();
   const windowWidth = React.useRef(window.innerWidth);
 
-  const localUserData = localStorage.getItem('userData');
-  const tempLocalUserData = localUserData && JSON.parse(localUserData);
   const [path, setPath] = React.useState('');
 
   React.useEffect(() => {
-    if (tempLocalUserData && tempLocalUserData.roleName === BASIC) {
+    if (global.azureUser?.roleName && global.azureUser?.roleName === BASIC) {
       setPath('basic');
-    } else if (tempLocalUserData && tempLocalUserData.roleName === ENTERPRISE) {
+    } else if (
+      global.azureUser?.roleName &&
+      global.azureUser?.roleName === ENTERPRISE
+    ) {
       setPath('enterprise');
     }
-  }, [tempLocalUserData]);
-
-  const getChartWidth = () => {
-    switch (true) {
-      case windowWidth.current <= 1051:
-        return '400';
-      case windowWidth.current > 1051 && windowWidth.current <= 1150:
-        return '450';
-      case windowWidth.current >= 1151 && windowWidth.current <= 1199:
-        return '500';
-      case windowWidth.current >= 1200 && windowWidth.current <= 125:
-        return '520';
-      case windowWidth.current >= 1251 && windowWidth.current <= 1300:
-        return '550';
-      case windowWidth.current >= 1301 && windowWidth.current <= 1400:
-        return '600';
-      case windowWidth.current >= 1401 && windowWidth.current <= 1500:
-        return '650';
-      case windowWidth.current >= 1500:
-        return '700';
-
-      default:
-        return '500';
-    }
-  };
+  }, [global.azureUser?.roleName]);
 
   React.useEffect(() => {
     handleGetTeamLevelActionsCountsData();
-  }, [fromDate, toDate]);
+  }, [fromDate, toDate,global?.teamId]);
 
   function removeDuplicates(arr: string[]) {
     return arr.filter((item, index) => arr.indexOf(item) === index);
   }
 
+
+
   const handleGetTeamLevelActionsCountsData = async () => {
-    const chartInput: chartInputType = {
-      userId: 'vishal.gawande@evoltech.com.au',
-      roleName: 'Enterprise',
-      enterpriseId: 'evoltech0.0751886606959975',
-      teamId: '0',
-      fromDate: formatDateForAPI(fromDate),
-      toDate: formatDateForAPI(toDate),
-    };
+    if (global.azureUser != undefined) {
+      const chartInput: chartInputType = {
+        userId: global.azureUser?.emailId,
+        roleName: global.azureUser?.roleName,
+        enterpriseId: global.azureUser?.enterpriseId,
+        teamId: global.teamId?global.teamId:"0",
+        fromDate: formatDateForAPI(fromDate),
+        toDate: formatDateForAPI(toDate,true),
+      };
 
+      setLoading(true);
+      await getTeamLevelActionsDataForChart(chartInput).then(
+        res => {
+          // console.log(res.data);
+          setLoading(false);
+          if (res.data.length > 0) {
+            let tempData = [];
+            let assignedArray = [];
+            let completedArray = [];
+            let teamNameArray = [];
+            var totalPercentage = 0;
+            var totalCompleted = 0;
+            var totalActions = 0;
+            for (let i = 0; i < res.data.length; i++) {
+              tempData.push({
+                team: res.data[i].teamName,
+                assigned: res.data[i].pending,
+                completed: res.data[i].completed,
+                completedPercentage: +res.data[i].completedInPer.toFixed(2),
+              });
+              totalCompleted = totalCompleted + res.data[i].completed;
+              totalActions =
+                totalActions + res.data[i].completed + res.data[i].pending;
 
-    await getTeamLevelActionsDataForChart(chartInput).then(
-      res => {
-        // console.log(res.data);
-        if (res.data.length > 0) {
-          let tempData = [];
-          let assignedArray = [];
-          let completedArray = [];
-          let teamNameArray = [];
-          var totalPercentage = 0;
-          var totalCompleted=0;
-          var totalActions=0
-          for (let i = 0; i < res.data.length; i++) {
-            tempData.push({
-              team: res.data[i].teamName,
-              assigned: res.data[i].pending,
-              completed: res.data[i].completed,
-              completedPercentage: +res.data[i].completedInPer.toFixed(2),
-            });
-            totalCompleted=totalCompleted+res.data[i].completed;
-            totalActions=totalActions+res.data[i].completed+res.data[i].pending;
-
-            assignedArray.push(res.data[i].pending);
-            completedArray.push(res.data[i].completed);
-            teamNameArray.push(res.data[i].teamName);
-
+              assignedArray.push(res.data[i].pending);
+              completedArray.push(res.data[i].completed);
+              teamNameArray.push(res.data[i].teamName);
+            }
+            totalPercentage = (totalCompleted / totalActions) * 100;
+            setTeamLevelActions(tempData);
+            setAssignedActions(assignedArray);
+            setCompletedActions(completedArray);
+            setMonths(teamNameArray);
+            setCompletedPercentage(+totalPercentage.toFixed(2));
+          } else {
+            setTeamLevelActions([]);
+            setAssignedActions([]);
+            setCompletedActions([]);
+            setMonths([]);
+            setCompletedPercentage(0);
           }
-          totalPercentage=(totalCompleted/totalActions)*100;
-          setTeamLevelActions(tempData);
-          setAssignedActions(assignedArray);
-          setCompletedActions(completedArray);
-          setMonths(teamNameArray);
-          setCompletedPercentage(+totalPercentage.toFixed(2));
-          setNoData(false);
-        } else {
-          setTeamLevelActions([]);
-          setAssignedActions([]);
-          setCompletedActions([]);
-          setMonths([]);
-          setCompletedPercentage(0);
-          setNoData(true);
+        },
+
+        err => {
+          console.log(err);
+          setLoading(false);
         }
-      },
-      err => {
-        console.log(err);
-      }
-    );
+      );
+    }
   };
   React.useEffect(() => {
     const fromDateInput = global.chartStartDate;
@@ -296,175 +281,194 @@ export default function TeamLevelActionsCountChart({
 
   return (
     <>
-      {dashboard ? (
-        <ReactApexChart
-          options={options}
-          series={series}
-          type="bar"
-          width="518"
-          height="320"
-        />
+      {loading ? (
+        <CircularProgress />
       ) : (
-        <Grid container spacing={2} sx={{ padding: '48px', overflowY: 'auto' }}>
-          {/* Route Path */}
-          <Grid
-            item
-            xs={12}
-            sx={{
-              padding: '0px !important',
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'flex-start',
-            }}
-          >
-            <Link to={path + '/analytics/'}>Analytics </Link>&nbsp;\ Count Level
-          </Grid>
-          {/* Back Button & Chart Title */}
-          <Grid
-            item
-            xs={12}
-            sx={{
-              padding: '0px !important',
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'flex-start',
-              marginTop: '24px',
-            }}
-          >
-            <Icons.ArrowCircleLeftOutline
-              size={32}
-              style={{
-                cursor: 'pointer',
-                color: '#159ADD',
-              }}
-              onClick={() => navigate(-1)}
-            />
-            <H2SemiBoldTypography
-              label="Count of Team Actions (Assigned vs Completed)"
-              style={{ color: '#2C69A1', marginLeft: '16px' }}
-            />
-          </Grid>
-          {/* Table with Selector*/}
-          <Grid
-            item
-            xs={12}
-            md={6}
-            sx={{
-              padding: '0px !important',
-              display: 'flex',
-              alignItems: 'center',
-              flexDirection: 'column',
-              marginTop: '24px',
-            }}
-          >
-            {/* Selector */}
-
-            <Box>
-              {' '}
-              <DateSelector
-                fromDate={fromDate}
-                toDate={toDate}
-                handleFromDate={handleFromDate}
-                handleToDate={handleToDate}
-              />{' '}
-            </Box>
-
-            {/* Table */}
-            <Box sx={{ marginTop: '32px' }}>
-              <TableContainer style={{ borderCollapse: 'collapse' }}>
-                <TableHead>
-                  <TableRow>
-                    <StyledTableCell align="center">Team</StyledTableCell>
-                    <StyledTableCell align="center">Pending</StyledTableCell>
-                    <StyledTableCell align="center">Completed</StyledTableCell>
-                    <StyledTableCell align="center">
-                      Completed %
-                    </StyledTableCell>
-                  </TableRow>
-                </TableHead>
-                <TableBody>
-                  {teamLevelActions.map(
-                    (teamLevelAction: any, index: number) => {
-                      return (
-                        <TableRow key={'teamLevelActions' + index}>
-                          <StyledTableCell
-                            component="th"
-                            scope="row"
-                            align="center"
-                          >
-                            {teamLevelAction.team}
-                          </StyledTableCell>
-                          <StyledTableCell align="center">
-                            {teamLevelAction.assigned}
-                          </StyledTableCell>
-                          <StyledTableCell align="center">
-                            {teamLevelAction.completed}
-                          </StyledTableCell>
-                          <StyledTableCell align="center">
-                            {teamLevelAction.completedPercentage}
-                          </StyledTableCell>
-                        </TableRow>
-                      );
-                    }
-                  )}
-                </TableBody>
-              </TableContainer>
-            </Box>
-          </Grid>
-          {/* Chart  */}
-          <Grid
-            item
-            xs={12}
-            md={6}
-            sx={{
-              padding: '0px !important',
-              marginTop: '16px',
-              display: 'flex',
-              alignItems: 'flex-start',
-              flexDirection: 'column',
-            }}
-          >
-            <Box>
-              <Grid item xs={12} sx={{ padding: '0px !important' }}>
-                <BodyRegularTypography
-                  label="Avg. Actions Completed"
-                  style={{ color: '#343434' }}
-                />
-              </Grid>
-              <Grid
-                item
-                xs={12}
-                sx={{ padding: '0px !important', marginTop: '10px' }}
-              >
-                <H4SemiBoldTypography
-                  label={completedPercentage!=undefined? completedPercentage+" % ": 0 +' %'}
-                  style={{ color: '#343434' }}
-                />
-              </Grid>
-              <Grid
-                item
-                xs={12}
-                sx={{ padding: '0px !important', marginTop: '10px' }}
-              >
-                <BodyRegularTypography
-                  label={
-                    formatDateToMonthYear(fromDate) +
-                    ' To ' +
-                    formatDateToMonthYear(toDate)
-                  }
-                  style={{ color: '#343434' }}
-                />
-              </Grid>
-            </Box>
+        <>
+          {dashboard ? (
             <ReactApexChart
               options={options}
               series={series}
               type="bar"
-              width={getChartWidth()}
-              height="500"
+              width="518"
+              height="320"
             />
-          </Grid>
-        </Grid>
+          ) : (
+            <Grid
+              container
+              spacing={2}
+              sx={{ padding: '48px', overflowY: 'auto' }}
+            >
+              {/* Route Path */}
+              <Grid
+                item
+                xs={12}
+                sx={{
+                  padding: '0px !important',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'flex-start',
+                }}
+              >
+                <Link to={path + '/analytics/'}>Analytics </Link>&nbsp;\ Count
+                Level
+              </Grid>
+              {/* Back Button & Chart Title */}
+              <Grid
+                item
+                xs={12}
+                sx={{
+                  padding: '0px !important',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'flex-start',
+                  marginTop: '24px',
+                }}
+              >
+                <Icons.ArrowCircleLeftOutline
+                  size={32}
+                  style={{
+                    cursor: 'pointer',
+                    color: '#159ADD',
+                  }}
+                  onClick={() => navigate(-1)}
+                />
+                <H2SemiBoldTypography
+                  label="Count of Team Actions (Assigned vs Completed)"
+                  style={{ color: '#2C69A1', marginLeft: '16px' }}
+                />
+              </Grid>
+              {/* Table with Selector*/}
+              <Grid
+                item
+                xs={12}
+                md={6}
+                sx={{
+                  padding: '0px !important',
+                  display: 'flex',
+                  alignItems: 'center',
+                  flexDirection: 'column',
+                  marginTop: '24px',
+                }}
+              >
+                {/* Selector */}
+
+                <Box>
+                  {' '}
+                  <DateSelector
+                    fromDate={fromDate}
+                    toDate={toDate}
+                    handleFromDate={handleFromDate}
+                    handleToDate={handleToDate}
+                  />{' '}
+                </Box>
+
+                {/* Table */}
+                <Box sx={{ marginTop: '32px' }}>
+                  <TableContainer style={{ borderCollapse: 'collapse' }}>
+                    <TableHead>
+                      <TableRow>
+                        <StyledTableCell align="center">Team</StyledTableCell>
+                        <StyledTableCell align="center">
+                          Pending
+                        </StyledTableCell>
+                        <StyledTableCell align="center">
+                          Completed
+                        </StyledTableCell>
+                        <StyledTableCell align="center">
+                          Completed %
+                        </StyledTableCell>
+                      </TableRow>
+                    </TableHead>
+                    <TableBody>
+                      {teamLevelActions.map(
+                        (teamLevelAction: any, index: number) => {
+                          return (
+                            <TableRow key={'teamLevelActions' + index}>
+                              <StyledTableCell
+                                component="th"
+                                scope="row"
+                                align="center"
+                              >
+                                {teamLevelAction.team}
+                              </StyledTableCell>
+                              <StyledTableCell align="center">
+                                {teamLevelAction.assigned}
+                              </StyledTableCell>
+                              <StyledTableCell align="center">
+                                {teamLevelAction.completed}
+                              </StyledTableCell>
+                              <StyledTableCell align="center">
+                                {teamLevelAction.completedPercentage}
+                              </StyledTableCell>
+                            </TableRow>
+                          );
+                        }
+                      )}
+                    </TableBody>
+                  </TableContainer>
+                </Box>
+              </Grid>
+              {/* Chart  */}
+              <Grid
+                item
+                xs={12}
+                md={6}
+                sx={{
+                  padding: '0px !important',
+                  marginTop: '16px',
+                  display: 'flex',
+                  alignItems: 'flex-start',
+                  flexDirection: 'column',
+                }}
+              >
+                <Box>
+                  <Grid item xs={12} sx={{ padding: '0px !important' }}>
+                    <BodyRegularTypography
+                      label="Avg. Actions Completed"
+                      style={{ color: '#343434' }}
+                    />
+                  </Grid>
+                  <Grid
+                    item
+                    xs={12}
+                    sx={{ padding: '0px !important', marginTop: '10px' }}
+                  >
+                    <H4SemiBoldTypography
+                      label={
+                        completedPercentage != undefined
+                          ? completedPercentage + ' % '
+                          : 0 + ' %'
+                      }
+                      style={{ color: '#343434' }}
+                    />
+                  </Grid>
+                  <Grid
+                    item
+                    xs={12}
+                    sx={{ padding: '0px !important', marginTop: '10px' }}
+                  >
+                    <BodyRegularTypography
+                      label={
+                        formatDateToMonthYear(fromDate) +
+                        ' To ' +
+                        formatDateToMonthYear(toDate)
+                      }
+                      style={{ color: '#343434' }}
+                    />
+                  </Grid>
+                </Box>
+                <ReactApexChart
+                  options={options}
+                  series={series}
+                  type="bar"
+                  width={getChartWidth(windowWidth.current)}
+                  height="500"
+                />
+              </Grid>
+            </Grid>
+          )}
+        </>
       )}
     </>
   );

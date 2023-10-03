@@ -4,21 +4,40 @@ import {
   FormControl,
   TextField,
   FormHelperText,
+  Dialog,
+  DialogTitle,
+  Grid,
+  Checkbox,
+  InputAdornment,
 } from '@mui/material';
 import * as React from 'react';
+import moment from 'moment';
 
 import {
-  BodySemiBoldTypography,
   ButtonLabelTypography,
   H2SemiBoldTypography,
+  H5RegularTypography,
+  BodySemiBoldTypography,
+  H6RegularTypography,
+  H4SemiBoldTypography,
+  CaptionSemiBoldTypography,
 } from '../../CustomizedTypography';
+import { ContainedButton, OutlinedButton } from './../../../components';
+import { MagnifyingGlassIcon } from '@heroicons/react/24/outline';
+import { TableBody, TableCell, TableRow } from '@material-ui/core';
 import commonStyles from '../../../style.module.scss';
 import { useNavigate } from 'react-router-dom';
 import * as Icons from 'heroicons-react';
 import { BASIC, ENTERPRISE } from '../../../constants/applicationConst';
-import { OutlinedButton } from '../../CustomizedButton/OutlinedButton';
-import { createTeam } from '../../../helpers/msal/services';
+import {
+  createTeam,
+  getAllUsersByEnterpriseId,
+} from '../../../helpers/msal/services';
 import { ActionType, GlobalContext } from '../../../contexts/GlobalContext';
+import OutlineButtonWithIconWithNoBorder from '../../CustomizedButton/OutlineButtonWithIconWithNoBorder';
+import { ContainedButtonWithIcon } from '../../CustomizedButton/ContainedButtonWithIcon';
+import useTable from '../../CustomizedTable/useTable';
+import SelectedTeamMembers from './SelectedTeamMembers';
 
 const styles = {
   accessCodeTextField: {
@@ -38,6 +57,12 @@ const styles = {
   },
 };
 
+const headCells = [
+  { id: 'check', label: '', disableSorting: true },
+  { id: 'fullName', label: 'Name', disableSorting: true },
+  { id: 'emailId', label: 'Email', disableSorting: true },
+];
+
 export default function CreateTeam() {
   const navigate = useNavigate();
   const [global, dispatch] = React.useContext(GlobalContext);
@@ -45,11 +70,11 @@ export default function CreateTeam() {
   const tempLocalUserData = localUserData && JSON.parse(localUserData);
 
   const [teamName, setTeamName] = React.useState('');
+  const [teamDepartment, setTeamDepartment] = React.useState('');
   const [teamDescription, setTeamDescription] = React.useState('');
   const [createdBy, setCreatedBy] = React.useState('');
-  const [teamDepartment, setTeamDepartment] = React.useState('');
   const [userEmailIds, setUserEmailIds] = React.useState([
-    'vishal.gawande@evoltech.com',
+    global.azureUser?.emailId,
   ]);
   const [enterpriseId, setEnterpriseId] = React.useState('');
   const [codeTeamNameError, setTeamNameCodeError] = React.useState('');
@@ -62,16 +87,123 @@ export default function CreateTeam() {
 
   React.useEffect(() => {
     setEnterpriseId(tempLocalUserData.enterpriseId);
+    setHeight(window.innerHeight);
+    callGetAllUsersByEnterpriseId(
+      tempLocalUserData && tempLocalUserData.enterpriseId
+    );
   }, []);
+
+  // Add Members
+  const [openAddMembersDialog, setOpenAddMembersDialog] = React.useState(false);
+  const [height, setHeight] = React.useState(0);
+  const [records, setRecords] = React.useState<any>([]);
+  const [searchedVal, setSearchedVal] = React.useState('');
+  const [filterFn, setFilterFn] = React.useState<any>({
+    fn: (items: any) => {
+      return items;
+    },
+  });
+
+  // Show Members
+  const [checkedUserEmails, setCheckedUserEmails] = React.useState([]);
+
+  const { TblContainer, TblHead, TblPagination, recordAfterPagingAndSorting } =
+    useTable(records, headCells, filterFn);
+
+  // Get All Users By Enterprise
+  const callGetAllUsersByEnterpriseId = async (enterpriseId: any) => {
+    dispatch({
+      type: ActionType.SET_LOADING,
+      payload: { loadingFlag: true },
+    });
+    await getAllUsersByEnterpriseId(enterpriseId).then(
+      res => {
+        let tempRes = res.map((user: any) => {
+          return {
+            id: user.emailId,
+            fullName: user.firstName + ' ' + user.lastName,
+            emailId: user.emailId,
+            teams: user.teamInfo,
+            roleName: user.roleName,
+            createdAt: moment(user.createdAt).format('Do MMM YYYY'),
+            checked: false,
+          };
+        });
+        setRecords(tempRes);
+        dispatch({
+          type: ActionType.SET_LOADING,
+          payload: { loadingFlag: false },
+        });
+      },
+      err => {
+        console.log('err', err);
+        dispatch({
+          type: ActionType.SET_LOADING,
+          payload: { loadingFlag: false },
+        });
+      }
+    );
+  };
+
+  // Handle Search
+  const handleSearch = (e: any) => {
+    let target = e.target;
+    setFilterFn({
+      fn: (items: any) => {
+        if (target.value === '') {
+          return items;
+        } else {
+          let temp = items.filter((x: any) => {
+            return x.fullName
+              .toLowerCase()
+              .includes(target.value.toLowerCase());
+          });
+          return temp;
+        }
+      },
+    });
+  };
+
+  // Handle Checkbox
+  const handleChangeCheckbox = (
+    event: React.ChangeEvent<HTMLInputElement>,
+    userId: any
+  ) => {
+    const newRecord = records.map((record: any) => {
+      if (record.emailId === userId) {
+        record.checked = !record.checked;
+      }
+      return record;
+    });
+    setRecords(newRecord);
+  };
 
   // Function to navigate on all team
   function goToAllTeam() {
     if (tempLocalUserData && tempLocalUserData.roleName === BASIC) {
-      navigate('/basic/teams/allTeams/');
+      // navigate('/basic/teams/allTeams/');
+      navigate(-1);
     } else if (tempLocalUserData && tempLocalUserData.roleName === ENTERPRISE) {
-      navigate('/enterprise/teams/allTeams/');
+      // navigate('/enterprise/teams/allTeams/');
+      navigate(-1);
     }
   }
+
+  const handleOpenAddMembersDialog = () => {
+    setOpenAddMembersDialog(true);
+  };
+
+  const handleCloseAddMembersDialog = () => {
+    setOpenAddMembersDialog(false);
+  };
+
+  const addMembersFromDialog = () => {
+    const checkRecords = records
+      .filter((e: any) => e.checked)
+      .map((r: any) => r.emailId);
+    setCheckedUserEmails(checkRecords);
+    handleCloseAddMembersDialog();
+  };
 
   const submitTeam = () => {
     if (teamName === '') {
@@ -94,18 +226,12 @@ export default function CreateTeam() {
     } else {
       setCreatedByCodeError('');
     }
-    if (userEmailIds.length === 0) {
-      setUserEmailIdsCodeError('Please select at least one member');
-    } else {
-      setUserEmailIdsCodeError('');
-    }
 
     if (
       teamName === '' ||
       teamDepartment === '' ||
       teamDescription === '' ||
-      createdBy === '' ||
-      userEmailIds.length === 0
+      createdBy === ''
     ) {
       return;
     }
@@ -114,9 +240,23 @@ export default function CreateTeam() {
       teamName != '' ||
       teamDepartment != '' ||
       teamDescription != '' ||
-      createdBy != '' ||
-      userEmailIds.length === 0
+      createdBy != ''
     ) {
+      const userIds = records
+        .filter((r: any) => r.checked)
+        .map((e: any) => e.emailId);
+      setUserEmailIds(userIds);
+      const requestBody = {
+        teamName: teamName,
+        teamDepartment: teamDepartment,
+        teamDescription: teamDescription,
+        enterpriseId: enterpriseId,
+        userEmailIds: userEmailIds,
+        createdBy: createdBy,
+        isActive: true,
+      };
+      console.log('requestBody', requestBody);
+      return;
       // Call API to Create team
       callCreateTeam();
     }
@@ -127,14 +267,13 @@ export default function CreateTeam() {
       type: ActionType.SET_LOADING,
       payload: { loadingFlag: true },
     });
-
     const requestBody = {
       teamName: teamName,
-      teamDescription: teamDescription,
       teamDepartment: teamDepartment,
+      teamDescription: teamDescription,
       enterpriseId: enterpriseId,
+      userEmailIds: checkedUserEmails,
       createdBy: createdBy,
-      userEmailIds: userEmailIds,
       isActive: true,
     };
 
@@ -153,6 +292,34 @@ export default function CreateTeam() {
         });
       }
     );
+  };
+
+  const removeUser = (selectedUserId: any) => {
+    const newRecord = records.map((record: any) => {
+      if (record.emailId === selectedUserId) {
+        record.checked = false;
+      }
+      return record;
+    });
+    setRecords(newRecord);
+    const checkRecords = newRecord
+      .filter((e: any) => e.checked)
+      .map((r: any) => r.emailId);
+    setCheckedUserEmails(checkRecords);
+  };
+
+  const removeMultipleUser = (selectedUserIds: any) => {
+    const newRecord = records.map((record: any) => {
+      if (selectedUserIds.includes(record.emailId)) {
+        record.checked = false;
+      }
+      return record;
+    });
+    setRecords(newRecord);
+    const checkRecords = newRecord
+      .filter((e: any) => e.checked)
+      .map((r: any) => r.emailId);
+    setCheckedUserEmails(checkRecords);
   };
 
   return (
@@ -207,269 +374,482 @@ export default function CreateTeam() {
             style={{ color: commonStyles.PrimaryDark, marginLeft: '16px' }}
           />
         </Box>
-        {/* Left Side Form */}
         <Box
           sx={{
-            height: '100%',
-            width: '50%',
+            width: '100%',
             display: 'flex',
-            justifyContent: 'flex-start',
-            alignItems: 'flex-start',
-            flexDirection: 'column',
+            flexDirection: 'row',
+            marginTop: '24px',
           }}
         >
-          {/* Team Name */}
+          {/* Left Side Form */}
           <Box
             sx={{
-              width: '100%',
-              display: 'flex',
-              justifyContent: 'space-between',
-              alignItems: 'flex-start',
-              flexDirection: 'row',
-              marginTop: '24px',
-            }}
-          >
-            {/* Team Name */}
-            <FormControl
-              style={{
-                display: 'flex',
-                width: '600px',
-                justifyContent: 'flex-start',
-                alignItems: 'center',
-              }}
-            >
-              <Box
-                sx={{
-                  display: 'flex',
-                  flexDirection: 'row',
-                  justifyContent: 'flex-start',
-                  alignItems: 'center',
-                  width: '100%',
-                }}
-              >
-                <TextField
-                  label="Team Name"
-                  autoFocus
-                  variant="standard"
-                  error={!!codeTeamNameError}
-                  sx={{
-                    width: '400px',
-                    ...styles.accessCodeTextField,
-                  }}
-                  value={teamName}
-                  onChange={e => {
-                    setTeamName(e.currentTarget.value);
-                    setTeamNameCodeError('');
-                  }}
-                />
-              </Box>
-              {/* Error message */}
-              {codeTeamNameError !== '' && (
-                <FormHelperText style={{ color: '#d32f2f', marginLeft: '5px' }}>
-                  {codeTeamNameError}
-                </FormHelperText>
-              )}
-            </FormControl>
-            <OutlinedButton
-              id={'save_team_info'}
-              label="Save"
-              onClick={() => submitTeam()}
-              style={{
-                minWidth: '172px !important',
-                width: '172px !important',
-                height: '40px !important',
-                marginLeft: '20px',
-              }}
-              size={'small'}
-            />
-          </Box>
-          {/* Team Description */}
-          <Box
-            sx={{
-              width: '100%',
+              height: '100%',
+              width: '40%',
               display: 'flex',
               justifyContent: 'flex-start',
               alignItems: 'flex-start',
-              flexDirection: 'row',
-              marginTop: '24px',
+              flexDirection: 'column',
+              paddingRight: '24px',
             }}
           >
+            {/* Team Name && Save Button */}
+            <Box
+              sx={{
+                width: '100%',
+                display: 'flex',
+                justifyContent: 'space-between',
+                alignItems: 'center',
+                flexDirection: 'row',
+              }}
+            >
+              {/* Team Name */}
+              <FormControl
+                style={{
+                  display: 'flex',
+                  width: '600px',
+                  justifyContent: 'flex-start',
+                  alignItems: 'center',
+                }}
+              >
+                <Box
+                  sx={{
+                    display: 'flex',
+                    flexDirection: 'row',
+                    justifyContent: 'flex-start',
+                    alignItems: 'center',
+                    width: '100%',
+                  }}
+                >
+                  <TextField
+                    label="Team Name"
+                    autoFocus
+                    variant="standard"
+                    error={!!codeTeamNameError}
+                    sx={{
+                      width: '400px',
+                      ...styles.accessCodeTextField,
+                    }}
+                    value={teamName}
+                    onChange={e => {
+                      setTeamName(e.currentTarget.value);
+                      setTeamNameCodeError('');
+                    }}
+                  />
+                </Box>
+                {/* Error message */}
+                {codeTeamNameError !== '' && (
+                  <FormHelperText
+                    style={{ color: '#d32f2f', marginLeft: '5px' }}
+                  >
+                    {codeTeamNameError}
+                  </FormHelperText>
+                )}
+              </FormControl>
+              {/* Save Button*/}
+              <OutlineButtonWithIconWithNoBorder
+                id="save_team_info"
+                label="save"
+                iconPath="/svgs/saveTeam.svg"
+                onClick={() => submitTeam()}
+                style={{
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  textTransform: 'uppercase',
+                }}
+              />
+            </Box>
             {/* Team Description */}
-            <FormControl
-              style={{
+            <Box
+              sx={{
+                width: '100%',
                 display: 'flex',
-                width: '600px',
                 justifyContent: 'flex-start',
-                alignItems: 'center',
+                alignItems: 'flex-start',
+                flexDirection: 'row',
+                marginTop: '24px',
               }}
             >
-              <Box
-                sx={{
-                  width: '100%',
+              {/* Team Description */}
+              <FormControl
+                style={{
                   display: 'flex',
-                  flexDirection: 'row',
+                  width: '600px',
                   justifyContent: 'flex-start',
                   alignItems: 'center',
                 }}
               >
-                <TextField
-                  label="Team Description"
-                  maxRows={8}
-                  variant="standard"
-                  error={!!codeTeamDescriptionError}
+                <Box
                   sx={{
-                    width: '400px',
-                    ...styles.messageTextField,
+                    width: '100%',
+                    display: 'flex',
+                    flexDirection: 'row',
+                    justifyContent: 'flex-start',
+                    alignItems: 'center',
                   }}
-                  value={teamDescription}
-                  onChange={e => {
-                    setTeamDescription(e.currentTarget.value);
-                    setTeamDescriptionError('');
-                  }}
-                />
-              </Box>
-              {/* Error message */}
-              {codeTeamDescriptionError !== '' && (
-                <FormHelperText style={{ color: '#d32f2f', marginLeft: '5px' }}>
-                  {codeTeamDescriptionError}
-                </FormHelperText>
-              )}
-            </FormControl>
-          </Box>
-          {/* Created By  */}
-          <Box
-            sx={{
-              width: '100%',
-              display: 'flex',
-              justifyContent: 'flex-start',
-              alignItems: 'flex-start',
-              flexDirection: 'row',
-              marginTop: '24px',
-            }}
-          >
-            {/* Created BY */}
-            <FormControl
-              style={{
+                >
+                  <TextField
+                    label="Team Description"
+                    maxRows={8}
+                    variant="standard"
+                    error={!!codeTeamDescriptionError}
+                    sx={{
+                      width: '400px',
+                      ...styles.messageTextField,
+                    }}
+                    value={teamDescription}
+                    onChange={e => {
+                      setTeamDescription(e.currentTarget.value);
+                      setTeamDescriptionError('');
+                    }}
+                  />
+                </Box>
+                {/* Error message */}
+                {codeTeamDescriptionError !== '' && (
+                  <FormHelperText
+                    style={{ color: '#d32f2f', marginLeft: '5px' }}
+                  >
+                    {codeTeamDescriptionError}
+                  </FormHelperText>
+                )}
+              </FormControl>
+            </Box>
+            {/* Created By  */}
+            <Box
+              sx={{
+                width: '100%',
                 display: 'flex',
-                width: '600px',
                 justifyContent: 'flex-start',
-                alignItems: 'center',
+                alignItems: 'flex-start',
+                flexDirection: 'row',
+                marginTop: '24px',
               }}
             >
-              <Box
-                sx={{
+              {/* Created BY */}
+              <FormControl
+                style={{
                   display: 'flex',
-                  flexDirection: 'row',
+                  width: '600px',
                   justifyContent: 'flex-start',
                   alignItems: 'center',
-                  width: '100%',
                 }}
               >
-                <TextField
-                  label="Created BY"
-                  autoFocus
-                  variant="standard"
-                  error={!!codeCreatedByError}
+                <Box
                   sx={{
-                    width: '400px',
-                    ...styles.accessCodeTextField,
+                    display: 'flex',
+                    flexDirection: 'row',
+                    justifyContent: 'flex-start',
+                    alignItems: 'center',
+                    width: '100%',
                   }}
-                  value={createdBy}
-                  onChange={e => {
-                    setCreatedBy(e.currentTarget.value);
-                    setCreatedByCodeError('');
-                  }}
-                />
-              </Box>
-              {/* Error message */}
-              {codeCreatedByError !== '' && (
-                <FormHelperText style={{ color: '#d32f2f', marginLeft: '5px' }}>
-                  {codeCreatedByError}
-                </FormHelperText>
-              )}
-            </FormControl>
-          </Box>
-          {/* Department */}
-          <Box
-            sx={{
-              width: '100%',
-              display: 'flex',
-              justifyContent: 'flex-start',
-              alignItems: 'flex-start',
-              flexDirection: 'row',
-              marginTop: '24px',
-            }}
-          >
+                >
+                  <TextField
+                    label="Created BY"
+                    variant="standard"
+                    error={!!codeCreatedByError}
+                    sx={{
+                      width: '400px',
+                      ...styles.accessCodeTextField,
+                    }}
+                    value={createdBy}
+                    onChange={e => {
+                      setCreatedBy(e.currentTarget.value);
+                      setCreatedByCodeError('');
+                    }}
+                  />
+                </Box>
+                {/* Error message */}
+                {codeCreatedByError !== '' && (
+                  <FormHelperText
+                    style={{ color: '#d32f2f', marginLeft: '5px' }}
+                  >
+                    {codeCreatedByError}
+                  </FormHelperText>
+                )}
+              </FormControl>
+            </Box>
             {/* Department */}
-            <FormControl
-              style={{
+            <Box
+              sx={{
+                width: '100%',
                 display: 'flex',
-                width: '600px',
                 justifyContent: 'flex-start',
-                alignItems: 'center',
+                alignItems: 'flex-start',
+                flexDirection: 'row',
+                marginTop: '24px',
               }}
             >
-              <Box
-                sx={{
-                  width: '100%',
+              {/* Department */}
+              <FormControl
+                style={{
                   display: 'flex',
-                  flexDirection: 'row',
+                  width: '600px',
                   justifyContent: 'flex-start',
                   alignItems: 'center',
                 }}
               >
-                <TextField
-                  label="Department"
-                  variant="standard"
-                  error={!!codeTeamDepartmentError}
+                <Box
                   sx={{
-                    width: '400px',
-                    ...styles.accessCodeTextField,
+                    width: '100%',
+                    display: 'flex',
+                    flexDirection: 'row',
+                    justifyContent: 'flex-start',
+                    alignItems: 'center',
                   }}
-                  value={teamDepartment}
-                  onChange={e => {
-                    setTeamDepartment(e.currentTarget.value);
-                    setTeamDepartmentCodeError('');
-                  }}
-                />
-              </Box>
-              {/* Error message */}
-              {codeTeamDepartmentError !== '' && (
-                <FormHelperText style={{ color: '#d32f2f', marginLeft: '5px' }}>
-                  {codeTeamDepartmentError}
-                </FormHelperText>
-              )}
-            </FormControl>
+                >
+                  <TextField
+                    label="Department"
+                    variant="standard"
+                    error={!!codeTeamDepartmentError}
+                    sx={{
+                      width: '400px',
+                      ...styles.accessCodeTextField,
+                    }}
+                    value={teamDepartment}
+                    onChange={e => {
+                      setTeamDepartment(e.currentTarget.value);
+                      setTeamDepartmentCodeError('');
+                    }}
+                  />
+                </Box>
+                {/* Error message */}
+                {codeTeamDepartmentError !== '' && (
+                  <FormHelperText
+                    style={{ color: '#d32f2f', marginLeft: '5px' }}
+                  >
+                    {codeTeamDepartmentError}
+                  </FormHelperText>
+                )}
+              </FormControl>
+            </Box>
+            {/* Session and Actions */}
+            <Box
+              sx={{
+                width: '100%',
+                display: 'flex',
+                justifyContent: 'space-between',
+                alignItems: 'flex-start',
+                flexDirection: 'row',
+                marginTop: '48px',
+              }}
+            >
+              <ButtonLabelTypography label="No Of Sessions: -" />
+              <ButtonLabelTypography label="No Of Actions: -" />
+            </Box>
+            {/* Analytics */}
+            <Box
+              sx={{
+                width: '100%',
+                display: 'flex',
+                justifyContent: 'space-between',
+                alignItems: 'flex-start',
+                flexDirection: 'row',
+                marginTop: '48px',
+              }}
+            >
+              <ButtonLabelTypography label="Analytics: -" />
+            </Box>
           </Box>
-          {/* Session and Actions */}
-          <Box
+          {/* Right Side Form */}
+          <Paper
             sx={{
-              width: '100%',
+              height: '100%',
+              width: '60%',
               display: 'flex',
-              justifyContent: 'space-between',
+              justifyContent: 'flex-start',
               alignItems: 'flex-start',
-              flexDirection: 'row',
-              marginTop: '48px',
+              flexDirection: 'column',
+              padding: '24px',
             }}
           >
-            <ButtonLabelTypography label="No Of Sessions: -" />
-            <ButtonLabelTypography label="No Of Actions: -" />
-          </Box>
-          {/* Analytics */}
-          <Box
-            sx={{
-              width: '100%',
-              display: 'flex',
-              justifyContent: 'space-between',
-              alignItems: 'flex-start',
-              flexDirection: 'row',
-              marginTop: '48px',
-            }}
-          >
-            <ButtonLabelTypography label="Analytics: -" />
-          </Box>
+            <Box
+              display="flex"
+              flexDirection="row"
+              justifyContent="space-between"
+              alignItems="center"
+              sx={{
+                width: '100%',
+                flexDirection: 'row',
+              }}
+            >
+              <H5RegularTypography label="Team Members" />
+              <ContainedButtonWithIcon
+                id={'create_new_Team'}
+                label={'Add Member'}
+                size={'small'}
+                iconPath="/svgs/plusSmall.svg"
+                style={{ width: '200px', textAlign: 'center' }}
+                onClick={() => handleOpenAddMembersDialog()}
+              />
+            </Box>
+            <SelectedTeamMembers
+              checkedUserEmails={checkedUserEmails}
+              handleOpenAddMembersDialog={handleOpenAddMembersDialog}
+              removeUser={removeUser}
+              removeMultipleUser={removeMultipleUser}
+            />
+          </Paper>
         </Box>
       </Paper>
+      <Dialog
+        open={openAddMembersDialog}
+        sx={{
+          height: height - 100,
+          '& .MuiDialog-container': {
+            display: 'flex',
+            justifyContent: 'center',
+            alignItems: 'flex-start',
+          },
+          '& .MuiDialog-paper ': {
+            minWidth: '800px !important',
+            padding: '16px !important',
+          },
+        }}
+      >
+        <DialogTitle style={{ padding: '0px' }}>
+          <Grid container sx={{ display: 'flex', alignItems: 'center' }}>
+            <Grid item sm={6}>
+              <Box display="flex" justifyContent="flex-start">
+                <H4SemiBoldTypography
+                  label={'Add Members'}
+                  style={{
+                    color: '#343434',
+                  }}
+                />
+              </Box>
+            </Grid>
+            <Grid item sm={6}>
+              <Box display="flex" justifyContent="flex-end">
+                <Icons.X
+                  size={20}
+                  style={{
+                    cursor: 'pointer',
+                  }}
+                  onClick={() => handleCloseAddMembersDialog()}
+                />
+              </Box>
+            </Grid>
+          </Grid>
+        </DialogTitle>
+
+        {/* Selected User List */}
+        <Box
+          sx={{
+            width: '600px',
+            display: 'grid',
+            gridTemplateColumns: 'repeat(4, 1fr)',
+            flexDirection: 'row',
+            alignItems: 'center',
+            justifyContent: 'flex-start',
+            marginTop: '16px',
+          }}
+        >
+          {records
+            .filter((r: any) => r.checked)
+            .map((record: any) => {
+              return (
+                <Box
+                  key={record.emailId}
+                  sx={{
+                    width: '150px',
+                    height: '32px',
+                    minWidth: '150px',
+                    minHeight: '32px',
+                    border: '1px solid var(--Info, #4285F4)',
+                    borderRadius: '4px',
+                    background: '#d7e6ff',
+                    textAlign: 'center',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    margin: '4px',
+                  }}
+                >
+                  <CaptionSemiBoldTypography
+                    label={record.fullName}
+                    style={{
+                      color: '#4285F4 !important',
+                      fontSize: '12px !important',
+                    }}
+                  />
+                </Box>
+              );
+            })}
+        </Box>
+        {/* Search Bar */}
+        <TextField
+          id="outlined-basic"
+          variant="standard"
+          placeholder="Find a members"
+          sx={{
+            background: 'white',
+            width: '100%',
+            marginTop: '24px',
+            ...styles.accessCodeTextField,
+          }}
+          onChange={e => {
+            setSearchedVal(e.target.value);
+            handleSearch(e);
+          }}
+          value={searchedVal}
+        />
+        {/* Users List */}
+        <TblContainer>
+          {/* <TblHead /> */}
+          <TableBody>
+            {recordAfterPagingAndSorting().map((item: any) => {
+              return (
+                <TableRow key={item.id}>
+                  <TableCell>{item.fullName}</TableCell>
+                  <TableCell>{item.emailId}</TableCell>
+                  <TableCell>
+                    <Checkbox
+                      checked={item.checked}
+                      onChange={e => handleChangeCheckbox(e, item.id)}
+                      inputProps={{ 'aria-label': 'controlled' }}
+                    />
+                  </TableCell>
+                </TableRow>
+              );
+            })}
+          </TableBody>
+        </TblContainer>
+        {/* Buttons */}
+        <Box>
+          <Box
+            sx={{
+              width: '100%',
+              display: 'flex',
+              flex: '1 0 auto',
+              alignItems: 'flex-end',
+              justifyContent: 'flex-end',
+              my: 2,
+            }}
+          >
+            <OutlinedButton
+              label="Close"
+              size={'medium'}
+              onClick={() => handleCloseAddMembersDialog()}
+              style={{
+                minWidth: '75px !important',
+                height: '36px !important',
+              }}
+            />
+            <ContainedButton
+              name="Add Member"
+              onClick={addMembersFromDialog}
+              style={{
+                minWidth: '75px !important',
+                height: '36px !important',
+                marginLeft: '16px !important',
+              }}
+              size={'medium'}
+            />
+          </Box>
+        </Box>
+      </Dialog>
     </>
   );
 }
