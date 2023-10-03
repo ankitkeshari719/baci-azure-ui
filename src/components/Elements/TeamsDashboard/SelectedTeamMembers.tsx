@@ -15,6 +15,7 @@ import {
 import * as React from 'react';
 import * as Icons from 'heroicons-react';
 import moment from 'moment';
+import CsvDownloader from 'react-csv-downloader';
 
 import {
   BodyRegularTypography,
@@ -69,8 +70,6 @@ export default function SelectedTeamMembers({
 }: Props) {
   const [global, dispatch] = React.useContext(GlobalContext);
   const [height, setHeight] = React.useState(0);
-  const [isManageUserPage, setIsManageUserPage] = React.useState(false);
-  const [selectedTeam, setSelectedTeam] = React.useState('0');
   const [isSelectAllChecked, setIsSelectAllChecked] = React.useState(false);
   const [openDeleteUserDialog, setOpenDeleteUserDialog] = React.useState(false);
   const [openUpdateRoleDialog, setUpdateRoleDialog] = React.useState(false);
@@ -297,6 +296,25 @@ export default function SelectedTeamMembers({
     removeMultipleUser(selectedUsersIds);
   };
 
+  const columns = [
+    {
+      id: 'fullName',
+      displayName: 'Name',
+    },
+    {
+      id: 'emailId',
+      displayName: 'Email',
+    },
+    {
+      id: 'roleName',
+      displayName: 'Role',
+    },
+  ];
+
+  const getData = () => {
+    return records;
+  };
+
   return (
     <>
       <Box sx={{ marginTop: '24px', width: '100%' }}>
@@ -340,20 +358,31 @@ export default function SelectedTeamMembers({
             />
             {/* Download CSV && Remove Selected button */}
             <Box display="flex" flexDirection="row" alignItems="center">
-              <OutlineButtonWithIconWithNoBorder
-                id={'download csv'}
-                label={'Download CSV'}
-                iconPath="/svgs/download.svg"
-                onClick={handleDeleteSelectedUsers}
-                style={{
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                  color: '#159ADD !important',
-                  textColor: '#159ADD !important',
-                  marginRight: '24px  !important',
-                }}
-              />
+              <CsvDownloader
+                filename="BACI Team Member List"
+                extension=".csv"
+                separator=";"
+                wrapColumnChar=""
+                columns={columns}
+                datas={getData()}
+                noHeader={false}
+              >
+                <OutlineButtonWithIconWithNoBorder
+                  id={'download csv'}
+                  label={'Download CSV'}
+                  iconPath="/svgs/download.svg"
+                  onClick={handleDeleteSelectedUsers}
+                  style={{
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    color: '#159ADD !important',
+                    textColor: '#159ADD !important',
+                    marginRight: '24px  !important',
+                  }}
+                />
+              </CsvDownloader>
+
               <OutlineButtonWithIconWithNoBorder
                 id={'remove-selected-items'}
                 label={'Remove Selected'}
