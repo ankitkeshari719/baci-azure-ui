@@ -20,6 +20,7 @@ import {
   BodySemiBoldTypography,
   H4SemiBoldTypography,
   CaptionSemiBoldTypography,
+  CaptionRegularTypography,
 } from '../../CustomizedTypography';
 import { ContainedButton, OutlinedButton } from './../../../components';
 import { TableBody, TableCell, TableRow } from '@material-ui/core';
@@ -72,6 +73,9 @@ export default function CreateTeam() {
   const [teamName, setTeamName] = React.useState('');
   const [teamDepartment, setTeamDepartment] = React.useState('');
   const [teamDescription, setTeamDescription] = React.useState('');
+  const [createdOn, setCreatedOn] = React.useState(
+    moment(new Date()).format('Do MMM YYYY')
+  );
   const [createdBy, setCreatedBy] = React.useState('');
   const [userEmailIds, setUserEmailIds] = React.useState([
     global.azureUser?.emailId,
@@ -336,6 +340,7 @@ export default function CreateTeam() {
           type: ActionType.SET_LOADING,
           payload: { loadingFlag: false },
         });
+        goToAllTeam();
       },
       err => {
         console.log('err', err);
@@ -343,11 +348,11 @@ export default function CreateTeam() {
           type: ActionType.SET_LOADING,
           payload: { loadingFlag: false },
         });
+        goToAllTeam();
       }
     );
   };
 
-  // Clean up the data
 
   return (
     <>
@@ -455,11 +460,8 @@ export default function CreateTeam() {
                       flexDirection: 'column',
                     }}
                   >
-                    <ButtonLabelTypography
-                      label="Team Name"
-                      style={{ color: '#000000' }}
-                    />
                     <TextField
+                      label="Team Name"
                       autoFocus
                       variant="standard"
                       error={!!codeTeamNameError}
@@ -477,9 +479,7 @@ export default function CreateTeam() {
                 </Box>
                 {/* Error message */}
                 {codeTeamNameError !== '' && (
-                  <FormHelperText
-                    style={{ color: '#d32f2f', marginLeft: '5px' }}
-                  >
+                  <FormHelperText style={{ color: '#d32f2f', width: '100%' }}>
                     {codeTeamNameError}
                   </FormHelperText>
                 )}
@@ -533,13 +533,13 @@ export default function CreateTeam() {
                       flexDirection: 'column',
                     }}
                   >
-                    <ButtonLabelTypography
+                    <CaptionRegularTypography
                       label="Team Description"
-                      style={{ color: '#000000' }}
+                      style={{ color: '#808080' }}
                     />
                     <TextField
                       multiline
-                      rows={4}
+                      rows={2}
                       maxRows={8}
                       placeholder="Enter Description"
                       variant="standard"
@@ -559,15 +559,13 @@ export default function CreateTeam() {
                 </Box>
                 {/* Error message */}
                 {codeTeamDescriptionError !== '' && (
-                  <FormHelperText
-                    style={{ color: '#d32f2f', marginLeft: '5px' }}
-                  >
+                  <FormHelperText style={{ color: '#d32f2f', width: '100%' }}>
                     {codeTeamDescriptionError}
                   </FormHelperText>
                 )}
               </FormControl>
             </Box>
-            {/* Created By  */}
+            {/* Created On && Created By  */}
             <Box
               sx={{
                 width: '100%',
@@ -578,6 +576,49 @@ export default function CreateTeam() {
                 marginTop: '24px',
               }}
             >
+              {/* Created On */}
+              <FormControl
+                style={{
+                  display: 'flex',
+                  width: '600px',
+                  justifyContent: 'flex-start',
+                  alignItems: 'center',
+                }}
+              >
+                <Box
+                  sx={{
+                    display: 'flex',
+                    flexDirection: 'row',
+                    justifyContent: 'flex-start',
+                    alignItems: 'center',
+                    width: '100%',
+                  }}
+                >
+                  <Box
+                    sx={{
+                      display: 'flex',
+                      flexDirection: 'column',
+                    }}
+                  >
+                    <ButtonLabelTypography
+                      label="Created On"
+                      style={{ color: '#000000', marginBottom: '8px' }}
+                    />
+                    <TextField
+                      autoFocus
+                      variant="filled"
+                      InputProps={{
+                        readOnly: true,
+                      }}
+                      sx={{
+                        width: '200px',
+                        ...styles.accessCodeTextField,
+                      }}
+                      value={createdOn}
+                    />
+                  </Box>
+                </Box>
+              </FormControl>
               {/* Created BY */}
               <FormControl
                 style={{
@@ -604,7 +645,7 @@ export default function CreateTeam() {
                   >
                     <ButtonLabelTypography
                       label="Created BY"
-                      style={{ color: '#000000' }}
+                      style={{ color: '#000000', marginBottom: '8px' }}
                     />
                     <UserSelector
                       enterpriseId={
@@ -612,15 +653,14 @@ export default function CreateTeam() {
                       }
                       selectedUser={createdBy}
                       handleChange={handleCreatedByChange}
-                      width={400}
+                      width={200}
+                      padding="14px"
                     />
                   </Box>
                 </Box>
                 {/* Error message */}
                 {codeCreatedByError !== '' && (
-                  <FormHelperText
-                    style={{ color: '#d32f2f', marginLeft: '5px' }}
-                  >
+                  <FormHelperText style={{ color: '#d32f2f', width: '100%' }}>
                     {codeCreatedByError}
                   </FormHelperText>
                 )}
@@ -663,13 +703,13 @@ export default function CreateTeam() {
                   >
                     <ButtonLabelTypography
                       label="Department"
-                      style={{ color: '#000000' }}
+                      style={{ color: '#000000', marginBottom: '8px' }}
                     />
                     <TextField
                       variant="standard"
                       error={!!codeTeamDepartmentError}
                       sx={{
-                        width: '400px',
+                        width: '200px',
                         ...styles.accessCodeTextField,
                       }}
                       value={teamDepartment}
@@ -682,9 +722,7 @@ export default function CreateTeam() {
                 </Box>
                 {/* Error message */}
                 {codeTeamDepartmentError !== '' && (
-                  <FormHelperText
-                    style={{ color: '#d32f2f', marginLeft: '5px' }}
-                  >
+                  <FormHelperText style={{ color: '#d32f2f', width: '100%' }}>
                     {codeTeamDepartmentError}
                   </FormHelperText>
                 )}
