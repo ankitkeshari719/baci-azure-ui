@@ -1,4 +1,4 @@
-import * as React from 'react';
+import React, { useEffect, useState } from 'react';
 import { Box, Button, Grid } from '@mui/material';
 import { TopBar } from '../CreateRetro/TopBar';
 import { DeploymentPopUp } from '../Utils/Alerts/DeploymentPopUp';
@@ -8,6 +8,7 @@ import FileUploadOutlinedIcon from '@mui/icons-material/FileUploadOutlined';
 import RotateRightIcon from '@mui/icons-material/RotateRight';
 import { useNavigate } from 'react-router-dom';
 import CircularProgress from '@mui/material/CircularProgress';
+import { ActionType, GlobalContext } from '../../contexts/GlobalContext';
 
 import {
   Dialog,
@@ -47,14 +48,20 @@ export function UploadImageScan() {
   const [fileData, setFileData] = React.useState<Blob | null>(null);
   const [recognizedText, setRecognizedText] = React.useState<string[]>([]);
   const [isLoading, setIsLoading] = React.useState(false);
+  const [global, dispatch] = React.useContext(GlobalContext);
 
   function handleStartRetro() {
     setIsRetroStart(true);
   }
 
-  
+
   const navigateToScan = () => {
-    navigate('/basic/scan/');
+    if(global.azureUser?.roleName === "Enterprise"){
+      navigate('/enterprise/scanImage/');
+    }else{
+      navigate('/basic/scanImage/');
+    }
+   
   };
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -97,6 +104,7 @@ export function UploadImageScan() {
       description: 'Once your summary is generated, share or save your report',
     },
   ];
+  
 
   const recognizeHandwrittenText = async () => {
     if (!selectedFile) {

@@ -259,7 +259,7 @@ function EnterpriseDashboard() {
   };
 
   const navigateToUploadImage = () => {
-    navigate('/enterprise/scanImage/');
+    navigate('/enterprise/uploadImage/');
   };
   return (
     <>

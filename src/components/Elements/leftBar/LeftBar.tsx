@@ -133,7 +133,7 @@ const LeftBar = () => {
       setSelectedMenu(menuArray[2].label);
     } else if (location.pathname.includes('actions')) {
       setSelectedMenu(menuArray[1].label);
-    }else if(location.pathname.includes('createRetro')|| location.pathname.includes('scanImage') || location.pathname.includes('scan')){
+    }else if(location.pathname.includes('createRetro')|| location.pathname.includes('uploadImage') || location.pathname.includes('scanImage')){
       setSelectedMenu(menuArray[3].label);
     }
   }, [
@@ -142,7 +142,7 @@ const LeftBar = () => {
     location.pathname.includes('enterprise/dashboard'),
     location.pathname.includes('createRetro'),
     location.pathname.includes('scanImage'),
-    location.pathname.includes('scan'),
+    location.pathname.includes('uploadImage'),
 
 
   ]);

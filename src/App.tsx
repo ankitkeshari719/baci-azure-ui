@@ -350,11 +350,11 @@ export default function App({ instance }: AppProps) {
                               />
                                 
                                 <Route
-                                path="scanImage"
+                                path="uploadImage"
                                 element={<UploadImageScan />}
                               />
                                 <Route
-                                path="scan"
+                                path="scanImage"
                                 element={<ScanUploadImage />}
                               />
                               <Route
@@ -555,11 +555,11 @@ export default function App({ instance }: AppProps) {
                                 element={<CreateRetroMain />}
                               />
                               <Route
-                                path="scanImage"
+                                path="uploadImage"
                                 element={<UploadImageScan />}
                               />
                               <Route
-                                path="scan"
+                                path="scanImage"
                                 element={<ScanUploadImage />}
                               />
                               <Route
