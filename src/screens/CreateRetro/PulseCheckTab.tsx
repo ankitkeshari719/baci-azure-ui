@@ -84,6 +84,7 @@ type Props = {
   onClickNext: (currentPanel: string, nextPanel: string) => void;
   handlePulseCheck: (selectedPulseCheck: pulseCheckInterface) => void;
   handlePulseCheckSelectClick: (selectedTemplateId: string) => void;
+  isLoginUser: boolean;
 };
 
 export function PulseCheckTab({
@@ -93,6 +94,7 @@ export function PulseCheckTab({
   onClickBack,
   handlePulseCheck,
   handlePulseCheckSelectClick,
+  isLoginUser,
 }: Props) {
   const [height, setHeight] = React.useState(0);
   const classes = useStyles();
@@ -139,6 +141,14 @@ export function PulseCheckTab({
 
   const closeLearnMoreDialog = () => {
     setOpenLearnMoreDialog(false);
+  };
+
+  const onClickNextButton = () => {
+    if (isLoginUser) {
+      onClickNext('pulseCheckPanel', 'teamDetailPanel');
+    } else {
+      onClickNext('pulseCheckPanel', 'userDetailPanel');
+    }
   };
 
   return (
@@ -310,9 +320,7 @@ export function PulseCheckTab({
               >
                 <ContainedButton
                   name="Next"
-                  onClick={() =>
-                    onClickNext('pulseCheckPanel', 'userDetailPanel')
-                  }
+                  onClick={onClickNextButton}
                   style={{
                     mt: 5,
                     minWidth: '75px !important',
