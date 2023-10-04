@@ -145,6 +145,15 @@ export default function TeamsDashboard() {
     }
   }
 
+  // Function to navigate on create new team page
+  function editTeam(teamId: any) {
+    if (tempLocalUserData && tempLocalUserData.roleName === BASIC) {
+      navigate(`/basic/teams/edit/${teamId}`);
+    } else if (tempLocalUserData && tempLocalUserData.roleName === ENTERPRISE) {
+      navigate(`/enterprise/teams/edit/${teamId}`);
+    }
+  }
+
   const handleSearch = (e: any) => {
     let target = e.target;
     setFilterFn({
@@ -396,7 +405,7 @@ export default function TeamsDashboard() {
                             cursor: 'pointer',
                             color: '#4E4E4E',
                           }}
-                          onClick={() => createNewTeam()}
+                          onClick={() => editTeam(item.id)}
                         />
                         <Icons.TrashOutline
                           size={20}

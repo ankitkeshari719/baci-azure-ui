@@ -25,7 +25,7 @@ import {
 import { ContainedButton, OutlinedButton } from './../../../components';
 import { TableBody, TableCell, TableRow } from '@material-ui/core';
 import commonStyles from '../../../style.module.scss';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import * as Icons from 'heroicons-react';
 import { BASIC, ENTERPRISE } from '../../../constants/applicationConst';
 import {
@@ -64,8 +64,9 @@ const headCells = [
   { id: 'emailId', label: 'Email', disableSorting: true },
 ];
 
-export default function CreateTeam() {
+export default function EditTeam() {
   const navigate = useNavigate();
+  const { id } = useParams();
   const [global, dispatch] = React.useContext(GlobalContext);
   const localUserData = localStorage.getItem('userData');
   const tempLocalUserData = localUserData && JSON.parse(localUserData);
@@ -78,6 +79,7 @@ export default function CreateTeam() {
     moment(new Date()).format('Do MMM YYYY')
   );
   const [createdBy, setCreatedBy] = React.useState('');
+  const [userEmailIds, setUserEmailIds] = React.useState([]);
 
   const [codeTeamNameError, setTeamNameCodeError] = React.useState('');
   const [codeTeamDescriptionError, setTeamDescriptionError] =
@@ -104,6 +106,7 @@ export default function CreateTeam() {
     useTable(records, headCells, filterFn);
 
   React.useEffect(() => {
+    console.log('team id', id);
     setEnterpriseId(tempLocalUserData.enterpriseId);
     setHeight(window.innerHeight);
     callGetAllUsersByEnterpriseId(
@@ -241,7 +244,7 @@ export default function CreateTeam() {
     setCreatedBy(event.target.value as string);
     setCreatedByCodeError('');
   };
-
+  
   // -------------------------------- Submit Form and Update table---------------------------------
   const submitTeam = () => {
     if (teamName === '') {
