@@ -264,6 +264,16 @@ export default function EditTeam() {
     handleCloseAddMembersDialog();
   };
 
+  const unCheckRecord = (emailId: any) => {
+    const newRecord = records.map((record: any) => {
+      if (record.emailId === emailId) {
+        record.checked = false;
+      }
+      return record;
+    });
+    setRecords(newRecord);
+  };
+
   // -------------------------------- Remove user and users ---------------------------------
   const removeUser = (selectedUserId: any) => {
     const newRecord = records.map((record: any) => {
@@ -1321,6 +1331,14 @@ export default function EditTeam() {
                       color: '#4285F4 !important',
                       fontSize: '12px !important',
                     }}
+                  />
+                  <Icons.X
+                    size={20}
+                    style={{
+                      cursor: 'pointer',
+                      color: '#4285F4',
+                    }}
+                    onClick={() => unCheckRecord(record.emailId)}
                   />
                 </Box>
               );
