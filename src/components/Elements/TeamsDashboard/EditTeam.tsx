@@ -21,6 +21,7 @@ import {
   H4SemiBoldTypography,
   CaptionSemiBoldTypography,
   CaptionRegularTypography,
+  BodyRegularTypography,
 } from '../../CustomizedTypography';
 import { ContainedButton, OutlinedButton } from './../../../components';
 import { TableBody, TableCell, TableRow } from '@material-ui/core';
@@ -32,6 +33,7 @@ import {
   createTeam,
   getAllUsersByEnterpriseId,
   getTeamById,
+  getUserByEmailId,
   updateTeam,
   updateUsersTeamArray,
 } from '../../../helpers/msal/services';
@@ -41,6 +43,7 @@ import { ContainedButtonWithIcon } from '../../CustomizedButton/ContainedButtonW
 import useTable from '../../CustomizedTable/useTable';
 import SelectedTeamMembers from './SelectedTeamMembers';
 import UserSelector from '../UserSelector';
+import { LazyLoadImage } from 'react-lazy-load-image-component';
 
 const styles = {
   accessCodeTextField: {
@@ -82,6 +85,7 @@ export default function EditTeam() {
     moment(new Date()).format('Do MMM YYYY')
   );
   const [createdBy, setCreatedBy] = React.useState('');
+  const [createdByAvatar, setCreatedByAvatar] = React.useState('');
   const [userEmailIds, setUserEmailIds] = React.useState([]);
 
   const [codeTeamNameError, setTeamNameCodeError] = React.useState('');
@@ -125,13 +129,17 @@ export default function EditTeam() {
           type: ActionType.SET_LOADING,
           payload: { loadingFlag: false },
         });
-        setTeamName(res.teamName);
-        setTeamDepartment(res.teamDepartment);
-        setTeamDescription(res.teamDescription);
+        setTeamName(res && res.teamName);
+        setTeamDepartment(res && res.teamDepartment);
+        setTeamDescription(res && res.teamDescription);
         setTeamData(res);
-        setCreatedOn(moment(res.updatedAt).format('Do MMM YYYY'));
-        callGetAllUsersByEnterpriseId(res.enterpriseId, res.userEmailIds);
-        setCheckedUserEmails(res.userEmailIds);
+        setCreatedOn(moment(res && res.updatedAt).format('Do MMM YYYY'));
+        setCheckedUserEmails(res && res.userEmailIds);
+        callGetUserByEmailId(res && res.createdBy);
+        callGetAllUsersByEnterpriseId(
+          res && res.enterpriseId,
+          res && res.userEmailIds
+        );
       },
       err => {
         console.log('err', err);
@@ -139,6 +147,19 @@ export default function EditTeam() {
           type: ActionType.SET_LOADING,
           payload: { loadingFlag: false },
         });
+      }
+    );
+  };
+
+  // Get CreatedBy Id
+  const callGetUserByEmailId = async (emailId: any) => {
+    await getUserByEmailId(emailId).then(
+      res => {
+        setCreatedBy(res && res.firstName + ' ' + res.lastName);
+        setCreatedByAvatar(res && res.selectedAvatar);
+      },
+      err => {
+        console.log('err', err);
       }
     );
   };
@@ -345,7 +366,6 @@ export default function EditTeam() {
           type: ActionType.SET_LOADING,
           payload: { loadingFlag: false },
         });
-        console.log('res::::', res);
         //updateUsersTeam(res, userEmailIdsFromRecord);
       },
       err => {
@@ -637,19 +657,11 @@ export default function EditTeam() {
                   >
                     <ButtonLabelTypography
                       label="Created On"
-                      style={{ color: '#000000', marginBottom: '8px' }}
+                      style={{ color: '#000000' }}
                     />
-                    <TextField
-                      autoFocus
-                      variant="filled"
-                      InputProps={{
-                        readOnly: true,
-                      }}
-                      sx={{
-                        width: '200px',
-                        ...styles.accessCodeTextField,
-                      }}
-                      value={createdOn}
+                    <BodyRegularTypography
+                      label={createdOn}
+                      style={{ color: '#343434', marginTop: '16px !important' }}
                     />
                   </Box>
                 </Box>
@@ -682,15 +694,43 @@ export default function EditTeam() {
                       label="Created BY"
                       style={{ color: '#000000', marginBottom: '8px' }}
                     />
-                    <UserSelector
-                      enterpriseId={
-                        tempLocalUserData && tempLocalUserData.enterpriseId
-                      }
-                      selectedUser={createdBy}
-                      handleChange={handleCreatedByChange}
-                      width={200}
-                      padding="14px"
-                    />
+                    <Box
+                      sx={{
+                        display: 'flex',
+                        flexDirection: 'row',
+                        alignItems: 'center',
+                        marginTop: '8px !important'
+                      }}
+                    >
+                      {createdByAvatar != '' ? (
+                        <LazyLoadImage
+                          className="avatar"
+                          style={{
+                            height: '48px',
+                            width: '48px',
+                            borderRadius: '50%',
+                            border: '5px solid #f9fbf8',
+                            cursor: 'pointer',
+                          }}
+                          src={'/avatars/animals/' + createdByAvatar + '.svg'}
+                        ></LazyLoadImage>
+                      ) : (
+                        <LazyLoadImage
+                          width="48px !important"
+                          height="48px !important"
+                          style={{
+                            borderRadius: '50%',
+                            cursor: 'pointer',
+                            border: 'none',
+                          }}
+                          src={'/svgs/DefaultUser.svg'}
+                        ></LazyLoadImage>
+                      )}
+                      <BodyRegularTypography
+                        label={createdBy}
+                        style={{ color: '#343434' }}
+                      />
+                    </Box>
                   </Box>
                 </Box>
                 {/* Error message */}

@@ -12,6 +12,7 @@ import {
 } from '@mui/material';
 import * as React from 'react';
 import moment from 'moment';
+import { LazyLoadImage } from 'react-lazy-load-image-component';
 
 import {
   ButtonLabelTypography,
@@ -21,6 +22,7 @@ import {
   H4SemiBoldTypography,
   CaptionSemiBoldTypography,
   CaptionRegularTypography,
+  BodyRegularTypography,
 } from '../../CustomizedTypography';
 import { ContainedButton, OutlinedButton } from './../../../components';
 import { TableBody, TableCell, TableRow } from '@material-ui/core';
@@ -78,6 +80,7 @@ export default function CreateTeam() {
     moment(new Date()).format('Do MMM YYYY')
   );
   const [createdBy, setCreatedBy] = React.useState('');
+  const [createdByAvatar, setCreatedByAvatar] = React.useState('');
 
   const [codeTeamNameError, setTeamNameCodeError] = React.useState('');
   const [codeTeamDescriptionError, setTeamDescriptionError] =
@@ -106,6 +109,11 @@ export default function CreateTeam() {
   React.useEffect(() => {
     setEnterpriseId(tempLocalUserData.enterpriseId);
     setHeight(window.innerHeight);
+    setCreatedBy(
+      tempLocalUserData &&
+        tempLocalUserData.firstName + ' ' + tempLocalUserData.lastName
+    );
+    setCreatedByAvatar(tempLocalUserData && tempLocalUserData.selectedAvatar);
     callGetAllUsersByEnterpriseId(
       tempLocalUserData && tempLocalUserData.enterpriseId
     );
@@ -236,12 +244,6 @@ export default function CreateTeam() {
     setCheckedUserEmails(checkRecords);
   };
 
-  // -------------------------------- Created By On Change ---------------------------------
-  const handleCreatedByChange = (event: SelectChangeEvent) => {
-    setCreatedBy(event.target.value as string);
-    setCreatedByCodeError('');
-  };
-
   // -------------------------------- Submit Form and Update table---------------------------------
   const submitTeam = () => {
     if (teamName === '') {
@@ -310,7 +312,6 @@ export default function CreateTeam() {
           type: ActionType.SET_LOADING,
           payload: { loadingFlag: false },
         });
-        console.log('res::::', res);
         updateUsersTeam(res, userEmailIdsFromRecord);
       },
       err => {
@@ -604,17 +605,9 @@ export default function CreateTeam() {
                       label="Created On"
                       style={{ color: '#000000', marginBottom: '8px' }}
                     />
-                    <TextField
-                      autoFocus
-                      variant="filled"
-                      InputProps={{
-                        readOnly: true,
-                      }}
-                      sx={{
-                        width: '200px',
-                        ...styles.accessCodeTextField,
-                      }}
-                      value={createdOn}
+                    <BodyRegularTypography
+                      label={createdOn}
+                      style={{ color: '#343434', marginTop: '16px' }}
                     />
                   </Box>
                 </Box>
@@ -647,15 +640,42 @@ export default function CreateTeam() {
                       label="Created BY"
                       style={{ color: '#000000', marginBottom: '8px' }}
                     />
-                    <UserSelector
-                      enterpriseId={
-                        tempLocalUserData && tempLocalUserData.enterpriseId
-                      }
-                      selectedUser={createdBy}
-                      handleChange={handleCreatedByChange}
-                      width={200}
-                      padding="14px"
-                    />
+                    <Box
+                      sx={{
+                        display: 'flex',
+                        flexDirection: 'row',
+                        alignItems: 'center',
+                      }}
+                    >
+                      {createdByAvatar != '' ? (
+                        <LazyLoadImage
+                          className="avatar"
+                          style={{
+                            height: '48px',
+                            width: '48px',
+                            borderRadius: '50%',
+                            border: '5px solid #f9fbf8',
+                            cursor: 'pointer',
+                          }}
+                          src={'/avatars/animals/' + createdByAvatar + '.svg'}
+                        ></LazyLoadImage>
+                      ) : (
+                        <LazyLoadImage
+                          width="48px !important"
+                          height="48px !important"
+                          style={{
+                            borderRadius: '50%',
+                            cursor: 'pointer',
+                            border: 'none',
+                          }}
+                          src={'/svgs/DefaultUser.svg'}
+                        ></LazyLoadImage>
+                      )}
+                      <BodyRegularTypography
+                        label={createdBy}
+                        style={{ color: '#343434' }}
+                      />
+                    </Box>
                   </Box>
                 </Box>
                 {/* Error message */}
