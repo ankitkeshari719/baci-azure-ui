@@ -1,5 +1,10 @@
 import * as React from 'react';
 import { Box, Button, ThemeProvider, createTheme, styled } from '@mui/material';
+import { Grid } from '@mui/material';
+import BACITemplate from '../../../assets/img/BACI Template.png';
+import UploadImage from '../../../assets/img/Upload Image or Photo.png';
+import Backdrop from '@mui/material/Backdrop';
+
 import {
   ButtonLabelTypography,
   CaptionRegularTypography,
@@ -22,7 +27,14 @@ import { useNavigate } from 'react-router-dom';
 import EnterpriseLevelSentimentsMoodsChart from '../../../screens/Analytics/EnterpriseLevelSentimentsMoodsChart';
 import Tooltip, { TooltipProps, tooltipClasses } from '@mui/material/Tooltip';
 import { TextButton } from '../../CustomizedButton/TextButton';
-
+import Dialog from '@mui/material/Dialog';
+import DialogActions from '@mui/material/DialogActions';
+import DialogContent from '@mui/material/DialogContent';
+import DialogContentText from '@mui/material/DialogContentText';
+import DialogTitle from '@mui/material/DialogTitle';
+import Slide from '@mui/material/Slide';
+import Paper from '@mui/material/Paper';
+import { TransitionProps } from '@mui/material/transitions';
 const theme = createTheme({
   palette: {
     primary: {
@@ -34,7 +46,13 @@ const theme = createTheme({
     },
   },
 });
-
+const Item = styled(Paper)(({ theme }) => ({
+  backgroundColor: theme.palette.mode === 'dark' ? '#1A2027' : '#fff',
+  ...theme.typography.body2,
+  padding: theme.spacing(1),
+  textAlign: 'center',
+  color: theme.palette.text.secondary,
+}));
 const BootstrapTooltip = styled(({ className, ...props }: TooltipProps) => (
   <Tooltip {...props} arrow classes={{ popper: className }} />
 ))(({ theme }) => ({
@@ -45,10 +63,26 @@ const BootstrapTooltip = styled(({ className, ...props }: TooltipProps) => (
     backgroundColor: theme.palette.common.black,
   },
 }));
+const Transition = React.forwardRef(function Transition(
+  props: TransitionProps & {
+    children: React.ReactElement<any, any>;
+  },
+  ref: React.Ref<unknown>
+) {
+  return <Slide direction="up" ref={ref} {...props} />;
+});
 
 function BasicDashboardWithEnterprise() {
   const navigate = useNavigate();
   const [selectId, setSelectedId] = React.useState<string>('0');
+  const [open, setOpen] = React.useState(false);
+
+  const handleClose = () => {
+    setOpen(false);
+  };
+  const handleOpen = () => {
+    setOpen(true);
+  };
 
   const menuList = [
     {
@@ -138,6 +172,10 @@ function BasicDashboardWithEnterprise() {
     navigate('/basic/createRetro/');
   };
 
+  const navigateToUploadImage = () => {
+    navigate('/basic/uploadImage/');
+  };
+
   const goToAnalyticsLearnMorePage = (url: string) => {
     navigate(url);
   };
@@ -181,13 +219,84 @@ function BasicDashboardWithEnterprise() {
                 variant="contained"
                 color="secondary"
                 sx={{ marginLeft: '20px', borderRadius: '10px' }}
-                onClick={navigateToCreateSession}
+                onClick={handleOpen}
               >
                 <span style={{ color: 'white' }}>NEW SESSION</span>
               </Button>
             </ThemeProvider>
           </Box>
         </Box>
+
+        {/* select session flow */}
+        <Backdrop
+          sx={{ color: '#fff', zIndex: theme => theme.zIndex.drawer + 1 }}
+          open={open}
+          onClick={handleClose}
+        >
+          <Box style={{ width: '700px' }}>
+            <Grid container spacing={2}>
+              <Grid
+                item
+                xs={5}
+                onClick={navigateToCreateSession}
+                style={{
+                  backgroundColor: 'white',
+                  borderRadius: '5px',
+                  padding: '7px',
+                  alignContent: 'center',
+                  maxWidth: '250px',
+                }}
+              >
+                <img
+                  src={BACITemplate}
+                  alt="Logo"
+                  className="logo"
+                  height="90px"
+                  width="230px"
+                />
+                <p style={{ textAlign: 'center', color: 'black' }}>
+                  BACI Template
+                </p>
+                <p style={{ fontSize: '12px', color: 'gray' }}>
+                  Need run a collabration session with BACI?
+                  <br />
+                  Start instatly with preset BACI Template.
+                </p>
+              </Grid>
+              <Grid item xs={1}></Grid>
+              <Grid
+                item
+                xs={5}
+                onClick={navigateToUploadImage}
+                style={{
+                  backgroundColor: 'white',
+                  borderRadius: '5px',
+                  padding: '7px',
+                  maxWidth: '250px',
+                }}
+              >
+                <img
+                  src={UploadImage}
+                  alt="Logo"
+                  className="logo"
+                  height="90px"
+                  width="230"
+                />
+                <p
+                  onClick={handleClose}
+                  style={{ textAlign: 'center', color: 'black' }}
+                >
+                  Upload Image or Photo
+                </p>
+                <p style={{ fontSize: '12px', color: 'gray' }}>
+                  Run a collabration session with Post-Its on a wall?
+                  <br/>Digitise it here for easy analysis and safe keeping.
+                </p>
+              </Grid>
+            </Grid>
+          </Box>
+        </Backdrop>
+
         {/* Bottom container */}
         <Box display="flex" flexDirection="column" sx={{ overflow: 'auto' }}>
           {/* Teams list menu start */}
@@ -396,9 +505,7 @@ function BasicDashboardWithEnterprise() {
                 </Box>
                 <Box
                   onClick={() => {
-                    navigate(
-                      '/basic/analytics/enterpriseLevelActionsCount'
-                    );
+                    navigate('/basic/analytics/enterpriseLevelActionsCount');
                   }}
                 >
                   <EnterpriseLevelActionsCountChart
