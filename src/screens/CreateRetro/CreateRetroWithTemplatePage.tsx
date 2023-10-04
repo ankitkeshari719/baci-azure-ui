@@ -15,6 +15,7 @@ import { pulseCheckInterface, pulseChecksData, templatesData } from './const';
 import { UserTypeArray } from '../../constants';
 import { getRetro } from '../../helpers/msal/services';
 import { StartRetroWithTemplate } from './StartRetroWithTemplate';
+import { TeamsDetailsTab } from './TeamsDetailsTab';
 
 type Props = {
   handleStartRetro: () => void;
@@ -35,6 +36,8 @@ export function CreateRetroWithTemplatePage({
   );
   const [activePanel, setActivePanel] = React.useState('detailsPanel');
   const [isStartRetro, setIsStartRetro] = React.useState(false);
+  const [isLoginUser, setIsLoginUser] = React.useState(false);
+
   {
     /* BACI Details Panel Constant */
   }
@@ -75,6 +78,14 @@ export function CreateRetroWithTemplatePage({
   }, []);
 
   React.useEffect(() => {
+    if (
+      window.location.href.indexOf('enterprise') > -1 ||
+      window.location.href.indexOf('basic') > -1
+    ) {
+      setIsLoginUser(true);
+    } else {
+      setIsLoginUser(false);
+    }
     const initialPulseCheck = pulseChecksData.filter(e => e.checked == true);
     const initialTemplate: any = templatesData.filter(e => e.checked == true);
     if (!isTemplateCustomized) {
@@ -198,6 +209,48 @@ export function CreateRetroWithTemplatePage({
     setActivePanel(previousPanel);
   };
 
+  // Function to handle next button on click
+  const onClickNext = (currentPanel: string, nextPanel: string) => {
+    if (
+      currentPanel === 'detailsPanel' &&
+      (retroName === '' || retroTimeFrame === '')
+    ) {
+      if (retroName === '') {
+        setRetroNameError('Please enter retro name.');
+      }
+      if (retroTimeFrame === '') {
+        setIsTimeFrameSet(true);
+      }
+      return;
+    }
+
+    if (
+      currentPanel === 'userDetailPanel' &&
+      (userName === '' || selectedAvatar === '')
+    ) {
+      if (selectedAvatar === '') {
+        setAvatarSelectionError('Please select avatar');
+      }
+      if (userName === '') {
+        setUserNameError('Please enter your name');
+      }
+      return;
+    }
+
+    setActivePanel(nextPanel);
+    if (
+      currentPanel === 'userDetailPanel' &&
+      retroName != '' &&
+      retroTimeFrame != '' &&
+      selectedTemplate != null &&
+      selectedPulseCheck != null &&
+      userName != '' &&
+      selectedAvatar != ''
+    ) {
+      create();
+    }
+  };
+
   // Function to create a New Retro
   const create = async () => {
     let mySelectedTemplate;
@@ -295,48 +348,6 @@ export function CreateRetroWithTemplatePage({
     sessionStorage.setItem('retroname', retroName);
   };
 
-  // Function to handle next button on click
-  const onClickNext = (currentPanel: string, nextPanel: string) => {
-    if (
-      currentPanel === 'detailsPanel' &&
-      (retroName === '' || retroTimeFrame === '')
-    ) {
-      if (retroName === '') {
-        setRetroNameError('Please enter retro name.');
-      }
-      if (retroTimeFrame === '') {
-        setIsTimeFrameSet(true);
-      }
-      return;
-    }
-
-    if (
-      currentPanel === 'userDetailPanel' &&
-      (userName === '' || selectedAvatar === '')
-    ) {
-      if (selectedAvatar === '') {
-        setAvatarSelectionError('Please select avatar');
-      }
-      if (userName === '') {
-        setUserNameError('Please enter your name');
-      }
-      return;
-    }
-
-    setActivePanel(nextPanel);
-    if (
-      currentPanel === 'userDetailPanel' &&
-      retroName != '' &&
-      retroTimeFrame != '' &&
-      selectedTemplate != null &&
-      selectedPulseCheck != null &&
-      userName != '' &&
-      selectedAvatar != ''
-    ) {
-      create();
-    }
-  };
-
   return (
     <Box
       sx={{
@@ -352,53 +363,108 @@ export function CreateRetroWithTemplatePage({
           {global.currentRetro?.name} is ready to start
         </Box>
       )}
-      <Box sx={{ mt: 4, minWidth: '100%' }}>
-        <BaciDetailsTab
-          activePanel={activePanel}
-          retroName={retroName}
-          retroTimeFrame={retroTimeFrame}
-          retroNameError={retroNameError}
-          retroNameWarning={retroNameWarning}
-          timeFrameRef={timeFrameRef}
-          isTimeFrameSet={isTimeFrameSet}
-          handleRetroNameChange={handleRetroNameChange}
-          handleTimeFrame={handleTimeFrame}
-          onClickNext={onClickNext}
-        />
-        <RetroTemplateTab
-          activePanel={activePanel}
-          onClickNext={onClickNext}
-          onClickBack={onClickBack}
-          selectedTemplate={selectedTemplate}
-          handleCheckedTemplate={handleCheckedTemplate}
-          handleTemplateSelectClick={handleTemplateSelectClick}
-          templates={templates}
-          setSelectedTemplate={setSelectedTemplate}
-          isTemplateCustomized={isTemplateCustomized}
-          setIsTemplateCustomized={setIsTemplateCustomized}
-          customizedTemplate={customizedTemplate}
-        />
-        <PulseCheckTab
-          activePanel={activePanel}
-          onClickNext={onClickNext}
-          onClickBack={onClickBack}
-          selectedPulseCheck={selectedPulseCheck}
-          handlePulseCheck={handlePulseCheck}
-          handlePulseCheckSelectClick={handlePulseCheckSelectClick}
-        />
-        <UserDetailsTab
-          activePanel={activePanel}
-          onClickBack={onClickBack}
-          onClickNext={onClickNext}
-          handleUsername={handleUsername}
-          userName={userName}
-          userNameError={userNameError}
-          userNameWarning={userNameWarning}
-          selectedAvatar={selectedAvatar}
-          avatarSelectionError={avatarSelectionError}
-          onClickAvatar={onClickAvatar}
-        />
-      </Box>
+      {isLoginUser ? (
+        <>
+          <Box sx={{ mt: 4, minWidth: '100%' }}>
+            <BaciDetailsTab
+              activePanel={activePanel}
+              retroName={retroName}
+              retroTimeFrame={retroTimeFrame}
+              retroNameError={retroNameError}
+              retroNameWarning={retroNameWarning}
+              timeFrameRef={timeFrameRef}
+              isTimeFrameSet={isTimeFrameSet}
+              handleRetroNameChange={handleRetroNameChange}
+              handleTimeFrame={handleTimeFrame}
+              onClickNext={onClickNext}
+            />
+            <RetroTemplateTab
+              activePanel={activePanel}
+              onClickNext={onClickNext}
+              onClickBack={onClickBack}
+              selectedTemplate={selectedTemplate}
+              handleCheckedTemplate={handleCheckedTemplate}
+              handleTemplateSelectClick={handleTemplateSelectClick}
+              templates={templates}
+              setSelectedTemplate={setSelectedTemplate}
+              isTemplateCustomized={isTemplateCustomized}
+              setIsTemplateCustomized={setIsTemplateCustomized}
+              customizedTemplate={customizedTemplate}
+            />
+            <PulseCheckTab
+              activePanel={activePanel}
+              onClickNext={onClickNext}
+              onClickBack={onClickBack}
+              selectedPulseCheck={selectedPulseCheck}
+              handlePulseCheck={handlePulseCheck}
+              handlePulseCheckSelectClick={handlePulseCheckSelectClick}
+              isLoginUser={isLoginUser}
+            />
+            <TeamsDetailsTab
+              activePanel={activePanel}
+              onClickBack={onClickBack}
+              onClickNext={onClickNext}
+              handleUsername={handleUsername}
+              userName={userName}
+              userNameError={userNameError}
+              selectedAvatar={selectedAvatar}
+              avatarSelectionError={avatarSelectionError}
+              onClickAvatar={onClickAvatar}
+            />
+          </Box>
+        </>
+      ) : (
+        <>
+          <Box sx={{ mt: 4, minWidth: '100%' }}>
+            <BaciDetailsTab
+              activePanel={activePanel}
+              retroName={retroName}
+              retroTimeFrame={retroTimeFrame}
+              retroNameError={retroNameError}
+              retroNameWarning={retroNameWarning}
+              timeFrameRef={timeFrameRef}
+              isTimeFrameSet={isTimeFrameSet}
+              handleRetroNameChange={handleRetroNameChange}
+              handleTimeFrame={handleTimeFrame}
+              onClickNext={onClickNext}
+            />
+            <RetroTemplateTab
+              activePanel={activePanel}
+              onClickNext={onClickNext}
+              onClickBack={onClickBack}
+              selectedTemplate={selectedTemplate}
+              handleCheckedTemplate={handleCheckedTemplate}
+              handleTemplateSelectClick={handleTemplateSelectClick}
+              templates={templates}
+              setSelectedTemplate={setSelectedTemplate}
+              isTemplateCustomized={isTemplateCustomized}
+              setIsTemplateCustomized={setIsTemplateCustomized}
+              customizedTemplate={customizedTemplate}
+            />
+            <PulseCheckTab
+              activePanel={activePanel}
+              onClickNext={onClickNext}
+              onClickBack={onClickBack}
+              selectedPulseCheck={selectedPulseCheck}
+              handlePulseCheck={handlePulseCheck}
+              handlePulseCheckSelectClick={handlePulseCheckSelectClick}
+              isLoginUser={isLoginUser}
+            />
+            <UserDetailsTab
+              activePanel={activePanel}
+              onClickBack={onClickBack}
+              onClickNext={onClickNext}
+              handleUsername={handleUsername}
+              userName={userName}
+              userNameError={userNameError}
+              userNameWarning={userNameWarning}
+              selectedAvatar={selectedAvatar}
+              avatarSelectionError={avatarSelectionError}
+              onClickAvatar={onClickAvatar}
+            />
+          </Box>
+        </>
+      )}
       {isStartRetro && (
         <Box
           sx={{

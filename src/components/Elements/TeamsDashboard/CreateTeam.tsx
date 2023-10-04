@@ -12,6 +12,7 @@ import {
 } from '@mui/material';
 import * as React from 'react';
 import moment from 'moment';
+import { LazyLoadImage } from 'react-lazy-load-image-component';
 
 import {
   ButtonLabelTypography,
@@ -21,6 +22,7 @@ import {
   H4SemiBoldTypography,
   CaptionSemiBoldTypography,
   CaptionRegularTypography,
+  BodyRegularTypography,
 } from '../../CustomizedTypography';
 import { ContainedButton, OutlinedButton } from './../../../components';
 import { TableBody, TableCell, TableRow } from '@material-ui/core';
@@ -78,6 +80,8 @@ export default function CreateTeam() {
     moment(new Date()).format('Do MMM YYYY')
   );
   const [createdBy, setCreatedBy] = React.useState('');
+  const [createdByAvatar, setCreatedByAvatar] = React.useState('');
+  const [createdByEmailId, setCreatedByEmailId] = React.useState('');
 
   const [codeTeamNameError, setTeamNameCodeError] = React.useState('');
   const [codeTeamDescriptionError, setTeamDescriptionError] =
@@ -106,6 +110,13 @@ export default function CreateTeam() {
   React.useEffect(() => {
     setEnterpriseId(tempLocalUserData.enterpriseId);
     setHeight(window.innerHeight);
+    setCreatedBy(
+      tempLocalUserData &&
+        tempLocalUserData.firstName + ' ' + tempLocalUserData.lastName
+    );
+    setCreatedByAvatar(tempLocalUserData && tempLocalUserData.selectedAvatar);
+    setCreatedByEmailId(tempLocalUserData && tempLocalUserData.emailId);
+
     callGetAllUsersByEnterpriseId(
       tempLocalUserData && tempLocalUserData.enterpriseId
     );
@@ -207,6 +218,16 @@ export default function CreateTeam() {
     handleCloseAddMembersDialog();
   };
 
+  const unCheckRecord = (emailId: any) => {
+    const newRecord = records.map((record: any) => {
+      if (record.emailId === emailId) {
+        record.checked = false;
+      }
+      return record;
+    });
+    setRecords(newRecord);
+  };
+
   // -------------------------------- Remove user and users ---------------------------------
   const removeUser = (selectedUserId: any) => {
     const newRecord = records.map((record: any) => {
@@ -236,12 +257,6 @@ export default function CreateTeam() {
     setCheckedUserEmails(checkRecords);
   };
 
-  // -------------------------------- Created By On Change ---------------------------------
-  const handleCreatedByChange = (event: SelectChangeEvent) => {
-    setCreatedBy(event.target.value as string);
-    setCreatedByCodeError('');
-  };
-
   // -------------------------------- Submit Form and Update table---------------------------------
   const submitTeam = () => {
     if (teamName === '') {
@@ -259,7 +274,7 @@ export default function CreateTeam() {
     } else {
       setTeamDescriptionError('');
     }
-    if (createdBy === '') {
+    if (createdByEmailId === '') {
       setCreatedByCodeError('Please enter creator');
     } else {
       setCreatedByCodeError('');
@@ -269,7 +284,7 @@ export default function CreateTeam() {
       teamName === '' ||
       teamDepartment === '' ||
       teamDescription === '' ||
-      createdBy === ''
+      createdByEmailId === ''
     ) {
       return;
     }
@@ -278,7 +293,7 @@ export default function CreateTeam() {
       teamName != '' ||
       teamDepartment != '' ||
       teamDescription != '' ||
-      createdBy != ''
+      createdByEmailId != ''
     ) {
       const rrr = records.filter((r: any) => r.checked);
       const userEmailIdsFromRecord = rrr.map((r: any) => {
@@ -301,7 +316,7 @@ export default function CreateTeam() {
       teamDescription: teamDescription,
       enterpriseId: enterpriseId,
       userEmailIds: userEmailIdsFromRecord,
-      createdBy: createdBy,
+      createdBy: createdByEmailId,
       isActive: true,
     };
     await createTeam(requestBody).then(
@@ -310,7 +325,6 @@ export default function CreateTeam() {
           type: ActionType.SET_LOADING,
           payload: { loadingFlag: false },
         });
-        console.log('res::::', res);
         updateUsersTeam(res, userEmailIdsFromRecord);
       },
       err => {
@@ -341,7 +355,7 @@ export default function CreateTeam() {
           type: ActionType.SET_LOADING,
           payload: { loadingFlag: false },
         });
-        goToAllTeam();
+        goToViewMode(teamId);
       },
       err => {
         console.log('err', err);
@@ -349,10 +363,18 @@ export default function CreateTeam() {
           type: ActionType.SET_LOADING,
           payload: { loadingFlag: false },
         });
-        goToAllTeam();
+        goToViewMode(teamId);
       }
     );
   };
+
+  function goToViewMode(teamId: any) {
+    if (tempLocalUserData && tempLocalUserData.roleName === BASIC) {
+      navigate(`/basic/teams/edit/${teamId}`);
+    } else if (tempLocalUserData && tempLocalUserData.roleName === ENTERPRISE) {
+      navigate(`/enterprise/teams/edit/${teamId}`);
+    }
+  }
 
   return (
     <>
@@ -604,17 +626,9 @@ export default function CreateTeam() {
                       label="Created On"
                       style={{ color: '#000000', marginBottom: '8px' }}
                     />
-                    <TextField
-                      autoFocus
-                      variant="filled"
-                      InputProps={{
-                        readOnly: true,
-                      }}
-                      sx={{
-                        width: '200px',
-                        ...styles.accessCodeTextField,
-                      }}
-                      value={createdOn}
+                    <BodyRegularTypography
+                      label={createdOn}
+                      style={{ color: '#343434', marginTop: '16px' }}
                     />
                   </Box>
                 </Box>
@@ -647,15 +661,42 @@ export default function CreateTeam() {
                       label="Created BY"
                       style={{ color: '#000000', marginBottom: '8px' }}
                     />
-                    <UserSelector
-                      enterpriseId={
-                        tempLocalUserData && tempLocalUserData.enterpriseId
-                      }
-                      selectedUser={createdBy}
-                      handleChange={handleCreatedByChange}
-                      width={200}
-                      padding="14px"
-                    />
+                    <Box
+                      sx={{
+                        display: 'flex',
+                        flexDirection: 'row',
+                        alignItems: 'center',
+                      }}
+                    >
+                      {createdByAvatar != '' ? (
+                        <LazyLoadImage
+                          className="avatar"
+                          style={{
+                            height: '48px',
+                            width: '48px',
+                            borderRadius: '50%',
+                            border: '5px solid #f9fbf8',
+                            cursor: 'pointer',
+                          }}
+                          src={'/avatars/animals/' + createdByAvatar + '.svg'}
+                        ></LazyLoadImage>
+                      ) : (
+                        <LazyLoadImage
+                          width="48px !important"
+                          height="48px !important"
+                          style={{
+                            borderRadius: '50%',
+                            cursor: 'pointer',
+                            border: 'none',
+                          }}
+                          src={'/svgs/DefaultUser.svg'}
+                        ></LazyLoadImage>
+                      )}
+                      <BodyRegularTypography
+                        label={createdBy}
+                        style={{ color: '#343434' }}
+                      />
+                    </Box>
                   </Box>
                 </Box>
                 {/* Error message */}
@@ -867,8 +908,9 @@ export default function CreateTeam() {
                     textAlign: 'center',
                     display: 'flex',
                     alignItems: 'center',
-                    justifyContent: 'center',
+                    justifyContent: 'space-between',
                     margin: '4px',
+                    padding: '4px',
                   }}
                 >
                   <CaptionSemiBoldTypography
@@ -877,6 +919,14 @@ export default function CreateTeam() {
                       color: '#4285F4 !important',
                       fontSize: '12px !important',
                     }}
+                  />
+                  <Icons.X
+                    size={20}
+                    style={{
+                      cursor: 'pointer',
+                      color: '#4285F4',
+                    }}
+                    onClick={() => unCheckRecord(record.emailId)}
                   />
                 </Box>
               );

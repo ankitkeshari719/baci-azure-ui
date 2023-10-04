@@ -10,7 +10,12 @@ type Props = {
 
 export function BodyRegularTypography({ label, onClick, style }: Props) {
   return (
-    <Typography className="bodyRegular" component="span" sx={{ ...style }}>
+    <Typography
+      className="bodyRegular"
+      component="span"
+      sx={{ ...style }}
+      onClick={onClick}
+    >
       {label}
     </Typography>
   );
