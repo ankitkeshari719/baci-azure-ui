@@ -3,7 +3,7 @@ import { Box, Divider, Grid, Paper, Typography } from '@mui/material';
 import * as Icons from 'heroicons-react';
 import { useNavigate } from 'react-router-dom';
 import {
-  BodySemiBoldTypography,
+  BodyRegularTypography,
   H2SemiBoldTypography,
 } from '../../CustomizedTypography';
 import { BASIC, ENTERPRISE } from '../../../constants/applicationConst';
@@ -37,8 +37,8 @@ export default function TemplatesLearnMore() {
         <Box
           sx={{ display: 'flex', flexDirection: 'row', marginBottom: '10px' }}
         >
-          <BodySemiBoldTypography
-            label="Template "
+          <BodyRegularTypography
+            label="Template"
             style={{
               color: '#00E',
               cursor: 'pointer',
@@ -46,16 +46,28 @@ export default function TemplatesLearnMore() {
             }}
             onClick={goToRetroList}
           />
-          <BodySemiBoldTypography
-            label="\ Session Template "
+          <BodyRegularTypography
+            label="\"
+            style={{ marginLeft: '8px !important' }}
+          />
+          <BodyRegularTypography
+            label="Session Template "
             style={{
               color: '#00E',
               cursor: 'pointer',
               textDecorationLine: 'underline',
+              marginLeft: '8px !important',
             }}
             onClick={goToRetroList}
           />
-          <BodySemiBoldTypography label="\ Simple" style={{}} />
+          <BodyRegularTypography
+            label="\"
+            style={{ marginLeft: '8px !important' }}
+          />
+          <BodyRegularTypography
+            label="Simple"
+            style={{ marginLeft: '8px !important' }}
+          />
         </Box>
         <Box
           display="flex"

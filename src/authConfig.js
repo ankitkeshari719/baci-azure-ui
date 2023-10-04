@@ -60,7 +60,6 @@ export const msalConfig = {
   // },
 
   // ----------------------------------------Test----------------------------------------
-  
   // auth: {
   //   clientId: '89db314e-f8a5-43e2-a490-4377a23ee049', // This is the ONLY mandatory field that you need to supply.
   //   authority: b2cPolicies.authorities.signUpSignIn.authority, // Choose SUSI as your default authority.

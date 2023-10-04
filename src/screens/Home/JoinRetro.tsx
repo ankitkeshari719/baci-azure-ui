@@ -318,27 +318,44 @@ export function JoinRetro() {
           <Box
             sx={{
               display: 'flex',
-              alignItems: 'center',
+              alignItems: 'left',
               justifyContent: 'center',
               flexDirection: 'column',
               marginTop: '24px',
+              paddingLeft:"16px",
+              paddingRight:"16px",
             }}
           >
             {/* Welcome to BACI Text 1 */}
-            <H3RegularTypography
-              label={'Welcome to BACI'}
-              style={{
-                color: '#2C69A1',
-                textAlign: 'center',
-              }}
-            />
+     
+              {!global.currentRetro?.creatorId ? (
+                <Box sx={{ display: 'flex', flexDirection: 'column' }}>
+                  <H1RegularTypography
+                    label={'Welcome to the BACI'}
+                    style={{
+                      color: '#2C69A1',
+                    }}
+                  />
+                  <H3RegularTypography
+                    label={'Who you are in ‘' + retroName + '’?'}
+                    style={{ color: '#2C69A1' }}
+                  />
+                </Box>
+              ) : (
+                <Box>
+                  <H3RegularTypography
+                    label={'Who you are in ‘' + retroName + '’?'}
+                    style={{ color: '#2C69A1' }}
+                  />
+                </Box>
+              )}
             {/* Pick Your Avatar Text 2*/}
             <H5SemiBoldTypography
-              label={' Pick Your Avatar'}
+              label={' Pick your avatar'}
               style={{
                 color: '#2C69A1',
-                textAlign: 'center',
-                marginTop: '8px',
+                textAlign: 'left',
+                marginTop: '16px',
               }}
             />
           </Box>
@@ -349,6 +366,7 @@ export function JoinRetro() {
               justifyContent: 'center',
               flexDirection: 'column',
               margin: '16px',
+              
             }}
           >
             {/* Choose Text Field */}
@@ -378,7 +396,7 @@ export function JoinRetro() {
                 width: '100%',
                 marginTop: '48px',
                 display: 'flex',
-                justifyContent: 'center',
+                justifyContent: 'left',
                 alignItems: 'center',
               }}
             >

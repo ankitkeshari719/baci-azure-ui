@@ -69,10 +69,11 @@ import BasicDashboardWithEnterprise from './components/Elements/BasicUserDashboa
 
 // Enterprise User Component
 import { EnterpriseMainContainer } from './components/Elements/EnterpriseDashboardPages/EnterpriseMainContainer';
-import { JoinRetroEnterprise } from './components/Elements/EnterpriseDashboardPages/JoinRetroEnterprise';
+import { JoinRetroEnterprise } from './components/Elements/RetroManagementEnterprise/JoinRetroEnterprise';
 import EnterpriseRegistration from './components/Elements/EnterpriseDashboardPages/EnterpriseRegistration';
 
 import PageNotFound from './screens/Others/PageNotFound';
+import EditTeam from './components/Elements/TeamsDashboard/EditTeam';
 
 type AppProps = {
   instance: IPublicClientApplication;
@@ -315,11 +316,20 @@ export default function App({ instance }: AppProps) {
                                 </Route>
                               </Route>
                               <Route path="teams/">
-                                <Route path="" element={<Notifications />} />
+                                <Route
+                                  path=""
+                                  element={<Notifications />}
+                                />
                                 <Route path="allTeams">
-                                  <Route path="" element={<Notifications />} />
+                                  <Route
+                                    path=""
+                                    element={<Notifications />}
+                                  />
                                 </Route>
                                 <Route path="create">
+                                  <Route path="" element={<Notifications />} />
+                                </Route>
+                                <Route path="edit/:id">
                                   <Route path="" element={<Notifications />} />
                                 </Route>
                               </Route>
@@ -506,17 +516,26 @@ export default function App({ instance }: AppProps) {
                                 </Route>
                               </Route>
                               <Route path="teams/">
-                                <Route path="" element={<Notifications />} />
+                                <Route
+                                  path=""
+                                  element={<Notifications />}
+                                />
                                 <Route path="allTeams">
+                                  <Route
+                                    path=""
+                                    element={<Notifications />}
+                                  />
+                                </Route>
+                                <Route path="create">
+                                  <Route path="" element={<Notifications />} />
+                                </Route>
+                                <Route path="edit/:id">
                                   <Route path="" element={<Notifications />} />
                                 </Route>
                                 <Route path="manageUsers">
                                   <Route path="" element={<ManageUsers />} />
                                 </Route>
                                 <Route path="enterpriseRegistration">
-                                  <Route path="" element={<Notifications />} />
-                                </Route>
-                                <Route path="create">
                                   <Route path="" element={<Notifications />} />
                                 </Route>
                               </Route>
