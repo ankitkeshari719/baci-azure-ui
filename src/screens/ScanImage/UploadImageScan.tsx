@@ -3,6 +3,7 @@ import { Box, Button, Grid } from '@mui/material';
 import { TopBar } from '../CreateRetro/TopBar';
 import { DeploymentPopUp } from '../Utils/Alerts/DeploymentPopUp';
 import '../../global.scss';
+import '../ScanImage/styles.scss'
 import FileUploadOutlinedIcon from '@mui/icons-material/FileUploadOutlined';
 import RotateRightIcon from '@mui/icons-material/RotateRight';
 import { useNavigate } from 'react-router-dom';
@@ -36,6 +37,7 @@ interface Line {
   text: string;
 }
 
+
 export function UploadImageScan() {
   const [isRetroStart, setIsRetroStart] = React.useState<boolean>(false);
   const [isUploaded, setIsUploaded] = React.useState<boolean>(false);
@@ -50,6 +52,7 @@ export function UploadImageScan() {
     setIsRetroStart(true);
   }
 
+  
   const navigateToScan = () => {
     navigate('/basic/scan/');
   };
@@ -245,7 +248,7 @@ export function UploadImageScan() {
                   Upload Image or Photo
                 </Box>
 
-                <div
+                <div 
                   style={{
                     display: 'flex',
                     height: '330px',
@@ -261,7 +264,17 @@ export function UploadImageScan() {
                   }}
                 >
                   {isLoading ? (
-                    <CircularProgress />
+                    // <CircularProgress />
+                    // <div className="ocrloader"></div>
+                    <div className="scanner-container">
+                      <div className="scanning-line"></div>
+                    {image && (
+                        <img src={image} alt="Stored" height="325px" >
+                       
+                        </img>
+                      )}
+                  </div>
+                    
                   ) : (
                     <>
                       {image && (
@@ -302,7 +315,7 @@ export function UploadImageScan() {
                 <Box
                   component="div"
                   whiteSpace="normal"
-                  style={{ fontSize: '32px', marginLeft: '14px' }}
+                  style={{ fontSize: '32px', marginLeft: '14px', color:" #343434"}}
                 >
                   Upload Image or Photo
                 </Box>

@@ -1,0 +1,26 @@
+/* Scanner.css */
+.scanner-container {
+    position: relative;
+    width: "1000px"; /* Adjust the container width as needed */
+    overflow: hidden;
+    height:"300px"
+  }
+  
+  .scanning-line {
+    position: absolute;
+    //* Initial position above the container */
+    left: 0;
+    width: 100%;
+    height: 3px; /* Adjust the line thickness as needed */
+    background-color: #CEEFFF; /* Adjust the line color as needed */
+    animation: scan 2s linear infinite; /* Adjust animation duration as needed */
+  }
+  
+  @keyframes scan {
+    0% {
+      top: -100%; /* Start scanning from above the container */
+    }
+    100% {
+      top: 100%; /* Complete scanning below the container */
+    }
+  }

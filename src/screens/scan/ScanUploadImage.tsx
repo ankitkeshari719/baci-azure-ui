@@ -11,21 +11,16 @@ import {
   IconButton,
   CardActionArea,
   Switch,
-  Divider,
   Avatar,
 } from '@mui/material';
 import { TopBar } from '../CreateRetro/TopBar';
 import { DeploymentPopUp } from '../Utils/Alerts/DeploymentPopUp';
 import '../../global.scss';
-import FileUploadOutlinedIcon from '@mui/icons-material/FileUploadOutlined';
-import RotateRightIcon from '@mui/icons-material/RotateRight';
-import StarIcon from '@mui/icons-material/Star';
 import DeleteIcon from '@mui/icons-material/Delete';
 import MoreVertIcon from '@mui/icons-material/MoreVert';
 import EditIcon from '@mui/icons-material/Edit';
 import AssignmentIcon from '@mui/icons-material/Assignment';
 import ToggleButton from '@mui/material/ToggleButton';
-import ToggleButtonGroup from '@mui/material/ToggleButtonGroup';
 import FilterListIcon from '@mui/icons-material/FilterList';
 import Checkbox from '@mui/material/Checkbox';
 import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
@@ -60,7 +55,10 @@ export function ScanUploadImage() {
     setIsLeftGridExpanded(!isLeftGridExpanded);
   };
 
-  const handleViewChange = (event: React.MouseEvent<HTMLElement>, newView: string) => {
+  const handleViewChange = (
+    event: React.MouseEvent<HTMLElement>,
+    newView: string
+  ) => {
     if (newView) {
       setIsGroupView(newView === 'group');
     }
@@ -72,7 +70,10 @@ export function ScanUploadImage() {
         <DeploymentPopUp />
         <TopBar />
 
-        <Typography variant="h4" style={{ textAlign: 'left', marginTop: '16px' }}>
+        <Typography
+          variant="h4"
+          style={{ textAlign: 'left', marginTop: '16px' }}
+        >
           <Button
             onClick={handleToggleLeftGrid}
             style={{
@@ -97,12 +98,12 @@ export function ScanUploadImage() {
               </>
             )}
           </Button>
-          {isLeftGridExpanded ? 'Summarized Cards' : ''}
+          {isLeftGridExpanded ? 'Summarized Cards' : 'Summarized Cards'}
         </Typography>
 
         <Grid container spacing={2}>
           {isLeftGridExpanded && (
-            <Grid item xs={3}>
+            <Grid item xs={12} sm={6} md={4} lg={3}>
               <Paper
                 style={{
                   height: '100%',
@@ -141,7 +142,7 @@ export function ScanUploadImage() {
               </Paper>
             </Grid>
           )}
-          <Grid item xs={isLeftGridExpanded ? 6 : 9}>
+          <Grid item xs={12} sm={6} md={isLeftGridExpanded ? 6 : 9}>
             <div
               className="middle-grid-container"
               style={{
@@ -168,16 +169,22 @@ export function ScanUploadImage() {
               >
                 <div style={{ display: 'flex', alignItems: 'center' }}>
                   <DeleteIcon style={{ color: '#159ADD' }} />
-                  <span style={{ color: '#159ADD', marginLeft: '4px' }}>Remove Selected</span>
+                  <span style={{ color: '#159ADD', marginLeft: '4px' }}>
+                    Remove Selected
+                  </span>
                 </div>
                 <div style={{ display: 'flex', alignItems: 'center' }}>
-                  <span style={{ color: '#159ADD', marginLeft: '16px' }}>Group View</span>
+                  <span style={{ color: '#159ADD', marginLeft: '220px' }}>
+                    Group View
+                  </span>
                   <Switch
                     checked={isGroupView}
                     onChange={() => setIsGroupView(!isGroupView)}
                     color="primary"
                   />
-                  <FilterListIcon style={{ color: '#159ADD', marginLeft: '16px' }} />
+                  <FilterListIcon
+                    style={{ color: '#159ADD', marginLeft: '16px' }}
+                  />
                 </div>
               </div>
               {recognizedText &&
@@ -237,13 +244,13 @@ export function ScanUploadImage() {
                 padding: '16px',
               }}
             >
-              <Button variant="contained" color="primary" style={{ marginRight: '16px' }}>
-                Save
+              <Button style={{ marginRight: '16px', color: '#EA4335' }}>
+                Cancel
               </Button>
-              <Button variant="outlined">Cancel</Button>
+              <Button style={{ color: '#159ADD' }}>Save</Button>
             </div>
           </Grid>
-          <Grid item xs={3}>
+          <Grid item xs={12} sm={6} md={3} lg={3}>
             <Paper
               style={{
                 height: '100%',
@@ -270,9 +277,30 @@ export function ScanUploadImage() {
                   </IconButton>
                 </div>
               </Typography>
-              <div style={{ padding: '16px' }}>
+              <div
+                style={{
+                  maxHeight: '300px',
+                  overflowY: 'auto',
+                  padding: '16px',
+                }}
+              >
                 <Typography variant="body2">
-                  (dummy summary) Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse efficitur lacus a tellus convallis tincidunt. Proin ultrices iaculis metus, vel imperdiet tellus venenatis eget. Morbi vitae venenatis nulla. Suspendisse potenti. Nam nibh eros, maximus quis suscipit vel, consectetur vel nisi. Ut a ultricies tortor. Mauris rhoncus diam sit amet rutrum dapibus. Morbi ac vehicula tellus. Mauris congue, enim eu porttitor blandit, odio leo mattis libero, eu sagittis odio ligula vitae tortor. Sed blandit, urna ut auctor rutrum, odio quam efficitur sapien, in eleifend eros mauris et orci. Suspendisse libero dolor, volutpat nec neque id, tempus condimentum ipsum. Quisque ut nisl quam. Maecenas at laoreet urna. Duis vel turpis facilisis, pellentesque eros quis, imperdiet elit. Phasellus in libero sed nunc porta sodales vel ac sapien. Vivamus ex urna, consequat at lorem eget, ultricies suscipit ex.
+                  <p>(Content shown is dummy summary)</p> Lorem ipsum dolor sit
+                  amet, consectetur adipiscing elit. Suspendisse efficitur lacus
+                  a tellus convallis tincidunt. Proin ultrices iaculis metus,
+                  vel imperdiet tellus venenatis eget. Morbi vitae venenatis
+                  nulla. Suspendisse potenti. Nam nibh eros, maximus quis
+                  suscipit vel, consectetur vel nisi. Ut a ultricies tortor.
+                  Mauris rhoncus diam sit amet rutrum dapibus. Morbi ac vehicula
+                  tellus. Mauris congue, enim eu porttitor blandit, odio leo
+                  mattis libero, eu sagittis odio ligula vitae tortor. Sed
+                  blandit, urna ut auctor rutrum, odio quam efficitur sapien, in
+                  eleifend eros mauris et orci. Suspendisse libero dolor,
+                  volutpat nec neque id, tempus condimentum ipsum. Quisque ut
+                  nisl quam. Maecenas at laoreet urna. Duis vel turpis
+                  facilisis, pellentesque eros quis, imperdiet elit. Phasellus
+                  in libero sed nunc porta sodales vel ac sapien. Vivamus ex
+                  urna, consequat at lorem eget, ultricies suscipit ex.
                 </Typography>
               </div>
             </Paper>
