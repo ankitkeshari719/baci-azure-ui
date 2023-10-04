@@ -489,7 +489,7 @@ export const getOverAllSummary = async (
   return overAllSummary;
 };
 
-export const getSessionsData=async (input:chartInputType):Promise<any>=>{
+export const getSessionsData = async (input: chartInputType): Promise<any> => {
   let sessionsData;
   const requestOptions = {
     method: 'POST',
@@ -504,9 +504,11 @@ export const getSessionsData=async (input:chartInputType):Promise<any>=>{
       sessionsData = data;
     });
   return sessionsData;
-}
+};
 
-export const getActionsDataForTable=async (input:chartInputType):Promise<any>=>{
+export const getActionsDataForTable = async (
+  input: chartInputType
+): Promise<any> => {
   let actionsDataForTable;
   const requestOptions = {
     method: 'POST',
@@ -521,9 +523,7 @@ export const getActionsDataForTable=async (input:chartInputType):Promise<any>=>{
       actionsDataForTable = data;
     });
   return actionsDataForTable;
-}
-
-
+};
 
 export function formatDateToMonthYear(inputDate: string) {
   // Parse the input date
@@ -556,11 +556,11 @@ export function formatDateToMonthYear(inputDate: string) {
   return formattedDate;
 }
 
-export function formatDateForAPI(inputDate: string,end?:boolean) {
+export function formatDateForAPI(inputDate: string, end?: boolean) {
   const parts = inputDate.split('-');
-  var day="01"
-  if(end!=undefined&&end){
-    day=new Date(parseInt(parts[0]), parseInt(parts[1]), 0).getDate() +"";
+  var day = '01';
+  if (end != undefined && end) {
+    day = new Date(parseInt(parts[0]), parseInt(parts[1]), 0).getDate() + '';
   }
   const formattedDate = `${parts[1]}/${day}/${parts[0]}`;
 
@@ -1462,6 +1462,26 @@ export const updateRoleOnEnterpriseRequest = async (
   };
 
   await fetch(API_URL + `/users/updateRoleOnEnterpriseRequest`, requestOptions)
+    .then(response => response.json())
+    .then(response => {
+      data = response.data;
+    });
+  return data;
+};
+
+// UpdateTeamArray
+export const updateUsersTeamArray = async (requestBody: any): Promise<any> => {
+  let data: any;
+  const requestOptions = {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({
+      teamId: requestBody.teamId,
+      userEmailIdsFromRecord: requestBody.userEmailIdsFromRecord,
+    }),
+  };
+
+  await fetch(API_URL + `/users/updateUsersTeamArray`, requestOptions)
     .then(response => response.json())
     .then(response => {
       data = response.data;

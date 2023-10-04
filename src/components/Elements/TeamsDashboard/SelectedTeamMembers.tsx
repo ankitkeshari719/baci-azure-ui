@@ -10,11 +10,11 @@ import {
   Dialog,
   DialogTitle,
   Grid,
-  SelectChangeEvent,
 } from '@mui/material';
 import * as React from 'react';
 import * as Icons from 'heroicons-react';
 import moment from 'moment';
+import CsvDownloader from 'react-csv-downloader';
 
 import {
   BodyRegularTypography,
@@ -25,7 +25,6 @@ import useTable from '../../CustomizedTable/useTable';
 import { TableBody, TableCell, TableRow } from '@material-ui/core';
 import { MagnifyingGlassIcon } from '@heroicons/react/24/outline';
 import {
-  deactivateMultipleByIds,
   getAllUsersByEnterpriseId,
   updateUser,
 } from '../../../helpers/msal/services';
@@ -39,7 +38,7 @@ import {
 import { ContainedButton } from '../../CustomizedButton/ContainedButton';
 import { OutlinedButton } from '../../CustomizedButton/OutlinedButton';
 import OutlineButtonWithIconWithNoBorder from '../../CustomizedButton/OutlineButtonWithIconWithNoBorder';
-import TeamSelector from '../TeamSelector';
+import { ContainedButtonWithIcon } from '../../CustomizedButton/ContainedButtonWithIcon';
 
 const headCells = [
   { id: 'check', label: '', disableSorting: true },
@@ -49,17 +48,25 @@ const headCells = [
     label: 'Email',
     disableSorting: false,
   },
-  { id: 'teams', label: 'Teams', disableSorting: true },
   { id: 'roleName', label: 'Role', disableSorting: true },
-  { id: 'createdAt', label: 'Date Joined', disableSorting: false },
   { id: 'actions', label: 'Actions', disableSorting: true },
 ];
 
-export default function AllUsers() {
+type Props = {
+  checkedUserEmails: any;
+  handleOpenAddMembersDialog: () => void;
+  removeUser: (selectedUserId: any) => void;
+  removeMultipleUser: (selectedUserIds: any) => void;
+};
+
+export default function SelectedTeamMembers({
+  checkedUserEmails,
+  handleOpenAddMembersDialog,
+  removeUser,
+  removeMultipleUser,
+}: Props) {
   const [global, dispatch] = React.useContext(GlobalContext);
   const [height, setHeight] = React.useState(0);
-  const [isManageUserPage, setIsManageUserPage] = React.useState(false);
-  const [selectedTeam, setSelectedTeam] = React.useState('0');
   const [isSelectAllChecked, setIsSelectAllChecked] = React.useState(false);
   const [openDeleteUserDialog, setOpenDeleteUserDialog] = React.useState(false);
   const [openUpdateRoleDialog, setUpdateRoleDialog] = React.useState(false);
@@ -84,6 +91,12 @@ export default function AllUsers() {
     );
   }, []);
 
+  React.useEffect(() => {
+    callGetAllUsersByEnterpriseId(
+      tempLocalUserData && tempLocalUserData.enterpriseId
+    );
+  }, [checkedUserEmails]);
+
   // Get All Users By Enterprise
   const callGetAllUsersByEnterpriseId = async (enterpriseId: any) => {
     dispatch({
@@ -92,18 +105,21 @@ export default function AllUsers() {
     });
     await getAllUsersByEnterpriseId(enterpriseId).then(
       res => {
-        console.log('res', res);
-        let tempRes = res.map((user: any) => {
-          return {
-            id: user.emailId,
-            fullName: user.firstName + ' ' + user.lastName,
-            emailId: user.emailId,
-            teams: user.teamInfo,
-            roleName: user.roleName,
-            createdAt: moment(user.createdAt).format('Do MMM YYYY'),
-            checked: false,
-          };
-        });
+        let tempRes = res
+          .map((user: any) => {
+            if (checkedUserEmails.includes(user.emailId)) {
+              return {
+                id: user.emailId,
+                fullName: user.firstName + ' ' + user.lastName,
+                emailId: user.emailId,
+                teams: user.teamInfo,
+                roleName: user.roleName,
+                createdAt: moment(user.createdAt).format('Do MMM YYYY'),
+                checked: false,
+              };
+            }
+          })
+          .filter((e: any) => e != null);
         setRecords(tempRes);
         dispatch({
           type: ActionType.SET_LOADING,
@@ -139,66 +155,6 @@ export default function AllUsers() {
       handleSelectAllCheckbox
     );
 
-  // Teams Selector
-  const handleTeamChange = (event: SelectChangeEvent) => {
-    setSelectedTeam(event.target.value as string);
-    callGetAllUsersByEnterpriseIdAndTeamId(
-      tempLocalUserData && tempLocalUserData.enterpriseId,
-      event.target.value as string
-    );
-  };
-
-  const callGetAllUsersByEnterpriseIdAndTeamId = async (
-    enterpriseId: any,
-    teamId: any
-  ) => {
-    dispatch({
-      type: ActionType.SET_LOADING,
-      payload: { loadingFlag: true },
-    });
-    await getAllUsersByEnterpriseId(enterpriseId).then(
-      res => {
-        let tempRes = res.map((user: any) => {
-          return {
-            id: user.emailId,
-            fullName: user.firstName + ' ' + user.lastName,
-            emailId: user.emailId,
-            teams: user.teamInfo,
-            roleName: user.roleName,
-            createdAt: moment(user.createdAt).format('Do MMM YYYY'),
-            checked: false,
-          };
-        });
-
-        let newRecord: any = [];
-        for (let i = 0; i < tempRes.length; i++) {
-          for (let j = 0; j < tempRes[i].teams.length; j++) {
-            if (tempRes[i].teams[j].teamId === teamId) {
-              newRecord.push(tempRes[i]);
-              break;
-            }
-          }
-        }
-        if (teamId === '0') {
-          setRecords(tempRes);
-        } else {
-          setRecords(newRecord);
-        }
-        dispatch({
-          type: ActionType.SET_LOADING,
-          payload: { loadingFlag: false },
-        });
-      },
-      err => {
-        console.log('err', err);
-        dispatch({
-          type: ActionType.SET_LOADING,
-          payload: { loadingFlag: false },
-        });
-      }
-    );
-  };
-
   // Handle Search
   const handleSearch = (e: any) => {
     let target = e.target;
@@ -232,6 +188,7 @@ export default function AllUsers() {
     setRecords(newRecord);
   };
 
+  //----------------------------------------- Remove Single user ---------------------------------------
   // Close Delete User Pop Up
   const handleDeleteUserPopUpOpen = (userId: any, userName: any) => {
     setTempStoreUserId(userId);
@@ -248,35 +205,11 @@ export default function AllUsers() {
 
   // Delete User
   const handleDeleteUser = async () => {
-    dispatch({
-      type: ActionType.SET_LOADING,
-      payload: { loadingFlag: true },
-    });
-
-    const requestBody = {
-      isActive: false,
-    };
-
-    await updateUser(tempStoreUserId, requestBody).then(
-      res => {
-        callGetAllUsersByEnterpriseId(tempLocalUserData.enterpriseId);
-        dispatch({
-          type: ActionType.SET_LOADING,
-          payload: { loadingFlag: false },
-        });
-        handleDeleteUserPopUpClose();
-      },
-      err => {
-        console.log('err', err);
-        dispatch({
-          type: ActionType.SET_LOADING,
-          payload: { loadingFlag: false },
-        });
-        handleDeleteUserPopUpClose();
-        callGetAllUsersByEnterpriseId(tempLocalUserData.enterpriseId);
-      }
-    );
+    removeUser(tempStoreUserId);
+    handleDeleteUserPopUpClose();
   };
+
+  //----------------------------------------- Change User Role ---------------------------------------
 
   // Open Change User Role Pop up
   const handleChangeUserRolePopUpOpen = (
@@ -351,42 +284,37 @@ export default function AllUsers() {
     );
   };
 
+  //----------------------------------------- Remove multiple  ---------------------------------------
   // Delete Multiple Users
   const handleDeleteSelectedUsers = async () => {
-    dispatch({
-      type: ActionType.SET_LOADING,
-      payload: { loadingFlag: true },
-    });
-    const selectedUsersId = records
+    const selectedUsersIds = records
       .filter((record: any) => record.checked)
       .map((data: any) => data.id);
+    removeMultipleUser(selectedUsersIds);
+  };
 
-    const requestBody = {
-      emailIds: selectedUsersId,
-    };
+  const columns = [
+    {
+      id: 'fullName',
+      displayName: 'Name',
+    },
+    {
+      id: 'emailId',
+      displayName: 'Email',
+    },
+    {
+      id: 'roleName',
+      displayName: 'Role',
+    },
+  ];
 
-    await deactivateMultipleByIds(requestBody).then(
-      res => {
-        dispatch({
-          type: ActionType.SET_LOADING,
-          payload: { loadingFlag: false },
-        });
-        callGetAllUsersByEnterpriseId(tempLocalUserData.enterpriseId);
-      },
-      err => {
-        console.log('err', err);
-        dispatch({
-          type: ActionType.SET_LOADING,
-          payload: { loadingFlag: false },
-        });
-        callGetAllUsersByEnterpriseId(tempLocalUserData.enterpriseId);
-      }
-    );
+  const getData = () => {
+    return records;
   };
 
   return (
     <>
-      <Box sx={{ width: '100%' }}>
+      <Box sx={{ marginTop: '24px', width: '100%' }}>
         {/* Table and Search Box For Manage users*/}
         <Box
           sx={{
@@ -396,7 +324,6 @@ export default function AllUsers() {
             flexDirection: 'column',
           }}
         >
-          <H5RegularTypography label="Requests for Enterprise Dashboard" />
           <Box
             display="flex"
             flexDirection="row"
@@ -426,10 +353,36 @@ export default function AllUsers() {
                 ),
               }}
             />
+            {/* Download CSV && Remove Selected button */}
             <Box display="flex" flexDirection="row" alignItems="center">
+              <CsvDownloader
+                filename="BACI Team Member List"
+                extension=".csv"
+                separator=";"
+                wrapColumnChar=""
+                columns={columns}
+                datas={getData()}
+                noHeader={false}
+              >
+                <OutlineButtonWithIconWithNoBorder
+                  id={'download csv'}
+                  label={'Download CSV'}
+                  iconPath="/svgs/download.svg"
+                  onClick={handleDeleteSelectedUsers}
+                  style={{
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    color: '#159ADD !important',
+                    textColor: '#159ADD !important',
+                    marginRight: '24px  !important',
+                  }}
+                />
+              </CsvDownloader>
+
               <OutlineButtonWithIconWithNoBorder
-                id={'delete_selected_users'}
-                label={'Delete Users'}
+                id={'remove-selected-items'}
+                label={'Remove Selected'}
                 iconPath="/svgs/Delete.svg"
                 onClick={handleDeleteSelectedUsers}
                 style={{
@@ -441,156 +394,149 @@ export default function AllUsers() {
                   marginRight: '24px  !important',
                 }}
               />
-              <TeamSelector
-                enterpriseId={
-                  tempLocalUserData && tempLocalUserData.enterpriseId
-                }
-                selectedTeam={selectedTeam}
-                handleChange={handleTeamChange}
-              />
             </Box>
           </Box>
-          <TblContainer>
-            <TblHead />
-            <TableBody>
-              {recordAfterPagingAndSorting().map((item: any) => {
-                return (
-                  <TableRow key={item.id}>
-                    <TableCell>
-                      <Checkbox
-                        checked={item.checked}
-                        onChange={e => handleChangeCheckbox(e, item.id)}
-                        inputProps={{ 'aria-label': 'controlled' }}
-                      />
-                    </TableCell>
-                    <TableCell>{item.fullName}</TableCell>
-                    <TableCell>{item.emailId}</TableCell>
-                    <TableCell>
-                      {item.teams.length === 0 ? (
-                        "Team's Not Found"
-                      ) : (
-                        <>
-                          <Box
+          {/* Table */}
+          {records.length === 0 ? (
+            <Box
+              sx={{
+                width: '100%',
+                height: '400px',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                flexDirection: 'column',
+              }}
+            >
+              <H5RegularTypography label="No Members Added" />
+              <ContainedButtonWithIcon
+                id={'create_new_Team'}
+                label={'Add Member'}
+                size={'small'}
+                iconPath="/svgs/plusSmall.svg"
+                style={{
+                  width: '200px',
+                  textAlign: 'center',
+                  marginTop: '24px',
+                }}
+                onClick={() => handleOpenAddMembersDialog()}
+              />
+            </Box>
+          ) : (
+            <TblContainer>
+              <TblHead />
+              <TableBody>
+                {recordAfterPagingAndSorting().map((item: any) => {
+                  return (
+                    <TableRow key={item.id}>
+                      <TableCell>
+                        <Checkbox
+                          checked={item.checked}
+                          onChange={e => handleChangeCheckbox(e, item.id)}
+                          inputProps={{ 'aria-label': 'controlled' }}
+                        />
+                      </TableCell>
+                      <TableCell>{item.fullName}</TableCell>
+                      <TableCell>{item.emailId}</TableCell>
+                      <TableCell>
+                        <FormControl
+                          variant="standard"
+                          sx={{ m: 1, minWidth: 120 }}
+                        >
+                          <Select
+                            fullWidth
+                            id="role-selection"
+                            value={item.roleName}
+                            onClick={() =>
+                              handleChangeUserRolePopUpOpen(
+                                item.roleName,
+                                item.id,
+                                item.fullName
+                              )
+                            }
                             sx={{
-                              width: '100%',
-                              display: 'grid',
-                              gridTemplateColumns: 'repeat(1, 1fr)',
-                              flexDirection: 'row',
-                              alignItems: 'center',
-                              justifyContent: 'flex-start',
+                              fieldset: {
+                                border: 'none',
+                                opacity: 1,
+                                color: '#4E4E4E',
+                              },
+                              '& .MuiSelect-select': {
+                                display: 'flex',
+                                justifyContent: 'center',
+                                alignItems: 'flex-start',
+                                padding: '16px',
+                              },
                             }}
-                          >
-                            {item.teams.map((team: any, index: number) => {
-                              return (
-                                <span id={team.teamId}>
-                                  {team.teamName}
-                                  {index < item.teams.length - 1 ? ', ' : ''}
-                                </span>
-                              );
-                            })}
-                          </Box>
-                        </>
-                      )}
-                    </TableCell>
-                    <TableCell>
-                      <FormControl
-                        variant="standard"
-                        sx={{ m: 1, minWidth: 120 }}
-                      >
-                        <Select
-                          fullWidth
-                          id="role-selection"
-                          value={item.roleName}
-                          onClick={() =>
-                            handleChangeUserRolePopUpOpen(
-                              item.roleName,
-                              item.id,
-                              item.fullName
-                            )
-                          }
-                          sx={{
-                            fieldset: {
-                              border: 'none',
-                              opacity: 1,
-                              color: '#4E4E4E',
-                            },
-                            '& .MuiSelect-select': {
-                              display: 'flex',
-                              justifyContent: 'center',
-                              alignItems: 'flex-start',
-                              padding: '16px',
-                            },
-                          }}
-                          MenuProps={{
-                            PaperProps: {
-                              sx: {
-                                bgcolor: '#ffffff',
-                                '& .MuiMenuItem-root': {
-                                  padding: 2,
+                            MenuProps={{
+                              PaperProps: {
+                                sx: {
+                                  bgcolor: '#ffffff',
+                                  '& .MuiMenuItem-root': {
+                                    padding: 2,
+                                  },
                                 },
                               },
-                            },
+                            }}
+                          >
+                            <MenuItem value={BASIC}>
+                              <Typography
+                                style={{
+                                  fontFamily: 'Poppins',
+                                  fontStyle: 'normal',
+                                  fontWeight: 400,
+                                  fontSize: '16px',
+                                  lineHeight: '20px',
+                                  letterSpacing: '0.6px',
+                                  color: '#343434',
+                                  whiteSpace: 'nowrap',
+                                  overflow: 'hidden',
+                                  textOverflow: 'ellipsis',
+                                }}
+                              >
+                                Basic
+                              </Typography>
+                            </MenuItem>
+                            <br />
+                            <MenuItem value={ENTERPRISE}>
+                              <Typography
+                                style={{
+                                  fontFamily: 'Poppins',
+                                  fontStyle: 'normal',
+                                  fontWeight: 400,
+                                  fontSize: '16px',
+                                  lineHeight: '20px',
+                                  letterSpacing: '0.6px',
+                                  color: '#343434',
+                                  whiteSpace: 'nowrap',
+                                  overflow: 'hidden',
+                                  textOverflow: 'ellipsis',
+                                }}
+                              >
+                                Enterprise
+                              </Typography>
+                            </MenuItem>
+                          </Select>
+                        </FormControl>
+                      </TableCell>
+                      <TableCell>
+                        <Icons.TrashOutline
+                          size={20}
+                          style={{
+                            cursor: 'pointer',
+                            color: '#4E4E4E',
                           }}
-                        >
-                          <MenuItem value={BASIC}>
-                            <Typography
-                              style={{
-                                fontFamily: 'Poppins',
-                                fontStyle: 'normal',
-                                fontWeight: 400,
-                                fontSize: '16px',
-                                lineHeight: '20px',
-                                letterSpacing: '0.6px',
-                                color: '#343434',
-                                whiteSpace: 'nowrap',
-                                overflow: 'hidden',
-                                textOverflow: 'ellipsis',
-                              }}
-                            >
-                              Basic
-                            </Typography>
-                          </MenuItem>
-                          <br />
-                          <MenuItem value={ENTERPRISE}>
-                            <Typography
-                              style={{
-                                fontFamily: 'Poppins',
-                                fontStyle: 'normal',
-                                fontWeight: 400,
-                                fontSize: '16px',
-                                lineHeight: '20px',
-                                letterSpacing: '0.6px',
-                                color: '#343434',
-                                whiteSpace: 'nowrap',
-                                overflow: 'hidden',
-                                textOverflow: 'ellipsis',
-                              }}
-                            >
-                              Enterprise
-                            </Typography>
-                          </MenuItem>
-                        </Select>
-                      </FormControl>
-                    </TableCell>
-                    <TableCell>{item.createdAt}</TableCell>
-                    <TableCell>
-                      <Icons.TrashOutline
-                        size={20}
-                        style={{
-                          cursor: 'pointer',
-                          color: '#4E4E4E',
-                        }}
-                        onClick={() =>
-                          handleDeleteUserPopUpOpen(item.id, item.fullName)
-                        }
-                      />
-                    </TableCell>
-                  </TableRow>
-                );
-              })}
-            </TableBody>
-          </TblContainer>
-          <TblPagination />
+                          onClick={() =>
+                            handleDeleteUserPopUpOpen(item.id, item.fullName)
+                          }
+                        />
+                      </TableCell>
+                    </TableRow>
+                  );
+                })}
+              </TableBody>
+              <TblPagination />
+            </TblContainer>
+          )}
         </Box>
       </Box>
       {/* Delete User Pop Up */}

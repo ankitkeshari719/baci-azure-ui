@@ -9,6 +9,7 @@ import {
 import commonStyles from '../../../style.module.scss';
 import AllUsers from './AllUsers';
 import EnterpriseRequests from './EnterpriseRequests';
+import Notifications from '../BottomBarPages/Notifications';
 
 export default function ManageUsers() {
   const [isManageUserPage, setIsManageUserPage] = React.useState(false);
@@ -82,7 +83,7 @@ export default function ManageUsers() {
           {/* Right Side */}
           <Box sx={{ width: '75%' }}>
             {/* Table and Search Box For Manage users*/}
-            {isManageUserPage ? <AllUsers /> : <EnterpriseRequests />}
+            {isManageUserPage ? <Notifications/>: <EnterpriseRequests />}
           </Box>
         </Box>
       </Box>

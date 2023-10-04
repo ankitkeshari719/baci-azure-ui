@@ -66,7 +66,7 @@ export default function PulseCheckListContainer() {
       >
         <BodySemiBoldTypography
           label="Template"
-          style={{ marginBottom: '10px' }}
+          style={{ marginBottom: '12px' }}
         />
         <H2SemiBoldTypography
           label="Pulse Check Templates"
