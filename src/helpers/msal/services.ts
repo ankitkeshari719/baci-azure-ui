@@ -884,7 +884,7 @@ export const getAllTeams = async (): Promise<any> => {
 };
 
 // Get By Id Team
-export const getTeamById = async (teamId: string): Promise<any> => {
+export const getTeamById = async (teamId: any): Promise<any> => {
   let team;
   const requestOptions = {
     method: 'GET',
@@ -903,7 +903,7 @@ export const getTeamById = async (teamId: string): Promise<any> => {
 
 // Update Team
 export const updateTeam = async (
-  teamId: string,
+  teamId: any,
   requestBody: any
 ): Promise<any> => {
   let data: any;
@@ -913,10 +913,11 @@ export const updateTeam = async (
     body: JSON.stringify({
       teamName: requestBody.teamName,
       teamDescription: requestBody.teamDescription,
+      teamDepartment: requestBody.teamDepartment,
       enterpriseId: requestBody.enterpriseId,
+      userEmailIds: requestBody.userEmailIds,
       createdBy: requestBody.createdBy,
       isActive: requestBody.isActive,
-      userEmailIds: requestBody.userEmailIds,
     }),
   };
 
