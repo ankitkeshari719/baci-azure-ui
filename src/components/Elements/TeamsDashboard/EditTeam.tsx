@@ -31,6 +31,8 @@ import { BASIC, ENTERPRISE } from '../../../constants/applicationConst';
 import {
   createTeam,
   getAllUsersByEnterpriseId,
+  getTeamById,
+  updateTeam,
   updateUsersTeamArray,
 } from '../../../helpers/msal/services';
 import { ActionType, GlobalContext } from '../../../contexts/GlobalContext';
@@ -71,6 +73,7 @@ export default function EditTeam() {
   const localUserData = localStorage.getItem('userData');
   const tempLocalUserData = localUserData && JSON.parse(localUserData);
   const [enterpriseId, setEnterpriseId] = React.useState('');
+  const [teamData, setTeamData] = React.useState();
 
   const [teamName, setTeamName] = React.useState('');
   const [teamDepartment, setTeamDepartment] = React.useState('');
@@ -106,16 +109,45 @@ export default function EditTeam() {
     useTable(records, headCells, filterFn);
 
   React.useEffect(() => {
-    console.log('team id', id);
     setEnterpriseId(tempLocalUserData.enterpriseId);
     setHeight(window.innerHeight);
-    callGetAllUsersByEnterpriseId(
-      tempLocalUserData && tempLocalUserData.enterpriseId
-    );
+    callGetTeamById();
   }, []);
 
+  const callGetTeamById = async () => {
+    dispatch({
+      type: ActionType.SET_LOADING,
+      payload: { loadingFlag: true },
+    });
+    await getTeamById(id).then(
+      res => {
+        dispatch({
+          type: ActionType.SET_LOADING,
+          payload: { loadingFlag: false },
+        });
+        setTeamName(res.teamName);
+        setTeamDepartment(res.teamDepartment);
+        setTeamDescription(res.teamDescription);
+        setTeamData(res);
+        setCreatedOn(moment(res.updatedAt).format('Do MMM YYYY'));
+        callGetAllUsersByEnterpriseId(res.enterpriseId, res.userEmailIds);
+        setCheckedUserEmails(res.userEmailIds);
+      },
+      err => {
+        console.log('err', err);
+        dispatch({
+          type: ActionType.SET_LOADING,
+          payload: { loadingFlag: false },
+        });
+      }
+    );
+  };
+
   // Get All Users By Enterprise
-  const callGetAllUsersByEnterpriseId = async (enterpriseId: any) => {
+  const callGetAllUsersByEnterpriseId = async (
+    enterpriseId: any,
+    userEmailIds: any
+  ) => {
     dispatch({
       type: ActionType.SET_LOADING,
       payload: { loadingFlag: true },
@@ -130,7 +162,7 @@ export default function EditTeam() {
             teams: user.teamInfo,
             roleName: user.roleName,
             createdAt: moment(user.createdAt).format('Do MMM YYYY'),
-            checked: false,
+            checked: userEmailIds.includes(user.emailId) ? true : false,
           };
         });
         setRecords(tempRes);
@@ -244,7 +276,7 @@ export default function EditTeam() {
     setCreatedBy(event.target.value as string);
     setCreatedByCodeError('');
   };
-  
+
   // -------------------------------- Submit Form and Update table---------------------------------
   const submitTeam = () => {
     if (teamName === '') {
@@ -289,11 +321,11 @@ export default function EditTeam() {
       });
 
       // Call API to Create team
-      callCreateTeam(userEmailIdsFromRecord);
+      callUpdateTeam(userEmailIdsFromRecord);
     }
   };
 
-  const callCreateTeam = async (userEmailIdsFromRecord: any) => {
+  const callUpdateTeam = async (userEmailIdsFromRecord: any) => {
     dispatch({
       type: ActionType.SET_LOADING,
       payload: { loadingFlag: true },
@@ -307,14 +339,14 @@ export default function EditTeam() {
       createdBy: createdBy,
       isActive: true,
     };
-    await createTeam(requestBody).then(
+    await updateTeam(id, requestBody).then(
       res => {
         dispatch({
           type: ActionType.SET_LOADING,
           payload: { loadingFlag: false },
         });
         console.log('res::::', res);
-        updateUsersTeam(res, userEmailIdsFromRecord);
+        //updateUsersTeam(res, userEmailIdsFromRecord);
       },
       err => {
         console.log('err', err);
@@ -405,7 +437,7 @@ export default function EditTeam() {
             onClick={goToAllTeam}
           />
           <H2SemiBoldTypography
-            label="Create Team"
+            label="Edit Team"
             style={{ color: commonStyles.PrimaryDark, marginLeft: '16px' }}
           />
         </Box>
@@ -490,7 +522,7 @@ export default function EditTeam() {
               {/* Save Button*/}
               <OutlineButtonWithIconWithNoBorder
                 id="save_team_info"
-                label="save"
+                label="Update"
                 iconPath="/svgs/saveTeam.svg"
                 onClick={() => submitTeam()}
                 style={{
