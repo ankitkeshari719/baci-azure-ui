@@ -7,9 +7,11 @@ import { GlobalContext } from '../../../contexts/GlobalContext';
 
 export default function AssigneeDropdown({
   id,
+  inputIndex,
   outAssigneeSelected,
 }: {
   id: string;
+  inputIndex:any,
   outAssigneeSelected: (value: any) => void;
 }) {
   const [assigneeId, setAssigneeId] = React.useState<string>(id);
@@ -34,7 +36,8 @@ export default function AssigneeDropdown({
             marginRight: '5px',
           }}
         />
-        {user?.firstName + ' ' + user?.lastName}
+        {user?.firstName!=undefined?user?.firstName!=undefined?user?.firstName:"" + ' ' + user?.lastName?user?.lastName:"":user.emailId}
+
       </Box>
     );
   };
@@ -82,16 +85,18 @@ export default function AssigneeDropdown({
       >
         {users.map(
           (user,index) =>
-            user.id !== assigneeId && (
+            user.emailId !== assigneeId && (
               <MenuItem
-                key={user.id+index}
-                value={user.id}
+                key={user.emailId+index+inputIndex}
+                value={user.emailId}
                 onClick={() => {
                   handleClose();
                   outAssigneeSelected(user);
-                  setAssigneeId(user.emailId);
+                  console.log(user)
+                  setAssigneeId(user?.emailId);
                 }}
               >
+                
                 <Box display="flex" flexDirection="row" alignItems="center">
                   <Avatar
                     avatar={user?.selectedAvatar}
@@ -102,7 +107,7 @@ export default function AssigneeDropdown({
                       marginRight: '5px',
                     }}
                   />
-                  {user?.firstName + ' ' + user?.lastName}
+           {user?.firstName + ' ' + user?.lastName}
                 </Box>
               </MenuItem>
             )

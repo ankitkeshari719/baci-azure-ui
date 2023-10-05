@@ -354,7 +354,7 @@ export default function ActionDashboard() {
   React.useEffect(() => {
 
 
-    let initialData = [];
+    let initialData:any[] = [];
     initialData.push({ r1: 'Date : ', r2: new Date().toLocaleString() + '' });
 
     actionCount.forEach(action => {
@@ -566,6 +566,7 @@ console.log("click")
                             >
                               <AssigneeDropdown
                                 id={row["action.assigneeId"]}
+                                inputIndex={index}
                               
                                 outAssigneeSelected={valueOut => {
                                   setSearchedVal('');
@@ -573,7 +574,7 @@ console.log("click")
 
                                   tempJiraRows.map((obj: any, i: number) => {
                                     if (index == i) {
-                                      obj[column.id] = valueOut.id;
+                                      obj[column.id] = valueOut.emailId;
                                       obj['assigneeName'] = valueOut.name;
                                       obj['assigneeAvatar'] = valueOut.avatar;
                                     }
