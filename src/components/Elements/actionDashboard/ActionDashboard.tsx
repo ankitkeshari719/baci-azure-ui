@@ -40,10 +40,12 @@ import CsvDownloader from 'react-csv-downloader';
 import { useNavigate } from 'react-router-dom';
 import {
   chartInputType,
+  createAction,
   formatDateForAPI,
   getActionsDataForTable,
   getAllUsers,
   getAllUsersByEnterpriseId,
+  updateAction,
 } from '../../../helpers/msal/services';
 import { ActionType, GlobalContext } from '../../../contexts/GlobalContext';
 
@@ -380,6 +382,48 @@ export default function ActionDashboard() {
 
     setCsvData([...initialData]);
   }, [displayJiraRows]);
+
+
+
+
+  const callUpdateAction = async (action:any,assignedTo:string,status:string) => {
+console.log("--------------------------",action,"actionData")
+    const requestBody = {
+      actionId:action.actionId,
+      actionName: action.actionName,
+      jiraId: action.jiraId,
+      retroId: action.retroId,
+      // "retroIdEnc":"64f6179cf9b80b2e2f9f31f9",
+      createdBy: action.createdBy,
+      assignedTo: assignedTo,
+      jiraUrl:action.jiraUrl,
+      teamId: action.teamId,
+      enterpriseId:action.enterpriseId,
+      status: status,
+      avatar:action.avatar,
+      createdAt:action.createdAt,
+      assigneeFName:action.assigneeFName,
+      assigneeLName:action.assigneeLName,
+      isActive: true,
+      teamName:action.teamName,
+      retroIdEnc:action.retroIdEnc
+  }
+  
+    await createAction( requestBody).then(
+      res => {
+        console.log('callUpdateAction response', res);
+      },
+      err => {
+        console.log('err', err);
+      }
+    );
+  };
+
+
+
+
+
+
   return (
     <>
       <Paper
@@ -577,14 +621,17 @@ console.log("click")
                                       obj[column.id] = valueOut.emailId;
                                       obj['assigneeName'] = valueOut.name;
                                       obj['assigneeAvatar'] = valueOut.avatar;
+                                      callUpdateAction(obj,valueOut.emailId,obj.status)
                                     }
                                   });
-                                  setJiraRows(tempJiraRows);
-                                  localStorage.setItem(
-                                    'actionList',
-                                    JSON.stringify(tempJiraRows)
-                                  );
-                                  setDisplayJiraRows(tempJiraRows);
+                                  // setJiraRows(tempJiraRows);
+                                  // setDisplayJiraRows(tempJiraRows);
+
+                                  // localStorage.setItem(
+                                  //   'actionList',
+                                  //   JSON.stringify(tempJiraRows)
+                                  // );
+                                  // 
                                 }}
                               />
                             </TableCell>
@@ -606,14 +653,18 @@ console.log("click")
                                   tempJiraRows.map((obj: any, i: number) => {
                                     if (index == i) {
                                       obj[column.id] = valueOut;
+                                      console.log(obj.assignedTo,obj,valueOut)
+                                      callUpdateAction(obj,obj.assignedTo,valueOut);
                                     }
+
+                                   
                                   });
-                                  setJiraRows(tempJiraRows);
-                                  localStorage.setItem(
-                                    'actionList',
-                                    JSON.stringify(tempJiraRows)
-                                  );
-                                  updateJiraCount(tempJiraRows);
+                                  // setJiraRows(tempJiraRows);
+                                  // localStorage.setItem(
+                                  //   'actionList',
+                                  //   JSON.stringify(tempJiraRows)
+                                  // );
+                                  // updateJiraCount(tempJiraRows);
                                 }}
                               />
                               {/* {value} */}
