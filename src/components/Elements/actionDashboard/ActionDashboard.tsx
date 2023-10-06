@@ -20,6 +20,7 @@ import {
   TextField,
   TableSortLabel,
   Button,
+  CircularProgress,
 } from '@mui/material';
 
 import {
@@ -185,14 +186,15 @@ export default function ActionDashboard() {
   const [searchedVal, setSearchedVal] = React.useState('');
 
   const [actionCount, setActionCount] = React.useState<any[]>(ActionCount);
+  const [loading,setLoading] = React.useState<boolean>(false);
   const navigate = useNavigate();
 
   React.useEffect(() => {
- 
     getActionsForTable();
   }, []);
 
   const getActionsForTable = async () => {
+    setLoading(true);
     if (global.azureUser != undefined) {
       const chartInput: chartInputType = {
         userId: global.azureUser?.emailId,
@@ -202,41 +204,45 @@ export default function ActionDashboard() {
         fromDate: '0',
         toDate: '0',
       };
-      await getAllUsersByEnterpriseId(global.azureUser?.enterpriseId).then((res:any[])=>{
-    
-        dispatch({
-          type: ActionType.SET_USER_LIST_BY_ENT,
-          payload: { users: res },
-        });
-        
-      })
+      await getAllUsersByEnterpriseId(global.azureUser?.enterpriseId).then(
+        (res: any[]) => {
+          dispatch({
+            type: ActionType.SET_USER_LIST_BY_ENT,
+            payload: { users: res },
+          });
+          setLoading(false);
+        },error=>{
+          setLoading(false);
+        }
+      );
+      setLoading(true);
       await getActionsDataForTable(chartInput).then(res => {
-        console.log(res.data, 'actionTable');
-        if (res.data.length > 0) {
-          let actionsArray:any[] = [];
-          res.data.forEach((action: any) => {
 
-            var day =new Date(action.createdAt).getDate();
+        if (res.data.length > 0) {
+          let actionsArray: any[] = [];
+          res.data.forEach((action: any) => {
+            var day = new Date(action.createdAt).getDate();
             var month = new Date(action.createdAt).getMonth();
             var year = new Date(action.createdAt).getFullYear();
-
 
             var actionObj = action;
             actionObj['action.value'] = action.actionName;
             actionObj['action.assigneeName'] =
               action.assigneeFName + ' ' + action.assigneeLName;
-            actionObj.startDate =  day>9?day:"0"+day + '-' + month + '-' + year;;
-            actionObj["action.assigneeId"]=action.assignedTo;
+            actionObj.startDate =
+              day > 9 ? day : '0' + day + '-' + month + '-' + year;
+            actionObj['action.assigneeId'] = action.assignedTo;
 
             actionsArray.push(actionObj);
           });
           setJiraRows([...actionsArray]);
           updateJiraCount([...actionsArray]);
-          setDisplayJiraRows([...actionsArray])
+          setDisplayJiraRows([...actionsArray]);
         }
+        setLoading(false);
+      },error=>{
+        setLoading(false);
       });
-
-   
     }
   };
 
@@ -354,9 +360,8 @@ export default function ActionDashboard() {
   };
 
   React.useEffect(() => {
-
-
-    let initialData:any[] = [];
+    
+    let initialData: any[] = [];
     initialData.push({ r1: 'Date : ', r2: new Date().toLocaleString() + '' });
 
     actionCount.forEach(action => {
@@ -383,46 +388,49 @@ export default function ActionDashboard() {
     setCsvData([...initialData]);
   }, [displayJiraRows]);
 
+  const callUpdateAction = async (
+    action: any,
+    assignedTo: string,
+    status: string,
+    tempJiraRows: any
+  ) => {
+    setLoading(true);
 
-
-
-  const callUpdateAction = async (action:any,assignedTo:string,status:string) => {
-console.log("--------------------------",action,"actionData")
     const requestBody = {
-      actionId:action.actionId,
+      actionId: action.actionId,
       actionName: action.actionName,
       jiraId: action.jiraId,
       retroId: action.retroId,
       // "retroIdEnc":"64f6179cf9b80b2e2f9f31f9",
       createdBy: action.createdBy,
       assignedTo: assignedTo,
-      jiraUrl:action.jiraUrl,
+      jiraUrl: action.jiraUrl,
       teamId: action.teamId,
-      enterpriseId:action.enterpriseId,
+      enterpriseId: action.enterpriseId,
       status: status,
-      avatar:action.avatar,
-      createdAt:action.createdAt,
-      assigneeFName:action.assigneeFName,
-      assigneeLName:action.assigneeLName,
+      avatar: action.avatar,
+      createdAt: action.createdAt,
+      assigneeFName: action.assigneeFName,
+      assigneeLName: action.assigneeLName,
       isActive: true,
-      teamName:action.teamName,
-      retroIdEnc:action.retroIdEnc
-  }
-  
-    await createAction( requestBody).then(
+      teamName: action.teamName,
+      retroIdEnc: action.retroIdEnc,
+    };
+
+    await createAction(requestBody).then(
       res => {
-        console.log('callUpdateAction response', res);
+        setJiraRows([...tempJiraRows]);
+        setDisplayJiraRows([...tempJiraRows]);
+        updateJiraCount(tempJiraRows);
+        setLoading(false);
       },
       err => {
-        console.log('err', err);
+        setJiraRows([...jiraRows]);
+        setDisplayJiraRows([...displayJiraRows]);
+        setLoading(false);
       }
     );
   };
-
-
-
-
-
 
   return (
     <>
@@ -472,7 +480,6 @@ console.log("--------------------------",action,"actionData")
                       ac.selected = !action.selected;
                     }
                   });
-console.log("click")
                   setActionCount([...newArrayState]);
                 }}
               >
@@ -609,21 +616,30 @@ console.log("click")
                               }}
                             >
                               <AssigneeDropdown
-                                id={row["action.assigneeId"]}
+                                id={row['action.assigneeId']}
                                 inputIndex={index}
-                              
-                                outAssigneeSelected={valueOut => {
+                                outAssigneeSelected={async valueOut => {
                                   setSearchedVal('');
                                   var tempJiraRows = jiraRows;
-
+                                  var action = '';
+                                  var emailId = '';
+                                  var status = '';
                                   tempJiraRows.map((obj: any, i: number) => {
                                     if (index == i) {
                                       obj[column.id] = valueOut.emailId;
                                       obj['assigneeName'] = valueOut.name;
                                       obj['assigneeAvatar'] = valueOut.avatar;
-                                      callUpdateAction(obj,valueOut.emailId,obj.status)
+                                      action = obj;
+                                      emailId = valueOut.emailId;
+                                      status = obj.status;
                                     }
                                   });
+                                  callUpdateAction(
+                                    action,
+                                    emailId,
+                                    status,
+                                    tempJiraRows
+                                  );
                                   // setJiraRows(tempJiraRows);
                                   // setDisplayJiraRows(tempJiraRows);
 
@@ -631,7 +647,7 @@ console.log("click")
                                   //   'actionList',
                                   //   JSON.stringify(tempJiraRows)
                                   // );
-                                  // 
+                                  //
                                 }}
                               />
                             </TableCell>
@@ -649,17 +665,30 @@ console.log("click")
                                 status={value}
                                 outStatusSelected={valueOut => {
                                   var tempJiraRows = jiraRows;
+                                  var action = '';
+                                  var emailId = '';
+                                  var status = '';
 
                                   tempJiraRows.map((obj: any, i: number) => {
                                     if (index == i) {
                                       obj[column.id] = valueOut;
-                                      console.log(obj.assignedTo,obj,valueOut)
-                                      callUpdateAction(obj,obj.assignedTo,valueOut);
-                                    }
+                                  
 
-                                   
+                                      action = obj;
+                                      emailId = obj.assignedTo;
+                                      status = valueOut;
+                                    }
                                   });
+                                  callUpdateAction(
+                                    action,
+                                    emailId,
+                                    status,
+                                    tempJiraRows
+                                  );
+                                  // console.log("run")
                                   // setJiraRows(tempJiraRows);
+                                  // updateJiraCount(tempJiraRows);
+
                                   // localStorage.setItem(
                                   //   'actionList',
                                   //   JSON.stringify(tempJiraRows)
@@ -713,6 +742,19 @@ console.log("click")
           onRowsPerPageChange={handleChangeRowsPerPage}
         />
       </Paper>
+      <>{loading&&<Box
+        sx={{
+          display: 'flex',
+          zIndex: '3',
+          position: 'absolute',
+          width: '90%',
+          height: '90%',
+          justifyContent: 'center',
+          alignItems: 'center',
+        }}
+      >
+        <CircularProgress />
+      </Box>}</>
     </>
   );
 }
