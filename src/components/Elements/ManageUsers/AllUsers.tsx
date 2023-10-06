@@ -447,6 +447,7 @@ export default function AllUsers() {
                 }
                 selectedTeam={selectedTeam}
                 handleChange={handleTeamChange}
+                showAllTeamOption={true}
               />
             </Box>
           </Box>

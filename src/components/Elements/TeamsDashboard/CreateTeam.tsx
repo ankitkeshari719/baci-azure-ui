@@ -8,7 +8,6 @@ import {
   DialogTitle,
   Grid,
   Checkbox,
-  SelectChangeEvent,
 } from '@mui/material';
 import * as React from 'react';
 import moment from 'moment';
@@ -40,7 +39,6 @@ import OutlineButtonWithIconWithNoBorder from '../../CustomizedButton/OutlineBut
 import { ContainedButtonWithIcon } from '../../CustomizedButton/ContainedButtonWithIcon';
 import useTable from '../../CustomizedTable/useTable';
 import SelectedTeamMembers from './SelectedTeamMembers';
-import UserSelector from '../UserSelector';
 
 const styles = {
   accessCodeTextField: {

@@ -560,6 +560,7 @@ export default function EnterpriseRequests() {
                 }
                 selectedTeam={selectedTeam}
                 handleChange={handleChange}
+                showAllTeamOption={true}
               />
             </Box>
           </Box>
