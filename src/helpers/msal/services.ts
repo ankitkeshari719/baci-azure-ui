@@ -1099,15 +1099,7 @@ export const createAction = async (requestBody: any): Promise<any> => {
   const requestOptions = {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({
-      actionName: requestBody.actionName,
-      jiraId: requestBody.jiraId,
-      retroId: requestBody.retroId,
-      assignedTo: requestBody.assignedTo,
-      createdBy: requestBody.createdBy,
-      status: requestBody.status,
-      isActive: requestBody.isActive,
-    }),
+    body: JSON.stringify(requestBody),
   };
 
   await fetch(API_URL + `/actions/create`, requestOptions)

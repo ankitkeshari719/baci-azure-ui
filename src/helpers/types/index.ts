@@ -37,7 +37,14 @@ export class SnackMessageClass {
   snackMessageType: AlertColor = 'success';
   message: string = '';
 }
+const getMonth=(month:string)=>{
 
+  if(+month<10){
+    return "0"+month
+  }
+  else return month;
+
+}
 export class Global {
   user: User = new User();
   currentRetro?: Retro = undefined;
@@ -61,12 +68,10 @@ export class Global {
   jiraCode?: string ="";
   chartStartDate?:string= new Date().getFullYear().toString() +
   '-' +
-  '0' +
-  new Date().getMonth().toString().slice(-2);
+  getMonth((new Date().getMonth() ).toString().slice(-2));
   chartEndDate?:string=new Date().getFullYear().toString() +
   '-' +
-  '0' +
-  (new Date().getMonth() + 1).toString().slice(-2);
+  getMonth((new Date().getMonth() + 1).toString().slice(-2));
   azureUser?:AzureUser;
   teamId?:string
   users?:any[]

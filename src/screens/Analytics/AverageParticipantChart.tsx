@@ -121,7 +121,7 @@ export default function AverageParticipantChart({
   React.useEffect(() => {
     console.log(global.teamId)
     handleGetParticipantChartData();
-  }, [fromDate, toDate,global.teamId]);
+  }, [fromDate, toDate,global?.teamId]);
 
 
 
