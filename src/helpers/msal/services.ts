@@ -1352,9 +1352,9 @@ export const updateUser = async (
       teams: requestBody.teams,
       isActive: requestBody.isActive,
       enterpriseRequestId: requestBody.enterpriseRequestId,
-      isSessionNotificationChecked: requestBody.isActive,
-      isActionNotificationChecked: requestBody.isActive,
-      isTeamNotificationChecked: requestBody.isActive,
+      isSessionNotificationChecked: requestBody.isSessionNotificationChecked,
+      isActionNotificationChecked: requestBody.isActionNotificationChecked,
+      isTeamNotificationChecked: requestBody.isTeamNotificationChecked,
     }),
   };
 

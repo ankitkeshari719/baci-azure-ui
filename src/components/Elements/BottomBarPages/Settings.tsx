@@ -20,17 +20,23 @@ export default function Settings() {
   const tempLocalUserData = localUserData && JSON.parse(localUserData);
 
   const [isSessionNotificationChecked, setIsSessionNotificationChecked] =
-    React.useState(true);
+    React.useState(
+      tempLocalUserData && tempLocalUserData.isSessionNotificationChecked
+    );
   const [isActionNotificationChecked, setIsActionNotificationChecked] =
-    React.useState(true);
+    React.useState(
+      tempLocalUserData && tempLocalUserData.isActionNotificationChecked
+    );
   const [isTeamNotificationChecked, setIsTeamNotificationChecked] =
-    React.useState(true);
+    React.useState(
+      tempLocalUserData && tempLocalUserData.isTeamNotificationChecked
+    );
 
   const handleSessionNotificationChange = (
     event: React.ChangeEvent<HTMLInputElement>
   ) => {
     setIsSessionNotificationChecked(event.target.checked);
-    callUpdateUser(
+    callGetUserByEmailId(
       event.target.checked,
       isActionNotificationChecked,
       isTeamNotificationChecked
@@ -41,7 +47,7 @@ export default function Settings() {
     event: React.ChangeEvent<HTMLInputElement>
   ) => {
     setIsActionNotificationChecked(event.target.checked);
-    callUpdateUser(
+    callGetUserByEmailId(
       isSessionNotificationChecked,
       event.target.checked,
       isTeamNotificationChecked
@@ -52,14 +58,14 @@ export default function Settings() {
     event: React.ChangeEvent<HTMLInputElement>
   ) => {
     setIsTeamNotificationChecked(event.target.checked);
-    callUpdateUser(
+    callGetUserByEmailId(
       isSessionNotificationChecked,
       isActionNotificationChecked,
       event.target.checked
     );
   };
 
-  const callGetUserByEmailId = async () => {
+  const callGetUserByEmailId = async (s: boolean, a: boolean, t: boolean) => {
     dispatch({
       type: ActionType.SET_LOADING,
       payload: { loadingFlag: true },
@@ -67,7 +73,7 @@ export default function Settings() {
     const emailId = tempLocalUserData && tempLocalUserData.emailId;
     await getUserByEmailId(emailId).then(
       res => {
-        console.log('callGetUserByEmailId response', res);
+        callUpdateUser(s, a, t, res);
       },
       err => {
         console.log('err', err);
@@ -75,13 +81,19 @@ export default function Settings() {
     );
   };
 
-  const callUpdateUser = async (s: boolean, a: boolean, t: boolean) => {
+  const callUpdateUser = async (
+    s: boolean,
+    a: boolean,
+    t: boolean,
+    userData: any
+  ) => {
     dispatch({
       type: ActionType.SET_LOADING,
       payload: { loadingFlag: true },
     });
 
     const requestBody = {
+      ...userData,
       isSessionNotificationChecked: s,
       isActionNotificationChecked: a,
       isTeamNotificationChecked: t,
