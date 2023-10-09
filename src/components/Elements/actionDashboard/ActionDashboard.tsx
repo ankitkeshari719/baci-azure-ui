@@ -186,7 +186,7 @@ export default function ActionDashboard() {
   const [searchedVal, setSearchedVal] = React.useState('');
 
   const [actionCount, setActionCount] = React.useState<any[]>(ActionCount);
-  const [loading,setLoading] = React.useState<boolean>(false);
+  const [loading, setLoading] = React.useState<boolean>(false);
   const navigate = useNavigate();
 
   React.useEffect(() => {
@@ -211,38 +211,41 @@ export default function ActionDashboard() {
             payload: { users: res },
           });
           setLoading(false);
-        },error=>{
+        },
+        error => {
           setLoading(false);
         }
       );
       setLoading(true);
-      await getActionsDataForTable(chartInput).then(res => {
+      await getActionsDataForTable(chartInput).then(
+        res => {
+          if (res.data.length > 0) {
+            let actionsArray: any[] = [];
+            res.data.forEach((action: any) => {
+              var day = new Date(action.createdAt).getDate();
+              var month = new Date(action.createdAt).getMonth();
+              var year = new Date(action.createdAt).getFullYear();
 
-        if (res.data.length > 0) {
-          let actionsArray: any[] = [];
-          res.data.forEach((action: any) => {
-            var day = new Date(action.createdAt).getDate();
-            var month = new Date(action.createdAt).getMonth();
-            var year = new Date(action.createdAt).getFullYear();
+              var actionObj = action;
+              actionObj['action.value'] = action.actionName;
+              actionObj['action.assigneeName'] =
+                action.assigneeFName + ' ' + action.assigneeLName;
+              actionObj.startDate =
+                day > 9 ? day : '0' + day + '-' + month + '-' + year;
+              actionObj['action.assigneeId'] = action.assignedTo;
 
-            var actionObj = action;
-            actionObj['action.value'] = action.actionName;
-            actionObj['action.assigneeName'] =
-              action.assigneeFName + ' ' + action.assigneeLName;
-            actionObj.startDate =
-              day > 9 ? day : '0' + day + '-' + month + '-' + year;
-            actionObj['action.assigneeId'] = action.assignedTo;
-
-            actionsArray.push(actionObj);
-          });
-          setJiraRows([...actionsArray]);
-          updateJiraCount([...actionsArray]);
-          setDisplayJiraRows([...actionsArray]);
+              actionsArray.push(actionObj);
+            });
+            setJiraRows([...actionsArray]);
+            updateJiraCount([...actionsArray]);
+            setDisplayJiraRows([...actionsArray]);
+          }
+          setLoading(false);
+        },
+        error => {
+          setLoading(false);
         }
-        setLoading(false);
-      },error=>{
-        setLoading(false);
-      });
+      );
     }
   };
 
@@ -360,7 +363,6 @@ export default function ActionDashboard() {
   };
 
   React.useEffect(() => {
-    
     let initialData: any[] = [];
     initialData.push({ r1: 'Date : ', r2: new Date().toLocaleString() + '' });
 
@@ -511,7 +513,7 @@ export default function ActionDashboard() {
             label="Search..."
             variant="outlined"
             sx={{ marginBottom: '10px', background: 'white', width: '450px' }}
-            onChange={e => setSearchedVal(e.target.value)}
+            onChange={(e: any) => setSearchedVal(e.target.value)}
             value={searchedVal}
             InputProps={{
               startAdornment: (
@@ -672,7 +674,6 @@ export default function ActionDashboard() {
                                   tempJiraRows.map((obj: any, i: number) => {
                                     if (index == i) {
                                       obj[column.id] = valueOut;
-                                  
 
                                       action = obj;
                                       emailId = obj.assignedTo;
@@ -742,19 +743,23 @@ export default function ActionDashboard() {
           onRowsPerPageChange={handleChangeRowsPerPage}
         />
       </Paper>
-      <>{loading&&<Box
-        sx={{
-          display: 'flex',
-          zIndex: '3',
-          position: 'absolute',
-          width: '90%',
-          height: '90%',
-          justifyContent: 'center',
-          alignItems: 'center',
-        }}
-      >
-        <CircularProgress />
-      </Box>}</>
+      <>
+        {loading && (
+          <Box
+            sx={{
+              display: 'flex',
+              zIndex: '3',
+              position: 'absolute',
+              width: '90%',
+              height: '90%',
+              justifyContent: 'center',
+              alignItems: 'center',
+            }}
+          >
+            <CircularProgress />
+          </Box>
+        )}
+      </>
     </>
   );
 }

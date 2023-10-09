@@ -490,7 +490,7 @@ export default function CreateTeam() {
                         ...styles.accessCodeTextField,
                       }}
                       value={teamName}
-                      onChange={e => {
+                      onChange={(e: any) => {
                         setTeamName(e.currentTarget.value);
                         setTeamNameCodeError('');
                       }}
@@ -570,7 +570,7 @@ export default function CreateTeam() {
                         background: '#ffffff',
                       }}
                       value={teamDescription}
-                      onChange={e => {
+                      onChange={(e: any) => {
                         setTeamDescription(e.currentTarget.value);
                         setTeamDescriptionError('');
                       }}
@@ -752,7 +752,7 @@ export default function CreateTeam() {
                         ...styles.accessCodeTextField,
                       }}
                       value={teamDepartment}
-                      onChange={e => {
+                      onChange={(e: any) => {
                         setTeamDepartment(e.currentTarget.value);
                         setTeamDepartmentCodeError('');
                       }}
@@ -941,7 +941,7 @@ export default function CreateTeam() {
             marginTop: '24px',
             ...styles.accessCodeTextField,
           }}
-          onChange={e => {
+          onChange={(e: any) => {
             setSearchedVal(e.target.value);
             handleSearch(e);
           }}
@@ -959,7 +959,7 @@ export default function CreateTeam() {
                   <TableCell>
                     <Checkbox
                       checked={item.checked}
-                      onChange={e => handleChangeCheckbox(e, item.id)}
+                      onChange={(e: any) => handleChangeCheckbox(e, item.id)}
                       inputProps={{ 'aria-label': 'controlled' }}
                     />
                   </TableCell>

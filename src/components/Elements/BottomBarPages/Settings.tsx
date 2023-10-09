@@ -1,12 +1,94 @@
-import { Paper, Box } from '@mui/material';
+import { Paper, Box, Divider, Grid } from '@mui/material';
+import * as React from 'react';
+import Switch from '@mui/material/Switch';
 
 import {
   BodySemiBoldTypography,
+  CaptionRegularTypography,
   H2SemiBoldTypography,
+  H4SemiBoldTypography,
+  H6SemiBoldTypography,
 } from '../../CustomizedTypography';
 import commonStyles from '../../../style.module.scss';
+import { ContainedButtonWithIcon } from '../../CustomizedButton/ContainedButtonWithIcon';
+import { updateUser } from '../../../helpers/msal/services';
+import { GlobalContext, ActionType } from '../../../contexts/GlobalContext';
 
 export default function Settings() {
+  const [global, dispatch] = React.useContext(GlobalContext);
+  const localUserData = localStorage.getItem('userData');
+  const tempLocalUserData = localUserData && JSON.parse(localUserData);
+
+  const [isSessionNotificationChecked, setIsSessionNotificationChecked] =
+    React.useState(true);
+  const [isActionNotificationChecked, setIsActionNotificationChecked] =
+    React.useState(true);
+  const [isTeamNotificationChecked, setIsTeamNotificationChecked] =
+    React.useState(true);
+
+  const handleSessionNotificationChange = (
+    event: React.ChangeEvent<HTMLInputElement>
+  ) => {
+    setIsSessionNotificationChecked(event.target.checked);
+    callUpdateUser(
+      event.target.checked,
+      isActionNotificationChecked,
+      isTeamNotificationChecked
+    );
+  };
+
+  const handleActionNotificationChange = (
+    event: React.ChangeEvent<HTMLInputElement>
+  ) => {
+    setIsActionNotificationChecked(event.target.checked);
+    callUpdateUser(
+      isSessionNotificationChecked,
+      event.target.checked,
+      isTeamNotificationChecked
+    );
+  };
+
+  const handleTeamNotificationChange = (
+    event: React.ChangeEvent<HTMLInputElement>
+  ) => {
+    setIsTeamNotificationChecked(event.target.checked);
+    callUpdateUser(
+      isSessionNotificationChecked,
+      isActionNotificationChecked,
+      event.target.checked
+    );
+  };
+
+  const callUpdateUser = async (s: boolean, a: boolean, t: boolean) => {
+    dispatch({
+      type: ActionType.SET_LOADING,
+      payload: { loadingFlag: true },
+    });
+
+    const requestBody = {
+      isSessionNotificationChecked: s,
+      isActionNotificationChecked: a,
+      isTeamNotificationChecked: t,
+    };
+    const emailId = tempLocalUserData && tempLocalUserData.emailId;
+    await updateUser(emailId, requestBody).then(
+      res => {
+        dispatch({
+          type: ActionType.SET_LOADING,
+          payload: { loadingFlag: false },
+        });
+        localStorage.setItem('userData', JSON.stringify(res));
+      },
+      err => {
+        dispatch({
+          type: ActionType.SET_LOADING,
+          payload: { loadingFlag: false },
+        });
+        console.log('err', err);
+      }
+    );
+  };
+
   return (
     <>
       <Box
@@ -37,7 +119,89 @@ export default function Settings() {
             overflowY: 'auto',
             marginTop: '24px',
           }}
-        ></Paper>
+        >
+          <H4SemiBoldTypography label="Notification" />
+          <Box
+            sx={{
+              display: 'flex',
+              flexDirection: 'row',
+              marginTop: '24px',
+            }}
+          >
+            <Box
+              sx={{
+                display: 'flex',
+                flexDirection: 'column',
+                justifyContent: 'flex-start',
+                alignItems: 'flex-start',
+              }}
+            >
+              <H6SemiBoldTypography
+                label="New Session Created"
+                style={{ marginTop: '24px' }}
+              />
+              <H6SemiBoldTypography
+                label="Actions Assigned"
+                style={{ marginTop: '24px' }}
+              />
+              <H6SemiBoldTypography
+                label="Team Added"
+                style={{ marginTop: '24px' }}
+              />
+            </Box>
+            <Box
+              sx={{
+                display: 'flex',
+                flexDirection: 'column',
+                justifyContent: 'flex-start',
+                alignItems: 'center',
+                marginLeft: '160px',
+              }}
+            >
+              <Switch
+                checked={isSessionNotificationChecked}
+                onChange={handleSessionNotificationChange}
+                inputProps={{ 'aria-label': 'controlled' }}
+                sx={{ marginTop: '12px' }}
+              />
+              <Switch
+                checked={isActionNotificationChecked}
+                onChange={handleActionNotificationChange}
+                inputProps={{ 'aria-label': 'controlled' }}
+                sx={{ marginTop: '12px' }}
+              />
+              <Switch
+                checked={isTeamNotificationChecked}
+                onChange={handleTeamNotificationChange}
+                inputProps={{ 'aria-label': 'controlled' }}
+                sx={{ marginTop: '12px' }}
+              />
+            </Box>
+          </Box>
+          <Grid item xs={12} sx={{ mt: 6 }}>
+            <Divider />
+          </Grid>
+          <H4SemiBoldTypography
+            label="Integrations"
+            style={{ marginTop: '24px !important' }}
+          />
+          <CaptionRegularTypography
+            label="Improve productivity by utilising productivty apps"
+            style={{ marginTop: '12px !important' }}
+          />
+          <ContainedButtonWithIcon
+            id={'connect_jira_button_desktop'}
+            label={'Connect Jira Account'}
+            size={'medium'}
+            iconPath="/svgs/jira_icon.svg"
+            style={{
+              width: '460px',
+              marginTop: '40px !important',
+              textAlign: 'center',
+            }}
+            onClick={() => console.log('Setting JIRA')}
+          />
+        </Paper>
       </Box>
     </>
   );

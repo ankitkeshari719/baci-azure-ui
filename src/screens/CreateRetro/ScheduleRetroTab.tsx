@@ -18,6 +18,8 @@ import {
 } from '../../components/CustomizedTypography';
 import { RETRO_IMMEDIATELY, RETRO_SCHEDULE } from './const';
 
+import * as React from 'react';
+
 const styles = {
   avatarfield: {
     minWidth: '300px',
@@ -118,7 +120,7 @@ export function ScheduleRetroTab({
             alignItems: 'center',
           }}
         >
-          {activePanel != 'scheduleDetailPanel' && scheduleDescription != ''? (
+          {activePanel != 'scheduleDetailPanel' && scheduleDescription != '' ? (
             <>
               <Box
                 sx={{
@@ -231,7 +233,7 @@ export function ScheduleRetroTab({
                           border: '1px  solid #F0F0F0',
                         }}
                         value={scheduleDescription}
-                        onChange={e => {
+                        onChange={(e: any) => {
                           handleScheduleDescriptionChange(
                             e.currentTarget.value
                           );

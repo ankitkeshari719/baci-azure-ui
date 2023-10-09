@@ -18,7 +18,11 @@ import { NestedDropdown } from 'mui-nested-menu';
 import { MAX_CARD_TEXT_LENGTH, UNGROUPED } from '../../../constants';
 import { BoardContext } from '../../../contexts/BoardContext';
 import { BoardActionType } from '../../../helpers/statemachine/BoardStateMachine';
-import { Card as RetroCardType, CardGroup, Column } from '../../../helpers/types';
+import {
+  Card as RetroCardType,
+  CardGroup,
+  Column,
+} from '../../../helpers/types';
 
 import DeleteForever from '@mui/icons-material/DeleteForever';
 import MoveDownIcon from '@mui/icons-material/MoveDown';
@@ -54,7 +58,6 @@ export function RetroCard({
   animate,
   isPrintPage,
   width,
-
 }: {
   card: RetroCardType;
   currentGroupId: string;
@@ -65,7 +68,6 @@ export function RetroCard({
   animate: boolean;
   isPrintPage: boolean;
   width?: number;
-
 }) {
   const [global, dispatch] = React.useContext(GlobalContext);
   const {
@@ -81,17 +83,16 @@ export function RetroCard({
   const open = Boolean(anchorEl);
   const open1 = Boolean(anchorEl1);
   const editFieldRef = React.useRef<HTMLInputElement>(null);
-  const [sectionWidth, setSectionWidth] = React.useState<number>(300)
-  const [sectionHalfWidth, setSectionHalfWidth] = React.useState<number>(180)
-
+  const [sectionWidth, setSectionWidth] = React.useState<number>(300);
+  const [sectionHalfWidth, setSectionHalfWidth] = React.useState<number>(180);
 
   React.useEffect(() => {
-    const section = document.getElementById("section0")
+    const section = document.getElementById('section0');
     if (section != null) {
-      setSectionWidth(section.offsetWidth)
-      setSectionHalfWidth(section.offsetWidth / 2 - 28)
+      setSectionWidth(section.offsetWidth);
+      setSectionHalfWidth(section.offsetWidth / 2 - 28);
     }
-  }, [])
+  }, []);
   React.useEffect(() => {
     if (editing) {
       const end = editFieldRef.current?.value.length || 0;
@@ -290,36 +291,39 @@ export function RetroCard({
     ],
   };
   const compareText = (text: string): boolean => {
-    var flag = false
+    var flag = false;
 
     // card.keywords.forEach(element => {
     for (let i = 0; i < card.keywords.length; i++) {
-      const element = card.keywords[i]
-      const keyword = element.split(" ");
-      if (element.toLocaleLowerCase().replace(".", "") == text.toLowerCase().replace(".", "")) {
-        flag = true
+      const element = card.keywords[i];
+      const keyword = element.split(' ');
+      if (
+        element.toLocaleLowerCase().replace('.', '') ==
+        text.toLowerCase().replace('.', '')
+      ) {
+        flag = true;
 
-        return true
+        return true;
         break;
       }
+      // keyword.forEach(key => {
       else
-        // keyword.forEach(key => {
         for (let j = 0; j < keyword.length; j++) {
-          const key = keyword[j]
-    
+          const key = keyword[j];
 
-          if (key.toLowerCase().replace(".", "") == text.toLowerCase().replace(".", "")) {
-
-            flag = true
-            return true
+          if (
+            key.toLowerCase().replace('.', '') ==
+            text.toLowerCase().replace('.', '')
+          ) {
+            flag = true;
+            return true;
             break;
           }
         }
-
     }
-    
-    return flag
-  }
+
+    return flag;
+  };
   return (
     <>
       {
@@ -340,7 +344,6 @@ export function RetroCard({
               background: editing ? 'transparant' : cardColourHover,
             },
           }}
-
           className="cardStyle"
         >
           <CardContent
@@ -351,7 +354,7 @@ export function RetroCard({
             <Box sx={{ display: 'flex', flexDirection: 'row' }}>
               {!isPrintPage ? (
                 <Avatar
-                  onClickAvatar={() => { }}
+                  onClickAvatar={() => {}}
                   avatar={card.avatar}
                   css={{ width: '40px', height: '40px', border: 'none' }}
                 />
@@ -388,7 +391,7 @@ export function RetroCard({
                       div: { padding: 0, position: 'initial' },
                       position: 'initial',
                     }}
-                    onKeyDown={e => {
+                    onKeyDown={(e: any) => {
                       if (e.key === 'Escape') {
                         cancelEdit();
                       }
@@ -405,7 +408,7 @@ export function RetroCard({
                         (e.target as HTMLInputElement).blur();
                       }
                     }}
-                    onChange={e => {
+                    onChange={(e: any) => {
                       const tempValue = value;
                       const removedEnter = tempValue.replace(/[\r\n]/gm, '');
                       const removedSpaces = removedEnter.replace(/ /g, '');
@@ -437,26 +440,32 @@ export function RetroCard({
                     sx={{
                       cursor:
                         card.createdBy === global.user.id &&
-                          !ended &&
-                          !hideButtons
+                        !ended &&
+                        !hideButtons
                           ? 'text'
                           : '',
                     }}
                   >
-                    {card.value.split(" ").map((text, index) => {
-
+                    {card.value.split(' ').map((text, index) => {
                       return (
                         <Typography
                           component={'span'}
-                          key={text + index} className={columns.find(column => column.id === columnId)?.showKeywords && !ended && compareText(text) ? "textStyleBold" : "textStyle"} display={'inline'}>
-                          {text} </Typography>
-                      )
-
+                          key={text + index}
+                          className={
+                            columns.find(column => column.id === columnId)
+                              ?.showKeywords &&
+                            !ended &&
+                            compareText(text)
+                              ? 'textStyleBold'
+                              : 'textStyle'
+                          }
+                          display={'inline'}
+                        >
+                          {text}{' '}
+                        </Typography>
+                      );
                     })}
                   </Typography>
-
-
-
                 )}
                 {!editing && card.editCount > 1 ? (
                   <Typography
@@ -540,10 +549,10 @@ export function RetroCard({
                 sx={{ display: 'flex', alignItems: 'center' }}
               >
                 {card.createdBy === global.user.id &&
-                  !hideButtons &&
-                  !ended &&
-                  !global.leaveRetro &&
-                  !isPrintPage ? (
+                !hideButtons &&
+                !ended &&
+                !global.leaveRetro &&
+                !isPrintPage ? (
                   <Button
                     sx={{ minWidth: '0px', position: 'initial' }}
                     onClick={e => {
@@ -571,11 +580,11 @@ export function RetroCard({
                 ) : null}
 
                 {!hideButtons &&
-                  !ended &&
-                  !global.leaveRetro &&
-                  (card.createdBy === global.user.id ||
-                    global.user.userType == 2) &&
-                  !isPrintPage ? (
+                !ended &&
+                !global.leaveRetro &&
+                (card.createdBy === global.user.id ||
+                  global.user.userType == 2) &&
+                !isPrintPage ? (
                   <Box
                     component="span"
                     sx={{
@@ -590,9 +599,9 @@ export function RetroCard({
                         global.user.userType == 2
                           ? menuItemsData
                           : {
-                            label: menuItemsData.label,
-                            items: [menuItemsData.items[0]],
-                          }
+                              label: menuItemsData.label,
+                              items: [menuItemsData.items[0]],
+                            }
                       }
                       MenuProps={{ elevation: 3 }}
                       ButtonProps={{ variant: undefined }}

@@ -175,7 +175,7 @@ export default function Employees() {
             label="Search..."
             variant="outlined"
             sx={{ marginTop: '20px', background: 'white', width: '50%' }}
-            onChange={e => {
+            onChange={(e: any) => {
               setSearchedVal(e.target.value);
               handleSearch(e);
             }}
