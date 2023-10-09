@@ -29,6 +29,7 @@ import {
   createEnterpriseRequest,
   deleteEnterpriseRequestById,
   getEnterpriseById,
+  getUserByEmailId,
   updateUser,
 } from '../../../helpers/msal/services';
 import { GlobalContext, ActionType } from '../../../contexts/GlobalContext';
@@ -209,11 +210,27 @@ export default function EditProfile({ handleEdit }: Props) {
       cityCode != ''
     ) {
       // Call API
-      callUpdateUser();
+      callGetUserByEmailId();
     }
   };
 
-  const callUpdateUser = async () => {
+  const callGetUserByEmailId = async () => {
+    dispatch({
+      type: ActionType.SET_LOADING,
+      payload: { loadingFlag: true },
+    });
+    const emailId = tempLocalUserData && tempLocalUserData.emailId;
+    await getUserByEmailId(emailId).then(
+      res => {
+        callUpdateUser(res);
+      },
+      err => {
+        console.log('err', err);
+      }
+    );
+  };
+
+  const callUpdateUser = async (userData: any) => {
     dispatch({
       type: ActionType.SET_LOADING,
       payload: { loadingFlag: true },
@@ -221,6 +238,7 @@ export default function EditProfile({ handleEdit }: Props) {
 
     const teamsIds = teams.map((team: any) => team.teamId);
     const requestBody = {
+      ...userData,
       firstName: firstName,
       lastName: lastName,
       phoneNo: phoneNo,
