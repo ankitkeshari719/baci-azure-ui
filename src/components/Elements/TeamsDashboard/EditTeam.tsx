@@ -30,7 +30,11 @@ import { useNavigate, useParams } from 'react-router-dom';
 import * as Icons from 'heroicons-react';
 import { BASIC, ENTERPRISE } from '../../../constants/applicationConst';
 import {
+  chartInputType,
+  formatDateForAPI,
+  getActionsChartData,
   getAllUsersByEnterpriseId,
+  getSessionsData,
   getTeamById,
   getUserByEmailId,
   updateTeam,
@@ -106,6 +110,23 @@ export default function EditTeam() {
     },
   });
 
+  const [toDate, setToDate] = React.useState<string>(
+    new Date().getFullYear().toString() +
+      '-' +
+      '0' +
+      (new Date().getMonth() + 1).toString().slice(-2)
+  );
+
+  const [fromDate, setFromDate] = React.useState<string>(
+    new Date().getFullYear().toString() +
+      '-' +
+      '0' +
+      new Date().getMonth().toString().slice(-2)
+  );
+
+  const [sessionCount, setSessionCount] = React.useState<number>(0);
+  const [actionsCount, setActionsCount] = React.useState<number>(0);
+
   // Show Members
   const [checkedUserEmails, setCheckedUserEmails] = React.useState([]);
 
@@ -158,6 +179,8 @@ export default function EditTeam() {
         setCreatedBy(res && res.firstName + ' ' + res.lastName);
         setCreatedByAvatar(res && res.selectedAvatar);
         setCreatedByEmailId(res && res.emailId);
+        handleEnterpriseLevelActionsCountData();
+        handleGetRetroChartData();
       },
       err => {
         console.log('err', err);
@@ -201,6 +224,55 @@ export default function EditTeam() {
         });
       }
     );
+  };
+
+  // Get All Actions By Teams
+  const handleEnterpriseLevelActionsCountData = async () => {
+    if (global.azureUser != undefined) {
+      const chartInput: chartInputType = {
+        userId: global.azureUser?.emailId,
+        roleName: global.azureUser?.roleName,
+        enterpriseId: global.azureUser?.enterpriseId,
+        teamId: id,
+        fromDate: formatDateForAPI(fromDate),
+        toDate: formatDateForAPI(toDate, true),
+      };
+      await getActionsChartData(chartInput).then(
+        res => {
+          console.log('setActionsCount', res.actionsData?.length);
+          setActionsCount(res.actionsData?.length);
+        },
+        err => {
+          console.log('err', err);
+        }
+      );
+    }
+  };
+
+  // Get All Retros By Team
+  const handleGetRetroChartData = async () => {
+    if (global.azureUser != undefined) {
+      const chartInput: chartInputType = {
+        userId: global.azureUser?.emailId,
+        roleName: global.azureUser?.roleName,
+        enterpriseId: global.azureUser?.enterpriseId,
+        teamId: id,
+        fromDate: formatDateForAPI(fromDate),
+        toDate: formatDateForAPI(toDate, true),
+      };
+
+      await getSessionsData(chartInput).then(
+        res => {
+          if (res.result != undefined && res.result?.length != undefined) {
+            console.log('setSessionCount', res.result?.length);
+            setSessionCount(res.result?.length);
+          } else {
+            setSessionCount(0);
+          }
+        },
+        err => {}
+      );
+    }
   };
 
   // Handle Search
@@ -372,6 +444,7 @@ export default function EditTeam() {
           payload: { loadingFlag: false },
         });
         //updateUsersTeam(res, userEmailIdsFromRecord);
+        setIsEditModeOn(false);
       },
       err => {
         console.log('err', err);
@@ -383,7 +456,7 @@ export default function EditTeam() {
     );
   };
 
-  // Update users teams array after creating the team
+  //-------------------------------- Update users teams array after creating the team --------------------------------
   const updateUsersTeam = async (teamId: any, userEmailIdsFromRecord: any) => {
     dispatch({
       type: ActionType.SET_LOADING,
@@ -419,6 +492,22 @@ export default function EditTeam() {
       navigate('/basic/analytics/');
     } else if (tempLocalUserData && tempLocalUserData.roleName === ENTERPRISE) {
       navigate('/enterprise/analytics/');
+    }
+  };
+
+  const goSessionsPage = () => {
+    if (tempLocalUserData && tempLocalUserData.roleName === BASIC) {
+      navigate('/basic/sessions/');
+    } else if (tempLocalUserData && tempLocalUserData.roleName === ENTERPRISE) {
+      navigate('/enterprise/sessions/');
+    }
+  };
+
+  const goToActionsPage = () => {
+    if (tempLocalUserData && tempLocalUserData.roleName === BASIC) {
+      navigate('/basic/actions/');
+    } else if (tempLocalUserData && tempLocalUserData.roleName === ENTERPRISE) {
+      navigate('/enterprise/actions/');
     }
   };
 
@@ -843,21 +932,69 @@ export default function EditTeam() {
                     marginTop: '48px',
                   }}
                 >
-                  <ButtonLabelTypography label="No Of Sessions: -" />
-                  <ButtonLabelTypography label="No Of Actions: -" />
+                  <Box
+                    sx={{
+                      width: '100%',
+                      display: 'flex',
+                      alignItems: 'flex-start',
+                      flexDirection: 'row',
+                    }}
+                  >
+                    <ButtonLabelTypography label={'No Of Sessions: '} />
+                    &nbsp;&nbsp;
+                    <BodyRegularTypography
+                      label={sessionCount.toString()}
+                      style={{
+                        color: '#00E',
+                        textDecorationLine: 'underline',
+                        cursor: 'pointer',
+                      }}
+                      onClick={goSessionsPage}
+                    />
+                  </Box>
+                  <Box
+                    sx={{
+                      width: '100%',
+                      display: 'flex',
+                      alignItems: 'flex-start',
+                      flexDirection: 'row',
+                    }}
+                  >
+                    <ButtonLabelTypography label={'No Of Actions: '} />
+                    &nbsp;&nbsp;
+                    <BodyRegularTypography
+                      label={actionsCount.toString()}
+                      style={{
+                        color: '#00E',
+                        textDecorationLine: 'underline',
+                        cursor: 'pointer',
+                      }}
+                      onClick={goToActionsPage}
+                    />
+                  </Box>
                 </Box>
                 {/* Analytics */}
                 <Box
                   sx={{
                     width: '100%',
                     display: 'flex',
-                    justifyContent: 'space-between',
+                    justifyContent: 'flex-start',
                     alignItems: 'flex-start',
                     flexDirection: 'row',
                     marginTop: '48px',
                   }}
                 >
-                  <ButtonLabelTypography label="Analytics: -" />
+                  <ButtonLabelTypography label="Analytics: " />
+                  &nbsp;&nbsp;
+                  <BodyRegularTypography
+                    label=" View All"
+                    style={{
+                      color: '#00E',
+                      textDecorationLine: 'underline',
+                      cursor: 'pointer',
+                    }}
+                    onClick={goToAnalyticsPage}
+                  />
                 </Box>
               </Box>
             </>
@@ -1180,8 +1317,46 @@ export default function EditTeam() {
                     marginTop: '48px',
                   }}
                 >
-                  <ButtonLabelTypography label="No Of Sessions: -" />
-                  <ButtonLabelTypography label="No Of Actions: -" />
+                  <Box
+                    sx={{
+                      width: '100%',
+                      display: 'flex',
+                      alignItems: 'flex-start',
+                      flexDirection: 'row',
+                    }}
+                  >
+                    <ButtonLabelTypography label={'No Of Sessions: '} />
+                    &nbsp;&nbsp;
+                    <BodyRegularTypography
+                      label={sessionCount.toString()}
+                      style={{
+                        color: '#00E',
+                        textDecorationLine: 'underline',
+                        cursor: 'pointer',
+                      }}
+                      onClick={goSessionsPage}
+                    />
+                  </Box>
+                  <Box
+                    sx={{
+                      width: '100%',
+                      display: 'flex',
+                      alignItems: 'flex-start',
+                      flexDirection: 'row',
+                    }}
+                  >
+                    <ButtonLabelTypography label={'No Of Actions: '} />
+                    &nbsp;&nbsp;
+                    <BodyRegularTypography
+                      label={actionsCount.toString()}
+                      style={{
+                        color: '#00E',
+                        textDecorationLine: 'underline',
+                        cursor: 'pointer',
+                      }}
+                      onClick={goToActionsPage}
+                    />
+                  </Box>
                 </Box>
                 {/* Analytics */}
                 <Box
@@ -1195,7 +1370,7 @@ export default function EditTeam() {
                   }}
                 >
                   <ButtonLabelTypography label="Analytics: " />
-                  <ButtonLabelTypography label=" " />
+                  &nbsp;&nbsp;
                   <BodyRegularTypography
                     label=" View All"
                     style={{

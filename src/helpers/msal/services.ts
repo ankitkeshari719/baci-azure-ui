@@ -339,7 +339,7 @@ export interface chartInputType {
   userId: string;
   roleName: string;
   enterpriseId: string;
-  teamId: string;
+  teamId: any;
   fromDate: string;
   toDate: string;
 }
