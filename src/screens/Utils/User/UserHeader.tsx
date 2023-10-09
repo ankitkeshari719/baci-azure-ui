@@ -56,6 +56,7 @@ export function UserHeader({ accounts }: Props) {
   const callGetAllEnterprises = async () => {
     await getAllEnterprises().then(
       res => {
+        console.log("responce", res);
         const com =
           accounts && accounts[0] && accounts[0].username.split('@')[1];
         let enterpriseFlag = 0;
