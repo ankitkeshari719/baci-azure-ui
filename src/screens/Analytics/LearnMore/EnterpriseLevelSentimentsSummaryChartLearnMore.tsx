@@ -36,48 +36,46 @@ export default function EnterpriseLevelSentimentsSummaryChartLearnMore() {
         overflowY: 'scroll !important',
       }}
     >
+      <Box sx={{ display: 'flex', flexDirection: 'row' }}>
+        <BodyRegularTypography
+          label="Analytics "
+          style={{
+            color: '#00E',
+            cursor: 'pointer',
+            textDecorationLine: 'underline',
+          }}
+          onClick={goToDashboard}
+        />
+        <H6RegularTypography
+          label="\  Overall Summary - Paragraph and Word Cloud"
+          style={{ color: '#4E4E4E' }}
+        />
+      </Box>
       <Box
-          sx={{ display: 'flex', flexDirection: 'row',  }}
-        >
-          <BodyRegularTypography
-            label="Analytics "
-            style={{
-              color: '#00E',
-              cursor: 'pointer',
-              textDecorationLine: 'underline',
-            }}
-            onClick={goToDashboard}
-          />
-          <H6RegularTypography
-            label="\  Overall Summary - Paragraph and Word Cloud"
-            style={{ color: '#4E4E4E' }}
-          />
-        </Box>
-        <Box
-          display="flex"
-          flexDirection="row"
-          alignItems="center"
-          justifyContent="flex-start"
-          sx={{ marginTop: '12px' }}
-        >
-          <Icons.ArrowCircleLeftOutline
-            size={20}
-            style={{
-              width: '24px',
-              height: '24px',
-              display: 'block',
-              right: '0px',
-              color: '#159ADD',
-              fontSize: '14px',
-              cursor: 'pointer',
-            }}
-            onClick={goToDashboard}
-          />
-          <H2SemiBoldTypography
-            label=" Overall Summary - Paragraph and Word Cloud"
-            style={{ color: commonStyles.PrimaryDark, marginLeft: '16px' }}
-          />
-        </Box>
+        display="flex"
+        flexDirection="row"
+        alignItems="center"
+        justifyContent="flex-start"
+        sx={{ marginTop: '12px' }}
+      >
+        <Icons.ArrowCircleLeftOutline
+          size={20}
+          style={{
+            width: '24px',
+            height: '24px',
+            display: 'block',
+            right: '0px',
+            color: '#159ADD',
+            fontSize: '14px',
+            cursor: 'pointer',
+          }}
+          onClick={goToDashboard}
+        />
+        <H2SemiBoldTypography
+          label=" Overall Summary - Paragraph and Word Cloud"
+          style={{ color: commonStyles.PrimaryDark, marginLeft: '16px' }}
+        />
+      </Box>
       <Paper
         sx={{
           border: ' 1px solid #FAFAFA',
@@ -86,7 +84,6 @@ export default function EnterpriseLevelSentimentsSummaryChartLearnMore() {
           marginTop: '24px',
         }}
       >
-        
         <Grid container spacing={0} sx={{ padding: '24px' }}>
           {/* About  Overall Summary - Paragraph and Word Cloud */}
           <Grid item xs={12}>
@@ -181,7 +178,7 @@ export default function EnterpriseLevelSentimentsSummaryChartLearnMore() {
                 </ul>
               </Grid>
             </Grid>
-            {/* How to read graph */}
+            {/* How to read the summary */}
             <Grid container mt={6}>
               <Grid
                 item
@@ -194,7 +191,7 @@ export default function EnterpriseLevelSentimentsSummaryChartLearnMore() {
                 }}
               >
                 <Typography className="aboutTemplate" component="div">
-                  How to read graph
+                  How to read the summary
                 </Typography>
 
                 <Typography
@@ -256,8 +253,8 @@ export default function EnterpriseLevelSentimentsSummaryChartLearnMore() {
                 >
                   High performing & continuously improving teams live & consume
                   data to effectively summarise, communicate & understand the
-                  current status to better steer the organisation towards growth
-                  & improvements.
+                  current status to better steer the organisation towards
+                  growth.
                 </Typography>
               </Grid>
             </Grid>

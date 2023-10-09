@@ -231,7 +231,7 @@ export default function EnterpriseLevelSentimentsMoodsChartLearnMore() {
                         component="div"
                         sx={{ mt: 2 }}
                       >
-                        Neutral and Sad feelings are in0-fact valuable
+                        Neutral and Sad feelings are in-fact valuable
                         opportunities to uncover and resolve any hidden
                         blockers.
                       </Typography>
