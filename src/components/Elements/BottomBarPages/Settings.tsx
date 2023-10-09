@@ -11,7 +11,7 @@ import {
 } from '../../CustomizedTypography';
 import commonStyles from '../../../style.module.scss';
 import { ContainedButtonWithIcon } from '../../CustomizedButton/ContainedButtonWithIcon';
-import { updateUser } from '../../../helpers/msal/services';
+import { getUserByEmailId, updateUser } from '../../../helpers/msal/services';
 import { GlobalContext, ActionType } from '../../../contexts/GlobalContext';
 
 export default function Settings() {
@@ -56,6 +56,22 @@ export default function Settings() {
       isSessionNotificationChecked,
       isActionNotificationChecked,
       event.target.checked
+    );
+  };
+
+  const callGetUserByEmailId = async () => {
+    dispatch({
+      type: ActionType.SET_LOADING,
+      payload: { loadingFlag: true },
+    });
+    const emailId = tempLocalUserData && tempLocalUserData.emailId;
+    await getUserByEmailId(emailId).then(
+      res => {
+        console.log('callGetUserByEmailId response', res);
+      },
+      err => {
+        console.log('err', err);
+      }
     );
   };
 
