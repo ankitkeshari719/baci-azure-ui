@@ -139,7 +139,7 @@ const PulseCheckTopbar = (props: any) => {
                     },
                   }}
                   value={localRetroName}
-                  onChange={e => {
+                  onChange={(e: any) => {
                     setLocalRetroName(e.currentTarget.value);
                   }}
                   onBlur={async () => {

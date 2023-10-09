@@ -119,10 +119,10 @@ export default function AddAction({
             multiline
             placeholder="Type new action here"
             value={addedActionValue}
-            onChange={e => setAddActionValue(e.currentTarget.value)}
+            onChange={(e: any) => setAddActionValue(e.currentTarget.value)}
             onFocus={() => setIsTextFieldFocused(true)}
             onBlur={() => setIsTextFieldFocused(true)}
-            onKeyDown={e => {
+            onKeyDown={(e: any) => {
               const tempValue = addedActionValue;
               const removedEnter = tempValue.replace(/[\r\n]/gm, '');
               setAddActionValue(removedEnter);

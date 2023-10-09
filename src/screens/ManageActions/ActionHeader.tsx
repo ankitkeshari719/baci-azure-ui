@@ -134,7 +134,7 @@ export default function ActionHeader({
                     autoFocus
                     placeholder="Search..."
                     value={searchQuery}
-                    onChange={e =>
+                   onChange={(e : any) =>
                       handleSearchQueryOnChange(e.currentTarget.value)
                     }
                     inputProps={{
@@ -506,7 +506,7 @@ export default function ActionHeader({
                     autoFocus
                     placeholder="Search..."
                     value={searchQuery}
-                    onChange={e =>
+                   onChange={(e : any) =>
                       handleSearchQueryOnChange(e.currentTarget.value)
                     }
                     inputProps={{

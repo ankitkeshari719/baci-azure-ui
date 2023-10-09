@@ -1,7 +1,4 @@
 import { Action, Retro, User } from '../types';
-import { useSocket } from '../hooks/useSocket';
-import { DefaultEventsMap } from '@socket.io/component-emitter';
-import { Socket } from 'socket.io-client';
 import { Dayjs } from 'dayjs';
 
 import { API_URL } from '../../constants/FeatureFlags';
@@ -1099,15 +1096,7 @@ export const createAction = async (requestBody: any): Promise<any> => {
   const requestOptions = {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({
-      actionName: requestBody.actionName,
-      jiraId: requestBody.jiraId,
-      retroId: requestBody.retroId,
-      assignedTo: requestBody.assignedTo,
-      createdBy: requestBody.createdBy,
-      status: requestBody.status,
-      isActive: requestBody.isActive,
-    }),
+    body: JSON.stringify(requestBody),
   };
 
   await fetch(API_URL + `/actions/create`, requestOptions)
@@ -1323,6 +1312,9 @@ export const createUser = async (requestBody: any): Promise<any> => {
       teams: requestBody.teams,
       isActive: requestBody.isActive,
       enterpriseRequestId: requestBody.enterpriseRequestId,
+      isSessionNotificationChecked: requestBody.isActive,
+      isActionNotificationChecked: requestBody.isActive,
+      isTeamNotificationChecked: requestBody.isActive,
     }),
   };
 
@@ -1360,6 +1352,9 @@ export const updateUser = async (
       teams: requestBody.teams,
       isActive: requestBody.isActive,
       enterpriseRequestId: requestBody.enterpriseRequestId,
+      isSessionNotificationChecked: requestBody.isActive,
+      isActionNotificationChecked: requestBody.isActive,
+      isTeamNotificationChecked: requestBody.isActive,
     }),
   };
 

@@ -121,7 +121,7 @@ export function UserHeader({ accounts }: Props) {
           } else if (res.roleName === ENTERPRISE) {
             navigate('enterprise');
           }
-        }else {
+        } else {
           setOpenAccountNotActiveDialog(true);
         }
       },
@@ -160,6 +160,9 @@ export function UserHeader({ accounts }: Props) {
         teams: [],
         isActive: true,
         enterpriseRequestId: '',
+        isSessionNotificationChecked: false,
+        isActionNotificationChecked: false,
+        isTeamNotificationChecked: false,
       };
 
       await createUser(requestBody).then(

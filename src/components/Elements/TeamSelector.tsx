@@ -10,6 +10,7 @@ type Props = {
   selectedTeam: string;
   handleChange: any;
   padding?: string;
+  showAllTeamOption?: boolean;
 };
 
 export default function TeamSelector({
@@ -17,6 +18,7 @@ export default function TeamSelector({
   selectedTeam,
   handleChange,
   padding,
+  showAllTeamOption,
 }: Props) {
   const [teams, setTeams] = React.useState<any>([]);
 
@@ -61,9 +63,11 @@ export default function TeamSelector({
             },
           }}
         >
-          <MenuItem value="0" key="0">
-            {'All Teams'}
-          </MenuItem>
+          {showAllTeamOption && (
+            <MenuItem value="0" key="0">
+              {'All Teams'}
+            </MenuItem>
+          )}
           {teams.map((team: any) => {
             return (
               <MenuItem value={team.teamId} key={team.teamId}>

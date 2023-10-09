@@ -413,7 +413,7 @@ export default function AllUsers() {
               label="Search..."
               variant="outlined"
               sx={{ background: 'white', width: '40%' }}
-              onChange={e => {
+              onChange={(e: any) => {
                 setSearchedVal(e.target.value);
                 handleSearch(e);
               }}
@@ -447,6 +447,7 @@ export default function AllUsers() {
                 }
                 selectedTeam={selectedTeam}
                 handleChange={handleTeamChange}
+                showAllTeamOption={true}
               />
             </Box>
           </Box>
@@ -459,7 +460,7 @@ export default function AllUsers() {
                     <TableCell>
                       <Checkbox
                         checked={item.checked}
-                        onChange={e => handleChangeCheckbox(e, item.id)}
+                        onChange={(e: any) => handleChangeCheckbox(e, item.id)}
                         inputProps={{ 'aria-label': 'controlled' }}
                       />
                     </TableCell>

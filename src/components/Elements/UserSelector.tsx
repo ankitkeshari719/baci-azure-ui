@@ -39,7 +39,7 @@ export default function UserSelector({
   };
 
   return (
-    <Box sx={{ minWidth: width }}>
+    <Box m={3} sx={{ minWidth: width }}>
       <FormControl fullWidth>
         <Select
           value={selectedUser}

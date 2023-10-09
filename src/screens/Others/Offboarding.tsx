@@ -73,7 +73,7 @@ export function Offboarding() {
             flexDirection: 'column',
             justifyContent: 'flex-start',
             alignItems: 'center',
-            width:'100%'
+            width: '100%',
           }}
         >
           <DeploymentPopUp />
@@ -153,9 +153,9 @@ export function Offboarding() {
               variant="outlined"
               value={comments}
               sx={{ fontSize: '20px' }}
-              onChange={e => setComments(e.currentTarget.value)}
+              onChange={(e: any) => setComments(e.currentTarget.value)}
               multiline
-              onKeyDown={e => {
+              onKeyDown={(e: any) => {
                 if (e.keyCode === 13) {
                   submitFeedback();
                 }
@@ -207,7 +207,7 @@ export function Offboarding() {
           sx={{
             height: isXsUp ? 'calc(var(--app-height))' : 'calc(100vh)',
             overflowY: 'auto',
-            width:'100%'
+            width: '100%',
           }}
         >
           <DeploymentPopUp />
