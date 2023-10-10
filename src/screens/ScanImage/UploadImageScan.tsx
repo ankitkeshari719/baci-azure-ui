@@ -55,7 +55,7 @@ export function UploadImageScan() {
   }
 
   const navigateToScan = () => {
-    if (global.azureUser?.roleName === "Enterprise") {
+    if (global.azureUser?.roleName === 'Enterprise') {
       navigate('/enterprise/scanImage/');
     } else {
       navigate('/basic/scanImage/');
@@ -237,7 +237,11 @@ export function UploadImageScan() {
                 <Box
                   component="div"
                   whiteSpace="normal"
-                  style={{ fontSize: '32px', marginLeft: '16px' }}
+                  style={{
+                    fontSize: '32px',
+                    marginLeft: '16px',
+                    color: '#343434',
+                  }}
                 >
                   Upload Image or Photo
                 </Box>
@@ -245,30 +249,27 @@ export function UploadImageScan() {
                 <div
                   style={{
                     display: 'flex',
-                    height: '330px',
-                    width: 'auto',
+                    height: '60vh', // Set the height to 60% of the viewport height (adjust as needed)
+                    width: '100%', // Set the width to 80% of the parent container (adjust as needed)
                     marginTop: '10px',
-                    marginLeft: '14px',
+                    marginLeft: 'auto',
+                    marginRight: 'auto',
                     borderRadius: '10px',
                     justifyContent: 'center',
                     alignItems: 'center',
                     transition: 'all 0.3s ease-in-out',
                     backgroundColor: 'black',
-                    padding: '5px',
+                    maxWidth: '800px', // Set a maximum width to prevent it from becoming too wide on larger screens
                   }}
                 >
                   {isLoading ? (
                     <div className="scanner-container">
                       <div className="scanning-line"></div>
-                      {image && (
-                        <img src={image} alt="Stored" height="325px" />
-                      )}
+                      {image && <img src={image} alt="Stored" height="325px" />}
                     </div>
                   ) : (
                     <>
-                      {image && (
-                        <img src={image} alt="Stored" height="325px" />
-                      )}
+                      {image && <img src={image} alt="Stored" height="325px" />}
                     </>
                   )}
                 </div>
@@ -283,7 +284,7 @@ export function UploadImageScan() {
                 >
                   <Button
                     style={{
-                      backgroundColor: '#FFFFFF',
+                      backgroundColor: '#159ADD',
                       borderRadius: '24px',
                       width: '120px',
                       alignItems: 'center',
@@ -304,7 +305,11 @@ export function UploadImageScan() {
                 <Box
                   component="div"
                   whiteSpace="normal"
-                  style={{ fontSize: '32px', marginLeft: '16px', color: "#343434" }}
+                  style={{
+                    fontSize: '32px',
+                    marginLeft: '16px',
+                    color: '#343434',
+                  }}
                 >
                   Upload Image or Photo
                 </Box>
@@ -312,16 +317,18 @@ export function UploadImageScan() {
                 <div
                   style={{
                     display: 'flex',
-                    height: '463px',
-                    width: '800px',
+                    height: '60vh', // Set the height to 60% of the viewport height (adjust as needed)
+                    width: '100%', // Set the width to 80% of the parent container (adjust as needed)
                     marginTop: '10px',
-                    marginLeft: '14px',
+                    marginLeft: 'auto',
+                    marginRight: 'auto',
                     borderRadius: '10px',
                     justifyContent: 'center',
                     alignItems: 'center',
                     transition: 'all 0.3s ease-in-out',
                     backgroundColor: '#CEEFFF',
                     border: '3px dashed #159ADD',
+                    maxWidth: '800px',
                   }}
                 >
                   <label htmlFor="fileInput">
@@ -341,7 +348,15 @@ export function UploadImageScan() {
                         onChange={handleFileChange}
                       />
                     </InputLabel>
-                    <p style={{ textAlign: "center", color: '#159ADD', marginTop: "20px" }}>OR</p>
+                    <p
+                      style={{
+                        textAlign: 'center',
+                        color: '#159ADD',
+                        marginTop: '20px',
+                      }}
+                    >
+                      OR
+                    </p>
                     <InputLabel
                       style={{
                         border: '1px solid #159ADD',
@@ -378,7 +393,7 @@ export function UploadImageScan() {
                       color: 'white',
                       marginTop: '10px',
                       padding: '12px 16px 12px 16px',
-                      fontSize: "16px"
+                      fontSize: '16px',
                     }}
                   >
                     <RotateRightIcon />
@@ -401,10 +416,16 @@ export function UploadImageScan() {
                         width: '28px',
                         backgroundColor: '#E3E3E3',
                         borderRadius: '50%',
-                        fontSize: '16px'
+                        fontSize: '16px',
                       }}
                     >
-                      <span style={{ padding: '10px', color: '#676767', fontSize: '16px' }}>
+                      <span
+                        style={{
+                          padding: '10px',
+                          color: '#676767',
+                          fontSize: '16px',
+                        }}
+                      >
                         {item.id}
                       </span>
                     </div>
@@ -432,7 +453,7 @@ export function UploadImageScan() {
                             marginLeft: '22px',
                             fontSize: '16px',
                             marginTop: '3px',
-                            color: "#4E4E4E"
+                            color: '#4E4E4E',
                           }}
                         >
                           {item.description}
@@ -448,7 +469,13 @@ export function UploadImageScan() {
                             marginBottom: '10px',
                           }}
                         ></span>
-                        <p style={{ marginLeft: '15px', fontSize: '16px', color: "#4E4E4E" }}>
+                        <p
+                          style={{
+                            marginLeft: '15px',
+                            fontSize: '16px',
+                            color: '#4E4E4E',
+                          }}
+                        >
                           {item.description}
                         </p>
                       </>
