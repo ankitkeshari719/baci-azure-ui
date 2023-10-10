@@ -38,6 +38,7 @@ import {
   getTeamById,
   getUserByEmailId,
   updateTeam,
+  updatePullUsersTeamArray,
   updateUsersTeamArray,
 } from '../../../helpers/msal/services';
 import { ActionType, GlobalContext } from '../../../contexts/GlobalContext';
@@ -129,6 +130,7 @@ export default function EditTeam() {
 
   // Show Members
   const [checkedUserEmails, setCheckedUserEmails] = React.useState([]);
+  const [teamUserEmails, setTeamUserEmails] = React.useState([]);
 
   const { TblContainer, TblHead, TblPagination, recordAfterPagingAndSorting } =
     useTable(records, headCells, filterFn);
@@ -156,6 +158,7 @@ export default function EditTeam() {
         setTeamData(res);
         setCreatedOn(moment(res && res.updatedAt).format('Do MMM YYYY'));
         setCheckedUserEmails(res && res.userEmailIds);
+        setTeamUserEmails(res && res.userEmailIds);
         callGetUserByEmailId(res && res.createdBy);
         callGetAllUsersByEnterpriseId(
           res && res.enterpriseId,
@@ -239,7 +242,6 @@ export default function EditTeam() {
       };
       await getActionsChartData(chartInput).then(
         res => {
-          console.log('setActionsCount', res.actionsData?.length);
           setActionsCount(res.actionsData?.length);
         },
         err => {
@@ -264,7 +266,6 @@ export default function EditTeam() {
       await getSessionsData(chartInput).then(
         res => {
           if (res.result != undefined && res.result?.length != undefined) {
-            console.log('setSessionCount', res.result?.length);
             setSessionCount(res.result?.length);
           } else {
             setSessionCount(0);
@@ -443,8 +444,7 @@ export default function EditTeam() {
           type: ActionType.SET_LOADING,
           payload: { loadingFlag: false },
         });
-        //updateUsersTeam(res, userEmailIdsFromRecord);
-        setIsEditModeOn(false);
+        checkTheUpdatedArray(id, userEmailIdsFromRecord, teamUserEmails);
       },
       err => {
         console.log('err', err);
@@ -456,7 +456,37 @@ export default function EditTeam() {
     );
   };
 
-  //-------------------------------- Update users teams array after creating the team --------------------------------
+  const checkTheUpdatedArray = (
+    teamId: any,
+    newTeamArray: any,
+    previousTeamArray: any
+  ) => {
+    let removedArray: any = [];
+    let addedArray: any = [];
+    previousTeamArray.forEach((preObj: any) => {
+      const found = newTeamArray.find((newObj: any) => newObj == preObj);
+      if (!found) {
+        removedArray.push(preObj);
+      }
+    });
+
+    newTeamArray.forEach((newObj: any) => {
+      const found = previousTeamArray.find((prevObj: any) => prevObj == newObj);
+      if (!found) {
+        addedArray.push(newObj);
+      }
+    });
+
+    if (removedArray.length > 0) {
+      updatePullUsersTeam(teamId, removedArray);
+    }
+
+    if (addedArray.length > 0) {
+      updateUsersTeam(teamId, addedArray);
+    }
+  };
+
+  //-------------------------------- Update users teams array by pushing after creating the team --------------------------------
   const updateUsersTeam = async (teamId: any, userEmailIdsFromRecord: any) => {
     dispatch({
       type: ActionType.SET_LOADING,
@@ -475,6 +505,7 @@ export default function EditTeam() {
           payload: { loadingFlag: false },
         });
         setIsEditModeOn(false);
+        callGetTeamById();
       },
       err => {
         console.log('err', err);
@@ -483,6 +514,43 @@ export default function EditTeam() {
           payload: { loadingFlag: false },
         });
         setIsEditModeOn(false);
+        callGetTeamById();
+      }
+    );
+  };
+
+  //-------------------------------- Update users teams array by pulling after creating the team --------------------------------
+  const updatePullUsersTeam = async (
+    teamId: any,
+    userEmailIdsFromRecord: any
+  ) => {
+    dispatch({
+      type: ActionType.SET_LOADING,
+      payload: { loadingFlag: true },
+    });
+
+    const requestBody = {
+      teamId: teamId,
+      userEmailIdsFromRecord: userEmailIdsFromRecord,
+    };
+
+    await updatePullUsersTeamArray(requestBody).then(
+      res => {
+        dispatch({
+          type: ActionType.SET_LOADING,
+          payload: { loadingFlag: false },
+        });
+        setIsEditModeOn(false);
+        callGetTeamById();
+      },
+      err => {
+        console.log('err', err);
+        dispatch({
+          type: ActionType.SET_LOADING,
+          payload: { loadingFlag: false },
+        });
+        setIsEditModeOn(false);
+        callGetTeamById();
       }
     );
   };

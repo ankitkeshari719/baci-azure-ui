@@ -1485,6 +1485,26 @@ export const updateUsersTeamArray = async (requestBody: any): Promise<any> => {
   return data;
 };
 
+export const updatePullUsersTeamArray = async (requestBody: any): Promise<any> => {
+  let data: any;
+  const requestOptions = {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({
+      teamId: requestBody.teamId,
+      userEmailIdsFromRecord: requestBody.userEmailIdsFromRecord,
+    }),
+  };
+
+  await fetch(API_URL + `/users/updatePullUsersTeamArray`, requestOptions)
+    .then(response => response.json())
+    .then(response => {
+      data = response.data;
+    });
+  return data;
+};
+
+
 // ---------------------------------------- Enterprise Request API's -----------------------------------------------
 // Create Enterprise
 export const createEnterpriseRequest = async (
