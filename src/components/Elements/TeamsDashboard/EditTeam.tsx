@@ -30,10 +30,15 @@ import { useNavigate, useParams } from 'react-router-dom';
 import * as Icons from 'heroicons-react';
 import { BASIC, ENTERPRISE } from '../../../constants/applicationConst';
 import {
+  chartInputType,
+  formatDateForAPI,
+  getActionsChartData,
   getAllUsersByEnterpriseId,
+  getSessionsData,
   getTeamById,
   getUserByEmailId,
   updateTeam,
+  updatePullUsersTeamArray,
   updateUsersTeamArray,
 } from '../../../helpers/msal/services';
 import { ActionType, GlobalContext } from '../../../contexts/GlobalContext';
@@ -106,8 +111,26 @@ export default function EditTeam() {
     },
   });
 
+  const [toDate, setToDate] = React.useState<string>(
+    new Date().getFullYear().toString() +
+      '-' +
+      '0' +
+      (new Date().getMonth() + 1).toString().slice(-2)
+  );
+
+  const [fromDate, setFromDate] = React.useState<string>(
+    new Date().getFullYear().toString() +
+      '-' +
+      '0' +
+      new Date().getMonth().toString().slice(-2)
+  );
+
+  const [sessionCount, setSessionCount] = React.useState<number>(0);
+  const [actionsCount, setActionsCount] = React.useState<number>(0);
+
   // Show Members
   const [checkedUserEmails, setCheckedUserEmails] = React.useState([]);
+  const [teamUserEmails, setTeamUserEmails] = React.useState([]);
 
   const { TblContainer, TblHead, TblPagination, recordAfterPagingAndSorting } =
     useTable(records, headCells, filterFn);
@@ -135,6 +158,7 @@ export default function EditTeam() {
         setTeamData(res);
         setCreatedOn(moment(res && res.updatedAt).format('Do MMM YYYY'));
         setCheckedUserEmails(res && res.userEmailIds);
+        setTeamUserEmails(res && res.userEmailIds);
         callGetUserByEmailId(res && res.createdBy);
         callGetAllUsersByEnterpriseId(
           res && res.enterpriseId,
@@ -158,6 +182,8 @@ export default function EditTeam() {
         setCreatedBy(res && res.firstName + ' ' + res.lastName);
         setCreatedByAvatar(res && res.selectedAvatar);
         setCreatedByEmailId(res && res.emailId);
+        handleEnterpriseLevelActionsCountData();
+        handleGetRetroChartData();
       },
       err => {
         console.log('err', err);
@@ -201,6 +227,53 @@ export default function EditTeam() {
         });
       }
     );
+  };
+
+  // Get All Actions By Teams
+  const handleEnterpriseLevelActionsCountData = async () => {
+    if (global.azureUser != undefined) {
+      const chartInput: chartInputType = {
+        userId: global.azureUser?.emailId,
+        roleName: global.azureUser?.roleName,
+        enterpriseId: global.azureUser?.enterpriseId,
+        teamId: id,
+        fromDate: formatDateForAPI(fromDate),
+        toDate: formatDateForAPI(toDate, true),
+      };
+      await getActionsChartData(chartInput).then(
+        res => {
+          setActionsCount(res.actionsData?.length);
+        },
+        err => {
+          console.log('err', err);
+        }
+      );
+    }
+  };
+
+  // Get All Retros By Team
+  const handleGetRetroChartData = async () => {
+    if (global.azureUser != undefined) {
+      const chartInput: chartInputType = {
+        userId: global.azureUser?.emailId,
+        roleName: global.azureUser?.roleName,
+        enterpriseId: global.azureUser?.enterpriseId,
+        teamId: id,
+        fromDate: formatDateForAPI(fromDate),
+        toDate: formatDateForAPI(toDate, true),
+      };
+
+      await getSessionsData(chartInput).then(
+        res => {
+          if (res.result != undefined && res.result?.length != undefined) {
+            setSessionCount(res.result?.length);
+          } else {
+            setSessionCount(0);
+          }
+        },
+        err => {}
+      );
+    }
   };
 
   // Handle Search
@@ -371,7 +444,7 @@ export default function EditTeam() {
           type: ActionType.SET_LOADING,
           payload: { loadingFlag: false },
         });
-        //updateUsersTeam(res, userEmailIdsFromRecord);
+        checkTheUpdatedArray(id, userEmailIdsFromRecord, teamUserEmails);
       },
       err => {
         console.log('err', err);
@@ -383,7 +456,37 @@ export default function EditTeam() {
     );
   };
 
-  // Update users teams array after creating the team
+  const checkTheUpdatedArray = (
+    teamId: any,
+    newTeamArray: any,
+    previousTeamArray: any
+  ) => {
+    let removedArray: any = [];
+    let addedArray: any = [];
+    previousTeamArray.forEach((preObj: any) => {
+      const found = newTeamArray.find((newObj: any) => newObj == preObj);
+      if (!found) {
+        removedArray.push(preObj);
+      }
+    });
+
+    newTeamArray.forEach((newObj: any) => {
+      const found = previousTeamArray.find((prevObj: any) => prevObj == newObj);
+      if (!found) {
+        addedArray.push(newObj);
+      }
+    });
+
+    if (removedArray.length > 0) {
+      updatePullUsersTeam(teamId, removedArray);
+    }
+
+    if (addedArray.length > 0) {
+      updateUsersTeam(teamId, addedArray);
+    }
+  };
+
+  //-------------------------------- Update users teams array by pushing after creating the team --------------------------------
   const updateUsersTeam = async (teamId: any, userEmailIdsFromRecord: any) => {
     dispatch({
       type: ActionType.SET_LOADING,
@@ -402,6 +505,7 @@ export default function EditTeam() {
           payload: { loadingFlag: false },
         });
         setIsEditModeOn(false);
+        callGetTeamById();
       },
       err => {
         console.log('err', err);
@@ -410,6 +514,43 @@ export default function EditTeam() {
           payload: { loadingFlag: false },
         });
         setIsEditModeOn(false);
+        callGetTeamById();
+      }
+    );
+  };
+
+  //-------------------------------- Update users teams array by pulling after creating the team --------------------------------
+  const updatePullUsersTeam = async (
+    teamId: any,
+    userEmailIdsFromRecord: any
+  ) => {
+    dispatch({
+      type: ActionType.SET_LOADING,
+      payload: { loadingFlag: true },
+    });
+
+    const requestBody = {
+      teamId: teamId,
+      userEmailIdsFromRecord: userEmailIdsFromRecord,
+    };
+
+    await updatePullUsersTeamArray(requestBody).then(
+      res => {
+        dispatch({
+          type: ActionType.SET_LOADING,
+          payload: { loadingFlag: false },
+        });
+        setIsEditModeOn(false);
+        callGetTeamById();
+      },
+      err => {
+        console.log('err', err);
+        dispatch({
+          type: ActionType.SET_LOADING,
+          payload: { loadingFlag: false },
+        });
+        setIsEditModeOn(false);
+        callGetTeamById();
       }
     );
   };
@@ -419,6 +560,22 @@ export default function EditTeam() {
       navigate('/basic/analytics/');
     } else if (tempLocalUserData && tempLocalUserData.roleName === ENTERPRISE) {
       navigate('/enterprise/analytics/');
+    }
+  };
+
+  const goSessionsPage = () => {
+    if (tempLocalUserData && tempLocalUserData.roleName === BASIC) {
+      navigate('/basic/sessions/');
+    } else if (tempLocalUserData && tempLocalUserData.roleName === ENTERPRISE) {
+      navigate('/enterprise/sessions/');
+    }
+  };
+
+  const goToActionsPage = () => {
+    if (tempLocalUserData && tempLocalUserData.roleName === BASIC) {
+      navigate('/basic/actions/');
+    } else if (tempLocalUserData && tempLocalUserData.roleName === ENTERPRISE) {
+      navigate('/enterprise/actions/');
     }
   };
 
@@ -541,7 +698,7 @@ export default function EditTeam() {
                             ...styles.accessCodeTextField,
                           }}
                           value={teamName}
-                          onChange={e => {
+                          onChange={(e: any) => {
                             setTeamName(e.currentTarget.value);
                             setTeamNameCodeError('');
                           }}
@@ -623,7 +780,7 @@ export default function EditTeam() {
                             background: '#ffffff',
                           }}
                           value={teamDescription}
-                          onChange={e => {
+                          onChange={(e: any) => {
                             setTeamDescription(e.currentTarget.value);
                             setTeamDescriptionError('');
                           }}
@@ -815,7 +972,7 @@ export default function EditTeam() {
                             ...styles.accessCodeTextField,
                           }}
                           value={teamDepartment}
-                          onChange={e => {
+                          onChange={(e: any) => {
                             setTeamDepartment(e.currentTarget.value);
                             setTeamDepartmentCodeError('');
                           }}
@@ -843,21 +1000,69 @@ export default function EditTeam() {
                     marginTop: '48px',
                   }}
                 >
-                  <ButtonLabelTypography label="No Of Sessions: -" />
-                  <ButtonLabelTypography label="No Of Actions: -" />
+                  <Box
+                    sx={{
+                      width: '100%',
+                      display: 'flex',
+                      alignItems: 'flex-start',
+                      flexDirection: 'row',
+                    }}
+                  >
+                    <ButtonLabelTypography label={'No Of Sessions: '} />
+                    &nbsp;&nbsp;
+                    <BodyRegularTypography
+                      label={sessionCount.toString()}
+                      style={{
+                        color: '#00E',
+                        textDecorationLine: 'underline',
+                        cursor: 'pointer',
+                      }}
+                      onClick={goSessionsPage}
+                    />
+                  </Box>
+                  <Box
+                    sx={{
+                      width: '100%',
+                      display: 'flex',
+                      alignItems: 'flex-start',
+                      flexDirection: 'row',
+                    }}
+                  >
+                    <ButtonLabelTypography label={'No Of Actions: '} />
+                    &nbsp;&nbsp;
+                    <BodyRegularTypography
+                      label={actionsCount.toString()}
+                      style={{
+                        color: '#00E',
+                        textDecorationLine: 'underline',
+                        cursor: 'pointer',
+                      }}
+                      onClick={goToActionsPage}
+                    />
+                  </Box>
                 </Box>
                 {/* Analytics */}
                 <Box
                   sx={{
                     width: '100%',
                     display: 'flex',
-                    justifyContent: 'space-between',
+                    justifyContent: 'flex-start',
                     alignItems: 'flex-start',
                     flexDirection: 'row',
                     marginTop: '48px',
                   }}
                 >
-                  <ButtonLabelTypography label="Analytics: -" />
+                  <ButtonLabelTypography label="Analytics: " />
+                  &nbsp;&nbsp;
+                  <BodyRegularTypography
+                    label=" View All"
+                    style={{
+                      color: '#00E',
+                      textDecorationLine: 'underline',
+                      cursor: 'pointer',
+                    }}
+                    onClick={goToAnalyticsPage}
+                  />
                 </Box>
               </Box>
             </>
@@ -1180,8 +1385,46 @@ export default function EditTeam() {
                     marginTop: '48px',
                   }}
                 >
-                  <ButtonLabelTypography label="No Of Sessions: -" />
-                  <ButtonLabelTypography label="No Of Actions: -" />
+                  <Box
+                    sx={{
+                      width: '100%',
+                      display: 'flex',
+                      alignItems: 'flex-start',
+                      flexDirection: 'row',
+                    }}
+                  >
+                    <ButtonLabelTypography label={'No Of Sessions: '} />
+                    &nbsp;&nbsp;
+                    <BodyRegularTypography
+                      label={sessionCount.toString()}
+                      style={{
+                        color: '#00E',
+                        textDecorationLine: 'underline',
+                        cursor: 'pointer',
+                      }}
+                      onClick={goSessionsPage}
+                    />
+                  </Box>
+                  <Box
+                    sx={{
+                      width: '100%',
+                      display: 'flex',
+                      alignItems: 'flex-start',
+                      flexDirection: 'row',
+                    }}
+                  >
+                    <ButtonLabelTypography label={'No Of Actions: '} />
+                    &nbsp;&nbsp;
+                    <BodyRegularTypography
+                      label={actionsCount.toString()}
+                      style={{
+                        color: '#00E',
+                        textDecorationLine: 'underline',
+                        cursor: 'pointer',
+                      }}
+                      onClick={goToActionsPage}
+                    />
+                  </Box>
                 </Box>
                 {/* Analytics */}
                 <Box
@@ -1195,7 +1438,7 @@ export default function EditTeam() {
                   }}
                 >
                   <ButtonLabelTypography label="Analytics: " />
-                  <ButtonLabelTypography label=" " />
+                  &nbsp;&nbsp;
                   <BodyRegularTypography
                     label=" View All"
                     style={{
@@ -1355,7 +1598,7 @@ export default function EditTeam() {
             marginTop: '24px',
             ...styles.accessCodeTextField,
           }}
-          onChange={e => {
+          onChange={(e: any) => {
             setSearchedVal(e.target.value);
             handleSearch(e);
           }}
@@ -1373,7 +1616,7 @@ export default function EditTeam() {
                   <TableCell>
                     <Checkbox
                       checked={item.checked}
-                      onChange={e => handleChangeCheckbox(e, item.id)}
+                      onChange={(e: any) => handleChangeCheckbox(e, item.id)}
                       inputProps={{ 'aria-label': 'controlled' }}
                     />
                   </TableCell>

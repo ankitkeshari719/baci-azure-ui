@@ -53,7 +53,7 @@ const styles = {
     height: '220px',
     overflowY: 'auto',
     marginTop: '24px',
-    maxWidth:'527px'
+    maxWidth: '527px',
   },
   goOnBtn: {
     marginTop: '48px',
@@ -312,7 +312,7 @@ export function JoinRetro() {
   return (
     <>
       {isXsUp ? (
-        <Box sx={{ height: 'calc(var(--app-height))', overflowY: 'auto'}}>
+        <Box sx={{ height: 'calc(var(--app-height))', overflowY: 'auto' }}>
           <DeploymentPopUp />
           <LandingLayout></LandingLayout>
           <Box
@@ -322,33 +322,33 @@ export function JoinRetro() {
               justifyContent: 'center',
               flexDirection: 'column',
               marginTop: '24px',
-              paddingLeft:"16px",
-              paddingRight:"16px",
+              paddingLeft: '16px',
+              paddingRight: '16px',
             }}
           >
             {/* Welcome to BACI Text 1 */}
-     
-              {!global.currentRetro?.creatorId ? (
-                <Box sx={{ display: 'flex', flexDirection: 'column' }}>
-                  <H1RegularTypography
-                    label={'Welcome to the BACI'}
-                    style={{
-                      color: '#2C69A1',
-                    }}
-                  />
-                  <H3RegularTypography
-                    label={'Who you are in ‘' + retroName + '’?'}
-                    style={{ color: '#2C69A1' }}
-                  />
-                </Box>
-              ) : (
-                <Box>
-                  <H3RegularTypography
-                    label={'Who you are in ‘' + retroName + '’?'}
-                    style={{ color: '#2C69A1' }}
-                  />
-                </Box>
-              )}
+
+            {!global.currentRetro?.creatorId ? (
+              <Box sx={{ display: 'flex', flexDirection: 'column' }}>
+                <H1RegularTypography
+                  label={'Welcome to the BACI'}
+                  style={{
+                    color: '#2C69A1',
+                  }}
+                />
+                <H3RegularTypography
+                  label={'Who you are in ‘' + retroName + '’?'}
+                  style={{ color: '#2C69A1' }}
+                />
+              </Box>
+            ) : (
+              <Box>
+                <H3RegularTypography
+                  label={'Who you are in ‘' + retroName + '’?'}
+                  style={{ color: '#2C69A1' }}
+                />
+              </Box>
+            )}
             {/* Pick Your Avatar Text 2*/}
             <H5SemiBoldTypography
               label={' Pick your avatar'}
@@ -366,7 +366,6 @@ export function JoinRetro() {
               justifyContent: 'center',
               flexDirection: 'column',
               margin: '16px',
-              
             }}
           >
             {/* Choose Text Field */}
@@ -377,7 +376,7 @@ export function JoinRetro() {
                 variant="standard"
                 sx={{ ...styles.avatarfield }}
                 value={userName}
-                onChange={e => handleUsername(e.currentTarget.value)}
+                onChange={(e: any) => handleUsername(e.currentTarget.value)}
                 inputProps={{
                   maxLength: AVATAR_CHARACTER_LIMIT,
                 }}
@@ -409,16 +408,18 @@ export function JoinRetro() {
                     borderRadius: '50%',
                   }}
                 ></Avatar>
-              ): <LazyLoadImage
-              className="avatar"
-              style={{
-                width: '32px',
-                height: '32px',
-                borderRadius: '50%',
-                border: 'none',
-              }}
-              src={'/svgs/DefaultUser.svg'}
-            ></LazyLoadImage>}
+              ) : (
+                <LazyLoadImage
+                  className="avatar"
+                  style={{
+                    width: '32px',
+                    height: '32px',
+                    borderRadius: '50%',
+                    border: 'none',
+                  }}
+                  src={'/svgs/DefaultUser.svg'}
+                ></LazyLoadImage>
+              )}
               <TextButton
                 id={'select_avatar'}
                 label={'Select Avatar'}
@@ -447,9 +448,13 @@ export function JoinRetro() {
           </Box>
         </Box>
       ) : (
-        <Grid container spacing={0} style={{ overflowY: 'auto',height: 'calc(var(--app-height))' }}>
+        <Grid
+          container
+          spacing={0}
+          style={{ overflowY: 'auto', height: 'calc(var(--app-height))' }}
+        >
           <DeploymentPopUp />
-          <Grid item xs={6} >
+          <Grid item xs={6}>
             <LandingLayout></LandingLayout>
           </Grid>
           <Grid
@@ -459,7 +464,13 @@ export function JoinRetro() {
             justifyContent="start"
             alignItems="center"
           >
-            <Box sx={{ marginLeft: '80px',paddingTop:'10px',paddingBottom:"10px" }}>
+            <Box
+              sx={{
+                marginLeft: '80px',
+                paddingTop: '10px',
+                paddingBottom: '10px',
+              }}
+            >
               {!global.currentRetro?.creatorId ? (
                 <Box sx={{ display: 'flex', flexDirection: 'column' }}>
                   <H1RegularTypography
@@ -482,14 +493,21 @@ export function JoinRetro() {
                 </Box>
               )}
               {/* Choose your name for this retro Form Field */}
-              <FormControl sx={{ maxWidth: '322px',width:"100%",display:'flex', marginTop: '36px' }}>
+              <FormControl
+                sx={{
+                  maxWidth: '322px',
+                  width: '100%',
+                  display: 'flex',
+                  marginTop: '36px',
+                }}
+              >
                 <TextField
                   id="standard-helperText"
                   label="Choose your name for this retro"
                   variant="standard"
                   sx={{ ...styles.avatarfield }}
                   value={userName}
-                  onChange={e => handleUsername(e.currentTarget.value)}
+                  onChange={(e: any) => handleUsername(e.currentTarget.value)}
                   inputProps={{
                     maxLength: AVATAR_CHARACTER_LIMIT,
                   }}
@@ -562,7 +580,7 @@ export function JoinRetro() {
       {/* Select Avatar Dialog  for Mobile View*/}
       <Dialog
         open={openAvatarDialog}
-        sx={{ height: height , overflowY: 'auto' }}
+        sx={{ height: height, overflowY: 'auto' }}
       >
         <DialogTitle>
           <CaptionRegularTypography

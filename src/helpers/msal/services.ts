@@ -1,7 +1,4 @@
 import { Action, Retro, User } from '../types';
-import { useSocket } from '../hooks/useSocket';
-import { DefaultEventsMap } from '@socket.io/component-emitter';
-import { Socket } from 'socket.io-client';
 import { Dayjs } from 'dayjs';
 
 import { API_URL } from '../../constants/FeatureFlags';
@@ -342,7 +339,7 @@ export interface chartInputType {
   userId: string;
   roleName: string;
   enterpriseId: string;
-  teamId: string;
+  teamId: any;
   fromDate: string;
   toDate: string;
 }
@@ -1315,6 +1312,9 @@ export const createUser = async (requestBody: any): Promise<any> => {
       teams: requestBody.teams,
       isActive: requestBody.isActive,
       enterpriseRequestId: requestBody.enterpriseRequestId,
+      isSessionNotificationChecked: requestBody.isActive,
+      isActionNotificationChecked: requestBody.isActive,
+      isTeamNotificationChecked: requestBody.isActive,
     }),
   };
 
@@ -1352,6 +1352,9 @@ export const updateUser = async (
       teams: requestBody.teams,
       isActive: requestBody.isActive,
       enterpriseRequestId: requestBody.enterpriseRequestId,
+      isSessionNotificationChecked: requestBody.isSessionNotificationChecked,
+      isActionNotificationChecked: requestBody.isActionNotificationChecked,
+      isTeamNotificationChecked: requestBody.isTeamNotificationChecked,
     }),
   };
 
@@ -1481,6 +1484,26 @@ export const updateUsersTeamArray = async (requestBody: any): Promise<any> => {
     });
   return data;
 };
+
+export const updatePullUsersTeamArray = async (requestBody: any): Promise<any> => {
+  let data: any;
+  const requestOptions = {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({
+      teamId: requestBody.teamId,
+      userEmailIdsFromRecord: requestBody.userEmailIdsFromRecord,
+    }),
+  };
+
+  await fetch(API_URL + `/users/updatePullUsersTeamArray`, requestOptions)
+    .then(response => response.json())
+    .then(response => {
+      data = response.data;
+    });
+  return data;
+};
+
 
 // ---------------------------------------- Enterprise Request API's -----------------------------------------------
 // Create Enterprise

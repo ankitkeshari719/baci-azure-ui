@@ -179,13 +179,13 @@ export default function ParticipantsPanel({
                                   div: { position: 'initial' },
                                 }}
                                 value={userName}
-                                onKeyDown={e => {
+                                onKeyDown={(e: any) => {
                                   if (e.keyCode === 13) {
                                     submitUserName(userName);
                                     (e.target as HTMLInputElement).blur();
                                   }
                                 }}
-                                onChange={e =>
+                                onChange={(e: any) =>
                                   setUserName(e.currentTarget.value)
                                 }
                                 onBlur={() => submitUserName(userName)}

@@ -419,7 +419,7 @@ export default function EnterpriseRegistration() {
                     ...styles.accessCodeTextField,
                   }}
                   value={organisationName}
-                  onChange={e => {
+                  onChange={(e: any) => {
                     setOrganisationName(e.currentTarget.value);
                     setOrganisationNameCodeError('');
                   }}
@@ -547,7 +547,7 @@ export default function EnterpriseRegistration() {
                     ...styles.accessCodeTextField,
                   }}
                   value={organisationCountry}
-                  onChange={e => {
+                  onChange={(e: any) => {
                     setOrganisationCountry(e.currentTarget.value);
                     setCountryCodeError('');
                   }}

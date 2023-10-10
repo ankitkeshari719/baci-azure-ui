@@ -3,19 +3,22 @@ import {
   Box,
   FormControl,
   Grid,
+  TextField,
+  RadioGroup,
   FormHelperText,
 } from '@mui/material';
+import Radio from '@mui/material/Radio';
+import FormControlLabel from '@mui/material/FormControlLabel';
 import '../../global.scss';
 import './styles.scss';
-import { LazyLoadImage } from 'react-lazy-load-image-component';
 import { ContainedButton, OutlinedButton } from '../../components';
 import {
-  BodyRegularTypography,
   H5SemiBoldTypography,
   H6RegularTypography,
 } from '../../components/CustomizedTypography';
-import TeamSelector from '../../components/Elements/TeamSelector';
-import UserSelector from '../../components/Elements/UserSelector';
+import { RETRO_IMMEDIATELY, RETRO_SCHEDULE } from './const';
+
+import * as React from 'react';
 
 const styles = {
   avatarfield: {
@@ -61,48 +64,50 @@ const styles = {
       marginTop: '24px !important',
     },
   },
+  messageTextField: {
+    '& .MuiFilledInput-root': {
+      color: 'rgba(0, 0, 0, 0.6)',
+      fontSize: '14px',
+      borderRadius: '0px !important',
+      height: '300px',
+    },
+  },
 };
 
 type Props = {
   activePanel: string;
-  selectedTeam: string;
-  selectedFacilitator: string;
-  selectedTeamData: any;
-  selectedFacilitatorData: any;
-  teamSelectionError: string;
-  facilitatorSelectionError: string;
-  handleTeamChange: (selectedTeam: any) => void;
-  handleFacilitatorChange: (selectedFacilitator: any) => void;
+  scheduleRetroType: string;
+  scheduleDescription: string;
+  scheduleDescriptionError: string;
+  scheduleRetroTime: any;
+  handleRetroTypeChange: (scheduleRetroType: any) => void;
+  handleRetroDateChange: (scheduleRetroType: any) => void;
+  handleScheduleDescriptionChange: (scheduleDescription: string) => void;
   onClickNext: (currentPanel: string, nextPanel: string) => void;
   onClickBack: (previousPanel: string) => void;
 };
 
-export function TeamsDetailsTab({
+export function ScheduleRetroTab({
   activePanel,
-  selectedTeam,
-  selectedFacilitator,
-  selectedTeamData,
-  selectedFacilitatorData,
-  teamSelectionError,
-  facilitatorSelectionError,
-  handleTeamChange,
-  handleFacilitatorChange,
+  scheduleDescription,
+  scheduleDescriptionError,
+  handleRetroDateChange,
+  scheduleRetroType,
+  scheduleRetroTime,
+  handleScheduleDescriptionChange,
+  handleRetroTypeChange,
   onClickNext,
   onClickBack,
 }: Props) {
-  const localUserData = localStorage.getItem('userData');
-  const tempLocalUserData = localUserData && JSON.parse(localUserData);
   return (
     <>
-      {/* Teams Details Panel */}
+      {/* Schedule Details Panel */}
       <Box
         sx={{
           borderBottom: 1,
           borderColor: '#CCCCCC',
           py:
-            activePanel != 'teamDetailPanel' &&
-            selectedTeamData != '' &&
-            selectedFacilitatorData != ''
+            activePanel != 'scheduleDetailPanel' && scheduleDescription != ''
               ? 2.5
               : 4,
         }}
@@ -115,9 +120,7 @@ export function TeamsDetailsTab({
             alignItems: 'center',
           }}
         >
-          {activePanel != 'teamDetailPanel' &&
-          selectedTeamData != null &&
-          selectedFacilitatorData != null ? (
+          {activePanel != 'scheduleDetailPanel' && scheduleDescription != '' ? (
             <>
               <Box
                 sx={{
@@ -127,55 +130,11 @@ export function TeamsDetailsTab({
                 }}
               >
                 <H6RegularTypography
-                  label="Team: "
+                  label="Scheduled: "
                   style={{ color: '#4E4E4E !important' }}
                 />
                 &nbsp;&nbsp;
-                <H5SemiBoldTypography label={selectedTeamData.teamName} />
-              </Box>
-              <Box
-                className="tabSummary"
-                sx={{
-                  display: 'flex',
-                  alignItems: 'center',
-                  color: '#4E4E4E !important',
-                  ml: 5,
-                }}
-              >
-                <BodyRegularTypography
-                  label={
-                    'Facilitator: ' +
-                    selectedFacilitatorData.firstName +
-                    ' ' +
-                    selectedFacilitatorData.lastName
-                  }
-                />
-                {selectedFacilitatorData.selectedAvatar ? (
-                  <LazyLoadImage
-                    className="avatar"
-                    style={{
-                      width: '60px',
-                      height: '60px',
-                      borderRadius: '50%',
-                      border: '5px solid #f9fbf8',
-                    }}
-                    src={
-                      '/avatars/animals/' +
-                      selectedFacilitatorData.selectedAvatar +
-                      '.svg'
-                    }
-                  ></LazyLoadImage>
-                ) : (
-                  <LazyLoadImage
-                    style={{
-                      width: '60px',
-                      height: '60px',
-                      borderRadius: '50%',
-                      border: '5px solid #f9fbf8',
-                    }}
-                    src="../svgs/Empty-Animals.svg"
-                  ></LazyLoadImage>
-                )}
+                <H5SemiBoldTypography label={scheduleRetroTime} />
               </Box>
             </>
           ) : (
@@ -183,24 +142,21 @@ export function TeamsDetailsTab({
               className="tabSummary"
               sx={{
                 color:
-                  activePanel === 'teamDetailPanel'
+                  activePanel === 'scheduleDetailPanel'
                     ? '#2c69a1 !important'
                     : '#4E4E4E !important',
               }}
             >
-              <H6RegularTypography
-                label="Team"
-                style={{ color: '#4E4E4E !important' }}
-              />
+              <H6RegularTypography label="Scheduled " />
             </Typography>
           )}
         </Box>
         {/* When the tab is open */}
-        {activePanel === 'teamDetailPanel' && (
+        {activePanel === 'scheduleDetailPanel' && (
           <Box>
             <FormControl fullWidth>
               <Grid container spacing={2}>
-                {/* Team Selector */}
+                {/* Select Retro Type */}
                 <Grid item xs={12}>
                   <Box
                     sx={{
@@ -209,36 +165,27 @@ export function TeamsDetailsTab({
                       alignItems: 'center',
                     }}
                   >
-                    <Typography className="chooseAvatarText">
-                      Select Team:
-                    </Typography>
-                    <Box
-                      sx={{
-                        display: 'flex',
-                        flexDirection: 'column',
-                      }}
+                    <RadioGroup
+                      row
+                      aria-labelledby="demo-row-radio-buttons-group-label"
+                      name="row-radio-buttons-group"
+                      value={scheduleRetroType}
+                      onChange={handleRetroTypeChange}
                     >
-                      <TeamSelector
-                        enterpriseId={
-                          tempLocalUserData && tempLocalUserData.enterpriseId
-                        }
-                        selectedTeam={selectedTeam}
-                        handleChange={handleTeamChange}
-                        showAllTeamOption={false}
+                      <FormControlLabel
+                        value={RETRO_IMMEDIATELY}
+                        control={<Radio />}
+                        label="Start Immediately"
                       />
-                      <Box ml={2}>
-                        {teamSelectionError !== '' && (
-                          <FormHelperText
-                            sx={{ color: '#d32f2f', marginLeft: '10px' }}
-                          >
-                            {teamSelectionError}
-                          </FormHelperText>
-                        )}
-                      </Box>
-                    </Box>
+                      <FormControlLabel
+                        value={RETRO_SCHEDULE}
+                        control={<Radio />}
+                        label="Schedule"
+                      />
+                    </RadioGroup>
                   </Box>
                 </Grid>
-                {/* Facilitator Selector */}
+                {/* Select Date and Time */}
                 <Grid item xs={12}>
                   <Box
                     sx={{
@@ -248,7 +195,23 @@ export function TeamsDetailsTab({
                     }}
                   >
                     <Typography className="chooseAvatarText">
-                      Select Facilitator:
+                      Select Date and Time:
+                    </Typography>
+                    &nbsp;&nbsp;
+                    <H5SemiBoldTypography label={scheduleRetroTime} />
+                  </Box>
+                </Grid>
+                {/* Add Description*/}
+                <Grid item xs={12}>
+                  <Box
+                    sx={{
+                      display: 'flex',
+                      flexDirection: 'row',
+                      alignItems: 'center',
+                    }}
+                  >
+                    <Typography className="chooseAvatarText">
+                      Add Description:
                     </Typography>
                     <Box
                       sx={{
@@ -256,21 +219,32 @@ export function TeamsDetailsTab({
                         flexDirection: 'column',
                       }}
                     >
-                      <UserSelector
-                        enterpriseId={
-                          tempLocalUserData && tempLocalUserData.enterpriseId
-                        }
-                        selectedUser={selectedFacilitator}
-                        handleChange={handleFacilitatorChange}
-                        padding="4px"
-                        width={240}
+                      <TextField
+                        multiline
+                        rows={2}
+                        maxRows={8}
+                        variant="outlined"
+                        error={!!scheduleDescriptionError}
+                        sx={{
+                          width: '400px',
+                          ...styles.messageTextField,
+                          background: '#ffffff',
+                          marginLeft: '24px',
+                          border: '1px  solid #F0F0F0',
+                        }}
+                        value={scheduleDescription}
+                        onChange={(e: any) => {
+                          handleScheduleDescriptionChange(
+                            e.currentTarget.value
+                          );
+                        }}
                       />
                       <Box ml={2}>
-                        {facilitatorSelectionError !== '' && (
+                        {scheduleDescriptionError !== '' && (
                           <FormHelperText
                             sx={{ color: '#d32f2f', marginLeft: '10px' }}
                           >
-                            {facilitatorSelectionError}
+                            {scheduleDescriptionError}
                           </FormHelperText>
                         )}
                       </Box>
@@ -288,9 +262,9 @@ export function TeamsDetailsTab({
                 }}
               >
                 <ContainedButton
-                  name="Next"
+                  name="Finish"
                   onClick={() =>
-                    onClickNext('teamDetailPanel', 'scheduleDetailPanel')
+                    onClickNext('scheduleDetailPanel', 'finalButtonTab')
                   }
                   style={{
                     mt: 5,
@@ -302,7 +276,7 @@ export function TeamsDetailsTab({
                 <OutlinedButton
                   label="Back"
                   size={'medium'}
-                  onClick={() => onClickBack('pulseCheckPanel')}
+                  onClick={() => onClickBack('teamDetailPanel')}
                   style={{
                     minWidth: '75px !important',
                     height: '36px !important',

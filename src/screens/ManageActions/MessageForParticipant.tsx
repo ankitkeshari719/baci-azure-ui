@@ -40,7 +40,7 @@ const MessageForParticipant = ({
   clearMessageForParticipant,
   userType,
   ended,
-  isXsUp
+  isXsUp,
 }: {
   expandMessageForParticipant: boolean;
   setExpandMessageForParticipant: (value: boolean) => void;
@@ -53,7 +53,6 @@ const MessageForParticipant = ({
   ended: boolean;
   isXsUp: boolean;
 }) => {
-
   const [enablePostButton, setEnablePostButton] = useState<boolean>(false);
   const [enableClearButton, setEnableClearButton] = useState<boolean>(false);
   const [valueOfWidth, setValueOfWidth] = useState<string>('500px');
@@ -210,7 +209,7 @@ const MessageForParticipant = ({
                     padding: '12px',
                     borderColor: 'red',
                   }}
-                  onChange={e =>
+                  onChange={(e: any) =>
                     setMessageForParticipant(e.currentTarget.value)
                   }
                   disabled={ended}

@@ -107,7 +107,6 @@ export function UploadImageScan() {
       alert('Please select an image.');
       return;
     }
-
     const formData = new FormData();
     formData.append('file', selectedFile);
     setIsLoading(true);
@@ -157,7 +156,7 @@ export function UploadImageScan() {
             const data: string[] = transformData(
               responseData.analyzeResult.readResults[0].lines
             );
-            console.log('Data:', data);
+            // Convert the array to a JSON string
             const dataJson = JSON.stringify(data);
             localStorage.setItem('myData', dataJson);
             setRecognizedText(data);

@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { Box } from '@mui/material';
+import { Box, SelectChangeEvent } from '@mui/material';
 import '../../global.scss';
 import './styles.scss';
 import { useNavigate, useParams } from 'react-router-dom';
@@ -11,11 +11,22 @@ import { BaciDetailsTab } from './BaciDetailsTab';
 import { RetroTemplateTab } from './RetroTemplateTab';
 import { PulseCheckTab } from './PulseCheckTab';
 import { UserDetailsTab } from './UserDetailsTab';
-import { pulseCheckInterface, pulseChecksData, templatesData } from './const';
+import {
+  RETRO_IMMEDIATELY,
+  pulseCheckInterface,
+  pulseChecksData,
+  templatesData,
+} from './const';
 import { UserTypeArray } from '../../constants';
-import { getRetro } from '../../helpers/msal/services';
+import {
+  getRetro,
+  getTeamById,
+  getUserByEmailId,
+} from '../../helpers/msal/services';
 import { StartRetroWithTemplate } from './StartRetroWithTemplate';
 import { TeamsDetailsTab } from './TeamsDetailsTab';
+import { ScheduleRetroTab } from './ScheduleRetroTab';
+import moment from 'moment';
 
 type Props = {
   handleStartRetro: () => void;
@@ -71,7 +82,33 @@ export function CreateRetroWithTemplatePage({
   const [selectedAvatar, setAvatar] = React.useState('');
   const [avatarSelectionError, setAvatarSelectionError] = React.useState('');
 
+  {
+    /* Team Details Panel & Facilitator Details PanelConstant */
+  }
+  const [selectedTeam, setSelectedTeam] = React.useState('');
+  const [selectedTeamData, setSelectedTeamData] = React.useState(null);
+  const [teamSelectionError, setTeamSelectionError] = React.useState('');
+  const [selectedFacilitator, setSelectedFacilitator] = React.useState('');
+  const [selectedFacilitatorData, setSelectedFacilitatorData] =
+    React.useState(null);
+  const [facilitatorSelectionError, setFacilitatorSelectionError] =
+    React.useState('');
+
+  {
+    /* Schedule Details Panel Constant */
+  }
+  const [scheduleRetroType, setScheduleRetroType] =
+    React.useState(RETRO_IMMEDIATELY);
+  const [scheduleRetroTime, setScheduleRetroTime] = React.useState(
+    moment(new Date()).format('Do MMM YYYY h:mm:ss a')
+  );
+  const [scheduleDescription, setScheduleDescription] = React.useState('');
+  const [scheduleDescriptionError, setScheduleDescriptionError] =
+    React.useState('');
+
   React.useEffect(() => {
+    setSelectedFacilitatorData(null);
+    setSelectedTeamData(null);
     dispatch({
       type: ActionType.CLOSE_CURRENT_RETRO,
     });
@@ -93,6 +130,28 @@ export function CreateRetroWithTemplatePage({
     }
     setSelectedPulseCheck(initialPulseCheck && initialPulseCheck[0]);
   }, []);
+
+  const callGetTeamById = async (selectedTeamId: any) => {
+    await getTeamById(selectedTeamId).then(
+      res => {
+        setSelectedTeamData(res);
+      },
+      err => {
+        console.log('err', err);
+      }
+    );
+  };
+
+  const callGetUserByEmailId = async (selectedFacilitatorId: any) => {
+    await getUserByEmailId(selectedFacilitatorId).then(
+      res => {
+        setSelectedFacilitatorData(res);
+      },
+      err => {
+        console.log('err', err);
+      }
+    );
+  };
 
   useAzureAuth();
 
@@ -204,6 +263,39 @@ export function CreateRetroWithTemplatePage({
     setAvatarSelectionError('');
   };
 
+  // Function to handle the team selection
+  const handleTeamChange = (event: SelectChangeEvent) => {
+    setSelectedTeam(event.target.value as string);
+    callGetTeamById(event.target.value);
+    setTeamSelectionError('');
+  };
+
+  // Function to handle the facilitator selection
+  const handleFacilitatorChange = (event: SelectChangeEvent) => {
+    setSelectedFacilitator(event.target.value as string);
+    callGetUserByEmailId(event.target.value);
+    setFacilitatorSelectionError('');
+  };
+
+  // Function to handle the schedule retro type
+  const handleRetroTypeChange = (
+    event: React.ChangeEvent<HTMLInputElement>
+  ) => {
+    setScheduleRetroType((event.target as HTMLInputElement).value);
+  };
+
+  const handleRetroDateChange = (
+    event: React.ChangeEvent<HTMLInputElement>
+  ) => {
+    setScheduleRetroTime((event.target as HTMLInputElement).value);
+  };
+
+  // Function to handle the schedule description
+  const handleScheduleDescriptionChange = (value: any) => {
+    setScheduleDescription(value);
+    setScheduleDescriptionError('');
+  };
+
   // Function to handle next button on click
   const onClickBack = (previousPanel: string) => {
     setActivePanel(previousPanel);
@@ -237,17 +329,56 @@ export function CreateRetroWithTemplatePage({
       return;
     }
 
-    setActivePanel(nextPanel);
-    if (
-      currentPanel === 'userDetailPanel' &&
-      retroName != '' &&
-      retroTimeFrame != '' &&
-      selectedTemplate != null &&
-      selectedPulseCheck != null &&
-      userName != '' &&
-      selectedAvatar != ''
-    ) {
-      create();
+    if (!isLoginUser) {
+      // If user is not basic and enterprise
+      setActivePanel(nextPanel);
+      if (
+        currentPanel === 'userDetailPanel' &&
+        retroName != '' &&
+        retroTimeFrame != '' &&
+        selectedTemplate != null &&
+        selectedPulseCheck != null &&
+        userName != '' &&
+        selectedAvatar != ''
+      ) {
+        create();
+      }
+    } else {
+      // If user is basic and enterprise
+      if (
+        currentPanel === 'teamDetailPanel' &&
+        (selectedTeam === '' || selectedFacilitator === '')
+      ) {
+        if (selectedTeam === '') {
+          setTeamSelectionError('Please select team');
+        }
+        if (selectedFacilitator === '') {
+          setFacilitatorSelectionError('Please select facilitator');
+        }
+        return;
+      }
+
+      if (
+        currentPanel === 'scheduleDetailPanel' &&
+        scheduleDescription === ''
+      ) {
+        if (scheduleDescription === '') {
+          setScheduleDescriptionError('Please add description');
+        }
+        return;
+      }
+      setActivePanel(nextPanel);
+      if (
+        currentPanel === 'finalButtonTab' &&
+        retroName != '' &&
+        retroTimeFrame != '' &&
+        selectedTemplate != null &&
+        selectedPulseCheck != null &&
+        userName != '' &&
+        selectedAvatar != ''
+      ) {
+        // Call the Retro creation
+      }
     }
   };
 
@@ -404,12 +535,26 @@ export function CreateRetroWithTemplatePage({
               activePanel={activePanel}
               onClickBack={onClickBack}
               onClickNext={onClickNext}
-              handleUsername={handleUsername}
-              userName={userName}
-              userNameError={userNameError}
-              selectedAvatar={selectedAvatar}
-              avatarSelectionError={avatarSelectionError}
-              onClickAvatar={onClickAvatar}
+              selectedTeam={selectedTeam}
+              handleTeamChange={handleTeamChange}
+              selectedFacilitator={selectedFacilitator}
+              handleFacilitatorChange={handleFacilitatorChange}
+              selectedTeamData={selectedTeamData}
+              selectedFacilitatorData={selectedFacilitatorData}
+              teamSelectionError={teamSelectionError}
+              facilitatorSelectionError={facilitatorSelectionError}
+            />
+            <ScheduleRetroTab
+              activePanel={activePanel}
+              onClickBack={onClickBack}
+              onClickNext={onClickNext}
+              scheduleRetroType={scheduleRetroType}
+              scheduleRetroTime={scheduleRetroTime}
+              scheduleDescription={scheduleDescription}
+              scheduleDescriptionError={scheduleDescriptionError}
+              handleRetroTypeChange={handleRetroTypeChange}
+              handleRetroDateChange={handleRetroDateChange}
+              handleScheduleDescriptionChange={handleScheduleDescriptionChange}
             />
           </Box>
         </>

@@ -1,5 +1,13 @@
-
-import { FormControlLabel, FormGroup, Grid, Switch, TextField, ThemeProvider, Tooltip, Typography } from '@mui/material';
+import {
+  FormControlLabel,
+  FormGroup,
+  Grid,
+  Switch,
+  TextField,
+  ThemeProvider,
+  Tooltip,
+  Typography,
+} from '@mui/material';
 import React, { useEffect } from 'react';
 import { ActionType } from '../../contexts/GlobalContext';
 import theme from '../../helpers/theme/theme';
@@ -26,7 +34,7 @@ const ColumnHeader = ({
   deleteUnconfirmedGroups,
   retryGroupSuggestion,
   keywordExtraction,
-  hideKeywords
+  hideKeywords,
 }: {
   column: Column;
   columnId: string;
@@ -52,41 +60,37 @@ const ColumnHeader = ({
   const [showEdit, setShowEdit] = React.useState(false);
   const [enableSave, setEnableSave] = React.useState(false);
   const [groupSuggestion, setGroupSuggestion] = React.useState(false);
-  const [disableGroupSuggestion, setDisableGroupSuggestion] = React.useState(true);
-  const [disableKeywordSuggestion, setDisabledKeywordSuggestion] = React.useState(true);
+  const [disableGroupSuggestion, setDisableGroupSuggestion] =
+    React.useState(true);
+  const [disableKeywordSuggestion, setDisabledKeywordSuggestion] =
+    React.useState(true);
   useEffect(() => {
-    setGroupSuggestion(false)
+    setGroupSuggestion(false);
     setDisableGroupSuggestion(true);
-    setDisabledKeywordSuggestion(true)
+    setDisabledKeywordSuggestion(true);
     var tempKeywordGroupSuggestion = true;
     var totalCards = 0;
 
-
     column.groups.forEach(element => {
-      totalCards = totalCards + element.cards.length
+      totalCards = totalCards + element.cards.length;
       if (element.suggested) {
-        setGroupSuggestion(true)
+        setGroupSuggestion(true);
       }
 
       if (element.name == UNGROUPED) {
         if (element.cards.length > 2) {
-          setDisableGroupSuggestion(false)
+          setDisableGroupSuggestion(false);
           tempKeywordGroupSuggestion = false;
-
-        }
-        else {
-          setDisableGroupSuggestion(true)
+        } else {
+          setDisableGroupSuggestion(true);
         }
       }
     });
 
-    if(totalCards>1){
-      setDisabledKeywordSuggestion(false)
-
+    if (totalCards > 1) {
+      setDisabledKeywordSuggestion(false);
     }
-
-
-  }, [column])
+  }, [column]);
   return (
     <Grid
       container
@@ -96,9 +100,13 @@ const ColumnHeader = ({
       xs={12}
       md={12}
       lg={12}
-
     >
-      <Grid item lg={global.expandColumn === -1 ? 8 : 6} md={global.expandColumn === -1 ? 6 : 4} xs={6}>
+      <Grid
+        item
+        lg={global.expandColumn === -1 ? 8 : 6}
+        md={global.expandColumn === -1 ? 6 : 4}
+        xs={6}
+      >
         <Tooltip title={columnName}>
           <div>
             {!noHeader && (
@@ -137,13 +145,15 @@ const ColumnHeader = ({
                       multiline
                       fullWidth
                       value={columnName}
-                      onKeyDown={e => {
+                      onKeyDown={(e: any) => {
                         if (e.keyCode === 13 && value.length != 0) {
                           submitColumnName(columnName);
                           (e.target as HTMLInputElement).blur();
                         }
                       }}
-                      onChange={e => setColumnName(e.currentTarget.value)}
+                      onChange={(e: any) =>
+                        setColumnName(e.currentTarget.value)
+                      }
                       onBlur={() => submitColumnName(columnName)}
                       onSubmit={() => submitColumnName(columnName)}
                     ></TextField>
@@ -168,7 +178,6 @@ const ColumnHeader = ({
         </Tooltip>
       </Grid>
       {!isPrintPage && (
-
         <Grid
           container
           justifyContent="flex-end"
@@ -180,64 +189,80 @@ const ColumnHeader = ({
           xs={5}
         >
           {global.user.userType == 2 && (!ended || !global.leaveRetro) && (
-
-
             <>
-              {global.expandColumn !== -1 && !ended &&
-
+              {global.expandColumn !== -1 && !ended && (
                 <Grid sx={{ display: 'flex', alignItems: 'center' }}>
                   <FormGroup sx={{ display: 'flex', flexDirection: 'row' }}>
-
-                    <Tooltip title={disableKeywordSuggestion && "Need at least two cards"}>
+                    <Tooltip
+                      title={
+                        disableKeywordSuggestion && 'Need at least two cards'
+                      }
+                    >
                       <FormControlLabel
-                        checked={column.showKeywords ? column.showKeywords : false}
+                        checked={
+                          column.showKeywords ? column.showKeywords : false
+                        }
                         sx={{ color: theme.palette.primary.dark }}
                         disabled={disableKeywordSuggestion}
-                        control={<Switch color="primary"
-
-                          onChange={(value) => {
-                            if (value.target.checked) {
-                              keywordExtraction()
-
-                            }
-                            else {
-                              hideKeywords()
-                            }
-
-                          }}
-                        />} label="Show keywords" />
+                        control={
+                          <Switch
+                            color="primary"
+                            onChange={value => {
+                              if (value.target.checked) {
+                                keywordExtraction();
+                              } else {
+                                hideKeywords();
+                              }
+                            }}
+                          />
+                        }
+                        label="Show keywords"
+                      />
                     </Tooltip>
-                    <Tooltip title={!groupSuggestion && disableGroupSuggestion ? "Need more than 2 ungrouped cards" : ''}>
-                      <FormControlLabel disabled={!groupSuggestion && disableGroupSuggestion} sx={{ color: theme.palette.primary.dark }} checked={groupSuggestion}
-                        control={<Switch color="primary" onChange={(value) => {
-                          if (value.target.checked) {
-                            getGroupSuggestion()
-
-                          }
-                          else {
-                  
-                            deleteUnconfirmedGroups()
-                          }
-                        }} />} label="Suggest Grouping" />
-                    </Tooltip>
-
-                  </FormGroup>
-                  {groupSuggestion && !disableGroupSuggestion && <Tooltip title="Resuggest grouping">
-                    <RefreshIcon sx={{ color: theme.palette.primary.dark, marginRight: '15px', cursor: 'pointer' }}
-                      onClick={
-                        retryGroupSuggestion
+                    <Tooltip
+                      title={
+                        !groupSuggestion && disableGroupSuggestion
+                          ? 'Need more than 2 ungrouped cards'
+                          : ''
                       }
-                    />
-
-                  </Tooltip>}
+                    >
+                      <FormControlLabel
+                        disabled={!groupSuggestion && disableGroupSuggestion}
+                        sx={{ color: theme.palette.primary.dark }}
+                        checked={groupSuggestion}
+                        control={
+                          <Switch
+                            color="primary"
+                            onChange={value => {
+                              if (value.target.checked) {
+                                getGroupSuggestion();
+                              } else {
+                                deleteUnconfirmedGroups();
+                              }
+                            }}
+                          />
+                        }
+                        label="Suggest Grouping"
+                      />
+                    </Tooltip>
+                  </FormGroup>
+                  {groupSuggestion && !disableGroupSuggestion && (
+                    <Tooltip title="Resuggest grouping">
+                      <RefreshIcon
+                        sx={{
+                          color: theme.palette.primary.dark,
+                          marginRight: '15px',
+                          cursor: 'pointer',
+                        }}
+                        onClick={retryGroupSuggestion}
+                      />
+                    </Tooltip>
+                  )}
                 </Grid>
-
-              }
+              )}
 
               {column.publish ? (
-                <Typography style={{ color: '#808080' }}>
-                  Published
-                </Typography>
+                <Typography style={{ color: '#808080' }}>Published</Typography>
               ) : (
                 <Typography
                   id={'publish' + columnIndex}
@@ -290,7 +315,6 @@ const ColumnHeader = ({
             />
           )}
         </Grid>
-
       )}
     </Grid>
   );

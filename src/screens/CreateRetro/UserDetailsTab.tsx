@@ -263,7 +263,9 @@ export function UserDetailsTab({
                         variant="standard"
                         sx={styles.avatarfield}
                         value={userName}
-                        onChange={e => handleUsername(e.currentTarget.value)}
+                        onChange={(e: any) =>
+                          handleUsername(e.currentTarget.value)
+                        }
                         inputProps={{
                           maxLength: AVATAR_CHARACTER_LIMIT,
                         }}
