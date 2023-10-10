@@ -173,8 +173,11 @@ function BasicDashboardWithEnterprise() {
   };
 
   const navigateToUploadImage = () => {
-    navigate('/basic/uploadImage/');
+    // navigate('/basic/uploadImage/');
+    navigate('/basic/createSession/');
+    
   };
+
 
   const goToAnalyticsLearnMorePage = (url: string) => {
     navigate(url);

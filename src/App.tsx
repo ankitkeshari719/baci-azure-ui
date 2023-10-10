@@ -18,6 +18,7 @@ import { Offboarding } from './screens/Others/Offboarding';
 import { RetroDetails } from './screens/Board/RetroDetails';
 import { ParticipantWaitingPage } from './screens/Board/ParticipantWaitingPage';
 import { CreateRetroMain } from './screens/CreateRetro/CreateRetroMain';
+import { CreateSessionMain } from './screens/CreateSession/CreateSessionMain';
 import { UploadImageScan } from './screens/ScanImage/UploadImageScan';
 import { ScanUploadImage} from './screens/scan/ScanUploadImage';
 import { StartRetro } from './screens/Home/StartRetro';
@@ -357,6 +358,10 @@ export default function App({ instance }: AppProps) {
                                 path="scanImage"
                                 element={<ScanUploadImage />}
                               />
+                               <Route
+                                path="createSession"
+                                element={<CreateSessionMain />}
+                              />
                               <Route
                                 path="termAndCondition"
                                 element={
@@ -561,6 +566,10 @@ export default function App({ instance }: AppProps) {
                               <Route
                                 path="scanImage"
                                 element={<ScanUploadImage />}
+                              />
+                               <Route
+                                path="createSession"
+                                element={<CreateSessionMain />}
                               />
                               <Route
                                 path="termAndCondition"

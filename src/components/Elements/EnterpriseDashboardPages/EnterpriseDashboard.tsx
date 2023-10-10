@@ -258,7 +258,8 @@ function EnterpriseDashboard() {
   };
 
   const navigateToUploadImage = () => {
-    navigate('/enterprise/uploadImage/');
+    // navigate('/enterprise/uploadImage/');
+    navigate('/enterprise/createSession/');
   };
   return (
     <>
