@@ -64,8 +64,8 @@ export const msalConfig = {
     clientId: '3d3e6b6a-f8fc-41a9-9d08-d7b5c015d1ad', // This is the ONLY mandatory field that you need to supply.
     authority: b2cPolicies.authorities.signUpSignIn.authority, // Choose SUSI as your default authority.
     knownAuthorities: [b2cPolicies.authorityDomain], // Mark your B2C tenant's domain as trusted.
-    redirectUri: 'https://appdev.baci.app/', // You must register this URI on Azure Portal/App Registration. Defaults to window.location.origin
-    postLogoutRedirectUri: 'https://appdev.baci.app/', // Indicates the page to navigate after logout.
+    redirectUri: 'https://apptest.baci.app/', // You must register this URI on Azure Portal/App Registration. Defaults to window.location.origin
+    postLogoutRedirectUri: 'https://apptest.baci.app/', // Indicates the page to navigate after logout.
     navigateToLoginRequestUrl: false, // If "true", will navigate back to the original request location before processing the auth code response.
   },
 
