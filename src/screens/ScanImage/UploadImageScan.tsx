@@ -111,7 +111,6 @@ export function UploadImageScan() {
       alert('Please select an image.');
       return;
     }
-    console.log('selected file', selectedFile);
     const formData = new FormData();
     formData.append('file', selectedFile);
     setIsLoading(true);
@@ -156,14 +155,12 @@ export function UploadImageScan() {
 
         if (operationResponse.status === 200) {
           const responseData: ApiResponse = await operationResponse.json();
-          console.log('Status:', responseData.status);
 
           if (responseData.status === 'succeeded') {
             //const data = transformData(responseData.analyzeResult.readResults[0].lines);
             const data: string[] = transformData(
               responseData.analyzeResult.readResults[0].lines
             );
-            console.log('Data:', data);
             // Convert the array to a JSON string
             const dataJson = JSON.stringify(data);
 
@@ -194,7 +191,6 @@ export function UploadImageScan() {
   };
 
   const transformData = (apiData: Line[]) => {
-    console.log('apiData', apiData);
     const store: { [key: string]: string } = {};
 
     for (let i = 0; i < apiData.length; i++) {
@@ -229,7 +225,6 @@ export function UploadImageScan() {
       }
     }
 
-    console.log('store', store);
     return Object.values(store);
   };
 

@@ -186,7 +186,6 @@ function EnterpriseDashboard() {
       await getSessionsData(chartInput).then(
         res => {
           if (res.result != undefined && res.result?.length != undefined) {
-            console.log(res.result?.length);
             setSessionCount(res.result?.length);
           } else {
             setSessionCount(0);
