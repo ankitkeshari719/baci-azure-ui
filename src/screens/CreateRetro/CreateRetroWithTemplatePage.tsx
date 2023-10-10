@@ -368,16 +368,28 @@ export function CreateRetroWithTemplatePage({
         return;
       }
       setActivePanel(nextPanel);
+      console.log('currentPanel', currentPanel);
+      console.log('retroName', retroName);
+      console.log('retroTimeFrame', retroTimeFrame);
+      console.log('userName', userName);
+      console.log('selectedAvatar', selectedAvatar);
+      console.log('selectedPulseCheck', selectedPulseCheck);
+      console.log('selectedTemplate', selectedTemplate);
+      console.log('selectedTeam', selectedTeam);
+      console.log('selectedFacilitator', selectedFacilitator);
+      console.log('scheduleRetroType', scheduleRetroType);
+      console.log('scheduleRetroTime', scheduleRetroTime);
+      console.log('scheduleDescription', scheduleDescription);
+      return;
       if (
         currentPanel === 'finalButtonTab' &&
         retroName != '' &&
         retroTimeFrame != '' &&
         selectedTemplate != null &&
-        selectedPulseCheck != null &&
-        userName != '' &&
-        selectedAvatar != ''
+        selectedPulseCheck != null
       ) {
         // Call the Retro creation
+        create();
       }
     }
   };
