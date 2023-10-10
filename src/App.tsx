@@ -318,19 +318,19 @@ export default function App({ instance }: AppProps) {
                               <Route path="teams/">
                                 <Route
                                   path=""
-                                  element={<Notifications />}
+                                  element={<TeamsMainContainer />}
                                 />
                                 <Route path="allTeams">
                                   <Route
                                     path=""
-                                    element={<Notifications />}
+                                    element={<TeamsMainContainer />}
                                   />
                                 </Route>
                                 <Route path="create">
-                                  <Route path="" element={<Notifications />} />
+                                  <Route path="" element={<CreateTeam />} />
                                 </Route>
                                 <Route path="edit/:id">
-                                  <Route path="" element={<Notifications />} />
+                                  <Route path="" element={<EditTeam />} />
                                 </Route>
                               </Route>
                               <Route path="settings" element={<Settings />} />
@@ -518,19 +518,19 @@ export default function App({ instance }: AppProps) {
                               <Route path="teams/">
                                 <Route
                                   path=""
-                                  element={<Notifications />}
+                                  element={<TeamsMainContainer />}
                                 />
                                 <Route path="allTeams">
                                   <Route
                                     path=""
-                                    element={<Notifications />}
+                                    element={<TeamsMainContainer />}
                                   />
                                 </Route>
                                 <Route path="create">
-                                  <Route path="" element={<Notifications />} />
+                                  <Route path="" element={<CreateTeam />} />
                                 </Route>
                                 <Route path="edit/:id">
-                                  <Route path="" element={<Notifications />} />
+                                  <Route path="" element={<EditTeam />} />
                                 </Route>
                                 <Route path="manageUsers">
                                   <Route path="" element={<ManageUsers />} />

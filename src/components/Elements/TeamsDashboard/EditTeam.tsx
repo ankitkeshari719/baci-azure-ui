@@ -211,6 +211,7 @@ export default function EditTeam() {
             roleName: user.roleName,
             createdAt: moment(user.createdAt).format('Do MMM YYYY'),
             checked: userEmailIds.includes(user.emailId) ? true : false,
+            selectedAvatar: user.selectedAvatar,
           };
         });
         setRecords(tempRes);
@@ -1616,7 +1617,37 @@ export default function EditTeam() {
             {recordAfterPagingAndSorting().map((item: any) => {
               return (
                 <TableRow key={item.id}>
-                  <TableCell>{item.fullName}</TableCell>
+                  <TableCell>
+                    <>
+                      {item.selectedAvatar != '' ? (
+                        <LazyLoadImage
+                          className="avatar"
+                          style={{
+                            height: '48px',
+                            width: '48px',
+                            borderRadius: '50%',
+                            border: '5px solid #f9fbf8',
+                            cursor: 'pointer',
+                          }}
+                          src={
+                            '/avatars/animals/' + item.selectedAvatar + '.svg'
+                          }
+                        ></LazyLoadImage>
+                      ) : (
+                        <LazyLoadImage
+                          width="48px !important"
+                          height="48px !important"
+                          style={{
+                            borderRadius: '50%',
+                            cursor: 'pointer',
+                            border: 'none',
+                          }}
+                          src={'/svgs/DefaultUser.svg'}
+                        ></LazyLoadImage>
+                      )}
+                      {item.fullName}
+                    </>
+                  </TableCell>
                   <TableCell>{item.emailId}</TableCell>
                   <TableCell>
                     <Checkbox
