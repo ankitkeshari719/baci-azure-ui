@@ -233,7 +233,7 @@ function BasicDashboardWithEnterprise() {
           open={open}
           onClick={handleClose}
         >
-          <Box style={{ width: '700px' }}>
+          <Box style={{ width: '1000px' }}>
             <Grid container spacing={2}>
               <Grid
                 item
@@ -241,54 +241,55 @@ function BasicDashboardWithEnterprise() {
                 onClick={navigateToCreateSession}
                 style={{
                   backgroundColor: 'white',
-                  borderRadius: '5px',
-                  padding: '7px',
+                  borderRadius: '10px',
+                  padding: "10px 10px 20px 10px",
                   alignContent: 'center',
-                  maxWidth: '250px',
+                  maxWidth: '450px',
                 }}
               >
                 <img
                   src={BACITemplate}
                   alt="Logo"
                   className="logo"
-                  height="90px"
-                  width="230px"
+                  height="189px"
+                  width="400px"
                 />
-                <p style={{ textAlign: 'center', color: 'black' }}>
+                <p style={{ textAlign: 'center', color: 'black', fontSize: '23px' }}>
                   BACI Template
                 </p>
-                <p style={{ fontSize: '12px', color: 'gray' }}>
-                  Need run a collabration session with BACI?
+                <p style={{ fontSize: '16px', color: 'gray', margin:"10px" }}>
+                 Need to run a collaboration session with BACI? 
                   <br />
-                  Start instatly with preset BACI Template.
+                  Start instantly with preset BACI templates.
                 </p>
               </Grid>
-              <Grid item xs={1}></Grid>
+           
               <Grid
                 item
                 xs={5}
                 onClick={navigateToUploadImage}
                 style={{
                   backgroundColor: 'white',
-                  borderRadius: '5px',
-                  padding: '7px',
-                  maxWidth: '250px',
+                  borderRadius: '10px',
+                  padding: "10px 10px 20px 10px",
+                  maxWidth: '450px',
                 }}
               >
                 <img
                   src={UploadImage}
                   alt="Logo"
                   className="logo"
-                  height="90px"
-                  width="230"
+                  height="189px"
+                  width="400px"
+
                 />
                 <p
                   onClick={handleClose}
-                  style={{ textAlign: 'center', color: 'black' }}
+                  style={{ textAlign: 'center', color: 'black',fontSize: '23px' }}
                 >
                   Upload Image or Photo
                 </p>
-                <p style={{ fontSize: '12px', color: 'gray' }}>
+                <p style={{ fontSize: '16px', color: 'gray', margin:"10px" }}>
                   Run a collabration session with Post-Its on a wall?
                   <br/>Digitise it here for easy analysis and safe keeping.
                 </p>
