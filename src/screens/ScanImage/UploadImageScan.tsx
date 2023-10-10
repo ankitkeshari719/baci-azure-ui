@@ -3,13 +3,12 @@ import { Box, Button, Grid } from '@mui/material';
 import { TopBar } from '../CreateRetro/TopBar';
 import { DeploymentPopUp } from '../Utils/Alerts/DeploymentPopUp';
 import '../../global.scss';
-import '../ScanImage/styles.scss'
+import '../ScanImage/styles.scss';
 import FileUploadOutlinedIcon from '@mui/icons-material/FileUploadOutlined';
 import RotateRightIcon from '@mui/icons-material/RotateRight';
+import CameraAltOutlinedIcon from '@mui/icons-material/CameraAltOutlined';
 import { useNavigate } from 'react-router-dom';
 import CircularProgress from '@mui/material/CircularProgress';
-import { ActionType, GlobalContext } from '../../contexts/GlobalContext';
-
 import {
   Dialog,
   DialogActions,
@@ -21,13 +20,15 @@ import {
   Typography,
 } from '@mui/material';
 import { ScanUploadImage } from '../scan/ScanUploadImage';
+import { GlobalContext } from '../../contexts/GlobalContext';
+
 type Props = {
   handleStartRetro: () => void;
   isRetroStart: boolean;
 };
 
 interface ApiResponse {
-  status: string; // Add this line to define the 'status' property
+  status: string;
   analyzeResult: {
     readResults: { lines: Line[] }[];
   };
@@ -37,7 +38,6 @@ interface Line {
   boundingBox: number[];
   text: string;
 }
-
 
 export function UploadImageScan() {
   const [isRetroStart, setIsRetroStart] = React.useState<boolean>(false);
@@ -54,14 +54,12 @@ export function UploadImageScan() {
     setIsRetroStart(true);
   }
 
-
   const navigateToScan = () => {
-    if(global.azureUser?.roleName === "Enterprise"){
+    if (global.azureUser?.roleName === "Enterprise") {
       navigate('/enterprise/scanImage/');
-    }else{
+    } else {
       navigate('/basic/scanImage/');
     }
-   
   };
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -75,7 +73,6 @@ export function UploadImageScan() {
       reader.onload = () => {
         const base64String = reader.result?.toString();
         if (base64String) {
-          // Save the base64 representation of the image in localStorage
           localStorage.setItem('uploadedImage', base64String);
           setImage(base64String);
           setIsUploaded(true);
@@ -90,13 +87,13 @@ export function UploadImageScan() {
       id: '1',
       title: 'Upload Your Document or Scan it',
       description:
-        'Just take a picture of your board, sticky note or paper. Upload it and lets us do the work to digitise and analyse',
+        'Just take a picture of your board, sticky note or paper. Upload it and lets us do the work to digitize and analyze',
     },
     {
       id: '2',
       title: 'Select, Edit or Delete',
       description:
-        'Our AI can help you automatically summarise, group cards, and create a summary report',
+        'Our AI can help you automatically summarize, group cards, and create a summary report',
     },
     {
       id: '3',
@@ -104,14 +101,13 @@ export function UploadImageScan() {
       description: 'Once your summary is generated, share or save your report',
     },
   ];
-  
 
   const recognizeHandwrittenText = async () => {
     if (!selectedFile) {
       alert('Please select an image.');
       return;
     }
-    console.log('selected file', selectedFile);
+
     const formData = new FormData();
     formData.append('file', selectedFile);
     setIsLoading(true);
@@ -156,28 +152,21 @@ export function UploadImageScan() {
 
         if (operationResponse.status === 200) {
           const responseData: ApiResponse = await operationResponse.json();
-          console.log('Status:', responseData.status);
 
           if (responseData.status === 'succeeded') {
-            //const data = transformData(responseData.analyzeResult.readResults[0].lines);
             const data: string[] = transformData(
               responseData.analyzeResult.readResults[0].lines
             );
             console.log('Data:', data);
-            // Convert the array to a JSON string
             const dataJson = JSON.stringify(data);
-
-            // Save it to local storage
             localStorage.setItem('myData', dataJson);
             setRecognizedText(data);
             setIsLoading(false);
             navigateToScan();
             return data;
           } else if (responseData.status === 'failed') {
-            // The operation has failed, handle the error
             throw new Error('Recognition operation failed');
           } else {
-            // Wait for a while before checking the status again (e.g., every few seconds)
             await new Promise(resolve => setTimeout(resolve, 5000));
           }
         } else {
@@ -194,7 +183,6 @@ export function UploadImageScan() {
   };
 
   const transformData = (apiData: Line[]) => {
-    console.log('apiData', apiData);
     const store: { [key: string]: string } = {};
 
     for (let i = 0; i < apiData.length; i++) {
@@ -229,7 +217,6 @@ export function UploadImageScan() {
       }
     }
 
-    console.log('store', store);
     return Object.values(store);
   };
 
@@ -251,12 +238,12 @@ export function UploadImageScan() {
                 <Box
                   component="div"
                   whiteSpace="normal"
-                  style={{ fontSize: '32px', marginLeft: '14px' }}
+                  style={{ fontSize: '32px', marginLeft: '16px' }}
                 >
                   Upload Image or Photo
                 </Box>
 
-                <div 
+                <div
                   style={{
                     display: 'flex',
                     height: '330px',
@@ -272,17 +259,12 @@ export function UploadImageScan() {
                   }}
                 >
                   {isLoading ? (
-                    // <CircularProgress />
-                    // <div className="ocrloader"></div>
                     <div className="scanner-container">
                       <div className="scanning-line"></div>
-                    {image && (
-                        <img src={image} alt="Stored" height="325px" >
-                       
-                        </img>
+                      {image && (
+                        <img src={image} alt="Stored" height="325px" />
                       )}
-                  </div>
-                    
+                    </div>
                   ) : (
                     <>
                       {image && (
@@ -302,7 +284,7 @@ export function UploadImageScan() {
                 >
                   <Button
                     style={{
-                      backgroundColor: '#159ADD',
+                      backgroundColor: '#FFFFFF',
                       borderRadius: '24px',
                       width: '120px',
                       alignItems: 'center',
@@ -323,7 +305,7 @@ export function UploadImageScan() {
                 <Box
                   component="div"
                   whiteSpace="normal"
-                  style={{ fontSize: '32px', marginLeft: '14px', color:" #343434"}}
+                  style={{ fontSize: '32px', marginLeft: '16px', color: "#343434" }}
                 >
                   Upload Image or Photo
                 </Box>
@@ -331,8 +313,8 @@ export function UploadImageScan() {
                 <div
                   style={{
                     display: 'flex',
-                    height: '330px',
-                    width: 'auto',
+                    height: '463px',
+                    width: '800px',
                     marginTop: '10px',
                     marginLeft: '14px',
                     borderRadius: '10px',
@@ -340,7 +322,7 @@ export function UploadImageScan() {
                     alignItems: 'center',
                     transition: 'all 0.3s ease-in-out',
                     backgroundColor: '#CEEFFF',
-                    border: '2px dashed #159ADD',
+                    border: '3px dashed #159ADD',
                   }}
                 >
                   <label htmlFor="fileInput">
@@ -349,10 +331,27 @@ export function UploadImageScan() {
                         border: '1px solid #159ADD',
                         borderRadius: '10px',
                         color: '#159ADD',
-                        padding: '3px',
+                        padding: '12px 20px 12px 20px',
                       }}
                     >
-                      Upload Image <FileUploadOutlinedIcon />
+                      TAKE A PICTURE <CameraAltOutlinedIcon />
+                      <Input
+                        id="fileInput"
+                        type="file"
+                        style={{ display: 'none' }}
+                        onChange={handleFileChange}
+                      />
+                    </InputLabel>
+                    <p style={{ textAlign: "center", color: '#159ADD', marginTop: "20px" }}>OR</p>
+                    <InputLabel
+                      style={{
+                        border: '1px solid #159ADD',
+                        borderRadius: '10px',
+                        color: '#159ADD',
+                        padding: '12px 20px 12px 20px',
+                      }}
+                    >
+                      UPLOAD IMAGE <FileUploadOutlinedIcon />
                       <Input
                         id="fileInput"
                         type="file"
@@ -375,10 +374,12 @@ export function UploadImageScan() {
                     style={{
                       backgroundColor: '#CCCCCC',
                       borderRadius: '24px',
-                      width: '120px',
+                      width: '170px',
                       alignItems: 'center',
                       color: 'white',
                       marginTop: '10px',
+                      padding: '12px 16px 12px 16px',
+                      fontSize: "16px"
                     }}
                   >
                     <RotateRightIcon />
@@ -397,21 +398,22 @@ export function UploadImageScan() {
                   <div style={{ display: 'flex', flexDirection: 'row' }}>
                     <div
                       style={{
-                        height: '25px',
-                        width: '25px',
+                        height: '28px',
+                        width: '28px',
                         backgroundColor: '#E3E3E3',
                         borderRadius: '50%',
+                        fontSize: '16px'
                       }}
                     >
-                      <span style={{ padding: '7px', color: '#676767' }}>
+                      <span style={{ padding: '10px', color: '#676767', fontSize: '16px' }}>
                         {item.id}
                       </span>
                     </div>
                     <span
                       style={{
                         color: '#EE7538',
-                        marginLeft: '5px',
-                        fontSize: '14px',
+                        marginLeft: '12px',
+                        fontSize: '16px',
                       }}
                     >
                       {item.title}
@@ -421,7 +423,7 @@ export function UploadImageScan() {
                     style={{
                       display: 'flex',
                       flexDirection: 'row',
-                      marginLeft: '7px',
+                      marginLeft: '12px',
                     }}
                   >
                     {item.id === '3' ? (
@@ -429,8 +431,9 @@ export function UploadImageScan() {
                         <p
                           style={{
                             marginLeft: '22px',
-                            fontSize: '14px',
+                            fontSize: '16px',
                             marginTop: '3px',
+                            color: "#4E4E4E"
                           }}
                         >
                           {item.description}
@@ -446,7 +449,7 @@ export function UploadImageScan() {
                             marginBottom: '10px',
                           }}
                         ></span>
-                        <p style={{ marginLeft: '15px', fontSize: '14px' }}>
+                        <p style={{ marginLeft: '15px', fontSize: '16px', color: "#4E4E4E" }}>
                           {item.description}
                         </p>
                       </>
