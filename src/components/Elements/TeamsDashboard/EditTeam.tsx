@@ -461,6 +461,7 @@ export default function EditTeam() {
     newTeamArray: any,
     previousTeamArray: any
   ) => {
+    setIsEditModeOn(false);
     let removedArray: any = [];
     let addedArray: any = [];
     previousTeamArray.forEach((preObj: any) => {
@@ -506,6 +507,7 @@ export default function EditTeam() {
         });
         setIsEditModeOn(false);
         callGetTeamById();
+        setIsEditModeOn(false);
       },
       err => {
         console.log('err', err);
@@ -515,6 +517,7 @@ export default function EditTeam() {
         });
         setIsEditModeOn(false);
         callGetTeamById();
+        setIsEditModeOn(false);
       }
     );
   };
@@ -542,6 +545,7 @@ export default function EditTeam() {
         });
         setIsEditModeOn(false);
         callGetTeamById();
+        setIsEditModeOn(false);
       },
       err => {
         console.log('err', err);
@@ -551,6 +555,7 @@ export default function EditTeam() {
         });
         setIsEditModeOn(false);
         callGetTeamById();
+        setIsEditModeOn(false);
       }
     );
   };

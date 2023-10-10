@@ -470,12 +470,13 @@ export default function TeamsDashboard() {
         </DialogTitle>
         <Box
           sx={{
-            width: '600px',
-            minWidth: '600px',
+            // width: '600px',
+            // minWidth: '600px',
             height: height / 4,
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'center',
+            padding: '24px !important'
           }}
         >
           <BodyRegularTypography

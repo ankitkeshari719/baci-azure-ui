@@ -584,12 +584,13 @@ export default function SelectedTeamMembers({
         </DialogTitle>
         <Box
           sx={{
-            width: '650px',
-            minWidth: '600px',
+            // width: '650px',
+            // minWidth: '600px',
             height: height / 4,
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'center',
+            padding: '24px !important'
           }}
         >
           <BodyRegularTypography
@@ -675,12 +676,13 @@ export default function SelectedTeamMembers({
         </DialogTitle>
         <Box
           sx={{
-            width: '650px',
-            minWidth: '600px',
+            // width: '650px',
+            // minWidth: '600px',
             height: height / 4,
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'center',
+            padding: '24px !important'
           }}
         >
           <BodyRegularTypography
@@ -766,12 +768,13 @@ export default function SelectedTeamMembers({
         </DialogTitle>
         <Box
           sx={{
-            width: '650px',
-            minWidth: '600px',
+            // width: '650px',
+            // minWidth: '600px',
             height: height / 4,
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'center',
+            padding: '24px !important'
           }}
         >
           <BodyRegularTypography
