@@ -139,7 +139,7 @@ const LeftBar = () => {
   }, [
     location.pathname.includes('enterprise'),
     location.pathname.includes('analytics'),
-    location.pathname.includes('enterprise/dashboard'),
+    location.pathname.includes('dashboard'),
     location.pathname.includes('createRetro'),
     location.pathname.includes('scanImage'),
     location.pathname.includes('uploadImage'),
