@@ -138,7 +138,7 @@ export function BaciDetailsTab({
             display: 'flex',
             flexDirection: 'row',
             alignItems: 'center',
-            py: activePanel === 'detailsPanel' ? 0 : 4,
+            py: activePanel === 'detailsPanel' ? 0 : 3,
           }}
         >
           {activePanel != 'detailsPanel' &&

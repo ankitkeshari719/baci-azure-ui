@@ -739,6 +739,7 @@ export default function EnterpriseRequests() {
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'center',
+            padding: '24px',
           }}
         >
           <BodyRegularTypography
@@ -829,6 +830,7 @@ export default function EnterpriseRequests() {
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'center',
+            padding: '24px',
           }}
         >
           <BodyRegularTypography

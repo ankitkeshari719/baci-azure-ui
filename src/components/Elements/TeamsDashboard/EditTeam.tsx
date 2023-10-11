@@ -211,6 +211,7 @@ export default function EditTeam() {
             roleName: user.roleName,
             createdAt: moment(user.createdAt).format('Do MMM YYYY'),
             checked: userEmailIds.includes(user.emailId) ? true : false,
+            selectedAvatar: user.selectedAvatar,
           };
         });
         setRecords(tempRes);
@@ -461,6 +462,7 @@ export default function EditTeam() {
     newTeamArray: any,
     previousTeamArray: any
   ) => {
+    setIsEditModeOn(false);
     let removedArray: any = [];
     let addedArray: any = [];
     previousTeamArray.forEach((preObj: any) => {
@@ -506,6 +508,7 @@ export default function EditTeam() {
         });
         setIsEditModeOn(false);
         callGetTeamById();
+        setIsEditModeOn(false);
       },
       err => {
         console.log('err', err);
@@ -515,6 +518,7 @@ export default function EditTeam() {
         });
         setIsEditModeOn(false);
         callGetTeamById();
+        setIsEditModeOn(false);
       }
     );
   };
@@ -542,6 +546,7 @@ export default function EditTeam() {
         });
         setIsEditModeOn(false);
         callGetTeamById();
+        setIsEditModeOn(false);
       },
       err => {
         console.log('err', err);
@@ -551,6 +556,7 @@ export default function EditTeam() {
         });
         setIsEditModeOn(false);
         callGetTeamById();
+        setIsEditModeOn(false);
       }
     );
   };
@@ -717,7 +723,7 @@ export default function EditTeam() {
                   {/* Save Button*/}
                   <OutlineButtonWithIconWithNoBorder
                     id="save_team_info"
-                    label="Update"
+                    label="Save"
                     iconPath="/svgs/saveTeam.svg"
                     onClick={() => submitTeam()}
                     style={{
@@ -1129,7 +1135,7 @@ export default function EditTeam() {
                   {/* Save Button*/}
                   <OutlineButtonWithIconWithNoBorder
                     id="save_team_info"
-                    label="Edit Team"
+                    label="Edit"
                     iconPath="/svgs/edit_blue.svg"
                     onClick={() => setIsEditModeOn(true)}
                     style={{
@@ -1452,7 +1458,6 @@ export default function EditTeam() {
               </Box>
             </>
           )}
-
           {/* Right Side Form */}
           <Paper
             sx={{
@@ -1463,6 +1468,7 @@ export default function EditTeam() {
               alignItems: 'flex-start',
               flexDirection: 'column',
               padding: '24px',
+              pointerEvents: !isEditModeOn ? 'none' : '',
             }}
           >
             <Box
@@ -1494,6 +1500,7 @@ export default function EditTeam() {
           </Paper>
         </Box>
       </Paper>
+      {/* Add Members Dialog */}
       <Dialog
         open={openAddMembersDialog}
         sx={{
@@ -1611,7 +1618,37 @@ export default function EditTeam() {
             {recordAfterPagingAndSorting().map((item: any) => {
               return (
                 <TableRow key={item.id}>
-                  <TableCell>{item.fullName}</TableCell>
+                  <TableCell>
+                    <>
+                      {item.selectedAvatar != '' ? (
+                        <LazyLoadImage
+                          className="avatar"
+                          style={{
+                            height: '48px',
+                            width: '48px',
+                            borderRadius: '50%',
+                            border: '5px solid #f9fbf8',
+                            cursor: 'pointer',
+                          }}
+                          src={
+                            '/avatars/animals/' + item.selectedAvatar + '.svg'
+                          }
+                        ></LazyLoadImage>
+                      ) : (
+                        <LazyLoadImage
+                          width="48px !important"
+                          height="48px !important"
+                          style={{
+                            borderRadius: '50%',
+                            cursor: 'pointer',
+                            border: 'none',
+                          }}
+                          src={'/svgs/DefaultUser.svg'}
+                        ></LazyLoadImage>
+                      )}
+                      {item.fullName}
+                    </>
+                  </TableCell>
                   <TableCell>{item.emailId}</TableCell>
                   <TableCell>
                     <Checkbox

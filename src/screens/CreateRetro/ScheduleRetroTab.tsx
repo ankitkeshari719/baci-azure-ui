@@ -108,7 +108,7 @@ export function ScheduleRetroTab({
           py:
             activePanel != 'scheduleDetailPanel' && scheduleDescription != ''
               ? 2.5
-              : 4,
+              : 3,
         }}
       >
         {/* When the tab is not open */}
@@ -278,9 +278,7 @@ export function ScheduleRetroTab({
               >
                 <ContainedButton
                   name="Finish"
-                  onClick={() =>
-                    onClickNext('scheduleDetailPanel', 'finalButtonTab')
-                  }
+                  onClick={() => onClickNext('scheduleDetailPanel', 'finalTab')}
                   style={{
                     mt: 5,
                     minWidth: '75px !important',
