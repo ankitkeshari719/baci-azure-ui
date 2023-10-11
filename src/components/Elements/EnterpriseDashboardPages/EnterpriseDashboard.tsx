@@ -52,6 +52,8 @@ import {
   chartInputType,
   formatDateForAPI,
   formatDateToMonthYear,
+  getCountOfAllParticipantsOverTime,
+  getCountOfAllSessionsOverTime,
   getParticipantsCount,
   getRetrosCount,
   getSessionsData,
@@ -100,11 +102,11 @@ function EnterpriseDashboard() {
 
   const [hoverIndex, setHoverIndex] = React.useState<number>(0);
 
-  const [sessionCount,setSessionCount]= React.useState<number>(0);
+  const [sessionCount, setSessionCount] = React.useState<number>(0);
 
   const [selectId, setSelectedId] = React.useState<string>('0');
 
-  const [actionCount,setActionCount]=React.useState<number>(0);
+  const [actionCount, setActionCount] = React.useState<number>(0);
 
   let componentRef = React.useRef(null);
 
@@ -169,16 +171,20 @@ function EnterpriseDashboard() {
         enterpriseId: global.azureUser?.enterpriseId,
         teamId: global.teamId ? global.teamId : '0',
         fromDate: formatDateForAPI(fromDate),
-        toDate: formatDateForAPI(toDate,true),
+        toDate: formatDateForAPI(toDate, true),
       };
 
-      await getSessionsData(chartInput).then(
+      await getCountOfAllSessionsOverTime(chartInput).then(
         res => {
-          if (res.result != undefined && res.result?.length != undefined) {
-            console.log(res.result?.length);
-            setSessionCount(res.result?.length)
+          if (res.data != undefined && res.data?.length != undefined) {
+            var totalRetrocount = 0;
+            res.data.forEach((element: any) => {
+              totalRetrocount = element.retroCount + totalRetrocount;
+            });
+
+            setSessionCount(totalRetrocount);
           } else {
-            setSessionCount(0)
+            setSessionCount(0);
           }
         },
         err => {}
@@ -407,23 +413,42 @@ function EnterpriseDashboard() {
                     />
                   }
                   style={{ marginLeft: '20px' }}
-                  label={actionCount>1?actionCount+'  Actions':actionCount+'  Actions'}
+                  label={
+                    actionCount > 1
+                      ? actionCount + '  Actions'
+                      : actionCount + '  Actions'
+                  }
                   size={'medium'}
-                  onClick={() => console.log('')}
+                  onClick={() => navigate('/actions')}
                 />
               </Box>
 
-              <Box padding={'12px'} paddingRight={'18px'} 
-              paddingLeft={'18px'}
-              display={'flex'} marginRight={'20px'} flexDirection={'row'} justifyContent={'space-between'} width={'200px'}
-              border="1px solid #CEEFFF"
-              borderRadius={'5px'}
-              sx={{background:'white', cursor:'pointer'}}
+              <Box
+                padding={'12px'}
+                paddingRight={'18px'}
+                paddingLeft={'18px'}
+                display={'flex'}
+                marginRight={'20px'}
+                flexDirection={'row'}
+                justifyContent={'space-between'}
+                width={'200px'}
+                border="1px solid #CEEFFF"
+                borderRadius={'5px'}
+                sx={{ background: 'white', cursor: 'pointer' }}
               >
-                <H5SemiBoldTypography label={sessionCount>1?sessionCount+"  Sessions":sessionCount+"  Session"} />
+                <H5SemiBoldTypography
+                  label={
+                    sessionCount > 1
+                      ? sessionCount + '  Sessions'
+                      : sessionCount + '  Session'
+                  }
+                />
 
                 <Box>
-                  <img src={RetroCount} style={{width:'20px',height:'18px'}}/>
+                  <img
+                    src={RetroCount}
+                    style={{ width: '20px', height: '18px' }}
+                  />
                 </Box>
               </Box>
             </Box>
@@ -592,10 +617,9 @@ function EnterpriseDashboard() {
                   <EnterpriseLevelActionsCountChart
                     dashboard={true}
                     team={selectId}
-                    count={(e)=>{
-               
-                      setActionCount(e)
-                     }}
+                    count={e => {
+                      setActionCount(e);
+                    }}
                   />
                 </Box>
                 {/* <Box
