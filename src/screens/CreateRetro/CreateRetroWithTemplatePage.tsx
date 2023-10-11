@@ -27,6 +27,7 @@ import { StartRetroWithTemplate } from './StartRetroWithTemplate';
 import { TeamsDetailsTab } from './TeamsDetailsTab';
 import { ScheduleRetroTab } from './ScheduleRetroTab';
 import moment from 'moment';
+import { ContainedButton } from '../../components';
 
 type Props = {
   handleStartRetro: () => void;
@@ -357,7 +358,6 @@ export function CreateRetroWithTemplatePage({
         }
         return;
       }
-
       if (
         currentPanel === 'scheduleDetailPanel' &&
         scheduleDescription === ''
@@ -368,29 +368,6 @@ export function CreateRetroWithTemplatePage({
         return;
       }
       setActivePanel(nextPanel);
-      console.log('currentPanel', currentPanel);
-      console.log('retroName', retroName);
-      console.log('retroTimeFrame', retroTimeFrame);
-      console.log('userName', userName);
-      console.log('selectedAvatar', selectedAvatar);
-      console.log('selectedPulseCheck', selectedPulseCheck);
-      console.log('selectedTemplate', selectedTemplate);
-      console.log('selectedTeam', selectedTeam);
-      console.log('selectedFacilitator', selectedFacilitator);
-      console.log('scheduleRetroType', scheduleRetroType);
-      console.log('scheduleRetroTime', scheduleRetroTime);
-      console.log('scheduleDescription', scheduleDescription);
-      return;
-      if (
-        currentPanel === 'finalButtonTab' &&
-        retroName != '' &&
-        retroTimeFrame != '' &&
-        selectedTemplate != null &&
-        selectedPulseCheck != null
-      ) {
-        // Call the Retro creation
-        create();
-      }
     }
   };
 
@@ -412,83 +389,181 @@ export function CreateRetroWithTemplatePage({
         ? UserTypeArray[1].id
         : UserTypeArray[0].id;
 
-    if (
-      retroName !== '' &&
-      retroTimeFrame !== '' &&
-      userName !== '' &&
-      selectedAvatar !== '' &&
-      selectedPulseCheck != null &&
-      selectedTemplate != null
-    ) {
-      dispatch({ type: ActionType.CREATE_RETRO, payload: {} });
-      dispatch({
-        type: ActionType.SET_LOADING,
-        payload: { loadingFlag: true },
-      });
-      setRetroNameError('');
-      setIsTimeFrameSet(false);
-      await retro
-        .createTemplate(
-          { name: retroName },
-          retroTimeFrame,
-          '',
-          userName,
-          selectedAvatar,
-          userType,
-          selectedPulseCheck,
-          mySelectedTemplate
-        )
-        .then(
-          res => {
-            // dispatch({ type: ActionType.CREATE_RETRO, payload: {} });
-            const userTypeValue: number =
-              global?.user?.id == res?.creatorId
-                ? UserTypeArray[1].id
-                : UserTypeArray[0].id;
-            dispatch({
-              type: ActionType.SET_PREFERRED_NICKNAME,
-              payload: {
-                preferredNickname: userName,
-                avatar: selectedAvatar,
-                userType: userTypeValue,
-              },
-            });
-            dispatch({
-              type: ActionType.SET_LOADING,
-              payload: { loadingFlag: false },
-            });
-            // Call Join Retro
-            // Get Retro
-            getRetro(res.id as string)
-              .then(retro => {
-                if (retro && retro.id) {
-                  console.log(
-                    '------------- Setting retro details for BoardState in create retro temp page -------------',
-                    retro
-                  );
-                  dispatch({
-                    type: ActionType.SET_CURRENT_RETRO,
-                    payload: { retro },
-                  });
-                }
-              })
-              .catch(e => {
-                console.log('error', e);
+    console.log('isLoginUser', isLoginUser);
+    console.log('retroName', retroName);
+    console.log('retroTimeFrame', retroTimeFrame);
+    console.log('userName', userName);
+    console.log('selectedAvatar', selectedAvatar);
+    console.log('selectedPulseCheck', selectedPulseCheck);
+    console.log('selectedTemplate', selectedTemplate);
+    console.log('selectedTeam', selectedTeam);
+    console.log('selectedFacilitator', selectedFacilitator);
+    console.log('scheduleRetroType', scheduleRetroType);
+    console.log('scheduleRetroTime', scheduleRetroTime);
+    console.log('scheduleDescription', scheduleDescription);
+
+    if (!isLoginUser) {
+      // if the user is not basic and enterprise
+      if (
+        retroName !== '' &&
+        retroTimeFrame !== '' &&
+        userName !== '' &&
+        selectedAvatar !== '' &&
+        selectedPulseCheck != null &&
+        selectedTemplate != null
+      ) {
+        dispatch({ type: ActionType.CREATE_RETRO, payload: {} });
+        dispatch({
+          type: ActionType.SET_LOADING,
+          payload: { loadingFlag: true },
+        });
+        setRetroNameError('');
+        setIsTimeFrameSet(false);
+        await retro
+          .createTemplate(
+            { name: retroName },
+            retroTimeFrame,
+            '',
+            userName,
+            selectedAvatar,
+            userType,
+            selectedPulseCheck,
+            mySelectedTemplate
+          )
+          .then(
+            res => {
+              // dispatch({ type: ActionType.CREATE_RETRO, payload: {} });
+              const userTypeValue: number =
+                global?.user?.id == res?.creatorId
+                  ? UserTypeArray[1].id
+                  : UserTypeArray[0].id;
+              dispatch({
+                type: ActionType.SET_PREFERRED_NICKNAME,
+                payload: {
+                  preferredNickname: userName,
+                  avatar: selectedAvatar,
+                  userType: userTypeValue,
+                },
               });
-            setIsStartRetro(true);
-            handleStartRetro();
-            localStorage.removeItem('selectedTemplate');
-          },
-          err => {
-            console.log('err', err);
-            dispatch({
-              type: ActionType.SET_LOADING,
-              payload: { loadingFlag: false },
-            });
-          }
-        );
+              dispatch({
+                type: ActionType.SET_LOADING,
+                payload: { loadingFlag: false },
+              });
+              // Call Join Retro
+              // Get Retro
+              getRetro(res.id as string)
+                .then(retro => {
+                  if (retro && retro.id) {
+                    console.log(
+                      '------------- Setting retro details for BoardState in create retro temp page -------------',
+                      retro
+                    );
+                    dispatch({
+                      type: ActionType.SET_CURRENT_RETRO,
+                      payload: { retro },
+                    });
+                  }
+                })
+                .catch(e => {
+                  console.log('error', e);
+                });
+              setIsStartRetro(true);
+              handleStartRetro();
+              localStorage.removeItem('selectedTemplate');
+            },
+            err => {
+              console.log('err', err);
+              dispatch({
+                type: ActionType.SET_LOADING,
+                payload: { loadingFlag: false },
+              });
+            }
+          );
+      }
+      sessionStorage.setItem('retroname', retroName);
+    } else {
+      // if the user is basic and enterprise
+      if (
+        retroName !== '' &&
+        retroTimeFrame !== '' &&
+        selectedPulseCheck != null &&
+        selectedTemplate != null &&
+        selectedTeam !== '' &&
+        selectedFacilitator !== '' &&
+        scheduleRetroType !== '' &&
+        scheduleRetroTime !== '' &&
+        scheduleDescription !== ''
+      ) {
+        dispatch({ type: ActionType.CREATE_RETRO, payload: {} });
+        dispatch({
+          type: ActionType.SET_LOADING,
+          payload: { loadingFlag: true },
+        });
+        setRetroNameError('');
+        setIsTimeFrameSet(false);
+        await retro
+          .createTemplate(
+            { name: retroName },
+            retroTimeFrame,
+            '',
+            userName,
+            selectedAvatar,
+            userType,
+            selectedPulseCheck,
+            mySelectedTemplate
+          )
+          .then(
+            res => {
+              // dispatch({ type: ActionType.CREATE_RETRO, payload: {} });
+              const userTypeValue: number =
+                global?.user?.id == res?.creatorId
+                  ? UserTypeArray[1].id
+                  : UserTypeArray[0].id;
+              dispatch({
+                type: ActionType.SET_PREFERRED_NICKNAME,
+                payload: {
+                  preferredNickname: userName,
+                  avatar: selectedAvatar,
+                  userType: userTypeValue,
+                },
+              });
+              dispatch({
+                type: ActionType.SET_LOADING,
+                payload: { loadingFlag: false },
+              });
+              // Call Join Retro
+              // Get Retro
+              getRetro(res.id as string)
+                .then(retro => {
+                  if (retro && retro.id) {
+                    console.log(
+                      '------------- Setting retro details for BoardState in create retro temp page -------------',
+                      retro
+                    );
+                    dispatch({
+                      type: ActionType.SET_CURRENT_RETRO,
+                      payload: { retro },
+                    });
+                  }
+                })
+                .catch(e => {
+                  console.log('error', e);
+                });
+              setIsStartRetro(true);
+              handleStartRetro();
+              localStorage.removeItem('selectedTemplate');
+            },
+            err => {
+              console.log('err', err);
+              dispatch({
+                type: ActionType.SET_LOADING,
+                payload: { loadingFlag: false },
+              });
+            }
+          );
+      }
+      sessionStorage.setItem('retroname', retroName);
     }
-    sessionStorage.setItem('retroname', retroName);
   };
 
   return (
@@ -568,6 +643,18 @@ export function CreateRetroWithTemplatePage({
               handleRetroDateChange={handleRetroDateChange}
               handleScheduleDescriptionChange={handleScheduleDescriptionChange}
             />
+            {activePanel == 'finalTab' && (
+              <ContainedButton
+                name="Save Session"
+                onClick={create}
+                style={{
+                  mt: 5,
+                  minWidth: '75px !important',
+                  height: '36px !important',
+                }}
+                size={'medium'}
+              />
+            )}
           </Box>
         </>
       ) : (
