@@ -222,6 +222,7 @@ export default function ActionItem({
       }
     );
   };
+  
   const functionToGetArray = () => {
     const items: any = [];
     users.map((user, index) => {

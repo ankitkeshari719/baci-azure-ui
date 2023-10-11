@@ -40,6 +40,7 @@ import {
   updateTeam,
   updatePullUsersTeamArray,
   updateUsersTeamArray,
+  getCountOfAllSessionsOverTime,
 } from '../../../helpers/msal/services';
 import { ActionType, GlobalContext } from '../../../contexts/GlobalContext';
 import OutlineButtonWithIconWithNoBorder from '../../CustomizedButton/OutlineButtonWithIconWithNoBorder';
@@ -264,7 +265,7 @@ export default function EditTeam() {
         toDate: formatDateForAPI(toDate, true),
       };
 
-      await getSessionsData(chartInput).then(
+      await getCountOfAllSessionsOverTime(chartInput).then(
         res => {
           if (res.result != undefined && res.result?.length != undefined) {
             setSessionCount(res.result?.length);
