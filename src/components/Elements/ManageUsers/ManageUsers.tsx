@@ -83,7 +83,7 @@ export default function ManageUsers() {
           {/* Right Side */}
           <Box sx={{ width: '75%' }}>
             {/* Table and Search Box For Manage users*/}
-            {isManageUserPage ? <Notifications/>: <EnterpriseRequests />}
+            {isManageUserPage ? <AllUsers /> : <EnterpriseRequests />}
           </Box>
         </Box>
       </Box>

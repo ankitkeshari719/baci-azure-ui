@@ -286,7 +286,7 @@ export function LandingPage({ isDemo }: { isDemo?: boolean }) {
                     }
                   }}
                   value={humanId}
-                  onChange={e => {
+                  onChange={(e: any) => {
                     setHumanId(e.currentTarget.value);
                     setCodeError('');
                   }}
@@ -389,7 +389,7 @@ export function LandingPage({ isDemo }: { isDemo?: boolean }) {
                             }
                           }}
                           value={humanId}
-                          onChange={e => {
+                          onChange={(e: any) => {
                             setHumanId(e.currentTarget.value);
                             setCodeError('');
                           }}
@@ -511,7 +511,7 @@ export function LandingPage({ isDemo }: { isDemo?: boolean }) {
                             }
                           }}
                           value={humanId}
-                          onChange={e => {
+                          onChange={(e: any) => {
                             setHumanId(e.currentTarget.value);
                             setCodeError('');
                           }}

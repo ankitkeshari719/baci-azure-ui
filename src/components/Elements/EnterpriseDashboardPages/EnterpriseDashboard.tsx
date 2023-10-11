@@ -69,6 +69,9 @@ import { ContainedButtonWithIcon } from '../../CustomizedButton/ContainedButtonW
 import { TextButtonWithIcon } from '../../CustomizedButton/TextButtonWithIcon';
 import { OutlinedButtonWithIcon } from '../../CustomizedButton/OutlinedButtonWithIcon';
 import RetroCount from '../../../assets/img/RetroCount.png';
+import UploadImage from '../../../assets/img/Upload Image or Photo.png';
+import Backdrop from '@mui/material/Backdrop';
+import BACITemplate from '../../../assets/img/BACI Template.png';
 
 const theme = createTheme({
   palette: {
@@ -141,6 +144,14 @@ function EnterpriseDashboard() {
 
   const [totalSessions, setTotalSessions] = useState<Number>();
   const [totalParticipants, setTotalParticipants] = useState<Number>();
+  const [open, setOpen] = React.useState(false);
+
+  const handleClose = () => {
+    setOpen(false);
+  };
+  const handleOpen = () => {
+    setOpen(true);
+  };
 
   function createNewTeam() {
     if (global.azureUser?.roleName && global.azureUser?.roleName === BASIC) {
@@ -253,6 +264,9 @@ function EnterpriseDashboard() {
     navigate('/enterprise/createRetro/');
   };
 
+  const navigateToUploadImage = () => {
+    navigate('/enterprise/uploadImage/');
+  };
   return (
     <>
       <Box
@@ -311,13 +325,87 @@ function EnterpriseDashboard() {
                 variant="contained"
                 color="secondary"
                 sx={{ marginLeft: '20px', borderRadius: '10px' }}
-                onClick={navigateToCreateSession}
+                onClick={handleOpen}
               >
                 <span style={{ color: 'white' }}>NEW SESSION</span>
               </Button>
             </ThemeProvider>
           </Box>
         </Box>
+
+ {/* select session flow */}
+ <Backdrop
+          sx={{ color: '#fff', zIndex: theme => theme.zIndex.drawer + 1 }}
+          open={open}
+          onClick={handleClose}
+        >
+          <Box style={{ width: '1000px' }}>
+            <Grid container spacing={2} style={{gridGap:"30px"}}>
+              <Grid
+                item
+                xs={5}
+                onClick={navigateToCreateSession}
+                style={{
+                  backgroundColor: 'white',
+                  borderRadius: '10px',
+                  padding: "10px 10px 20px 10px",
+                  alignContent: 'center',
+                  maxWidth: '450px',
+                  height:"349px"
+                }}
+              >
+                <img
+                  src={BACITemplate}
+                  alt="Logo"
+                  className="logo"
+                  height="189px"
+                  width="400px"
+                />
+                <p style={{ textAlign: 'center', color: 'black',fontSize: '23px' }}>
+                  BACI Template
+                </p>
+                <p style={{ fontSize: '16px', color: 'gray', margin:"10px" }}>
+                Need to run a collaboration session with BACI? 
+                  <br />
+                  Start instantly with preset BACI templates.
+                </p>
+              </Grid>
+             
+              <Grid
+                item
+                xs={5}
+                onClick={navigateToUploadImage}
+                style={{
+                  backgroundColor: 'white',
+                  borderRadius: '10px',
+                  padding: "10px 10px 20px 10px",
+                  maxWidth: '450px',
+                  height:"349px"
+                }}
+              >
+                <img
+                  src={UploadImage}
+                  alt="Logo"
+                  className="logo"
+                  height="189px"
+                  width="400px"
+                />
+                <p
+                  onClick={handleClose}
+                  style={{ textAlign: 'center', color: 'black' ,fontSize: '23px'}}
+                >
+                  Upload Image or Photo
+                </p>
+                <p style={{ fontSize: '16px', color: 'gray',margin:"10px" }}>
+                  Run a collabration session with Post-Its on a wall?
+                  <br/>Digitise it here for easy analysis and safe keeping.
+                </p>
+              </Grid>
+            </Grid>
+          </Box>
+        </Backdrop>
+
+
         {/* Bottom container */}
         <Box display="flex" flexDirection="column" sx={{ overflow: 'auto' }}>
           {/* Retro list starts here after hover */}
@@ -394,6 +482,7 @@ function EnterpriseDashboard() {
 
                     setSelectedId(change.target.value);
                   }}
+                  showAllTeamOption={true}
                 />
 
                 <ContainedButtonWithIcon

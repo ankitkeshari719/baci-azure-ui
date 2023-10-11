@@ -95,10 +95,7 @@ export default function Help() {
             marginTop: '24px',
           }}
         >
-          <H3SemiBoldTypography
-            label="Ask BACI"
-            style={{ color: '#159ADD' }}
-          />
+          <H3SemiBoldTypography label="Ask BACI" style={{ color: '#159ADD' }} />
           <Box display="flex" flexDirection="row" sx={{ marginTop: '24px' }}>
             <BodyRegularTypography
               label="Feel Free to drop us a mail on "
@@ -150,7 +147,7 @@ export default function Help() {
                     ...styles.accessCodeTextField,
                   }}
                   value={email}
-                  onChange={e => {
+                 onChange={(e : any) => {
                     setEmail(e.currentTarget.value);
                     setEmailCodeError('');
                   }}
@@ -192,7 +189,7 @@ export default function Help() {
                     ...styles.messageTextField,
                   }}
                   value={message}
-                  onChange={e => {
+                 onChange={(e : any) => {
                     setMessage(e.currentTarget.value);
                     setMessageCodeError('');
                   }}

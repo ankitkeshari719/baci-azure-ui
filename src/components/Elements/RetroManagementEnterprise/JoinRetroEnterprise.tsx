@@ -137,13 +137,13 @@ export function JoinRetroEnterprise() {
                 label="Retro access code"
                 error={!!codeError}
                 sx={styles.accessCodeTextField}
-                onKeyDown={e => {
+                onKeyDown={(e: any) => {
                   if (e.keyCode === 13) {
                     joinRetro();
                   }
                 }}
                 value={humanId}
-                onChange={e => {
+                onChange={(e: any) => {
                   setHumanId(e.currentTarget.value);
                   setCodeError('');
                 }}

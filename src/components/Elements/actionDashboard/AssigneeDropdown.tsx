@@ -92,7 +92,6 @@ export default function AssigneeDropdown({
                 onClick={() => {
                   handleClose();
                   outAssigneeSelected(user);
-                  console.log(user)
                   setAssigneeId(user?.emailId);
                 }}
               >

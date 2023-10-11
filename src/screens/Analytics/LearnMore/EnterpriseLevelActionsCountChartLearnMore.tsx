@@ -152,8 +152,8 @@ export default function EnterpriseLevelActionsCountChartLearnMore() {
                       component="div"
                       sx={{ mt: 2 }}
                     >
-                      Monitor the completion of improvement actions is
-                      fundamental to teams improvement
+                      Monitor the completion of improvement actions are
+                      fundamental to team improvements
                     </Typography>
                   </li>
                 </ul>
@@ -172,7 +172,7 @@ export default function EnterpriseLevelActionsCountChartLearnMore() {
                 }}
               >
                 <Typography className="aboutTemplate" component="div">
-                  How to read graph
+                  How to read this graph
                 </Typography>
 
                 <Typography
@@ -181,7 +181,8 @@ export default function EnterpriseLevelActionsCountChartLearnMore() {
                   sx={{ mt: 2 }}
                 >
                   The graph shows the break down of total actions created over
-                  time, Total actions are broken into Assigned vs Completed.
+                  time, total actions completed overtime and are divided into
+                  Assigned vs Completed.
                 </Typography>
                 <Typography
                   className="templateDescription"
@@ -212,7 +213,7 @@ export default function EnterpriseLevelActionsCountChartLearnMore() {
                         Decreases is not necessarily negative, just a trigger
                         point to understand and explain e.g. a decrease in a
                         particular month could be caused by Public Holidays or
-                        team absences.
+                        team absentees.
                       </Typography>
                     </li>
                     <li>
@@ -221,8 +222,8 @@ export default function EnterpriseLevelActionsCountChartLearnMore() {
                         component="div"
                         sx={{ mt: 2 }}
                       >
-                        Value more the teams that show consistently show that
-                        most of their actions are being completed.
+                        Reward the teams that show consistency in completing
+                        actions.
                       </Typography>
                     </li>
                   </ol>

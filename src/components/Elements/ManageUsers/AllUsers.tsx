@@ -62,6 +62,8 @@ export default function AllUsers() {
   const [selectedTeam, setSelectedTeam] = React.useState('0');
   const [isSelectAllChecked, setIsSelectAllChecked] = React.useState(false);
   const [openDeleteUserDialog, setOpenDeleteUserDialog] = React.useState(false);
+  const [openDeleteMultipleUserDialog, setOpenDeleteMultipleUserDialog] =
+    React.useState(false);
   const [openUpdateRoleDialog, setUpdateRoleDialog] = React.useState(false);
   const [openRevokeRoleDialog, setRevokeRoleDialog] = React.useState(false);
   const [tempStoreUserId, setTempStoreUserId] = React.useState<any>('');
@@ -232,14 +234,15 @@ export default function AllUsers() {
     setRecords(newRecord);
   };
 
-  // Close Delete User Pop Up
+  // -------------------------------- Delete Single user Functionality --------------------------------
+  // Open Delete User Pop Up
   const handleDeleteUserPopUpOpen = (userId: any, userName: any) => {
     setTempStoreUserId(userId);
     setTempStoreUserName(userName);
     setOpenDeleteUserDialog(true);
   };
 
-  // Open Delete User Pop Up
+  // Close Delete User Pop Up
   const handleDeleteUserPopUpClose = () => {
     setOpenDeleteUserDialog(false);
     setTempStoreUserName('');
@@ -278,6 +281,7 @@ export default function AllUsers() {
     );
   };
 
+  // -------------------------------- Change Role Functionality --------------------------------
   // Open Change User Role Pop up
   const handleChangeUserRolePopUpOpen = (
     roleName: any,
@@ -351,6 +355,17 @@ export default function AllUsers() {
     );
   };
 
+  // -------------------------------- Delete Multiple Users Functionality --------------------------------
+  // Open Multiple Delete Users Pop Up
+  const handleDeleteMultipleUserPopUpOpen = () => {
+    setOpenDeleteMultipleUserDialog(true);
+  };
+
+  // Cole Multiple Delete Users Pop Up
+  const handleDeleteMultipleUserPopUpClose = () => {
+    setOpenDeleteMultipleUserDialog(false);
+  };
+
   // Delete Multiple Users
   const handleDeleteSelectedUsers = async () => {
     dispatch({
@@ -372,6 +387,7 @@ export default function AllUsers() {
           payload: { loadingFlag: false },
         });
         callGetAllUsersByEnterpriseId(tempLocalUserData.enterpriseId);
+        handleDeleteMultipleUserPopUpClose();
       },
       err => {
         console.log('err', err);
@@ -380,6 +396,7 @@ export default function AllUsers() {
           payload: { loadingFlag: false },
         });
         callGetAllUsersByEnterpriseId(tempLocalUserData.enterpriseId);
+        handleDeleteMultipleUserPopUpClose();
       }
     );
   };
@@ -413,7 +430,7 @@ export default function AllUsers() {
               label="Search..."
               variant="outlined"
               sx={{ background: 'white', width: '40%' }}
-              onChange={e => {
+              onChange={(e: any) => {
                 setSearchedVal(e.target.value);
                 handleSearch(e);
               }}
@@ -431,7 +448,7 @@ export default function AllUsers() {
                 id={'delete_selected_users'}
                 label={'Delete Users'}
                 iconPath="/svgs/Delete.svg"
-                onClick={handleDeleteSelectedUsers}
+                onClick={handleDeleteMultipleUserPopUpOpen}
                 style={{
                   display: 'flex',
                   alignItems: 'center',
@@ -447,6 +464,7 @@ export default function AllUsers() {
                 }
                 selectedTeam={selectedTeam}
                 handleChange={handleTeamChange}
+                showAllTeamOption={true}
               />
             </Box>
           </Box>
@@ -459,7 +477,7 @@ export default function AllUsers() {
                     <TableCell>
                       <Checkbox
                         checked={item.checked}
-                        onChange={e => handleChangeCheckbox(e, item.id)}
+                        onChange={(e: any) => handleChangeCheckbox(e, item.id)}
                         inputProps={{ 'aria-label': 'controlled' }}
                       />
                     </TableCell>
@@ -636,12 +654,13 @@ export default function AllUsers() {
         </DialogTitle>
         <Box
           sx={{
-            width: '650px',
-            minWidth: '600px',
+            // width: '650px',
+            // minWidth: '600px',
             height: height / 4,
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'center',
+            padding: '24px !important',
           }}
         >
           <BodyRegularTypography
@@ -727,12 +746,13 @@ export default function AllUsers() {
         </DialogTitle>
         <Box
           sx={{
-            width: '650px',
-            minWidth: '600px',
+            // width: '650px',
+            // minWidth: '600px',
             height: height / 4,
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'center',
+            padding: '24px !important',
           }}
         >
           <BodyRegularTypography
@@ -818,12 +838,13 @@ export default function AllUsers() {
         </DialogTitle>
         <Box
           sx={{
-            width: '650px',
-            minWidth: '600px',
+            // width: '650px',
+            // minWidth: '600px',
             height: height / 4,
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'center',
+            padding: '24px !important',
           }}
         >
           <BodyRegularTypography
@@ -860,6 +881,98 @@ export default function AllUsers() {
                 minWidth: '75px !important',
                 height: '36px !important',
                 background: '#159ADD !important',
+              }}
+              size={'medium'}
+            />
+          </Box>
+        </Box>
+      </Dialog>
+      {/* Delete Multiple User Pop Up */}
+      <Dialog open={openDeleteMultipleUserDialog}>
+        <DialogTitle
+          style={{ padding: '20px', borderBottom: '1px solid #EA4335' }}
+        >
+          <Grid container sx={{ display: 'flex', alignItems: 'center' }}>
+            <Grid item sm={6}>
+              <Box
+                display="flex"
+                justifyContent="flex-start"
+                alignItems="center"
+              >
+                <Icons.ExclamationCircleOutline
+                  size={32}
+                  style={{
+                    color: '#EA4335',
+                    fontSize: '32px',
+                  }}
+                />
+                <H5SemiBoldTypography
+                  label={'Delete Users'}
+                  style={{
+                    color: '#343434',
+                    marginLeft: '12px !important',
+                  }}
+                />
+              </Box>
+            </Grid>
+            <Grid item sm={6}>
+              <Box display="flex" justifyContent="flex-end">
+                <Icons.X
+                  size={20}
+                  style={{
+                    cursor: 'pointer',
+                  }}
+                  onClick={handleDeleteMultipleUserPopUpClose}
+                />
+              </Box>
+            </Grid>
+          </Grid>
+        </DialogTitle>
+        <Box
+          sx={{
+            // width: '650px',
+            // minWidth: '600px',
+            height: height / 4,
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            padding: '24px !important',
+          }}
+        >
+          <BodyRegularTypography
+            label={`Are you sure you want to delete selected users ?`}
+            style={{ textAlign: 'center' }}
+          />
+        </Box>
+        {/* Buttons */}
+        <Box sx={{ mx: 3 }}>
+          <Box
+            sx={{
+              width: '100%',
+              display: 'flex',
+              flex: '1 0 auto',
+              alignItems: 'flex-end',
+              justifyContent: 'flex-end',
+              my: 2,
+            }}
+          >
+            <OutlinedButton
+              label="Cancel"
+              size={'medium'}
+              onClick={handleDeleteMultipleUserPopUpClose}
+              style={{
+                minWidth: '75px !important',
+                height: '36px !important',
+                marginRight: '20px !important',
+              }}
+            />
+            <ContainedButton
+              name="Yes"
+              onClick={() => handleDeleteSelectedUsers()}
+              style={{
+                minWidth: '75px !important',
+                height: '36px !important',
+                background: '#EA4335 !important',
               }}
               size={'medium'}
             />

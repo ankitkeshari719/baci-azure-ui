@@ -821,7 +821,9 @@ export const ReportSummary = React.forwardRef((props, ref) => {
                 </tr>
                 <tr style={{ border: '1px solid #CCCCCC' }}>
                   <td style={{ border: '1px solid #CCCCCC' }}>
-                    <Typography className="textTypeOne">Time Taken&nbsp;</Typography>
+                    <Typography className="textTypeOne">
+                      Time Taken&nbsp;
+                    </Typography>
                   </td>
                   <td style={{ border: '1px solid #CCCCCC' }}>
                     <Typography
@@ -1260,7 +1262,9 @@ export const ReportSummary = React.forwardRef((props, ref) => {
                   rows={3}
                   maxRows={4}
                   value={submittedFeedback}
-                  onChange={e => handleTextFieldChange(e.currentTarget.value)}
+                  onChange={(e: any) =>
+                    handleTextFieldChange(e.currentTarget.value)
+                  }
                   sx={{
                     width: '674px',
                     height: '100px',

@@ -1,0 +1,135 @@
+/* Scanner.css */
+.scanner-container {
+    position: relative;
+    width: "1000px"; /* Adjust the container width as needed */
+    overflow: hidden;
+    height:"300px"
+  }
+  
+  .scanning-line {
+    position: absolute;
+    //* Initial position above the container */
+    left: 0;
+    width: 100%;
+    height: 3px; /* Adjust the line thickness as needed */
+    background-color: #CEEFFF; /* Adjust the line color as needed */
+    animation: scan 2s linear infinite; /* Adjust animation duration as needed */
+  }
+  
+  @keyframes scan {
+    0% {
+      top: -100%; /* Start scanning from above the container */
+    }
+    100% {
+      top: 100%; /* Complete scanning below the container */
+    }
+  }
+
+  /* UploadImageScan.scss */
+
+.mainContainer {
+  overflow-y: auto;
+
+  .gridContainer {
+    height: calc(100vh - 64px) !important;
+    padding: 10px;
+    padding-top: 30px;
+  }
+
+  .uploadSection {
+    .uploadTitle {
+      font-size: 32px;
+      margin-left: 16px;
+    }
+
+    .imageContainer {
+      display: flex;
+      height: 330px;
+      width: auto;
+      margin-top: 10px;
+      margin-left: 14px;
+      border-radius: 10px;
+      justify-content: center;
+      align-items: center;
+      transition: all 0.3s ease-in-out;
+      background-color: black;
+      padding: 5px;
+
+      // .scanner-container {
+      //   .scanning-line {
+      //     // Your scanning line styles here
+      //   }
+      //   .storedImage {
+      //     // Your stored image styles here
+      //   }
+      // }
+    }
+
+    .buttonContainer {
+      display: flex;
+      flex-direction: row;
+      justify-content: center;
+      justify-items: center;
+
+      .scanButton {
+        background-color: #159ADD;
+        border-radius: 24px;
+        width: 120px;
+        align-items: center;
+        color: white;
+        margin-top: 10px;
+      }
+    }
+  }
+
+  .ruleListSection {
+    margin-top: 50px;
+
+    .ruleList {
+      // Your rule list styles here
+
+      .ruleItem {
+        display: flex;
+        flex-direction: row;
+
+        .ruleItemCircle {
+          height: 28px;
+          width: 28px;
+          background-color: #E3E3E3;
+          border-radius: 50%;
+          font-size: 16px;
+
+          .ruleItemCircleText {
+            padding: 7px;
+            color: #676767;
+            font-size: 16px;
+          }
+        }
+
+        .ruleItemTitle {
+          color: #EE7538;
+          margin-left: 5px;
+          font-size: 16px;
+        }
+
+        .ruleItemDescription {
+          display: flex;
+          flex-direction: row;
+          margin-left: 7px;
+
+          .ruleItemSeparator {
+            border-left: 2px solid gray;
+            padding: 2px;
+            margin-top: 5px;
+            margin-bottom: 10px;
+          }
+
+          .ruleItemDescriptionText {
+            margin-left: 15px;
+            font-size: 16px;
+          }
+        }
+      }
+    }
+  }
+}

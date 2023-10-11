@@ -29,6 +29,7 @@ import {
   createEnterpriseRequest,
   deleteEnterpriseRequestById,
   getEnterpriseById,
+  getUserByEmailId,
   updateUser,
 } from '../../../helpers/msal/services';
 import { GlobalContext, ActionType } from '../../../contexts/GlobalContext';
@@ -209,11 +210,27 @@ export default function EditProfile({ handleEdit }: Props) {
       cityCode != ''
     ) {
       // Call API
-      callUpdateUser();
+      callGetUserByEmailId();
     }
   };
 
-  const callUpdateUser = async () => {
+  const callGetUserByEmailId = async () => {
+    dispatch({
+      type: ActionType.SET_LOADING,
+      payload: { loadingFlag: true },
+    });
+    const emailId = tempLocalUserData && tempLocalUserData.emailId;
+    await getUserByEmailId(emailId).then(
+      res => {
+        callUpdateUser(res);
+      },
+      err => {
+        console.log('err', err);
+      }
+    );
+  };
+
+  const callUpdateUser = async (userData: any) => {
     dispatch({
       type: ActionType.SET_LOADING,
       payload: { loadingFlag: true },
@@ -221,6 +238,7 @@ export default function EditProfile({ handleEdit }: Props) {
 
     const teamsIds = teams.map((team: any) => team.teamId);
     const requestBody = {
+      ...userData,
       firstName: firstName,
       lastName: lastName,
       phoneNo: phoneNo,
@@ -238,7 +256,7 @@ export default function EditProfile({ handleEdit }: Props) {
         localStorage.setItem('userData', JSON.stringify(res));
         dispatch({
           type: ActionType.SET_AZURE_USER,
-          payload: {azureUser :res}
+          payload: { azureUser: res },
         });
         handleEdit();
       },
@@ -329,7 +347,7 @@ export default function EditProfile({ handleEdit }: Props) {
         localStorage.setItem('userData', JSON.stringify(res));
         dispatch({
           type: ActionType.SET_AZURE_USER,
-          payload: {azureUser :res}
+          payload: { azureUser: res },
         });
         setIsEnterpriserRequested(!isEnterpriserRequested);
       },
@@ -562,7 +580,7 @@ export default function EditProfile({ handleEdit }: Props) {
                         ...styles.accessCodeTextField,
                       }}
                       value={firstName}
-                      onChange={e => {
+                      onChange={(e: any) => {
                         setFirstName(e.currentTarget.value);
                         setFirstNameCodeError('');
                       }}
@@ -614,7 +632,7 @@ export default function EditProfile({ handleEdit }: Props) {
                         ...styles.accessCodeTextField,
                       }}
                       value={lastName}
-                      onChange={e => {
+                      onChange={(e: any) => {
                         setLastName(e.currentTarget.value);
                         setLastNameCodeError('');
                       }}
@@ -679,7 +697,7 @@ export default function EditProfile({ handleEdit }: Props) {
                         ...styles.accessCodeTextField,
                       }}
                       value={emailId}
-                      onChange={e => {
+                      onChange={(e: any) => {
                         setEmailId(e.currentTarget.value);
                       }}
                       InputProps={{
@@ -725,7 +743,7 @@ export default function EditProfile({ handleEdit }: Props) {
                         ...styles.accessCodeTextField,
                       }}
                       value={phoneNo}
-                      onChange={e => {
+                      onChange={(e: any) => {
                         setPhoneNo(e.currentTarget.value);
                         setPhoneNoError('');
                       }}
@@ -791,7 +809,7 @@ export default function EditProfile({ handleEdit }: Props) {
                         ...styles.accessCodeTextField,
                       }}
                       value={country}
-                      onChange={e => {
+                      onChange={(e: any) => {
                         setCountry(e.currentTarget.value);
                         setCountryCodeError('');
                       }}
@@ -843,7 +861,7 @@ export default function EditProfile({ handleEdit }: Props) {
                         ...styles.accessCodeTextField,
                       }}
                       value={cityCode}
-                      onChange={e => {
+                      onChange={(e: any) => {
                         setCityCode(e.currentTarget.value);
                         setCityCodeCodeError('');
                       }}
@@ -925,7 +943,7 @@ export default function EditProfile({ handleEdit }: Props) {
                         ...styles.accessCodeTextField,
                       }}
                       value={companyName}
-                      onChange={e => {
+                      onChange={(e: any) => {
                         setCompanyName(e.currentTarget.value);
                       }}
                       InputProps={{
@@ -1044,7 +1062,7 @@ export default function EditProfile({ handleEdit }: Props) {
                         ...styles.accessCodeTextField,
                       }}
                       value={role}
-                      onChange={e => {
+                      onChange={(e: any) => {
                         setRole(e.currentTarget.value);
                       }}
                       InputProps={{

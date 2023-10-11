@@ -58,7 +58,7 @@ export default function RetroPropsPanel({
   };
   const doneEditRetroNameClickHandler = () => {
     setIsEditClick(false);
-  }
+  };
   const saveAndProcessAction = async (
     actionName: BoardActionType,
     parameters: any
@@ -159,57 +159,65 @@ export default function RetroPropsPanel({
 
             <div style={{ width: '100%' }}>
               {isEditClicked ? (
-                <div style={{
-                  display: 'inline-flex',
-                  verticalAlign: 'text-bottom',
-                  boxSizing: 'inherit',
-                  textAlign: 'center',
-                  alignItems: 'center',
-                  width: '100%',
-                }}>
+                <div
+                  style={{
+                    display: 'inline-flex',
+                    verticalAlign: 'text-bottom',
+                    boxSizing: 'inherit',
+                    textAlign: 'center',
+                    alignItems: 'center',
+                    width: '100%',
+                  }}
+                >
                   <div style={{ width: '70%' }}>
-                  <TextField
-                  multiline
-                  variant="standard"
-                  label="Retro Name"
-                  sx={{ color: '#727D84', minWidth: '200px', margin: '10px' }}
-                  value={localRetroName}
-                  onChange={e => {
-                    setLocalRetroName(e.currentTarget.value);
-                  }}
-                  onBlur={async () => {
-                    await saveAndProcessAction(
-                      BoardActionType.UPDATE_RETRO_DETAILS,
-                      {
-                        retroName: localRetroName,
-                      }
-                    );
-                  }}
-                  onKeyDown={async e => {
-                    if (e.keyCode === 13) {
-                      await saveAndProcessAction(
-                        BoardActionType.UPDATE_RETRO_DETAILS,
-                        {
-                          retroName: localRetroName,
-                          
+                    <TextField
+                      multiline
+                      variant="standard"
+                      label="Retro Name"
+                      sx={{
+                        color: '#727D84',
+                        minWidth: '200px',
+                        margin: '10px',
+                      }}
+                      value={localRetroName}
+                      onChange={(e: any) => {
+                        setLocalRetroName(e.currentTarget.value);
+                      }}
+                      onBlur={async () => {
+                        await saveAndProcessAction(
+                          BoardActionType.UPDATE_RETRO_DETAILS,
+                          {
+                            retroName: localRetroName,
+                          }
+                        );
+                      }}
+                      onKeyDown={async e => {
+                        if (e.keyCode === 13) {
+                          await saveAndProcessAction(
+                            BoardActionType.UPDATE_RETRO_DETAILS,
+                            {
+                              retroName: localRetroName,
+                            }
+                          );
+                          (e.target as HTMLInputElement).blur();
                         }
-                      );
-                      (e.target as HTMLInputElement).blur();
-                    }
-                  }}
-                />
+                      }}
+                    />
+                  </div>
+                  <div style={{ width: '30%' }}>
+                    <Button onClick={doneEditRetroNameClickHandler}>
+                      <DoneIcon color="disabled" fontSize="large" />
+                    </Button>
+                  </div>
                 </div>
-                <div style={{ width: '30%' }}>
-                      <Button onClick={doneEditRetroNameClickHandler}>
-                        <DoneIcon color="disabled" fontSize='large' />
-                      </Button>
-                    </div>
-                </div>
-                
               ) : (
                 <>
                   <div>
-                    <Typography style={{ marginLeft: '5px', color: '#00000099' }}>Retro Name</Typography>
+                    <Typography
+                      style={{ marginLeft: '5px', color: '#00000099' }}
+                    >
+                      Retro Name
+                    </Typography>
                   </div>
                   <div
                     style={{
@@ -221,7 +229,7 @@ export default function RetroPropsPanel({
                       width: '100%',
                     }}
                   >
-                    <div style={{width: '70%'}}>
+                    <div style={{ width: '70%' }}>
                       <Typography style={{ marginLeft: '10px', float: 'left' }}>
                         {localRetroName}
                       </Typography>
@@ -247,7 +255,7 @@ export default function RetroPropsPanel({
                   span: { visibility: 'visible', background: 'white' },
                 }}
                 value={localRetroTimeframe}
-                onChange={e => {
+                onChange={(e:any) => {
                   setLocalRetroTimeframe(e.target.value);
                 }}
                 onBlur={() => {

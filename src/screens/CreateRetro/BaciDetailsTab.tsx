@@ -138,7 +138,7 @@ export function BaciDetailsTab({
             display: 'flex',
             flexDirection: 'row',
             alignItems: 'center',
-            py: activePanel === 'detailsPanel' ? 0 : 4,
+            py: activePanel === 'detailsPanel' ? 0 : 3,
           }}
         >
           {activePanel != 'detailsPanel' &&
@@ -200,11 +200,11 @@ export function BaciDetailsTab({
                         error={!!retroNameError}
                         helperText={retroNameError}
                         sx={styles.retroNameTextField}
-                        onChange={e =>
+                        onChange={(e: any) =>
                           handleRetroNameChange(e.currentTarget.value)
                         }
                         multiline
-                        onKeyDown={e => {
+                        onKeyDown={(e: any) => {
                           if (e.keyCode === 13) {
                             e.preventDefault();
                             timeFrameRef.current?.focus();
@@ -227,7 +227,7 @@ export function BaciDetailsTab({
                         sx={styles.timeFramefield}
                         value={retroTimeFrame}
                         select
-                        onChange={e => handleTimeFrame(e?.target?.value)}
+                        onChange={(e: any) => handleTimeFrame(e?.target?.value)}
                       >
                         <MenuItem disableRipple value={'1 day'}>
                           1 day

@@ -67,7 +67,7 @@ export default function ActionDashboard() {
               background: 'white',
               width: '450px',
             }}
-            onChange={e => setSearchedVal(e.target.value)}
+            onChange={(e: any) => setSearchedVal(e.target.value)}
             value={searchedVal}
             InputProps={{
               startAdornment: (

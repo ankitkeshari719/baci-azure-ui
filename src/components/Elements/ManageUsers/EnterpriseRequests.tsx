@@ -512,7 +512,7 @@ export default function EnterpriseRequests() {
               label="Search..."
               variant="outlined"
               sx={{ background: 'white', width: '30%' }}
-              onChange={e => {
+              onChange={(e: any) => {
                 setSearchedVal(e.target.value);
                 handleSearch(e);
               }}
@@ -560,6 +560,7 @@ export default function EnterpriseRequests() {
                 }
                 selectedTeam={selectedTeam}
                 handleChange={handleChange}
+                showAllTeamOption={true}
               />
             </Box>
           </Box>
@@ -572,7 +573,7 @@ export default function EnterpriseRequests() {
                     <TableCell>
                       <Checkbox
                         checked={item?.checked}
-                        onChange={e => handleChangeCheckbox(e, item.id)}
+                        onChange={(e: any) => handleChangeCheckbox(e, item.id)}
                         inputProps={{ 'aria-label': 'controlled' }}
                       />
                     </TableCell>
@@ -738,6 +739,7 @@ export default function EnterpriseRequests() {
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'center',
+            padding: '24px',
           }}
         >
           <BodyRegularTypography
@@ -828,6 +830,7 @@ export default function EnterpriseRequests() {
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'center',
+            padding: '24px',
           }}
         >
           <BodyRegularTypography

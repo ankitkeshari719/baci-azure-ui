@@ -275,12 +275,13 @@ export default function TeamsDashboard() {
             marginTop: '16px',
           }}
         >
+          {/* Search Field */}
           <TextField
             id="outlined-basic"
             label="Search..."
             variant="outlined"
             sx={{ background: 'white', width: '40%' }}
-            onChange={e => {
+            onChange={(e: any) => {
               setSearchedVal(e.target.value);
               handleSearch(e);
             }}
@@ -298,57 +299,124 @@ export default function TeamsDashboard() {
             <TableBody>
               {recordAfterPagingAndSorting().map((item: any) => {
                 return (
-                  <TableRow key={item.id}>
+                  <TableRow key={item?.id}>
                     <TableCell>
                       <Checkbox
-                        checked={item.checked}
-                        onChange={e => handleChangeCheckbox(e, item.id)}
+                        checked={item?.checked}
+                        onChange={(e: any) => handleChangeCheckbox(e, item?.id)}
                         inputProps={{ 'aria-label': 'controlled' }}
                       />
                     </TableCell>
-                    <TableCell>{item.teamName}</TableCell>
+                    <TableCell>{item?.teamName}</TableCell>
                     <TableCell>
-                      <LazyLoadImage
-                        className="avatar"
-                        style={{
-                          width: '40px',
-                          height: '40px',
-                          borderRadius: '50%',
-                          border: 'none',
-                        }}
-                        src={
-                          '/avatars/animals/' +
-                          item.createdByObj.selectedAvatar +
-                          '.svg'
-                        }
-                      ></LazyLoadImage>
-                      {' ' +
-                        item.createdByObj.firstName +
-                        ' ' +
-                        item.createdByObj.lastName}
+                      {console.log('item.createdByObj', item.createdByObj)}
+                      {item.createdByObj === undefined ? (
+                        <>
+                          <LazyLoadImage
+                            width="48px !important"
+                            height="48px !important"
+                            style={{
+                              borderRadius: '50%',
+                              cursor: 'pointer',
+                              border: 'none',
+                            }}
+                            src={'/svgs/DefaultUser.svg'}
+                          ></LazyLoadImage>
+                          {' ' + ' '}
+                        </>
+                      ) : (
+                        <>
+                          {item.createdByObj?.selectedAvatar != '' ? (
+                            <LazyLoadImage
+                              className="avatar"
+                              style={{
+                                height: '48px',
+                                width: '48px',
+                                borderRadius: '50%',
+                                border: '5px solid #f9fbf8',
+                                cursor: 'pointer',
+                              }}
+                              src={
+                                '/avatars/animals/' +
+                                item.createdByObj?.selectedAvatar +
+                                '.svg'
+                              }
+                            ></LazyLoadImage>
+                          ) : (
+                            <LazyLoadImage
+                              width="48px !important"
+                              height="48px !important"
+                              style={{
+                                borderRadius: '50%',
+                                cursor: 'pointer',
+                                border: 'none',
+                              }}
+                              src={'/svgs/DefaultUser.svg'}
+                            ></LazyLoadImage>
+                          )}
+                          {' ' +
+                            item.createdByObj?.firstName +
+                            ' ' +
+                            item.createdByObj?.lastName}
+                        </>
+                      )}
                     </TableCell>
                     <TableCell>
-                      {item.users.length < 5 ? (
+                      {item?.users.length < 5 ? (
                         <Box
                           display="flex"
                           flexDirection="row"
                           alignItems="center"
                           justifyContent="center"
                         >
-                          {item.users?.map(
+                          {item?.users?.map(
                             (user: any, index: any) =>
                               index < 4 && (
-                                <Avatar
-                                  key={index}
-                                  avatar={user.selectedAvatar}
-                                  css={{
-                                    width: '40px',
-                                    height: '40px',
-                                    marginLeft: '0',
-                                    marginRight: '-16px',
-                                    border: '3px solid transparent',
-                                  }}
-                                />
+                                <>
+                                  {console.log(
+                                    'user?.selectedAvatar',
+                                    user?.selectedAvatar
+                                  )}
+                                  {user?.selectedAvatar === undefined ? (
+                                    <LazyLoadImage
+                                      width="48px !important"
+                                      height="48px !important"
+                                      style={{
+                                        borderRadius: '50%',
+                                        border: 'none',
+                                      }}
+                                      src={'/svgs/DefaultUser.svg'}
+                                    ></LazyLoadImage>
+                                  ) : (
+                                    <>
+                                      {user?.selectedAvatar != '' ? (
+                                        <LazyLoadImage
+                                          className="avatar"
+                                          style={{
+                                            height: '48px',
+                                            width: '48px',
+                                            borderRadius: '50%',
+                                          }}
+                                          src={
+                                            '/avatars/animals/' +
+                                            user?.selectedAvatar +
+                                            '.svg'
+                                          }
+                                        ></LazyLoadImage>
+                                      ) : (
+                                        <LazyLoadImage
+                                          width="48px !important"
+                                          height="48px !important"
+                                          style={{
+                                            borderRadius: '50%',
+                                            border: 'none',
+                                          }}
+                                          src={'/svgs/DefaultUser.svg'}
+                                        ></LazyLoadImage>
+                                      )}
+                                    </>
+                                  )}
+                                </>
                               )
                           )}
                         </Box>
@@ -376,7 +444,7 @@ export default function TeamsDashboard() {
                               )
                           )}
                           <TinyTextTypography
-                            label={'+' + (item.users.length - 4).toString()}
+                            label={'+' + (item.users?.length - 4).toString()}
                             style={{
                               marginLeft: '20px !important',
                               color: '#808080',
@@ -385,11 +453,11 @@ export default function TeamsDashboard() {
                         </Box>
                       )}
                     </TableCell>
-                    <TableCell>{item.department}</TableCell>
-                    <TableCell>{item.retroCount}</TableCell>
-                    <TableCell>{item.actionsCount}</TableCell>
+                    <TableCell>{item?.department}</TableCell>
+                    <TableCell>{item?.retroCount}</TableCell>
+                    <TableCell>{item?.actionsCount}</TableCell>
                     <TableCell>
-                      {moment(item.createdAt).format('Do MMM YYYY')}
+                      {moment(item?.createdAt).format('Do MMM YYYY')}
                     </TableCell>
                     <TableCell>
                       <Box
@@ -405,7 +473,7 @@ export default function TeamsDashboard() {
                             cursor: 'pointer',
                             color: '#4E4E4E',
                           }}
-                          onClick={() => editTeam(item.id)}
+                          onClick={() => editTeam(item?.id)}
                         />
                         <Icons.TrashOutline
                           size={20}
@@ -414,7 +482,7 @@ export default function TeamsDashboard() {
                             color: '#4E4E4E',
                           }}
                           onClick={() =>
-                            handleDeleteTeamPopUpOpen(item.id, item.teamName)
+                            handleDeleteTeamPopUpOpen(item?.id, item.teamName)
                           }
                         />
                       </Box>
@@ -470,12 +538,13 @@ export default function TeamsDashboard() {
         </DialogTitle>
         <Box
           sx={{
-            width: '600px',
-            minWidth: '600px',
+            // width: '600px',
+            // minWidth: '600px',
             height: height / 4,
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'center',
+            padding: '24px !important',
           }}
         >
           <BodyRegularTypography

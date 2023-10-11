@@ -1,7 +1,13 @@
 import * as React from 'react';
 import './styles.scss';
 import * as Icons from 'heroicons-react';
-import {RocketLaunchIcon, CheckCircleIcon, BookmarkIcon, BugAntIcon, BoltIcon } from '@heroicons/react/24/outline';
+import {
+  RocketLaunchIcon,
+  CheckCircleIcon,
+  BookmarkIcon,
+  BugAntIcon,
+  BoltIcon,
+} from '@heroicons/react/24/outline';
 import { ActionInterface } from '../../helpers/types';
 import { ListItemIcon, ListItemText } from '@material-ui/core';
 import {
@@ -79,7 +85,7 @@ export default function ActionItem({
     null
   );
   const openMainMenu = Boolean(mainAnchorEl);
-const [jiraProjects,setJiraProjects]=React.useState<any>([]);
+  const [jiraProjects, setJiraProjects] = React.useState<any>([]);
 
   // For Users Menu
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
@@ -88,7 +94,7 @@ const [jiraProjects,setJiraProjects]=React.useState<any>([]);
   const openProjectList = Boolean(anchorEl1);
   const [selectedActionForAssign, setSelectedActionForAssign] =
     React.useState<ActionInterface>();
-  const [showDialog,setShowDialog]=React.useState<boolean>(false);
+  const [showDialog, setShowDialog] = React.useState<boolean>(false);
   const userReacted = !!(action.reacts || []).find(
     r => r.by === global.user.id
   );
@@ -216,6 +222,7 @@ const [jiraProjects,setJiraProjects]=React.useState<any>([]);
       }
     );
   };
+  
   const functionToGetArray = () => {
     const items: any = [];
     users.map((user, index) => {
@@ -270,12 +277,9 @@ const [jiraProjects,setJiraProjects]=React.useState<any>([]);
     return items;
   };
 
-
-
   const menuItemsData: any = {
-    label: action?.assigneeAvatar === '' ||
-      action.assigneeAvatar === undefined ? (
- 
+    label:
+      action?.assigneeAvatar === '' || action.assigneeAvatar === undefined ? (
         <LazyLoadImage
           className="avatar"
           style={{
@@ -283,14 +287,11 @@ const [jiraProjects,setJiraProjects]=React.useState<any>([]);
             height: '32px',
             borderRadius: '50%',
             border: 'none',
-
           }}
           src={'/svgs/DefaultUser.svg'}
-        // onClick={(event)=>{handleMainMenuClick(event)} }
+          // onClick={(event)=>{handleMainMenuClick(event)} }
         ></LazyLoadImage>
-      
-    ) : (
-   
+      ) : (
         <LazyLoadImage
           width="32px !important"
           height="32px !important"
@@ -302,10 +303,9 @@ const [jiraProjects,setJiraProjects]=React.useState<any>([]);
             border: 'none',
           }}
           src={'/avatars/animals/' + action?.assigneeAvatar + '.svg'}
-        // onClick={(event)=>{handleMainMenuClick(event)} }
+          // onClick={(event)=>{handleMainMenuClick(event)} }
         ></LazyLoadImage>
-     
-    ),
+      ),
     items: [
       {
         label: '   Edit   ',
@@ -352,37 +352,46 @@ const [jiraProjects,setJiraProjects]=React.useState<any>([]);
       {
         label: '    Export to JIRA  ',
         leftIcon: (
-          <img src="/images/jira.png" style={{ height: '18px', width: '18px' }} />
+          <img
+            src="/images/jira.png"
+            style={{ height: '18px', width: '18px' }}
+          />
         ),
         rightIcon: <img src="/svgs/RightArrow.svg" />,
-        items: global.jiraCode==""?[
-          {
-            label: 'Connect JIRA',
-            leftIcon: (<img src="/images/ArrowLeftOnRectangle.png" />),
-            callback: (()=>setShowDialog(true))
-
-          }
-        ]:[
-          {label:'Select JIRA Project',disabled},
-          {
-            label: 'Project 1',
-            leftIcon: <RocketLaunchIcon height="18px"/>,
-            rightIcon: <img src="/svgs/RightArrow.svg" />,
-            callback: (()=>setShowDialog(true)),
-            items:[
-              {label:'Export as...',disabled},
-              {label:'Task',
-            leftIcon:<CheckCircleIcon height="18px"/>
-          },{label:'Story',
-          leftIcon:<BookmarkIcon height="18px"/>},{label:'Bug',
-          leftIcon:<BugAntIcon height="18px"/>},{label:"Epic",
-          leftIcon:<BoltIcon height="18px"/>}]
-          }
-        ],
+        items:
+          global.jiraCode == ''
+            ? [
+                {
+                  label: 'Connect JIRA',
+                  leftIcon: <img src="/images/ArrowLeftOnRectangle.png" />,
+                  callback: () => setShowDialog(true),
+                },
+              ]
+            : [
+                { label: 'Select JIRA Project', disabled },
+                {
+                  label: 'Project 1',
+                  leftIcon: <RocketLaunchIcon height="18px" />,
+                  rightIcon: <img src="/svgs/RightArrow.svg" />,
+                  callback: () => setShowDialog(true),
+                  items: [
+                    { label: 'Export as...', disabled },
+                    {
+                      label: 'Task',
+                      leftIcon: <CheckCircleIcon height="18px" />,
+                    },
+                    {
+                      label: 'Story',
+                      leftIcon: <BookmarkIcon height="18px" />,
+                    },
+                    { label: 'Bug', leftIcon: <BugAntIcon height="18px" /> },
+                    { label: 'Epic', leftIcon: <BoltIcon height="18px" /> },
+                  ],
+                },
+              ],
         callback: handleUsersMenuClick,
         // global.jiracode
       },
-
 
       {
         label: '   Remove   ',
@@ -402,11 +411,9 @@ const [jiraProjects,setJiraProjects]=React.useState<any>([]);
     ],
   };
 
-  React.useEffect(()=>{
-if(global.jiraCode!="")
-setJiraProjects(loadJiraProjects());
-
-  },[global.jiraCode])
+  React.useEffect(() => {
+    if (global.jiraCode != '') setJiraProjects(loadJiraProjects());
+  }, [global.jiraCode]);
   //load jira projects
   const loadJiraProjects = async (): Promise<string[]> => {
     return await listJiraProjects(global.jiraCode as string).then(
@@ -417,7 +424,7 @@ setJiraProjects(loadJiraProjects());
             payload: { jiraCode: '' },
           });
         }
-      
+
         setJiraProjects(res.response);
         return res.response;
       },
@@ -443,7 +450,6 @@ setJiraProjects(loadJiraProjects());
 
   return (
     <>
-  
       <ListItem key={labelId} style={{ padding: '8px 12px' }}>
         {/* Checkbox */}
         {!disabled && !ended && !global.leaveRetro && (
@@ -546,8 +552,8 @@ setJiraProjects(loadJiraProjects());
                 fullWidth
                 multiline
                 value={editActionValue}
-                onChange={e => setEditActionValue(e.currentTarget.value)}
-                onKeyDown={e => {
+                onChange={(e: any) => setEditActionValue(e.currentTarget.value)}
+                onKeyDown={(e: any) => {
                   const tempValue = editActionValue;
                   const removedEnter =
                     tempValue && tempValue.replace(/[\r\n]/gm, '');
@@ -919,33 +925,28 @@ setJiraProjects(loadJiraProjects());
           </Menu>
         </ListItemAvatar> */}
         <Box
-                    component="span"
-                    sx={{
-             
-                      width:'40px',
-                      overflow:'hidden'
-                    }}
-              
-                  >
-        <NestedDropdown
-       
-          menuItemsData={
-            global.user.userType == 2
-              ? menuItemsData
-              : {
-                label: menuItemsData.label,
-                items: [menuItemsData.items[0]],
-              }
-          }
-          MenuProps={{
-            elevation: 4,
+          component="span"
+          sx={{
+            width: '40px',
+            overflow: 'hidden',
           }}
-          ButtonProps={{ variant: undefined }}
-        />
+        >
+          <NestedDropdown
+            menuItemsData={
+              global.user.userType == 2
+                ? menuItemsData
+                : {
+                    label: menuItemsData.label,
+                    items: [menuItemsData.items[0]],
+                  }
+            }
+            MenuProps={{
+              elevation: 4,
+            }}
+            ButtonProps={{ variant: undefined }}
+          />
         </Box>
       </ListItem>
-
-   
 
       <Menu
         id="long-menu"
@@ -1068,22 +1069,21 @@ setJiraProjects(loadJiraProjects());
         )}
       </Menu>
 
-
       {/* <ConfirmContext.Provider value={{ confirmAction, setConfirmAction }}> */}
       <DyanamicDialog
         show={showDialog}
         title={'Exit automation?'}
-        text={'All temporary groups created (in dotted lines) would be discarded.'}
-        action={ 'YES, EXIT'}
+        text={
+          'All temporary groups created (in dotted lines) would be discarded.'
+        }
+        action={'YES, EXIT'}
         type="Alert"
         onCancel={() => setShowDialog(false)}
         onConfirm={() => connect()}
       />
 
       {/* {props.children} */}
-    {/* </ConfirmContext.Provider> */}
-
-
+      {/* </ConfirmContext.Provider> */}
     </>
   );
 }
