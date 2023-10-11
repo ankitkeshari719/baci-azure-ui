@@ -71,6 +71,8 @@ export default function SelectedTeamMembers({
   const [openDeleteUserDialog, setOpenDeleteUserDialog] = React.useState(false);
   const [openUpdateRoleDialog, setUpdateRoleDialog] = React.useState(false);
   const [openRevokeRoleDialog, setRevokeRoleDialog] = React.useState(false);
+  const [openRemoveMultipleUsersDialog, setOpenRemoveMultipleUsersDialog] =
+    React.useState(false);
   const [tempStoreUserId, setTempStoreUserId] = React.useState<any>('');
   const [tempStoreUserName, setTempStoreUserName] = React.useState<any>('');
   const [tempStoreRoleName, setTempStoreRoleName] = React.useState<any>('');
@@ -285,6 +287,16 @@ export default function SelectedTeamMembers({
   };
 
   //----------------------------------------- Remove multiple  ---------------------------------------
+
+  // Open all Decline Enterprise Request Pop Up
+  const openRemoveMultipleUsersPopUp = () => {
+    setOpenRemoveMultipleUsersDialog(true);
+  };
+
+  // Close all Decline Request Pop Up
+  const closeRemoveMultipleUsersPopUp = () => {
+    setOpenRemoveMultipleUsersDialog(false);
+  };
   // Delete Multiple Users
   const handleDeleteSelectedUsers = async () => {
     const selectedUsersIds = records
@@ -368,7 +380,9 @@ export default function SelectedTeamMembers({
                   id={'download csv'}
                   label={'Download CSV'}
                   iconPath="/svgs/download.svg"
-                  onClick={handleDeleteSelectedUsers}
+                  onClick={() => {
+                    console.log('');
+                  }}
                   style={{
                     display: 'flex',
                     alignItems: 'center',
@@ -379,12 +393,11 @@ export default function SelectedTeamMembers({
                   }}
                 />
               </CsvDownloader>
-
               <OutlineButtonWithIconWithNoBorder
                 id={'remove-selected-items'}
                 label={'Remove Selected'}
                 iconPath="/svgs/Delete.svg"
-                onClick={handleDeleteSelectedUsers}
+                onClick={openRemoveMultipleUsersPopUp}
                 style={{
                   display: 'flex',
                   alignItems: 'center',
@@ -561,7 +574,7 @@ export default function SelectedTeamMembers({
                   }}
                 />
                 <H5SemiBoldTypography
-                  label={'Delete User'}
+                  label={'Remove User'}
                   style={{
                     color: '#343434',
                     marginLeft: '12px !important',
@@ -590,11 +603,11 @@ export default function SelectedTeamMembers({
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'center',
-            padding: '24px !important'
+            padding: '24px !important',
           }}
         >
           <BodyRegularTypography
-            label={`Are you sure you want to delete user ${tempStoreUserName} ?`}
+            label={`Are you sure you want to remove user ${tempStoreUserName} ?`}
             style={{ textAlign: 'center' }}
           />
         </Box>
@@ -682,7 +695,7 @@ export default function SelectedTeamMembers({
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'center',
-            padding: '24px !important'
+            padding: '24px !important',
           }}
         >
           <BodyRegularTypography
@@ -774,7 +787,7 @@ export default function SelectedTeamMembers({
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'center',
-            padding: '24px !important'
+            padding: '24px !important',
           }}
         >
           <BodyRegularTypography
@@ -811,6 +824,96 @@ export default function SelectedTeamMembers({
                 minWidth: '75px !important',
                 height: '36px !important',
                 background: '#159ADD !important',
+              }}
+              size={'medium'}
+            />
+          </Box>
+        </Box>
+      </Dialog>
+      {/* Decline All Enterprise Requests Pop Up */}
+      <Dialog open={openRemoveMultipleUsersDialog}>
+        <DialogTitle
+          style={{ padding: '20px', borderBottom: '1px solid #EA4335' }}
+        >
+          <Grid container sx={{ display: 'flex', alignItems: 'center' }}>
+            <Grid item sm={6}>
+              <Box
+                display="flex"
+                justifyContent="flex-start"
+                alignItems="center"
+              >
+                <Icons.ExclamationCircleOutline
+                  size={32}
+                  style={{
+                    color: '#EA4335',
+                    fontSize: '32px',
+                  }}
+                />
+                <H5SemiBoldTypography
+                  label={"Remove User's"}
+                  style={{
+                    color: '#343434',
+                    marginLeft: '12px !important',
+                  }}
+                />
+              </Box>
+            </Grid>
+            <Grid item sm={6}>
+              <Box display="flex" justifyContent="flex-end">
+                <Icons.X
+                  size={20}
+                  style={{
+                    cursor: 'pointer',
+                  }}
+                  onClick={closeRemoveMultipleUsersPopUp}
+                />
+              </Box>
+            </Grid>
+          </Grid>
+        </DialogTitle>
+        <Box
+          sx={{
+            height: height / 4,
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            padding: '24px'
+          }}
+        >
+          <BodyRegularTypography
+            label={`Are you sure you want to remove all selected user’s?`}
+            style={{ textAlign: 'center' }}
+          />
+        </Box>
+        {/* Buttons */}
+        <Box sx={{ mx: 3 }}>
+          <Box
+            sx={{
+              width: '100%',
+              display: 'flex',
+              flex: '1 0 auto',
+              alignItems: 'flex-end',
+              justifyContent: 'flex-end',
+              my: 2,
+            }}
+          >
+            <OutlinedButton
+              label="Cancel"
+              size={'medium'}
+              onClick={closeRemoveMultipleUsersPopUp}
+              style={{
+                minWidth: '75px !important',
+                height: '36px !important',
+                marginRight: '20px !important',
+              }}
+            />
+            <ContainedButton
+              name="Yes"
+              onClick={() => handleDeleteSelectedUsers()}
+              style={{
+                minWidth: '75px !important',
+                height: '36px !important',
+                background: '#EA4335 !important',
               }}
               size={'medium'}
             />

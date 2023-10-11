@@ -723,7 +723,7 @@ export default function EditTeam() {
                   {/* Save Button*/}
                   <OutlineButtonWithIconWithNoBorder
                     id="save_team_info"
-                    label="Update"
+                    label="Save"
                     iconPath="/svgs/saveTeam.svg"
                     onClick={() => submitTeam()}
                     style={{
@@ -1135,7 +1135,7 @@ export default function EditTeam() {
                   {/* Save Button*/}
                   <OutlineButtonWithIconWithNoBorder
                     id="save_team_info"
-                    label="Edit Team"
+                    label="Edit"
                     iconPath="/svgs/edit_blue.svg"
                     onClick={() => setIsEditModeOn(true)}
                     style={{
@@ -1458,7 +1458,6 @@ export default function EditTeam() {
               </Box>
             </>
           )}
-
           {/* Right Side Form */}
           <Paper
             sx={{
@@ -1500,6 +1499,7 @@ export default function EditTeam() {
           </Paper>
         </Box>
       </Paper>
+      {/* Add Members Dialog */}
       <Dialog
         open={openAddMembersDialog}
         sx={{
