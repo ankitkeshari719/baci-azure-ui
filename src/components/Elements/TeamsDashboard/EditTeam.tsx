@@ -1468,6 +1468,7 @@ export default function EditTeam() {
               alignItems: 'flex-start',
               flexDirection: 'column',
               padding: '24px',
+              pointerEvents: !isEditModeOn ? 'none' : '',
             }}
           >
             <Box
