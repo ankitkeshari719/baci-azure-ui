@@ -118,9 +118,6 @@ export const useRetro = () => {
         action: actions,
       } as Retro;
 
-      console.log('currentRetro', currentRetro);
-      console.log('user', state.user);
-
       const id = await createRetro(currentRetro, state.user);
       const retrievedRetro = await getRetro(id);
 

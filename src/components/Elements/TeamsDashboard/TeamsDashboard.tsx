@@ -36,7 +36,6 @@ import { ContainedButton } from '../../CustomizedButton/ContainedButton';
 import { OutlinedButton } from '../../CustomizedButton/OutlinedButton';
 
 const headCells = [
-  { id: 'check', label: '', disableSorting: true },
   { id: 'teamName', label: 'Team', disableSorting: false },
   { id: 'createdBy', label: 'Creator', disableSorting: false },
   { id: 'users', label: 'Members', disableSorting: true },
@@ -300,13 +299,6 @@ export default function TeamsDashboard() {
               {recordAfterPagingAndSorting().map((item: any) => {
                 return (
                   <TableRow key={item?.id}>
-                    <TableCell>
-                      <Checkbox
-                        checked={item?.checked}
-                        onChange={(e: any) => handleChangeCheckbox(e, item?.id)}
-                        inputProps={{ 'aria-label': 'controlled' }}
-                      />
-                    </TableCell>
                     <TableCell>{item?.teamName}</TableCell>
                     <TableCell>
                       {console.log('item.createdByObj', item.createdByObj)}
