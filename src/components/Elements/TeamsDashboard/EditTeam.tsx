@@ -165,6 +165,13 @@ export default function EditTeam() {
           res && res.enterpriseId,
           res && res.userEmailIds
         );
+        setFromDate(
+          new Date(res.updatedAt).getFullYear().toString() +
+            '-' +
+            '0' +
+            (new Date(res.updatedAt).getMonth() + 1).toString().slice(-2)
+        );
+        formatDateForAPI(fromDate);
       },
       err => {
         console.log('err', err);
@@ -267,8 +274,13 @@ export default function EditTeam() {
 
       await getCountOfAllSessionsOverTime(chartInput).then(
         res => {
-          if (res.result != undefined && res.result?.length != undefined) {
-            setSessionCount(res.result?.length);
+          if (res.data != undefined && res.data?.length != undefined) {
+            var totalRetrocount = 0;
+            res.data.forEach((element: any) => {
+              totalRetrocount = element.retroCount + totalRetrocount;
+            });
+
+            setSessionCount(totalRetrocount);
           } else {
             setSessionCount(0);
           }

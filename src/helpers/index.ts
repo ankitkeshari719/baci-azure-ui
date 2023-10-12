@@ -77,7 +77,16 @@ export const useRetro = () => {
       selectedAvatar: string,
       userType: number,
       selectedPulseCheck: pulseCheckInterface | null,
-      selectedTemplate: any
+      selectedTemplate: any,
+      selectedTeam?: any,
+      selectedFacilitator?: any,
+      scheduleRetroType?: any,
+      scheduleRetroTime?: any,
+      scheduleDescription?: any,
+      isLoginUser?: any,
+      retroSummary?: any,
+      enterpriseId?: any,
+      actions?: any
     ): Promise<Retro> => {
       const humanId = (
         '' +
@@ -91,10 +100,27 @@ export const useRetro = () => {
         joinUrl: `${window.location.protocol}//${window.location.hostname}${
           window.location.port ? ':' + window.location.port : ''
         }/join/${humanId}`,
+        retroGoal: retroGoal,
+        retroTimeframe: retroTimeframe,
+        selectedTemplate: selectedTemplate,
+        selectedPulseCheck: selectedPulseCheck,
+        userName: userName,
+        selectedAvatar: selectedAvatar,
+        userType: userType,
+        selectedTeam: selectedTeam,
+        selectedFacilitator: selectedFacilitator,
+        scheduleRetroType: scheduleRetroType,
+        scheduleRetroTime: scheduleRetroTime,
+        scheduleDescription: scheduleDescription,
+        isLoginUser: isLoginUser,
+        retroSummary: retroSummary,
+        enterpriseId: enterpriseId,
+        action: actions,
       } as Retro;
 
       const id = await createRetro(currentRetro, state.user);
       const retrievedRetro = await getRetro(id);
+
       sessionStorage.setItem(
         'lastRetroName',
         JSON.stringify(retrievedRetro.name)
@@ -103,10 +129,12 @@ export const useRetro = () => {
         'retroNameForPrivacyDialog',
         JSON.stringify(retrievedRetro.name)
       );
+
       console.log(
         '------------- setting retro details in index -------------',
         retro
       );
+
       socket.connect().on('connect', () => {
         dispatch({
           type: ActionType.SET_CURRENT_RETRO,
