@@ -28,7 +28,7 @@ export const SessionsMainContainer = () => {
       {sessions.length === 0 ? (
         <SessionEmptyScreen />
       ) : (
-        <SessionsDashboard sessions={sessions} />
+        <SessionsDashboard  />
       )}
     </>
   );

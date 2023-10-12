@@ -52,6 +52,8 @@ import {
   chartInputType,
   formatDateForAPI,
   formatDateToMonthYear,
+  getCountOfAllParticipantsOverTime,
+  getCountOfAllSessionsOverTime,
   getParticipantsCount,
   getRetrosCount,
   getSessionsData,
@@ -183,10 +185,15 @@ function EnterpriseDashboard() {
         toDate: formatDateForAPI(toDate, true),
       };
 
-      await getSessionsData(chartInput).then(
+      await getCountOfAllSessionsOverTime(chartInput).then(
         res => {
-          if (res.result != undefined && res.result?.length != undefined) {
-            setSessionCount(res.result?.length);
+          if (res.data != undefined && res.data?.length != undefined) {
+            var totalRetrocount = 0;
+            res.data.forEach((element: any) => {
+              totalRetrocount = element.retroCount + totalRetrocount;
+            });
+
+            setSessionCount(totalRetrocount);
           } else {
             setSessionCount(0);
           }
@@ -501,7 +508,7 @@ function EnterpriseDashboard() {
                       : actionCount + '  Actions'
                   }
                   size={'medium'}
-                  onClick={() => console.log('')}
+                  onClick={() => navigate('/actions')}
                 />
               </Box>
 

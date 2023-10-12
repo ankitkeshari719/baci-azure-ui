@@ -385,6 +385,35 @@ export const getTeamLevelActionsDataForChart = async (
   return teamLevelActionsDataForChart;
 };
 
+
+
+
+export const getSessionsDataForTable = async (
+  input: chartInputType
+): Promise<any> => {
+  let sessionsDataForTable;
+  const requestOptions = {
+    method: 'POST',
+    body: JSON.stringify(input),
+    headers: {
+      'Content-type': 'application/json; charset=UTF-8',
+    },
+  };
+  await fetch(
+    API_URL + `/analytics/getSessionsDataForTable`,
+    requestOptions
+  )
+    .then(response => response.json())
+    .then(data => {
+      sessionsDataForTable = data;
+    });
+  return sessionsDataForTable;
+};
+
+
+
+
+
 export const getCountOfAllParticipantsOverTime = async (
   input: chartInputType
 ): Promise<any> => {
@@ -1288,6 +1317,9 @@ export const getAllUsersByEnterpriseId = async (
 
   return users;
 };
+
+
+
 
 // Create User
 export const createUser = async (requestBody: any): Promise<any> => {
