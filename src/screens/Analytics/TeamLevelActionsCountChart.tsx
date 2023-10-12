@@ -271,12 +271,12 @@ export default function TeamLevelActionsCountChart({
     },
   };
 
-  const handleFromDate = (event: SelectChangeEvent) => {
-    setFromDate(event.target.value as string);
+  const handleFromDate = (event: any) => {
+    setFromDate(event as string);
   };
 
-  const handleToDate = (event: SelectChangeEvent) => {
-    setToDate(event.target.value as string);
+  const handleToDate = (event: any) => {
+    setToDate(event as string);
   };
 
   return (
