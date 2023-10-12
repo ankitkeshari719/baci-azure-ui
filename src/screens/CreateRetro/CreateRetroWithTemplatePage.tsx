@@ -373,9 +373,6 @@ export function CreateRetroWithTemplatePage({
     }
   };
 
-  console.log('selectedFacilitatorData', selectedFacilitatorData);
-  console.log('selectedFacilitator', selectedFacilitator);
-
   // Function to create a New Retro
   const create = async () => {
     let mySelectedTemplate;

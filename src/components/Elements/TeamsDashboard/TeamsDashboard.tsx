@@ -301,7 +301,6 @@ export default function TeamsDashboard() {
                   <TableRow key={item?.id}>
                     <TableCell>{item?.teamName}</TableCell>
                     <TableCell>
-                      {console.log('item.createdByObj', item.createdByObj)}
                       {item.createdByObj === undefined ? (
                         <>
                           <LazyLoadImage
@@ -365,10 +364,6 @@ export default function TeamsDashboard() {
                             (user: any, index: any) =>
                               index < 4 && (
                                 <>
-                                  {console.log(
-                                    'user?.selectedAvatar',
-                                    user?.selectedAvatar
-                                  )}
                                   {user?.selectedAvatar === undefined ? (
                                     <LazyLoadImage
                                       width="48px !important"

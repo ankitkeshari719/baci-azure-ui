@@ -11,8 +11,8 @@ export class Retro {
   retroStatus: string = '';
   retroTimeframe?: any = '';
   retroGoal?: any = '';
-  selectedTemplate?: any = '';
-  selectedPulseCheck?: any = '';
+  selectedTemplate?: any;
+  selectedPulseCheck?: any;
   userName?: any = '';
   selectedAvatar?: any = '';
   userType?: any = '';
