@@ -413,7 +413,7 @@ export default function AllUsers() {
             flexDirection: 'column',
           }}
         >
-          <H5RegularTypography label="Requests for Enterprise Dashboard" />
+          <H5RegularTypography label="All Users (Team-wise)" />
           <Box
             display="flex"
             flexDirection="row"
