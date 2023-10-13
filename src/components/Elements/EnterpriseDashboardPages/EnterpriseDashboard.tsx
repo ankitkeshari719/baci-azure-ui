@@ -267,6 +267,11 @@ function EnterpriseDashboard() {
   const navigateToUploadImage = () => {
     navigate('/enterprise/uploadImage/');
   };
+
+  const handleOnClick = (link: string) => {
+    navigate(link);
+  };
+
   return (
     <>
       <Box
@@ -690,8 +695,9 @@ function EnterpriseDashboard() {
                 >
                   <BodySemiBoldTypography label="Count of All Actions (Assigned vs Completed)" />
                   <BootstrapTooltip
-                    title="The graph shows the break down of total actions created over time,
-                    Total actions are broken into Assigned vs Completed."
+                    title={
+                      'The graph shows the break down of total actions created over time,Total actions are broken into Assigned vs Completed.'
+                    }
                     arrow
                     placement="right"
                   >
@@ -704,6 +710,17 @@ function EnterpriseDashboard() {
                       }}
                     />
                   </BootstrapTooltip>
+                  {/* <BodySemiBoldTypography
+                    label="Learn More"
+                    style={{
+                      color: '#159ADD',
+                      cursor: 'pointer',
+                      marginTop: '8px',
+                    }}
+                    onClick={() =>
+                      handleOnClick('enterpriseLevelActionsCountLearnMore')
+                    }
+                  /> */}
                 </Box>
                 <Box
                   onClick={() => {
@@ -769,6 +786,17 @@ function EnterpriseDashboard() {
                       }}
                     />
                   </BootstrapTooltip>
+                  {/* <BodySemiBoldTypography
+                    label="Learn More"
+                    style={{
+                      color: '#159ADD',
+                      cursor: 'pointer',
+                      marginTop: '8px',
+                    }}
+                    onClick={() =>
+                      handleOnClick('teamLevelActionsCountLearnMore')
+                    }
+                  /> */}
                 </Box>
                 <Box
                   onClick={() => {
@@ -864,6 +892,17 @@ function EnterpriseDashboard() {
                       }}
                     />
                   </BootstrapTooltip>
+                  {/* <BodySemiBoldTypography
+                    label="Learn More"
+                    style={{
+                      color: '#159ADD',
+                      cursor: 'pointer',
+                      marginTop: '8px',
+                    }}
+                    onClick={() =>
+                      handleOnClick('enterpriseLevelParticipantsCountLearnMore')
+                    }
+                  /> */}
                 </Box>
                 <Box
                   onClick={() => {
@@ -900,6 +939,17 @@ function EnterpriseDashboard() {
                       }}
                     />
                   </BootstrapTooltip>
+                  {/* <BodySemiBoldTypography
+                    label="Learn More"
+                    style={{
+                      color: '#159ADD',
+                      cursor: 'pointer',
+                      marginTop: '8px',
+                    }}
+                    onClick={() =>
+                      handleOnClick('enterpriseLevelRetrosCountLearnMore')
+                    }
+                  /> */}
                 </Box>
                 <Box
                   onClick={() => {
@@ -994,6 +1044,17 @@ function EnterpriseDashboard() {
                       }}
                     />
                   </BootstrapTooltip>
+                  {/* <BodySemiBoldTypography
+                    label="Learn More"
+                    style={{
+                      color: '#159ADD',
+                      cursor: 'pointer',
+                      marginTop: '8px',
+                    }}
+                    onClick={() =>
+                      handleOnClick('enterpriseLevelSentimentsThemesLearnMore')
+                    }
+                  /> */}
                 </Box>
                 <Box
                   onClick={() => {
@@ -1033,6 +1094,17 @@ function EnterpriseDashboard() {
                       }}
                     />
                   </BootstrapTooltip>
+                  {/* <BodySemiBoldTypography
+                    label="Learn More"
+                    style={{
+                      color: '#159ADD',
+                      cursor: 'pointer',
+                      marginTop: '8px',
+                    }}
+                    onClick={() =>
+                      handleOnClick('enterpriseLevelSentimentsMoodsLearnMore')
+                    }
+                  /> */}
                 </Box>
                 <Box
                   onClick={() => {
@@ -1130,6 +1202,17 @@ function EnterpriseDashboard() {
                       }}
                     />
                   </BootstrapTooltip>
+                  {/* <BodySemiBoldTypography
+                    label="Learn More"
+                    style={{
+                      color: '#159ADD',
+                      cursor: 'pointer',
+                      marginTop: '8px',
+                    }}
+                    onClick={() =>
+                      handleOnClick('enterpriseLevelSentimentsSummaryLearnMore')
+                    }
+                  /> */}
                 </Box>
                 <Box
                   onClick={() => {
