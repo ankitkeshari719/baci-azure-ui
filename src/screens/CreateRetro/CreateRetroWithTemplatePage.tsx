@@ -663,6 +663,18 @@ export function CreateRetroWithTemplatePage({
               />
             )}
           </Box>
+          {isStartRetro && scheduleRetroType === RETRO_IMMEDIATELY && (
+            <Box
+              sx={{
+                mt: 2,
+                minWidth: '100%',
+                alignItems: 'flex-start',
+                justifyContent: 'center',
+              }}
+            >
+              <StartRetroWithTemplate />
+            </Box>
+          )}
         </>
       ) : (
         <>
@@ -714,19 +726,19 @@ export function CreateRetroWithTemplatePage({
               onClickAvatar={onClickAvatar}
             />
           </Box>
+          {isStartRetro && (
+            <Box
+              sx={{
+                mt: 2,
+                minWidth: '100%',
+                alignItems: 'flex-start',
+                justifyContent: 'center',
+              }}
+            >
+              <StartRetroWithTemplate />
+            </Box>
+          )}
         </>
-      )}
-      {isStartRetro && (
-        <Box
-          sx={{
-            mt: 2,
-            minWidth: '100%',
-            alignItems: 'flex-start',
-            justifyContent: 'center',
-          }}
-        >
-          <StartRetroWithTemplate />
-        </Box>
       )}
     </Box>
   );
