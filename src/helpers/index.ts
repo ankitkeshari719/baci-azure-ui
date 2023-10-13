@@ -147,19 +147,28 @@ export const useRetro = () => {
         actionName: BoardActionType.UPDATE_RETRO_DETAILS,
         parameters: {
           retroName: retro?.name,
-          retroTimeframe,
-          retroGoal,
+          humanId: humanId,
           joinUrl: `${window.location.protocol}//${window.location.hostname}${
             window.location.port ? ':' + window.location.port : ''
           }/join/${humanId}`,
+          retroGoal,
+          retroTimeframe,
+          pulseCheck: selectedPulseCheck,
+          template: selectedTemplate,
           creatorId: state.currentRetro?.creatorId,
-          userId: state.user.id,
-          humanId: humanId,
           preferredNickname: userName,
           avatar: selectedAvatar,
           userType: userType,
-          pulseCheck: selectedPulseCheck,
-          template: selectedTemplate,
+          userId: state.user.id,
+          selectedTeam: selectedTeam,
+          selectedFacilitator: selectedFacilitator,
+          scheduleRetroType: scheduleRetroType,
+          scheduleRetroTime: scheduleRetroTime,
+          scheduleDescription: scheduleDescription,
+          isLoginUser: isLoginUser,
+          retroSummary: retroSummary,
+          enterpriseId: enterpriseId,
+          action: actions,
         },
         userId: state.user.id,
         timestamp: 0,
@@ -167,9 +176,7 @@ export const useRetro = () => {
         sourceActionTimestamp: 0,
         version: BOARD_STATE_MACHINE_VERSION,
       };
-
       await addRetroAction(id, action);
-
       return retrievedRetro;
     },
 
