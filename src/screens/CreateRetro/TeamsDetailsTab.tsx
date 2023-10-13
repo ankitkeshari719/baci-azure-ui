@@ -104,7 +104,7 @@ export function TeamsDetailsTab({
             selectedTeamData != '' &&
             selectedFacilitatorData != ''
               ? 2.5
-              : 4,
+              : 3,
         }}
       >
         {/* When the tab is not open */}

@@ -9,6 +9,22 @@ export class Retro {
   timestamp?: Date | undefined;
   waitingTimeStamp: Date | undefined;
   retroStatus: string = '';
+  retroTimeframe?: any = '';
+  retroGoal?: any = '';
+  selectedTemplate?: any;
+  selectedPulseCheck?: any;
+  userName?: any = '';
+  selectedAvatar?: any = '';
+  userType?: any = '';
+  selectedTeam?: any = '';
+  selectedFacilitator?: any = '';
+  scheduleRetroType?: any = '';
+  scheduleRetroTime?: any = '';
+  scheduleDescription?: any = '';
+  isLoginUser?: any;
+  retroSummary?: any = '';
+  enterpriseId?: any = '';
+  action?: any = [];
 }
 export interface PulseCheckSubmitStatus {
   retroId: string;
@@ -37,14 +53,11 @@ export class SnackMessageClass {
   snackMessageType: AlertColor = 'success';
   message: string = '';
 }
-const getMonth=(month:string)=>{
-
-  if(+month<10){
-    return "0"+month
-  }
-  else return month;
-
-}
+const getMonth = (month: string) => {
+  if (+month < 10) {
+    return '0' + month;
+  } else return month;
+};
 export class Global {
   user: User = new User();
   currentRetro?: Retro = undefined;
@@ -65,16 +78,18 @@ export class Global {
   emojiId?: string = '';
   isMaintenanceScheduled?: boolean = false;
   lastGlobalStateUpdate: Date | undefined = new Date();
-  jiraCode?: string ="";
-  chartStartDate?:string= new Date().getFullYear().toString() +
-  '-' +
-  getMonth((new Date().getMonth() ).toString().slice(-2));
-  chartEndDate?:string=new Date().getFullYear().toString() +
-  '-' +
-  getMonth((new Date().getMonth() + 1).toString().slice(-2));
-  azureUser?:AzureUser;
-  teamId?:string
-  users?:any[]
+  jiraCode?: string = '';
+  chartStartDate?: string =
+    new Date().getFullYear().toString() +
+    '-' +
+    getMonth(new Date().getMonth().toString().slice(-2));
+  chartEndDate?: string =
+    new Date().getFullYear().toString() +
+    '-' +
+    getMonth((new Date().getMonth() + 1).toString().slice(-2));
+  azureUser?: AzureUser;
+  teamId?: string;
+  users?: any[];
 }
 
 export class LastRetroName {
@@ -116,25 +131,22 @@ export interface Actions {
   actions: ActionInterface[];
   isVotingEnableToParticipant?: boolean;
   isAddActionEnableToParticipant?: boolean;
-  messageForParicipants?:string;
-  postMessageForParticipants?:boolean;
-  backgroundColor?:string;
-  fontColor?:string;
+  messageForParicipants?: string;
+  postMessageForParticipants?: boolean;
+  backgroundColor?: string;
+  fontColor?: string;
 }
 export interface JiraActionInterface {
-  action:ActionInterface;
-  teamId:string;
-  teamName:string;
-  jiraId:string;
-  initialSession:string;
-  startDate:string;
+  action: ActionInterface;
+  teamId: string;
+  teamName: string;
+  jiraId: string;
+  initialSession: string;
+  startDate: string;
   // TO DO , IN - PROGRESS, DONE, CANCELLED
-  status:string; 
-  url?:string;
-
+  status: string;
+  url?: string;
 }
-
-
 
 export interface CardGroup {
   id: string;
@@ -188,10 +200,10 @@ export class BoardState {
     actions: [],
     isVotingEnableToParticipant: false,
     isAddActionEnableToParticipant: false,
-    messageForParicipants:"",
-    postMessageForParticipants:false,
-    backgroundColor:'rgba(138, 56, 245, 0.1)',
-    fontColor:'#8A38F5',
+    messageForParicipants: '',
+    postMessageForParticipants: false,
+    backgroundColor: 'rgba(138, 56, 245, 0.1)',
+    fontColor: '#8A38F5',
   };
   creatorId: string = '';
   users: {
@@ -247,25 +259,23 @@ export interface Action {
   version: number;
 }
 export interface DyanamicDialog {
-  open:boolean;
-  header:string;
-  content:string;
-  cancelLabel:string;
-  agreeLabel:string;
-
+  open: boolean;
+  header: string;
+  content: string;
+  cancelLabel: string;
+  agreeLabel: string;
 }
 
-export interface AzureUser 
-  {
-    firstName: string;
-    lastName: string;
-    emailId: string;
-    phoneNo: string;
-    name: string;
-    roleName: string;
-    enterpriseId: string;
-    enterpriseName: string;
-    selectedAvatar: string;
-    teams: string[];
-    isActive: boolean;
-  };
+export interface AzureUser {
+  firstName: string;
+  lastName: string;
+  emailId: string;
+  phoneNo: string;
+  name: string;
+  roleName: string;
+  enterpriseId: string;
+  enterpriseName: string;
+  selectedAvatar: string;
+  teams: string[];
+  isActive: boolean;
+}

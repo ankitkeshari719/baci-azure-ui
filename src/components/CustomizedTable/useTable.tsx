@@ -30,9 +30,8 @@ export default function useTable(
   records?: any,
   headCells?: any,
   filterFn?: any,
-  isSelectAllChecked?:any,
-  handleSelectAllCheckbox?:any,
-
+  isSelectAllChecked?: any,
+  handleSelectAllCheckbox?: any
 ) {
   const classes = useStyles();
 
@@ -63,10 +62,15 @@ export default function useTable(
               <TableCell
                 key={headCell.id}
                 sortDirection={orderBy === headCell.id ? order : false}
+                align="left"
               >
                 {headCell.id === 'check' ? (
                   <>
-                    <TableCell>
+                    <TableCell
+                      align="left"
+                      padding="none"
+                      style={{ width: 50, border: 'none' }}
+                    >
                       <Checkbox
                         checked={isSelectAllChecked}
                         onChange={handleSelectAllCheckbox}

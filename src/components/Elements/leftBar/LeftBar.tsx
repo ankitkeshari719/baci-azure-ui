@@ -133,16 +133,20 @@ const LeftBar = () => {
       setSelectedMenu(menuArray[2].label);
     } else if (location.pathname.includes('actions')) {
       setSelectedMenu(menuArray[1].label);
-    }else if(location.pathname.includes('createRetro')|| location.pathname.includes('uploadImage') || location.pathname.includes('scanImage')){
+    }else if(location.pathname.includes('createRetro')|| location.pathname.includes('uploadImage') || location.pathname.includes('scanImage')||location.pathname.includes('sessions')){
       setSelectedMenu(menuArray[3].label);
     }
+
   }, [
     location.pathname.includes('enterprise'),
     location.pathname.includes('analytics'),
-    location.pathname.includes('enterprise/dashboard'),
+    location.pathname.includes('dashboard'),
     location.pathname.includes('createRetro'),
     location.pathname.includes('scanImage'),
     location.pathname.includes('uploadImage'),
+    location.pathname.includes('sessions'),
+
+    
 
 
   ]);

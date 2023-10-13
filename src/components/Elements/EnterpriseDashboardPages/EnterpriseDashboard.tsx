@@ -52,6 +52,8 @@ import {
   chartInputType,
   formatDateForAPI,
   formatDateToMonthYear,
+  getCountOfAllParticipantsOverTime,
+  getCountOfAllSessionsOverTime,
   getParticipantsCount,
   getRetrosCount,
   getSessionsData,
@@ -183,10 +185,15 @@ function EnterpriseDashboard() {
         toDate: formatDateForAPI(toDate, true),
       };
 
-      await getSessionsData(chartInput).then(
+      await getCountOfAllSessionsOverTime(chartInput).then(
         res => {
-          if (res.result != undefined && res.result?.length != undefined) {
-            setSessionCount(res.result?.length);
+          if (res.data != undefined && res.data?.length != undefined) {
+            var totalRetrocount = 0;
+            res.data.forEach((element: any) => {
+              totalRetrocount = element.retroCount + totalRetrocount;
+            });
+
+            setSessionCount(totalRetrocount);
           } else {
             setSessionCount(0);
           }
@@ -229,19 +236,19 @@ function EnterpriseDashboard() {
     );
   };
 
-  const handleFromDate = (event: SelectChangeEvent) => {
-    setFromDate(event.target.value as string);
+  const handleFromDate = (event: any) => {
+    setFromDate(event as string);
     dispatch({
       type: ActionType.CHART_START_DATE,
-      payload: { startDate: event.target.value },
+      payload: { startDate: event },
     });
   };
 
-  const handleToDate = (event: SelectChangeEvent) => {
-    setToDate(event.target.value as string);
+  const handleToDate = (event:any) => {
+    setToDate(event as string);
     dispatch({
       type: ActionType.CHART_END_DATE,
-      payload: { endDate: event.target.value },
+      payload: { endDate: event },
     });
   };
 
@@ -501,7 +508,7 @@ function EnterpriseDashboard() {
                       : actionCount + '  Actions'
                   }
                   size={'medium'}
-                  onClick={() => console.log('')}
+                  onClick={() => navigate('/actions')}
                 />
               </Box>
 
