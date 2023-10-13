@@ -236,19 +236,19 @@ function EnterpriseDashboard() {
     );
   };
 
-  const handleFromDate = (event: SelectChangeEvent) => {
-    setFromDate(event.target.value as string);
+  const handleFromDate = (event: any) => {
+    setFromDate(event as string);
     dispatch({
       type: ActionType.CHART_START_DATE,
-      payload: { startDate: event.target.value },
+      payload: { startDate: event },
     });
   };
 
-  const handleToDate = (event: SelectChangeEvent) => {
-    setToDate(event.target.value as string);
+  const handleToDate = (event:any) => {
+    setToDate(event as string);
     dispatch({
       type: ActionType.CHART_END_DATE,
-      payload: { endDate: event.target.value },
+      payload: { endDate: event },
     });
   };
 

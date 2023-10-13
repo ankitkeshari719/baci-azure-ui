@@ -38,6 +38,8 @@ export function CreateRetroWithTemplatePage({
   handleStartRetro,
   isRetroStart,
 }: Props) {
+  const localUserData = localStorage.getItem('userData');
+  const tempLocalUserData = localUserData && JSON.parse(localUserData);
   const { id } = useParams();
   const retro = useRetro();
   const navigate = useNavigate();
@@ -389,19 +391,6 @@ export function CreateRetroWithTemplatePage({
         ? UserTypeArray[1].id
         : UserTypeArray[0].id;
 
-    console.log('isLoginUser', isLoginUser);
-    console.log('retroName', retroName);
-    console.log('retroTimeFrame', retroTimeFrame);
-    console.log('userName', userName);
-    console.log('selectedAvatar', selectedAvatar);
-    console.log('selectedPulseCheck', selectedPulseCheck);
-    console.log('selectedTemplate', selectedTemplate);
-    console.log('selectedTeam', selectedTeam);
-    console.log('selectedFacilitator', selectedFacilitator);
-    console.log('scheduleRetroType', scheduleRetroType);
-    console.log('scheduleRetroTime', scheduleRetroTime);
-    console.log('scheduleDescription', scheduleDescription);
-
     if (!isLoginUser) {
       // if the user is not basic and enterprise
       if (
@@ -428,7 +417,16 @@ export function CreateRetroWithTemplatePage({
             selectedAvatar,
             userType,
             selectedPulseCheck,
-            mySelectedTemplate
+            mySelectedTemplate,
+            selectedTeam,
+            selectedFacilitator,
+            scheduleRetroType,
+            moment(new Date(scheduleRetroTime)).format('Do MMM YYYY h:mm:ss a'),
+            scheduleDescription,
+            isLoginUser,
+            '',
+            tempLocalUserData && tempLocalUserData.enterpriseId,
+            []
           )
           .then(
             res => {
@@ -510,7 +508,16 @@ export function CreateRetroWithTemplatePage({
             selectedAvatar,
             userType,
             selectedPulseCheck,
-            mySelectedTemplate
+            mySelectedTemplate,
+            selectedTeam,
+            selectedFacilitator,
+            scheduleRetroType,
+            moment(new Date(scheduleRetroTime)).format('Do MMM YYYY h:mm:ss a'),
+            scheduleDescription,
+            isLoginUser,
+            '',
+            tempLocalUserData && tempLocalUserData.enterpriseId,
+            []
           )
           .then(
             res => {
