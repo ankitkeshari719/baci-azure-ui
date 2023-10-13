@@ -19,7 +19,7 @@ import { RetroDetails } from './screens/Board/RetroDetails';
 import { ParticipantWaitingPage } from './screens/Board/ParticipantWaitingPage';
 import { CreateRetroMain } from './screens/CreateRetro/CreateRetroMain';
 import { UploadImageScan } from './screens/ScanImage/UploadImageScan';
-import { ScanUploadImage } from './screens/scan/ScanUploadImage';
+import { ScanUploadImage} from './screens/scan/ScanUploadImage';
 import { StartRetro } from './screens/Home/StartRetro';
 import { Box, Grid, useMediaQuery } from '@mui/material';
 import Feedback from './screens/Others/Feedback';
@@ -318,19 +318,19 @@ export default function App({ instance }: AppProps) {
                               <Route path="teams/">
                                 <Route
                                   path=""
-                                  element={<TeamsMainContainer />}
+                                  element={<Notifications />}
                                 />
                                 <Route path="allTeams">
                                   <Route
                                     path=""
-                                    element={<TeamsMainContainer />}
+                                    element={<Notifications />}
                                   />
                                 </Route>
                                 <Route path="create">
-                                  <Route path="" element={<CreateTeam />} />
+                                  <Route path="" element={<Notifications />} />
                                 </Route>
                                 <Route path="edit/:id">
-                                  <Route path="" element={<EditTeam />} />
+                                  <Route path="" element={<Notifications />} />
                                 </Route>
                               </Route>
                               <Route path="settings" element={<Settings />} />
@@ -348,12 +348,12 @@ export default function App({ instance }: AppProps) {
                                 path="createRetro"
                                 element={<CreateRetroMain />}
                               />
-
-                              <Route
+                                
+                                <Route
                                 path="uploadImage"
                                 element={<UploadImageScan />}
                               />
-                              <Route
+                                <Route
                                 path="scanImage"
                                 element={<ScanUploadImage />}
                               />
@@ -518,19 +518,19 @@ export default function App({ instance }: AppProps) {
                               <Route path="teams/">
                                 <Route
                                   path=""
-                                  element={<TeamsMainContainer />}
+                                  element={<Notifications />}
                                 />
                                 <Route path="allTeams">
                                   <Route
                                     path=""
-                                    element={<TeamsMainContainer />}
+                                    element={<Notifications />}
                                   />
                                 </Route>
                                 <Route path="create">
-                                  <Route path="" element={<CreateTeam />} />
+                                  <Route path="" element={<Notifications />} />
                                 </Route>
                                 <Route path="edit/:id">
-                                  <Route path="" element={<EditTeam />} />
+                                  <Route path="" element={<Notifications />} />
                                 </Route>
                                 <Route path="manageUsers">
                                   <Route path="" element={<ManageUsers />} />
