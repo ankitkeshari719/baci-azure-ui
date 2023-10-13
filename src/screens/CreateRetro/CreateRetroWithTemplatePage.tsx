@@ -588,6 +588,7 @@ export function CreateRetroWithTemplatePage({
           {global.currentRetro?.name} is ready to start
         </Box>
       )}
+      {/* If the user basic or enterprise role */}
       {isLoginUser ? (
         <>
           <Box sx={{ mt: 4, minWidth: '100%' }}>
