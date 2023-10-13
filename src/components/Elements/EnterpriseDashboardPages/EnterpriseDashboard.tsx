@@ -244,7 +244,7 @@ function EnterpriseDashboard() {
     });
   };
 
-  const handleToDate = (event:any) => {
+  const handleToDate = (event: any) => {
     setToDate(event as string);
     dispatch({
       type: ActionType.CHART_END_DATE,
@@ -332,15 +332,14 @@ function EnterpriseDashboard() {
             </ThemeProvider>
           </Box>
         </Box>
-
- {/* select session flow */}
- <Backdrop
+        {/* select session flow */}
+        <Backdrop
           sx={{ color: '#fff', zIndex: theme => theme.zIndex.drawer + 1 }}
           open={open}
           onClick={handleClose}
         >
           <Box style={{ width: '1000px' }}>
-            <Grid container spacing={2} style={{gridGap:"30px"}}>
+            <Grid container spacing={2} style={{ gridGap: '30px' }}>
               <Grid
                 item
                 xs={5}
@@ -348,10 +347,10 @@ function EnterpriseDashboard() {
                 style={{
                   backgroundColor: 'white',
                   borderRadius: '10px',
-                  padding: "10px 10px 20px 10px",
+                  padding: '10px 10px 20px 10px',
                   alignContent: 'center',
                   maxWidth: '450px',
-                  height:"349px"
+                  height: '349px',
                 }}
               >
                 <img
@@ -361,16 +360,22 @@ function EnterpriseDashboard() {
                   height="189px"
                   width="400px"
                 />
-                <p style={{ textAlign: 'center', color: 'black',fontSize: '23px' }}>
+                <p
+                  style={{
+                    textAlign: 'center',
+                    color: 'black',
+                    fontSize: '23px',
+                  }}
+                >
                   BACI Template
                 </p>
-                <p style={{ fontSize: '16px', color: 'gray', margin:"10px" }}>
-                Need to run a collaboration session with BACI? 
+                <p style={{ fontSize: '16px', color: 'gray', margin: '10px' }}>
+                  Need to run a collaboration session with BACI?
                   <br />
                   Start instantly with preset BACI templates.
                 </p>
               </Grid>
-             
+
               <Grid
                 item
                 xs={5}
@@ -378,9 +383,9 @@ function EnterpriseDashboard() {
                 style={{
                   backgroundColor: 'white',
                   borderRadius: '10px',
-                  padding: "10px 10px 20px 10px",
+                  padding: '10px 10px 20px 10px',
                   maxWidth: '450px',
-                  height:"349px"
+                  height: '349px',
                 }}
               >
                 <img
@@ -392,20 +397,23 @@ function EnterpriseDashboard() {
                 />
                 <p
                   onClick={handleClose}
-                  style={{ textAlign: 'center', color: 'black' ,fontSize: '23px'}}
+                  style={{
+                    textAlign: 'center',
+                    color: 'black',
+                    fontSize: '23px',
+                  }}
                 >
                   Upload Image or Photo
                 </p>
-                <p style={{ fontSize: '16px', color: 'gray',margin:"10px" }}>
+                <p style={{ fontSize: '16px', color: 'gray', margin: '10px' }}>
                   Run a collabration session with Post-Its on a wall?
-                  <br/>Digitise it here for easy analysis and safe keeping.
+                  <br />
+                  Digitise it here for easy analysis and safe keeping.
                 </p>
               </Grid>
             </Grid>
           </Box>
         </Backdrop>
-
-
         {/* Bottom container */}
         <Box display="flex" flexDirection="column" sx={{ overflow: 'auto' }}>
           {/* Retro list starts here after hover */}
@@ -682,7 +690,8 @@ function EnterpriseDashboard() {
                 >
                   <BodySemiBoldTypography label="Count of All Actions (Assigned vs Completed)" />
                   <BootstrapTooltip
-                    title="Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vivamus in ex a est finibus fermentum aliquet at urna. Vivamus ac aliquet mi. Morbi laoreet tortor metus, ac vehicula turpis imperdiet et."
+                    title="The graph shows the break down of total actions created over time,
+                    Total actions are broken into Assigned vs Completed."
                     arrow
                     placement="right"
                   >
@@ -746,7 +755,8 @@ function EnterpriseDashboard() {
                 >
                   <BodySemiBoldTypography label="Count of Team Actions (Assigned vs Completed)" />
                   <BootstrapTooltip
-                    title="Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vivamus in ex a est finibus fermentum aliquet at urna. Vivamus ac aliquet mi. Morbi laoreet tortor metus, ac vehicula turpis imperdiet et."
+                    title="The graph shows the break down of total actions created for each of your team.
+                    Total actions are broken into Assigned vs Completed."
                     arrow
                     placement="right"
                   >
@@ -841,7 +851,7 @@ function EnterpriseDashboard() {
                 >
                   <BodySemiBoldTypography label="Count of All Participants Over Time" />
                   <BootstrapTooltip
-                    title="Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vivamus in ex a est finibus fermentum aliquet at urna. Vivamus ac aliquet mi. Morbi laoreet tortor metus, ac vehicula turpis imperdiet et."
+                    title="The graph shows the total number of participants (unique users) across all your teams over time."
                     arrow
                     placement="right"
                   >
@@ -877,7 +887,7 @@ function EnterpriseDashboard() {
                 >
                   <BodySemiBoldTypography label="Count of All Sessions" />
                   <BootstrapTooltip
-                    title="Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vivamus in ex a est finibus fermentum aliquet at urna. Vivamus ac aliquet mi. Morbi laoreet tortor metus, ac vehicula turpis imperdiet et."
+                    title="The graph shows the total number of sessions across all your teams over time."
                     arrow
                     placement="right"
                   >
@@ -971,7 +981,7 @@ function EnterpriseDashboard() {
                 >
                   <BodySemiBoldTypography label="Enterprise Level - Sentiments - Key Themes Heatmap" />
                   <BootstrapTooltip
-                    title="Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vivamus in ex a est finibus fermentum aliquet at urna. Vivamus ac aliquet mi. Morbi laoreet tortor metus, ac vehicula turpis imperdiet et."
+                    title="The chart uses AI to capture words used in BACI collaboration sessions and measures in a heat map of how your people are feeling (Happy, Sad, Neutral) against each BACI key themes for high performing organisations. It is a more detailed view of the Sentiments - Moods chart."
                     arrow
                     placement="right"
                   >
@@ -1010,7 +1020,7 @@ function EnterpriseDashboard() {
                 >
                   <BodySemiBoldTypography label="Sentiments - Moods" />
                   <BootstrapTooltip
-                    title="Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vivamus in ex a est finibus fermentum aliquet at urna. Vivamus ac aliquet mi. Morbi laoreet tortor metus, ac vehicula turpis imperdiet et."
+                    title="The chart takes the results from the pulse check and uses AI to capture words used in BACI collaboration sessions to provide a simple chart of how your people are feeling (Happy, Sad, Neutral) from month-to-month."
                     arrow
                     placement="right"
                   >
@@ -1107,7 +1117,7 @@ function EnterpriseDashboard() {
                 >
                   <BodySemiBoldTypography label="Enterprise Level - Overall Summary" />
                   <BootstrapTooltip
-                    title="Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vivamus in ex a est finibus fermentum aliquet at urna. Vivamus ac aliquet mi. Morbi laoreet tortor metus, ac vehicula turpis imperdiet et."
+                    title="The summary uses AI to capture words used in BACI collaboration sessions and produces simple, useful and powerful summary paragraph and word cloud to gain valuable data driven insights on your teams mindset and culture."
                     arrow
                     placement="right"
                   >
