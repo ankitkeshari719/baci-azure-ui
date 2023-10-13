@@ -29,6 +29,7 @@ import {
 import commonStyles from '../../../style.module.scss';
 
 import {
+  PlusIcon,
   EllipsisVerticalIcon,
   FunnelIcon,
   DocumentDuplicateIcon,
@@ -44,6 +45,7 @@ import { ActionType, GlobalContext } from '../../../contexts/GlobalContext';
 
 import DateSelector from '../EnterpriseDashboardPages/DateSelector';
 import TeamSelector from '../TeamSelector';
+import { ContainedButtonWithIcon } from '../../CustomizedButton/ContainedButtonWithIcon';
 
 interface Column {
   id:
@@ -135,6 +137,7 @@ export default function SessionDashboard() {
   );
 
   const [loading, setLoading] = React.useState<boolean>(false);
+  const [codeError, setCodeError] = React.useState('');
   const navigate = useNavigate();
 
   React.useEffect(() => {
@@ -173,7 +176,7 @@ export default function SessionDashboard() {
             });
 
             setDisplayJiraRows([...actionsArray]);
-          }
+          } else setDisplayJiraRows([]);
           setLoading(false);
         },
         error => {
@@ -183,19 +186,19 @@ export default function SessionDashboard() {
     }
   };
 
-  const handleFromDate = (event: SelectChangeEvent) => {
-    setFromDate(event.target.value as string);
+  const handleFromDate = (event: any) => {
+    setFromDate(event as string);
     dispatch({
       type: ActionType.CHART_START_DATE,
-      payload: { startDate: event.target.value },
+      payload: { startDate: event },
     });
   };
 
-  const handleToDate = (event: SelectChangeEvent) => {
-    setToDate(event.target.value as string);
+  const handleToDate = (event: any) => {
+    setToDate(event as string);
     dispatch({
       type: ActionType.CHART_END_DATE,
-      payload: { endDate: event.target.value },
+      payload: { endDate: event },
     });
   };
   const flattenObject = (ob: any) => {
@@ -230,13 +233,13 @@ export default function SessionDashboard() {
   const searchFunction = (row1: any) => {
     const columns = [
       'name',
-      'humanId',
-      'joinUrl',
-      'timestamp',
+      // 'humanId',
+      // 'joinUrl',
+      // 'timestamp',
       'teamName',
-      'retroStatus',
-      'teamDepartment',
-      'teamId',
+      // 'retroStatus',
+      // 'teamDepartment',
+      // 'teamId',
     ];
     var fullRow = '';
     columns.forEach((column, index) => {
@@ -275,6 +278,14 @@ export default function SessionDashboard() {
     setDisplayJiraRows(sortArray(jira, orderDirection, id));
     setOrderDirection(orderDirection === 'asc' ? 'desc' : 'asc');
   };
+  function CreateNewRetro() {
+    dispatch({
+      type: ActionType.SET_RETRO_CREATE,
+      payload: { retroCreateState: true },
+    });
+    setCodeError('');
+    navigate('/create/');
+  }
 
   return (
     <>
@@ -291,11 +302,22 @@ export default function SessionDashboard() {
           label="Sessions"
           style={{ marginBottom: '10px' }}
         />
-        <H2SemiBoldTypography
-          label="My Sessions"
-          style={{ color: commonStyles.PrimaryDark, marginBottom: '15px' }}
-        />
+        <Box
+          sx={{
+            display: 'flex',
+            flexDirection: 'row',
+            justifyContent: 'space-between',
+          }}
+        >
+          <H2SemiBoldTypography
+            label="My Sessions"
+            style={{ color: commonStyles.PrimaryDark, marginBottom: '15px' }}
+          />
 
+          <Button variant="contained" sx={{borderRadius:"24px",fontSize:'16px',fontWeight:'500!important',paddingTop:"0px!important",paddingBottom:'0px!important',height:'34px!important'}}>
+            <PlusIcon width={"24px"} style={{marginRight:'15px'}}/>
+             NEW SESSION</Button>
+        </Box>
         <Box
           display="flex"
           flexDirection="row"
@@ -319,147 +341,209 @@ export default function SessionDashboard() {
           />
 
           {/* <FunnelIcon width="32px" style={{ cursor: 'pointer' }} /> */}
+          <Box sx={{ display: 'flex', flexDirection: 'row' }}>
+            <DateSelector
+              handleFromDate={handleFromDate}
+              handleToDate={handleToDate}
+              fromDate={fromDate}
+              toDate={toDate}
+              disable={true}
+            />
+            <TeamSelector
+              enterpriseId={
+                global.azureUser?.enterpriseId
+                  ? global.azureUser?.enterpriseId
+                  : '0'
+              }
+              padding="9px"
+              selectedTeam={global.teamId ? global.teamId : selectId}
+              handleChange={(change: any) => {
+                dispatch({
+                  type: ActionType.SET_TEAM_ID,
+                  payload: { teamId: change.target.value },
+                });
 
-          <DateSelector
-            handleFromDate={handleFromDate}
-            handleToDate={handleToDate}
-            fromDate={fromDate}
-            toDate={toDate}
-            disable={true}
-          />
-          <TeamSelector
-            enterpriseId={
-              global.azureUser?.enterpriseId
-                ? global.azureUser?.enterpriseId
-                : '0'
-            }
-            padding="9px"
-            selectedTeam={global.teamId ? global.teamId : selectId}
-            handleChange={(change: any) => {
-              dispatch({
-                type: ActionType.SET_TEAM_ID,
-                payload: { teamId: change.target.value },
-              });
-
-              setSelectedId(change.target.value);
-            }}
-            showAllTeamOption={true}
-          />
+                setSelectedId(change.target.value);
+              }}
+              showAllTeamOption={true}
+            />
+          </Box>
         </Box>
-        <TableContainer sx={{ height: 'calc(100% - 280px)' }}>
-          <Table stickyHeader aria-label="sticky table">
-            <TableHead>
-              <TableRow>
-                {columns.map(column => (
-                  <TableCell
-                    key={column.id}
-                    align={column.align}
-                    sx={{ borderBottom: '2px solid gray' }}
-                    onClick={() =>
-                      column.id != 'teamId' &&
-                      handleSortRequest(column.id, displayJiraRows)
-                    }
-                  >
-                    {column.id == 'teamId' ? (
-                      <>
-                        <BodySemiBoldTypography label={column.label} />
-                      </>
-                    ) : (
-                      <TableSortLabel
-                        active={true}
-                        direction={orderDirection === 'asc' ? 'asc' : 'desc'}
+        {displayJiraRows.length > 0 ? (
+          <>
+            <TableContainer sx={{ height: 'calc(100% - 280px)' }}>
+              <Table stickyHeader aria-label="sticky table">
+                <TableHead>
+                  <TableRow>
+                    {columns.map(column => (
+                      <TableCell
+                        key={column.id}
+                        align={column.align}
+                        sx={{ borderBottom: '2px solid gray' }}
+                        onClick={() =>
+                          column.id != 'teamId' &&
+                          handleSortRequest(column.id, displayJiraRows)
+                        }
                       >
-                        <BodySemiBoldTypography label={column.label} />
-                      </TableSortLabel>
-                    )}
-                  </TableCell>
-                ))}
-              </TableRow>
-            </TableHead>
-            <TableBody>
-              {displayJiraRows
-                .filter((row1: any) =>
-                  // note that I've incorporated the searchedVal length check here
-                  searchFunction(row1)
-                )
-                .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-                .map((row: any, index: number) => {
-                  return (
-                    <StyledTableRow
-                      hover
-                      role="checkbox"
-                      tabIndex={-1}
-                      key={index}
-                    >
-                      {columns.map(column => {
-                        const value = row[column.id];
+                        {column.id == 'teamId' ? (
+                          <>
+                            <BodySemiBoldTypography label={column.label} />
+                          </>
+                        ) : (
+                          <TableSortLabel
+                            active={column.id == 'name' ? true : false}
+                            direction={
+                              orderDirection === 'asc' ? 'asc' : 'desc'
+                            }
+                          >
+                            <BodySemiBoldTypography label={column.label} />
+                          </TableSortLabel>
+                        )}
+                      </TableCell>
+                    ))}
+                  </TableRow>
+                </TableHead>
+                <TableBody>
+                  {displayJiraRows
+                    .filter((row1: any) =>
+                      // note that I've incorporated the searchedVal length check here
+                      searchFunction(row1)
+                    )
+                    .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+                    .map((row: any, index: number) => {
+                      return (
+                        <StyledTableRow
+                          hover
+                          role="checkbox"
+                          tabIndex={-1}
+                          key={index}
+                        >
+                          {columns.map(column => {
+                            const value = row[column.id];
 
-                        if (column.id == 'joinUrl') {
-                          return (
-                            <TableCell
-                              key={column.id}
-                              align={column.align}
-                              sx={{ maxWidth: '250px' }}
-                            >
-                              <Box
-                                display={{
-                                  alignItems: 'center',
-                                  display: 'flex',
-                                  flexDirection: 'row',
-                                }}
-                              >
-                                <Box component={'span'}>{value}</Box>
-                                <DocumentDuplicateIcon
-                                  width="16px"
-                                  style={{ marginLeft: '12px' }}
-                                />
-                              </Box>
-                            </TableCell>
-                          );
-                        } else if (column.id == 'retroStatus') {
-                          return (
-                            <TableCell
-                              key={column.id}
-                              align={column.align}
-                              sx={{ maxWidth: '250px' }}
-                            >
-                              {value == 'waiting' ? (
-                                <Button variant="contained" sx={{borderRadius:'24px'}}>START SESSION</Button>
-                              ) : value == 'ended' ? (
-                                <Button >VIEW SUMMARY</Button>
-                              ) : (
-                                <></>
-                              )}
-                            </TableCell>
-                          );
-                        } else
-                          return (
-                            <TableCell
-                              key={column.id}
-                              align={column.align}
-                              sx={{ maxWidth: '250px' }}
-                            >
-                              {value}
-                            </TableCell>
-                          );
-                      })}
-                    </StyledTableRow>
-                  );
-                })}
-            </TableBody>
-          </Table>
-        </TableContainer>
-        <TablePagination
-          rowsPerPageOptions={[10, 25, 100]}
-          component="div"
-          count={
-            displayJiraRows.filter((row1: any) => searchFunction(row1)).length
-          }
-          rowsPerPage={rowsPerPage}
-          page={page}
-          onPageChange={handleChangePage}
-          onRowsPerPageChange={handleChangeRowsPerPage}
-        />
+                            if (column.id == 'joinUrl') {
+                              return (
+                                <TableCell
+                                  key={column.id}
+                                  align={column.align}
+                                  sx={{ maxWidth: '250px' }}
+                                >
+                                  <Box
+                                    display={{
+                                      alignItems: 'center',
+                                      display: 'flex',
+                                      flexDirection: 'row',
+                                    }}
+                                  >
+                                    <Box component={'span'}>{value}</Box>
+                                    <DocumentDuplicateIcon
+                                      cursor="pointer"
+                                      onClick={() => {
+                                        navigator.clipboard.writeText(value);
+
+
+                                        dispatch({
+                                          type: ActionType.SET_SNACK_MESSAGE,
+                                          payload: {
+                                            snackMessage: {
+                                              message: 'Retro URL Copied',
+                                              snackMessageType: 'success',
+                                            },
+                                          },
+                                        });
+
+
+
+                                        // alert(value);
+                                      }}
+                                      width="16px"
+                                      style={{ marginLeft: '12px' }}
+                                    />
+                                  </Box>
+                                </TableCell>
+                              );
+                            } else if (column.id == 'retroStatus') {
+                              return (
+                                <TableCell
+                                  key={column.id}
+                                  align={column.align}
+                                  sx={{ maxWidth: '250px' }}
+                                >
+                                  {value == 'waiting' ? (
+                                    <Button
+                                      variant="contained"
+                                      sx={{ borderRadius: '24px' }}
+                                    >
+                                      START SESSION
+                                    </Button>
+                                  ) : value == 'ended' ? (
+                                    <Button>VIEW SUMMARY</Button>
+                                  ) : (
+                                    <></>
+                                  )}
+                                </TableCell>
+                              );
+                            } else
+                              return (
+                                <TableCell
+                                  key={column.id}
+                                  align={column.align}
+                                  sx={{ maxWidth: '250px' }}
+                                >
+                                  {value}
+                                </TableCell>
+                              );
+                          })}
+                        </StyledTableRow>
+                      );
+                    })}
+                </TableBody>
+              </Table>
+            </TableContainer>
+            <TablePagination
+              rowsPerPageOptions={[10, 25, 100]}
+              component="div"
+              count={
+                displayJiraRows.filter((row1: any) => searchFunction(row1))
+                  .length
+              }
+              rowsPerPage={rowsPerPage}
+              page={page}
+              onPageChange={handleChangePage}
+              onRowsPerPageChange={handleChangeRowsPerPage}
+            />
+          </>
+        ) : (
+          <>
+            <Box
+              sx={{
+                height: 'calc(100% - 280px)',
+                display: 'flex',
+                justifyContent: 'center',
+                alignItems: 'center',
+                flexDirection: 'column',
+              }}
+            >
+              <img src="/svgs/emptySessions.svg" width={300} height={350} />
+              <H2SemiBoldTypography
+                label="No Session to display"
+                style={{ color: '#2C69A1' }}
+              />
+              <ContainedButtonWithIcon
+                id={'create_new__retro_button_desktop'}
+                label={'New Session'}
+                size={'medium'}
+                iconPath="/svgs/plusSmall.svg"
+                style={{
+                  width: '260px',
+                  marginTop: '40px',
+                  textAlign: 'center',
+                }}
+                onClick={() => CreateNewRetro()}
+              />
+            </Box>
+          </>
+        )}
       </Paper>
       <>
         {loading && (
