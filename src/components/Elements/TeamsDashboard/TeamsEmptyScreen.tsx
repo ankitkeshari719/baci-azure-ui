@@ -60,7 +60,7 @@ export default function TeamsEmptyScreen() {
             src="/svgs/emptyTeams.svg"
             width={300}
             height={350}
-            alt="/svgs/emptyTeams.svg"
+            alt="empty image"
           />
           <H2SemiBoldTypography
             label="You have not created any Teams"
