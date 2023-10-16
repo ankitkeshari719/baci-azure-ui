@@ -536,7 +536,7 @@ export default function App({ instance }: AppProps) {
                                   <Route path="" element={<ManageUsers />} />
                                 </Route>
                                 <Route path="enterpriseRegistration">
-                                  <Route path="" element={<Notifications />} />
+                                  <Route path="" element={<EnterpriseRegistration />} />
                                 </Route>
                               </Route>
                               <Route path="settings" element={<Settings />} />
