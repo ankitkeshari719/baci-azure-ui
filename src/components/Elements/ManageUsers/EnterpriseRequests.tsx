@@ -23,6 +23,7 @@ import useTable from '../../CustomizedTable/useTable';
 import { TableBody, TableCell, TableRow } from '@material-ui/core';
 import { MagnifyingGlassIcon } from '@heroicons/react/24/outline';
 import {
+  addEnterpriseRequestNotification,
   approvedDeclinedEnterpriseRequestByIds,
   getAllByEnterpriseId,
   updateEnterpriseRequest,
@@ -31,8 +32,10 @@ import {
 } from '../../../helpers/msal/services';
 import { ActionType, GlobalContext } from '../../../contexts/GlobalContext';
 import {
+  APPROVED_ENTERPRISE_REQUEST,
   BASIC,
   BASIC_USER_ID,
+  DECLINE_ENTERPRISE_REQUEST,
   ENTERPRISE,
   ENTERPRISE_USER_ID,
 } from '../../../constants/applicationConst';
@@ -202,7 +205,6 @@ export default function EnterpriseRequests() {
   };
 
   // ---------------------------------------------- Request ----------------------------------------------
-
   // Approve User
   const handleApprovedUser = async (
     enterpriseRequestId: any,
@@ -226,7 +228,12 @@ export default function EnterpriseRequests() {
           type: ActionType.SET_LOADING,
           payload: { loadingFlag: false },
         });
-        handleChangeUserRole(fromEmail, ENTERPRISE_USER_ID, ENTERPRISE);
+        handleChangeUserRole(
+          fromEmail,
+          ENTERPRISE_USER_ID,
+          ENTERPRISE,
+          APPROVED_ENTERPRISE_REQUEST
+        );
       },
       err => {
         console.log('err', err);
@@ -245,7 +252,8 @@ export default function EnterpriseRequests() {
   const handleChangeUserRole = async (
     fromEmail: any,
     roleId: any,
-    roleName: any
+    roleName: any,
+    type: any
   ) => {
     dispatch({
       type: ActionType.SET_LOADING,
@@ -264,6 +272,51 @@ export default function EnterpriseRequests() {
           type: ActionType.SET_LOADING,
           payload: { loadingFlag: false },
         });
+        callAddEnterpriseRequestNotification(
+          type,
+          tempLocalUserData && tempLocalUserData.emailId,
+          fromEmail
+        );
+      },
+      err => {
+        console.log('err', err);
+        dispatch({
+          type: ActionType.SET_LOADING,
+          payload: { loadingFlag: false },
+        });
+        callGetAllEnterpriseRequestByEnterpriseId(
+          tempLocalUserData && tempLocalUserData.enterpriseId
+        );
+      }
+    );
+  };
+
+  // Notification addition
+  const callAddEnterpriseRequestNotification = async (
+    type: string,
+    fromId: any,
+    toId: any
+  ) => {
+    // call
+    dispatch({
+      type: ActionType.SET_LOADING,
+      payload: { loadingFlag: true },
+    });
+
+    const requestBody = {
+      type: type,
+      organisationId: tempLocalUserData && tempLocalUserData.enterpriseId,
+      fromId: fromId,
+      toId: [toId],
+      isRead: false,
+    };
+
+    await addEnterpriseRequestNotification(requestBody).then(
+      res => {
+        dispatch({
+          type: ActionType.SET_LOADING,
+          payload: { loadingFlag: false },
+        });
         callGetAllEnterpriseRequestByEnterpriseId(
           tempLocalUserData && tempLocalUserData.enterpriseId
         );
@@ -277,6 +330,7 @@ export default function EnterpriseRequests() {
         callGetAllEnterpriseRequestByEnterpriseId(
           tempLocalUserData && tempLocalUserData.enterpriseId
         );
+        closeDeclinedRequestPopUp();
       }
     );
   };
@@ -318,7 +372,12 @@ export default function EnterpriseRequests() {
           type: ActionType.SET_LOADING,
           payload: { loadingFlag: false },
         });
-        handleChangeUserRole(tempStoreUserEmail, BASIC_USER_ID, BASIC);
+        handleChangeUserRole(
+          tempStoreUserEmail,
+          BASIC_USER_ID,
+          BASIC,
+          DECLINE_ENTERPRISE_REQUEST
+        );
         closeDeclinedRequestPopUp();
       },
       err => {
