@@ -308,12 +308,13 @@ export default function CreateTeam() {
       type: ActionType.SET_LOADING,
       payload: { loadingFlag: true },
     });
+    const userEmailIds = [createdByEmailId, ...userEmailIdsFromRecord];
     const requestBody = {
       teamName: teamName,
       teamDepartment: teamDepartment,
       teamDescription: teamDescription,
       enterpriseId: enterpriseId,
-      userEmailIds: userEmailIdsFromRecord,
+      userEmailIds: userEmailIds,
       createdBy: createdByEmailId,
       isActive: true,
     };
@@ -323,7 +324,7 @@ export default function CreateTeam() {
           type: ActionType.SET_LOADING,
           payload: { loadingFlag: false },
         });
-        updateUsersTeam(res, userEmailIdsFromRecord);
+        updateUsersTeam(res, userEmailIds);
       },
       err => {
         console.log('err', err);
