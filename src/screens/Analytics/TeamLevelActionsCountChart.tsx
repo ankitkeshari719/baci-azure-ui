@@ -124,7 +124,6 @@ export default function TeamLevelActionsCountChart({
       setLoading(true);
       await getTeamLevelActionsDataForChart(chartInput).then(
         res => {
-          // console.log(res.data);
           setLoading(false);
           if (res.data.length > 0) {
             let tempData = [];

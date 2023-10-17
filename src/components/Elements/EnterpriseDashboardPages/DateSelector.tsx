@@ -63,7 +63,6 @@ function DateSelector({
         value={fromDate}
        
         onChange={(e:any)=>{
-          console.log(dayjs(e).format('YYYY-MM'))
           dispatch({
            type: ActionType.CHART_START_DATE,
            payload: { endDate: dayjs(e).format('YYYY-MM') },
@@ -92,7 +91,6 @@ function DateSelector({
         value={toDate}
        minDate={fromDate}
         onChange={(e:any)=>{
-          console.log(dayjs(e).format('YYYY-MM'))
           dispatch({
            type: ActionType.CHART_END_DATE,
            payload: { endDate: dayjs(e).format('YYYY-MM') },

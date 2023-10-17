@@ -163,7 +163,6 @@ export default function SessionDashboard() {
       setLoading(true);
       await getSessionsDataForTable(chartInput).then(
         res => {
-          console.log(res.data);
           if (res.data.length > 0) {
             let actionsArray: any[] = [];
             res.data.forEach((action: any) => {

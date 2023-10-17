@@ -23,13 +23,19 @@ import {
 } from '../../CustomizedTypography';
 import { GlobalContext, ActionType } from '../../../contexts/GlobalContext';
 import {
+  addEnterpriseRequestNotification,
   createEnterpriseRequest,
   deleteEnterpriseRequestById,
+  getAllUsersByEnterpriseId,
   updateUser,
 } from '../../../helpers/msal/services';
 import OutlineButtonWithIconWithNoBorder from '../../CustomizedButton/OutlineButtonWithIconWithNoBorder';
 import { LazyLoadImage } from 'react-lazy-load-image-component';
-import { BASIC, ENTERPRISE } from '../../../constants/applicationConst';
+import {
+  BASIC,
+  ENTERPRISE,
+  REQUEST_FOR_ENTERPRISE,
+} from '../../../constants/applicationConst';
 
 const styles = {
   accessCodeTextField: {
@@ -106,6 +112,9 @@ export default function UpdateProfile({ handleEdit }: Props) {
   const [codePhoneNoError, setPhoneNoError] = React.useState('');
   const [codeCountryError, setCountryCodeError] = React.useState('');
   const [codeCityCodeError, setCityCodeCodeError] = React.useState('');
+  const [enterpriseUserEmailIds, setEnterpriseUserEmailIds] = React.useState(
+    []
+  );
 
   React.useEffect(() => {
     setFirstName(tempLocalUserData && tempLocalUserData.firstName);
@@ -126,7 +135,23 @@ export default function UpdateProfile({ handleEdit }: Props) {
     } else {
       setRole('Enterprise');
     }
+    const enterpriseId = tempLocalUserData && tempLocalUserData.enterpriseId;
+    callGetAllUsersByEnterpriseId(enterpriseId);
   }, []);
+
+  const callGetAllUsersByEnterpriseId = async (enterpriseId: any) => {
+    await getAllUsersByEnterpriseId(enterpriseId).then(
+      res => {
+        const emailIds = res
+          .filter((k: any) => k.roleName === ENTERPRISE)
+          .map((e: any) => e.emailId);
+        setEnterpriseUserEmailIds(emailIds);
+      },
+      err => {
+        console.log('err', err);
+      }
+    );
+  };
 
   const requestEnterpriseAdmin = () => {
     handleNewEnterpriseRequest();
@@ -207,6 +232,11 @@ export default function UpdateProfile({ handleEdit }: Props) {
           payload: { azureUser: res },
         });
         setIsEnterpriserRequested(!isEnterpriserRequested);
+        callAddEnterpriseRequestNotification(
+          REQUEST_FOR_ENTERPRISE,
+          emailId,
+          enterpriseUserEmailIds
+        );
       },
       err => {
         dispatch({
@@ -238,6 +268,43 @@ export default function UpdateProfile({ handleEdit }: Props) {
           payload: { loadingFlag: false },
         });
       });
+  };
+
+  // Notification addition
+  const callAddEnterpriseRequestNotification = async (
+    type: string,
+    fromId: any,
+    toId: any
+  ) => {
+    // call
+    dispatch({
+      type: ActionType.SET_LOADING,
+      payload: { loadingFlag: true },
+    });
+
+    const requestBody = {
+      type: type,
+      organisationId: tempLocalUserData && tempLocalUserData.enterpriseId,
+      fromId: fromId,
+      toId: toId,
+      isRead: false,
+    };
+
+    await addEnterpriseRequestNotification(requestBody).then(
+      res => {
+        dispatch({
+          type: ActionType.SET_LOADING,
+          payload: { loadingFlag: false },
+        });
+      },
+      err => {
+        console.log('err', err);
+        dispatch({
+          type: ActionType.SET_LOADING,
+          payload: { loadingFlag: false },
+        });
+      }
+    );
   };
 
   const imaSrc = '/avatars/animals/' + selectedAvatar + '.svg';
