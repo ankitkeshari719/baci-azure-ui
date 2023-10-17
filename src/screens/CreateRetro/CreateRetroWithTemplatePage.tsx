@@ -19,6 +19,7 @@ import {
 } from './const';
 import { UserTypeArray } from '../../constants';
 import {
+  addEnterpriseRequestNotification,
   getRetro,
   getTeamById,
   getUserByEmailId,
@@ -28,6 +29,7 @@ import { TeamsDetailsTab } from './TeamsDetailsTab';
 import { ScheduleRetroTab } from './ScheduleRetroTab';
 import moment from 'moment';
 import { ContainedButton } from '../../components';
+import { ADDED_IN_NEW_SESSION } from '../../constants/applicationConst';
 
 type Props = {
   handleStartRetro: () => void;
@@ -559,6 +561,7 @@ export function CreateRetroWithTemplatePage({
               setIsStartRetro(true);
               handleStartRetro();
               localStorage.removeItem('selectedTemplate');
+              setDataForNotification(selectedTeam, selectedFacilitator);
             },
             err => {
               console.log('err', err);
@@ -571,6 +574,61 @@ export function CreateRetroWithTemplatePage({
       }
       sessionStorage.setItem('retroname', retroName);
     }
+  };
+
+  const setDataForNotification = async (
+    selectedTeam: any,
+    selectedFacilitator: any
+  ) => {
+    await getTeamById(selectedTeam).then(
+      res => {
+        callAddEnterpriseRequestNotification(
+          ADDED_IN_NEW_SESSION,
+          selectedFacilitator,
+          res.userEmailIds
+        );
+      },
+      err => {
+        console.log('err', err);
+      }
+    );
+  };
+
+  // Notification addition
+  const callAddEnterpriseRequestNotification = async (
+    type: string,
+    fromId: any,
+    toId: any
+  ) => {
+    // call
+    dispatch({
+      type: ActionType.SET_LOADING,
+      payload: { loadingFlag: true },
+    });
+
+    const requestBody = {
+      type: type,
+      organisationId: tempLocalUserData && tempLocalUserData.enterpriseId,
+      fromId: fromId,
+      toId: toId,
+      isRead: false,
+    };
+
+    await addEnterpriseRequestNotification(requestBody).then(
+      res => {
+        dispatch({
+          type: ActionType.SET_LOADING,
+          payload: { loadingFlag: false },
+        });
+      },
+      err => {
+        console.log('err', err);
+        dispatch({
+          type: ActionType.SET_LOADING,
+          payload: { loadingFlag: false },
+        });
+      }
+    );
   };
 
   return (
@@ -588,6 +646,7 @@ export function CreateRetroWithTemplatePage({
           {global.currentRetro?.name} is ready to start
         </Box>
       )}
+      {/* If the user basic or enterprise role */}
       {isLoginUser ? (
         <>
           <Box sx={{ mt: 4, minWidth: '100%' }}>
@@ -663,6 +722,18 @@ export function CreateRetroWithTemplatePage({
               />
             )}
           </Box>
+          {isStartRetro && scheduleRetroType === RETRO_IMMEDIATELY && (
+            <Box
+              sx={{
+                mt: 2,
+                minWidth: '100%',
+                alignItems: 'flex-start',
+                justifyContent: 'center',
+              }}
+            >
+              <StartRetroWithTemplate />
+            </Box>
+          )}
         </>
       ) : (
         <>
@@ -714,19 +785,19 @@ export function CreateRetroWithTemplatePage({
               onClickAvatar={onClickAvatar}
             />
           </Box>
+          {isStartRetro && (
+            <Box
+              sx={{
+                mt: 2,
+                minWidth: '100%',
+                alignItems: 'flex-start',
+                justifyContent: 'center',
+              }}
+            >
+              <StartRetroWithTemplate />
+            </Box>
+          )}
         </>
-      )}
-      {isStartRetro && (
-        <Box
-          sx={{
-            mt: 2,
-            minWidth: '100%',
-            alignItems: 'flex-start',
-            justifyContent: 'center',
-          }}
-        >
-          <StartRetroWithTemplate />
-        </Box>
       )}
     </Box>
   );

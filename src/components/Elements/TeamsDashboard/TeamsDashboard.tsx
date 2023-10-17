@@ -97,7 +97,7 @@ export default function TeamsDashboard() {
     });
 
     const requestBody = {
-      userId: tempLocalUserData && tempLocalUserData.userId,
+      userId: tempLocalUserData && tempLocalUserData.emailId,
       roleName: tempLocalUserData && tempLocalUserData.roleName,
       enterpriseId: tempLocalUserData && tempLocalUserData.enterpriseId,
     };

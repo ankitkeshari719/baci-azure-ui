@@ -56,12 +56,7 @@ export default function TeamsEmptyScreen() {
             flexDirection: 'column',
           }}
         >
-          <img
-            src="/svgs/emptyTeams.svg"
-            width={300}
-            height={350}
-            alt="/svgs/emptyTeams.svg"
-          />
+          <img src="/svgs/emptyTeamImage.svg" width={300} height={350} />
           <H2SemiBoldTypography
             label="You have not created any Teams"
             style={{ color: '#2C69A1' }}
