@@ -142,8 +142,8 @@ function EnterpriseDashboard() {
           (new Date().getMonth() + 1).toString().slice(-2)
   );
 
-  const [totalSessions, setTotalSessions] = useState<Number>();
-  const [totalParticipants, setTotalParticipants] = useState<Number>();
+
+  const [totalParticipants, setTotalParticipants] = useState<any>(0);
   const [open, setOpen] = React.useState(false);
 
   const handleClose = () => {
@@ -168,10 +168,7 @@ function EnterpriseDashboard() {
     handleGetRetroChartData();
   }, [fromDate, toDate, selectId]);
 
-  // Call function to get participant
-  React.useEffect(() => {
-    handleGetParticipantChartData();
-  }, [fromDate, toDate, selectId]);
+  
 
   // Function to get Sessions
   const handleGetRetroChartData = async () => {
@@ -202,39 +199,10 @@ function EnterpriseDashboard() {
       );
     }
 
-    await getRetrosCount(fromDate, toDate, selectId).then(
-      res => {
-        if (res && res.result) {
-          let temp = 0;
-          res.result.map((item: any) => {
-            temp = temp + item.averageRetros;
-          });
-          setTotalSessions(Math.round(temp));
-        }
-      },
-      err => {
-        console.log('err', err);
-      }
-    );
+
   };
 
-  // Function to get participant
-  const handleGetParticipantChartData = async () => {
-    await getParticipantsCount(fromDate, toDate, selectId).then(
-      res => {
-        if (res && res.result) {
-          let temp = 0;
-          res.result.map((item: any) => {
-            temp = temp + item.averageParticipants;
-          });
-          setTotalParticipants(Math.round(temp));
-        }
-      },
-      err => {
-        console.log('err', err);
-      }
-    );
-  };
+ 
 
   const handleFromDate = (event: any) => {
     setFromDate(event as string);
@@ -521,7 +489,12 @@ function EnterpriseDashboard() {
                       : actionCount + '  Actions'
                   }
                   size={'medium'}
-                  onClick={() => navigate('/actions')}
+                  onClick={() => {
+                    
+                    if(location.pathname.includes('basic')) 
+                    {navigate('/basic/actions')}
+                    else if(location.pathname.includes('enterprise'))
+                    navigate('/enterprise/actions')}}
                 />
               </Box>
 
@@ -537,6 +510,13 @@ function EnterpriseDashboard() {
                 border="1px solid #CEEFFF"
                 borderRadius={'5px'}
                 sx={{ background: 'white', cursor: 'pointer' }}
+                onClick={() => {
+                    
+                  if(location.pathname.includes('basic')) 
+                  {navigate('/basic/sessions')}
+                  else if(location.pathname.includes('enterprise'))
+                  navigate('/enterprise/sessions')}}
+              
               >
                 <H5SemiBoldTypography
                   label={
@@ -661,7 +641,7 @@ function EnterpriseDashboard() {
                       >
                         <img src="/svgs/square_stack.svg"></img>
                         <BodyRegularTypography
-                          label={totalSessions + ' Sessions'}
+                          label={sessionCount + ' Sessions'}
                           style={{ color: '#2C69A1', marginLeft: '18px' }}
                         />
                       </Box>
@@ -911,7 +891,9 @@ function EnterpriseDashboard() {
                     );
                   }}
                 >
-                  <AverageParticipantChart dashboard={true} team={selectId} />
+                  <AverageParticipantChart dashboard={true} team={selectId} totalParticipantsCount={(count)=>{
+                    setTotalParticipants(count)
+                  }} />
                 </Box>
               </Box>
 
