@@ -21,6 +21,7 @@ import {
   listJiraProjects,
   listJiraMeta,
   createJiraIssue,
+  getJiraUserList,
 } from '../../helpers/msal/services';
 import { Dialog, DialogActions, DialogTitle } from '@material-ui/core';
 
@@ -100,6 +101,8 @@ export default function ManageActionSummary({
     });
     SetOpenHelpPopup(true);
   };
+
+
   const loadJiraProjects = async (): Promise<string[]> => {
     return await listJiraProjects(global.jiraCode as string).then(
       (res: any) => {
@@ -197,6 +200,10 @@ export default function ManageActionSummary({
             >
               <Typography className="textTypeFour">Create</Typography>
             </Button>
+
+          
+
+            
             <Dialog open={openHelpPopup} onClose={handleClose}>
               <DialogTitle>
                 <Typography variant="h6">

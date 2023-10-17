@@ -90,6 +90,8 @@ function MainContent() {
 
 export default function App({ instance }: AppProps) {
   const isXsUp = useMediaQuery('(max-width:768px)');
+  const isDisplay =location.pathname.includes('basic') ||
+  location.pathname.includes('enterprise');
 
   return (
     <ErrorProvider>
@@ -102,8 +104,8 @@ export default function App({ instance }: AppProps) {
                   <ThemeProvider theme={theme}>
                     <MsalProvider instance={instance}>
                       <Box display="flex" height="calc(var(--app-height))">
-                        {!isXsUp && <LeftBar />}
-                        <Box display="flex" width={'calc(100% - 72px)'}>
+                        {!isXsUp && isDisplay && <LeftBar />}
+                        <Box display="flex" width={isDisplay?'calc(100% - 72px)':'100%'}>
                           <Routes>
                             <Route
                               path="/"
@@ -170,6 +172,7 @@ export default function App({ instance }: AppProps) {
                               path="/jiraCallback/"
                               element={<JiraCallback />}
                             />
+                             {/* <Box display="flex" width={'calc(100% - 72px)'}> */}
                             {/* Basic Routes */}
                             <Route path="/basic/">
                               <Route
@@ -572,6 +575,7 @@ export default function App({ instance }: AppProps) {
                               />
                               <Route path="*" element={<PageNotFound />} />
                             </Route>
+                            {/* </Box> */}
                             <Route
                               path="*"
                               element={<PageNotFound></PageNotFound>}
