@@ -19,6 +19,7 @@ import {
 } from './const';
 import { UserTypeArray } from '../../constants';
 import {
+  addEnterpriseRequestNotification,
   getRetro,
   getTeamById,
   getUserByEmailId,
@@ -28,6 +29,7 @@ import { TeamsDetailsTab } from './TeamsDetailsTab';
 import { ScheduleRetroTab } from './ScheduleRetroTab';
 import moment from 'moment';
 import { ContainedButton } from '../../components';
+import { ADDED_IN_NEW_SESSION } from '../../constants/applicationConst';
 
 type Props = {
   handleStartRetro: () => void;
@@ -559,6 +561,7 @@ export function CreateRetroWithTemplatePage({
               setIsStartRetro(true);
               handleStartRetro();
               localStorage.removeItem('selectedTemplate');
+              setDataForNotification(selectedTeam, selectedFacilitator);
             },
             err => {
               console.log('err', err);
@@ -571,6 +574,61 @@ export function CreateRetroWithTemplatePage({
       }
       sessionStorage.setItem('retroname', retroName);
     }
+  };
+
+  const setDataForNotification = async (
+    selectedTeam: any,
+    selectedFacilitator: any
+  ) => {
+    await getTeamById(selectedTeam).then(
+      res => {
+        callAddEnterpriseRequestNotification(
+          ADDED_IN_NEW_SESSION,
+          selectedFacilitator,
+          res.userEmailIds
+        );
+      },
+      err => {
+        console.log('err', err);
+      }
+    );
+  };
+
+  // Notification addition
+  const callAddEnterpriseRequestNotification = async (
+    type: string,
+    fromId: any,
+    toId: any
+  ) => {
+    // call
+    dispatch({
+      type: ActionType.SET_LOADING,
+      payload: { loadingFlag: true },
+    });
+
+    const requestBody = {
+      type: type,
+      organisationId: tempLocalUserData && tempLocalUserData.enterpriseId,
+      fromId: fromId,
+      toId: toId,
+      isRead: false,
+    };
+
+    await addEnterpriseRequestNotification(requestBody).then(
+      res => {
+        dispatch({
+          type: ActionType.SET_LOADING,
+          payload: { loadingFlag: false },
+        });
+      },
+      err => {
+        console.log('err', err);
+        dispatch({
+          type: ActionType.SET_LOADING,
+          payload: { loadingFlag: false },
+        });
+      }
+    );
   };
 
   return (

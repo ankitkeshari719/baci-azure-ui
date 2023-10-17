@@ -380,7 +380,7 @@ export default function RetroBoard() {
         (res: any) => {
           const data = res;
           if (data) {
-            console.log(data);
+            // console.log(data);
           } else {
             alert('Please try again');
           }

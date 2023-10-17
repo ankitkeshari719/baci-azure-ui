@@ -102,7 +102,6 @@ export default function TeamsDashboard() {
       enterpriseId: tempLocalUserData && tempLocalUserData.enterpriseId,
     };
 
-    console.log('requestBody', requestBody);
     await getTeamDataForTable(requestBody).then(
       res => {
         dispatch({
