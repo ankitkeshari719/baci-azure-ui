@@ -26,8 +26,10 @@ import {
   H6RegularTypography,
 } from '../../CustomizedTypography';
 import {
+  addEnterpriseRequestNotification,
   createEnterpriseRequest,
   deleteEnterpriseRequestById,
+  getAllUsersByEnterpriseId,
   getEnterpriseById,
   getUserByEmailId,
   updateUser,
@@ -39,7 +41,11 @@ import OutlineButtonWithIconWithNoBorder from '../../CustomizedButton/OutlineBut
 import { avatarName } from '../../../constants/AvatarName';
 import Avatar from '../Avatar';
 import { LazyLoadImage } from 'react-lazy-load-image-component';
-import { BASIC, ENTERPRISE } from '../../../constants/applicationConst';
+import {
+  BASIC,
+  ENTERPRISE,
+  REQUEST_FOR_ENTERPRISE,
+} from '../../../constants/applicationConst';
 
 const styles = {
   accessCodeTextField: {
@@ -119,8 +125,10 @@ export default function EditProfile({ handleEdit }: Props) {
   const [codePhoneNoError, setPhoneNoError] = React.useState('');
   const [codeCountryError, setCountryCodeError] = React.useState('');
   const [codeCityCodeError, setCityCodeCodeError] = React.useState('');
-
   const [enterpriseDetails, setEnterpriseDetails] = React.useState<any>(null);
+  const [enterpriseUserEmailIds, setEnterpriseUserEmailIds] = React.useState(
+    []
+  );
 
   React.useEffect(() => {
     setFirstName(tempLocalUserData && tempLocalUserData.firstName);
@@ -152,12 +160,28 @@ export default function EditProfile({ handleEdit }: Props) {
   React.useEffect(() => {
     setAvatarList(avatarName.sort(() => Math.random() - 0.5));
     setHeight(window.innerHeight);
+    const enterpriseId = tempLocalUserData && tempLocalUserData.enterpriseId;
+    callGetAllUsersByEnterpriseId(enterpriseId);
   }, []);
 
   const callGetEnterpriseById = async (enterpriseId: any) => {
     await getEnterpriseById(enterpriseId).then(
       res => {
         setEnterpriseDetails(res);
+      },
+      err => {
+        console.log('err', err);
+      }
+    );
+  };
+
+  const callGetAllUsersByEnterpriseId = async (enterpriseId: any) => {
+    await getAllUsersByEnterpriseId(enterpriseId).then(
+      res => {
+        const emailIds = res
+          .filter((k: any) => k.roleName === ENTERPRISE)
+          .map((e: any) => e.emailId);
+        setEnterpriseUserEmailIds(emailIds);
       },
       err => {
         console.log('err', err);
@@ -305,24 +329,6 @@ export default function EditProfile({ handleEdit }: Props) {
     );
   };
 
-  // Remove the requested enterprise
-  const cancelEnterpriseRequest = async () => {
-    dispatch({
-      type: ActionType.SET_LOADING,
-      payload: { loadingFlag: true },
-    });
-    const enterpriseRequestId =
-      tempLocalUserData && tempLocalUserData.enterpriseRequestId;
-    await deleteEnterpriseRequestById(enterpriseRequestId).then(
-      res => {
-        updateIsEnterpriserRequested('', isEnterpriserRequested);
-      },
-      err => {
-        console.log('err', err);
-      }
-    );
-  };
-
   // Update user data for isEnterpriserRequested
   const updateIsEnterpriserRequested = async (
     enterpriseRequestId: any,
@@ -350,12 +356,35 @@ export default function EditProfile({ handleEdit }: Props) {
           payload: { azureUser: res },
         });
         setIsEnterpriserRequested(!isEnterpriserRequested);
+        callAddEnterpriseRequestNotification(
+          REQUEST_FOR_ENTERPRISE,
+          emailId,
+          enterpriseUserEmailIds
+        );
       },
       err => {
         dispatch({
           type: ActionType.SET_LOADING,
           payload: { loadingFlag: false },
         });
+        console.log('err', err);
+      }
+    );
+  };
+
+  // Remove the requested enterprise
+  const cancelEnterpriseRequest = async () => {
+    dispatch({
+      type: ActionType.SET_LOADING,
+      payload: { loadingFlag: true },
+    });
+    const enterpriseRequestId =
+      tempLocalUserData && tempLocalUserData.enterpriseRequestId;
+    await deleteEnterpriseRequestById(enterpriseRequestId).then(
+      res => {
+        updateIsEnterpriserRequested('', isEnterpriserRequested);
+      },
+      err => {
         console.log('err', err);
       }
     );
@@ -395,6 +424,43 @@ export default function EditProfile({ handleEdit }: Props) {
     }
     setSelectedAvatar(selectedAvatar);
     setOpenAvatarDialog(false);
+  };
+
+  // Notification addition
+  const callAddEnterpriseRequestNotification = async (
+    type: string,
+    fromId: any,
+    toId: any
+  ) => {
+    // call
+    dispatch({
+      type: ActionType.SET_LOADING,
+      payload: { loadingFlag: true },
+    });
+
+    const requestBody = {
+      type: type,
+      organisationId: tempLocalUserData && tempLocalUserData.enterpriseId,
+      fromId: fromId,
+      toId: toId,
+      isRead: false,
+    };
+
+    await addEnterpriseRequestNotification(requestBody).then(
+      res => {
+        dispatch({
+          type: ActionType.SET_LOADING,
+          payload: { loadingFlag: false },
+        });
+      },
+      err => {
+        console.log('err', err);
+        dispatch({
+          type: ActionType.SET_LOADING,
+          payload: { loadingFlag: false },
+        });
+      }
+    );
   };
 
   const imaSrc = '/avatars/animals/' + selectedAvatar + '.svg';

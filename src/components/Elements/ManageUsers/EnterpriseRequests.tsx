@@ -423,6 +423,7 @@ export default function EnterpriseRequests() {
         });
         // Update the users table for all the users
         handleChangeAllUsersRole(
+          APPROVED_ENTERPRISE_REQUEST,
           selectedEnterpriseRequestEmailIds,
           ENTERPRISE_USER_ID,
           ENTERPRISE
@@ -478,6 +479,7 @@ export default function EnterpriseRequests() {
         });
         // Update the users table for all the users
         handleChangeAllUsersRole(
+          DECLINE_ENTERPRISE_REQUEST,
           selectedEnterpriseRequestEmailIds,
           BASIC_USER_ID,
           BASIC
@@ -503,6 +505,7 @@ export default function EnterpriseRequests() {
 
   //Change all users role once user request approved and decline
   const handleChangeAllUsersRole = async (
+    type: any,
     fromEmails: any,
     roleId: any,
     roleName: any
@@ -525,6 +528,51 @@ export default function EnterpriseRequests() {
           type: ActionType.SET_LOADING,
           payload: { loadingFlag: false },
         });
+        callAllAddEnterpriseRequestNotification(
+          type,
+          tempLocalUserData && tempLocalUserData.emailId,
+          fromEmails
+        );
+      },
+      err => {
+        console.log('err', err);
+        dispatch({
+          type: ActionType.SET_LOADING,
+          payload: { loadingFlag: false },
+        });
+        callGetAllEnterpriseRequestByEnterpriseId(
+          tempLocalUserData && tempLocalUserData.enterpriseId
+        );
+      }
+    );
+  };
+
+  // Notification addition
+  const callAllAddEnterpriseRequestNotification = async (
+    type: string,
+    fromId: any,
+    toId: any
+  ) => {
+    // call
+    dispatch({
+      type: ActionType.SET_LOADING,
+      payload: { loadingFlag: true },
+    });
+
+    const requestBody = {
+      type: type,
+      organisationId: tempLocalUserData && tempLocalUserData.enterpriseId,
+      fromId: fromId,
+      toId: toId,
+      isRead: false,
+    };
+
+    await addEnterpriseRequestNotification(requestBody).then(
+      res => {
+        dispatch({
+          type: ActionType.SET_LOADING,
+          payload: { loadingFlag: false },
+        });
         callGetAllEnterpriseRequestByEnterpriseId(
           tempLocalUserData && tempLocalUserData.enterpriseId
         );
@@ -538,6 +586,7 @@ export default function EnterpriseRequests() {
         callGetAllEnterpriseRequestByEnterpriseId(
           tempLocalUserData && tempLocalUserData.enterpriseId
         );
+        closeDeclinedRequestPopUp();
       }
     );
   };
