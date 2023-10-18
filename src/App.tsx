@@ -171,7 +171,6 @@ export default function App({ instance }: AppProps) {
                               path="/jiraCallback/"
                               element={<JiraCallback />}
                             />
-                             {/* <Box display="flex" width={'calc(100% - 72px)'}> */}
                             {/* Basic Routes */}
                             <Route path="/basic/">
                               <Route
@@ -574,7 +573,6 @@ export default function App({ instance }: AppProps) {
                               />
                               <Route path="*" element={<PageNotFound />} />
                             </Route>
-                            {/* </Box> */}
                             <Route
                               path="*"
                               element={<PageNotFound></PageNotFound>}
