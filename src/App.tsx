@@ -90,8 +90,11 @@ function MainContent() {
 
 export default function App({ instance }: AppProps) {
   const isXsUp = useMediaQuery('(max-width:768px)');
-  const isDisplay =location.pathname.includes('basic') ||location.pathname.includes('enterprise');
+  const isDisplay =
+    location.pathname.includes('basic') ||
+    location.pathname.includes('enterprise');
 
+  console.log('isDisplay', isDisplay);
   return (
     <ErrorProvider>
       <ErrorBoundary>
@@ -103,8 +106,11 @@ export default function App({ instance }: AppProps) {
                   <ThemeProvider theme={theme}>
                     <MsalProvider instance={instance}>
                       <Box display="flex" height="calc(var(--app-height))">
-                        {!isXsUp  && <LeftBar />}
-                        <Box display="flex" width={isDisplay?'calc(100% - 72px)':'100%'}>
+                        {!isXsUp && <LeftBar />}
+                        <Box
+                          display="flex"
+                          width={isDisplay ? 'calc(100% - 72px)' : '100%'}
+                        >
                           <Routes>
                             <Route
                               path="/"
@@ -537,7 +543,10 @@ export default function App({ instance }: AppProps) {
                                   <Route path="" element={<ManageUsers />} />
                                 </Route>
                                 <Route path="enterpriseRegistration">
-                                  <Route path="" element={<EnterpriseRegistration />} />
+                                  <Route
+                                    path=""
+                                    element={<EnterpriseRegistration />}
+                                  />
                                 </Route>
                               </Route>
                               <Route path="settings" element={<Settings />} />

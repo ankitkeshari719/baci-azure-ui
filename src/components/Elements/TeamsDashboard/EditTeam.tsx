@@ -600,57 +600,66 @@ export default function EditTeam() {
   };
 
   return (
-    <>
+    <Box
+      sx={{
+        width: '100%',
+        background: '#F9FBFC',
+        padding: '20px',
+        display: 'flex',
+        flexDirection: 'column',
+        overflowY: 'auto',
+      }}
+    >
+      {/* Header */}
+      <Box sx={{ display: 'flex', flexDirection: 'row', marginBottom: '10px' }}>
+        <BodySemiBoldTypography
+          label="My Teams "
+          style={{
+            color: '#00E',
+            cursor: 'pointer',
+            textDecorationLine: 'underline',
+          }}
+          onClick={goToAllTeam}
+        />
+        <BodySemiBoldTypography label="\ About Team" style={{}} />
+      </Box>
+      {/* Title with back button */}
+      <Box
+        display="flex"
+        flexDirection="row"
+        alignItems="center"
+        justifyContent="flex-start"
+      >
+        <Icons.ArrowCircleLeftOutline
+          size={20}
+          style={{
+            width: '24px',
+            height: '24px',
+            display: 'block',
+            right: '0px',
+            color: '#159ADD',
+            fontSize: '14px',
+            cursor: 'pointer',
+          }}
+          onClick={goToAllTeam}
+        />
+        <H2SemiBoldTypography
+          label="About Team"
+          style={{ color: commonStyles.PrimaryDark, marginLeft: '16px' }}
+        />
+      </Box>
       <Paper
         sx={{
           width: '100%',
+          height: '100%',
           background: 'rgb(249 251 252)',
           padding: '20px',
           display: 'flex',
           flexDirection: 'column',
           overflowY: 'auto',
+          marginTop: '24px',
         }}
       >
-        {/* Header */}
-        <Box
-          sx={{ display: 'flex', flexDirection: 'row', marginBottom: '10px' }}
-        >
-          <BodySemiBoldTypography
-            label="My Teams "
-            style={{
-              color: '#00E',
-              cursor: 'pointer',
-              textDecorationLine: 'underline',
-            }}
-            onClick={goToAllTeam}
-          />
-          <BodySemiBoldTypography label="\ About Team" style={{}} />
-        </Box>
-        {/* Title with back button */}
-        <Box
-          display="flex"
-          flexDirection="row"
-          alignItems="center"
-          justifyContent="flex-start"
-        >
-          <Icons.ArrowCircleLeftOutline
-            size={20}
-            style={{
-              width: '24px',
-              height: '24px',
-              display: 'block',
-              right: '0px',
-              color: '#159ADD',
-              fontSize: '14px',
-              cursor: 'pointer',
-            }}
-            onClick={goToAllTeam}
-          />
-          <H2SemiBoldTypography
-            label="About Team"
-            style={{ color: commonStyles.PrimaryDark, marginLeft: '16px' }}
-          />
-        </Box>
         <Box
           sx={{
             width: '100%',
@@ -1710,6 +1719,6 @@ export default function EditTeam() {
           </Box>
         </Box>
       </Dialog>
-    </>
+    </Box>
   );
 }
