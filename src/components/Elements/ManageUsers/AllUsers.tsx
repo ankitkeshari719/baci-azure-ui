@@ -500,7 +500,7 @@ export default function AllUsers() {
                           >
                             {item.teams.map((team: any, index: number) => {
                               return (
-                                <span id={team.teamId}>
+                                <span id={team.teamId} key={index}>
                                   {team.teamName}
                                   {index < item.teams.length - 1 ? ', ' : ''}
                                 </span>

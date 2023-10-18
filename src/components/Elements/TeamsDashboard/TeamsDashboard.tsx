@@ -363,7 +363,7 @@ export default function TeamsDashboard() {
                           {item?.users?.map(
                             (user: any, index: any) =>
                               index < 4 && (
-                                <>
+                                <span key={index}>
                                   {user?.selectedAvatar === undefined ? (
                                     <LazyLoadImage
                                       width="48px !important"
@@ -403,7 +403,7 @@ export default function TeamsDashboard() {
                                       )}
                                     </>
                                   )}
-                                </>
+                                </span>
                               )
                           )}
                         </Box>
