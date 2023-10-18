@@ -74,6 +74,7 @@ import EnterpriseRegistration from './components/Elements/EnterpriseDashboardPag
 
 import PageNotFound from './screens/Others/PageNotFound';
 import EditTeam from './components/Elements/TeamsDashboard/EditTeam';
+import { useEffect, useState } from 'react';
 
 type AppProps = {
   instance: IPublicClientApplication;
@@ -81,6 +82,8 @@ type AppProps = {
 
 function MainContent() {
   const { instance } = useMsal();
+
+
   return (
     <Grid container spacing={0}>
       <Outlet />
@@ -90,7 +93,16 @@ function MainContent() {
 
 export default function App({ instance }: AppProps) {
   const isXsUp = useMediaQuery('(max-width:768px)');
-  const isDisplay =location.pathname.includes('basic') ||location.pathname.includes('enterprise');
+  const [isDisplay,setDisplay] = useState<any>(    location.pathname.includes('basic') ||
+  location.pathname.includes('enterprise'))
+;
+
+    useEffect(()=>{
+      setDisplay(    location.pathname.includes('basic') ||
+      location.pathname.includes('enterprise'))
+      
+    },[location.pathname.includes('basic') ,
+    location.pathname.includes('enterprise')])
 
   return (
     <ErrorProvider>
@@ -103,8 +115,11 @@ export default function App({ instance }: AppProps) {
                   <ThemeProvider theme={theme}>
                     <MsalProvider instance={instance}>
                       <Box display="flex" height="calc(var(--app-height))">
-                        {!isXsUp  && <LeftBar />}
-                        <Box display="flex" width={isDisplay?'calc(100% - 72px)':'100%'}>
+                        {!isXsUp && <LeftBar />}
+                        <Box
+                          display="flex"
+                          width={isDisplay ? 'calc(100% - 72px)' : '100%'}
+                        >
                           <Routes>
                             <Route
                               path="/"
@@ -171,13 +186,75 @@ export default function App({ instance }: AppProps) {
                               path="/jiraCallback/"
                               element={<JiraCallback />}
                             />
-                             {/* <Box display="flex" width={'calc(100% - 72px)'}> */}
+                            {/* <Box display="flex" width={'calc(100% - 72px)'}> */}
                             {/* Basic Routes */}
                             <Route path="/basic/">
                               <Route
                                 path=""
                                 element={<BasicDashboardWithEnterprise />}
                               />
+                              <Route
+                                path="join/:id"
+                                element={<JoinRetro></JoinRetro>}
+                              />
+
+                              <Route
+                                path="create"
+                                element={<CreateRetroMain></CreateRetroMain>}
+                              />
+
+                              <Route
+                                path="termAndCondition"
+                                element={
+                                  <TermsAndConditions></TermsAndConditions>
+                                }
+                              />
+                              <Route
+                                path="privatePolicy"
+                                element={<PrivacyPolicy></PrivacyPolicy>}
+                              />
+                              <Route
+                                path="retrodetails"
+                                element={<RetroDetails></RetroDetails>}
+                              />
+                              <Route
+                                path="offboarding"
+                                element={<Offboarding></Offboarding>}
+                              />
+                              <Route path="board" element={<MainContent />}>
+                                <Route
+                                  path=":id/waiting"
+                                  element={
+                                    <ParticipantWaitingPage></ParticipantWaitingPage>
+                                  }
+                                />
+                                <Route
+                                  path=":id/pulsecheck"
+                                  element={<PulseCheckMain />}
+                                />
+                                <Route path=":id" element={<Board />} />
+                                <Route
+                                  path=":id/feedback"
+                                  element={<Feedback />}
+                                />
+                                <Route
+                                  path=":id/startRetro"
+                                  element={<StartRetro></StartRetro>}
+                                />
+                              </Route>
+                              <Route
+                                path="report/:id"
+                                element={<SummaryReportMain />}
+                              />
+                              <Route
+                                path="retroisfinished"
+                                element={<RetroIsFinished></RetroIsFinished>}
+                              />
+                              <Route
+                                path="jiraCallback/"
+                                element={<JiraCallback />}
+                              />
+
                               <Route
                                 path="dashboard"
                                 element={<BasicDashboardWithEnterprise />}
@@ -380,6 +457,69 @@ export default function App({ instance }: AppProps) {
                                 path=""
                                 element={<EnterpriseMainContainer />}
                               />
+
+                              <Route
+                                path="join/:id"
+                                element={<JoinRetro></JoinRetro>}
+                              />
+                              {/* retro Data */}
+                              <Route
+                                path="create"
+                                element={<CreateRetroMain></CreateRetroMain>}
+                              />
+
+                              <Route
+                                path="termAndCondition"
+                                element={
+                                  <TermsAndConditions></TermsAndConditions>
+                                }
+                              />
+                              <Route
+                                path="privatePolicy"
+                                element={<PrivacyPolicy></PrivacyPolicy>}
+                              />
+                              <Route
+                                path="retrodetails"
+                                element={<RetroDetails></RetroDetails>}
+                              />
+                              <Route
+                                path="offboarding"
+                                element={<Offboarding></Offboarding>}
+                              />
+                              <Route path="board" element={<MainContent />}>
+                                <Route
+                                  path=":id/waiting"
+                                  element={
+                                    <ParticipantWaitingPage></ParticipantWaitingPage>
+                                  }
+                                />
+                                <Route
+                                  path=":id/pulsecheck"
+                                  element={<PulseCheckMain />}
+                                />
+                                <Route path=":id" element={<Board />} />
+                                <Route
+                                  path=":id/feedback"
+                                  element={<Feedback />}
+                                />
+                                <Route
+                                  path=":id/startRetro"
+                                  element={<StartRetro></StartRetro>}
+                                />
+                              </Route>
+                              <Route
+                                path="report/:id"
+                                element={<SummaryReportMain />}
+                              />
+                              <Route
+                                path="retroisfinished"
+                                element={<RetroIsFinished></RetroIsFinished>}
+                              />
+                              <Route
+                                path="jiraCallback/"
+                                element={<JiraCallback />}
+                              />
+
                               <Route
                                 path="dashboard"
                                 element={<EnterpriseMainContainer />}
@@ -538,7 +678,10 @@ export default function App({ instance }: AppProps) {
                                   <Route path="" element={<ManageUsers />} />
                                 </Route>
                                 <Route path="enterpriseRegistration">
-                                  <Route path="" element={<EnterpriseRegistration />} />
+                                  <Route
+                                    path=""
+                                    element={<EnterpriseRegistration />}
+                                  />
                                 </Route>
                               </Route>
                               <Route path="settings" element={<Settings />} />

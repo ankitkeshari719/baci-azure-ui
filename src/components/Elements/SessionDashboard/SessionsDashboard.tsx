@@ -313,9 +313,26 @@ export default function SessionDashboard() {
             style={{ color: commonStyles.PrimaryDark, marginBottom: '15px' }}
           />
 
-          <Button variant="contained" sx={{borderRadius:"24px",fontSize:'16px',fontWeight:'500!important',paddingTop:"0px!important",paddingBottom:'0px!important',height:'34px!important'}}>
-            <PlusIcon width={"24px"} style={{marginRight:'15px'}}/>
-             NEW SESSION</Button>
+          <Button
+            variant="contained"
+            sx={{
+              borderRadius: '24px',
+              fontSize: '16px',
+              fontWeight: '500!important',
+              paddingTop: '0px!important',
+              paddingBottom: '0px!important',
+              height: '34px!important',
+            }}
+            onClick={() => {
+              if (location.pathname.includes('basic')) {
+                navigate('/basic/create');
+              } else if (location.pathname.includes('enterprise'))
+                navigate('/enterprise/create');
+            }}
+          >
+            <PlusIcon width={'24px'} style={{ marginRight: '15px' }} />
+            NEW SESSION
+          </Button>
         </Box>
         <Box
           display="flex"
@@ -440,7 +457,6 @@ export default function SessionDashboard() {
                                       onClick={() => {
                                         navigator.clipboard.writeText(value);
 
-
                                         dispatch({
                                           type: ActionType.SET_SNACK_MESSAGE,
                                           payload: {
@@ -450,8 +466,6 @@ export default function SessionDashboard() {
                                             },
                                           },
                                         });
-
-
 
                                         // alert(value);
                                       }}
