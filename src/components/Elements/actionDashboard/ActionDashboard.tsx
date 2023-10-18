@@ -49,6 +49,7 @@ import {
   updateAction,
 } from '../../../helpers/msal/services';
 import { ActionType, GlobalContext } from '../../../contexts/GlobalContext';
+import { UserActionType, UserContext } from '../../../contexts/UserContext';
 
 interface Column {
   id:
@@ -181,6 +182,7 @@ export default function ActionDashboard() {
   const [displayJiraRows, setDisplayJiraRows] = React.useState<any>([]);
   const [csvData, setCsvData] = React.useState<any>([]);
   const [global, dispatch] = React.useContext(GlobalContext);
+  const [gUser,userDispatch]= React.useContext(UserContext);
   const [page, setPage] = React.useState(0);
   const [rowsPerPage, setRowsPerPage] = React.useState(10);
   const [searchedVal, setSearchedVal] = React.useState('');
@@ -208,6 +210,10 @@ export default function ActionDashboard() {
         (res: any[]) => {
           dispatch({
             type: ActionType.SET_USER_LIST_BY_ENT,
+            payload: { users: res },
+          });
+          userDispatch({
+            type: UserActionType.SET_USER_LIST_BY_ENT,
             payload: { users: res },
           });
           setLoading(false);

@@ -145,6 +145,9 @@ const LeftBar = () => {
     } else if (location.pathname.includes('settings')) {
       setSelectedMenu(menuArray[6].label);
     }
+    else{
+      setSelectedMenu(menuArray[0].label);
+    }
   }, [
     location.pathname.includes('enterprise'),
     location.pathname.includes('dashboard'),

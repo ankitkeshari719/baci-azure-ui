@@ -46,6 +46,8 @@ import {
   ENTERPRISE,
   REQUEST_FOR_ENTERPRISE,
 } from '../../../constants/applicationConst';
+import { UserActionType, UserContext } from '../../../contexts/UserContext';
+import { GlobalUser } from '../../../helpers/types';
 
 const styles = {
   accessCodeTextField: {
@@ -93,6 +95,7 @@ export default function EditProfile({ handleEdit }: Props) {
   const [avatarError, setAvatarError] = React.useState('');
 
   const [global, dispatch] = React.useContext(GlobalContext);
+  const [gUser,userDispatch]= React.useContext(UserContext);
   const [firstName, setFirstName] = React.useState(
     tempLocalUserData && tempLocalUserData.firstName
   );
@@ -282,6 +285,10 @@ export default function EditProfile({ handleEdit }: Props) {
           type: ActionType.SET_AZURE_USER,
           payload: { azureUser: res },
         });
+        userDispatch({
+          type: UserActionType.SET_AZURE_USER,
+          payload: { azureUser: res },
+        });
         handleEdit();
       },
       err => {
@@ -353,6 +360,10 @@ export default function EditProfile({ handleEdit }: Props) {
         localStorage.setItem('userData', JSON.stringify(res));
         dispatch({
           type: ActionType.SET_AZURE_USER,
+          payload: { azureUser: res },
+        });
+        userDispatch({
+          type: UserActionType.SET_AZURE_USER,
           payload: { azureUser: res },
         });
         setIsEnterpriserRequested(!isEnterpriserRequested);

@@ -75,6 +75,7 @@ import EnterpriseRegistration from './components/Elements/EnterpriseDashboardPag
 import PageNotFound from './screens/Others/PageNotFound';
 import EditTeam from './components/Elements/TeamsDashboard/EditTeam';
 import { useEffect, useState } from 'react';
+import { UserProvider } from './contexts/UserContext';
 
 type AppProps = {
   instance: IPublicClientApplication;
@@ -109,6 +110,7 @@ export default function App({ instance }: AppProps) {
     <ErrorProvider>
       <ErrorBoundary>
         <SocketProvider>
+          <UserProvider>
           <GlobalProvider>
             <BrowserRouter>
               <BoardProvider>
@@ -732,6 +734,7 @@ export default function App({ instance }: AppProps) {
               </BoardProvider>
             </BrowserRouter>
           </GlobalProvider>
+          </UserProvider>
         </SocketProvider>
       </ErrorBoundary>
     </ErrorProvider>

@@ -72,6 +72,7 @@ import RetroCount from '../../../assets/img/RetroCount.png';
 import UploadImage from '../../../assets/img/Upload Image or Photo.png';
 import Backdrop from '@mui/material/Backdrop';
 import BACITemplate from '../../../assets/img/BACI Template.png';
+import { UserActionType, UserContext } from '../../../contexts/UserContext';
 
 const theme = createTheme({
   palette: {
@@ -124,6 +125,7 @@ function EnterpriseDashboard() {
   );
 
   const [global, dispatch] = React.useContext(GlobalContext);
+  const [gUser,userDispatch]= React.useContext(UserContext);
 
   const [fromDate, setFromDate] = useState<string>(
     global.chartStartDate
@@ -210,12 +212,20 @@ function EnterpriseDashboard() {
       type: ActionType.CHART_START_DATE,
       payload: { startDate: event },
     });
+    userDispatch({
+      type: UserActionType.CHART_START_DATE,
+      payload: { startDate: event },
+    });
   };
 
   const handleToDate = (event: any) => {
     setToDate(event as string);
     dispatch({
       type: ActionType.CHART_END_DATE,
+      payload: { endDate: event },
+    });
+    userDispatch({
+      type: UserActionType.CHART_END_DATE,
       payload: { endDate: event },
     });
   };
@@ -458,6 +468,10 @@ function EnterpriseDashboard() {
                   handleChange={(change: any) => {
                     dispatch({
                       type: ActionType.SET_TEAM_ID,
+                      payload: { teamId: change.target.value },
+                    });
+                    userDispatch({
+                      type: UserActionType.SET_TEAM_ID,
                       payload: { teamId: change.target.value },
                     });
 

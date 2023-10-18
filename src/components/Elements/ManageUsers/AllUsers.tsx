@@ -40,6 +40,7 @@ import { ContainedButton } from '../../CustomizedButton/ContainedButton';
 import { OutlinedButton } from '../../CustomizedButton/OutlinedButton';
 import OutlineButtonWithIconWithNoBorder from '../../CustomizedButton/OutlineButtonWithIconWithNoBorder';
 import TeamSelector from '../TeamSelector';
+import { UserActionType, UserContext } from '../../../contexts/UserContext';
 
 const headCells = [
   { id: 'check', label: '', disableSorting: true },
@@ -57,6 +58,7 @@ const headCells = [
 
 export default function AllUsers() {
   const [global, dispatch] = React.useContext(GlobalContext);
+  const [gUser,userDispatch]= React.useContext(UserContext);
   const [height, setHeight] = React.useState(0);
   const [isManageUserPage, setIsManageUserPage] = React.useState(false);
   const [selectedTeam, setSelectedTeam] = React.useState('0');
@@ -339,6 +341,10 @@ export default function AllUsers() {
         localStorage.setItem('userData', JSON.stringify(res));
         dispatch({
           type: ActionType.SET_AZURE_USER,
+          payload: { azureUser: res },
+        });
+        userDispatch({
+          type: UserActionType.SET_AZURE_USER,
           payload: { azureUser: res },
         });
       },

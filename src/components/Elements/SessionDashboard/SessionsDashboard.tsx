@@ -46,6 +46,7 @@ import { ActionType, GlobalContext } from '../../../contexts/GlobalContext';
 import DateSelector from '../EnterpriseDashboardPages/DateSelector';
 import TeamSelector from '../TeamSelector';
 import { ContainedButtonWithIcon } from '../../CustomizedButton/ContainedButtonWithIcon';
+import { UserActionType, UserContext } from '../../../contexts/UserContext';
 
 interface Column {
   id:
@@ -115,6 +116,7 @@ const StyledTableRow = styled(TableRow)(({ theme }) => ({
 export default function SessionDashboard() {
   const [displayJiraRows, setDisplayJiraRows] = React.useState<any>([]);
   const [global, dispatch] = React.useContext(GlobalContext);
+  const [gUser,userDispatch]= React.useContext(UserContext);
   const [page, setPage] = React.useState(0);
   const [rowsPerPage, setRowsPerPage] = React.useState(10);
   const [searchedVal, setSearchedVal] = React.useState('');
@@ -191,12 +193,21 @@ export default function SessionDashboard() {
       type: ActionType.CHART_START_DATE,
       payload: { startDate: event },
     });
+    userDispatch({
+      type: UserActionType.CHART_START_DATE,
+      payload: { startDate: event },
+    });
   };
 
   const handleToDate = (event: any) => {
     setToDate(event as string);
     dispatch({
       type: ActionType.CHART_END_DATE,
+      payload: { endDate: event },
+    });
+    
+    userDispatch({
+      type: UserActionType.CHART_END_DATE,
       payload: { endDate: event },
     });
   };
@@ -376,6 +387,10 @@ export default function SessionDashboard() {
               handleChange={(change: any) => {
                 dispatch({
                   type: ActionType.SET_TEAM_ID,
+                  payload: { teamId: change.target.value },
+                });
+                userDispatch({
+                  type: UserActionType.SET_TEAM_ID,
                   payload: { teamId: change.target.value },
                 });
 

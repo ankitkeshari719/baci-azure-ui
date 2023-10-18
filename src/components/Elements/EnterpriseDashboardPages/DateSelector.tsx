@@ -16,6 +16,7 @@ import {   LocalizationProvider } from '@mui/x-date-pickers';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { DateTimePicker } from '@mui/x-date-pickers/DateTimePicker';
 import dayjs from 'dayjs';
+import { UserActionType, UserContext } from '../../../contexts/UserContext';
 
 function DateSelector({
   fromDate,
@@ -30,7 +31,7 @@ function DateSelector({
   handleToDate: (event: any) => void;
   handleFromDate: (event: any) => void;
 }) {
-
+  const [gUser,userDispatch]= React.useContext(UserContext);
   const [global, dispatch] = React.useContext(GlobalContext);
   return (
     <Grid
@@ -67,6 +68,11 @@ function DateSelector({
            type: ActionType.CHART_START_DATE,
            payload: { endDate: dayjs(e).format('YYYY-MM') },
          });
+         userDispatch({
+          type: UserActionType.CHART_START_DATE,
+          payload: { endDate: dayjs(e).format('YYYY-MM') },
+        });
+
          handleFromDate(dayjs(e).format('YYYY-MM'))}}
         renderInput={(params) => <TextField {...params} />
       }
@@ -95,6 +101,12 @@ function DateSelector({
            type: ActionType.CHART_END_DATE,
            payload: { endDate: dayjs(e).format('YYYY-MM') },
          });
+         userDispatch({
+          type: UserActionType.CHART_END_DATE,
+          payload: { endDate: dayjs(e).format('YYYY-MM') },
+        });
+
+
          handleToDate(dayjs(e).format('YYYY-MM'))}}
         renderInput={(params) => <TextField {...params} />}
       />
