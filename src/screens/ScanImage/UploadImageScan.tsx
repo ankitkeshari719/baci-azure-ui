@@ -8,7 +8,7 @@ import FileUploadOutlinedIcon from '@mui/icons-material/FileUploadOutlined';
 import RotateRightIcon from '@mui/icons-material/RotateRight';
 import CameraAltOutlinedIcon from '@mui/icons-material/CameraAltOutlined';
 import { useNavigate } from 'react-router-dom';
-import CircularProgress from '@mui/material/CircularProgress';
+
 import {
   Dialog,
   DialogActions,
@@ -21,6 +21,7 @@ import {
 } from '@mui/material';
 import { ScanUploadImage } from '../scan/ScanUploadImage';
 import { GlobalContext } from '../../contexts/GlobalContext';
+import CircularProgress from '@mui/material/CircularProgress';
 
 type Props = {
   handleStartRetro: () => void;
@@ -49,6 +50,20 @@ export function UploadImageScan() {
   const [recognizedText, setRecognizedText] = React.useState<string[]>([]);
   const [isLoading, setIsLoading] = React.useState(false);
   const [global, dispatch] = React.useContext(GlobalContext);
+  const [counter, setCounter] = useState(0);
+
+  useEffect(() => {
+    const timer = setInterval(() => {
+      if (counter < 100) {
+        setCounter(counter + 1);
+      } else {
+        clearInterval(timer);
+      }
+    }, 1);
+    return () => {
+      clearInterval(timer);
+    };
+  }, [counter]);
 
   function handleStartRetro() {
     setIsRetroStart(true);
@@ -160,14 +175,15 @@ export function UploadImageScan() {
             const dataJson = JSON.stringify(data);
             localStorage.setItem('myData', dataJson);
             setRecognizedText(data);
-            setIsLoading(false);
             navigateToScan();
+          
             return data;
           } else if (responseData.status === 'failed') {
             throw new Error('Recognition operation failed');
           } else {
             await new Promise(resolve => setTimeout(resolve, 5000));
           }
+          setIsLoading(false);
         } else {
           throw new Error(
             'Error checking operation status. HTTP status: ' +
@@ -249,8 +265,8 @@ export function UploadImageScan() {
                 <div
                   style={{
                     display: 'flex',
-                    height: '60vh', // Set the height to 60% of the viewport height (adjust as needed)
-                    width: '100%', // Set the width to 80% of the parent container (adjust as needed)
+                    height: '60vh',
+                    width: '100%',
                     marginTop: '10px',
                     marginLeft: 'auto',
                     marginRight: 'auto',
@@ -259,20 +275,45 @@ export function UploadImageScan() {
                     alignItems: 'center',
                     transition: 'all 0.3s ease-in-out',
                     backgroundColor: 'black',
-                    maxWidth: '800px', // Set a maximum width to prevent it from becoming too wide on larger screens
+                    maxWidth: '800px',
+                    position: 'relative',
                   }}
                 >
-                  {isLoading ? (
-                    <div className="scanner-container">
-                      <div className="scanning-line"></div>
-                      {image && <img src={image} alt="Stored" height="325px" />}
-                    </div>
+                   {isLoading ? (
+                    <>
+                      <CircularProgress
+                        size={100}
+                        style={{
+                          position: 'absolute',
+                          top: '50%',
+                          left: '50%',
+                          transform: 'translate(-50%, -50%)',
+                        }}
+                        variant="determinate"
+                        value={counter}
+                      />
+                      <Typography
+                        style={{
+                          color: 'white',
+                          position: 'absolute',
+                          top: '50%',
+                          left: '50%',
+                          transform: 'translate(-50%, -50%)',
+                        }}
+                      >
+                        {counter}%
+                      </Typography>
+                      {image && (
+                        <img src={image} alt="Stored" height="325px" />
+                      )}
+                    </>
                   ) : (
                     <>
                       {image && <img src={image} alt="Stored" height="325px" />}
                     </>
                   )}
                 </div>
+
 
                 <div
                   style={{

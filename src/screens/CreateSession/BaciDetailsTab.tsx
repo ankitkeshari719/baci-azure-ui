@@ -18,7 +18,7 @@ import {
 } from '../../components/CustomizedTypography';
 import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
-
+import moment from 'moment';
 const styles = {
   retroNameTextField: {
     minWidth: '300px',
@@ -109,13 +109,13 @@ const styles = {
 type Props = {
   activePanel: string;
   retroName: string;
-  retroTimeFrame: string;
+  retroTimeFrame: Date | null;
   retroNameError: string;
   retroNameWarning: string;
   timeFrameRef: any;
   isTimeFrameSet: boolean;
   handleRetroNameChange: (e: React.SetStateAction<string>) => void;
-  handleTimeFrame: (e: React.SetStateAction<string>) => void;
+  handleTimeFrame: (e: React.SetStateAction<Date | null>) => void;
   onClickNext: (currentPanel: string, nextPanel: string) => void;
 };
 
@@ -133,10 +133,13 @@ export function BaciDetailsTab({
 }: Props) {
   const [selectedDate, setSelectedDate] = React.useState<Date | null>(null);
 
+  const formattedDate = retroTimeFrame
+    ? moment(retroTimeFrame).format('D MMMM YYYY')
+    : '';
+
   const handleDateChange = (date: Date | null) => {
     setSelectedDate(date);
   };
-
   // Function to format the date as "12 July 2013"
   const formatDate = (date: Date | null): string => {
     if (date) {
@@ -162,7 +165,7 @@ export function BaciDetailsTab({
         >
           {activePanel != 'detailsPanel' &&
           retroName != '' &&
-          retroTimeFrame != '' ? (
+          retroTimeFrame != null ? (
             <>
               <Box display="flex" alignItems="center" flexDirection="row">
                 <Box
@@ -186,7 +189,7 @@ export function BaciDetailsTab({
                     ml: 5,
                   }}
                 >
-                  {retroTimeFrame}
+                  {formattedDate}
                 </Box>
               </Box>
             </>
@@ -243,34 +246,41 @@ export function BaciDetailsTab({
                         style={{
                           display: 'flex',
                           borderBottom: '2px solid black',
+                          width: '300px',
                         }}
                       >
                         <DatePicker
                           selected={selectedDate}
-                          onChange={handleDateChange}
+                          onChange={date => {
+                            handleTimeFrame(date);
+                            handleDateChange(date);
+                          }}
                           dateFormat="dd MMMM yyyy"
                           showMonthDropdown
                           showYearDropdown
                           dropdownMode="select"
                           popperPlacement="bottom-start"
                           customInput={
-                            <input
-                              type="text"
+                            <TextField
+                              autoFocus
+                              variant="standard"
+                              label="Date"
                               value={
-                                selectedDate ? formatDate(selectedDate) : ''
+                                selectedDate
+                                  ? selectedDate.toLocaleDateString()
+                                  : ''
                               }
-                              placeholder="Select Date"
-                              style={{
-                                borderBottom: 'none',
-                                width: '100%', // Set an initial width
-                                padding: '8px',
-                                border: 'none',
-                                outline: 'none',
-                                color: 'black',
+                              InputProps={{
+                                disableUnderline: true,
+                                style: {
+                                  width: '100%',
+                                  padding: '8px',
+                                  color: 'black',
+                                },
                               }}
                             />
                           }
-                          wrapperClassName="date-picker-wrapper" // Add a class for custom styles
+                          wrapperClassName="date-picker-wrapper"
                         />
                       </div>
                       {isTimeFrameSet && (
@@ -288,7 +298,7 @@ export function BaciDetailsTab({
             <Box sx={{ mt: 4, mb: 4 }}>
               <ContainedButton
                 name="Next"
-                onClick={() => onClickNext('detailsPanel', 'templatePanel')}
+                onClick={() => onClickNext('detailsPanel', 'teamDetailPanel')}
                 style={{
                   mt: 5,
                   minWidth: '75px !important',

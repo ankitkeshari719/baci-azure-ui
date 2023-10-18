@@ -22,7 +22,7 @@ import {
   getUserByEmailId,
 } from '../../helpers/msal/services';
 import { StartRetroWithTemplate } from '../../screens/CreateRetro/StartRetroWithTemplate';
-import { TeamsDetailsTab } from '../../screens/CreateRetro/TeamsDetailsTab';
+import { TeamsDetailsTab } from '../../screens/CreateSession/TeamsDetailsTab';
 import { ScheduleRetroTab } from '../../screens/CreateRetro/ScheduleRetroTab';
 import moment from 'moment';
 
@@ -51,7 +51,7 @@ export function CreateSessionWithTemplatePage({
     /* BACI Details Panel Constant */
   }
   const [retroName, setRetroName] = React.useState('');
-  const [retroTimeFrame, setRetroTimeFrame] = React.useState('');
+  const [retroTimeFrame, setRetroTimeFrame] = React.useState<Date | null>(null);
   const [retroNameError, setRetroNameError] = React.useState('');
   const [retroNameWarning, setRetroWarning] = React.useState('');
   const [isTimeFrameSet, setIsTimeFrameSet] = React.useState(id ? true : false);
@@ -143,6 +143,7 @@ export function CreateSessionWithTemplatePage({
   const callGetUserByEmailId = async (selectedFacilitatorId: any) => {
     await getUserByEmailId(selectedFacilitatorId).then(
       res => {
+        console.log("setSelectedFacilitatorData", res)
         setSelectedFacilitatorData(res);
       },
       err => {
@@ -172,11 +173,14 @@ export function CreateSessionWithTemplatePage({
       setRetroWarning('');
     }
     setRetroName(e);
+    localStorage.setItem('sessionName', retroName);
+
   }
 
   // Function to handle Time Frame on change
-  function handleTimeFrame(e: React.SetStateAction<string>) {
-    setRetroTimeFrame(e);
+  function handleTimeFrame(date: React.SetStateAction<Date | null>) {
+    // Logic for handling date
+    setRetroTimeFrame(date);
     setIsTimeFrameSet(false);
   }
 
@@ -190,6 +194,7 @@ export function CreateSessionWithTemplatePage({
   // Function to handle the facilitator selection
   const handleFacilitatorChange = (event: SelectChangeEvent) => {
     setSelectedFacilitator(event.target.value as string);
+    console.log("faciltator:", event.target.value)
     callGetUserByEmailId(event.target.value);
     setFacilitatorSelectionError('');
   };
@@ -222,12 +227,12 @@ export function CreateSessionWithTemplatePage({
   const onClickNext = (currentPanel: string, nextPanel: string) => {
     if (
       currentPanel === 'detailsPanel' &&
-      (retroName === '' || retroTimeFrame === '')
+      (retroName === '' || retroTimeFrame === null)
     ) {
       if (retroName === '') {
         setRetroNameError('Please enter retro name.');
       }
-      if (retroTimeFrame === '') {
+      if (retroTimeFrame === null) {
         setIsTimeFrameSet(true);
       }
       return;
@@ -246,13 +251,14 @@ export function CreateSessionWithTemplatePage({
       return;
     }
 
+  
     if (!isLoginUser) {
       // If user is not basic and enterprise
       setActivePanel(nextPanel);
       if (
         currentPanel === 'userDetailPanel' &&
         retroName != '' &&
-        retroTimeFrame != '' &&
+        retroTimeFrame != null &&
         selectedTemplate != null &&
         selectedPulseCheck != null &&
         userName != '' &&
@@ -275,20 +281,20 @@ export function CreateSessionWithTemplatePage({
         return;
       }
 
-      if (
-        currentPanel === 'scheduleDetailPanel' &&
-        scheduleDescription === ''
-      ) {
-        if (scheduleDescription === '') {
-          setScheduleDescriptionError('Please add description');
-        }
-        return;
-      }
+      // if (
+      //   currentPanel === 'scheduleDetailPanel' &&
+      //   scheduleDescription === ''
+      // ) {
+      //   if (scheduleDescription === '') {
+      //     setScheduleDescriptionError('Please add description');
+      //   }
+      //   return;
+      // }
       setActivePanel(nextPanel);
       if (
         currentPanel === 'finalButtonTab' &&
         retroName != '' &&
-        retroTimeFrame != '' &&
+        retroTimeFrame != null &&
         selectedTemplate != null &&
         selectedPulseCheck != null &&
         userName != '' &&
@@ -319,7 +325,7 @@ export function CreateSessionWithTemplatePage({
 
     if (
       retroName !== '' &&
-      retroTimeFrame !== '' &&
+      retroTimeFrame !== null &&
       userName !== '' &&
       selectedAvatar !== '' &&
       selectedPulseCheck != null &&
@@ -333,16 +339,17 @@ export function CreateSessionWithTemplatePage({
       setRetroNameError('');
       setIsTimeFrameSet(false);
       await retro
-        .createTemplate(
-          { name: retroName },
-          retroTimeFrame,
-          '',
-          userName,
-          selectedAvatar,
-          userType,
-          selectedPulseCheck,
-          mySelectedTemplate
+      .createTemplate(
+        { name: retroName },
+        retroTimeFrame.toISOString(), // Convert Date to ISO string
+        '',
+        userName,
+        selectedAvatar,
+        userType,
+        selectedPulseCheck,
+        mySelectedTemplate
         )
+
         .then(
           res => {
             // dispatch({ type: ActionType.CREATE_RETRO, payload: {} });
@@ -410,40 +417,40 @@ export function CreateSessionWithTemplatePage({
         <Box component="div" whiteSpace="normal" className="createRetroText">
           {global.currentRetro?.name} is ready to start
         </Box>
+
+        
       )}
-      
-        <>
-          <Box sx={{ mt: 4, minWidth: '100%' }}>
-            <BaciDetailsTab
-              activePanel={activePanel}
-              retroName={retroName}
-              retroTimeFrame={retroTimeFrame}
-              retroNameError={retroNameError}
-              retroNameWarning={retroNameWarning}
-              timeFrameRef={timeFrameRef}
-              isTimeFrameSet={isTimeFrameSet}
-              handleRetroNameChange={handleRetroNameChange}
-              handleTimeFrame={handleTimeFrame}
-              onClickNext={onClickNext}
-            />
-            <TeamsDetailsTab
-              activePanel={activePanel}
-              onClickBack={onClickBack}
-              onClickNext={onClickNext}
-              selectedTeam={selectedTeam}
-              handleTeamChange={handleTeamChange}
-              selectedFacilitator={selectedFacilitator}
-              handleFacilitatorChange={handleFacilitatorChange}
-              selectedTeamData={selectedTeamData}
-              selectedFacilitatorData={selectedFacilitatorData}
-              teamSelectionError={teamSelectionError}
-              facilitatorSelectionError={facilitatorSelectionError}
-            />
-          
-          </Box>
-        </>
-      
-      
+
+      <>
+        <Box sx={{ mt: 4, minWidth: '100%' }}>
+          <BaciDetailsTab
+            activePanel={activePanel}
+            retroName={retroName}
+            retroTimeFrame={retroTimeFrame}
+            retroNameError={retroNameError}
+            retroNameWarning={retroNameWarning}
+            timeFrameRef={timeFrameRef}
+            isTimeFrameSet={isTimeFrameSet}
+            handleRetroNameChange={handleRetroNameChange}
+            handleTimeFrame={handleTimeFrame}
+            onClickNext={onClickNext}
+          />
+          <TeamsDetailsTab
+    activePanel={activePanel}
+    selectedTeam={selectedTeam}
+    handleTeamChange={handleTeamChange}
+    selectedFacilitator={selectedFacilitator}
+    handleFacilitatorChange={handleFacilitatorChange}
+    selectedTeamData={selectedTeamData}
+    selectedFacilitatorData={selectedFacilitatorData}
+    teamSelectionError={teamSelectionError}
+    facilitatorSelectionError={facilitatorSelectionError}
+    onClickBack={onClickBack}
+    onClickNext={onClickNext}
+  />
+        </Box>
+      </>
+
       {isStartRetro && (
         <Box
           sx={{

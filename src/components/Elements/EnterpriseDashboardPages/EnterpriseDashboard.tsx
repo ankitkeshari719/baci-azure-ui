@@ -326,15 +326,14 @@ function EnterpriseDashboard() {
             </ThemeProvider>
           </Box>
         </Box>
-
- {/* select session flow */}
- <Backdrop
+        {/* select session flow */}
+        <Backdrop
           sx={{ color: '#fff', zIndex: theme => theme.zIndex.drawer + 1 }}
           open={open}
           onClick={handleClose}
         >
           <Box style={{ width: '1000px' }}>
-            <Grid container spacing={2} style={{gridGap:"30px"}}>
+            <Grid container spacing={2} style={{ gridGap: '30px' }}>
               <Grid
                 item
                 xs={5}
@@ -342,10 +341,10 @@ function EnterpriseDashboard() {
                 style={{
                   backgroundColor: 'white',
                   borderRadius: '10px',
-                  padding: "10px 10px 20px 10px",
+                  padding: '10px 10px 20px 10px',
                   alignContent: 'center',
                   maxWidth: '450px',
-                  height:"349px"
+                  height: '349px',
                 }}
               >
                 <img
@@ -355,16 +354,22 @@ function EnterpriseDashboard() {
                   height="189px"
                   width="400px"
                 />
-                <p style={{ textAlign: 'center', color: 'black',fontSize: '23px' }}>
+                <p
+                  style={{
+                    textAlign: 'center',
+                    color: 'black',
+                    fontSize: '23px',
+                  }}
+                >
                   BACI Template
                 </p>
-                <p style={{ fontSize: '16px', color: 'gray', margin:"10px" }}>
-                Need to run a collaboration session with BACI? 
+                <p style={{ fontSize: '16px', color: 'gray', margin: '10px' }}>
+                  Need to run a collaboration session with BACI?
                   <br />
                   Start instantly with preset BACI templates.
                 </p>
               </Grid>
-             
+
               <Grid
                 item
                 xs={5}
@@ -372,9 +377,9 @@ function EnterpriseDashboard() {
                 style={{
                   backgroundColor: 'white',
                   borderRadius: '10px',
-                  padding: "10px 10px 20px 10px",
+                  padding: '10px 10px 20px 10px',
                   maxWidth: '450px',
-                  height:"349px"
+                  height: '349px',
                 }}
               >
                 <img
@@ -386,20 +391,23 @@ function EnterpriseDashboard() {
                 />
                 <p
                   onClick={handleClose}
-                  style={{ textAlign: 'center', color: 'black' ,fontSize: '23px'}}
+                  style={{
+                    textAlign: 'center',
+                    color: 'black',
+                    fontSize: '23px',
+                  }}
                 >
                   Upload Image or Photo
                 </p>
-                <p style={{ fontSize: '16px', color: 'gray',margin:"10px" }}>
+                <p style={{ fontSize: '16px', color: 'gray', margin: '10px' }}>
                   Run a collabration session with Post-Its on a wall?
-                  <br/>Digitise it here for easy analysis and safe keeping.
+                  <br />
+                  Digitise it here for easy analysis and safe keeping.
                 </p>
               </Grid>
             </Grid>
           </Box>
         </Backdrop>
-
-
         {/* Bottom container */}
         <Box display="flex" flexDirection="column" sx={{ overflow: 'auto' }}>
           {/* Retro list starts here after hover */}

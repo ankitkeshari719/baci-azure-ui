@@ -4,6 +4,7 @@ import { CreateSessionWithTemplatePage } from '../../screens/CreateSession/Creat
 import { TopBar } from '../../screens/CreateSession/TopBar';
 // import { ShareParticipants } from './shareParticipants';
 import { DeploymentPopUp } from '../Utils/Alerts/DeploymentPopUp';
+import '../CreateSession/styles.scss'
 
 export function CreateSessionMain() {
   const [isRetroStart, setIsRetroStart] = React.useState<boolean>(false);
@@ -43,7 +44,7 @@ export function CreateSessionMain() {
             </Grid>
           </Grid>
         ) : (
-          <Grid container spacing={0} className="retroContainer">
+          <Grid container spacing={0} style={{padding:"25px"}}>
             <Grid item xs={12}>
               <CreateSessionWithTemplatePage
                 handleStartRetro={handleStartRetro}

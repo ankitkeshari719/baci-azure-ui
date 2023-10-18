@@ -237,7 +237,7 @@ function BasicDashboardWithEnterprise() {
           onClick={handleClose}
         >
           <Box style={{ width: '1000px' }}>
-            <Grid container spacing={2}>
+            <Grid container spacing={2} style={{gridGap:"30px"}}>
               <Grid
                 item
                 xs={5}
@@ -248,6 +248,7 @@ function BasicDashboardWithEnterprise() {
                   padding: "10px 10px 20px 10px",
                   alignContent: 'center',
                   maxWidth: '450px',
+                  height:"349px"
                 }}
               >
                 <img
@@ -257,16 +258,16 @@ function BasicDashboardWithEnterprise() {
                   height="189px"
                   width="400px"
                 />
-                <p style={{ textAlign: 'center', color: 'black', fontSize: '23px' }}>
+                <p style={{ textAlign: 'center', color: 'black',fontSize: '23px' }}>
                   BACI Template
                 </p>
                 <p style={{ fontSize: '16px', color: 'gray', margin:"10px" }}>
-                 Need to run a collaboration session with BACI? 
+                Need to run a collaboration session with BACI? 
                   <br />
                   Start instantly with preset BACI templates.
                 </p>
               </Grid>
-           
+             
               <Grid
                 item
                 xs={5}
@@ -276,6 +277,7 @@ function BasicDashboardWithEnterprise() {
                   borderRadius: '10px',
                   padding: "10px 10px 20px 10px",
                   maxWidth: '450px',
+                  height:"349px"
                 }}
               >
                 <img
@@ -284,15 +286,14 @@ function BasicDashboardWithEnterprise() {
                   className="logo"
                   height="189px"
                   width="400px"
-
                 />
                 <p
                   onClick={handleClose}
-                  style={{ textAlign: 'center', color: 'black',fontSize: '23px' }}
+                  style={{ textAlign: 'center', color: 'black' ,fontSize: '23px'}}
                 >
                   Upload Image or Photo
                 </p>
-                <p style={{ fontSize: '16px', color: 'gray', margin:"10px" }}>
+                <p style={{ fontSize: '16px', color: 'gray',margin:"10px" }}>
                   Run a collabration session with Post-Its on a wall?
                   <br/>Digitise it here for easy analysis and safe keeping.
                 </p>

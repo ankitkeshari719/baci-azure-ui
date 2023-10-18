@@ -16,6 +16,7 @@ import {
 } from '../../components/CustomizedTypography';
 import TeamSelector from '../../components/Elements/TeamSelector';
 import UserSelector from '../../components/Elements/UserSelector';
+import { useNavigate } from 'react-router-dom';
 
 const styles = {
   avatarfield: {
@@ -92,6 +93,15 @@ export function TeamsDetailsTab({
 }: Props) {
   const localUserData = localStorage.getItem('userData');
   const tempLocalUserData = localUserData && JSON.parse(localUserData);
+  const navigate = useNavigate();
+
+  const navigateToUploadImage = () => {
+    navigate('/basic/uploadImage/');
+  };
+
+  const navigateToBack = () => {
+    navigate('/basic/createSession/'); 
+  };
   return (
     <>
       {/* Teams Details Panel */}
@@ -288,10 +298,8 @@ export function TeamsDetailsTab({
                 }}
               >
                 <ContainedButton
-                  name="Next"
-                  onClick={() =>
-                    onClickNext('teamDetailPanel', 'scheduleDetailPanel')
-                  }
+                  name="Finish"
+                  onClick={navigateToUploadImage}
                   style={{
                     mt: 5,
                     minWidth: '75px !important',
@@ -302,7 +310,7 @@ export function TeamsDetailsTab({
                 <OutlinedButton
                   label="Back"
                   size={'medium'}
-                  onClick={() => onClickBack('pulseCheckPanel')}
+                  onClick={navigateToBack}
                   style={{
                     minWidth: '75px !important',
                     height: '36px !important',
