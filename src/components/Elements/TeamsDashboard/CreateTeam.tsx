@@ -334,7 +334,7 @@ export default function CreateTeam() {
           type: ActionType.SET_LOADING,
           payload: { loadingFlag: false },
         });
-        updateUsersTeam(res, userEmailIds, createdBy);
+        updateUsersTeam(res, userEmailIds, createdByEmailId);
       },
       err => {
         console.log('err', err);
@@ -350,7 +350,7 @@ export default function CreateTeam() {
   const updateUsersTeam = async (
     teamId: any,
     userEmailIdsFromRecord: any,
-    createdBy: any
+    createdByEmailId: any
   ) => {
     dispatch({
       type: ActionType.SET_LOADING,
@@ -371,7 +371,7 @@ export default function CreateTeam() {
         goToViewMode(teamId);
         callAddEnterpriseRequestNotification(
           ADDED_IN_TEAM,
-          createdBy,
+          createdByEmailId,
           userEmailIdsFromRecord
         );
       },
