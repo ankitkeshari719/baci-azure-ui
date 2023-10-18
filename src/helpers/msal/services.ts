@@ -318,6 +318,41 @@ export const createJiraIssue = async (
   return status;
 };
 
+//jira users list
+export const getJiraUserList = async (
+  // projectId: string,
+  // issueType: string,
+  jiraCode: string,
+  // description: string
+): Promise<any> => {
+  let status: any = '';
+  const requestOptions = {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({
+      // projectId,
+      // issueType,
+      access_token: jiraCode,
+      // description,
+    }),
+  };
+
+  await fetch(API_URL + `/getJiraUsers`, requestOptions)
+    .then(response => response.json())
+    .then(data => {
+      status = data;
+    });
+  return status;
+};
+
+
+
+
+
+
+
+
+
 // Api to get dummy chart data
 export const getDummyChartData = async (): Promise<any> => {
   let dummyChartData;
