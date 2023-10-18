@@ -334,7 +334,7 @@ export default function CreateTeam() {
           type: ActionType.SET_LOADING,
           payload: { loadingFlag: false },
         });
-        updateUsersTeam(res, userEmailIds, createdBy);
+        updateUsersTeam(res, userEmailIds, createdByEmailId);
       },
       err => {
         console.log('err', err);
@@ -350,7 +350,7 @@ export default function CreateTeam() {
   const updateUsersTeam = async (
     teamId: any,
     userEmailIdsFromRecord: any,
-    createdBy: any
+    createdByEmailId: any
   ) => {
     dispatch({
       type: ActionType.SET_LOADING,
@@ -371,7 +371,7 @@ export default function CreateTeam() {
         goToViewMode(teamId);
         callAddEnterpriseRequestNotification(
           ADDED_IN_TEAM,
-          createdBy,
+          createdByEmailId,
           userEmailIdsFromRecord
         );
       },
@@ -433,10 +433,10 @@ export default function CreateTeam() {
 
   return (
     <>
-      <Paper
+      <Box
         sx={{
           width: '100%',
-          background: 'rgb(249 251 252)',
+          background: '#F9FBFC',
           padding: '20px',
           display: 'flex',
           flexDirection: 'column',
@@ -483,6 +483,17 @@ export default function CreateTeam() {
             style={{ color: commonStyles.PrimaryDark, marginLeft: '16px' }}
           />
         </Box>
+      </Box>
+      <Paper
+        sx={{
+          width: '100%',
+          background: 'rgb(249 251 252)',
+          padding: '20px',
+          display: 'flex',
+          flexDirection: 'column',
+          overflowY: 'auto',
+        }}
+      >
         <Box
           sx={{
             width: '100%',

@@ -330,7 +330,7 @@ const Toolbar = (props: any) => {
                         }
                       );
                     }}
-                    onKeyDown={async e => {
+                    onKeyDown={async (e: any) => {
                       if (e.keyCode === 13) {
                         await saveAndProcessAction(
                           BoardActionType.UPDATE_RETRO_DETAILS,

@@ -601,10 +601,10 @@ export default function EditTeam() {
 
   return (
     <>
-      <Paper
+      <Box
         sx={{
           width: '100%',
-          background: 'rgb(249 251 252)',
+          background: '#F9FBFC',
           padding: '20px',
           display: 'flex',
           flexDirection: 'column',
@@ -651,1065 +651,1078 @@ export default function EditTeam() {
             style={{ color: commonStyles.PrimaryDark, marginLeft: '16px' }}
           />
         </Box>
-        <Box
+        <Paper
           sx={{
             width: '100%',
+            height: '100%',
+            background: 'rgb(249 251 252)',
+            padding: '20px',
             display: 'flex',
-            flexDirection: 'row',
+            flexDirection: 'column',
+            overflowY: 'auto',
             marginTop: '24px',
           }}
         >
-          {/* Left Side Form */}
-          {isEditModeOn ? (
-            <>
-              {/* Edit Mode */}
-              <Box
-                sx={{
-                  height: '100%',
-                  width: '40%',
-                  display: 'flex',
-                  justifyContent: 'flex-start',
-                  alignItems: 'flex-start',
-                  flexDirection: 'column',
-                  paddingRight: '24px',
-                }}
-              >
-                {/* Team Name && Save Button */}
-                <Box
-                  sx={{
-                    width: '100%',
-                    display: 'flex',
-                    justifyContent: 'space-between',
-                    alignItems: 'center',
-                    flexDirection: 'row',
-                  }}
-                >
-                  {/* Team Name */}
-                  <FormControl
-                    style={{
-                      display: 'flex',
-                      width: '600px',
-                      justifyContent: 'flex-start',
-                      alignItems: 'center',
-                    }}
-                  >
-                    <Box
-                      sx={{
-                        display: 'flex',
-                        flexDirection: 'row',
-                        justifyContent: 'flex-start',
-                        alignItems: 'center',
-                        width: '100%',
-                      }}
-                    >
-                      <Box
-                        sx={{
-                          display: 'flex',
-                          flexDirection: 'column',
-                        }}
-                      >
-                        <TextField
-                          label="Team Name"
-                          autoFocus
-                          variant="standard"
-                          error={!!codeTeamNameError}
-                          sx={{
-                            width: '400px',
-                            ...styles.accessCodeTextField,
-                          }}
-                          value={teamName}
-                          onChange={(e: any) => {
-                            setTeamName(e.currentTarget.value);
-                            setTeamNameCodeError('');
-                          }}
-                        />
-                      </Box>
-                    </Box>
-                    {/* Error message */}
-                    {codeTeamNameError !== '' && (
-                      <FormHelperText
-                        style={{ color: '#d32f2f', width: '100%' }}
-                      >
-                        {codeTeamNameError}
-                      </FormHelperText>
-                    )}
-                  </FormControl>
-                  {/* Save Button*/}
-                  <OutlineButtonWithIconWithNoBorder
-                    id="save_team_info"
-                    label="Save"
-                    iconPath="/svgs/saveTeam.svg"
-                    onClick={() => submitTeam()}
-                    style={{
-                      display: 'flex',
-                      alignItems: 'center',
-                      justifyContent: 'center',
-                      textTransform: 'uppercase',
-                    }}
-                  />
-                </Box>
-                {/* Team Description */}
-                <Box
-                  sx={{
-                    width: '100%',
-                    display: 'flex',
-                    justifyContent: 'flex-start',
-                    alignItems: 'flex-start',
-                    flexDirection: 'row',
-                    marginTop: '24px',
-                  }}
-                >
-                  {/* Team Description */}
-                  <FormControl
-                    style={{
-                      display: 'flex',
-                      width: '600px',
-                      justifyContent: 'flex-start',
-                      alignItems: 'center',
-                    }}
-                  >
-                    <Box
-                      sx={{
-                        width: '100%',
-                        display: 'flex',
-                        flexDirection: 'row',
-                        justifyContent: 'flex-start',
-                        alignItems: 'center',
-                      }}
-                    >
-                      <Box
-                        sx={{
-                          display: 'flex',
-                          flexDirection: 'column',
-                        }}
-                      >
-                        <CaptionRegularTypography
-                          label="Team Description"
-                          style={{ color: '#808080' }}
-                        />
-                        <TextField
-                          multiline
-                          rows={2}
-                          maxRows={8}
-                          placeholder="Enter Description"
-                          variant="standard"
-                          error={!!codeTeamDescriptionError}
-                          sx={{
-                            width: '400px',
-                            ...styles.messageTextField,
-                            background: '#ffffff',
-                          }}
-                          value={teamDescription}
-                          onChange={(e: any) => {
-                            setTeamDescription(e.currentTarget.value);
-                            setTeamDescriptionError('');
-                          }}
-                        />
-                      </Box>
-                    </Box>
-                    {/* Error message */}
-                    {codeTeamDescriptionError !== '' && (
-                      <FormHelperText
-                        style={{ color: '#d32f2f', width: '100%' }}
-                      >
-                        {codeTeamDescriptionError}
-                      </FormHelperText>
-                    )}
-                  </FormControl>
-                </Box>
-                {/* Created On && Created By  */}
-                <Box
-                  sx={{
-                    width: '100%',
-                    display: 'flex',
-                    justifyContent: 'flex-start',
-                    alignItems: 'flex-start',
-                    flexDirection: 'row',
-                    marginTop: '24px',
-                  }}
-                >
-                  {/* Created On */}
-                  <FormControl
-                    style={{
-                      display: 'flex',
-                      width: '600px',
-                      justifyContent: 'flex-start',
-                      alignItems: 'center',
-                    }}
-                  >
-                    <Box
-                      sx={{
-                        display: 'flex',
-                        flexDirection: 'row',
-                        justifyContent: 'flex-start',
-                        alignItems: 'center',
-                        width: '100%',
-                      }}
-                    >
-                      <Box
-                        sx={{
-                          display: 'flex',
-                          flexDirection: 'column',
-                        }}
-                      >
-                        <ButtonLabelTypography
-                          label="Created On"
-                          style={{ color: '#000000' }}
-                        />
-                        <BodyRegularTypography
-                          label={createdOn}
-                          style={{
-                            color: '#343434',
-                            marginTop: '16px !important',
-                          }}
-                        />
-                      </Box>
-                    </Box>
-                  </FormControl>
-                  {/* Created BY */}
-                  <FormControl
-                    style={{
-                      display: 'flex',
-                      width: '600px',
-                      justifyContent: 'flex-start',
-                      alignItems: 'center',
-                    }}
-                  >
-                    <Box
-                      sx={{
-                        display: 'flex',
-                        flexDirection: 'row',
-                        justifyContent: 'flex-start',
-                        alignItems: 'center',
-                        width: '100%',
-                      }}
-                    >
-                      <Box
-                        sx={{
-                          display: 'flex',
-                          flexDirection: 'column',
-                        }}
-                      >
-                        <ButtonLabelTypography
-                          label="Created BY"
-                          style={{ color: '#000000', marginBottom: '8px' }}
-                        />
-                        <Box
-                          sx={{
-                            display: 'flex',
-                            flexDirection: 'row',
-                            alignItems: 'center',
-                            marginTop: '8px !important',
-                          }}
-                        >
-                          {createdByAvatar != '' ? (
-                            <LazyLoadImage
-                              className="avatar"
-                              style={{
-                                height: '48px',
-                                width: '48px',
-                                borderRadius: '50%',
-                                border: '5px solid #f9fbf8',
-                                cursor: 'pointer',
-                              }}
-                              src={
-                                '/avatars/animals/' + createdByAvatar + '.svg'
-                              }
-                            ></LazyLoadImage>
-                          ) : (
-                            <LazyLoadImage
-                              width="48px !important"
-                              height="48px !important"
-                              style={{
-                                borderRadius: '50%',
-                                cursor: 'pointer',
-                                border: 'none',
-                              }}
-                              src={'/svgs/DefaultUser.svg'}
-                            ></LazyLoadImage>
-                          )}
-                          <BodyRegularTypography
-                            label={createdBy}
-                            style={{ color: '#343434' }}
-                          />
-                        </Box>
-                      </Box>
-                    </Box>
-                    {/* Error message */}
-                    {codeCreatedByError !== '' && (
-                      <FormHelperText
-                        style={{ color: '#d32f2f', width: '100%' }}
-                      >
-                        {codeCreatedByError}
-                      </FormHelperText>
-                    )}
-                  </FormControl>
-                </Box>
-                {/* Department */}
-                <Box
-                  sx={{
-                    width: '100%',
-                    display: 'flex',
-                    justifyContent: 'flex-start',
-                    alignItems: 'flex-start',
-                    flexDirection: 'row',
-                    marginTop: '24px',
-                  }}
-                >
-                  {/* Department */}
-                  <FormControl
-                    style={{
-                      display: 'flex',
-                      width: '600px',
-                      justifyContent: 'flex-start',
-                      alignItems: 'center',
-                    }}
-                  >
-                    <Box
-                      sx={{
-                        width: '100%',
-                        display: 'flex',
-                        flexDirection: 'row',
-                        justifyContent: 'flex-start',
-                        alignItems: 'center',
-                      }}
-                    >
-                      <Box
-                        sx={{
-                          display: 'flex',
-                          flexDirection: 'column',
-                        }}
-                      >
-                        <ButtonLabelTypography
-                          label="Department"
-                          style={{ color: '#000000', marginBottom: '8px' }}
-                        />
-                        <TextField
-                          variant="standard"
-                          error={!!codeTeamDepartmentError}
-                          sx={{
-                            width: '200px',
-                            ...styles.accessCodeTextField,
-                          }}
-                          value={teamDepartment}
-                          onChange={(e: any) => {
-                            setTeamDepartment(e.currentTarget.value);
-                            setTeamDepartmentCodeError('');
-                          }}
-                        />
-                      </Box>
-                    </Box>
-                    {/* Error message */}
-                    {codeTeamDepartmentError !== '' && (
-                      <FormHelperText
-                        style={{ color: '#d32f2f', width: '100%' }}
-                      >
-                        {codeTeamDepartmentError}
-                      </FormHelperText>
-                    )}
-                  </FormControl>
-                </Box>
-                {/* Session and Actions */}
-                <Box
-                  sx={{
-                    width: '100%',
-                    display: 'flex',
-                    justifyContent: 'space-between',
-                    alignItems: 'flex-start',
-                    flexDirection: 'row',
-                    marginTop: '48px',
-                  }}
-                >
-                  <Box
-                    sx={{
-                      width: '100%',
-                      display: 'flex',
-                      alignItems: 'flex-start',
-                      flexDirection: 'row',
-                    }}
-                  >
-                    <ButtonLabelTypography label={'No Of Sessions: '} />
-                    &nbsp;&nbsp;
-                    <BodyRegularTypography
-                      label={sessionCount.toString()}
-                      style={{
-                        color: '#00E',
-                        textDecorationLine: 'underline',
-                        cursor: 'pointer',
-                      }}
-                      onClick={goSessionsPage}
-                    />
-                  </Box>
-                  <Box
-                    sx={{
-                      width: '100%',
-                      display: 'flex',
-                      alignItems: 'flex-start',
-                      flexDirection: 'row',
-                    }}
-                  >
-                    <ButtonLabelTypography label={'No Of Actions: '} />
-                    &nbsp;&nbsp;
-                    <BodyRegularTypography
-                      label={actionsCount.toString()}
-                      style={{
-                        color: '#00E',
-                        textDecorationLine: 'underline',
-                        cursor: 'pointer',
-                      }}
-                      onClick={goToActionsPage}
-                    />
-                  </Box>
-                </Box>
-                {/* Analytics */}
-                <Box
-                  sx={{
-                    width: '100%',
-                    display: 'flex',
-                    justifyContent: 'flex-start',
-                    alignItems: 'flex-start',
-                    flexDirection: 'row',
-                    marginTop: '48px',
-                  }}
-                >
-                  <ButtonLabelTypography label="Analytics: " />
-                  &nbsp;&nbsp;
-                  <BodyRegularTypography
-                    label=" View All"
-                    style={{
-                      color: '#00E',
-                      textDecorationLine: 'underline',
-                      cursor: 'pointer',
-                    }}
-                    onClick={goToAnalyticsPage}
-                  />
-                </Box>
-              </Box>
-            </>
-          ) : (
-            <>
-              {/* View Mode */}
-              <Box
-                sx={{
-                  height: '100%',
-                  width: '40%',
-                  display: 'flex',
-                  justifyContent: 'flex-start',
-                  alignItems: 'flex-start',
-                  flexDirection: 'column',
-                  paddingRight: '24px',
-                }}
-              >
-                {/* Team Name && Save Button */}
-                <Box
-                  sx={{
-                    width: '100%',
-                    display: 'flex',
-                    justifyContent: 'space-between',
-                    alignItems: 'center',
-                    flexDirection: 'row',
-                  }}
-                >
-                  {/* Team Name */}
-                  <FormControl
-                    style={{
-                      display: 'flex',
-                      width: '600px',
-                      justifyContent: 'flex-start',
-                      alignItems: 'center',
-                    }}
-                  >
-                    <Box
-                      sx={{
-                        display: 'flex',
-                        flexDirection: 'row',
-                        justifyContent: 'flex-start',
-                        alignItems: 'center',
-                        width: '100%',
-                      }}
-                    >
-                      <Box
-                        sx={{
-                          display: 'flex',
-                          flexDirection: 'column',
-                        }}
-                      >
-                        <H2SemiBoldTypography label={teamName} />
-                      </Box>
-                    </Box>
-                    {/* Error message */}
-                    {codeTeamNameError !== '' && (
-                      <FormHelperText
-                        style={{ color: '#d32f2f', width: '100%' }}
-                      >
-                        {codeTeamNameError}
-                      </FormHelperText>
-                    )}
-                  </FormControl>
-                  {/* Save Button*/}
-                  <OutlineButtonWithIconWithNoBorder
-                    id="save_team_info"
-                    label="Edit"
-                    iconPath="/svgs/edit_blue.svg"
-                    onClick={() => setIsEditModeOn(true)}
-                    style={{
-                      display: 'flex',
-                      alignItems: 'center',
-                      justifyContent: 'center',
-                      textTransform: 'uppercase',
-                    }}
-                  />
-                </Box>
-                {/* Team Description */}
-                <Box
-                  sx={{
-                    width: '100%',
-                    display: 'flex',
-                    justifyContent: 'flex-start',
-                    alignItems: 'flex-start',
-                    flexDirection: 'row',
-                    marginTop: '24px',
-                  }}
-                >
-                  {/* Team Description */}
-                  <FormControl
-                    style={{
-                      display: 'flex',
-                      width: '600px',
-                      justifyContent: 'flex-start',
-                      alignItems: 'center',
-                    }}
-                  >
-                    <Box
-                      sx={{
-                        width: '100%',
-                        display: 'flex',
-                        flexDirection: 'row',
-                        justifyContent: 'flex-start',
-                        alignItems: 'center',
-                      }}
-                    >
-                      <Box
-                        sx={{
-                          display: 'flex',
-                          flexDirection: 'column',
-                        }}
-                      >
-                        <BodyRegularTypography
-                          label={teamDescription}
-                          style={{ color: '#343434' }}
-                        />
-                      </Box>
-                    </Box>
-                    {/* Error message */}
-                    {codeTeamDescriptionError !== '' && (
-                      <FormHelperText
-                        style={{ color: '#d32f2f', width: '100%' }}
-                      >
-                        {codeTeamDescriptionError}
-                      </FormHelperText>
-                    )}
-                  </FormControl>
-                </Box>
-                {/* Created On && Created By  */}
-                <Box
-                  sx={{
-                    width: '100%',
-                    display: 'flex',
-                    justifyContent: 'flex-start',
-                    alignItems: 'flex-start',
-                    flexDirection: 'row',
-                    marginTop: '48px',
-                  }}
-                >
-                  {/* Created On */}
-                  <FormControl
-                    style={{
-                      display: 'flex',
-                      width: '600px',
-                      justifyContent: 'flex-start',
-                      alignItems: 'center',
-                    }}
-                  >
-                    <Box
-                      sx={{
-                        display: 'flex',
-                        flexDirection: 'row',
-                        justifyContent: 'flex-start',
-                        alignItems: 'center',
-                        width: '100%',
-                      }}
-                    >
-                      <Box
-                        sx={{
-                          display: 'flex',
-                          flexDirection: 'column',
-                        }}
-                      >
-                        <ButtonLabelTypography
-                          label="Created On"
-                          style={{ color: '#000000' }}
-                        />
-                        <BodyRegularTypography
-                          label={createdOn}
-                          style={{
-                            color: '#343434',
-                            marginTop: '16px !important',
-                          }}
-                        />
-                      </Box>
-                    </Box>
-                  </FormControl>
-                  {/* Created BY */}
-                  <FormControl
-                    style={{
-                      display: 'flex',
-                      width: '600px',
-                      justifyContent: 'flex-start',
-                      alignItems: 'center',
-                    }}
-                  >
-                    <Box
-                      sx={{
-                        display: 'flex',
-                        flexDirection: 'row',
-                        justifyContent: 'flex-start',
-                        alignItems: 'center',
-                        width: '100%',
-                      }}
-                    >
-                      <Box
-                        sx={{
-                          display: 'flex',
-                          flexDirection: 'column',
-                        }}
-                      >
-                        <ButtonLabelTypography
-                          label="Created BY"
-                          style={{ color: '#000000', marginBottom: '8px' }}
-                        />
-                        <Box
-                          sx={{
-                            display: 'flex',
-                            flexDirection: 'row',
-                            alignItems: 'center',
-                            marginTop: '8px !important',
-                          }}
-                        >
-                          {createdByAvatar != '' ? (
-                            <LazyLoadImage
-                              className="avatar"
-                              style={{
-                                height: '48px',
-                                width: '48px',
-                                borderRadius: '50%',
-                                border: '5px solid #f9fbf8',
-                                cursor: 'pointer',
-                              }}
-                              src={
-                                '/avatars/animals/' + createdByAvatar + '.svg'
-                              }
-                            ></LazyLoadImage>
-                          ) : (
-                            <LazyLoadImage
-                              width="48px !important"
-                              height="48px !important"
-                              style={{
-                                borderRadius: '50%',
-                                cursor: 'pointer',
-                                border: 'none',
-                              }}
-                              src={'/svgs/DefaultUser.svg'}
-                            ></LazyLoadImage>
-                          )}
-                          <BodyRegularTypography
-                            label={createdBy}
-                            style={{ color: '#343434' }}
-                          />
-                        </Box>
-                      </Box>
-                    </Box>
-                    {/* Error message */}
-                    {codeCreatedByError !== '' && (
-                      <FormHelperText
-                        style={{ color: '#d32f2f', width: '100%' }}
-                      >
-                        {codeCreatedByError}
-                      </FormHelperText>
-                    )}
-                  </FormControl>
-                </Box>
-                {/* Department */}
-                <Box
-                  sx={{
-                    width: '100%',
-                    display: 'flex',
-                    justifyContent: 'flex-start',
-                    alignItems: 'flex-start',
-                    flexDirection: 'row',
-                    marginTop: '24px',
-                  }}
-                >
-                  {/* Department */}
-                  <FormControl
-                    style={{
-                      display: 'flex',
-                      width: '600px',
-                      justifyContent: 'flex-start',
-                      alignItems: 'center',
-                    }}
-                  >
-                    <Box
-                      sx={{
-                        width: '100%',
-                        display: 'flex',
-                        flexDirection: 'row',
-                        justifyContent: 'flex-start',
-                        alignItems: 'center',
-                      }}
-                    >
-                      <Box
-                        sx={{
-                          display: 'flex',
-                          flexDirection: 'column',
-                        }}
-                      >
-                        <ButtonLabelTypography
-                          label="Department"
-                          style={{ color: '#000000', marginBottom: '8px' }}
-                        />
-                        <BodyRegularTypography
-                          label={teamDepartment}
-                          style={{ color: '#343434' }}
-                        />
-                      </Box>
-                    </Box>
-                    {/* Error message */}
-                    {codeTeamDepartmentError !== '' && (
-                      <FormHelperText
-                        style={{ color: '#d32f2f', width: '100%' }}
-                      >
-                        {codeTeamDepartmentError}
-                      </FormHelperText>
-                    )}
-                  </FormControl>
-                </Box>
-                {/* Session and Actions */}
-                <Box
-                  sx={{
-                    width: '100%',
-                    display: 'flex',
-                    justifyContent: 'space-between',
-                    alignItems: 'flex-start',
-                    flexDirection: 'row',
-                    marginTop: '48px',
-                  }}
-                >
-                  <Box
-                    sx={{
-                      width: '100%',
-                      display: 'flex',
-                      alignItems: 'flex-start',
-                      flexDirection: 'row',
-                    }}
-                  >
-                    <ButtonLabelTypography label={'No Of Sessions: '} />
-                    &nbsp;&nbsp;
-                    <BodyRegularTypography
-                      label={sessionCount.toString()}
-                      style={{
-                        color: '#00E',
-                        textDecorationLine: 'underline',
-                        cursor: 'pointer',
-                      }}
-                      onClick={goSessionsPage}
-                    />
-                  </Box>
-                  <Box
-                    sx={{
-                      width: '100%',
-                      display: 'flex',
-                      alignItems: 'flex-start',
-                      flexDirection: 'row',
-                    }}
-                  >
-                    <ButtonLabelTypography label={'No Of Actions: '} />
-                    &nbsp;&nbsp;
-                    <BodyRegularTypography
-                      label={actionsCount.toString()}
-                      style={{
-                        color: '#00E',
-                        textDecorationLine: 'underline',
-                        cursor: 'pointer',
-                      }}
-                      onClick={goToActionsPage}
-                    />
-                  </Box>
-                </Box>
-                {/* Analytics */}
-                <Box
-                  sx={{
-                    width: '100%',
-                    display: 'flex',
-                    justifyContent: 'flex-start',
-                    alignItems: 'flex-start',
-                    flexDirection: 'row',
-                    marginTop: '48px',
-                  }}
-                >
-                  <ButtonLabelTypography label="Analytics: " />
-                  &nbsp;&nbsp;
-                  <BodyRegularTypography
-                    label=" View All"
-                    style={{
-                      color: '#00E',
-                      textDecorationLine: 'underline',
-                      cursor: 'pointer',
-                    }}
-                    onClick={goToAnalyticsPage}
-                  />
-                </Box>
-              </Box>
-            </>
-          )}
-          {/* Right Side Form */}
-          <Paper
-            sx={{
-              height: '100%',
-              width: '60%',
-              display: 'flex',
-              justifyContent: 'flex-start',
-              alignItems: 'flex-start',
-              flexDirection: 'column',
-              padding: '24px',
-              pointerEvents: !isEditModeOn ? 'none' : '',
-            }}
-          >
-            <Box
-              display="flex"
-              flexDirection="row"
-              justifyContent="space-between"
-              alignItems="center"
-              sx={{
-                width: '100%',
-                flexDirection: 'row',
-              }}
-            >
-              <H5RegularTypography label="Team Members" />
-              <ContainedButtonWithIcon
-                id={'create_new_Team'}
-                label={'Add Member'}
-                size={'small'}
-                iconPath="/svgs/plusSmall.svg"
-                style={{ width: '200px', textAlign: 'center' }}
-                onClick={() => handleOpenAddMembersDialog()}
-              />
-            </Box>
-            <SelectedTeamMembers
-              checkedUserEmails={checkedUserEmails}
-              handleOpenAddMembersDialog={handleOpenAddMembersDialog}
-              removeUser={removeUser}
-              removeMultipleUser={removeMultipleUser}
-            />
-          </Paper>
-        </Box>
-      </Paper>
-      {/* Add Members Dialog */}
-      <Dialog
-        open={openAddMembersDialog}
-        sx={{
-          height: height - 100,
-          '& .MuiDialog-container': {
-            display: 'flex',
-            justifyContent: 'center',
-            alignItems: 'flex-start',
-          },
-          '& .MuiDialog-paper ': {
-            minWidth: '800px !important',
-            padding: '16px !important',
-          },
-        }}
-      >
-        <DialogTitle style={{ padding: '0px' }}>
-          <Grid container sx={{ display: 'flex', alignItems: 'center' }}>
-            <Grid item sm={6}>
-              <Box display="flex" justifyContent="flex-start">
-                <H4SemiBoldTypography
-                  label={'Add Members'}
-                  style={{
-                    color: '#343434',
-                  }}
-                />
-              </Box>
-            </Grid>
-            <Grid item sm={6}>
-              <Box display="flex" justifyContent="flex-end">
-                <Icons.X
-                  size={20}
-                  style={{
-                    cursor: 'pointer',
-                  }}
-                  onClick={() => handleCloseAddMembersDialog()}
-                />
-              </Box>
-            </Grid>
-          </Grid>
-        </DialogTitle>
-
-        {/* Selected User List */}
-        <Box
-          sx={{
-            width: '600px',
-            display: 'grid',
-            gridTemplateColumns: 'repeat(4, 1fr)',
-            flexDirection: 'row',
-            alignItems: 'center',
-            justifyContent: 'flex-start',
-            marginTop: '16px',
-          }}
-        >
-          {records
-            .filter((r: any) => r.checked)
-            .map((record: any) => {
-              return (
-                <Box
-                  key={record.emailId}
-                  sx={{
-                    width: '150px',
-                    height: '32px',
-                    minWidth: '150px',
-                    minHeight: '32px',
-                    border: '1px solid var(--Info, #4285F4)',
-                    borderRadius: '4px',
-                    background: '#d7e6ff',
-                    textAlign: 'center',
-                    display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                    margin: '4px',
-                  }}
-                >
-                  <CaptionSemiBoldTypography
-                    label={record.fullName}
-                    style={{
-                      color: '#4285F4 !important',
-                      fontSize: '12px !important',
-                    }}
-                  />
-                  <Icons.X
-                    size={20}
-                    style={{
-                      cursor: 'pointer',
-                      color: '#4285F4',
-                    }}
-                    onClick={() => unCheckRecord(record.emailId)}
-                  />
-                </Box>
-              );
-            })}
-        </Box>
-        {/* Search Bar */}
-        <TextField
-          id="outlined-basic"
-          variant="standard"
-          placeholder="Find a members"
-          sx={{
-            background: 'white',
-            width: '100%',
-            marginTop: '24px',
-            ...styles.accessCodeTextField,
-          }}
-          onChange={(e: any) => {
-            setSearchedVal(e.target.value);
-            handleSearch(e);
-          }}
-          value={searchedVal}
-        />
-        {/* Users List */}
-        <TblContainer>
-          {/* <TblHead /> */}
-          <TableBody>
-            {recordAfterPagingAndSorting().map((item: any) => {
-              return (
-                <TableRow key={item.id}>
-                  <TableCell>
-                    <>
-                      {item.selectedAvatar != '' ? (
-                        <LazyLoadImage
-                          className="avatar"
-                          style={{
-                            height: '48px',
-                            width: '48px',
-                            borderRadius: '50%',
-                            border: '5px solid #f9fbf8',
-                            cursor: 'pointer',
-                          }}
-                          src={
-                            '/avatars/animals/' + item.selectedAvatar + '.svg'
-                          }
-                        ></LazyLoadImage>
-                      ) : (
-                        <LazyLoadImage
-                          width="48px !important"
-                          height="48px !important"
-                          style={{
-                            borderRadius: '50%',
-                            cursor: 'pointer',
-                            border: 'none',
-                          }}
-                          src={'/svgs/DefaultUser.svg'}
-                        ></LazyLoadImage>
-                      )}
-                      {item.fullName}
-                    </>
-                  </TableCell>
-                  <TableCell>{item.emailId}</TableCell>
-                  <TableCell>
-                    <Checkbox
-                      checked={item.checked}
-                      onChange={(e: any) => handleChangeCheckbox(e, item.id)}
-                      inputProps={{ 'aria-label': 'controlled' }}
-                    />
-                  </TableCell>
-                </TableRow>
-              );
-            })}
-          </TableBody>
-        </TblContainer>
-        {/* Buttons */}
-        <Box>
           <Box
             sx={{
               width: '100%',
               display: 'flex',
-              flex: '1 0 auto',
-              alignItems: 'flex-end',
-              justifyContent: 'flex-end',
-              my: 2,
+              flexDirection: 'row',
+              marginTop: '24px',
             }}
           >
-            <OutlinedButton
-              label="Close"
-              size={'medium'}
-              onClick={() => handleCloseAddMembersDialog()}
-              style={{
-                minWidth: '75px !important',
-                height: '36px !important',
+            {/* Left Side Form */}
+            {isEditModeOn ? (
+              <>
+                {/* Edit Mode */}
+                <Box
+                  sx={{
+                    height: '100%',
+                    width: '40%',
+                    display: 'flex',
+                    justifyContent: 'flex-start',
+                    alignItems: 'flex-start',
+                    flexDirection: 'column',
+                    paddingRight: '24px',
+                  }}
+                >
+                  {/* Team Name && Save Button */}
+                  <Box
+                    sx={{
+                      width: '100%',
+                      display: 'flex',
+                      justifyContent: 'space-between',
+                      alignItems: 'center',
+                      flexDirection: 'row',
+                    }}
+                  >
+                    {/* Team Name */}
+                    <FormControl
+                      style={{
+                        display: 'flex',
+                        width: '600px',
+                        justifyContent: 'flex-start',
+                        alignItems: 'center',
+                      }}
+                    >
+                      <Box
+                        sx={{
+                          display: 'flex',
+                          flexDirection: 'row',
+                          justifyContent: 'flex-start',
+                          alignItems: 'center',
+                          width: '100%',
+                        }}
+                      >
+                        <Box
+                          sx={{
+                            display: 'flex',
+                            flexDirection: 'column',
+                          }}
+                        >
+                          <TextField
+                            label="Team Name"
+                            autoFocus
+                            variant="standard"
+                            error={!!codeTeamNameError}
+                            sx={{
+                              width: '400px',
+                              ...styles.accessCodeTextField,
+                            }}
+                            value={teamName}
+                            onChange={(e: any) => {
+                              setTeamName(e.currentTarget.value);
+                              setTeamNameCodeError('');
+                            }}
+                          />
+                        </Box>
+                      </Box>
+                      {/* Error message */}
+                      {codeTeamNameError !== '' && (
+                        <FormHelperText
+                          style={{ color: '#d32f2f', width: '100%' }}
+                        >
+                          {codeTeamNameError}
+                        </FormHelperText>
+                      )}
+                    </FormControl>
+                    {/* Save Button*/}
+                    <OutlineButtonWithIconWithNoBorder
+                      id="save_team_info"
+                      label="Save"
+                      iconPath="/svgs/saveTeam.svg"
+                      onClick={() => submitTeam()}
+                      style={{
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                        textTransform: 'uppercase',
+                      }}
+                    />
+                  </Box>
+                  {/* Team Description */}
+                  <Box
+                    sx={{
+                      width: '100%',
+                      display: 'flex',
+                      justifyContent: 'flex-start',
+                      alignItems: 'flex-start',
+                      flexDirection: 'row',
+                      marginTop: '24px',
+                    }}
+                  >
+                    {/* Team Description */}
+                    <FormControl
+                      style={{
+                        display: 'flex',
+                        width: '600px',
+                        justifyContent: 'flex-start',
+                        alignItems: 'center',
+                      }}
+                    >
+                      <Box
+                        sx={{
+                          width: '100%',
+                          display: 'flex',
+                          flexDirection: 'row',
+                          justifyContent: 'flex-start',
+                          alignItems: 'center',
+                        }}
+                      >
+                        <Box
+                          sx={{
+                            display: 'flex',
+                            flexDirection: 'column',
+                          }}
+                        >
+                          <CaptionRegularTypography
+                            label="Team Description"
+                            style={{ color: '#808080' }}
+                          />
+                          <TextField
+                            multiline
+                            rows={2}
+                            maxRows={8}
+                            placeholder="Enter Description"
+                            variant="standard"
+                            error={!!codeTeamDescriptionError}
+                            sx={{
+                              width: '400px',
+                              ...styles.messageTextField,
+                              background: '#ffffff',
+                            }}
+                            value={teamDescription}
+                            onChange={(e: any) => {
+                              setTeamDescription(e.currentTarget.value);
+                              setTeamDescriptionError('');
+                            }}
+                          />
+                        </Box>
+                      </Box>
+                      {/* Error message */}
+                      {codeTeamDescriptionError !== '' && (
+                        <FormHelperText
+                          style={{ color: '#d32f2f', width: '100%' }}
+                        >
+                          {codeTeamDescriptionError}
+                        </FormHelperText>
+                      )}
+                    </FormControl>
+                  </Box>
+                  {/* Created On && Created By  */}
+                  <Box
+                    sx={{
+                      width: '100%',
+                      display: 'flex',
+                      justifyContent: 'flex-start',
+                      alignItems: 'flex-start',
+                      flexDirection: 'row',
+                      marginTop: '24px',
+                    }}
+                  >
+                    {/* Created On */}
+                    <FormControl
+                      style={{
+                        display: 'flex',
+                        width: '600px',
+                        justifyContent: 'flex-start',
+                        alignItems: 'center',
+                      }}
+                    >
+                      <Box
+                        sx={{
+                          display: 'flex',
+                          flexDirection: 'row',
+                          justifyContent: 'flex-start',
+                          alignItems: 'center',
+                          width: '100%',
+                        }}
+                      >
+                        <Box
+                          sx={{
+                            display: 'flex',
+                            flexDirection: 'column',
+                          }}
+                        >
+                          <ButtonLabelTypography
+                            label="Created On"
+                            style={{ color: '#000000' }}
+                          />
+                          <BodyRegularTypography
+                            label={createdOn}
+                            style={{
+                              color: '#343434',
+                              marginTop: '16px !important',
+                            }}
+                          />
+                        </Box>
+                      </Box>
+                    </FormControl>
+                    {/* Created BY */}
+                    <FormControl
+                      style={{
+                        display: 'flex',
+                        width: '600px',
+                        justifyContent: 'flex-start',
+                        alignItems: 'center',
+                      }}
+                    >
+                      <Box
+                        sx={{
+                          display: 'flex',
+                          flexDirection: 'row',
+                          justifyContent: 'flex-start',
+                          alignItems: 'center',
+                          width: '100%',
+                        }}
+                      >
+                        <Box
+                          sx={{
+                            display: 'flex',
+                            flexDirection: 'column',
+                          }}
+                        >
+                          <ButtonLabelTypography
+                            label="Created BY"
+                            style={{ color: '#000000', marginBottom: '8px' }}
+                          />
+                          <Box
+                            sx={{
+                              display: 'flex',
+                              flexDirection: 'row',
+                              alignItems: 'center',
+                              marginTop: '8px !important',
+                            }}
+                          >
+                            {createdByAvatar != '' ? (
+                              <LazyLoadImage
+                                className="avatar"
+                                style={{
+                                  height: '48px',
+                                  width: '48px',
+                                  borderRadius: '50%',
+                                  border: '5px solid #f9fbf8',
+                                  cursor: 'pointer',
+                                }}
+                                src={
+                                  '/avatars/animals/' + createdByAvatar + '.svg'
+                                }
+                              ></LazyLoadImage>
+                            ) : (
+                              <LazyLoadImage
+                                width="48px !important"
+                                height="48px !important"
+                                style={{
+                                  borderRadius: '50%',
+                                  cursor: 'pointer',
+                                  border: 'none',
+                                }}
+                                src={'/svgs/DefaultUser.svg'}
+                              ></LazyLoadImage>
+                            )}
+                            <BodyRegularTypography
+                              label={createdBy}
+                              style={{ color: '#343434' }}
+                            />
+                          </Box>
+                        </Box>
+                      </Box>
+                      {/* Error message */}
+                      {codeCreatedByError !== '' && (
+                        <FormHelperText
+                          style={{ color: '#d32f2f', width: '100%' }}
+                        >
+                          {codeCreatedByError}
+                        </FormHelperText>
+                      )}
+                    </FormControl>
+                  </Box>
+                  {/* Department */}
+                  <Box
+                    sx={{
+                      width: '100%',
+                      display: 'flex',
+                      justifyContent: 'flex-start',
+                      alignItems: 'flex-start',
+                      flexDirection: 'row',
+                      marginTop: '24px',
+                    }}
+                  >
+                    {/* Department */}
+                    <FormControl
+                      style={{
+                        display: 'flex',
+                        width: '600px',
+                        justifyContent: 'flex-start',
+                        alignItems: 'center',
+                      }}
+                    >
+                      <Box
+                        sx={{
+                          width: '100%',
+                          display: 'flex',
+                          flexDirection: 'row',
+                          justifyContent: 'flex-start',
+                          alignItems: 'center',
+                        }}
+                      >
+                        <Box
+                          sx={{
+                            display: 'flex',
+                            flexDirection: 'column',
+                          }}
+                        >
+                          <ButtonLabelTypography
+                            label="Department"
+                            style={{ color: '#000000', marginBottom: '8px' }}
+                          />
+                          <TextField
+                            variant="standard"
+                            error={!!codeTeamDepartmentError}
+                            sx={{
+                              width: '200px',
+                              ...styles.accessCodeTextField,
+                            }}
+                            value={teamDepartment}
+                            onChange={(e: any) => {
+                              setTeamDepartment(e.currentTarget.value);
+                              setTeamDepartmentCodeError('');
+                            }}
+                          />
+                        </Box>
+                      </Box>
+                      {/* Error message */}
+                      {codeTeamDepartmentError !== '' && (
+                        <FormHelperText
+                          style={{ color: '#d32f2f', width: '100%' }}
+                        >
+                          {codeTeamDepartmentError}
+                        </FormHelperText>
+                      )}
+                    </FormControl>
+                  </Box>
+                  {/* Session and Actions */}
+                  <Box
+                    sx={{
+                      width: '100%',
+                      display: 'flex',
+                      justifyContent: 'space-between',
+                      alignItems: 'flex-start',
+                      flexDirection: 'row',
+                      marginTop: '48px',
+                    }}
+                  >
+                    <Box
+                      sx={{
+                        width: '100%',
+                        display: 'flex',
+                        alignItems: 'flex-start',
+                        flexDirection: 'row',
+                      }}
+                    >
+                      <ButtonLabelTypography label={'No Of Sessions: '} />
+                      &nbsp;&nbsp;
+                      <BodyRegularTypography
+                        label={sessionCount.toString()}
+                        style={{
+                          color: '#00E',
+                          textDecorationLine: 'underline',
+                          cursor: 'pointer',
+                        }}
+                        onClick={goSessionsPage}
+                      />
+                    </Box>
+                    <Box
+                      sx={{
+                        width: '100%',
+                        display: 'flex',
+                        alignItems: 'flex-start',
+                        flexDirection: 'row',
+                      }}
+                    >
+                      <ButtonLabelTypography label={'No Of Actions: '} />
+                      &nbsp;&nbsp;
+                      <BodyRegularTypography
+                        label={actionsCount.toString()}
+                        style={{
+                          color: '#00E',
+                          textDecorationLine: 'underline',
+                          cursor: 'pointer',
+                        }}
+                        onClick={goToActionsPage}
+                      />
+                    </Box>
+                  </Box>
+                  {/* Analytics */}
+                  <Box
+                    sx={{
+                      width: '100%',
+                      display: 'flex',
+                      justifyContent: 'flex-start',
+                      alignItems: 'flex-start',
+                      flexDirection: 'row',
+                      marginTop: '48px',
+                    }}
+                  >
+                    <ButtonLabelTypography label="Analytics: " />
+                    &nbsp;&nbsp;
+                    <BodyRegularTypography
+                      label=" View All"
+                      style={{
+                        color: '#00E',
+                        textDecorationLine: 'underline',
+                        cursor: 'pointer',
+                      }}
+                      onClick={goToAnalyticsPage}
+                    />
+                  </Box>
+                </Box>
+              </>
+            ) : (
+              <>
+                {/* View Mode */}
+                <Box
+                  sx={{
+                    height: '100%',
+                    width: '40%',
+                    display: 'flex',
+                    justifyContent: 'flex-start',
+                    alignItems: 'flex-start',
+                    flexDirection: 'column',
+                    paddingRight: '24px',
+                  }}
+                >
+                  {/* Team Name && Save Button */}
+                  <Box
+                    sx={{
+                      width: '100%',
+                      display: 'flex',
+                      justifyContent: 'space-between',
+                      alignItems: 'center',
+                      flexDirection: 'row',
+                    }}
+                  >
+                    {/* Team Name */}
+                    <FormControl
+                      style={{
+                        display: 'flex',
+                        width: '600px',
+                        justifyContent: 'flex-start',
+                        alignItems: 'center',
+                      }}
+                    >
+                      <Box
+                        sx={{
+                          display: 'flex',
+                          flexDirection: 'row',
+                          justifyContent: 'flex-start',
+                          alignItems: 'center',
+                          width: '100%',
+                        }}
+                      >
+                        <Box
+                          sx={{
+                            display: 'flex',
+                            flexDirection: 'column',
+                          }}
+                        >
+                          <H2SemiBoldTypography label={teamName} />
+                        </Box>
+                      </Box>
+                      {/* Error message */}
+                      {codeTeamNameError !== '' && (
+                        <FormHelperText
+                          style={{ color: '#d32f2f', width: '100%' }}
+                        >
+                          {codeTeamNameError}
+                        </FormHelperText>
+                      )}
+                    </FormControl>
+                    {/* Save Button*/}
+                    <OutlineButtonWithIconWithNoBorder
+                      id="save_team_info"
+                      label="Edit"
+                      iconPath="/svgs/edit_blue.svg"
+                      onClick={() => setIsEditModeOn(true)}
+                      style={{
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                        textTransform: 'uppercase',
+                      }}
+                    />
+                  </Box>
+                  {/* Team Description */}
+                  <Box
+                    sx={{
+                      width: '100%',
+                      display: 'flex',
+                      justifyContent: 'flex-start',
+                      alignItems: 'flex-start',
+                      flexDirection: 'row',
+                      marginTop: '24px',
+                    }}
+                  >
+                    {/* Team Description */}
+                    <FormControl
+                      style={{
+                        display: 'flex',
+                        width: '600px',
+                        justifyContent: 'flex-start',
+                        alignItems: 'center',
+                      }}
+                    >
+                      <Box
+                        sx={{
+                          width: '100%',
+                          display: 'flex',
+                          flexDirection: 'row',
+                          justifyContent: 'flex-start',
+                          alignItems: 'center',
+                        }}
+                      >
+                        <Box
+                          sx={{
+                            display: 'flex',
+                            flexDirection: 'column',
+                          }}
+                        >
+                          <BodyRegularTypography
+                            label={teamDescription}
+                            style={{ color: '#343434' }}
+                          />
+                        </Box>
+                      </Box>
+                      {/* Error message */}
+                      {codeTeamDescriptionError !== '' && (
+                        <FormHelperText
+                          style={{ color: '#d32f2f', width: '100%' }}
+                        >
+                          {codeTeamDescriptionError}
+                        </FormHelperText>
+                      )}
+                    </FormControl>
+                  </Box>
+                  {/* Created On && Created By  */}
+                  <Box
+                    sx={{
+                      width: '100%',
+                      display: 'flex',
+                      justifyContent: 'flex-start',
+                      alignItems: 'flex-start',
+                      flexDirection: 'row',
+                      marginTop: '48px',
+                    }}
+                  >
+                    {/* Created On */}
+                    <FormControl
+                      style={{
+                        display: 'flex',
+                        width: '600px',
+                        justifyContent: 'flex-start',
+                        alignItems: 'center',
+                      }}
+                    >
+                      <Box
+                        sx={{
+                          display: 'flex',
+                          flexDirection: 'row',
+                          justifyContent: 'flex-start',
+                          alignItems: 'center',
+                          width: '100%',
+                        }}
+                      >
+                        <Box
+                          sx={{
+                            display: 'flex',
+                            flexDirection: 'column',
+                          }}
+                        >
+                          <ButtonLabelTypography
+                            label="Created On"
+                            style={{ color: '#000000' }}
+                          />
+                          <BodyRegularTypography
+                            label={createdOn}
+                            style={{
+                              color: '#343434',
+                              marginTop: '16px !important',
+                            }}
+                          />
+                        </Box>
+                      </Box>
+                    </FormControl>
+                    {/* Created BY */}
+                    <FormControl
+                      style={{
+                        display: 'flex',
+                        width: '600px',
+                        justifyContent: 'flex-start',
+                        alignItems: 'center',
+                      }}
+                    >
+                      <Box
+                        sx={{
+                          display: 'flex',
+                          flexDirection: 'row',
+                          justifyContent: 'flex-start',
+                          alignItems: 'center',
+                          width: '100%',
+                        }}
+                      >
+                        <Box
+                          sx={{
+                            display: 'flex',
+                            flexDirection: 'column',
+                          }}
+                        >
+                          <ButtonLabelTypography
+                            label="Created BY"
+                            style={{ color: '#000000', marginBottom: '8px' }}
+                          />
+                          <Box
+                            sx={{
+                              display: 'flex',
+                              flexDirection: 'row',
+                              alignItems: 'center',
+                              marginTop: '8px !important',
+                            }}
+                          >
+                            {createdByAvatar != '' ? (
+                              <LazyLoadImage
+                                className="avatar"
+                                style={{
+                                  height: '48px',
+                                  width: '48px',
+                                  borderRadius: '50%',
+                                  border: '5px solid #f9fbf8',
+                                  cursor: 'pointer',
+                                }}
+                                src={
+                                  '/avatars/animals/' + createdByAvatar + '.svg'
+                                }
+                              ></LazyLoadImage>
+                            ) : (
+                              <LazyLoadImage
+                                width="48px !important"
+                                height="48px !important"
+                                style={{
+                                  borderRadius: '50%',
+                                  cursor: 'pointer',
+                                  border: 'none',
+                                }}
+                                src={'/svgs/DefaultUser.svg'}
+                              ></LazyLoadImage>
+                            )}
+                            <BodyRegularTypography
+                              label={createdBy}
+                              style={{ color: '#343434' }}
+                            />
+                          </Box>
+                        </Box>
+                      </Box>
+                      {/* Error message */}
+                      {codeCreatedByError !== '' && (
+                        <FormHelperText
+                          style={{ color: '#d32f2f', width: '100%' }}
+                        >
+                          {codeCreatedByError}
+                        </FormHelperText>
+                      )}
+                    </FormControl>
+                  </Box>
+                  {/* Department */}
+                  <Box
+                    sx={{
+                      width: '100%',
+                      display: 'flex',
+                      justifyContent: 'flex-start',
+                      alignItems: 'flex-start',
+                      flexDirection: 'row',
+                      marginTop: '24px',
+                    }}
+                  >
+                    {/* Department */}
+                    <FormControl
+                      style={{
+                        display: 'flex',
+                        width: '600px',
+                        justifyContent: 'flex-start',
+                        alignItems: 'center',
+                      }}
+                    >
+                      <Box
+                        sx={{
+                          width: '100%',
+                          display: 'flex',
+                          flexDirection: 'row',
+                          justifyContent: 'flex-start',
+                          alignItems: 'center',
+                        }}
+                      >
+                        <Box
+                          sx={{
+                            display: 'flex',
+                            flexDirection: 'column',
+                          }}
+                        >
+                          <ButtonLabelTypography
+                            label="Department"
+                            style={{ color: '#000000', marginBottom: '8px' }}
+                          />
+                          <BodyRegularTypography
+                            label={teamDepartment}
+                            style={{ color: '#343434' }}
+                          />
+                        </Box>
+                      </Box>
+                      {/* Error message */}
+                      {codeTeamDepartmentError !== '' && (
+                        <FormHelperText
+                          style={{ color: '#d32f2f', width: '100%' }}
+                        >
+                          {codeTeamDepartmentError}
+                        </FormHelperText>
+                      )}
+                    </FormControl>
+                  </Box>
+                  {/* Session and Actions */}
+                  <Box
+                    sx={{
+                      width: '100%',
+                      display: 'flex',
+                      justifyContent: 'space-between',
+                      alignItems: 'flex-start',
+                      flexDirection: 'row',
+                      marginTop: '48px',
+                    }}
+                  >
+                    <Box
+                      sx={{
+                        width: '100%',
+                        display: 'flex',
+                        alignItems: 'flex-start',
+                        flexDirection: 'row',
+                      }}
+                    >
+                      <ButtonLabelTypography label={'No Of Sessions: '} />
+                      &nbsp;&nbsp;
+                      <BodyRegularTypography
+                        label={sessionCount.toString()}
+                        style={{
+                          color: '#00E',
+                          textDecorationLine: 'underline',
+                          cursor: 'pointer',
+                        }}
+                        onClick={goSessionsPage}
+                      />
+                    </Box>
+                    <Box
+                      sx={{
+                        width: '100%',
+                        display: 'flex',
+                        alignItems: 'flex-start',
+                        flexDirection: 'row',
+                      }}
+                    >
+                      <ButtonLabelTypography label={'No Of Actions: '} />
+                      &nbsp;&nbsp;
+                      <BodyRegularTypography
+                        label={actionsCount.toString()}
+                        style={{
+                          color: '#00E',
+                          textDecorationLine: 'underline',
+                          cursor: 'pointer',
+                        }}
+                        onClick={goToActionsPage}
+                      />
+                    </Box>
+                  </Box>
+                  {/* Analytics */}
+                  <Box
+                    sx={{
+                      width: '100%',
+                      display: 'flex',
+                      justifyContent: 'flex-start',
+                      alignItems: 'flex-start',
+                      flexDirection: 'row',
+                      marginTop: '48px',
+                    }}
+                  >
+                    <ButtonLabelTypography label="Analytics: " />
+                    &nbsp;&nbsp;
+                    <BodyRegularTypography
+                      label=" View All"
+                      style={{
+                        color: '#00E',
+                        textDecorationLine: 'underline',
+                        cursor: 'pointer',
+                      }}
+                      onClick={goToAnalyticsPage}
+                    />
+                  </Box>
+                </Box>
+              </>
+            )}
+            {/* Right Side Form */}
+            <Paper
+              sx={{
+                height: '100%',
+                width: '60%',
+                display: 'flex',
+                justifyContent: 'flex-start',
+                alignItems: 'flex-start',
+                flexDirection: 'column',
+                padding: '24px',
+                pointerEvents: !isEditModeOn ? 'none' : '',
               }}
-            />
-            <ContainedButton
-              name="Add Member"
-              onClick={addMembersFromDialog}
-              style={{
-                minWidth: '75px !important',
-                height: '36px !important',
-                marginLeft: '16px !important',
-              }}
-              size={'medium'}
-            />
+            >
+              <Box
+                display="flex"
+                flexDirection="row"
+                justifyContent="space-between"
+                alignItems="center"
+                sx={{
+                  width: '100%',
+                  flexDirection: 'row',
+                }}
+              >
+                <H5RegularTypography label="Team Members" />
+                <ContainedButtonWithIcon
+                  id={'create_new_Team'}
+                  label={'Add Member'}
+                  size={'small'}
+                  iconPath="/svgs/plusSmall.svg"
+                  style={{ width: '200px', textAlign: 'center' }}
+                  onClick={() => handleOpenAddMembersDialog()}
+                />
+              </Box>
+              <SelectedTeamMembers
+                checkedUserEmails={checkedUserEmails}
+                handleOpenAddMembersDialog={handleOpenAddMembersDialog}
+                removeUser={removeUser}
+                removeMultipleUser={removeMultipleUser}
+              />
+            </Paper>
           </Box>
-        </Box>
-      </Dialog>
+        </Paper>
+        {/* Add Members Dialog */}
+        <Dialog
+          open={openAddMembersDialog}
+          sx={{
+            height: height - 100,
+            '& .MuiDialog-container': {
+              display: 'flex',
+              justifyContent: 'center',
+              alignItems: 'flex-start',
+            },
+            '& .MuiDialog-paper ': {
+              minWidth: '800px !important',
+              padding: '16px !important',
+            },
+          }}
+        >
+          <DialogTitle style={{ padding: '0px' }}>
+            <Grid container sx={{ display: 'flex', alignItems: 'center' }}>
+              <Grid item sm={6}>
+                <Box display="flex" justifyContent="flex-start">
+                  <H4SemiBoldTypography
+                    label={'Add Members'}
+                    style={{
+                      color: '#343434',
+                    }}
+                  />
+                </Box>
+              </Grid>
+              <Grid item sm={6}>
+                <Box display="flex" justifyContent="flex-end">
+                  <Icons.X
+                    size={20}
+                    style={{
+                      cursor: 'pointer',
+                    }}
+                    onClick={() => handleCloseAddMembersDialog()}
+                  />
+                </Box>
+              </Grid>
+            </Grid>
+          </DialogTitle>
+
+          {/* Selected User List */}
+          <Box
+            sx={{
+              width: '600px',
+              display: 'grid',
+              gridTemplateColumns: 'repeat(4, 1fr)',
+              flexDirection: 'row',
+              alignItems: 'center',
+              justifyContent: 'flex-start',
+              marginTop: '16px',
+            }}
+          >
+            {records
+              .filter((r: any) => r.checked)
+              .map((record: any) => {
+                return (
+                  <Box
+                    key={record.emailId}
+                    sx={{
+                      width: '150px',
+                      height: '32px',
+                      minWidth: '150px',
+                      minHeight: '32px',
+                      border: '1px solid var(--Info, #4285F4)',
+                      borderRadius: '4px',
+                      background: '#d7e6ff',
+                      textAlign: 'center',
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                      margin: '4px',
+                    }}
+                  >
+                    <CaptionSemiBoldTypography
+                      label={record.fullName}
+                      style={{
+                        color: '#4285F4 !important',
+                        fontSize: '12px !important',
+                      }}
+                    />
+                    <Icons.X
+                      size={20}
+                      style={{
+                        cursor: 'pointer',
+                        color: '#4285F4',
+                      }}
+                      onClick={() => unCheckRecord(record.emailId)}
+                    />
+                  </Box>
+                );
+              })}
+          </Box>
+          {/* Search Bar */}
+          <TextField
+            id="outlined-basic"
+            variant="standard"
+            placeholder="Find a members"
+            sx={{
+              background: 'white',
+              width: '100%',
+              marginTop: '24px',
+              ...styles.accessCodeTextField,
+            }}
+            onChange={(e: any) => {
+              setSearchedVal(e.target.value);
+              handleSearch(e);
+            }}
+            value={searchedVal}
+          />
+          {/* Users List */}
+          <TblContainer>
+            {/* <TblHead /> */}
+            <TableBody>
+              {recordAfterPagingAndSorting().map((item: any) => {
+                return (
+                  <TableRow key={item.id}>
+                    <TableCell>
+                      <>
+                        {item.selectedAvatar != '' ? (
+                          <LazyLoadImage
+                            className="avatar"
+                            style={{
+                              height: '48px',
+                              width: '48px',
+                              borderRadius: '50%',
+                              border: '5px solid #f9fbf8',
+                              cursor: 'pointer',
+                            }}
+                            src={
+                              '/avatars/animals/' + item.selectedAvatar + '.svg'
+                            }
+                          ></LazyLoadImage>
+                        ) : (
+                          <LazyLoadImage
+                            width="48px !important"
+                            height="48px !important"
+                            style={{
+                              borderRadius: '50%',
+                              cursor: 'pointer',
+                              border: 'none',
+                            }}
+                            src={'/svgs/DefaultUser.svg'}
+                          ></LazyLoadImage>
+                        )}
+                        {item.fullName}
+                      </>
+                    </TableCell>
+                    <TableCell>{item.emailId}</TableCell>
+                    <TableCell>
+                      <Checkbox
+                        checked={item.checked}
+                        onChange={(e: any) => handleChangeCheckbox(e, item.id)}
+                        inputProps={{ 'aria-label': 'controlled' }}
+                      />
+                    </TableCell>
+                  </TableRow>
+                );
+              })}
+            </TableBody>
+          </TblContainer>
+          {/* Buttons */}
+          <Box>
+            <Box
+              sx={{
+                width: '100%',
+                display: 'flex',
+                flex: '1 0 auto',
+                alignItems: 'flex-end',
+                justifyContent: 'flex-end',
+                my: 2,
+              }}
+            >
+              <OutlinedButton
+                label="Close"
+                size={'medium'}
+                onClick={() => handleCloseAddMembersDialog()}
+                style={{
+                  minWidth: '75px !important',
+                  height: '36px !important',
+                }}
+              />
+              <ContainedButton
+                name="Add Member"
+                onClick={addMembersFromDialog}
+                style={{
+                  minWidth: '75px !important',
+                  height: '36px !important',
+                  marginLeft: '16px !important',
+                }}
+                size={'medium'}
+              />
+            </Box>
+          </Box>
+        </Dialog>
+      </Box>
     </>
   );
 }

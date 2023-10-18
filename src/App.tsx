@@ -104,6 +104,7 @@ export default function App({ instance }: AppProps) {
     },[location.pathname.includes('basic') ,
     location.pathname.includes('enterprise')])
 
+
   return (
     <ErrorProvider>
       <ErrorBoundary>
@@ -717,7 +718,6 @@ export default function App({ instance }: AppProps) {
                               />
                               <Route path="*" element={<PageNotFound />} />
                             </Route>
-                            {/* </Box> */}
                             <Route
                               path="*"
                               element={<PageNotFound></PageNotFound>}
