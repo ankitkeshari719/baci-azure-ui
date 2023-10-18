@@ -26,10 +26,12 @@ import {
 } from '../../../constants/applicationConst';
 import { LazyLoadImage } from 'react-lazy-load-image-component';
 import { useNavigate } from 'react-router-dom';
+import { UserContext } from '../../../contexts/UserContext';
 
 export default function Notifications() {
   const navigate = useNavigate();
   const [global, dispatch] = React.useContext(GlobalContext);
+  const [gUser] = React.useContext(UserContext);
   const localUserData = localStorage.getItem('userData');
   const tempLocalUserData = localUserData && JSON.parse(localUserData);
   const [allValidNotifications, setAllValidNotifications] = React.useState([]);
@@ -86,33 +88,33 @@ export default function Notifications() {
   };
 
   const goToViewAllRequest = () => {
-    if (global.azureUser?.roleName && global.azureUser?.roleName === BASIC) {
+    if (gUser.azureUser?.roleName && gUser.azureUser?.roleName === BASIC) {
       navigate('/basic/teams/manageUsers/');
     } else if (
-      global.azureUser?.roleName &&
-      global.azureUser?.roleName === ENTERPRISE
+      gUser.azureUser?.roleName &&
+      gUser.azureUser?.roleName === ENTERPRISE
     ) {
       navigate('/enterprise/teams/manageUsers/');
     }
   };
 
   const goToViewAllTeams = () => {
-    if (global.azureUser?.roleName && global.azureUser?.roleName === BASIC) {
+    if (gUser.azureUser?.roleName && gUser.azureUser?.roleName === BASIC) {
       navigate('/basic/teams/allTeams/');
     } else if (
-      global.azureUser?.roleName &&
-      global.azureUser?.roleName === ENTERPRISE
+      gUser.azureUser?.roleName &&
+      gUser.azureUser?.roleName === ENTERPRISE
     ) {
       navigate('/enterprise/teams/allTeams/');
     }
   };
 
   const goToViewAllSessions = () => {
-    if (global.azureUser?.roleName && global.azureUser?.roleName === BASIC) {
+    if (gUser.azureUser?.roleName && gUser.azureUser?.roleName === BASIC) {
       navigate('/basic/sessions/');
     } else if (
-      global.azureUser?.roleName &&
-      global.azureUser?.roleName === ENTERPRISE
+      gUser.azureUser?.roleName &&
+      gUser.azureUser?.roleName === ENTERPRISE
     ) {
       navigate('/enterprise/sessions/');
     }

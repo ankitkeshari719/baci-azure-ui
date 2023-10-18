@@ -128,16 +128,16 @@ function EnterpriseDashboard() {
   const [gUser,userDispatch]= React.useContext(UserContext);
 
   const [fromDate, setFromDate] = useState<string>(
-    global.chartStartDate
-      ? global.chartStartDate
+    gUser.chartStartDate
+      ? gUser.chartStartDate
       : new Date().getFullYear().toString() +
           '-' +
           '0' +
           new Date().getMonth().toString().slice(-2)
   );
   const [toDate, setToDate] = useState<string>(
-    global.chartEndDate
-      ? global.chartEndDate
+    gUser.chartEndDate
+      ? gUser.chartEndDate
       : new Date().getFullYear().toString() +
           '-' +
           '0' +
@@ -156,11 +156,11 @@ function EnterpriseDashboard() {
   };
 
   function createNewTeam() {
-    if (global.azureUser?.roleName && global.azureUser?.roleName === BASIC) {
+    if (gUser.azureUser?.roleName && gUser.azureUser?.roleName === BASIC) {
       navigate('/basic/teams/create/');
     } else if (
-      global.azureUser?.roleName &&
-      global.azureUser?.roleName === ENTERPRISE
+      gUser.azureUser?.roleName &&
+      gUser.azureUser?.roleName === ENTERPRISE
     ) {
       navigate('/enterprise/teams/create/');
     }
@@ -174,12 +174,12 @@ function EnterpriseDashboard() {
 
   // Function to get Sessions
   const handleGetRetroChartData = async () => {
-    if (global.azureUser != undefined) {
+    if (gUser.azureUser != undefined) {
       const chartInput: chartInputType = {
-        userId: global.azureUser?.emailId,
-        roleName: global.azureUser?.roleName,
-        enterpriseId: global.azureUser?.enterpriseId,
-        teamId: global.teamId ? global.teamId : '0',
+        userId: gUser.azureUser?.emailId,
+        roleName: gUser.azureUser?.roleName,
+        enterpriseId: gUser.azureUser?.enterpriseId,
+        teamId: gUser.teamId ? gUser.teamId : '0',
         fromDate: formatDateForAPI(fromDate),
         toDate: formatDateForAPI(toDate, true),
       };
@@ -459,12 +459,12 @@ function EnterpriseDashboard() {
                 />
                 <TeamSelector
                   enterpriseId={
-                    global.azureUser?.enterpriseId
-                      ? global.azureUser?.enterpriseId
+                    gUser.azureUser?.enterpriseId
+                      ? gUser.azureUser?.enterpriseId
                       : '0'
                   }
                   padding="9px"
-                  selectedTeam={global.teamId ? global.teamId : selectId}
+                  selectedTeam={gUser.teamId ? gUser.teamId : selectId}
                   handleChange={(change: any) => {
                     dispatch({
                       type: ActionType.SET_TEAM_ID,

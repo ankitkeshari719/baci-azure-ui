@@ -48,6 +48,7 @@ import { ContainedButtonWithIcon } from '../../CustomizedButton/ContainedButtonW
 import useTable from '../../CustomizedTable/useTable';
 import SelectedTeamMembers from './SelectedTeamMembers';
 import { LazyLoadImage } from 'react-lazy-load-image-component';
+import { UserContext } from '../../../contexts/UserContext';
 
 const styles = {
   accessCodeTextField: {
@@ -77,6 +78,7 @@ export default function EditTeam() {
   const navigate = useNavigate();
   const { id } = useParams();
   const [global, dispatch] = React.useContext(GlobalContext);
+  const [gUser,userDispatch]= React.useContext(UserContext);
   const localUserData = localStorage.getItem('userData');
   const tempLocalUserData = localUserData && JSON.parse(localUserData);
   const [enterpriseId, setEnterpriseId] = React.useState('');
@@ -240,11 +242,11 @@ export default function EditTeam() {
 
   // Get All Actions By Teams
   const handleEnterpriseLevelActionsCountData = async () => {
-    if (global.azureUser != undefined) {
+    if (gUser.azureUser != undefined) {
       const chartInput: chartInputType = {
-        userId: global.azureUser?.emailId,
-        roleName: global.azureUser?.roleName,
-        enterpriseId: global.azureUser?.enterpriseId,
+        userId: gUser.azureUser?.emailId,
+        roleName: gUser.azureUser?.roleName,
+        enterpriseId: gUser.azureUser?.enterpriseId,
         teamId: id,
         fromDate: formatDateForAPI(fromDate),
         toDate: formatDateForAPI(toDate, true),
@@ -262,11 +264,11 @@ export default function EditTeam() {
 
   // Get All Retros By Team
   const handleGetRetroChartData = async () => {
-    if (global.azureUser != undefined) {
+    if (gUser.azureUser != undefined) {
       const chartInput: chartInputType = {
-        userId: global.azureUser?.emailId,
-        roleName: global.azureUser?.roleName,
-        enterpriseId: global.azureUser?.enterpriseId,
+        userId: gUser.azureUser?.emailId,
+        roleName: gUser.azureUser?.roleName,
+        enterpriseId: gUser.azureUser?.enterpriseId,
         teamId: id,
         fromDate: formatDateForAPI(fromDate),
         toDate: formatDateForAPI(toDate, true),

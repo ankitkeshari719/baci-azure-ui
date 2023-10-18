@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { Box, Button, Grid } from '@mui/material';
 import { TopBar } from '../CreateRetro/TopBar';
 import { DeploymentPopUp } from '../Utils/Alerts/DeploymentPopUp';
-import '../../global.scss';
+import '../../gUser.scss';
 import '../ScanImage/styles.scss';
 import FileUploadOutlinedIcon from '@mui/icons-material/FileUploadOutlined';
 import RotateRightIcon from '@mui/icons-material/RotateRight';
@@ -21,6 +21,7 @@ import {
 } from '@mui/material';
 import { ScanUploadImage } from '../scan/ScanUploadImage';
 import { GlobalContext } from '../../contexts/GlobalContext';
+import { UserContext } from '../../contexts/UserContext';
 
 type Props = {
   handleStartRetro: () => void;
@@ -48,14 +49,15 @@ export function UploadImageScan() {
   const [fileData, setFileData] = React.useState<Blob | null>(null);
   const [recognizedText, setRecognizedText] = React.useState<string[]>([]);
   const [isLoading, setIsLoading] = React.useState(false);
-  const [global, dispatch] = React.useContext(GlobalContext);
+
+  const [gUser,userDispatch]= React.useContext(UserContext);
 
   function handleStartRetro() {
     setIsRetroStart(true);
   }
 
   const navigateToScan = () => {
-    if (global.azureUser?.roleName === 'Enterprise') {
+    if (gUser.azureUser?.roleName === 'Enterprise') {
       navigate('/enterprise/scanImage/');
     } else {
       navigate('/basic/scanImage/');
