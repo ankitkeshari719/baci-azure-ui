@@ -21,6 +21,7 @@ import {
 } from '@mui/material';
 import { ScanUploadImage } from '../scan/ScanUploadImage';
 import { GlobalContext } from '../../contexts/GlobalContext';
+import { UserContext } from '../../contexts/UserContext';
 
 type Props = {
   handleStartRetro: () => void;
@@ -48,14 +49,15 @@ export function UploadImageScan() {
   const [fileData, setFileData] = React.useState<Blob | null>(null);
   const [recognizedText, setRecognizedText] = React.useState<string[]>([]);
   const [isLoading, setIsLoading] = React.useState(false);
-  const [global, dispatch] = React.useContext(GlobalContext);
+
+  const [gUser,userDispatch]= React.useContext(UserContext);
 
   function handleStartRetro() {
     setIsRetroStart(true);
   }
 
   const navigateToScan = () => {
-    if (global.azureUser?.roleName === 'Enterprise') {
+    if (gUser.azureUser?.roleName === 'Enterprise') {
       navigate('/enterprise/scanImage/');
     } else {
       navigate('/basic/scanImage/');

@@ -433,10 +433,10 @@ export default function CreateTeam() {
 
   return (
     <>
-      <Box
+      <Paper
         sx={{
           width: '100%',
-          background: '#F9FBFC',
+          background: 'rgb(249 251 252)',
           padding: '20px',
           display: 'flex',
           flexDirection: 'column',
@@ -483,17 +483,6 @@ export default function CreateTeam() {
             style={{ color: commonStyles.PrimaryDark, marginLeft: '16px' }}
           />
         </Box>
-      </Box>
-      <Paper
-        sx={{
-          width: '100%',
-          background: 'rgb(249 251 252)',
-          padding: '20px',
-          display: 'flex',
-          flexDirection: 'column',
-          overflowY: 'auto',
-        }}
-      >
         <Box
           sx={{
             width: '100%',

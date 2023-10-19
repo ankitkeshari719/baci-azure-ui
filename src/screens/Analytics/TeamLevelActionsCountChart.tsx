@@ -36,6 +36,7 @@ import { MONTH_SELECTORS, MenuProps, getChartWidth } from './const';
 import { GlobalContext } from '../../contexts/GlobalContext';
 import { BASIC, ENTERPRISE } from '../../constants/applicationConst';
 import DateSelector from '../../components/Elements/EnterpriseDashboardPages/DateSelector';
+import { UserContext } from '../../contexts/UserContext';
 
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
   [`&.${tableCellClasses.head}`]: {
@@ -60,15 +61,15 @@ export default function TeamLevelActionsCountChart({
   dashboard?: boolean;
   team?: string;
 }) {
-  const [global, dispatch] = React.useContext(GlobalContext);
+  const [gUser,userDispatch]= React.useContext(UserContext);
   const [teamLevelActions, setTeamLevelActions] = useState<any>([]);
   const [assignedActions, setAssignedActions] = useState<any>([]);
   const [completedActions, setCompletedActions] = useState<any>([]);
   const [completedPercentage, setCompletedPercentage] = useState<Number>();
   const [months, setMonths] = useState<any>([]);
   const [fromDate, setFromDate] = useState<string>(
-    global.chartStartDate
-      ? global.chartStartDate
+    gUser.chartStartDate
+      ? gUser.chartStartDate
       : new Date().getFullYear().toString() +
           '-' +
           '0' +
@@ -76,8 +77,8 @@ export default function TeamLevelActionsCountChart({
   );
   const [loading, setLoading] = useState<boolean>(true);
   const [toDate, setToDate] = useState<string>(
-    global.chartEndDate
-      ? global.chartEndDate
+    gUser.chartEndDate
+      ? gUser.chartEndDate
       : new Date().getFullYear().toString() +
           '-' +
           '0' +
@@ -90,19 +91,19 @@ export default function TeamLevelActionsCountChart({
   const [path, setPath] = React.useState('');
 
   React.useEffect(() => {
-    if (global.azureUser?.roleName && global.azureUser?.roleName === BASIC) {
+    if (gUser.azureUser?.roleName && gUser.azureUser?.roleName === BASIC) {
       setPath('basic');
     } else if (
-      global.azureUser?.roleName &&
-      global.azureUser?.roleName === ENTERPRISE
+      gUser.azureUser?.roleName &&
+      gUser.azureUser?.roleName === ENTERPRISE
     ) {
       setPath('enterprise');
     }
-  }, [global.azureUser?.roleName]);
+  }, [gUser.azureUser?.roleName]);
 
   React.useEffect(() => {
     handleGetTeamLevelActionsCountsData();
-  }, [fromDate, toDate,global?.teamId]);
+  }, [fromDate, toDate,gUser?.teamId]);
 
   function removeDuplicates(arr: string[]) {
     return arr.filter((item, index) => arr.indexOf(item) === index);
@@ -111,12 +112,12 @@ export default function TeamLevelActionsCountChart({
 
 
   const handleGetTeamLevelActionsCountsData = async () => {
-    if (global.azureUser != undefined) {
+    if (gUser.azureUser != undefined) {
       const chartInput: chartInputType = {
-        userId: global.azureUser?.emailId,
-        roleName: global.azureUser?.roleName,
-        enterpriseId: global.azureUser?.enterpriseId,
-        teamId: global.teamId?global.teamId:"0",
+        userId: gUser.azureUser?.emailId,
+        roleName: gUser.azureUser?.roleName,
+        enterpriseId: gUser.azureUser?.enterpriseId,
+        teamId: gUser.teamId?gUser.teamId:"0",
         fromDate: formatDateForAPI(fromDate),
         toDate: formatDateForAPI(toDate,true),
       };
@@ -171,8 +172,8 @@ export default function TeamLevelActionsCountChart({
     }
   };
   React.useEffect(() => {
-    const fromDateInput = global.chartStartDate;
-    const toDateInput = global.chartEndDate;
+    const fromDateInput = gUser.chartStartDate;
+    const toDateInput = gUser.chartEndDate;
     if (
       fromDateInput != '' &&
       fromDateInput != undefined &&
@@ -183,7 +184,7 @@ export default function TeamLevelActionsCountChart({
     if (toDateInput != '' && toDateInput != undefined && toDateInput != null) {
       setToDate(toDateInput);
     }
-  }, [global.chartStartDate, global.chartEndDate]);
+  }, [gUser.chartStartDate, gUser.chartEndDate]);
 
   const series = [
     //data on the y-axis

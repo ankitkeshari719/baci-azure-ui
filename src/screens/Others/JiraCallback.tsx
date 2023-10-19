@@ -6,10 +6,12 @@ import './../../global.scss';
 import './styles.scss';
 import { ActionType, GlobalContext } from '../../contexts/GlobalContext';
 import { getJiraToken } from '../../helpers/msal/services';
+import { UserActionType, UserContext } from '../../contexts/UserContext';
 
 export function JiraCallback() {
   const [searchParams] = useSearchParams();
   const [global, dispatch] = React.useContext(GlobalContext);
+  const [gUser,userDispatch]= React.useContext(UserContext);
   let code = '';
   let state = '';
   code = searchParams.get('code') as string;
@@ -22,6 +24,10 @@ export function JiraCallback() {
         (res: any) => {
           dispatch({
             type: ActionType.SET_JIRA_CODE,
+            payload: { jiraCode: res.response },
+          });
+          userDispatch({
+            type: UserActionType.SET_JIRA_CODE,
             payload: { jiraCode: res.response },
           });
           navigate(`/board/` + state);
