@@ -322,7 +322,7 @@ export const createJiraIssue = async (
 export const getJiraUserList = async (
   // projectId: string,
   // issueType: string,
-  jiraCode: string,
+  jiraCode: string
   // description: string
 ): Promise<any> => {
   let status: any = '';
@@ -344,14 +344,6 @@ export const getJiraUserList = async (
     });
   return status;
 };
-
-
-
-
-
-
-
-
 
 // Api to get dummy chart data
 export const getDummyChartData = async (): Promise<any> => {
@@ -1110,6 +1102,7 @@ export const updateEnterprise = async (
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({
+      organisationId: requestBody.organisationId,
       organisationName: requestBody.organisationName,
       organisationDomain: requestBody.organisationDomain,
       organisationCountry: requestBody.organisationCountry,
@@ -1797,10 +1790,7 @@ export const getByNotificationId = async (
     method: 'GET',
     headers: { 'Content-Type': 'application/json' },
   };
-  await fetch(
-    API_URL + `/notifications/${notificationId}`,
-    requestOptions
-  )
+  await fetch(API_URL + `/notifications/${notificationId}`, requestOptions)
     .then(response => response.json())
     .then(response => {
       if (response) {
@@ -1824,7 +1814,10 @@ export const markAllNotificationById = async (
     }),
   };
 
-  await fetch(API_URL + `/notifications/markAllNotificationById`, requestOptions)
+  await fetch(
+    API_URL + `/notifications/markAllNotificationById`,
+    requestOptions
+  )
     .then(response => response.json())
     .then(response => {
       data = response.data;

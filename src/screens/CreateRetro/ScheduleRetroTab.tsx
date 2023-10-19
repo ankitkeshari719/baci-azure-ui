@@ -99,11 +99,6 @@ export function ScheduleRetroTab({
   onClickNext,
   onClickBack,
 }: Props) {
-  
-  React.useEffect(() => {
-    console.log('scheduleRetroTime', scheduleRetroTime);
-  }, [scheduleRetroTime]);
-
   return (
     <>
       {/* Schedule Details Panel */}
