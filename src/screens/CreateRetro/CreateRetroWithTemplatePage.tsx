@@ -292,7 +292,8 @@ export function CreateRetroWithTemplatePage({
   const handleRetroDateChange = (
     event: React.ChangeEvent<HTMLInputElement>
   ) => {
-    setScheduleRetroTime((event.target as HTMLInputElement).value);
+    let time = (event.target as HTMLInputElement).value;
+    setScheduleRetroTime(moment(time).format('Do MMM YYYY h:mm:ss a'));
   };
 
   // Function to handle the schedule description
