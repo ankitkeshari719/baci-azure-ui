@@ -120,7 +120,11 @@ export default function App({ instance }: AppProps) {
                       <MsalProvider instance={instance}>
                         <Box display="flex" height="calc(var(--app-height))">
                           {!isXsUp && <LeftBar />}
-                          <Box display="flex" width={'calc(100% - 72px)'}>
+                          <Box
+                            display="flex"
+                            // width={isDisplay ? 'calc(100% - 72px)' : '100%'}
+                            width={'calc(100% - 72px)'}
+                          >
                             <Routes>
                               <Route
                                 path="/"
