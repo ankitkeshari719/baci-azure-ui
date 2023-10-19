@@ -180,10 +180,11 @@ export default function EnterpriseRegistration() {
 
     const finalDomains = domains.concat(organisationDomains);
     const requestBody = {
+      organisationId: tempLocalUserData && tempLocalUserData.enterpriseId,
+      organisationPhoto: organisationPhoto,
       organisationName: organisationName,
       organisationDomain: finalDomains,
       organisationCountry: organisationCountry,
-      organisationPhoto: organisationPhoto,
       isActive: true,
     };
 

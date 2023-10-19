@@ -13,6 +13,7 @@ import FormControlLabel from '@mui/material/FormControlLabel';
 import '../../global.scss';
 import './styles.scss';
 import { ContainedButton, OutlinedButton } from '../../components';
+import moment from 'moment';
 import {
   H5SemiBoldTypography,
   H6RegularTypography,
