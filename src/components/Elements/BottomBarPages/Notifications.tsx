@@ -25,6 +25,7 @@ import {
   ADDED_IN_NEW_SESSION,
   BASIC,
   ENTERPRISE,
+  ADDED_IN_NEW_ACTION,
 } from '../../../constants/applicationConst';
 import { LazyLoadImage } from 'react-lazy-load-image-component';
 import { useNavigate } from 'react-router-dom';
@@ -207,6 +208,17 @@ export default function Notifications() {
     }
   };
 
+  const goToViewAllActions = () => {
+    if (gUser.azureUser?.roleName && gUser.azureUser?.roleName === BASIC) {
+      navigate('/basic/actions/');
+    } else if (
+      gUser.azureUser?.roleName &&
+      gUser.azureUser?.roleName === ENTERPRISE
+    ) {
+      navigate('/enterprise/actions/');
+    }
+  };
+
   return (
     <>
       <Box
@@ -259,13 +271,14 @@ export default function Notifications() {
                 />
               </Box>
             )}
-            {/* Today Notification */}
+            {/* Today Notification label */}
             {allTodayValidNotifications.length > 0 && (
               <BodySemiBoldTypography
                 label="Today"
                 style={{ marginBottom: '16px' }}
               />
-            )}{' '}
+            )}
+            {/* Today Notifications */}
             {allTodayValidNotifications.map(
               (allValidNotification: any, index: any) => {
                 return (
@@ -863,17 +876,137 @@ export default function Notifications() {
                           </Box>
                         </Box>
                       )}
+                    {/* ADDED_IN_NEW_ACTION */}
+                    {allValidNotification.type === ADDED_IN_NEW_ACTION &&
+                      tempLocalUserData &&
+                      tempLocalUserData.isActionNotificationChecked && (
+                        <Box
+                          sx={{
+                            display: 'flex',
+                            flexDirection: 'row',
+                            justifyContent: 'space-between',
+                            alignItems: 'center',
+                            borderBottom:
+                              index === allValidNotifications.length - 1
+                                ? ''
+                                : '1px solid #E3E3E3',
+                          }}
+                        >
+                          <Box
+                            sx={{
+                              display: 'flex',
+                              alignItems: 'center',
+                              justifyContent: 'flex-start',
+                              flexDirection: 'row',
+                            }}
+                          >
+                            {/* Avatar */}
+                            <Box sx={{ padding: '16px' }}>
+                              {allValidNotification.fromUserDetails[0]
+                                .selectedAvatar != '' ? (
+                                <LazyLoadImage
+                                  className="avatar"
+                                  style={{
+                                    height: '64px',
+                                    width: '64px',
+                                    borderRadius: '50%',
+                                    border: '5px solid #f9fbf8',
+                                    cursor: 'pointer',
+                                  }}
+                                  src={
+                                    '/avatars/animals/' +
+                                    allValidNotification.fromUserDetails[0]
+                                      .selectedAvatar +
+                                    '.svg'
+                                  }
+                                ></LazyLoadImage>
+                              ) : (
+                                <LazyLoadImage
+                                  width="64px !important"
+                                  height="48px !important"
+                                  style={{
+                                    borderRadius: '50%',
+                                    cursor: 'pointer',
+                                    border: 'none',
+                                  }}
+                                  src={'/svgs/DefaultUser.svg'}
+                                ></LazyLoadImage>
+                              )}
+                            </Box>
+                            {/* Text */}
+                            <Box
+                              sx={{
+                                display: 'flex',
+                                alignItems: 'center',
+                                justifyContent: 'flex-start',
+                                flexDirection: 'column',
+                              }}
+                            >
+                              <Box
+                                sx={{
+                                  display: 'flex',
+                                  alignItems: 'center',
+                                  justifyContent: 'flex-start',
+                                  flexDirection: 'row',
+                                }}
+                              >
+                                <BodySemiBoldTypography
+                                  label={
+                                    allValidNotification.fromUserDetails[0]
+                                      .firstName +
+                                    ' ' +
+                                    allValidNotification.fromUserDetails[0]
+                                      .lastName
+                                  }
+                                />
+                                &nbsp;
+                                <BodyRegularTypography label="has assign you in new Action" />
+                              </Box>
+                              <Box
+                                sx={{
+                                  width: '100%',
+                                  display: 'flex',
+                                  alignItems: 'center',
+                                  justifyContent: 'flex-start',
+                                  flexDirection: 'row',
+                                  marginTop: '24px',
+                                }}
+                              >
+                                <CaptionRegularTypography
+                                  label={moment(
+                                    allValidNotification.createdAt
+                                  ).format('Do MMM YYYY')}
+                                />
+                              </Box>
+                            </Box>
+                          </Box>
+                          <Box display="flex" flexDirection="row">
+                            <ContainedButton
+                              id="View_All_Session"
+                              name="View All Sessions"
+                              onClick={() => {
+                                goToViewAllActions();
+                                callGetTeamByIdForUpdate(
+                                  allValidNotification.notificationId
+                                );
+                              }}
+                              size={'small'}
+                            />
+                          </Box>
+                        </Box>
+                      )}
                   </Box>
                 );
               }
             )}
-            {/* Previous Notification */}
+            {/* Previous Notification label */}
             {allPreviousValidNotifications.length > 0 && (
               <BodySemiBoldTypography
                 label="Previous"
                 style={{ marginTop: '16px' }}
               />
             )}
+            {/* Previous Notification label */}
             {allPreviousValidNotifications.map(
               (allValidNotification: any, index: any) => {
                 return (
@@ -1462,6 +1595,125 @@ export default function Notifications() {
                               name="View All Sessions"
                               onClick={() => {
                                 goToViewAllSessions();
+                                callGetTeamByIdForUpdate(
+                                  allValidNotification.notificationId
+                                );
+                              }}
+                              size={'small'}
+                            />
+                          </Box>
+                        </Box>
+                      )}
+                    {/* ADDED_IN_NEW_ACTION */}
+                    {allValidNotification.type === ADDED_IN_NEW_ACTION &&
+                      tempLocalUserData &&
+                      tempLocalUserData.isActionNotificationChecked && (
+                        <Box
+                          sx={{
+                            display: 'flex',
+                            flexDirection: 'row',
+                            justifyContent: 'space-between',
+                            alignItems: 'center',
+                            borderBottom:
+                              index === allValidNotifications.length - 1
+                                ? ''
+                                : '1px solid #E3E3E3',
+                          }}
+                        >
+                          <Box
+                            sx={{
+                              display: 'flex',
+                              alignItems: 'center',
+                              justifyContent: 'flex-start',
+                              flexDirection: 'row',
+                            }}
+                          >
+                            {/* Avatar */}
+                            <Box sx={{ padding: '16px' }}>
+                              {allValidNotification.fromUserDetails[0]
+                                .selectedAvatar != '' ? (
+                                <LazyLoadImage
+                                  className="avatar"
+                                  style={{
+                                    height: '64px',
+                                    width: '64px',
+                                    borderRadius: '50%',
+                                    border: '5px solid #f9fbf8',
+                                    cursor: 'pointer',
+                                  }}
+                                  src={
+                                    '/avatars/animals/' +
+                                    allValidNotification.fromUserDetails[0]
+                                      .selectedAvatar +
+                                    '.svg'
+                                  }
+                                ></LazyLoadImage>
+                              ) : (
+                                <LazyLoadImage
+                                  width="64px !important"
+                                  height="48px !important"
+                                  style={{
+                                    borderRadius: '50%',
+                                    cursor: 'pointer',
+                                    border: 'none',
+                                  }}
+                                  src={'/svgs/DefaultUser.svg'}
+                                ></LazyLoadImage>
+                              )}
+                            </Box>
+                            {/* Text */}
+                            <Box
+                              sx={{
+                                display: 'flex',
+                                alignItems: 'center',
+                                justifyContent: 'flex-start',
+                                flexDirection: 'column',
+                              }}
+                            >
+                              <Box
+                                sx={{
+                                  display: 'flex',
+                                  alignItems: 'center',
+                                  justifyContent: 'flex-start',
+                                  flexDirection: 'row',
+                                }}
+                              >
+                                <BodySemiBoldTypography
+                                  label={
+                                    allValidNotification.fromUserDetails[0]
+                                      .firstName +
+                                    ' ' +
+                                    allValidNotification.fromUserDetails[0]
+                                      .lastName
+                                  }
+                                />
+                                &nbsp;
+                                <BodyRegularTypography label="has assign you in new Action" />
+                              </Box>
+                              <Box
+                                sx={{
+                                  width: '100%',
+                                  display: 'flex',
+                                  alignItems: 'center',
+                                  justifyContent: 'flex-start',
+                                  flexDirection: 'row',
+                                  marginTop: '24px',
+                                }}
+                              >
+                                <CaptionRegularTypography
+                                  label={moment(
+                                    allValidNotification.createdAt
+                                  ).format('Do MMM YYYY')}
+                                />
+                              </Box>
+                            </Box>
+                          </Box>
+                          <Box display="flex" flexDirection="row">
+                            <ContainedButton
+                              id="View_All_Session"
+                              name="View All Sessions"
+                              onClick={() => {
+                                goToViewAllActions();
                                 callGetTeamByIdForUpdate(
                                   allValidNotification.notificationId
                                 );
