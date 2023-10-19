@@ -46,6 +46,7 @@ import { ActionType, GlobalContext } from '../../../contexts/GlobalContext';
 import DateSelector from '../EnterpriseDashboardPages/DateSelector';
 import TeamSelector from '../TeamSelector';
 import { ContainedButtonWithIcon } from '../../CustomizedButton/ContainedButtonWithIcon';
+import { UserActionType, UserContext } from '../../../contexts/UserContext';
 
 interface Column {
   id:
@@ -115,21 +116,22 @@ const StyledTableRow = styled(TableRow)(({ theme }) => ({
 export default function SessionDashboard() {
   const [displayJiraRows, setDisplayJiraRows] = React.useState<any>([]);
   const [global, dispatch] = React.useContext(GlobalContext);
+  const [gUser,userDispatch]= React.useContext(UserContext);
   const [page, setPage] = React.useState(0);
   const [rowsPerPage, setRowsPerPage] = React.useState(10);
   const [searchedVal, setSearchedVal] = React.useState('');
   const [selectId, setSelectedId] = React.useState<string>('0');
   const [fromDate, setFromDate] = React.useState<string>(
-    global.chartStartDate
-      ? global.chartStartDate
+    gUser.chartStartDate
+      ? gUser.chartStartDate
       : new Date().getFullYear().toString() +
           '-' +
           '0' +
           new Date().getMonth().toString().slice(-2)
   );
   const [toDate, setToDate] = React.useState<string>(
-    global.chartEndDate
-      ? global.chartEndDate
+    gUser.chartEndDate
+      ? gUser.chartEndDate
       : new Date().getFullYear().toString() +
           '-' +
           '0' +
@@ -150,12 +152,12 @@ export default function SessionDashboard() {
 
   const getSessionForTable = async () => {
     setLoading(true);
-    if (global.azureUser != undefined) {
+    if (gUser.azureUser != undefined) {
       const chartInput: chartInputType = {
-        userId: global.azureUser?.emailId,
-        roleName: global.azureUser?.roleName,
-        enterpriseId: global.azureUser?.enterpriseId,
-        teamId: global.teamId ? global.teamId : '0',
+        userId: gUser.azureUser?.emailId,
+        roleName: gUser.azureUser?.roleName,
+        enterpriseId: gUser.azureUser?.enterpriseId,
+        teamId: gUser.teamId ? gUser.teamId : '0',
         fromDate: formatDateForAPI(fromDate),
         toDate: formatDateForAPI(toDate, true),
       };
@@ -191,12 +193,21 @@ export default function SessionDashboard() {
       type: ActionType.CHART_START_DATE,
       payload: { startDate: event },
     });
+    userDispatch({
+      type: UserActionType.CHART_START_DATE,
+      payload: { startDate: event },
+    });
   };
 
   const handleToDate = (event: any) => {
     setToDate(event as string);
     dispatch({
       type: ActionType.CHART_END_DATE,
+      payload: { endDate: event },
+    });
+    
+    userDispatch({
+      type: UserActionType.CHART_END_DATE,
       payload: { endDate: event },
     });
   };
@@ -313,9 +324,26 @@ export default function SessionDashboard() {
             style={{ color: commonStyles.PrimaryDark, marginBottom: '15px' }}
           />
 
-          <Button variant="contained" sx={{borderRadius:"24px",fontSize:'16px',fontWeight:'500!important',paddingTop:"0px!important",paddingBottom:'0px!important',height:'34px!important'}}>
-            <PlusIcon width={"24px"} style={{marginRight:'15px'}}/>
-             NEW SESSION</Button>
+          <Button
+            variant="contained"
+            sx={{
+              borderRadius: '24px',
+              fontSize: '16px',
+              fontWeight: '500!important',
+              paddingTop: '0px!important',
+              paddingBottom: '0px!important',
+              height: '34px!important',
+            }}
+            onClick={() => {
+              if (location.pathname.includes('basic')) {
+                navigate('/basic/create');
+              } else if (location.pathname.includes('enterprise'))
+                navigate('/enterprise/create');
+            }}
+          >
+            <PlusIcon width={'24px'} style={{ marginRight: '15px' }} />
+            NEW SESSION
+          </Button>
         </Box>
         <Box
           display="flex"
@@ -350,15 +378,19 @@ export default function SessionDashboard() {
             />
             <TeamSelector
               enterpriseId={
-                global.azureUser?.enterpriseId
-                  ? global.azureUser?.enterpriseId
+                gUser.azureUser?.enterpriseId
+                  ? gUser.azureUser?.enterpriseId
                   : '0'
               }
               padding="9px"
-              selectedTeam={global.teamId ? global.teamId : selectId}
+              selectedTeam={gUser.teamId ? gUser.teamId : selectId}
               handleChange={(change: any) => {
                 dispatch({
                   type: ActionType.SET_TEAM_ID,
+                  payload: { teamId: change.target.value },
+                });
+                userDispatch({
+                  type: UserActionType.SET_TEAM_ID,
                   payload: { teamId: change.target.value },
                 });
 
@@ -440,7 +472,6 @@ export default function SessionDashboard() {
                                       onClick={() => {
                                         navigator.clipboard.writeText(value);
 
-
                                         dispatch({
                                           type: ActionType.SET_SNACK_MESSAGE,
                                           payload: {
@@ -450,8 +481,6 @@ export default function SessionDashboard() {
                                             },
                                           },
                                         });
-
-
 
                                         // alert(value);
                                       }}

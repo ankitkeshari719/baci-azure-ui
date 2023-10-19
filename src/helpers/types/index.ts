@@ -58,6 +58,21 @@ const getMonth = (month: string) => {
     return '0' + month;
   } else return month;
 };
+export class GlobalUser{
+  jiraCode?: string = '';
+  chartStartDate?: string =
+    new Date().getFullYear().toString() +
+    '-' +
+    getMonth(new Date().getMonth().toString().slice(-2));
+  chartEndDate?: string =
+    new Date().getFullYear().toString() +
+    '-' +
+    getMonth((new Date().getMonth() + 1).toString().slice(-2));
+  azureUser?: AzureUser;
+  teamId?: string;
+  users?: any[];
+}
+
 export class Global {
   user: User = new User();
   currentRetro?: Retro = undefined;

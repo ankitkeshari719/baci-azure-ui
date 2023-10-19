@@ -36,6 +36,7 @@ import {
 } from '../../helpers/msal/services';
 import { NestedDropdown } from 'mui-nested-menu';
 import DyanamicDialog from '../../components/atoms/DyanamicDialog';
+import { UserActionType, UserContext } from '../../contexts/UserContext';
 
 type Props = {
   action: ActionInterface;
@@ -70,6 +71,7 @@ export default function ActionItem({
     commitAction,
   } = React.useContext(BoardContext);
   const [global, dispatch] = React.useContext(GlobalContext);
+  const [gUser,userDispatch]= React.useContext(UserContext);
   const labelId = `action-label-${action.id}`;
 
   const [isMouseHover, setIsMouseHover] = React.useState<boolean>(false);
@@ -459,6 +461,10 @@ export default function ActionItem({
         if (res.status == 401) {
           dispatch({
             type: ActionType.SET_JIRA_CODE,
+            payload: { jiraCode: '' },
+          });
+          userDispatch({
+            type: UserActionType.SET_JIRA_CODE,
             payload: { jiraCode: '' },
           });
         }

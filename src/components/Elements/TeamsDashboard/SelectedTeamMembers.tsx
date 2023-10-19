@@ -39,6 +39,7 @@ import { ContainedButton } from '../../CustomizedButton/ContainedButton';
 import { OutlinedButton } from '../../CustomizedButton/OutlinedButton';
 import OutlineButtonWithIconWithNoBorder from '../../CustomizedButton/OutlineButtonWithIconWithNoBorder';
 import { ContainedButtonWithIcon } from '../../CustomizedButton/ContainedButtonWithIcon';
+import { UserActionType, UserContext } from '../../../contexts/UserContext';
 
 const headCells = [
   { id: 'check', label: '', disableSorting: true },
@@ -66,6 +67,7 @@ export default function SelectedTeamMembers({
   removeMultipleUser,
 }: Props) {
   const [global, dispatch] = React.useContext(GlobalContext);
+  const [gUser,userDispatch]= React.useContext(UserContext);
   const [height, setHeight] = React.useState(0);
   const [isSelectAllChecked, setIsSelectAllChecked] = React.useState(false);
   const [openDeleteUserDialog, setOpenDeleteUserDialog] = React.useState(false);
@@ -270,6 +272,10 @@ export default function SelectedTeamMembers({
         localStorage.setItem('userData', JSON.stringify(res));
         dispatch({
           type: ActionType.SET_AZURE_USER,
+          payload: { azureUser: res },
+        });
+        userDispatch({
+          type: UserActionType.SET_AZURE_USER,
           payload: { azureUser: res },
         });
       },

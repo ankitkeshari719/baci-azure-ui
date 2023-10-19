@@ -21,6 +21,7 @@ import {
   BodyRegularTypography,
 } from '../../../components/CustomizedTypography';
 import { ActionType, GlobalContext } from '../../../contexts/GlobalContext';
+import { UserActionType, UserContext } from '../../../contexts/UserContext';
 
 type Props = {
   accounts: any;
@@ -33,6 +34,7 @@ export function UserHeader({ accounts }: Props) {
     React.useState(false);
   const [openAccountNotActiveDialog, setOpenAccountNotActiveDialog] =
     React.useState(false);
+    const [gUser,userDispatch]= React.useContext(UserContext);
   const [global, dispatch] = React.useContext(GlobalContext);
   const { instance } = useMsal();
 
@@ -115,6 +117,10 @@ export function UserHeader({ accounts }: Props) {
             type: ActionType.SET_AZURE_USER,
             payload: { azureUser: res },
           });
+          userDispatch({
+            type: UserActionType.SET_AZURE_USER,
+            payload: { azureUser: res },
+          });
           if (res.roleName === BASIC) {
             navigate('basic');
           } else if (res.roleName === ENTERPRISE) {
@@ -175,6 +181,10 @@ export function UserHeader({ accounts }: Props) {
             dispatch({
               type: ActionType.SET_AZURE_USER,
               payload: res,
+            });
+            userDispatch({
+              type: UserActionType.SET_AZURE_USER,
+              payload: { azureUser: res },
             });
             checkUser();
           }

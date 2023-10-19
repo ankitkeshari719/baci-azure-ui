@@ -15,3 +15,4 @@ export const DECLINE_ENTERPRISE_REQUEST = 'declineEnterpriseRequest';
 export const REQUEST_FOR_ENTERPRISE = 'requestForEnterprise';
 export const ADDED_IN_TEAM = 'addedInTeam';
 export const ADDED_IN_NEW_SESSION = 'addedInNewSession';
+export const ADDED_IN_NEW_ACTION = 'addedInNewAction';

@@ -22,6 +22,7 @@ import {
 import { ScanUploadImage } from '../scan/ScanUploadImage';
 import { GlobalContext } from '../../contexts/GlobalContext';
 import CircularProgress from '@mui/material/CircularProgress';
+import { UserContext } from '../../contexts/UserContext';
 
 type Props = {
   handleStartRetro: () => void;
@@ -65,12 +66,14 @@ export function UploadImageScan() {
     };
   }, [counter]);
 
+  const [gUser,userDispatch]= React.useContext(UserContext);
+
   function handleStartRetro() {
     setIsRetroStart(true);
   }
 
   const navigateToScan = () => {
-    if (global.azureUser?.roleName === 'Enterprise') {
+    if (gUser.azureUser?.roleName === 'Enterprise') {
       navigate('/enterprise/scanImage/');
     } else {
       navigate('/basic/scanImage/');

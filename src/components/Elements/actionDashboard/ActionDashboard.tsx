@@ -49,6 +49,7 @@ import {
   updateAction,
 } from '../../../helpers/msal/services';
 import { ActionType, GlobalContext } from '../../../contexts/GlobalContext';
+import { UserActionType, UserContext } from '../../../contexts/UserContext';
 
 interface Column {
   id:
@@ -181,6 +182,7 @@ export default function ActionDashboard() {
   const [displayJiraRows, setDisplayJiraRows] = React.useState<any>([]);
   const [csvData, setCsvData] = React.useState<any>([]);
   const [global, dispatch] = React.useContext(GlobalContext);
+  const [gUser,userDispatch]= React.useContext(UserContext);
   const [page, setPage] = React.useState(0);
   const [rowsPerPage, setRowsPerPage] = React.useState(10);
   const [searchedVal, setSearchedVal] = React.useState('');
@@ -195,19 +197,23 @@ export default function ActionDashboard() {
 
   const getActionsForTable = async () => {
     setLoading(true);
-    if (global.azureUser != undefined) {
+    if (gUser.azureUser != undefined) {
       const chartInput: chartInputType = {
-        userId: global.azureUser?.emailId,
-        roleName: global.azureUser?.roleName,
-        enterpriseId: global.azureUser?.enterpriseId,
-        teamId: global.teamId ? global.teamId : '0',
+        userId: gUser.azureUser?.emailId,
+        roleName: gUser.azureUser?.roleName,
+        enterpriseId: gUser.azureUser?.enterpriseId,
+        teamId: gUser.teamId ? gUser.teamId : '0',
         fromDate: '0',
         toDate: '0',
       };
-      await getAllUsersByEnterpriseId(global.azureUser?.enterpriseId).then(
+      await getAllUsersByEnterpriseId(gUser.azureUser?.enterpriseId).then(
         (res: any[]) => {
           dispatch({
             type: ActionType.SET_USER_LIST_BY_ENT,
+            payload: { users: res },
+          });
+          userDispatch({
+            type: UserActionType.SET_USER_LIST_BY_ENT,
             payload: { users: res },
           });
           setLoading(false);
