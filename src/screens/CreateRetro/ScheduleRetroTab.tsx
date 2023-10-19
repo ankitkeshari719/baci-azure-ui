@@ -1,3 +1,4 @@
+import * as React from 'react';
 import {
   Typography,
   Box,
@@ -17,8 +18,6 @@ import {
   H6RegularTypography,
 } from '../../components/CustomizedTypography';
 import { RETRO_IMMEDIATELY, RETRO_SCHEDULE } from './const';
-
-import * as React from 'react';
 
 const styles = {
   avatarfield: {
@@ -109,7 +108,7 @@ export function ScheduleRetroTab({
           py:
             activePanel != 'scheduleDetailPanel' && scheduleDescription != ''
               ? 2.5
-              : 4,
+              : 3,
         }}
       >
         {/* When the tab is not open */}
@@ -198,7 +197,23 @@ export function ScheduleRetroTab({
                       Select Date and Time:
                     </Typography>
                     &nbsp;&nbsp;
-                    <H5SemiBoldTypography label={scheduleRetroTime} />
+                    {scheduleRetroType === RETRO_IMMEDIATELY ? (
+                      <H5SemiBoldTypography label={scheduleRetroTime} />
+                    ) : (
+                      <input
+                        type="datetime-local"
+                        id="scheduleRetroTime"
+                        name="scheduleRetroTime"
+                        style={{
+                          fontSize: '16px',
+                          height: '48px',
+                          borderRadius: '4px',
+                          padding: '16px',
+                          border: '1px solid #343434',
+                        }}
+                        onChange={handleRetroDateChange}
+                      />
+                    )}
                   </Box>
                 </Grid>
                 {/* Add Description*/}
@@ -263,9 +278,7 @@ export function ScheduleRetroTab({
               >
                 <ContainedButton
                   name="Finish"
-                  onClick={() =>
-                    onClickNext('scheduleDetailPanel', 'finalButtonTab')
-                  }
+                  onClick={() => onClickNext('scheduleDetailPanel', 'finalTab')}
                   style={{
                     mt: 5,
                     minWidth: '75px !important',

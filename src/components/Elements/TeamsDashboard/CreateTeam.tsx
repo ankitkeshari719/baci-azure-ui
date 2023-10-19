@@ -28,8 +28,13 @@ import { TableBody, TableCell, TableRow } from '@material-ui/core';
 import commonStyles from '../../../style.module.scss';
 import { useNavigate } from 'react-router-dom';
 import * as Icons from 'heroicons-react';
-import { BASIC, ENTERPRISE } from '../../../constants/applicationConst';
 import {
+  ADDED_IN_TEAM,
+  BASIC,
+  ENTERPRISE,
+} from '../../../constants/applicationConst';
+import {
+  addEnterpriseRequestNotification,
   createTeam,
   getAllUsersByEnterpriseId,
   updateUsersTeamArray,
@@ -308,12 +313,18 @@ export default function CreateTeam() {
       type: ActionType.SET_LOADING,
       payload: { loadingFlag: true },
     });
+    let userEmailIds: any = [];
+    if (userEmailIdsFromRecord.includes(createdByEmailId)) {
+      userEmailIds = [...userEmailIdsFromRecord];
+    } else {
+      userEmailIds = [createdByEmailId, ...userEmailIdsFromRecord];
+    }
     const requestBody = {
       teamName: teamName,
       teamDepartment: teamDepartment,
       teamDescription: teamDescription,
       enterpriseId: enterpriseId,
-      userEmailIds: userEmailIdsFromRecord,
+      userEmailIds: userEmailIds,
       createdBy: createdByEmailId,
       isActive: true,
     };
@@ -323,7 +334,7 @@ export default function CreateTeam() {
           type: ActionType.SET_LOADING,
           payload: { loadingFlag: false },
         });
-        updateUsersTeam(res, userEmailIdsFromRecord);
+        updateUsersTeam(res, userEmailIds, createdByEmailId);
       },
       err => {
         console.log('err', err);
@@ -336,7 +347,11 @@ export default function CreateTeam() {
   };
 
   // Update users teams array after creating the team
-  const updateUsersTeam = async (teamId: any, userEmailIdsFromRecord: any) => {
+  const updateUsersTeam = async (
+    teamId: any,
+    userEmailIdsFromRecord: any,
+    createdByEmailId: any
+  ) => {
     dispatch({
       type: ActionType.SET_LOADING,
       payload: { loadingFlag: true },
@@ -354,6 +369,11 @@ export default function CreateTeam() {
           payload: { loadingFlag: false },
         });
         goToViewMode(teamId);
+        callAddEnterpriseRequestNotification(
+          ADDED_IN_TEAM,
+          createdByEmailId,
+          userEmailIdsFromRecord
+        );
       },
       err => {
         console.log('err', err);
@@ -374,12 +394,49 @@ export default function CreateTeam() {
     }
   }
 
+  // Notification addition
+  const callAddEnterpriseRequestNotification = async (
+    type: string,
+    fromId: any,
+    toId: any
+  ) => {
+    // call
+    dispatch({
+      type: ActionType.SET_LOADING,
+      payload: { loadingFlag: true },
+    });
+
+    const requestBody = {
+      type: type,
+      organisationId: tempLocalUserData && tempLocalUserData.enterpriseId,
+      fromId: fromId,
+      toId: toId,
+      isRead: false,
+    };
+
+    await addEnterpriseRequestNotification(requestBody).then(
+      res => {
+        dispatch({
+          type: ActionType.SET_LOADING,
+          payload: { loadingFlag: false },
+        });
+      },
+      err => {
+        console.log('err', err);
+        dispatch({
+          type: ActionType.SET_LOADING,
+          payload: { loadingFlag: false },
+        });
+      }
+    );
+  };
+
   return (
     <>
-      <Paper
+      <Box
         sx={{
           width: '100%',
-          background: 'rgb(249 251 252)',
+          background: '#F9FBFC',
           padding: '20px',
           display: 'flex',
           flexDirection: 'column',
@@ -426,6 +483,17 @@ export default function CreateTeam() {
             style={{ color: commonStyles.PrimaryDark, marginLeft: '16px' }}
           />
         </Box>
+      </Box>
+      <Paper
+        sx={{
+          width: '100%',
+          background: 'rgb(249 251 252)',
+          padding: '20px',
+          display: 'flex',
+          flexDirection: 'column',
+          overflowY: 'auto',
+        }}
+      >
         <Box
           sx={{
             width: '100%',

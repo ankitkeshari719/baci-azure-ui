@@ -6,10 +6,16 @@ import {
   MenuItem,
   Select,
   SelectChangeEvent,
+  TextField,
 } from '@mui/material';
 import { ButtonLabelTypography } from '../../CustomizedTypography';
 import { ActionType, GlobalContext } from '../../../contexts/GlobalContext';
 import React from 'react';
+import { DatePicker } from '@mui/x-date-pickers';
+import {   LocalizationProvider } from '@mui/x-date-pickers';
+import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
+import { DateTimePicker } from '@mui/x-date-pickers/DateTimePicker';
+import dayjs from 'dayjs';
 
 function DateSelector({
   fromDate,
@@ -46,28 +52,67 @@ function DateSelector({
           color: '#343434',
         }}
       />}
-      {/* From Date */}
-      <Box sx={{ minWidth: 180, marginLeft: '16px', marginRight: '16px' }}>
+
       
-        <FormControl fullWidth>
-        <Input type="month" id="fromDate" name="fromDate" value={fromDate} onChange={(e)=>{
-            dispatch({
-              type: ActionType.CHART_START_DATE,
-              payload: { startDate: e.target.value },
-            });
-          handleFromDate(e)}} />
-        </FormControl>
-      </Box>
-      <ButtonLabelTypography
+      <Box sx={{display:"flex",flexDirection:'row',  alignItems:'center'}}>
+      <LocalizationProvider dateAdapter={AdapterDayjs}>
+
+
+      <DatePicker
+        views={['year', 'month']} // Only show year and month views
+        value={fromDate}
+       
+        onChange={(e:any)=>{
+          dispatch({
+           type: ActionType.CHART_START_DATE,
+           payload: { endDate: dayjs(e).format('YYYY-MM') },
+         });
+         handleFromDate(dayjs(e).format('YYYY-MM'))}}
+        renderInput={(params) => <TextField {...params} />
+      }
+      />
+
+
+
+<ButtonLabelTypography
         label="To"
         style={{
           color: '#343434',
+          marginLeft:"15px",
+          marginRight:"15px",
+        
         }}
       />
-      {/*To Date */}
-      <Box sx={{ minWidth: 180, marginLeft: '16px' }}>
+        
   
-        <FormControl fullWidth>
+      <DatePicker
+      
+        views={['year', 'month']} // Only show year and month views
+        value={toDate}
+       minDate={fromDate}
+        onChange={(e:any)=>{
+          dispatch({
+           type: ActionType.CHART_END_DATE,
+           payload: { endDate: dayjs(e).format('YYYY-MM') },
+         });
+         handleToDate(dayjs(e).format('YYYY-MM'))}}
+        renderInput={(params) => <TextField {...params} />}
+      />
+        {/* <DateTimePicker
+          label="Date&Time picker"
+          value={toDate}
+          onChange={(e:any)=>{
+            dispatch({
+             type: ActionType.CHART_END_DATE,
+             payload: { endDate: e.target.value },
+           });
+           handleToDate(e)}}
+          renderInput={(params) => <TextField {...params} />}
+        /> */}
+
+    </LocalizationProvider>
+  
+        {/* <FormControl fullWidth>
         <Input type="month" id="toDate" name="toDate" value={toDate}
          inputProps={{ min:fromDate }}
         onChange={(e)=>{
@@ -76,7 +121,7 @@ function DateSelector({
             payload: { endDate: e.target.value },
           });
           handleToDate(e)}} />
-        </FormControl>
+        </FormControl> */}
       </Box>
     </Grid>
   );

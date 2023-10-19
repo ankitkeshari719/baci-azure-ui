@@ -143,7 +143,7 @@ export function CreateSessionWithTemplatePage({
   const callGetUserByEmailId = async (selectedFacilitatorId: any) => {
     await getUserByEmailId(selectedFacilitatorId).then(
       res => {
-        console.log("setSelectedFacilitatorData", res)
+       
         setSelectedFacilitatorData(res);
       },
       err => {
@@ -434,6 +434,7 @@ export function CreateSessionWithTemplatePage({
             handleRetroNameChange={handleRetroNameChange}
             handleTimeFrame={handleTimeFrame}
             onClickNext={onClickNext}
+            isLoginUser={isLoginUser}
           />
           <TeamsDetailsTab
     activePanel={activePanel}

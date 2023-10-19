@@ -56,12 +56,12 @@ const StyledTableCell = styled(TableCell)(({ theme }) => ({
 
 export default function AverageParticipantChart({
   dashboard,
-
   team,
+  totalParticipantsCount
 }: {
   dashboard?: boolean;
-
   team: string;
+  totalParticipantsCount?:(count:any)=>void
 }) {
   const [participantsCounts, setParticipantsCounts] = useState<any>([]);
   const [averageParticipants, setAverageParticipants] = useState([]);
@@ -84,7 +84,7 @@ export default function AverageParticipantChart({
           '0' +
           (new Date().getMonth() + 1).toString().slice(-2)
   );
-
+const [totalParticipants,setTotalParticipants]=useState<Number>(0)
   const [totalAverageParticipants, setTotalAverageParticipants] =
     useState<number>();
   const navigate = useNavigate();
@@ -144,12 +144,16 @@ export default function AverageParticipantChart({
           setMonths(
             res.data?.map((item: any) => formatDateToMonthYear(item.month))
           );
-          var totalParticipants = 0;
+          var totalParticipants:number = 0;
           res.data.forEach((item: any) => {
             totalParticipants = item.userCount + totalParticipants;
           });
-          totalParticipants = totalParticipants / res.data.length;
-          setTotalAverageParticipants(totalParticipants);
+       const totalParticipantsPerMonth = totalParticipants / res.data.length;
+
+          setTotalAverageParticipants(totalParticipantsPerMonth);
+          setTotalParticipants(totalParticipants);
+          totalParticipantsCount&& totalParticipantsCount(totalParticipants);
+
         },
         err => {
           console.log(err);
@@ -235,12 +239,12 @@ export default function AverageParticipantChart({
     },
   };
 
-  const handleFromDate = (event: SelectChangeEvent) => {
-    setFromDate(event.target.value as string);
+  const handleFromDate = (event: any) => {
+    setFromDate(event as string);
   };
 
-  const handleToDate = (event: SelectChangeEvent) => {
-    setToDate(event.target.value as string);
+  const handleToDate = (event: any) => {
+    setToDate(event as string);
   };
 
   return (

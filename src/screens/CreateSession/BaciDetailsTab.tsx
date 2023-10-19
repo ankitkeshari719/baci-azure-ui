@@ -117,6 +117,7 @@ type Props = {
   handleRetroNameChange: (e: React.SetStateAction<string>) => void;
   handleTimeFrame: (e: React.SetStateAction<Date | null>) => void;
   onClickNext: (currentPanel: string, nextPanel: string) => void;
+  isLoginUser: boolean;
 };
 
 export function BaciDetailsTab({
@@ -130,8 +131,10 @@ export function BaciDetailsTab({
   handleRetroNameChange,
   handleTimeFrame,
   onClickNext,
+  isLoginUser,
 }: Props) {
   const [selectedDate, setSelectedDate] = React.useState<Date | null>(null);
+
 
   const formattedDate = retroTimeFrame
     ? moment(retroTimeFrame).format('D MMMM YYYY')
@@ -149,6 +152,15 @@ export function BaciDetailsTab({
       return `${day} ${month} ${year}`;
     }
     return '';
+  };
+
+  //on click next
+  const onClickNextButton = () => {
+    if (isLoginUser) {
+      onClickNext('baciDetailPanel', 'teamDetailPanel');
+    } else {
+      onClickNext('baciDetailPanel', 'teamDetailPanel');
+    }
   };
 
   return (
@@ -189,7 +201,7 @@ export function BaciDetailsTab({
                     ml: 5,
                   }}
                 >
-                  {formattedDate}
+                 {formattedDate}
                 </Box>
               </Box>
             </>
@@ -242,47 +254,44 @@ export function BaciDetailsTab({
                   </Grid>
                   <Grid item xs={12} md={4}>
                     <Box>
-                      <div
-                        style={{
-                          display: 'flex',
-                          borderBottom: '2px solid black',
-                          width: '300px',
-                        }}
-                      >
-                        <DatePicker
-                          selected={selectedDate}
-                          onChange={date => {
-                            handleTimeFrame(date);
-                            handleDateChange(date);
-                          }}
-                          dateFormat="dd MMMM yyyy"
-                          showMonthDropdown
-                          showYearDropdown
-                          dropdownMode="select"
-                          popperPlacement="bottom-start"
-                          customInput={
-                            <TextField
-                              autoFocus
-                              variant="standard"
-                              label="Date"
-                              value={
-                                selectedDate
-                                  ? selectedDate.toLocaleDateString()
-                                  : ''
-                              }
-                              InputProps={{
-                                disableUnderline: true,
-                                style: {
-                                  width: '100%',
-                                  padding: '8px',
-                                  color: 'black',
-                                },
-                              }}
-                            />
-                          }
-                          wrapperClassName="date-picker-wrapper"
-                        />
-                      </div>
+                    <div
+  style={{
+    display: 'flex',
+    borderBottom: '2px solid black',
+    width: "300px"
+  }}
+>
+  <DatePicker
+    selected={selectedDate}
+    onChange={(date) => {
+      handleTimeFrame(date);
+      handleDateChange(date);
+    }}
+    dateFormat="dd MMMM yyyy"
+    showMonthDropdown
+    showYearDropdown
+    dropdownMode="select"
+    popperPlacement="bottom-start"
+    customInput={
+      <TextField
+      autoFocus
+      variant="standard"
+      label="Date"
+        value={selectedDate ? selectedDate.toLocaleDateString() : ''}
+       
+        InputProps={{
+          disableUnderline: true,
+          style: {
+            width: '100%',
+            padding: '8px',
+            color: 'black',
+          }
+        }}
+      />
+    }
+    wrapperClassName="date-picker-wrapper"
+  />
+</div>
                       {isTimeFrameSet && (
                         <FormHelperText
                           style={{ color: '#d32f2f', marginLeft: '5px' }}
@@ -298,7 +307,7 @@ export function BaciDetailsTab({
             <Box sx={{ mt: 4, mb: 4 }}>
               <ContainedButton
                 name="Next"
-                onClick={() => onClickNext('detailsPanel', 'teamDetailPanel')}
+                onClick={onClickNextButton}
                 style={{
                   mt: 5,
                   minWidth: '75px !important',

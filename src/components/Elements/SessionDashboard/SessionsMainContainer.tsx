@@ -1,5 +1,5 @@
 import * as React from 'react';
-import SessionEmptyScreen from './SessionEmptyScreen';
+
 import SessionsDashboard from './SessionsDashboard';
 import { getAllTeams } from '../../../helpers/msal/services';
 
@@ -8,7 +8,7 @@ export const SessionsMainContainer = () => {
 
   // API will hit here to get the Sessions list
   React.useEffect(() => {
-    callGetAllSessions();
+    // callGetAllSessions();
   }, []);
 
   // Function to get all Sessions data
@@ -25,11 +25,9 @@ export const SessionsMainContainer = () => {
 
   return (
     <>
-      {sessions.length === 0 ? (
-        <SessionEmptyScreen />
-      ) : (
-        <SessionsDashboard sessions={sessions} />
-      )}
+    
+        <SessionsDashboard  />
+   
     </>
   );
 };

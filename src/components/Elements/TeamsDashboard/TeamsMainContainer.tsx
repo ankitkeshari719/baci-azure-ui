@@ -22,7 +22,7 @@ export const TeamsMainContainer = () => {
       payload: { loadingFlag: true },
     });
     const requestBody = {
-      userId: tempLocalUserData && tempLocalUserData.userId,
+      userId: tempLocalUserData && tempLocalUserData.emailId,
       roleName: tempLocalUserData && tempLocalUserData.roleName,
       enterpriseId: tempLocalUserData && tempLocalUserData.enterpriseId,
     };

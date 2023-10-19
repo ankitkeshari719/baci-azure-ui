@@ -63,7 +63,6 @@ const LeftBar = () => {
       disabled: false,
       isVisibleToBasic: userRoleName === BASIC || userRoleName === ENTERPRISE,
     },
-
     {
       id: 3,
       label: 'Analytics',
@@ -72,7 +71,6 @@ const LeftBar = () => {
       disabled: false,
       isVisibleToBasic: userRoleName === BASIC || userRoleName === ENTERPRISE,
     },
-
     {
       id: 4,
       label: 'Sessions',
@@ -133,18 +131,31 @@ const LeftBar = () => {
       setSelectedMenu(menuArray[2].label);
     } else if (location.pathname.includes('actions')) {
       setSelectedMenu(menuArray[1].label);
-    }else if(location.pathname.includes('createRetro')|| location.pathname.includes('uploadImage') || location.pathname.includes('scanImage')){
+    } else if (
+      location.pathname.includes('createRetro') ||
+      location.pathname.includes('uploadImage') ||
+      location.pathname.includes('scanImage') ||
+      location.pathname.includes('sessions')
+    ) {
       setSelectedMenu(menuArray[3].label);
+    } else if (location.pathname.includes('templates')) {
+      setSelectedMenu(menuArray[4].label);
+    } else if (location.pathname.includes('teams')) {
+      setSelectedMenu(menuArray[5].label);
+    } else if (location.pathname.includes('settings')) {
+      setSelectedMenu(menuArray[6].label);
     }
   }, [
     location.pathname.includes('enterprise'),
+    location.pathname.includes('dashboard'),
     location.pathname.includes('analytics'),
-    location.pathname.includes('enterprise/dashboard'),
     location.pathname.includes('createRetro'),
     location.pathname.includes('scanImage'),
     location.pathname.includes('uploadImage'),
-
-
+    location.pathname.includes('sessions'),
+    location.pathname.includes('templates'),
+    location.pathname.includes('teams'),
+    location.pathname.includes('settings'),
   ]);
 
   // Function to navigate on retroListTemplate

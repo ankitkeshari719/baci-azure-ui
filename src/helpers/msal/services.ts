@@ -318,6 +318,41 @@ export const createJiraIssue = async (
   return status;
 };
 
+//jira users list
+export const getJiraUserList = async (
+  // projectId: string,
+  // issueType: string,
+  jiraCode: string,
+  // description: string
+): Promise<any> => {
+  let status: any = '';
+  const requestOptions = {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({
+      // projectId,
+      // issueType,
+      access_token: jiraCode,
+      // description,
+    }),
+  };
+
+  await fetch(API_URL + `/getJiraUsers`, requestOptions)
+    .then(response => response.json())
+    .then(data => {
+      status = data;
+    });
+  return status;
+};
+
+
+
+
+
+
+
+
+
 // Api to get dummy chart data
 export const getDummyChartData = async (): Promise<any> => {
   let dummyChartData;
@@ -383,6 +418,25 @@ export const getTeamLevelActionsDataForChart = async (
       teamLevelActionsDataForChart = data;
     });
   return teamLevelActionsDataForChart;
+};
+
+export const getSessionsDataForTable = async (
+  input: chartInputType
+): Promise<any> => {
+  let sessionsDataForTable;
+  const requestOptions = {
+    method: 'POST',
+    body: JSON.stringify(input),
+    headers: {
+      'Content-type': 'application/json; charset=UTF-8',
+    },
+  };
+  await fetch(API_URL + `/analytics/getSessionsDataForTable`, requestOptions)
+    .then(response => response.json())
+    .then(data => {
+      sessionsDataForTable = data;
+    });
+  return sessionsDataForTable;
 };
 
 export const getCountOfAllParticipantsOverTime = async (
@@ -1485,7 +1539,9 @@ export const updateUsersTeamArray = async (requestBody: any): Promise<any> => {
   return data;
 };
 
-export const updatePullUsersTeamArray = async (requestBody: any): Promise<any> => {
+export const updatePullUsersTeamArray = async (
+  requestBody: any
+): Promise<any> => {
   let data: any;
   const requestOptions = {
     method: 'POST',
@@ -1503,7 +1559,6 @@ export const updatePullUsersTeamArray = async (requestBody: any): Promise<any> =
     });
   return data;
 };
-
 
 // ---------------------------------------- Enterprise Request API's -----------------------------------------------
 // Create Enterprise
@@ -1643,6 +1698,133 @@ export const approvedDeclinedEnterpriseRequestByIds = async (
     API_URL + `/enterpriseRequests/approvedDeclinedEnterpriseRequests`,
     requestOptions
   )
+    .then(response => response.json())
+    .then(response => {
+      data = response.data;
+    });
+  return data;
+};
+
+// ---------------------------------------- Notifications Request API's -----------------------------------------------
+// Add Notifications
+export const addEnterpriseRequestNotification = async (
+  requestBody: any
+): Promise<any> => {
+  let data: any;
+  const requestOptions = {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({
+      type: requestBody.type,
+      organisationId: requestBody.organisationId,
+      fromId: requestBody.fromId,
+      toId: requestBody.toId,
+      isRead: requestBody.isRead,
+    }),
+  };
+
+  await fetch(
+    API_URL + `/notifications/addEnterpriseRequestNotification`,
+    requestOptions
+  )
+    .then(response => response.json())
+    .then(response => {
+      data = response.data;
+    });
+  return data;
+};
+
+// Get All Notifications
+export const getAllValidNotification = async (
+  requestBody: any
+): Promise<any> => {
+  let data: any;
+  const requestOptions = {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({
+      organisationId: requestBody.organisationId,
+      userId: requestBody.userId,
+    }),
+  };
+
+  await fetch(
+    API_URL + `/notifications/getAllValidNotification`,
+    requestOptions
+  )
+    .then(response => response.json())
+    .then(response => {
+      data = response.data;
+    });
+  return data;
+};
+
+// Update Notification
+export const updateNotification = async (
+  notificationId: string,
+  requestBody: any
+): Promise<any> => {
+  let data: any;
+  const requestOptions = {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({
+      type: requestBody.type,
+      organisationId: requestBody.organisationId,
+      fromId: requestBody.fromId,
+      toId: requestBody.toId,
+      isRead: requestBody.isRead,
+    }),
+  };
+
+  await fetch(
+    API_URL + `/notifications/update/${notificationId}`,
+    requestOptions
+  )
+    .then(response => response.json())
+    .then(response => {
+      data = response.data;
+    });
+  return data;
+};
+
+// Get By Id Notification
+export const getByNotificationId = async (
+  notificationId: string
+): Promise<any> => {
+  let notification;
+  const requestOptions = {
+    method: 'GET',
+    headers: { 'Content-Type': 'application/json' },
+  };
+  await fetch(
+    API_URL + `/notifications/${notificationId}`,
+    requestOptions
+  )
+    .then(response => response.json())
+    .then(response => {
+      if (response) {
+        notification = response.data;
+      }
+    })
+    .catch(err => console.log(err));
+  return notification;
+};
+
+// Deactivate Multiple Users By Ids
+export const markAllNotificationById = async (
+  requestBody: any
+): Promise<any> => {
+  let data: any;
+  const requestOptions = {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({
+      userId: requestBody.userId,
+    }),
+  };
+
+  await fetch(API_URL + `/notifications/markAllNotificationById`, requestOptions)
     .then(response => response.json())
     .then(response => {
       data = response.data;

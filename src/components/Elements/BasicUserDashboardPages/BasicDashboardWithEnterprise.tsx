@@ -245,7 +245,7 @@ function BasicDashboardWithEnterprise() {
                 style={{
                   backgroundColor: 'white',
                   borderRadius: '10px',
-                  padding: "10px 10px 20px 10px",
+                  padding: '10px 10px 20px 10px',
                   alignContent: 'center',
                   maxWidth: '450px',
                   height:"349px"
@@ -275,7 +275,7 @@ function BasicDashboardWithEnterprise() {
                 style={{
                   backgroundColor: 'white',
                   borderRadius: '10px',
-                  padding: "10px 10px 20px 10px",
+                  padding: '10px 10px 20px 10px',
                   maxWidth: '450px',
                   height:"349px"
                 }}
@@ -295,7 +295,8 @@ function BasicDashboardWithEnterprise() {
                 </p>
                 <p style={{ fontSize: '16px', color: 'gray',margin:"10px" }}>
                   Run a collabration session with Post-Its on a wall?
-                  <br/>Digitise it here for easy analysis and safe keeping.
+                  <br />
+                  Digitise it here for easy analysis and safe keeping.
                 </p>
               </Grid>
             </Grid>
@@ -494,7 +495,8 @@ function BasicDashboardWithEnterprise() {
                 >
                   <CaptionRegularTypography label="Count of actions (Assigned vs Completed)" />
                   <BootstrapTooltip
-                    title="Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vivamus in ex a est finibus fermentum aliquet at urna. Vivamus ac aliquet mi. Morbi laoreet tortor metus, ac vehicula turpis imperdiet et."
+                    title="The graph shows the break down of total actions created over time,
+                    Total actions are broken into Assigned vs Completed."
                     arrow
                     placement="right"
                   >
@@ -516,7 +518,9 @@ function BasicDashboardWithEnterprise() {
                   <EnterpriseLevelActionsCountChart
                     dashboard={true}
                     team={selectId}
-                    count={(e)=>{console.log(e)}}
+                    count={e => {
+                      console.log(e);
+                    }}
                   />
                 </Box>
                 {/* <Box
@@ -564,7 +568,7 @@ function BasicDashboardWithEnterprise() {
                 >
                   <CaptionRegularTypography label="Count of all participants over time" />
                   <BootstrapTooltip
-                    title="Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vivamus in ex a est finibus fermentum aliquet at urna. Vivamus ac aliquet mi. Morbi laoreet tortor metus, ac vehicula turpis imperdiet et."
+                    title="The graph shows the total number of participants (unique users) across all your teams over time."
                     arrow
                     placement="right"
                   >
@@ -632,7 +636,7 @@ function BasicDashboardWithEnterprise() {
                 >
                   <CaptionRegularTypography label="Sentiments - Moods" />
                   <BootstrapTooltip
-                    title="Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vivamus in ex a est finibus fermentum aliquet at urna. Vivamus ac aliquet mi. Morbi laoreet tortor metus, ac vehicula turpis imperdiet et."
+                    title="The chart takes the results from the pulse check and uses AI to capture words used in BACI collaboration sessions to provide a simple chart of how your people are feeling (Happy, Sad, Neutral) from month-to-month."
                     arrow
                     placement="right"
                   >

@@ -413,7 +413,7 @@ export default function AllUsers() {
             flexDirection: 'column',
           }}
         >
-          <H5RegularTypography label="Requests for Enterprise Dashboard" />
+          <H5RegularTypography label="All Users (Team-wise)" />
           <Box
             display="flex"
             flexDirection="row"
@@ -500,7 +500,7 @@ export default function AllUsers() {
                           >
                             {item.teams.map((team: any, index: number) => {
                               return (
-                                <span id={team.teamId}>
+                                <span id={team.teamId} key={index}>
                                   {team.teamName}
                                   {index < item.teams.length - 1 ? ', ' : ''}
                                 </span>

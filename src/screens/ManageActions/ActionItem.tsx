@@ -32,6 +32,7 @@ import {
   listJiraProjects,
   listJiraMeta,
   createJiraIssue,
+  getJiraUserList,
 } from '../../helpers/msal/services';
 import { NestedDropdown } from 'mui-nested-menu';
 import DyanamicDialog from '../../components/atoms/DyanamicDialog';
@@ -222,6 +223,7 @@ export default function ActionItem({
       }
     );
   };
+  
   const functionToGetArray = () => {
     const items: any = [];
     users.map((user, index) => {
@@ -275,6 +277,26 @@ export default function ActionItem({
     // items.push(abc)
     return items;
   };
+
+  const getJiraUsers= async () => {
+    // manageActions.map((action: any, index: number) => {
+      getJiraUserList(
+   
+        global.jiraCode as string,
+       
+      ).then(
+        (res: any) => {
+          return res.response;
+        },
+        (error: any) => {
+          console.log('error', error);
+          return [];
+        }
+      );
+    // });
+
+  };
+
 
   const menuItemsData: any = {
     label:
@@ -346,6 +368,23 @@ export default function ActionItem({
         rightIcon: <img src="/svgs/RightArrow.svg" />,
         items: functionToGetArray(),
         callback: handleUsersMenuClick,
+      },
+
+      {
+        label:"  Get List of USERS",
+        leftIcon:(
+          <Icons.UserCircleOutline
+            size={18}
+            color="#676767"
+            // style={{
+            //   cursor: 'unset',
+            // }}
+          />
+        ),
+        rightIcon: <img src="/svgs/RightArrow.svg" />,
+        // items: functionToGetArray(),
+        callback: getJiraUsers,
+
       },
 
       {

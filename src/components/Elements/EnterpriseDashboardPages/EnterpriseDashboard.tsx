@@ -52,6 +52,8 @@ import {
   chartInputType,
   formatDateForAPI,
   formatDateToMonthYear,
+  getCountOfAllParticipantsOverTime,
+  getCountOfAllSessionsOverTime,
   getParticipantsCount,
   getRetrosCount,
   getSessionsData,
@@ -140,8 +142,8 @@ function EnterpriseDashboard() {
           (new Date().getMonth() + 1).toString().slice(-2)
   );
 
-  const [totalSessions, setTotalSessions] = useState<Number>();
-  const [totalParticipants, setTotalParticipants] = useState<Number>();
+
+  const [totalParticipants, setTotalParticipants] = useState<any>(0);
   const [open, setOpen] = React.useState(false);
 
   const handleClose = () => {
@@ -166,10 +168,7 @@ function EnterpriseDashboard() {
     handleGetRetroChartData();
   }, [fromDate, toDate, selectId]);
 
-  // Call function to get participant
-  React.useEffect(() => {
-    handleGetParticipantChartData();
-  }, [fromDate, toDate, selectId]);
+  
 
   // Function to get Sessions
   const handleGetRetroChartData = async () => {
@@ -183,10 +182,15 @@ function EnterpriseDashboard() {
         toDate: formatDateForAPI(toDate, true),
       };
 
-      await getSessionsData(chartInput).then(
+      await getCountOfAllSessionsOverTime(chartInput).then(
         res => {
-          if (res.result != undefined && res.result?.length != undefined) {
-            setSessionCount(res.result?.length);
+          if (res.data != undefined && res.data?.length != undefined) {
+            var totalRetrocount = 0;
+            res.data.forEach((element: any) => {
+              totalRetrocount = element.retroCount + totalRetrocount;
+            });
+
+            setSessionCount(totalRetrocount);
           } else {
             setSessionCount(0);
           }
@@ -195,53 +199,24 @@ function EnterpriseDashboard() {
       );
     }
 
-    await getRetrosCount(fromDate, toDate, selectId).then(
-      res => {
-        if (res && res.result) {
-          let temp = 0;
-          res.result.map((item: any) => {
-            temp = temp + item.averageRetros;
-          });
-          setTotalSessions(Math.round(temp));
-        }
-      },
-      err => {
-        console.log('err', err);
-      }
-    );
+
   };
 
-  // Function to get participant
-  const handleGetParticipantChartData = async () => {
-    await getParticipantsCount(fromDate, toDate, selectId).then(
-      res => {
-        if (res && res.result) {
-          let temp = 0;
-          res.result.map((item: any) => {
-            temp = temp + item.averageParticipants;
-          });
-          setTotalParticipants(Math.round(temp));
-        }
-      },
-      err => {
-        console.log('err', err);
-      }
-    );
-  };
+ 
 
-  const handleFromDate = (event: SelectChangeEvent) => {
-    setFromDate(event.target.value as string);
+  const handleFromDate = (event: any) => {
+    setFromDate(event as string);
     dispatch({
       type: ActionType.CHART_START_DATE,
-      payload: { startDate: event.target.value },
+      payload: { startDate: event },
     });
   };
 
-  const handleToDate = (event: SelectChangeEvent) => {
-    setToDate(event.target.value as string);
+  const handleToDate = (event: any) => {
+    setToDate(event as string);
     dispatch({
       type: ActionType.CHART_END_DATE,
-      payload: { endDate: event.target.value },
+      payload: { endDate: event },
     });
   };
 
@@ -261,6 +236,11 @@ function EnterpriseDashboard() {
     // navigate('/enterprise/uploadImage/');
     navigate('/enterprise/createSession/');
   };
+
+  const handleOnClick = (link: string) => {
+    navigate(link);
+  };
+
   return (
     <>
       <Box
@@ -510,7 +490,12 @@ function EnterpriseDashboard() {
                       : actionCount + '  Actions'
                   }
                   size={'medium'}
-                  onClick={() => console.log('')}
+                  onClick={() => {
+                    
+                    if(location.pathname.includes('basic')) 
+                    {navigate('/basic/actions')}
+                    else if(location.pathname.includes('enterprise'))
+                    navigate('/enterprise/actions')}}
                 />
               </Box>
 
@@ -526,6 +511,13 @@ function EnterpriseDashboard() {
                 border="1px solid #CEEFFF"
                 borderRadius={'5px'}
                 sx={{ background: 'white', cursor: 'pointer' }}
+                onClick={() => {
+                    
+                  if(location.pathname.includes('basic')) 
+                  {navigate('/basic/sessions')}
+                  else if(location.pathname.includes('enterprise'))
+                  navigate('/enterprise/sessions')}}
+              
               >
                 <H5SemiBoldTypography
                   label={
@@ -650,7 +642,7 @@ function EnterpriseDashboard() {
                       >
                         <img src="/svgs/square_stack.svg"></img>
                         <BodyRegularTypography
-                          label={totalSessions + ' Sessions'}
+                          label={sessionCount + ' Sessions'}
                           style={{ color: '#2C69A1', marginLeft: '18px' }}
                         />
                       </Box>
@@ -684,7 +676,9 @@ function EnterpriseDashboard() {
                 >
                   <BodySemiBoldTypography label="Count of All Actions (Assigned vs Completed)" />
                   <BootstrapTooltip
-                    title="Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vivamus in ex a est finibus fermentum aliquet at urna. Vivamus ac aliquet mi. Morbi laoreet tortor metus, ac vehicula turpis imperdiet et."
+                    title={
+                      'The graph shows the break down of total actions created over time,Total actions are broken into Assigned vs Completed.'
+                    }
                     arrow
                     placement="right"
                   >
@@ -697,6 +691,17 @@ function EnterpriseDashboard() {
                       }}
                     />
                   </BootstrapTooltip>
+                  {/* <BodySemiBoldTypography
+                    label="Learn More"
+                    style={{
+                      color: '#159ADD',
+                      cursor: 'pointer',
+                      marginTop: '8px',
+                    }}
+                    onClick={() =>
+                      handleOnClick('enterpriseLevelActionsCountLearnMore')
+                    }
+                  /> */}
                 </Box>
                 <Box
                   onClick={() => {
@@ -748,7 +753,8 @@ function EnterpriseDashboard() {
                 >
                   <BodySemiBoldTypography label="Count of Team Actions (Assigned vs Completed)" />
                   <BootstrapTooltip
-                    title="Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vivamus in ex a est finibus fermentum aliquet at urna. Vivamus ac aliquet mi. Morbi laoreet tortor metus, ac vehicula turpis imperdiet et."
+                    title="The graph shows the break down of total actions created for each of your team.
+                    Total actions are broken into Assigned vs Completed."
                     arrow
                     placement="right"
                   >
@@ -761,6 +767,17 @@ function EnterpriseDashboard() {
                       }}
                     />
                   </BootstrapTooltip>
+                  {/* <BodySemiBoldTypography
+                    label="Learn More"
+                    style={{
+                      color: '#159ADD',
+                      cursor: 'pointer',
+                      marginTop: '8px',
+                    }}
+                    onClick={() =>
+                      handleOnClick('teamLevelActionsCountLearnMore')
+                    }
+                  /> */}
                 </Box>
                 <Box
                   onClick={() => {
@@ -843,7 +860,7 @@ function EnterpriseDashboard() {
                 >
                   <BodySemiBoldTypography label="Count of All Participants Over Time" />
                   <BootstrapTooltip
-                    title="Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vivamus in ex a est finibus fermentum aliquet at urna. Vivamus ac aliquet mi. Morbi laoreet tortor metus, ac vehicula turpis imperdiet et."
+                    title="The graph shows the total number of participants (unique users) across all your teams over time."
                     arrow
                     placement="right"
                   >
@@ -856,6 +873,17 @@ function EnterpriseDashboard() {
                       }}
                     />
                   </BootstrapTooltip>
+                  {/* <BodySemiBoldTypography
+                    label="Learn More"
+                    style={{
+                      color: '#159ADD',
+                      cursor: 'pointer',
+                      marginTop: '8px',
+                    }}
+                    onClick={() =>
+                      handleOnClick('enterpriseLevelParticipantsCountLearnMore')
+                    }
+                  /> */}
                 </Box>
                 <Box
                   onClick={() => {
@@ -864,7 +892,9 @@ function EnterpriseDashboard() {
                     );
                   }}
                 >
-                  <AverageParticipantChart dashboard={true} team={selectId} />
+                  <AverageParticipantChart dashboard={true} team={selectId} totalParticipantsCount={(count)=>{
+                    setTotalParticipants(count)
+                  }} />
                 </Box>
               </Box>
 
@@ -879,7 +909,7 @@ function EnterpriseDashboard() {
                 >
                   <BodySemiBoldTypography label="Count of All Sessions" />
                   <BootstrapTooltip
-                    title="Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vivamus in ex a est finibus fermentum aliquet at urna. Vivamus ac aliquet mi. Morbi laoreet tortor metus, ac vehicula turpis imperdiet et."
+                    title="The graph shows the total number of sessions across all your teams over time."
                     arrow
                     placement="right"
                   >
@@ -892,6 +922,17 @@ function EnterpriseDashboard() {
                       }}
                     />
                   </BootstrapTooltip>
+                  {/* <BodySemiBoldTypography
+                    label="Learn More"
+                    style={{
+                      color: '#159ADD',
+                      cursor: 'pointer',
+                      marginTop: '8px',
+                    }}
+                    onClick={() =>
+                      handleOnClick('enterpriseLevelRetrosCountLearnMore')
+                    }
+                  /> */}
                 </Box>
                 <Box
                   onClick={() => {
@@ -973,7 +1014,7 @@ function EnterpriseDashboard() {
                 >
                   <BodySemiBoldTypography label="Enterprise Level - Sentiments - Key Themes Heatmap" />
                   <BootstrapTooltip
-                    title="Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vivamus in ex a est finibus fermentum aliquet at urna. Vivamus ac aliquet mi. Morbi laoreet tortor metus, ac vehicula turpis imperdiet et."
+                    title="The chart uses AI to capture words used in BACI collaboration sessions and measures in a heat map of how your people are feeling (Happy, Sad, Neutral) against each BACI key themes for high performing organisations. It is a more detailed view of the Sentiments - Moods chart."
                     arrow
                     placement="right"
                   >
@@ -986,6 +1027,17 @@ function EnterpriseDashboard() {
                       }}
                     />
                   </BootstrapTooltip>
+                  {/* <BodySemiBoldTypography
+                    label="Learn More"
+                    style={{
+                      color: '#159ADD',
+                      cursor: 'pointer',
+                      marginTop: '8px',
+                    }}
+                    onClick={() =>
+                      handleOnClick('enterpriseLevelSentimentsThemesLearnMore')
+                    }
+                  /> */}
                 </Box>
                 <Box
                   onClick={() => {
@@ -1012,7 +1064,7 @@ function EnterpriseDashboard() {
                 >
                   <BodySemiBoldTypography label="Sentiments - Moods" />
                   <BootstrapTooltip
-                    title="Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vivamus in ex a est finibus fermentum aliquet at urna. Vivamus ac aliquet mi. Morbi laoreet tortor metus, ac vehicula turpis imperdiet et."
+                    title="The chart takes the results from the pulse check and uses AI to capture words used in BACI collaboration sessions to provide a simple chart of how your people are feeling (Happy, Sad, Neutral) from month-to-month."
                     arrow
                     placement="right"
                   >
@@ -1025,6 +1077,17 @@ function EnterpriseDashboard() {
                       }}
                     />
                   </BootstrapTooltip>
+                  {/* <BodySemiBoldTypography
+                    label="Learn More"
+                    style={{
+                      color: '#159ADD',
+                      cursor: 'pointer',
+                      marginTop: '8px',
+                    }}
+                    onClick={() =>
+                      handleOnClick('enterpriseLevelSentimentsMoodsLearnMore')
+                    }
+                  /> */}
                 </Box>
                 <Box
                   onClick={() => {
@@ -1109,7 +1172,7 @@ function EnterpriseDashboard() {
                 >
                   <BodySemiBoldTypography label="Enterprise Level - Overall Summary" />
                   <BootstrapTooltip
-                    title="Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vivamus in ex a est finibus fermentum aliquet at urna. Vivamus ac aliquet mi. Morbi laoreet tortor metus, ac vehicula turpis imperdiet et."
+                    title="The summary uses AI to capture words used in BACI collaboration sessions and produces simple, useful and powerful summary paragraph and word cloud to gain valuable data driven insights on your teams mindset and culture."
                     arrow
                     placement="right"
                   >
@@ -1122,6 +1185,17 @@ function EnterpriseDashboard() {
                       }}
                     />
                   </BootstrapTooltip>
+                  {/* <BodySemiBoldTypography
+                    label="Learn More"
+                    style={{
+                      color: '#159ADD',
+                      cursor: 'pointer',
+                      marginTop: '8px',
+                    }}
+                    onClick={() =>
+                      handleOnClick('enterpriseLevelSentimentsSummaryLearnMore')
+                    }
+                  /> */}
                 </Box>
                 <Box
                   onClick={() => {

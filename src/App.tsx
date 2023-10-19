@@ -20,7 +20,7 @@ import { ParticipantWaitingPage } from './screens/Board/ParticipantWaitingPage';
 import { CreateRetroMain } from './screens/CreateRetro/CreateRetroMain';
 import { CreateSessionMain } from './screens/CreateSession/CreateSessionMain';
 import { UploadImageScan } from './screens/ScanImage/UploadImageScan';
-import { ScanUploadImage} from './screens/scan/ScanUploadImage';
+import { ScanUploadImage } from './screens/scan/ScanUploadImage';
 import { StartRetro } from './screens/Home/StartRetro';
 import { Box, Grid, useMediaQuery } from '@mui/material';
 import Feedback from './screens/Others/Feedback';
@@ -91,7 +91,11 @@ function MainContent() {
 
 export default function App({ instance }: AppProps) {
   const isXsUp = useMediaQuery('(max-width:768px)');
+  const isDisplay =
+    location.pathname.includes('basic') ||
+    location.pathname.includes('enterprise');
 
+  console.log('isDisplay', isDisplay);
   return (
     <ErrorProvider>
       <ErrorBoundary>
@@ -104,7 +108,10 @@ export default function App({ instance }: AppProps) {
                     <MsalProvider instance={instance}>
                       <Box display="flex" height="calc(var(--app-height))">
                         {!isXsUp && <LeftBar />}
-                        <Box display="flex" width={'calc(100% - 72px)'}>
+                        <Box
+                          display="flex"
+                          width={isDisplay ? 'calc(100% - 72px)' : '100%'}
+                        >
                           <Routes>
                             <Route
                               path="/"
@@ -319,19 +326,19 @@ export default function App({ instance }: AppProps) {
                               <Route path="teams/">
                                 <Route
                                   path=""
-                                  element={<Notifications />}
+                                  element={<TeamsMainContainer />}
                                 />
                                 <Route path="allTeams">
                                   <Route
                                     path=""
-                                    element={<Notifications />}
+                                    element={<TeamsMainContainer />}
                                   />
                                 </Route>
                                 <Route path="create">
-                                  <Route path="" element={<Notifications />} />
+                                  <Route path="" element={<CreateTeam />} />
                                 </Route>
                                 <Route path="edit/:id">
-                                  <Route path="" element={<Notifications />} />
+                                  <Route path="" element={<EditTeam />} />
                                 </Route>
                               </Route>
                               <Route path="settings" element={<Settings />} />
@@ -349,12 +356,12 @@ export default function App({ instance }: AppProps) {
                                 path="createRetro"
                                 element={<CreateRetroMain />}
                               />
-                                
-                                <Route
+
+                              <Route
                                 path="uploadImage"
                                 element={<UploadImageScan />}
                               />
-                                <Route
+                              <Route
                                 path="scanImage"
                                 element={<ScanUploadImage />}
                               />
@@ -523,25 +530,28 @@ export default function App({ instance }: AppProps) {
                               <Route path="teams/">
                                 <Route
                                   path=""
-                                  element={<Notifications />}
+                                  element={<TeamsMainContainer />}
                                 />
                                 <Route path="allTeams">
                                   <Route
                                     path=""
-                                    element={<Notifications />}
+                                    element={<TeamsMainContainer />}
                                   />
                                 </Route>
                                 <Route path="create">
-                                  <Route path="" element={<Notifications />} />
+                                  <Route path="" element={<CreateTeam />} />
                                 </Route>
                                 <Route path="edit/:id">
-                                  <Route path="" element={<Notifications />} />
+                                  <Route path="" element={<EditTeam />} />
                                 </Route>
                                 <Route path="manageUsers">
                                   <Route path="" element={<ManageUsers />} />
                                 </Route>
                                 <Route path="enterpriseRegistration">
-                                  <Route path="" element={<Notifications />} />
+                                  <Route
+                                    path=""
+                                    element={<EnterpriseRegistration />}
+                                  />
                                 </Route>
                               </Route>
                               <Route path="settings" element={<Settings />} />

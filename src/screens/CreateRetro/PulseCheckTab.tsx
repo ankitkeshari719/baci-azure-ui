@@ -154,7 +154,7 @@ export function PulseCheckTab({
   return (
     <>
       {/* Template Panel */}
-      <Box sx={{ borderBottom: 1, borderColor: '#CCCCCC', py: 4 }}>
+      <Box sx={{ borderBottom: 1, borderColor: '#CCCCCC', py: 3 }}>
         <Box
           sx={{
             display: 'flex',
