@@ -84,7 +84,6 @@ type AppProps = {
 function MainContent() {
   const { instance } = useMsal();
 
-
   return (
     <Grid container spacing={0}>
       <Outlet />
@@ -94,137 +93,68 @@ function MainContent() {
 
 export default function App({ instance }: AppProps) {
   const isXsUp = useMediaQuery('(max-width:768px)');
-  const [isDisplay,setDisplay] = useState<any>(    location.pathname.includes('basic') ||
-  location.pathname.includes('enterprise'))
-;
-
-    useEffect(()=>{
-      setDisplay(    location.pathname.includes('basic') ||
-      location.pathname.includes('enterprise'))
-      
-    },[location.pathname.includes('basic') ,
-    location.pathname.includes('enterprise')])
-
+  const [isDisplay, setDisplay] = useState<any>(
+    location.pathname.includes('basic') ||
+      location.pathname.includes('enterprise')
+  );
+  useEffect(() => {
+    setDisplay(
+      location.pathname.includes('basic') ||
+        location.pathname.includes('enterprise')
+    );
+  }, [
+    location.pathname.includes('basic'),
+    location.pathname.includes('enterprise'),
+  ]);
 
   return (
     <ErrorProvider>
       <ErrorBoundary>
         <SocketProvider>
           <UserProvider>
-          <GlobalProvider>
-            <BrowserRouter>
-              <BoardProvider>
-                <ConfirmProvider>
-                  <ThemeProvider theme={theme}>
-                    <MsalProvider instance={instance}>
-                      <Box display="flex" height="calc(var(--app-height))">
-                        {!isXsUp && <LeftBar />}
-                        <Box
-                          display="flex"
-                          width={isDisplay ? 'calc(100% - 72px)' : '100%'}
-                        >
-                          <Routes>
-                            <Route
-                              path="/"
-                              element={
-                                <LandingPage isDemo={true}></LandingPage>
-                              }
-                            />
-                            <Route
-                              path="/join/:id"
-                              element={<JoinRetro></JoinRetro>}
-                            />
-                            <Route
-                              path="/create"
-                              element={<CreateRetroMain></CreateRetroMain>}
-                            />
-                            <Route
-                              path="/termAndCondition"
-                              element={
-                                <TermsAndConditions></TermsAndConditions>
-                              }
-                            />
-                            <Route
-                              path="/privatePolicy"
-                              element={<PrivacyPolicy></PrivacyPolicy>}
-                            />
-                            <Route
-                              path="/retrodetails"
-                              element={<RetroDetails></RetroDetails>}
-                            />
-                            <Route
-                              path="/offboarding"
-                              element={<Offboarding></Offboarding>}
-                            />
-                            <Route path="/board" element={<MainContent />}>
+            <GlobalProvider>
+              <BrowserRouter>
+                <BoardProvider>
+                  <ConfirmProvider>
+                    <ThemeProvider theme={theme}>
+                      <MsalProvider instance={instance}>
+                        <Box display="flex" height="calc(var(--app-height))">
+                          {!isXsUp && <LeftBar />}
+                          <Box display="flex" width={'calc(100% - 72px)'}>
+                            <Routes>
                               <Route
-                                path=":id/waiting"
+                                path="/"
                                 element={
-                                  <ParticipantWaitingPage></ParticipantWaitingPage>
+                                  <LandingPage isDemo={true}></LandingPage>
                                 }
                               />
                               <Route
-                                path=":id/pulsecheck"
-                                element={<PulseCheckMain />}
-                              />
-                              <Route path=":id" element={<Board />} />
-                              <Route
-                                path=":id/feedback"
-                                element={<Feedback />}
-                              />
-                              <Route
-                                path=":id/startRetro"
-                                element={<StartRetro></StartRetro>}
-                              />
-                            </Route>
-                            <Route
-                              path="/report/:id"
-                              element={<SummaryReportMain />}
-                            />
-                            <Route
-                              path="/retroisfinished"
-                              element={<RetroIsFinished></RetroIsFinished>}
-                            />
-                            <Route
-                              path="/jiraCallback/"
-                              element={<JiraCallback />}
-                            />
-                            {/* <Box display="flex" width={'calc(100% - 72px)'}> */}
-                            {/* Basic Routes */}
-                            <Route path="/basic/">
-                              <Route
-                                path=""
-                                element={<BasicDashboardWithEnterprise />}
-                              />
-                              <Route
-                                path="join/:id"
+                                path="/join/:id"
                                 element={<JoinRetro></JoinRetro>}
                               />
-
                               <Route
-                                path="create"
+                                path="/create"
                                 element={<CreateRetroMain></CreateRetroMain>}
                               />
-
                               <Route
-                                path="termAndCondition"
+                                path="/termAndCondition"
                                 element={
                                   <TermsAndConditions></TermsAndConditions>
                                 }
                               />
                               <Route
-                                path="privatePolicy"
+                                path="/privatePolicy"
                                 element={<PrivacyPolicy></PrivacyPolicy>}
                               />
                               <Route
-                                path="retrodetails"
+                                path="/retrodetails"
                                 element={<RetroDetails></RetroDetails>}
                               />
                               <Route
-                                path="offboarding"
+                                path="/offboarding"
                                 element={<Offboarding></Offboarding>}
                               />
-                              <Route path="board" element={<MainContent />}>
+                              <Route path="/board" element={<MainContent />}>
                                 <Route
                                   path=":id/waiting"
                                   element={
@@ -246,494 +176,566 @@ export default function App({ instance }: AppProps) {
                                 />
                               </Route>
                               <Route
-                                path="report/:id"
+                                path="/report/:id"
                                 element={<SummaryReportMain />}
                               />
                               <Route
-                                path="retroisfinished"
+                                path="/retroisfinished"
                                 element={<RetroIsFinished></RetroIsFinished>}
                               />
                               <Route
-                                path="jiraCallback/"
+                                path="/jiraCallback/"
                                 element={<JiraCallback />}
                               />
-
-                              <Route
-                                path="dashboard"
-                                element={<BasicDashboardWithEnterprise />}
-                              />
-                              <Route
-                                path="actions"
-                                element={<ActionsMainContainer />}
-                              />
-                              <Route path="analytics/">
+                              {/* <Box display="flex" width={'calc(100% - 72px)'}> */}
+                              {/* Basic Routes */}
+                              <Route path="/basic/">
                                 <Route
                                   path=""
-                                  element={<AnalyticsMainContainer />}
+                                  element={<BasicDashboardWithEnterprise />}
+                                />
+                                <Route
+                                  path="join/:id"
+                                  element={<JoinRetro></JoinRetro>}
                                 />
 
                                 <Route
-                                  path="teamLevelActionsCount"
-                                  element={<TeamLevelActionsCountChart />}
+                                  path="create"
+                                  element={<CreateRetroMain></CreateRetroMain>}
                                 />
 
                                 <Route
-                                  path="enterpriseLevelActionsCount"
+                                  path="termAndCondition"
                                   element={
-                                    <EnterpriseLevelActionsCountChart
-                                      dashboard={false}
-                                      team={'0'}
-                                      count={() => {}}
-                                    />
+                                    <TermsAndConditions></TermsAndConditions>
                                   }
                                 />
                                 <Route
-                                  path="enterpriseLevelParticipantsCount"
-                                  element={
-                                    <AverageParticipantChart
-                                      dashboard={false}
-                                      team={'0'}
-                                    />
-                                  }
+                                  path="privatePolicy"
+                                  element={<PrivacyPolicy></PrivacyPolicy>}
                                 />
                                 <Route
-                                  path="enterpriseLevelRetrosCount"
-                                  element={
-                                    <AverageRetroChart
-                                      dashboard={false}
-                                      team={'0'}
-                                    />
-                                  }
+                                  path="retrodetails"
+                                  element={<RetroDetails></RetroDetails>}
                                 />
                                 <Route
-                                  path="enterpriseLevelSentimentsSummary"
-                                  element={
-                                    <EnterpriseLevelSentimentsSummaryChart
-                                      dashboard={false}
-                                      team={'0'}
-                                    />
-                                  }
+                                  path="offboarding"
+                                  element={<Offboarding></Offboarding>}
                                 />
-                                <Route
-                                  path="enterpriseLevelSentimentsThemes"
-                                  element={
-                                    <EnterpriseLevelSentimentsThemeChart
-                                      dashboard={false}
-                                      team={'0'}
-                                    />
-                                  }
-                                />
-                                <Route
-                                  path="enterpriseLevelSentimentsMoods"
-                                  element={
-                                    <EnterpriseLevelSentimentsMoodsChart
-                                      dashboard={false}
-                                      team={'0'}
-                                    />
-                                  }
-                                />
-                                <Route
-                                  path="teamLevelActionsCountLearnMore"
-                                  element={
-                                    <TeamLevelActionsCountChartLearnMore />
-                                  }
-                                />
-                                <Route
-                                  path="enterpriseLevelActionsCountLearnMore"
-                                  element={
-                                    <EnterpriseLevelActionsCountChartLearnMore />
-                                  }
-                                />
-                                <Route
-                                  path="enterpriseLevelParticipantsCountLearnMore"
-                                  element={<AverageParticipantChartLearnMore />}
-                                />
-                                <Route
-                                  path="enterpriseLevelRetrosCountLearnMore"
-                                  element={<AverageRetroChartLearnMore />}
-                                />
-                                <Route
-                                  path="enterpriseLevelSentimentsSummaryLearnMore"
-                                  element={
-                                    <EnterpriseLevelSentimentsSummaryChartLearnMore />
-                                  }
-                                />
-                                <Route
-                                  path="enterpriseLevelSentimentsThemesLearnMore"
-                                  element={
-                                    <EnterpriseLevelSentimentsThemeChartLearnMore />
-                                  }
-                                />
-                                <Route
-                                  path="enterpriseLevelSentimentsMoodsLearnMore"
-                                  element={
-                                    <EnterpriseLevelSentimentsMoodsChartLearnMore />
-                                  }
-                                />
-                              </Route>
-                              <Route
-                                path="sessions"
-                                element={<SessionsMainContainer />}
-                              />
-                              <Route path="templates/">
-                                <Route path="retroListTemplate/">
+                                <Route path="board" element={<MainContent />}>
                                   <Route
-                                    path=""
-                                    element={<TemplatesListContainer />}
+                                    path=":id/waiting"
+                                    element={
+                                      <ParticipantWaitingPage></ParticipantWaitingPage>
+                                    }
                                   />
                                   <Route
-                                    path="RetroTemplateDetails"
-                                    element={<TemplatesLearnMore />}
+                                    path=":id/pulsecheck"
+                                    element={<PulseCheckMain />}
+                                  />
+                                  <Route path=":id" element={<Board />} />
+                                  <Route
+                                    path=":id/feedback"
+                                    element={<Feedback />}
+                                  />
+                                  <Route
+                                    path=":id/startRetro"
+                                    element={<StartRetro></StartRetro>}
                                   />
                                 </Route>
-                                <Route path="pulseCheckListTemplate">
+                                <Route
+                                  path="report/:id"
+                                  element={<SummaryReportMain />}
+                                />
+                                <Route
+                                  path="retroisfinished"
+                                  element={<RetroIsFinished></RetroIsFinished>}
+                                />
+                                <Route
+                                  path="jiraCallback/"
+                                  element={<JiraCallback />}
+                                />
+
+                                <Route
+                                  path="dashboard"
+                                  element={<BasicDashboardWithEnterprise />}
+                                />
+                                <Route
+                                  path="actions"
+                                  element={<ActionsMainContainer />}
+                                />
+                                <Route path="analytics/">
                                   <Route
                                     path=""
-                                    element={<PulseCheckListContainer />}
+                                    element={<AnalyticsMainContainer />}
+                                  />
+
+                                  <Route
+                                    path="teamLevelActionsCount"
+                                    element={<TeamLevelActionsCountChart />}
+                                  />
+
+                                  <Route
+                                    path="enterpriseLevelActionsCount"
+                                    element={
+                                      <EnterpriseLevelActionsCountChart
+                                        dashboard={false}
+                                        team={'0'}
+                                        count={() => {}}
+                                      />
+                                    }
                                   />
                                   <Route
-                                    path="pulseCheckTemplateDetails"
-                                    element={<PulseCheckLearnMore />}
+                                    path="enterpriseLevelParticipantsCount"
+                                    element={
+                                      <AverageParticipantChart
+                                        dashboard={false}
+                                        team={'0'}
+                                      />
+                                    }
+                                  />
+                                  <Route
+                                    path="enterpriseLevelRetrosCount"
+                                    element={
+                                      <AverageRetroChart
+                                        dashboard={false}
+                                        team={'0'}
+                                      />
+                                    }
+                                  />
+                                  <Route
+                                    path="enterpriseLevelSentimentsSummary"
+                                    element={
+                                      <EnterpriseLevelSentimentsSummaryChart
+                                        dashboard={false}
+                                        team={'0'}
+                                      />
+                                    }
+                                  />
+                                  <Route
+                                    path="enterpriseLevelSentimentsThemes"
+                                    element={
+                                      <EnterpriseLevelSentimentsThemeChart
+                                        dashboard={false}
+                                        team={'0'}
+                                      />
+                                    }
+                                  />
+                                  <Route
+                                    path="enterpriseLevelSentimentsMoods"
+                                    element={
+                                      <EnterpriseLevelSentimentsMoodsChart
+                                        dashboard={false}
+                                        team={'0'}
+                                      />
+                                    }
+                                  />
+                                  <Route
+                                    path="teamLevelActionsCountLearnMore"
+                                    element={
+                                      <TeamLevelActionsCountChartLearnMore />
+                                    }
+                                  />
+                                  <Route
+                                    path="enterpriseLevelActionsCountLearnMore"
+                                    element={
+                                      <EnterpriseLevelActionsCountChartLearnMore />
+                                    }
+                                  />
+                                  <Route
+                                    path="enterpriseLevelParticipantsCountLearnMore"
+                                    element={
+                                      <AverageParticipantChartLearnMore />
+                                    }
+                                  />
+                                  <Route
+                                    path="enterpriseLevelRetrosCountLearnMore"
+                                    element={<AverageRetroChartLearnMore />}
+                                  />
+                                  <Route
+                                    path="enterpriseLevelSentimentsSummaryLearnMore"
+                                    element={
+                                      <EnterpriseLevelSentimentsSummaryChartLearnMore />
+                                    }
+                                  />
+                                  <Route
+                                    path="enterpriseLevelSentimentsThemesLearnMore"
+                                    element={
+                                      <EnterpriseLevelSentimentsThemeChartLearnMore />
+                                    }
+                                  />
+                                  <Route
+                                    path="enterpriseLevelSentimentsMoodsLearnMore"
+                                    element={
+                                      <EnterpriseLevelSentimentsMoodsChartLearnMore />
+                                    }
                                   />
                                 </Route>
-                              </Route>
-                              <Route path="teams/">
                                 <Route
-                                  path=""
-                                  element={<TeamsMainContainer />}
+                                  path="sessions"
+                                  element={<SessionsMainContainer />}
                                 />
-                                <Route path="allTeams">
+                                <Route path="templates/">
+                                  <Route path="retroListTemplate/">
+                                    <Route
+                                      path=""
+                                      element={<TemplatesListContainer />}
+                                    />
+                                    <Route
+                                      path="RetroTemplateDetails"
+                                      element={<TemplatesLearnMore />}
+                                    />
+                                  </Route>
+                                  <Route path="pulseCheckListTemplate">
+                                    <Route
+                                      path=""
+                                      element={<PulseCheckListContainer />}
+                                    />
+                                    <Route
+                                      path="pulseCheckTemplateDetails"
+                                      element={<PulseCheckLearnMore />}
+                                    />
+                                  </Route>
+                                </Route>
+                                <Route path="teams/">
                                   <Route
                                     path=""
                                     element={<TeamsMainContainer />}
                                   />
+                                  <Route path="allTeams">
+                                    <Route
+                                      path=""
+                                      element={<TeamsMainContainer />}
+                                    />
+                                  </Route>
+                                  <Route path="create">
+                                    <Route path="" element={<CreateTeam />} />
+                                  </Route>
+                                  <Route path="edit/:id">
+                                    <Route path="" element={<EditTeam />} />
+                                  </Route>
                                 </Route>
-                                <Route path="create">
-                                  <Route path="" element={<CreateTeam />} />
-                                </Route>
-                                <Route path="edit/:id">
-                                  <Route path="" element={<EditTeam />} />
-                                </Route>
-                              </Route>
-                              <Route path="settings" element={<Settings />} />
-                              <Route path="help" element={<Help />} />
-                              <Route
-                                path="notifications"
-                                element={<Notifications />}
-                              />
-                              <Route path="profile" element={<Profile />} />
-                              <Route
-                                path="joinRetro"
-                                element={<JoinRetroEnterprise />}
-                              />
-                              <Route
-                                path="createRetro"
-                                element={<CreateRetroMain />}
-                              />
+                                <Route path="settings" element={<Settings />} />
+                                <Route path="help" element={<Help />} />
+                                <Route
+                                  path="notifications"
+                                  element={<Notifications />}
+                                />
+                                <Route path="profile" element={<Profile />} />
+                                <Route
+                                  path="joinRetro"
+                                  element={<JoinRetroEnterprise />}
+                                />
+                                <Route
+                                  path="createRetro"
+                                  element={<CreateRetroMain />}
+                                />
 
-                              <Route
-                                path="uploadImage"
-                                element={<UploadImageScan />}
-                              />
-                              <Route
-                                path="scanImage"
-                                element={<ScanUploadImage />}
-                              />
-                              <Route
-                                path="termAndCondition"
-                                element={
-                                  <TermsAndConditions></TermsAndConditions>
-                                }
-                              />
-                              <Route
-                                path="privatePolicy"
-                                element={<PrivacyPolicy></PrivacyPolicy>}
-                              />
+                                <Route
+                                  path="uploadImage"
+                                  element={<UploadImageScan />}
+                                />
+                                <Route
+                                  path="scanImage"
+                                  element={<ScanUploadImage />}
+                                />
+                                <Route
+                                  path="termAndCondition"
+                                  element={
+                                    <TermsAndConditions></TermsAndConditions>
+                                  }
+                                />
+                                <Route
+                                  path="privatePolicy"
+                                  element={<PrivacyPolicy></PrivacyPolicy>}
+                                />
+                                <Route
+                                  path="*"
+                                  element={<PageNotFound></PageNotFound>}
+                                />
+                              </Route>
+                              {/* Enterprise Routes */}
+                              <Route path="/enterprise/">
+                                <Route
+                                  path=""
+                                  element={<EnterpriseMainContainer />}
+                                />
+
+                                <Route
+                                  path="join/:id"
+                                  element={<JoinRetro></JoinRetro>}
+                                />
+                                {/* retro Data */}
+                                <Route
+                                  path="create"
+                                  element={<CreateRetroMain></CreateRetroMain>}
+                                />
+
+                                <Route
+                                  path="termAndCondition"
+                                  element={
+                                    <TermsAndConditions></TermsAndConditions>
+                                  }
+                                />
+                                <Route
+                                  path="privatePolicy"
+                                  element={<PrivacyPolicy></PrivacyPolicy>}
+                                />
+                                <Route
+                                  path="retrodetails"
+                                  element={<RetroDetails></RetroDetails>}
+                                />
+                                <Route
+                                  path="offboarding"
+                                  element={<Offboarding></Offboarding>}
+                                />
+                                <Route path="board" element={<MainContent />}>
+                                  <Route
+                                    path=":id/waiting"
+                                    element={
+                                      <ParticipantWaitingPage></ParticipantWaitingPage>
+                                    }
+                                  />
+                                  <Route
+                                    path=":id/pulsecheck"
+                                    element={<PulseCheckMain />}
+                                  />
+                                  <Route path=":id" element={<Board />} />
+                                  <Route
+                                    path=":id/feedback"
+                                    element={<Feedback />}
+                                  />
+                                  <Route
+                                    path=":id/startRetro"
+                                    element={<StartRetro></StartRetro>}
+                                  />
+                                </Route>
+                                <Route
+                                  path="report/:id"
+                                  element={<SummaryReportMain />}
+                                />
+                                <Route
+                                  path="retroisfinished"
+                                  element={<RetroIsFinished></RetroIsFinished>}
+                                />
+                                <Route
+                                  path="jiraCallback/"
+                                  element={<JiraCallback />}
+                                />
+
+                                <Route
+                                  path="dashboard"
+                                  element={<EnterpriseMainContainer />}
+                                />
+                                <Route
+                                  path="actions"
+                                  element={<ActionsMainContainer />}
+                                />
+                                <Route path="analytics/">
+                                  <Route
+                                    path=""
+                                    element={<AnalyticsMainContainer />}
+                                  />
+                                  <Route
+                                    path="teamLevelActionsCount"
+                                    element={<TeamLevelActionsCountChart />}
+                                  />
+                                  <Route
+                                    path="enterpriseLevelActionsCount"
+                                    element={
+                                      <EnterpriseLevelActionsCountChart
+                                        dashboard={false}
+                                        team={'0'}
+                                        count={() => {}}
+                                      />
+                                    }
+                                  />
+                                  <Route
+                                    path="enterpriseLevelParticipantsCount"
+                                    element={
+                                      <AverageParticipantChart
+                                        dashboard={false}
+                                        team={'0'}
+                                      />
+                                    }
+                                  />
+                                  <Route
+                                    path="enterpriseLevelRetrosCount"
+                                    element={
+                                      <AverageRetroChart
+                                        dashboard={false}
+                                        team={'0'}
+                                      />
+                                    }
+                                  />
+                                  <Route
+                                    path="enterpriseLevelSentimentsSummary"
+                                    element={
+                                      <EnterpriseLevelSentimentsSummaryChart
+                                        dashboard={false}
+                                        team={'0'}
+                                      />
+                                    }
+                                  />
+                                  <Route
+                                    path="enterpriseLevelSentimentsThemes"
+                                    element={
+                                      <EnterpriseLevelSentimentsThemeChart
+                                        dashboard={false}
+                                        team={'0'}
+                                      />
+                                    }
+                                  />
+                                  <Route
+                                    path="enterpriseLevelSentimentsMoods"
+                                    element={
+                                      <EnterpriseLevelSentimentsMoodsChart
+                                        dashboard={false}
+                                        team={'0'}
+                                      />
+                                    }
+                                  />
+                                  <Route
+                                    path="teamLevelActionsCountLearnMore"
+                                    element={
+                                      <TeamLevelActionsCountChartLearnMore />
+                                    }
+                                  />
+                                  <Route
+                                    path="enterpriseLevelActionsCountLearnMore"
+                                    element={
+                                      <EnterpriseLevelActionsCountChartLearnMore />
+                                    }
+                                  />
+                                  <Route
+                                    path="enterpriseLevelParticipantsCountLearnMore"
+                                    element={
+                                      <AverageParticipantChartLearnMore />
+                                    }
+                                  />
+                                  <Route
+                                    path="enterpriseLevelRetrosCountLearnMore"
+                                    element={<AverageRetroChartLearnMore />}
+                                  />
+                                  <Route
+                                    path="enterpriseLevelSentimentsSummaryLearnMore"
+                                    element={
+                                      <EnterpriseLevelSentimentsSummaryChartLearnMore />
+                                    }
+                                  />
+                                  <Route
+                                    path="enterpriseLevelSentimentsThemesLearnMore"
+                                    element={
+                                      <EnterpriseLevelSentimentsThemeChartLearnMore />
+                                    }
+                                  />
+                                  <Route
+                                    path="enterpriseLevelSentimentsMoodsLearnMore"
+                                    element={
+                                      <EnterpriseLevelSentimentsMoodsChartLearnMore />
+                                    }
+                                  />
+                                </Route>
+                                <Route
+                                  path="sessions"
+                                  element={<SessionsMainContainer />}
+                                />
+                                <Route path="templates/">
+                                  <Route path="retroListTemplate/">
+                                    <Route
+                                      path=""
+                                      element={<TemplatesListContainer />}
+                                    />
+                                    <Route
+                                      path="RetroTemplateDetails"
+                                      element={<TemplatesLearnMore />}
+                                    />
+                                  </Route>
+                                  <Route path="pulseCheckListTemplate">
+                                    <Route
+                                      path=""
+                                      element={<PulseCheckListContainer />}
+                                    />
+                                    <Route
+                                      path="pulseCheckTemplateDetails"
+                                      element={<PulseCheckLearnMore />}
+                                    />
+                                  </Route>
+                                </Route>
+                                <Route path="teams/">
+                                  <Route
+                                    path=""
+                                    element={<TeamsMainContainer />}
+                                  />
+                                  <Route path="allTeams">
+                                    <Route
+                                      path=""
+                                      element={<TeamsMainContainer />}
+                                    />
+                                  </Route>
+                                  <Route path="create">
+                                    <Route path="" element={<CreateTeam />} />
+                                  </Route>
+                                  <Route path="edit/:id">
+                                    <Route path="" element={<EditTeam />} />
+                                  </Route>
+                                  <Route path="manageUsers">
+                                    <Route path="" element={<ManageUsers />} />
+                                  </Route>
+                                  <Route path="enterpriseRegistration">
+                                    <Route
+                                      path=""
+                                      element={<EnterpriseRegistration />}
+                                    />
+                                  </Route>
+                                </Route>
+                                <Route path="settings" element={<Settings />} />
+                                <Route path="help" element={<Help />} />
+                                <Route
+                                  path="notifications"
+                                  element={<Notifications />}
+                                />
+                                <Route path="profile" element={<Profile />} />
+                                <Route
+                                  path="joinRetro"
+                                  element={<JoinRetroEnterprise />}
+                                />
+                                <Route
+                                  path="createRetro"
+                                  element={<CreateRetroMain />}
+                                />
+                                <Route
+                                  path="uploadImage"
+                                  element={<UploadImageScan />}
+                                />
+                                <Route
+                                  path="scanImage"
+                                  element={<ScanUploadImage />}
+                                />
+                                <Route
+                                  path="termAndCondition"
+                                  element={<TermsAndConditions />}
+                                />
+                                <Route
+                                  path="privatePolicy"
+                                  element={<PrivacyPolicy />}
+                                />
+                                <Route path="*" element={<PageNotFound />} />
+                              </Route>
                               <Route
                                 path="*"
                                 element={<PageNotFound></PageNotFound>}
                               />
-                            </Route>
-                            {/* Enterprise Routes */}
-                            <Route path="/enterprise/">
-                              <Route
-                                path=""
-                                element={<EnterpriseMainContainer />}
-                              />
-
-                              <Route
-                                path="join/:id"
-                                element={<JoinRetro></JoinRetro>}
-                              />
-                              {/* retro Data */}
-                              <Route
-                                path="create"
-                                element={<CreateRetroMain></CreateRetroMain>}
-                              />
-
-                              <Route
-                                path="termAndCondition"
-                                element={
-                                  <TermsAndConditions></TermsAndConditions>
-                                }
-                              />
-                              <Route
-                                path="privatePolicy"
-                                element={<PrivacyPolicy></PrivacyPolicy>}
-                              />
-                              <Route
-                                path="retrodetails"
-                                element={<RetroDetails></RetroDetails>}
-                              />
-                              <Route
-                                path="offboarding"
-                                element={<Offboarding></Offboarding>}
-                              />
-                              <Route path="board" element={<MainContent />}>
-                                <Route
-                                  path=":id/waiting"
-                                  element={
-                                    <ParticipantWaitingPage></ParticipantWaitingPage>
-                                  }
-                                />
-                                <Route
-                                  path=":id/pulsecheck"
-                                  element={<PulseCheckMain />}
-                                />
-                                <Route path=":id" element={<Board />} />
-                                <Route
-                                  path=":id/feedback"
-                                  element={<Feedback />}
-                                />
-                                <Route
-                                  path=":id/startRetro"
-                                  element={<StartRetro></StartRetro>}
-                                />
-                              </Route>
-                              <Route
-                                path="report/:id"
-                                element={<SummaryReportMain />}
-                              />
-                              <Route
-                                path="retroisfinished"
-                                element={<RetroIsFinished></RetroIsFinished>}
-                              />
-                              <Route
-                                path="jiraCallback/"
-                                element={<JiraCallback />}
-                              />
-
-                              <Route
-                                path="dashboard"
-                                element={<EnterpriseMainContainer />}
-                              />
-                              <Route
-                                path="actions"
-                                element={<ActionsMainContainer />}
-                              />
-                              <Route path="analytics/">
-                                <Route
-                                  path=""
-                                  element={<AnalyticsMainContainer />}
-                                />
-                                <Route
-                                  path="teamLevelActionsCount"
-                                  element={<TeamLevelActionsCountChart />}
-                                />
-                                <Route
-                                  path="enterpriseLevelActionsCount"
-                                  element={
-                                    <EnterpriseLevelActionsCountChart
-                                      dashboard={false}
-                                      team={'0'}
-                                      count={() => {}}
-                                    />
-                                  }
-                                />
-                                <Route
-                                  path="enterpriseLevelParticipantsCount"
-                                  element={
-                                    <AverageParticipantChart
-                                      dashboard={false}
-                                      team={'0'}
-                                    />
-                                  }
-                                />
-                                <Route
-                                  path="enterpriseLevelRetrosCount"
-                                  element={
-                                    <AverageRetroChart
-                                      dashboard={false}
-                                      team={'0'}
-                                    />
-                                  }
-                                />
-                                <Route
-                                  path="enterpriseLevelSentimentsSummary"
-                                  element={
-                                    <EnterpriseLevelSentimentsSummaryChart
-                                      dashboard={false}
-                                      team={'0'}
-                                    />
-                                  }
-                                />
-                                <Route
-                                  path="enterpriseLevelSentimentsThemes"
-                                  element={
-                                    <EnterpriseLevelSentimentsThemeChart
-                                      dashboard={false}
-                                      team={'0'}
-                                    />
-                                  }
-                                />
-                                <Route
-                                  path="enterpriseLevelSentimentsMoods"
-                                  element={
-                                    <EnterpriseLevelSentimentsMoodsChart
-                                      dashboard={false}
-                                      team={'0'}
-                                    />
-                                  }
-                                />
-                                <Route
-                                  path="teamLevelActionsCountLearnMore"
-                                  element={
-                                    <TeamLevelActionsCountChartLearnMore />
-                                  }
-                                />
-                                <Route
-                                  path="enterpriseLevelActionsCountLearnMore"
-                                  element={
-                                    <EnterpriseLevelActionsCountChartLearnMore />
-                                  }
-                                />
-                                <Route
-                                  path="enterpriseLevelParticipantsCountLearnMore"
-                                  element={<AverageParticipantChartLearnMore />}
-                                />
-                                <Route
-                                  path="enterpriseLevelRetrosCountLearnMore"
-                                  element={<AverageRetroChartLearnMore />}
-                                />
-                                <Route
-                                  path="enterpriseLevelSentimentsSummaryLearnMore"
-                                  element={
-                                    <EnterpriseLevelSentimentsSummaryChartLearnMore />
-                                  }
-                                />
-                                <Route
-                                  path="enterpriseLevelSentimentsThemesLearnMore"
-                                  element={
-                                    <EnterpriseLevelSentimentsThemeChartLearnMore />
-                                  }
-                                />
-                                <Route
-                                  path="enterpriseLevelSentimentsMoodsLearnMore"
-                                  element={
-                                    <EnterpriseLevelSentimentsMoodsChartLearnMore />
-                                  }
-                                />
-                              </Route>
-                              <Route
-                                path="sessions"
-                                element={<SessionsMainContainer />}
-                              />
-                              <Route path="templates/">
-                                <Route path="retroListTemplate/">
-                                  <Route
-                                    path=""
-                                    element={<TemplatesListContainer />}
-                                  />
-                                  <Route
-                                    path="RetroTemplateDetails"
-                                    element={<TemplatesLearnMore />}
-                                  />
-                                </Route>
-                                <Route path="pulseCheckListTemplate">
-                                  <Route
-                                    path=""
-                                    element={<PulseCheckListContainer />}
-                                  />
-                                  <Route
-                                    path="pulseCheckTemplateDetails"
-                                    element={<PulseCheckLearnMore />}
-                                  />
-                                </Route>
-                              </Route>
-                              <Route path="teams/">
-                                <Route
-                                  path=""
-                                  element={<TeamsMainContainer />}
-                                />
-                                <Route path="allTeams">
-                                  <Route
-                                    path=""
-                                    element={<TeamsMainContainer />}
-                                  />
-                                </Route>
-                                <Route path="create">
-                                  <Route path="" element={<CreateTeam />} />
-                                </Route>
-                                <Route path="edit/:id">
-                                  <Route path="" element={<EditTeam />} />
-                                </Route>
-                                <Route path="manageUsers">
-                                  <Route path="" element={<ManageUsers />} />
-                                </Route>
-                                <Route path="enterpriseRegistration">
-                                  <Route
-                                    path=""
-                                    element={<EnterpriseRegistration />}
-                                  />
-                                </Route>
-                              </Route>
-                              <Route path="settings" element={<Settings />} />
-                              <Route path="help" element={<Help />} />
-                              <Route
-                                path="notifications"
-                                element={<Notifications />}
-                              />
-                              <Route path="profile" element={<Profile />} />
-                              <Route
-                                path="joinRetro"
-                                element={<JoinRetroEnterprise />}
-                              />
-                              <Route
-                                path="createRetro"
-                                element={<CreateRetroMain />}
-                              />
-                              <Route
-                                path="uploadImage"
-                                element={<UploadImageScan />}
-                              />
-                              <Route
-                                path="scanImage"
-                                element={<ScanUploadImage />}
-                              />
-                              <Route
-                                path="termAndCondition"
-                                element={<TermsAndConditions />}
-                              />
-                              <Route
-                                path="privatePolicy"
-                                element={<PrivacyPolicy />}
-                              />
-                              <Route path="*" element={<PageNotFound />} />
-                            </Route>
-                            <Route
-                              path="*"
-                              element={<PageNotFound></PageNotFound>}
-                            />
-                          </Routes>
+                            </Routes>
+                          </Box>
                         </Box>
-                      </Box>
-                    </MsalProvider>
-                    <SnackMessage />
-                  </ThemeProvider>
-                </ConfirmProvider>
-              </BoardProvider>
-            </BrowserRouter>
-          </GlobalProvider>
+                      </MsalProvider>
+                      <SnackMessage />
+                    </ThemeProvider>
+                  </ConfirmProvider>
+                </BoardProvider>
+              </BrowserRouter>
+            </GlobalProvider>
           </UserProvider>
         </SocketProvider>
       </ErrorBoundary>
