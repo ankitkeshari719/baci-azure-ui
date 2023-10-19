@@ -37,6 +37,7 @@ import {
   CaptionRegularTypography,
   H5SemiBoldTypography,
 } from '../../components/CustomizedTypography';
+import { UserContext } from '../../contexts/UserContext';
 
 type Props = {
   pulseCheck: any;
@@ -46,6 +47,7 @@ export default function SimplePulseCheck({ pulseCheck }: Props) {
   const navigate = useNavigate();
   const isXsUp = useMediaQuery(theme.breakpoints.between('xs', 'sm'));
   const [{ user, currentRetro }, dispatch] = React.useContext(GlobalContext);
+  const [gUser] = React.useContext(UserContext);
   const { setConfirmAction } = React.useContext(ConfirmContext);
   const {
     state: { fullPulseCheck, users },
@@ -74,7 +76,12 @@ export default function SimplePulseCheck({ pulseCheck }: Props) {
     ) {
       const currentUser: any = users.find(user1 => user1.userId === user.id);
       if (currentUser?.pulseCheckQuestions.length > 0) {
-        navigate('/board/' + currentRetro?.id);
+        if(gUser?.azureUser?.emailId!=undefined){
+          navigate('/enterprise/sessions/board/' + currentRetro?.id);
+        }else{
+          navigate('/board/' + currentRetro?.id);
+        }
+        
         dispatch({
           type: ActionType.SET_SNACK_MESSAGE,
           payload: {
@@ -97,7 +104,11 @@ export default function SimplePulseCheck({ pulseCheck }: Props) {
         parseGPulseCheckState.pulseSubmitState &&
         parseGPulseCheckState?.retroId === currentRetro?.id
       ) {
-        navigate('/board/' + currentRetro?.id);
+        if(gUser?.azureUser?.emailId!=undefined){
+        navigate('/enterprise/sessions/board/' + currentRetro?.id);}
+        else {
+
+          navigate('/board/' + currentRetro?.id);}
         dispatch({
           type: ActionType.SET_SNACK_MESSAGE,
           payload: {
@@ -197,7 +208,10 @@ export default function SimplePulseCheck({ pulseCheck }: Props) {
         'pulseCheckState',
         JSON.stringify(pulseCheckState)
       );
-      navigate('/board/' + currentRetro?.id);
+      if(gUser?.azureUser?.emailId!=undefined){
+        navigate('/enterprise/sessions/board/' + currentRetro?.id);
+      }else{    navigate('/board/' + currentRetro?.id);}
+  
     };
 
     if (someBlank) {
@@ -219,7 +233,10 @@ export default function SimplePulseCheck({ pulseCheck }: Props) {
       text: 'Are you sure? Your voice matters!',
       action: 'Skip',
       onConfirm: () => {
-        navigate('/board/' + currentRetro?.id);
+        if(gUser?.azureUser?.emailId!=undefined){
+          navigate('/enterprise/sessions/board/' + currentRetro?.id);
+        }else{ navigate('/board/' + currentRetro?.id);}
+       
         setConfirmAction(undefined);
       },
     });

@@ -6,6 +6,7 @@ import { Button } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
 import { getRetro } from '../../helpers/msal/services';
 import RetroTimeInputDialog from '../atoms/RetroTimeInputDialog';
+import { UserContext } from '../../contexts/UserContext';
 
 const styles = {
   goToRetroBtn: {
@@ -24,9 +25,14 @@ const StartRetroButton = () => {
   const [selectedValue, setSelectedValue] = React.useState(60);
   const navigate = useNavigate();
   const [global, dispatch] = React.useContext(GlobalContext);
-
+  const [gUser,userDispatch]= React.useContext(UserContext);
   React.useEffect(() => {
     if (retroStarted && retroId != undefined && retroId != '') {
+      if(gUser.azureUser!=undefined&&gUser.azureUser.emailId!=undefined&&gUser.azureUser.emailId!=""){
+        navigate(`/enterprise/sessions/board/${retroId || global.currentRetro?.id}/pulsecheck`);
+      }
+      else
+      if(gUser.azureUser?.emailId!=undefined)
       navigate(`/board/${retroId || global.currentRetro?.id}/pulsecheck`);
     }
   }, [retroStarted]);

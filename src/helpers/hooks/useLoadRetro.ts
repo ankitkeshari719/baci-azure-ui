@@ -9,12 +9,14 @@ import { ErrorContext } from '../../contexts/ErrorContext';
 import { getRetro } from '../msal/services';
 import { useMediaQuery } from '@mui/material';
 import theme from '../theme/theme';
+import { UserContext } from '../../contexts/UserContext';
 
 export default function useLoadRetro() {
   const { id } = useParams();
 
   const { error, setError } = React.useContext(ErrorContext);
   const [global, dispatch] = React.useContext(GlobalContext);
+  const [gUser] = React.useContext(UserContext);
   const isXsUp = useMediaQuery(theme.breakpoints.only('xs'));
   const {
     state: { retroId, users, ended, loading, retroStarted },
@@ -34,6 +36,7 @@ export default function useLoadRetro() {
   };
 
   React.useEffect(() => {
+    console.log("waiting",retroId)
     if (!global?.user?.name && id) {
       navigate('/join/' + id);
       return;
@@ -84,9 +87,15 @@ export default function useLoadRetro() {
               return;
             }
           } else {
-            if (global.currentRetro?.creatorId !== global.user.id)
+            console.log(gUser.azureUser?.emailId,"email")
+            if (global.currentRetro?.creatorId !== global.user.id && global.currentRetro?.creatorId!==gUser.azureUser?.emailId)
+            if(gUser.azureUser?.emailId){ navigate(`/enterprise/sessions/board/${retroId}/waiting`);}
+            else
               navigate(`/board/${retroId}/waiting`);
             else {
+              if(gUser.azureUser?.emailId){  
+                console.log("true in emailID",gUser.azureUser?.emailId)
+                navigate(`/enterprise/sessions/board/${retroId}/startRetro`);}
               navigate(`/board/${retroId}/startRetro`);
             }
             return;

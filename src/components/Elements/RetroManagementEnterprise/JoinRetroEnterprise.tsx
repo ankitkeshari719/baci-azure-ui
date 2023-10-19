@@ -73,7 +73,7 @@ export function JoinRetroEnterprise() {
     if (tempLocalUserData && tempLocalUserData.roleName === BASIC) {
       navigate('/basic/createRetro/');
     } else if (tempLocalUserData && tempLocalUserData.roleName === ENTERPRISE) {
-      navigate('/enterprise/createRetro/');
+      navigate('/enterprise/sessions/createRetro/');
     }
   }
 
