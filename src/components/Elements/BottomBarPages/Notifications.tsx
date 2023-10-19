@@ -259,9 +259,13 @@ export default function Notifications() {
                 />
               </Box>
             )}
-
             {/* Today Notification */}
-            <BodySemiBoldTypography label="Today" style={{marginBottom: '16px'}}/>
+            {allTodayValidNotifications.length > 0 && (
+              <BodySemiBoldTypography
+                label="Today"
+                style={{ marginBottom: '16px' }}
+              />
+            )}{' '}
             {allTodayValidNotifications.map(
               (allValidNotification: any, index: any) => {
                 return (
@@ -863,9 +867,13 @@ export default function Notifications() {
                 );
               }
             )}
-
             {/* Previous Notification */}
-            <BodySemiBoldTypography label="Previous" style={{marginTop: '16px'}}/>
+            {allPreviousValidNotifications.length > 0 && (
+              <BodySemiBoldTypography
+                label="Previous"
+                style={{ marginTop: '16px' }}
+              />
+            )}
             {allPreviousValidNotifications.map(
               (allValidNotification: any, index: any) => {
                 return (
