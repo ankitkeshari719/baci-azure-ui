@@ -33,6 +33,8 @@ import {
 } from '../../components/CustomizedTypography';
 import { ContainedButton, TextButton } from '../../components';
 import { LazyLoadImage } from 'react-lazy-load-image-component';
+import { UserContext } from '../../contexts/UserContext';
+import { BoardActionType } from '../../helpers/statemachine/BoardStateMachine';
 
 const AVATAR_CHARACTER_LIMIT = 30;
 
@@ -75,6 +77,7 @@ const styles = {
 
 export function JoinRetro() {
   const [global, dispatch] = React.useContext(GlobalContext);
+  const [gUser] = React.useContext(UserContext);
   const {
     state: { users, retroId, retroStarted, ended, retroName },
     commitAction,
@@ -120,7 +123,8 @@ export function JoinRetro() {
     if (
       !global.user.id ||
       global.user.id == undefined ||
-      global.user.id == null
+      global.user.id == null ||
+      gUser.azureUser?.emailId == undefined
     ) {
       useAzureAuth;
     } else {
@@ -130,6 +134,7 @@ export function JoinRetro() {
         type: ActionType.SET_LOADING,
         payload: { loadingFlag: true },
       });
+
       joinRetro(true).then(
         res => {
           dispatch({
@@ -149,7 +154,7 @@ export function JoinRetro() {
     } else {
       navigatorFunction();
     }
-  }, [users, global?.user?.id]);
+  }, [users, global?.user?.id, gUser?.azureUser?.emailId != undefined]);
 
   const loadRetroDetails = async () => {
     let foundRetro = await retro.getByHumanId(humanId);
@@ -166,6 +171,7 @@ export function JoinRetro() {
 
   const setName = () => {
     sessionStorage.removeItem('pulseCheckState');
+    console.log('inSetName');
     if (userName !== '' && selectedAvatar !== '') {
       dispatch({
         type: ActionType.SET_LOADING,
@@ -191,9 +197,20 @@ export function JoinRetro() {
           });
           if (retro) {
             if (global.currentRetro?.creatorId === global.user?.id) {
-              navigate('/board/' + retro.id + '/startRetro');
+              if (gUser?.azureUser?.emailId != undefined) {
+                navigate(
+                  '/enterprise/sessions/board/' + retro.id + '/startRetro'
+                );
+              } else {
+                navigate('/board/' + retro.id + '/startRetro');
+              }
             } else {
-              navigate('/board/' + retro.id + '/waiting');
+              console.log('waiting in Join Retro');
+              if (gUser?.azureUser?.emailId != undefined) {
+                navigate('/enterprise/sessions/board/' + retro.id + '/waiting');
+              } else {
+                navigate('/board/' + retro.id + '/waiting');
+              }
 
               setCaptureName(false);
             }
@@ -204,7 +221,11 @@ export function JoinRetro() {
           type: ActionType.SET_LOADING,
           payload: { loadingFlag: false },
         });
-        navigate('/board/' + global.currentRetro?.id);
+        if (gUser?.azureUser?.emailId != undefined) {
+          navigate('/board/' + global.currentRetro?.id);
+        } else {
+          navigate('/enterprise/sessions/board/' + global.currentRetro?.id);
+        }
         setCaptureName(false);
       }
     } else {
@@ -233,29 +254,56 @@ export function JoinRetro() {
 
     setUserName(e);
   };
+  const saveAndProcessAction = async (
+    actionName: BoardActionType,
+    parameters: any
+  ) => {
+    await commitAction(actionName as BoardActionType, {
+      parameters,
+      userId: global.user.id,
+    });
+  };
 
   const navigatorFunction = (): any => {
+    console.log('global navigator function');
     if (
       retroId != undefined &&
       retroId != '' &&
       retroId == global?.currentRetro?.id &&
-      global.user.id != ''
+      (global.user.id != '' || gUser.azureUser?.emailId != undefined)
     ) {
+      if (gUser.azureUser?.emailId != undefined) {
+      }
+      console.log(global.user.id, 'userId', users);
       const currentUser: any = users.find(
         user => user.userId === global.user.id
       );
       if (currentUser) {
         const userTypeValue: number =
-          global?.user?.id == global.currentRetro?.creatorId
+          gUser.azureUser?.emailId != undefined
+            ? gUser?.azureUser?.emailId == global.currentRetro?.creatorId
+              ? UserTypeArray[1].id
+              : UserTypeArray[0].id
+            : global?.user?.id == global.currentRetro?.creatorId
             ? UserTypeArray[1].id
             : UserTypeArray[0].id;
+
         dispatch({
           type: ActionType.SET_USER,
           payload: {
             user: {
-              id: currentUser.userId,
-              name: currentUser.userNickname,
-              avatar: currentUser.avatar,
+              id:
+                gUser.azureUser?.emailId != undefined
+                  ? gUser.azureUser?.emailId
+                  : currentUser.userId,
+              name:
+                gUser.azureUser?.emailId != undefined
+                  ? gUser.azureUser?.firstName + ' ' + gUser.azureUser?.lastName
+                  : currentUser.userNickname,
+              avatar:
+                gUser.azureUser?.emailId != undefined
+                  ? gUser.azureUser?.selectedAvatar
+                  : currentUser.avatar,
               userType: userTypeValue,
             },
           },
@@ -263,18 +311,87 @@ export function JoinRetro() {
 
         if (ended || retroStarted) {
           if (ended && currentUser.userId == global.currentRetro?.creatorId) {
-            navigate('/report/' + global.currentRetro?.id);
+            if (gUser?.azureUser?.emailId != undefined) {
+              navigate(
+                '/enterprise/sessions/report/' + global.currentRetro?.id
+              );
+            } else {
+              navigate('/report/' + global.currentRetro?.id);
+            }
           } else {
-            if (currentUser?.pulseCheckQuestions?.length > 0)
-              navigate('/board/' + global.currentRetro?.id);
-            else navigate('/board/' + global.currentRetro?.id + '/pulseCheck');
+            if (currentUser?.pulseCheckQuestions?.length > 0) {
+              if (gUser?.azureUser?.emailId != undefined) {
+                navigate(
+                  '/enterprise/sessions/board/' + global.currentRetro?.id
+                );
+              } else navigate('/board/' + global.currentRetro?.id);
+            } else {
+              if (gUser?.azureUser?.emailId != undefined) {
+                navigate(
+                  '/enterprise/sessions/board/' +
+                    global.currentRetro?.id +
+                    '/pulseCheck'
+                );
+              } else
+                navigate('/board/' + global.currentRetro?.id + '/pulseCheck');
+            }
           }
         } else {
-          if (currentUser.userId == global.currentRetro?.creatorId && !isXsUp) {
-            navigate('/board/' + global.currentRetro?.id + '/startRetro');
+          if (gUser?.azureUser?.emailId != undefined) {
+            if (
+              currentUser.userId == global.currentRetro?.creatorId &&
+              !isXsUp
+            ) {
+              navigate(
+                '/enterprise/sessions/board/' +
+                  global.currentRetro?.id +
+                  '/startRetro'
+              );
+            } else {
+              navigate('/board/' + global.currentRetro?.id + '/waiting');
+            }
           } else {
-            navigate('/board/' + global.currentRetro?.id + '/waiting');
+            if (
+              currentUser.userId == global.currentRetro?.creatorId &&
+              !isXsUp
+            ) {
+              navigate(
+                '/enterprise/sessions/board/' +
+                  global.currentRetro?.id +
+                  '/startRetro'
+              );
+            } else {
+              navigate('/board/' + global.currentRetro?.id + '/waiting');
+            }
           }
+        }
+      } else {
+        if (gUser.azureUser?.emailId != undefined) {
+          const userTypeValue: number =
+            global?.user?.id == global.currentRetro?.creatorId
+              ? UserTypeArray[1].id
+              : UserTypeArray[0].id;
+          dispatch({
+            type: ActionType.SET_PREFERRED_NICKNAME,
+            payload: {
+              preferredNickname:
+                gUser.azureUser?.firstName + ' ' + gUser.azureUser?.lastName,
+              avatar: gUser.azureUser?.selectedAvatar,
+              userType: userTypeValue,
+            },
+          });
+          saveAndProcessAction(BoardActionType.JOIN_RETRO, {
+            userNickname:
+              gUser.azureUser?.firstName + ' ' + gUser.azureUser?.lastName,
+            avatar: gUser.azureUser?.selectedAvatar,
+            isMobile: window.innerWidth < 700,
+          }).then(() => {
+            navigate(
+              '/enterprise/sessions/board/' +
+                global.currentRetro?.id +
+                '/pulseCheck'
+            );
+          });
         }
       }
     }

@@ -122,8 +122,8 @@ export default function App({ instance }: AppProps) {
                           {!isXsUp && <LeftBar />}
                           <Box
                             display="flex"
-                            // width={isDisplay ? 'calc(100% - 72px)' : '100%'}
-                            width={'calc(100% - 72px)'}
+                            width={isDisplay ? 'calc(100% - 72px)' : '100%'}
+                            // width={'calc(100% - 72px)'}
                           >
                             <Routes>
                               <Route
@@ -466,16 +466,6 @@ export default function App({ instance }: AppProps) {
                                 />
 
                                 <Route
-                                  path="join/:id"
-                                  element={<JoinRetro></JoinRetro>}
-                                />
-                                {/* retro Data */}
-                                <Route
-                                  path="create"
-                                  element={<CreateRetroMain></CreateRetroMain>}
-                                />
-
-                                <Route
                                   path="termAndCondition"
                                   element={
                                     <TermsAndConditions></TermsAndConditions>
@@ -492,6 +482,12 @@ export default function App({ instance }: AppProps) {
                                 <Route
                                   path="offboarding"
                                   element={<Offboarding></Offboarding>}
+                                />
+
+                                {/* retro Data */}
+                                {/* <Route
+                                  path="create"
+                                  element={<CreateRetroMain></CreateRetroMain>}
                                 />
                                 <Route path="board" element={<MainContent />}>
                                   <Route
@@ -525,7 +521,7 @@ export default function App({ instance }: AppProps) {
                                 <Route
                                   path="jiraCallback/"
                                   element={<JiraCallback />}
-                                />
+                                /> */}
 
                                 <Route
                                   path="dashboard"
@@ -640,10 +636,60 @@ export default function App({ instance }: AppProps) {
                                     }
                                   />
                                 </Route>
-                                <Route
-                                  path="sessions"
-                                  element={<SessionsMainContainer />}
-                                />
+                                <Route path="sessions/">
+                                  <Route
+                                    path=""
+                                    element={
+                                      <SessionsMainContainer></SessionsMainContainer>
+                                    }
+                                  />
+
+                                  <Route
+                                    path="create"
+                                    element={
+                                      <CreateRetroMain></CreateRetroMain>
+                                    }
+                                  />
+                                  <Route
+                                    path="join/:id"
+                                    element={<JoinRetro></JoinRetro>}
+                                  />
+                                  <Route path="board" element={<MainContent />}>
+                                    <Route
+                                      path=":id/waiting"
+                                      element={
+                                        <ParticipantWaitingPage></ParticipantWaitingPage>
+                                      }
+                                    />
+                                    <Route
+                                      path=":id/pulsecheck"
+                                      element={<PulseCheckMain />}
+                                    />
+                                    <Route path=":id" element={<Board />} />
+                                    <Route
+                                      path=":id/feedback"
+                                      element={<Feedback />}
+                                    />
+                                    <Route
+                                      path=":id/startRetro"
+                                      element={<StartRetro></StartRetro>}
+                                    />
+                                  </Route>
+                                  <Route
+                                    path="report/:id"
+                                    element={<SummaryReportMain />}
+                                  />
+                                  <Route
+                                    path="retroisfinished"
+                                    element={
+                                      <RetroIsFinished></RetroIsFinished>
+                                    }
+                                  />
+                                  <Route
+                                    path="jiraCallback/"
+                                    element={<JiraCallback />}
+                                  />
+                                </Route>
                                 <Route path="templates/">
                                   <Route path="retroListTemplate/">
                                     <Route

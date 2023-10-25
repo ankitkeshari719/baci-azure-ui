@@ -86,7 +86,12 @@ function BoardProvider(props: ComponentProps<any>) {
     socket.on('connect_error', () => {
       console.log('------- socket error -------');
       setError('error : Socket disconnected');
+      
     });
+    socket.on('connect',()=>{
+      setState({ ...state, disconnected: false });
+      setError("");
+    })
     socket.on('disconnect', () => {
       console.log('------- socket disconnected -------');
       setState({ ...state, disconnected: true });

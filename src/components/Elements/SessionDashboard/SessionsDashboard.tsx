@@ -58,7 +58,8 @@ interface Column {
     | 'teamName'
     | 'retroStatus'
     | 'teamDepartment'
-    | 'teamId';
+    | 'teamId'
+    |'selectedFacilitator';
   label: string;
   minWidth?: number;
   align?: 'right';
@@ -116,7 +117,7 @@ const StyledTableRow = styled(TableRow)(({ theme }) => ({
 export default function SessionDashboard() {
   const [displayJiraRows, setDisplayJiraRows] = React.useState<any>([]);
   const [global, dispatch] = React.useContext(GlobalContext);
-  const [gUser,userDispatch]= React.useContext(UserContext);
+  const [gUser, userDispatch] = React.useContext(UserContext);
   const [page, setPage] = React.useState(0);
   const [rowsPerPage, setRowsPerPage] = React.useState(10);
   const [searchedVal, setSearchedVal] = React.useState('');
@@ -165,6 +166,7 @@ export default function SessionDashboard() {
       setLoading(true);
       await getSessionsDataForTable(chartInput).then(
         res => {
+          console.log(res.data,"data")
           if (res.data.length > 0) {
             let actionsArray: any[] = [];
             res.data.forEach((action: any) => {
@@ -205,7 +207,7 @@ export default function SessionDashboard() {
       type: ActionType.CHART_END_DATE,
       payload: { endDate: event },
     });
-    
+
     userDispatch({
       type: UserActionType.CHART_END_DATE,
       payload: { endDate: event },
@@ -338,7 +340,7 @@ export default function SessionDashboard() {
               if (location.pathname.includes('basic')) {
                 navigate('/basic/create');
               } else if (location.pathname.includes('enterprise'))
-                navigate('/enterprise/create');
+                navigate('/enterprise/sessions/create');
             }}
           >
             <PlusIcon width={'24px'} style={{ marginRight: '15px' }} />
@@ -501,13 +503,21 @@ export default function SessionDashboard() {
                                     <Button
                                       variant="contained"
                                       sx={{ borderRadius: '24px' }}
+                                      onClick={()=>navigate('/enterprise/sessions/join/'+row['humanId'])}
+                                      disabled={row['selectedFacilitator']!==gUser.azureUser?.emailId&&row['creatorId']!==gUser.azureUser?.emailId}
                                     >
                                       START SESSION
                                     </Button>
                                   ) : value == 'ended' ? (
                                     <Button>VIEW SUMMARY</Button>
                                   ) : (
-                                    <></>
+                                    <Button
+                                      variant="contained"
+                                      sx={{ borderRadius: '24px' }}
+                                      onClick={()=>{navigate('/enterprise/sessions/join/'+row['humanId'])}}
+                                    >
+                                      JOIN RETRO
+                                    </Button>
                                   )}
                                 </TableCell>
                               );
