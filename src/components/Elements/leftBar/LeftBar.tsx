@@ -216,10 +216,11 @@ const LeftBar = () => {
           >
             <img src="/../images/r_MenuHeader.png" style={{ width: '56px' }} />
           </Box>
+       
           {menuArray.map((menu, index) => {
             {
-              let a = menu.isVisibleToBasic ? (
-                <Tooltip title={menu.label} key={menu.label} placement="right">
+              // let a = menu.isVisibleToBasic ? (
+             return   <Tooltip title={menu.label} key={menu.label} placement="right">
                   <menu.icon
                     className={
                       menu.label == selectedMenu
@@ -248,10 +249,10 @@ const LeftBar = () => {
                     onMouseLeave={() => {}}
                   />
                 </Tooltip>
-              ) : (
-                <></>
-              );
-              return a;
+              // ) : (
+              //   <></>
+              // );
+              // return a;
             }
           })}
         </Box>

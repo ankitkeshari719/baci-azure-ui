@@ -11,11 +11,13 @@ import {
 } from '../../CustomizedTypography';
 import commonStyles from '../../../style.module.scss';
 import { ContainedButtonWithIcon } from '../../CustomizedButton/ContainedButtonWithIcon';
-import { getUserByEmailId, updateUser } from '../../../helpers/msal/services';
+import { connectJira, getUserByEmailId, updateUser } from '../../../helpers/msal/services';
 import { GlobalContext, ActionType } from '../../../contexts/GlobalContext';
+import { UserActionType, UserContext } from '../../../contexts/UserContext';
 
 export default function Settings() {
   const [global, dispatch] = React.useContext(GlobalContext);
+  const [gUser, userDispatch] = React.useContext(UserContext);
   const localUserData = localStorage.getItem('userData');
   const tempLocalUserData = localUserData && JSON.parse(localUserData);
 
@@ -77,6 +79,16 @@ export default function Settings() {
       },
       err => {
         console.log('err', err);
+      }
+    );
+  };
+  const connect = async () => {
+    await connectJira("" as string).then(
+      (res: any) => {
+        window.location.href = res.response;
+      },
+      error => {
+        console.log('error', error);
       }
     );
   };
@@ -219,7 +231,7 @@ export default function Settings() {
           />
           <ContainedButtonWithIcon
             id={'connect_jira_button_desktop'}
-            label={'Connect Jira Account'}
+            label={gUser.jiraCode==""?'Connect Jira Account':"Disconnect"}
             size={'medium'}
             iconPath="/svgs/jira_icon.svg"
             style={{
@@ -227,7 +239,10 @@ export default function Settings() {
               marginTop: '40px !important',
               textAlign: 'center',
             }}
-            onClick={() => console.log('Setting JIRA')}
+            onClick={() => gUser.jiraCode==""? connect():userDispatch({
+              type: UserActionType.SET_JIRA_CODE,
+              payload: { jiraCode: "" },
+            })}
           />
         </Paper>
       </Box>

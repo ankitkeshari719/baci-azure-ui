@@ -17,6 +17,13 @@ import { NONE, VALUE_ASC, VALUE_DSC, VOTES_ASC, VOTES_DSC } from './const';
 import ActionSubToolbar from './ActionSubToolbar';
 import DialogWithDyanamicData from '../Utils/Dialogs/DialogWithDyanamicData';
 import MessageForParticipant from './MessageForParticipant';
+import {
+  createJiraIssue,
+  listJiraMeta,
+  listJiraProjects,
+} from '../../helpers/msal/services';
+import { UserActionType, UserContext } from '../../contexts/UserContext';
+import { RocketLaunchIcon } from '@heroicons/react/24/solid';
 
 export default function ActionMainContainer() {
   const {
@@ -56,6 +63,8 @@ export default function ActionMainContainer() {
     cancelLabel: '',
   });
 
+  const [gUser, userDispatch] = React.useContext(UserContext);
+  const [jiraProjects, setJiraProjects] = React.useState([]);
   React.useEffect(() => {
     let tempActions = actionsData.actions.map(action => {
       action.checked = false;
@@ -499,11 +508,79 @@ export default function ActionMainContainer() {
     });
   };
 
+  React.useEffect(() => {
+    if (global.jiraCode != '') loadJiraProjects();
+  }, [global.jiraCode]);
+
+  // JiraAction
+
+  const loadJiraProjects = async () => {
+    console.log('loadJiraProjects');
+    await listJiraProjects(global.jiraCode as string).then(
+      async (res: any) => {
+        console.log(res, 'listJiraProjects');
+        if (res.response == 'Unauthorized') {
+          dispatch({
+            type: ActionType.SET_JIRA_CODE,
+            payload: { jiraCode: '' },
+          });
+          userDispatch({
+            type: UserActionType.SET_JIRA_CODE,
+            payload: { jiraCode: '' },
+          });
+        }
+        var jiraProj = res.response;
+   
+        var projects: any = [];
+        projects.push({ label: 'Select JIRA Project' });
+        for (let i = 0; i < jiraProj.length; i++) {
+          var project: any = {
+            label: jiraProj[i].name,
+            leftIcon: <RocketLaunchIcon height="18px" />,
+            rightIcon: <img src="/svgs/RightArrow.svg" />,
+            id: jiraProj[i].id,
+            // callback: () => setShowDialog(true)
+            items: [],
+          };
+          await listJiraMeta(global.jiraCode as string, jiraProj[i].id).then(
+            (res: any) => {
+              console.log(res.response);
+              res.response.forEach((item: any) => {
+                var exportItem: any = {
+                  label: item.name,
+                  id: item.id,
+                  callback: () =>
+                    createJiraIssue(jiraProj[i].id, item.id, '', 'asdfa'),
+                };
+                project.items.push(exportItem);
+              });
+              // return res.response;
+            },
+            (error: any) => {
+              console.log('error', error);
+              return [];
+            }
+          );
+
+          projects.push(project);
+        }
+
+        setJiraProjects(projects);
+        console.log(projects, 'projects');
+        return projects;
+      },
+      (error: any) => {
+        console.log('error', error);
+        return [];
+      }
+    );
+  };
+
   return (
     <Box
       className="actionsContainer"
       sx={{
-        height: false    
+        height: false
           ? 'auto'
           : isXsUp
           ? 'calc(var(--app-height) - 115px)'
@@ -602,6 +679,7 @@ export default function ActionMainContainer() {
                   }
                   removeAction={removeSelectedAction}
                   assignAction={assignAction}
+                  jiraProjects={jiraProjects}
                 />
               )}
             </>
@@ -630,6 +708,7 @@ export default function ActionMainContainer() {
                   }
                   removeAction={removeSelectedAction}
                   assignAction={assignAction}
+                  jiraProjects={jiraProjects}
                 />
               )}
             </>

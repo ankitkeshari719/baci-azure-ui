@@ -51,6 +51,7 @@ type Props = {
   assignAction: (ids: string[], assigneeId: string) => void;
 
   isOtherParticipantAction?: boolean;
+  jiraProjects:any[]
 };
 
 export default function ActionItem({
@@ -65,13 +66,14 @@ export default function ActionItem({
   removeAction,
   assignAction,
   isOtherParticipantAction,
+  jiraProjects
 }: Props) {
   const {
     state: { ended, users, actionsData },
     commitAction,
   } = React.useContext(BoardContext);
   const [global, dispatch] = React.useContext(GlobalContext);
-  const [gUser,userDispatch]= React.useContext(UserContext);
+  const [gUser, userDispatch] = React.useContext(UserContext);
   const labelId = `action-label-${action.id}`;
 
   const [isMouseHover, setIsMouseHover] = React.useState<boolean>(false);
@@ -88,7 +90,28 @@ export default function ActionItem({
     null
   );
   const openMainMenu = Boolean(mainAnchorEl);
-  const [jiraProjects, setJiraProjects] = React.useState<any>([]);
+  // const [jiraProjects, setJiraProjects] = React.useState<any>([
+  //   { label: 'Select JIRA Project', disabled },
+  //   {
+  //     label: 'Project 1',
+  //     leftIcon: <RocketLaunchIcon height="18px" />,
+  //     rightIcon: <img src="/svgs/RightArrow.svg" />,
+  //     callback: () => setShowDialog(true),
+  //     items: [
+  //       { label: 'Export as...', disabled },
+  //       {
+  //         label: 'Task',
+  //         leftIcon: <CheckCircleIcon height="18px" />,
+  //       },
+  //       {
+  //         label: 'Story',
+  //         leftIcon: <BookmarkIcon height="18px" />,
+  //       },
+  //       { label: 'Bug', leftIcon: <BugAntIcon height="18px" /> },
+  //       { label: 'Epic', leftIcon: <BoltIcon height="18px" /> },
+  //     ],
+  //   },
+  // ]);
 
   // For Users Menu
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
@@ -225,7 +248,7 @@ export default function ActionItem({
       }
     );
   };
-  
+
   const functionToGetArray = () => {
     const items: any = [];
     users.map((user, index) => {
@@ -242,23 +265,23 @@ export default function ActionItem({
           ></LazyLoadImage>
         ),
         callback: () => handleAssign,
-        items: [
-          {
-            label: '   Edit   ',
-            leftIcon: (
-              <Icons.Pencil
-                size={18}
-                color="#676767"
-                style={{
-                  cursor: 'unset',
-                }}
-              />
-            ),
-            callback: () => (
-              openEditActionOption(action), handleMainMenuClose()
-            ),
-          },
-        ],
+        // items: [
+        //   {
+        //     label: '   Edit   ',
+        //     leftIcon: (
+        //       <Icons.Pencil
+        //         size={18}
+        //         color="#676767"
+        //         style={{
+        //           cursor: 'unset',
+        //         }}
+        //       />
+        //     ),
+        //     callback: () => (
+        //       openEditActionOption(action), handleMainMenuClose()
+        //     ),
+        //   },
+        // ],
       };
 
       items.push(userItem);
@@ -280,27 +303,21 @@ export default function ActionItem({
     return items;
   };
 
-  const getJiraUsers= async () => {
+  const getJiraUsers = async () => {
     // manageActions.map((action: any, index: number) => {
-      getJiraUserList(
-   
-        global.jiraCode as string,
-       
-      ).then(
-        (res: any) => {
-          return res.response;
-        },
-        (error: any) => {
-          console.log('error', error);
-          return [];
-        }
-      );
+    getJiraUserList(global.jiraCode as string).then(
+      (res: any) => {
+        return res.response;
+      },
+      (error: any) => {
+        console.log('error', error);
+        return [];
+      }
+    );
     // });
-
   };
 
-
-  const menuItemsData: any = {
+  const [menuItemsData, setMenuItemsData] = React.useState<any>({
     label:
       action?.assigneeAvatar === '' || action.assigneeAvatar === undefined ? (
         <LazyLoadImage
@@ -372,22 +389,22 @@ export default function ActionItem({
         callback: handleUsersMenuClick,
       },
 
-      {
-        label:"  Get List of USERS",
-        leftIcon:(
-          <Icons.UserCircleOutline
-            size={18}
-            color="#676767"
-            // style={{
-            //   cursor: 'unset',
-            // }}
-          />
-        ),
-        rightIcon: <img src="/svgs/RightArrow.svg" />,
-        // items: functionToGetArray(),
-        callback: getJiraUsers,
+      // {
+      //   label:"  Get List of USERS",
+      //   leftIcon:(
+      //     <Icons.UserCircleOutline
+      //       size={18}
+      //       color="#676767"
+      //       // style={{
+      //       //   cursor: 'unset',
+      //       // }}
+      //     />
+      //   ),
+      //   rightIcon: <img src="/svgs/RightArrow.svg" />,
+      //   // items: functionToGetArray(),
+      //   callback: getJiraUsers,
 
-      },
+      // },
 
       {
         label: '    Export to JIRA  ',
@@ -407,28 +424,7 @@ export default function ActionItem({
                   callback: () => setShowDialog(true),
                 },
               ]
-            : [
-                { label: 'Select JIRA Project', disabled },
-                {
-                  label: 'Project 1',
-                  leftIcon: <RocketLaunchIcon height="18px" />,
-                  rightIcon: <img src="/svgs/RightArrow.svg" />,
-                  callback: () => setShowDialog(true),
-                  items: [
-                    { label: 'Export as...', disabled },
-                    {
-                      label: 'Task',
-                      leftIcon: <CheckCircleIcon height="18px" />,
-                    },
-                    {
-                      label: 'Story',
-                      leftIcon: <BookmarkIcon height="18px" />,
-                    },
-                    { label: 'Bug', leftIcon: <BugAntIcon height="18px" /> },
-                    { label: 'Epic', leftIcon: <BoltIcon height="18px" /> },
-                  ],
-                },
-              ],
+            : jiraProjects,
         callback: handleUsersMenuClick,
         // global.jiracode
       },
@@ -449,35 +445,71 @@ export default function ActionItem({
         },
       },
     ],
-  };
+  });
 
-  React.useEffect(() => {
-    if (global.jiraCode != '') setJiraProjects(loadJiraProjects());
-  }, [global.jiraCode]);
-  //load jira projects
-  const loadJiraProjects = async (): Promise<string[]> => {
-    return await listJiraProjects(global.jiraCode as string).then(
-      (res: any) => {
-        if (res.status == 401) {
-          dispatch({
-            type: ActionType.SET_JIRA_CODE,
-            payload: { jiraCode: '' },
-          });
-          userDispatch({
-            type: UserActionType.SET_JIRA_CODE,
-            payload: { jiraCode: '' },
-          });
-        }
+  // React.useEffect(() => {
+  //   if (global.jiraCode != '') loadJiraProjects();
+  // }, [global.jiraCode]);
+  // //load jira projects
+  // const loadJiraProjects = async (): Promise<string[]> => {
+  //   return await listJiraProjects(global.jiraCode as string).then(
+  //     async (res: any) => {
+  //       console.log(res, 'listJiraProjects');
+  //       var jiraProj = res.response;
+  //       if (res.status == 401) {
+  //         dispatch({
+  //           type: ActionType.SET_JIRA_CODE,
+  //           payload: { jiraCode: '' },
+  //         });
+  //         userDispatch({
+  //           type: UserActionType.SET_JIRA_CODE,
+  //           payload: { jiraCode: '' },
+  //         });
+  //       }
+  //       var projects: any = [];
+  //       projects.push({ label: 'Select JIRA Project', disabled });
+  //       for (let i = 0; i < jiraProj.length; i++) {
+  //         var project: any = {
+  //           label: jiraProj[i].name,
+  //           leftIcon: <RocketLaunchIcon height="18px" />,
+  //           rightIcon: <img src="/svgs/RightArrow.svg" />,
+  //           id: jiraProj[i].id,
+  //           // callback: () => setShowDialog(true)
+  //           items: [],
+  //         };
+  //         await listJiraMeta(global.jiraCode as string, jiraProj[i].id).then(
+  //           (res: any) => {
+  //             console.log(res.response);
+  //             res.response.forEach((item: any) => {
+  //               var exportItem: any = {
+  //                 label: item.name,
+  //                 id: item.id,
+  //                 callback: () =>
+  //                   createJiraIssue(jiraProj[i].id, item.id, '', 'asdfa'),
+  //               };
+  //               project.items.push(exportItem);
+  //             });
+  //             // return res.response;
+  //           },
+  //           (error: any) => {
+  //             console.log('error', error);
+  //             return [];
+  //           }
+  //         );
 
-        setJiraProjects(res.response);
-        return res.response;
-      },
-      (error: any) => {
-        console.log('error', error);
-        return [];
-      }
-    );
-  };
+  //         projects.push(project);
+  //       }
+
+  //       setJiraProjects(projects);
+  //       console.log(projects, 'projects');
+  //       return projects;
+  //     },
+  //     (error: any) => {
+  //       console.log('error', error);
+  //       return [];
+  //     }
+  //   );
+  // };
   //load jira meta data
   const loadJiraMeta = async (projectId: string): Promise<string[]> => {
     return await listJiraMeta(global.jiraCode as string, projectId).then(

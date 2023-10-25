@@ -98,7 +98,7 @@ const StartRetroButton = () => {
 
   return (
     <>
-      {global?.currentRetro?.creatorId === global?.user?.id && (
+      {(global?.currentRetro?.creatorId === global?.user?.id) ||(global?.currentRetro?.selectedFacilitator === global?.user?.id) && (
         <>
           <Button
             variant="outlined"
