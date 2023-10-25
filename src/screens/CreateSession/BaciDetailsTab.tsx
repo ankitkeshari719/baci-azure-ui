@@ -283,7 +283,6 @@ export function BaciDetailsTab({
           disableUnderline: true,
           style: {
             width: '100%',
-            padding: '8px',
             color: 'black',
           }
         }}

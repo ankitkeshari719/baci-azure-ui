@@ -143,7 +143,6 @@ export function CreateSessionWithTemplatePage({
   const callGetUserByEmailId = async (selectedFacilitatorId: any) => {
     await getUserByEmailId(selectedFacilitatorId).then(
       res => {
-       
         setSelectedFacilitatorData(res);
       },
       err => {
@@ -174,7 +173,6 @@ export function CreateSessionWithTemplatePage({
     }
     setRetroName(e);
     localStorage.setItem('sessionName', retroName);
-
   }
 
   // Function to handle Time Frame on change
@@ -194,7 +192,7 @@ export function CreateSessionWithTemplatePage({
   // Function to handle the facilitator selection
   const handleFacilitatorChange = (event: SelectChangeEvent) => {
     setSelectedFacilitator(event.target.value as string);
-    console.log("faciltator:", event.target.value)
+    console.log('faciltator:', event.target.value);
     callGetUserByEmailId(event.target.value);
     setFacilitatorSelectionError('');
   };
@@ -251,7 +249,6 @@ export function CreateSessionWithTemplatePage({
       return;
     }
 
-  
     if (!isLoginUser) {
       // If user is not basic and enterprise
       setActivePanel(nextPanel);
@@ -339,15 +336,15 @@ export function CreateSessionWithTemplatePage({
       setRetroNameError('');
       setIsTimeFrameSet(false);
       await retro
-      .createTemplate(
-        { name: retroName },
-        retroTimeFrame.toISOString(), // Convert Date to ISO string
-        '',
-        userName,
-        selectedAvatar,
-        userType,
-        selectedPulseCheck,
-        mySelectedTemplate
+        .createTemplate(
+          { name: retroName },
+          retroTimeFrame.toISOString(), // Convert Date to ISO string
+          '',
+          userName,
+          selectedAvatar,
+          userType,
+          selectedPulseCheck,
+          mySelectedTemplate
         )
 
         .then(
@@ -417,8 +414,6 @@ export function CreateSessionWithTemplatePage({
         <Box component="div" whiteSpace="normal" className="createRetroText">
           {global.currentRetro?.name} is ready to start
         </Box>
-
-        
       )}
 
       <>
@@ -437,18 +432,18 @@ export function CreateSessionWithTemplatePage({
             isLoginUser={isLoginUser}
           />
           <TeamsDetailsTab
-    activePanel={activePanel}
-    selectedTeam={selectedTeam}
-    handleTeamChange={handleTeamChange}
-    selectedFacilitator={selectedFacilitator}
-    handleFacilitatorChange={handleFacilitatorChange}
-    selectedTeamData={selectedTeamData}
-    selectedFacilitatorData={selectedFacilitatorData}
-    teamSelectionError={teamSelectionError}
-    facilitatorSelectionError={facilitatorSelectionError}
-    onClickBack={onClickBack}
-    onClickNext={onClickNext}
-  />
+            activePanel={activePanel}
+            selectedTeam={selectedTeam}
+            handleTeamChange={handleTeamChange}
+            selectedFacilitator={selectedFacilitator}
+            handleFacilitatorChange={handleFacilitatorChange}
+            selectedTeamData={selectedTeamData}
+            selectedFacilitatorData={selectedFacilitatorData}
+            teamSelectionError={teamSelectionError}
+            facilitatorSelectionError={facilitatorSelectionError}
+            onClickBack={onClickBack}
+            onClickNext={onClickNext}
+          />
         </Box>
       </>
 
