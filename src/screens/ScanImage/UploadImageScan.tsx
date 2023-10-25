@@ -53,18 +53,28 @@ export function UploadImageScan() {
   const [global, dispatch] = React.useContext(GlobalContext);
   const [counter, setCounter] = useState(0);
 
+  let interval: NodeJS.Timeout | undefined;
+
   useEffect(() => {
-    const timer = setInterval(() => {
-      if (counter < 100) {
-        setCounter(counter + 1);
-      } else {
-        clearInterval(timer);
+    if (isLoading) {
+      interval = setInterval(() => {
+        if (counter < 100) {
+          setCounter(counter + 1);
+        }
+      }, 100);
+    } else {
+      if (interval) {
+        clearInterval(interval);
       }
-    }, 1);
+      setCounter(0);
+    }
+
     return () => {
-      clearInterval(timer);
+      if (interval) {
+        clearInterval(interval);
+      }
     };
-  }, [counter]);
+  }, [isLoading, counter]);
 
   const [gUser,userDispatch]= React.useContext(UserContext);
 
@@ -121,13 +131,14 @@ export function UploadImageScan() {
   ];
 
   const recognizeHandwrittenText = async () => {
+    setIsLoading(true);
     if (!selectedFile) {
       alert('Please select an image.');
       return;
     }
     const formData = new FormData();
     formData.append('file', selectedFile);
-    setIsLoading(true);
+   
 
     try {
       const response = await fetch(
@@ -178,6 +189,7 @@ export function UploadImageScan() {
             const dataJson = JSON.stringify(data);
             localStorage.setItem('myData', dataJson);
             setRecognizedText(data);
+            setIsLoading(false);
             navigateToScan();
           
             return data;
@@ -186,7 +198,7 @@ export function UploadImageScan() {
           } else {
             await new Promise(resolve => setTimeout(resolve, 5000));
           }
-          setIsLoading(false);
+         
         } else {
           throw new Error(
             'Error checking operation status. HTTP status: ' +
@@ -198,6 +210,7 @@ export function UploadImageScan() {
         throw error;
       }
     }
+   
   };
 
   const transformData = (apiData: Line[]) => {
@@ -264,58 +277,57 @@ export function UploadImageScan() {
                 >
                   Upload Image or Photo
                 </Box>
-
                 <div
-                  style={{
-                    display: 'flex',
-                    height: '60vh',
-                    width: '100%',
-                    marginTop: '10px',
-                    marginLeft: 'auto',
-                    marginRight: 'auto',
-                    borderRadius: '10px',
-                    justifyContent: 'center',
-                    alignItems: 'center',
-                    transition: 'all 0.3s ease-in-out',
-                    backgroundColor: 'black',
-                    maxWidth: '800px',
-                    position: 'relative',
-                  }}
-                >
-                   {isLoading ? (
-                    <>
-                      <CircularProgress
-                        size={100}
-                        style={{
-                          position: 'absolute',
-                          top: '50%',
-                          left: '50%',
-                          transform: 'translate(-50%, -50%)',
-                        }}
-                        variant="determinate"
-                        value={counter}
-                      />
-                      <Typography
-                        style={{
-                          color: 'white',
-                          position: 'absolute',
-                          top: '50%',
-                          left: '50%',
-                          transform: 'translate(-50%, -50%)',
-                        }}
-                      >
-                        {counter}%
-                      </Typography>
-                      {image && (
-                        <img src={image} alt="Stored" height="325px" />
-                      )}
-                    </>
-                  ) : (
-                    <>
-                      {image && <img src={image} alt="Stored" height="325px" />}
-                    </>
-                  )}
-                </div>
+      style={{
+        display: 'flex',
+        height: '60vh',
+        width: '100%',
+        marginTop: '10px',
+        marginLeft: 'auto',
+        marginRight: 'auto',
+        borderRadius: '10px',
+        justifyContent: 'center',
+        alignItems: 'center',
+        transition: 'all 0.3s ease-in-out',
+        backgroundColor: 'black',
+        maxWidth: '800px',
+        position: 'relative',
+      }}
+    >
+      {isLoading ? (
+        <>
+          <CircularProgress
+            size={100}
+            style={{
+              position: 'absolute',
+              top: '50%',
+              left: '50%',
+              transform: 'translate(-50%, -50%)',
+            }}
+            variant="determinate"
+            value={counter}
+          />
+          <Typography
+            style={{
+              color: 'white',
+              position: 'absolute',
+              top: '50%',
+              left: '50%',
+              transform: 'translate(-50%, -50%)',
+            }}
+          >
+            {counter}%
+          </Typography>
+          {image && (
+            <img src={image} alt="Stored" height="325px" />
+          )}
+        </>
+      ) : (
+        <>
+          {image && <img src={image} alt="Stored" height="325px" />}
+        </>
+      )}
+    </div>
 
 
                 <div
