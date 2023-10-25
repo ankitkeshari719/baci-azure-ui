@@ -1,5 +1,6 @@
-import { Paper, Box } from '@mui/material';
+import { Paper, Box, Link, useMediaQuery } from '@mui/material';
 import React from 'react';
+import BACILogo from '../../assets/img/bacilogobeta.svg';
 
 import commonStyles from '../../style.module.css';
 import {
@@ -12,9 +13,10 @@ import {
 import { useNavigate } from 'react-router-dom';
 import * as Icons from 'heroicons-react';
 import { BASIC, ENTERPRISE } from '../../constants/applicationConst';
-
+import theme from '../../helpers/theme/theme';
 export default function TermsAndConditions() {
   const navigate = useNavigate();
+  const isXsUp = useMediaQuery(theme.breakpoints.only('xs'));
   const localUserData = localStorage.getItem('userData');
   const tempLocalUserData = localUserData && JSON.parse(localUserData);
 
@@ -34,7 +36,7 @@ export default function TermsAndConditions() {
       sx={{
         width: '100%',
         background: '#F9FBFC',
-        padding: '24px',
+        padding: '0px 24px  24px  24px',
         display: 'flex',
         flexDirection: 'column',
         overflowY: 'auto',
@@ -43,9 +45,34 @@ export default function TermsAndConditions() {
       <Box
         sx={{
           width: '100%',
+          height: '64px',
+          display: 'flex',
+          alignItems: 'center',
+          flexDirection: 'row',
+          gap: '8px',
+          borderBottom: '1px solid #E3E3E3',
+          padding: '16px 0px',
+        }}
+      >
+        <Link href="/">
+          <img
+            src={BACILogo}
+            alt="Logo"
+            style={{
+              width: isXsUp ? '53px' : '108px',
+              height: isXsUp ? '18px' : '48px',
+            }}
+          />
+        </Link>
+      </Box>
+
+      <Box
+        sx={{
+          width: '100%',
           display: 'flex',
           flexDirection: 'row',
           alignItems: 'center',
+          marginTop: '16px',
         }}
       >
         <Icons.ArrowCircleLeftOutline

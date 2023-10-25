@@ -235,11 +235,11 @@ function EnterpriseDashboard() {
   };
 
   const navigateToJoinSession = () => {
-    navigate('/enterprise/joinRetro/');
+    navigate('/enterprise/sessions/joinRetro/');
   };
 
   const navigateToCreateSession = () => {
-    navigate('/enterprise/createRetro/');
+    navigate('/enterprise/sessions/createRetro/');
   };
 
   const navigateToUploadImage = () => {

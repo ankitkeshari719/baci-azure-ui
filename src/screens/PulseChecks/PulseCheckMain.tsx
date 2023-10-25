@@ -10,6 +10,7 @@ import { DeploymentPopUp } from '../Utils/Alerts/DeploymentPopUp';
 import theme from '../../helpers/theme/theme';
 import useReRoute from '../../helpers/hooks/useReRoute';
 import useLoadRetro from '../../helpers/hooks/useLoadRetro';
+import { UserContext } from '../../contexts/UserContext';
 
 export default function PulseCheckMain() {
   const navigate = useNavigate();
@@ -18,7 +19,7 @@ export default function PulseCheckMain() {
   const {
     state: { retroId, pulseCheck },
   } = React.useContext(BoardContext);
-
+  const [gUser] = React.useContext(UserContext);
   // Re-Routing rules added
   useReRoute();
 
@@ -27,7 +28,11 @@ export default function PulseCheckMain() {
 
   React.useEffect(() => {
     if (pulseCheck && pulseCheck.id === 'pulse_check_not_req') {
-      navigate(`/board/${retroId || currentRetro?.id}`);
+      if(gUser?.azureUser?.emailId!=undefined){
+      navigate(`/enterprise/sessions/board/${retroId || currentRetro?.id}`)}
+      else{
+        navigate(`/board/${retroId || currentRetro?.id}`)
+      }
     }
   }, []);
 
