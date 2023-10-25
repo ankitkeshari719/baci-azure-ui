@@ -25,15 +25,21 @@ const StartRetroButton = () => {
   const [selectedValue, setSelectedValue] = React.useState(60);
   const navigate = useNavigate();
   const [global, dispatch] = React.useContext(GlobalContext);
-  const [gUser,userDispatch]= React.useContext(UserContext);
+  const [gUser, userDispatch] = React.useContext(UserContext);
   React.useEffect(() => {
     if (retroStarted && retroId != undefined && retroId != '') {
-      if(gUser.azureUser!=undefined&&gUser.azureUser.emailId!=undefined&&gUser.azureUser.emailId!=""){
-        navigate(`/enterprise/sessions/board/${retroId || global.currentRetro?.id}/pulsecheck`);
-      }
-      else
-      if(gUser.azureUser?.emailId!=undefined)
-      navigate(`/board/${retroId || global.currentRetro?.id}/pulsecheck`);
+      if (
+        gUser.azureUser != undefined &&
+        gUser.azureUser.emailId != undefined &&
+        gUser.azureUser.emailId != ''
+      ) {
+        navigate(
+          `/enterprise/sessions/board/${
+            retroId || global.currentRetro?.id
+          }/pulsecheck`
+        );
+      } else if (gUser.azureUser?.emailId != undefined)
+        navigate(`/board/${retroId || global.currentRetro?.id}/pulsecheck`);
     }
   }, [retroStarted]);
 
@@ -89,7 +95,7 @@ const StartRetroButton = () => {
   const handleClose = (value: any) => {
     setOpen(false);
   };
-  
+
   const handleSubmit = (value: any) => {
     setOpen(false);
     setSelectedValue(value);
@@ -98,7 +104,8 @@ const StartRetroButton = () => {
 
   return (
     <>
-      {(global?.currentRetro?.creatorId === global?.user?.id) ||(global?.currentRetro?.selectedFacilitator === global?.user?.id) && (
+      {(global?.currentRetro?.creatorId === global?.user?.id ||
+        global?.currentRetro?.selectedFacilitator === global?.user?.id) && (
         <>
           <Button
             variant="outlined"
