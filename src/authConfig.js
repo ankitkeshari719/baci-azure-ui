@@ -68,6 +68,7 @@ export const msalConfig = {
     postLogoutRedirectUri: 'https://apptest.baci.app/', // Indicates the page to navigate after logout.
     navigateToLoginRequestUrl: false, // If "true", will navigate back to the original request location before processing the auth code response.
   },
+
   cache: {
     cacheLocation: 'sessionStorage', // Configures cache location. "sessionStorage" is more secure, but "sessionStorage" gives you SSO between tabs.
     storeAuthStateInCookie: false, // Set this to "true" if you are having issues on IE11 or Edge
