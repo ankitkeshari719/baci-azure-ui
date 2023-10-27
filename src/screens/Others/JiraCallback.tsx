@@ -11,7 +11,7 @@ import { UserActionType, UserContext } from '../../contexts/UserContext';
 export function JiraCallback() {
   const [searchParams] = useSearchParams();
   const [global, dispatch] = React.useContext(GlobalContext);
-  const [gUser,userDispatch]= React.useContext(UserContext);
+  const [gUser, userDispatch] = React.useContext(UserContext);
   let code = '';
   let state = '';
   code = searchParams.get('code') as string;
@@ -19,9 +19,7 @@ export function JiraCallback() {
   const navigate = useNavigate();
 
   React.useEffect(() => {
-    
     getToken(code);
-   
   }, []);
 
   const getToken = async (code: string) => {
@@ -35,14 +33,18 @@ export function JiraCallback() {
           type: UserActionType.SET_JIRA_CODE,
           payload: { jiraCode: res.response },
         });
-        if(gUser.azureUser?.emailId!=undefined&&!!state){
-          if(!!state){
-            navigate(`/enterprise/settings/` );
-          }
-          else
-          navigate(`/enterprise/sessions/board/` + state);
-        }else
-        navigate(`/board/` + state);
+        console.log(
+          gUser.azureUser?.emailId,
+          '   ',
+          !!state,
+          '---state---',
+          state
+        );
+        if (gUser.azureUser?.emailId ) {
+          if (state) {
+            navigate(`/enterprise/sessions/board/` + state);
+          } else navigate(`/enterprise/settings/`);
+        } else navigate(`/board/` + state);
       },
       error => {
         console.log('error', error);

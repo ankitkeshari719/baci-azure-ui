@@ -510,6 +510,17 @@ export default function ActionMainContainer() {
 
   React.useEffect(() => {
     if (global.jiraCode != '') loadJiraProjects();
+    else {
+      dispatch({
+        type: ActionType.SET_JIRA_CODE,
+        payload: { jiraCode: '' },
+      });
+      userDispatch({
+        type: UserActionType.SET_JIRA_CODE,
+        payload: { jiraCode: '' },
+      });
+    }
+    console.log()
   }, [global.jiraCode]);
 
   // JiraAction
@@ -530,7 +541,7 @@ export default function ActionMainContainer() {
           });
         }
         var jiraProj = res.response;
-   
+
         var projects: any = [];
         projects.push({ label: 'Select JIRA Project' });
         for (let i = 0; i < jiraProj.length; i++) {
@@ -549,12 +560,10 @@ export default function ActionMainContainer() {
                 var exportItem: any = {
                   label: item.name,
                   id: item.id,
-                  callback: () =>
-                    createJiraIssue(jiraProj[i].id, item.id, '', 'asdfa'),
+                  projectData:{projectId:jiraProj[i].id,ticketId:item.id,jiraCode:global?.jiraCode ? global?.jiraCode : ''},
                 };
                 project.items.push(exportItem);
               });
-              // return res.response;
             },
             (error: any) => {
               console.log('error', error);

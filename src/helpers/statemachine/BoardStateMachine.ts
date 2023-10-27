@@ -53,6 +53,7 @@ export enum BoardActionType {
   DELETE_UNCONFIRMED_GROUPS = 'deleteUnconfirmedGroups',
   Add_NEW_ACTION = 'addAction',
   UPDATE_ACTION = 'updateAction',
+  UPDATE_JIRA_ACTION = 'updateJiraAction',
   ASSIGN_ACTION = 'assignAction',
   ADD_REACT_TO_ACTION = 'addReactToAction',
   REMOVE_ACTION = 'removeAction',
@@ -63,7 +64,7 @@ export enum BoardActionType {
   DELETE_ACTION = 'deleteAction',
   POST_MESSAGE_FOR_PARTICIPANTS_FLAG = 'postMessageForParticipantsFlag',
   UPDATE_MESSAGE_FOR_PARTICIPANTS = 'updateMessageForParticipant',
-  UPDATE_RETRO_SUMMARY="updateRetroSummary",
+  UPDATE_RETRO_SUMMARY = 'updateRetroSummary',
 }
 
 export const BOARD_STATE_MACHINE_VERSION = 1;
@@ -598,8 +599,8 @@ export const validateAction = (
         parameters.order,
         userId
       );
-      case BoardActionType.UPDATE_RETRO_SUMMARY:
-        return true;
+    case BoardActionType.UPDATE_RETRO_SUMMARY:
+      return true;
     case BoardActionType.ADD_NEW_CARD:
       return isAddNewCardValid(
         parameters.groupId,
@@ -717,6 +718,8 @@ export const validateAction = (
       return isRemoveActionValid(parameters.id, userId);
     case BoardActionType.UPDATE_ACTION:
       return isUpdateExistingActionValid(parameters.id, parameters.value);
+    case BoardActionType.UPDATE_JIRA_ACTION:
+      return true;
     case BoardActionType.ASSIGN_ACTION:
       return isAssignActionValid(
         parameters.actionIds,
@@ -923,9 +926,7 @@ export const processAction = (
     }
   };
 
-  const updateRetroSummary=()=>{
-
-  }
+  const updateRetroSummary = () => {};
 
   const createGroupAsSuggested = (
     columnId: string,
@@ -1463,6 +1464,22 @@ export const processAction = (
     actionsData.actions = [...newActions];
   };
 
+  const updateJiraId = (id: string, jiraObj: any) => {
+    const newActions = actionsData.actions.map(action => {
+      if (action.id === id) {
+        return {
+          ...action,
+          jiraId: jiraObj.jiraId,
+          jiraUrl: jiraObj.jiraUrl,
+          jiraKey: jiraObj.jiraKey,
+        };
+      }
+      return action;
+    });
+
+    actionsData.actions = [...newActions];
+  };
+
   // Remove existing action
   const removeAction = (id: string) => {
     var newActions = actionsData.actions.filter(x => {
@@ -1589,9 +1606,9 @@ export const processAction = (
         false
       );
       break;
-      case BoardActionType.UPDATE_RETRO_SUMMARY:
-        updateRetroSummary();
-        break;
+    case BoardActionType.UPDATE_RETRO_SUMMARY:
+      updateRetroSummary();
+      break;
     case BoardActionType.ADD_NEW_CARD:
       addNewCard(
         parameters.groupId,
@@ -1737,6 +1754,9 @@ export const processAction = (
       break;
     case BoardActionType.UPDATE_ACTION:
       updateAction(parameters.id, parameters.value);
+      break;
+    case BoardActionType.UPDATE_JIRA_ACTION:
+      updateJiraId(parameters.id, parameters.value);
       break;
     case BoardActionType.ASSIGN_ACTION:
       assignAction(parameters.actionIds, parameters.assigneeId, userId);

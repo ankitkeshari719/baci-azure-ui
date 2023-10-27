@@ -132,6 +132,9 @@ export interface ActionInterface {
   assigneeId: string;
   assigneeName: string;
   assigneeAvatar: string;
+  jiraId?:string;
+  jiraUrl?:string;
+  jiraKey?:string;
   reacts: any[];
   locked?: boolean;
   lockedBy?: string;

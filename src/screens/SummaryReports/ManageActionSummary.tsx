@@ -82,25 +82,25 @@ export default function ManageActionSummary({
     SetOpenHelpPopup(false);
   };
 
-  const createIssue = async () => {
-    manageActions.map((action: any, index: number) => {
-      createJiraIssue(
-        selectedJiraProject,
-        selectedJiraMeta,
-        global.jiraCode as string,
-        action.value
-      ).then(
-        (res: any) => {
-          return res.response;
-        },
-        (error: any) => {
-          console.log('error', error);
-          return [];
-        }
-      );
-    });
-    SetOpenHelpPopup(true);
-  };
+  // const createIssue = async () => {
+  //   manageActions.map((action: any, index: number) => {
+  //     createJiraIssue(
+  //       selectedJiraProject,
+  //       selectedJiraMeta,
+  //       global.jiraCode as string,
+  //       action.value
+  //     ).then(
+  //       (res: any) => {
+  //         return res.response;
+  //       },
+  //       (error: any) => {
+  //         console.log('error', error);
+  //         return [];
+  //       }
+  //     );
+  //   });
+  //   SetOpenHelpPopup(true);
+  // };
 
 
   const loadJiraProjects = async (): Promise<string[]> => {
@@ -196,7 +196,7 @@ export default function ManageActionSummary({
             <Button
               variant="outlined"
               className="submitfeedback"
-              onClick={createIssue}
+              // onClick={createIssue}
             >
               <Typography className="textTypeFour">Create</Typography>
             </Button>
@@ -259,6 +259,9 @@ export default function ManageActionSummary({
           </Col>
         )}
       </Row>
+
+
+      
       {/* Actions to be Taken Section 2*/}
       {manageActions.length === 0 ? (
         // Manage Action when the no. is zero

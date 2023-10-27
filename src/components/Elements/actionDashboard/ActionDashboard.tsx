@@ -54,6 +54,7 @@ import { UserActionType, UserContext } from '../../../contexts/UserContext';
 interface Column {
   id:
     | 'teamName'
+    | 'jiraKey'
     | 'jiraId'
     | 'initialSession'
     | 'action.value'
@@ -182,7 +183,7 @@ export default function ActionDashboard() {
   const [displayJiraRows, setDisplayJiraRows] = React.useState<any>([]);
   const [csvData, setCsvData] = React.useState<any>([]);
   const [global, dispatch] = React.useContext(GlobalContext);
-  const [gUser,userDispatch]= React.useContext(UserContext);
+  const [gUser, userDispatch] = React.useContext(UserContext);
   const [page, setPage] = React.useState(0);
   const [rowsPerPage, setRowsPerPage] = React.useState(10);
   const [searchedVal, setSearchedVal] = React.useState('');
@@ -610,7 +611,7 @@ export default function ActionDashboard() {
                               }}
                             >
                               <a href={row['url']} target="_blank">
-                                {value}
+                                {row['jiraKey'] ? row['jiraKey'] : value}
                               </a>
                             </TableCell>
                           );
@@ -623,41 +624,50 @@ export default function ActionDashboard() {
                                 minWidth: '150px',
                               }}
                             >
-                              <AssigneeDropdown
-                                id={row['action.assigneeId']}
-                                inputIndex={index}
-                                outAssigneeSelected={async valueOut => {
-                                  setSearchedVal('');
-                                  var tempJiraRows = jiraRows;
-                                  var action = '';
-                                  var emailId = '';
-                                  var status = '';
-                                  tempJiraRows.map((obj: any, i: number) => {
-                                    if (index == i) {
-                                      obj[column.id] = valueOut.emailId;
-                                      obj['assigneeName'] = valueOut.name;
-                                      obj['assigneeAvatar'] = valueOut.avatar;
-                                      action = obj;
-                                      emailId = valueOut.emailId;
-                                      status = obj.status;
-                                    }
-                                  });
-                                  callUpdateAction(
-                                    action,
-                                    emailId,
-                                    status,
-                                    tempJiraRows
-                                  );
-                                  // setJiraRows(tempJiraRows);
-                                  // setDisplayJiraRows(tempJiraRows);
+                              <>
+                                {' '}
+                                {row['action.assigneeId'] && (
+                                  <AssigneeDropdown
+                                    id={row['action.assigneeId']}
+                                    inputIndex={index}
+                                    outAssigneeSelected={async valueOut => {
+                                      setSearchedVal('');
+                                      var tempJiraRows = jiraRows;
+                                      var action = '';
+                                      var emailId = '';
+                                      var status = '';
+                                      tempJiraRows.map(
+                                        (obj: any, i: number) => {
+                                          if (index == i) {
+                                            obj[column.id] = valueOut?.emailId;
+                                            obj['assigneeName'] =
+                                              valueOut?.name;
+                                            obj['assigneeAvatar'] =
+                                              valueOut?.avatar;
+                                            action = obj;
+                                            emailId = valueOut?.emailId;
+                                            status = obj?.status;
+                                          }
+                                        }
+                                      );
+                                      callUpdateAction(
+                                        action,
+                                        emailId,
+                                        status,
+                                        tempJiraRows
+                                      );
+                                      // setJiraRows(tempJiraRows);
+                                      // setDisplayJiraRows(tempJiraRows);
 
-                                  // localStorage.setItem(
-                                  //   'actionList',
-                                  //   JSON.stringify(tempJiraRows)
-                                  // );
-                                  //
-                                }}
-                              />
+                                      // localStorage.setItem(
+                                      //   'actionList',
+                                      //   JSON.stringify(tempJiraRows)
+                                      // );
+                                      //
+                                    }}
+                                  />
+                                )}
+                              </>
                             </TableCell>
                           );
                         } else if (column.id == 'status') {

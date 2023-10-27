@@ -1,4 +1,4 @@
-import { Action, Retro, User } from '../types';
+import { Action, ActionInterface, Retro, User } from '../types';
 import { Dayjs } from 'dayjs';
 
 import { API_URL } from '../../constants/FeatureFlags';
@@ -296,7 +296,8 @@ export const createJiraIssue = async (
   projectId: string,
   issueType: string,
   jiraCode: string,
-  description: string
+  description: string,
+  action:any
 ): Promise<any> => {
   let status: any = '';
   const requestOptions = {
@@ -307,6 +308,7 @@ export const createJiraIssue = async (
       issueType,
       access_token: jiraCode,
       description,
+      action
     }),
   };
 
