@@ -8,7 +8,7 @@ import FileUploadOutlinedIcon from '@mui/icons-material/FileUploadOutlined';
 import RotateRightIcon from '@mui/icons-material/RotateRight';
 import CameraAltOutlinedIcon from '@mui/icons-material/CameraAltOutlined';
 import { useNavigate } from 'react-router-dom';
-import CircularProgress from '@mui/material/CircularProgress';
+
 import {
   Dialog,
   DialogActions,
@@ -21,6 +21,7 @@ import {
 } from '@mui/material';
 import { ScanUploadImage } from '../scan/ScanUploadImage';
 import { GlobalContext } from '../../contexts/GlobalContext';
+import CircularProgress from '@mui/material/CircularProgress';
 import { UserContext } from '../../contexts/UserContext';
 
 type Props = {
@@ -49,6 +50,31 @@ export function UploadImageScan() {
   const [fileData, setFileData] = React.useState<Blob | null>(null);
   const [recognizedText, setRecognizedText] = React.useState<string[]>([]);
   const [isLoading, setIsLoading] = React.useState(false);
+  const [global, dispatch] = React.useContext(GlobalContext);
+  const [counter, setCounter] = useState(0);
+
+  let interval: NodeJS.Timeout | undefined;
+
+  useEffect(() => {
+    if (isLoading) {
+      interval = setInterval(() => {
+        if (counter < 100) {
+          setCounter(counter + 1);
+        }
+      }, 100);
+    } else {
+      if (interval) {
+        clearInterval(interval);
+      }
+      setCounter(0);
+    }
+
+    return () => {
+      if (interval) {
+        clearInterval(interval);
+      }
+    };
+  }, [isLoading, counter]);
 
   const [gUser,userDispatch]= React.useContext(UserContext);
 
@@ -105,13 +131,14 @@ export function UploadImageScan() {
   ];
 
   const recognizeHandwrittenText = async () => {
+    setIsLoading(true);
     if (!selectedFile) {
       alert('Please select an image.');
       return;
     }
     const formData = new FormData();
     formData.append('file', selectedFile);
-    setIsLoading(true);
+   
 
     try {
       const response = await fetch(
@@ -164,12 +191,14 @@ export function UploadImageScan() {
             setRecognizedText(data);
             setIsLoading(false);
             navigateToScan();
+          
             return data;
           } else if (responseData.status === 'failed') {
             throw new Error('Recognition operation failed');
           } else {
             await new Promise(resolve => setTimeout(resolve, 5000));
           }
+         
         } else {
           throw new Error(
             'Error checking operation status. HTTP status: ' +
@@ -181,6 +210,7 @@ export function UploadImageScan() {
         throw error;
       }
     }
+   
   };
 
   const transformData = (apiData: Line[]) => {
@@ -247,34 +277,58 @@ export function UploadImageScan() {
                 >
                   Upload Image or Photo
                 </Box>
-
                 <div
-                  style={{
-                    display: 'flex',
-                    height: '60vh', // Set the height to 60% of the viewport height (adjust as needed)
-                    width: '100%', // Set the width to 80% of the parent container (adjust as needed)
-                    marginTop: '10px',
-                    marginLeft: 'auto',
-                    marginRight: 'auto',
-                    borderRadius: '10px',
-                    justifyContent: 'center',
-                    alignItems: 'center',
-                    transition: 'all 0.3s ease-in-out',
-                    backgroundColor: 'black',
-                    maxWidth: '800px', // Set a maximum width to prevent it from becoming too wide on larger screens
-                  }}
-                >
-                  {isLoading ? (
-                    <div className="scanner-container">
-                      <div className="scanning-line"></div>
-                      {image && <img src={image} alt="Stored" height="325px" />}
-                    </div>
-                  ) : (
-                    <>
-                      {image && <img src={image} alt="Stored" height="325px" />}
-                    </>
-                  )}
-                </div>
+      style={{
+        display: 'flex',
+        height: '60vh',
+        width: '100%',
+        marginTop: '10px',
+        marginLeft: 'auto',
+        marginRight: 'auto',
+        borderRadius: '10px',
+        justifyContent: 'center',
+        alignItems: 'center',
+        transition: 'all 0.3s ease-in-out',
+        backgroundColor: 'black',
+        maxWidth: '800px',
+        position: 'relative',
+      }}
+    >
+      {isLoading ? (
+        <>
+          <CircularProgress
+            size={100}
+            style={{
+              position: 'absolute',
+              top: '50%',
+              left: '50%',
+              transform: 'translate(-50%, -50%)',
+            }}
+            variant="determinate"
+            value={counter}
+          />
+          <Typography
+            style={{
+              color: 'white',
+              position: 'absolute',
+              top: '50%',
+              left: '50%',
+              transform: 'translate(-50%, -50%)',
+            }}
+          >
+            {counter}%
+          </Typography>
+          {image && (
+            <img src={image} alt="Stored" height="325px" />
+          )}
+        </>
+      ) : (
+        <>
+          {image && <img src={image} alt="Stored" height="325px" />}
+        </>
+      )}
+    </div>
+
 
                 <div
                   style={{

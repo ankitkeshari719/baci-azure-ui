@@ -1,0 +1,464 @@
+import * as React from 'react';
+import { Box, SelectChangeEvent } from '@mui/material';
+import '../../global.scss';
+import '../CreateSession/styles.scss';
+import { useNavigate, useParams } from 'react-router-dom';
+import { useRetro } from '../../helpers';
+import { useAzureAuth } from '../../helpers/msal/azureauth';
+import { GlobalContext } from '../../contexts/GlobalContext';
+import { ActionType } from '../../contexts/GlobalContext';
+import { BaciDetailsTab } from '../../screens/CreateSession/BaciDetailsTab';
+
+import {
+  RETRO_IMMEDIATELY,
+  pulseCheckInterface,
+  pulseChecksData,
+  templatesData,
+} from '../../screens/CreateRetro/const';
+import { UserTypeArray } from '../../constants';
+import {
+  getRetro,
+  getTeamById,
+  getUserByEmailId,
+} from '../../helpers/msal/services';
+import { StartRetroWithTemplate } from '../../screens/CreateRetro/StartRetroWithTemplate';
+import { TeamsDetailsTab } from '../../screens/CreateSession/TeamsDetailsTab';
+import { ScheduleRetroTab } from '../../screens/CreateRetro/ScheduleRetroTab';
+import moment from 'moment';
+
+type Props = {
+  handleStartRetro: () => void;
+  isRetroStart: boolean;
+};
+
+export function CreateSessionWithTemplatePage({
+  handleStartRetro,
+  isRetroStart,
+}: Props) {
+  const { id } = useParams();
+  const retro = useRetro();
+  const navigate = useNavigate();
+  const [global, dispatch] = React.useContext(GlobalContext);
+  const timeFrameRef = React.useRef<HTMLSelectElement | null>(null);
+  const [localRetroName, setLocalRetroName] = React.useState(
+    sessionStorage.getItem('retroname') || ''
+  );
+  const [activePanel, setActivePanel] = React.useState('detailsPanel');
+  const [isStartRetro, setIsStartRetro] = React.useState(false);
+  const [isLoginUser, setIsLoginUser] = React.useState(false);
+
+  {
+    /* BACI Details Panel Constant */
+  }
+  const [retroName, setRetroName] = React.useState('');
+  const [retroTimeFrame, setRetroTimeFrame] = React.useState<Date | null>(null);
+  const [retroNameError, setRetroNameError] = React.useState('');
+  const [retroNameWarning, setRetroWarning] = React.useState('');
+  const [isTimeFrameSet, setIsTimeFrameSet] = React.useState(id ? true : false);
+
+  {
+    /* Template Panel Constant */
+  }
+  const [templates, setTemplates] = React.useState(templatesData);
+  const [selectedTemplate, setSelectedTemplate] = React.useState(null);
+  const [customizedTemplate, setCustomizedTemplate] = React.useState(null);
+  const [isTemplateCustomized, setIsTemplateCustomized] = React.useState(false);
+  {
+    /* Pulse Check Panel Constant */
+  }
+  const [pulseChecks, setPulseChecks] =
+    React.useState<Array<pulseCheckInterface> | null>(pulseChecksData);
+  const [selectedPulseCheck, setSelectedPulseCheck] =
+    React.useState<pulseCheckInterface | null>(null);
+
+  {
+    /* User Details Panel Constant */
+  }
+  const [userName, setUserName] = React.useState('');
+  const [userNameError, setUserNameError] = React.useState('');
+  const [userNameWarning, setUserNameWarning] = React.useState('');
+  const [selectedAvatar, setAvatar] = React.useState('');
+  const [avatarSelectionError, setAvatarSelectionError] = React.useState('');
+
+  {
+    /* Team Details Panel & Facilitator Details PanelConstant */
+  }
+  const [selectedTeam, setSelectedTeam] = React.useState('');
+  const [selectedTeamData, setSelectedTeamData] = React.useState(null);
+  const [teamSelectionError, setTeamSelectionError] = React.useState('');
+  const [selectedFacilitator, setSelectedFacilitator] = React.useState('');
+  const [selectedFacilitatorData, setSelectedFacilitatorData] =
+    React.useState(null);
+  const [facilitatorSelectionError, setFacilitatorSelectionError] =
+    React.useState('');
+
+  {
+    /* Schedule Details Panel Constant */
+  }
+  const [scheduleRetroType, setScheduleRetroType] =
+    React.useState(RETRO_IMMEDIATELY);
+  const [scheduleRetroTime, setScheduleRetroTime] = React.useState(
+    moment(new Date()).format('Do MMM YYYY h:mm:ss a')
+  );
+  const [scheduleDescription, setScheduleDescription] = React.useState('');
+  const [scheduleDescriptionError, setScheduleDescriptionError] =
+    React.useState('');
+
+  React.useEffect(() => {
+    setSelectedFacilitatorData(null);
+    setSelectedTeamData(null);
+    dispatch({
+      type: ActionType.CLOSE_CURRENT_RETRO,
+    });
+  }, []);
+
+  React.useEffect(() => {
+    if (
+      window.location.href.indexOf('enterprise') > -1 ||
+      window.location.href.indexOf('basic') > -1
+    ) {
+      setIsLoginUser(true);
+    } else {
+      setIsLoginUser(false);
+    }
+    const initialPulseCheck = pulseChecksData.filter(e => e.checked == true);
+    const initialTemplate: any = templatesData.filter(e => e.checked == true);
+    if (!isTemplateCustomized) {
+      setSelectedTemplate(initialTemplate && initialTemplate[0]);
+    }
+    setSelectedPulseCheck(initialPulseCheck && initialPulseCheck[0]);
+  }, []);
+
+  const callGetTeamById = async (selectedTeamId: any) => {
+    await getTeamById(selectedTeamId).then(
+      res => {
+        setSelectedTeamData(res);
+      },
+      err => {
+        console.log('err', err);
+      }
+    );
+  };
+
+  const callGetUserByEmailId = async (selectedFacilitatorId: any) => {
+    await getUserByEmailId(selectedFacilitatorId).then(
+      res => {
+        setSelectedFacilitatorData(res);
+      },
+      err => {
+        console.log('err', err);
+      }
+    );
+  };
+
+  useAzureAuth();
+
+  // Function to handle Retro Name on change
+  function handleRetroNameChange(e: React.SetStateAction<string>) {
+    if (e == '') {
+      setRetroWarning('');
+    } else {
+      setRetroNameError('');
+    }
+    if (e.length >= 60) {
+      let count = 80 - e.length;
+
+      if (count === 0) {
+        setRetroWarning('No more character remaining');
+      } else {
+        setRetroWarning('Character remaining -' + `${count}`);
+      }
+    } else {
+      setRetroWarning('');
+    }
+    setRetroName(e);
+    localStorage.setItem('sessionName', retroName);
+  }
+
+  // Function to handle Time Frame on change
+  function handleTimeFrame(date: React.SetStateAction<Date | null>) {
+    // Logic for handling date
+    setRetroTimeFrame(date);
+    setIsTimeFrameSet(false);
+  }
+
+  // Function to handle the team selection
+  const handleTeamChange = (event: SelectChangeEvent) => {
+    setSelectedTeam(event.target.value as string);
+    callGetTeamById(event.target.value);
+    setTeamSelectionError('');
+  };
+
+  // Function to handle the facilitator selection
+  const handleFacilitatorChange = (event: SelectChangeEvent) => {
+    setSelectedFacilitator(event.target.value as string);
+    console.log('faciltator:', event.target.value);
+    callGetUserByEmailId(event.target.value);
+    setFacilitatorSelectionError('');
+  };
+
+  // Function to handle the schedule retro type
+  const handleRetroTypeChange = (
+    event: React.ChangeEvent<HTMLInputElement>
+  ) => {
+    setScheduleRetroType((event.target as HTMLInputElement).value);
+  };
+
+  const handleRetroDateChange = (
+    event: React.ChangeEvent<HTMLInputElement>
+  ) => {
+    setScheduleRetroTime((event.target as HTMLInputElement).value);
+  };
+
+  // Function to handle the schedule description
+  const handleScheduleDescriptionChange = (value: any) => {
+    setScheduleDescription(value);
+    setScheduleDescriptionError('');
+  };
+
+  // Function to handle next button on click
+  const onClickBack = (previousPanel: string) => {
+    setActivePanel(previousPanel);
+  };
+
+  // Function to handle next button on click
+  const onClickNext = (currentPanel: string, nextPanel: string) => {
+    if (
+      currentPanel === 'detailsPanel' &&
+      (retroName === '' || retroTimeFrame === null)
+    ) {
+      if (retroName === '') {
+        setRetroNameError('Please enter retro name.');
+      }
+      if (retroTimeFrame === null) {
+        setIsTimeFrameSet(true);
+      }
+      return;
+    }
+
+    if (
+      currentPanel === 'userDetailPanel' &&
+      (userName === '' || selectedAvatar === '')
+    ) {
+      if (selectedAvatar === '') {
+        setAvatarSelectionError('Please select avatar');
+      }
+      if (userName === '') {
+        setUserNameError('Please enter your name');
+      }
+      return;
+    }
+
+    if (!isLoginUser) {
+      // If user is not basic and enterprise
+      setActivePanel(nextPanel);
+      if (
+        currentPanel === 'userDetailPanel' &&
+        retroName != '' &&
+        retroTimeFrame != null &&
+        selectedTemplate != null &&
+        selectedPulseCheck != null &&
+        userName != '' &&
+        selectedAvatar != ''
+      ) {
+        create();
+      }
+    } else {
+      // If user is basic and enterprise
+      if (
+        currentPanel === 'teamDetailPanel' &&
+        (selectedTeam === '' || selectedFacilitator === '')
+      ) {
+        if (selectedTeam === '') {
+          setTeamSelectionError('Please select team');
+        }
+        if (selectedFacilitator === '') {
+          setFacilitatorSelectionError('Please select facilitator');
+        }
+        return;
+      }
+
+      // if (
+      //   currentPanel === 'scheduleDetailPanel' &&
+      //   scheduleDescription === ''
+      // ) {
+      //   if (scheduleDescription === '') {
+      //     setScheduleDescriptionError('Please add description');
+      //   }
+      //   return;
+      // }
+      setActivePanel(nextPanel);
+      if (
+        currentPanel === 'finalButtonTab' &&
+        retroName != '' &&
+        retroTimeFrame != null &&
+        selectedTemplate != null &&
+        selectedPulseCheck != null &&
+        userName != '' &&
+        selectedAvatar != ''
+      ) {
+        // Call the Retro creation
+      }
+    }
+  };
+
+  // Function to create a New Retro
+  const create = async () => {
+    let mySelectedTemplate;
+    if (isTemplateCustomized) {
+      const localStorageTemplateTemp = localStorage.getItem('selectedTemplate');
+      mySelectedTemplate =
+        localStorageTemplateTemp && JSON.parse(localStorageTemplateTemp);
+    } else {
+      mySelectedTemplate = selectedTemplate;
+    }
+
+    sessionStorage.setItem('retroname', retroName);
+    setLocalRetroName(retroName);
+    const userType: number =
+      global?.user?.id == global.currentRetro?.creatorId
+        ? UserTypeArray[1].id
+        : UserTypeArray[0].id;
+
+    if (
+      retroName !== '' &&
+      retroTimeFrame !== null &&
+      userName !== '' &&
+      selectedAvatar !== '' &&
+      selectedPulseCheck != null &&
+      selectedTemplate != null
+    ) {
+      dispatch({ type: ActionType.CREATE_RETRO, payload: {} });
+      dispatch({
+        type: ActionType.SET_LOADING,
+        payload: { loadingFlag: true },
+      });
+      setRetroNameError('');
+      setIsTimeFrameSet(false);
+      await retro
+        .createTemplate(
+          { name: retroName },
+          retroTimeFrame.toISOString(), // Convert Date to ISO string
+          '',
+          userName,
+          selectedAvatar,
+          userType,
+          selectedPulseCheck,
+          mySelectedTemplate
+        )
+
+        .then(
+          res => {
+            // dispatch({ type: ActionType.CREATE_RETRO, payload: {} });
+            const userTypeValue: number =
+              global?.user?.id == res?.creatorId
+                ? UserTypeArray[1].id
+                : UserTypeArray[0].id;
+            dispatch({
+              type: ActionType.SET_PREFERRED_NICKNAME,
+              payload: {
+                preferredNickname: userName,
+                avatar: selectedAvatar,
+                userType: userTypeValue,
+              },
+            });
+            dispatch({
+              type: ActionType.SET_LOADING,
+              payload: { loadingFlag: false },
+            });
+            // Call Join Retro
+            // Get Retro
+            getRetro(res.id as string)
+              .then(retro => {
+                if (retro && retro.id) {
+                  console.log(
+                    '------------- Setting retro details for BoardState in create retro temp page -------------',
+                    retro
+                  );
+                  dispatch({
+                    type: ActionType.SET_CURRENT_RETRO,
+                    payload: { retro },
+                  });
+                }
+              })
+              .catch(e => {
+                console.log('error', e);
+              });
+            setIsStartRetro(true);
+            handleStartRetro();
+            localStorage.removeItem('selectedTemplate');
+          },
+          err => {
+            console.log('err', err);
+            dispatch({
+              type: ActionType.SET_LOADING,
+              payload: { loadingFlag: false },
+            });
+          }
+        );
+    }
+    sessionStorage.setItem('retroname', retroName);
+  };
+
+  return (
+    <Box
+      sx={{
+        width: '100%',
+      }}
+    >
+      {!isRetroStart ? (
+        <Box component="div" whiteSpace="normal" className="createRetroText">
+          Details for Session{' '}
+        </Box>
+      ) : (
+        <Box component="div" whiteSpace="normal" className="createRetroText">
+          {global.currentRetro?.name} is ready to start
+        </Box>
+      )}
+
+      <>
+        <Box sx={{ mt: 4, minWidth: '100%' }}>
+          <BaciDetailsTab
+            activePanel={activePanel}
+            retroName={retroName}
+            retroTimeFrame={retroTimeFrame}
+            retroNameError={retroNameError}
+            retroNameWarning={retroNameWarning}
+            timeFrameRef={timeFrameRef}
+            isTimeFrameSet={isTimeFrameSet}
+            handleRetroNameChange={handleRetroNameChange}
+            handleTimeFrame={handleTimeFrame}
+            onClickNext={onClickNext}
+            isLoginUser={isLoginUser}
+          />
+          <TeamsDetailsTab
+            activePanel={activePanel}
+            selectedTeam={selectedTeam}
+            handleTeamChange={handleTeamChange}
+            selectedFacilitator={selectedFacilitator}
+            handleFacilitatorChange={handleFacilitatorChange}
+            selectedTeamData={selectedTeamData}
+            selectedFacilitatorData={selectedFacilitatorData}
+            teamSelectionError={teamSelectionError}
+            facilitatorSelectionError={facilitatorSelectionError}
+            onClickBack={onClickBack}
+            onClickNext={onClickNext}
+          />
+        </Box>
+      </>
+
+      {isStartRetro && (
+        <Box
+          sx={{
+            mt: 2,
+            minWidth: '100%',
+            alignItems: 'flex-start',
+            justifyContent: 'center',
+          }}
+        >
+          <StartRetroWithTemplate />
+        </Box>
+      )}
+    </Box>
+  );
+}
