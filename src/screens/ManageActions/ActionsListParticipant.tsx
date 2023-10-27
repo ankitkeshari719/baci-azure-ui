@@ -18,6 +18,7 @@ type Props = {
   user: any;
   removeAction: (selectedActions: ActionInterface) => void;
   assignAction: (ids: string[], assigneeId: string) => void;
+jiraProjects:any[]
 };
 
 export default function ActionsListParticipant({
@@ -32,6 +33,7 @@ export default function ActionsListParticipant({
   user,
   removeAction,
   assignAction,
+  jiraProjects
 }: Props) {
   const [showOtherAction, setShowOtherAction] = React.useState<boolean>(false);
   const [currentUserActions, setCurrentUserActions] = React.useState<
@@ -82,6 +84,7 @@ export default function ActionsListParticipant({
                 disabled={false}
                 removeAction={removeAction}
                 assignAction={assignAction}
+                jiraProjects={jiraProjects}
               />
             );
           })}
@@ -133,6 +136,7 @@ export default function ActionsListParticipant({
                 removeAction={removeAction}
                 assignAction={assignAction}
                 isOtherParticipantAction={true}
+                jiraProjects={jiraProjects}
               />
             );
           })}

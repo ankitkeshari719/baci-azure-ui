@@ -504,7 +504,7 @@ export default function SessionDashboard() {
                                       variant="contained"
                                       sx={{ borderRadius: '24px' }}
                                       onClick={()=>navigate('/enterprise/sessions/join/'+row['humanId'])}
-                                      disabled={row['selectedFacilitator']!==gUser.azureUser?.emailId&&row['creatorId']!==gUser.azureUser?.emailId}
+                                      disabled={row['selectedFacilitator']===gUser.azureUser?.emailId&&row['creatorId']!==gUser.azureUser?.emailId}
                                     >
                                       START SESSION
                                     </Button>

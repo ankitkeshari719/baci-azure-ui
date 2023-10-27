@@ -19,26 +19,36 @@ export function JiraCallback() {
   const navigate = useNavigate();
 
   React.useEffect(() => {
-    const getToken = async (code: string) => {
-      await getJiraToken(code).then(
-        (res: any) => {
-          dispatch({
-            type: ActionType.SET_JIRA_CODE,
-            payload: { jiraCode: res.response },
-          });
-          userDispatch({
-            type: UserActionType.SET_JIRA_CODE,
-            payload: { jiraCode: res.response },
-          });
-          navigate(`/board/` + state);
-        },
-        error => {
-          console.log('error', error);
-        }
-      );
-    };
+    
     getToken(code);
+   
   }, []);
+
+  const getToken = async (code: string) => {
+    await getJiraToken(code).then(
+      (res: any) => {
+        dispatch({
+          type: ActionType.SET_JIRA_CODE,
+          payload: { jiraCode: res.response },
+        });
+        userDispatch({
+          type: UserActionType.SET_JIRA_CODE,
+          payload: { jiraCode: res.response },
+        });
+        if(gUser.azureUser?.emailId!=undefined&&!!state){
+          if(!!state){
+            navigate(`/enterprise/settings/` );
+          }
+          else
+          navigate(`/enterprise/sessions/board/` + state);
+        }else
+        navigate(`/board/` + state);
+      },
+      error => {
+        console.log('error', error);
+      }
+    );
+  };
 
   return <></>;
 }
