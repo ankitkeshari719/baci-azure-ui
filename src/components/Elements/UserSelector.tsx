@@ -30,6 +30,7 @@ export default function UserSelector({
   const callGetAllUsersByEnterpriseId = async () => {
     await getAllUsersByEnterpriseId(enterpriseId).then(
       res => {
+      console.log("setUsers id",res)
         setUsers(res);
       },
       err => {
