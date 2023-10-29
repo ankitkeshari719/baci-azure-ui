@@ -143,7 +143,7 @@ export default function ManageActionSummary({
           <Typography className="textTypeFour">Actions Identified</Typography>
         </Col>
         {/* Jira Integration*/}
-        {global.jiraCode ? (
+        {/* {global.jiraCode ? (
           <Col
             xs="6"
             className="d-flex justify-content-start align-items-center"
@@ -235,7 +235,7 @@ export default function ManageActionSummary({
               <Typography className="textTypeFour">Connect to Jira</Typography>
             </Button>
           </Col>
-        )}
+        )} */}
         {manageActions.length === 0 ? null : (
           <Col
             xs={{ span: 2, offset: 8 }}

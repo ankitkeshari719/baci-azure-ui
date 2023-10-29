@@ -296,7 +296,11 @@ export default function SessionDashboard() {
       payload: { retroCreateState: true },
     });
     setCodeError('');
-    navigate('/create/');
+    if (location.pathname.includes('basic')) {
+      navigate('/basic/create');
+    } else if (location.pathname.includes('enterprise'))
+      navigate('/enterprise/sessions/create');
+;
   }
 
   return (
@@ -468,7 +472,7 @@ export default function SessionDashboard() {
                                       flexDirection: 'row',
                                     }}
                                   >
-                                    <Box component={'span'}>{value}</Box>
+                                    <Box component={'span'} style={{wordWrap:"break-word"}}>{value}</Box>
                                     <DocumentDuplicateIcon
                                       cursor="pointer"
                                       onClick={() => {
@@ -503,7 +507,16 @@ export default function SessionDashboard() {
                                     <Button
                                       variant="contained"
                                       sx={{ borderRadius: '24px' }}
-                                      onClick={()=>navigate('/enterprise/sessions/join/'+row['humanId'])}
+                                      onClick={()=>
+                                        
+                                        {
+                                          if (location.pathname.includes('basic')) {
+                                            navigate('/basic/session/join/'+row['humanId']);
+                                          } else if (location.pathname.includes('enterprise'))
+                                            navigate('/enterprise/sessions/join/'+row['humanId']);
+                                        }
+                                        // navigate('/enterprise/sessions/join/'+row['humanId'])
+                                      }
                                       disabled={row['selectedFacilitator']!==gUser.azureUser?.emailId&&row['creatorId']!==gUser.azureUser?.emailId}
                                     >
                                       START SESSION
@@ -514,7 +527,14 @@ export default function SessionDashboard() {
                                     <Button
                                       variant="contained"
                                       sx={{ borderRadius: '24px' }}
-                                      onClick={()=>{navigate('/enterprise/sessions/join/'+row['humanId'])}}
+                                      onClick={()=>{
+                                        
+                                        
+                                        if (location.pathname.includes('basic')) {
+                                          navigate('/basic/session/join/'+row['humanId']);
+                                        } else if (location.pathname.includes('enterprise'))
+                                          navigate('/enterprise/sessions/join/'+row['humanId']);
+                                      }}
                                     >
                                       JOIN RETRO
                                     </Button>

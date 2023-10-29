@@ -35,6 +35,8 @@ import DialogTitle from '@mui/material/DialogTitle';
 import Slide from '@mui/material/Slide';
 import Paper from '@mui/material/Paper';
 import { TransitionProps } from '@mui/material/transitions';
+import { UserContext } from '../../../contexts/UserContext';
+import { BASIC, ENTERPRISE } from '../../../constants/applicationConst';
 const theme = createTheme({
   palette: {
     primary: {
@@ -73,6 +75,7 @@ const Transition = React.forwardRef(function Transition(
 });
 
 function BasicDashboardWithEnterprise() {
+  const [gUser, userDispatch] = React.useContext(UserContext);
   const navigate = useNavigate();
   const [selectId, setSelectedId] = React.useState<string>('0');
   const [open, setOpen] = React.useState(false);
@@ -165,16 +168,39 @@ function BasicDashboardWithEnterprise() {
   ];
 
   const navigateToJoinSession = () => {
-    navigate('/basic/joinRetro/');
+
+
+    if (gUser?.azureUser?.roleName == ENTERPRISE)
+    navigate('/enterprise/sessions/');
+  else if (gUser?.azureUser?.roleName == BASIC)
+    navigate('/basic/sessions/');
+  else 
+
+    navigate('/basic/sessions/');
   };
 
   const navigateToCreateSession = () => {
+
+    if (gUser?.azureUser?.roleName == ENTERPRISE)
+    navigate('/enterprise/sessions/createRetro/');
+  else if (gUser?.azureUser?.roleName == BASIC)
+    navigate('/basic/sessions/createRetro/');
+  else 
+
     navigate('/basic/createRetro/');
   };
 
   const navigateToUploadImage = () => {
     // navigate('/basic/uploadImage/');
+    if (gUser?.azureUser?.roleName == ENTERPRISE)
+    navigate('/enterprise/sessions/createSession/');
+  else if (gUser?.azureUser?.roleName == BASIC)
+    navigate('/basic/sessions/createSession/');
+  else 
+
     navigate('/basic/createSession/');
+    
+  
     
   };
 

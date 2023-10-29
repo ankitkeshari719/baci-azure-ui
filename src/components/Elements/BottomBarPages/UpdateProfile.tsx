@@ -133,9 +133,9 @@ export default function UpdateProfile({ handleEdit }: Props) {
     setSelectedAvatar(tempLocalUserData && tempLocalUserData.selectedAvatar);
     let roleName = tempLocalUserData && tempLocalUserData.roleName;
     if (roleName === BASIC) {
-      setRole('Basic');
+      setRole(BASIC);
     } else {
-      setRole('Enterprise');
+      setRole(ENTERPRISE);
     }
     const enterpriseId = tempLocalUserData && tempLocalUserData.enterpriseId;
     callGetAllUsersByEnterpriseId(enterpriseId);

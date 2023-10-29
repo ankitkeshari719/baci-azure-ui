@@ -28,7 +28,11 @@ export default function useReRoute() {
       (uuid === null || uuid === undefined) &&
       window.location.pathname.includes('pulsecheck')
     ) {
-      navigate(`/retroisfinished`);
+      if (window.location.pathname.includes('enterprise'))
+        navigate(`/enterprise/sessions/retroisfinished`);
+      else if (window.location.pathname.includes('basic'))
+        navigate(`/basic/sessions/retroisfinished`);
+      else navigate(`/retroisfinished`);
     }
 
     if (
@@ -40,7 +44,11 @@ export default function useReRoute() {
       ended &&
       !found
     ) {
-      navigate(`/retroisfinished`);
+      if (window.location.pathname.includes('enterprise'))
+        navigate(`/enterprise/sessions/retroisfinished`);
+      else if (window.location.pathname.includes('basic'))
+        navigate(`/basic/sessions/retroisfinished`);
+      else navigate(`/retroisfinished`);
     }
   }, [users, uuid, ended, retroId, loading, id]);
 }

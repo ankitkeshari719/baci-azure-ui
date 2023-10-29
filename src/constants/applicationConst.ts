@@ -1,6 +1,6 @@
 // Roles
-export const ENTERPRISE = 'Enterprise';
-export const BASIC = 'Basic';
+export const ENTERPRISE = "Enterprise";
+export const BASIC = "Basic";
 
 // Roles Id
 export const ENTERPRISE_USER_ID = 'enterprise0.9280169812171823';

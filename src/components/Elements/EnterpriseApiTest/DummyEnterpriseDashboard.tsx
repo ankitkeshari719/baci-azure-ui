@@ -30,6 +30,7 @@ import {
   deleteUserById,
   authenticateUser,
 } from '../../../helpers/msal/services';
+import { ENTERPRISE } from '../../../constants/applicationConst';
 
 export default function DummyEnterpriseDashboard() {
   React.useEffect(() => {
@@ -65,7 +66,7 @@ export default function DummyEnterpriseDashboard() {
 
   // ---------------------------------------- Roles API's -----------------------------------------------
   const callCreateRole = async () => {
-    const roleName = 'Enterprise';
+    const roleName = ENTERPRISE;
     await createRole(roleName).then(
       res => {
         console.log('callCreateRole response', res);
@@ -100,7 +101,7 @@ export default function DummyEnterpriseDashboard() {
   };
 
   const callUpdateRole = async () => {
-    const roleName = 'Enterprise';
+    const roleName = ENTERPRISE;
     const roleId = 'regular_user0.8981389442061536';
     await updateRole(roleId, roleName).then(
       res => {

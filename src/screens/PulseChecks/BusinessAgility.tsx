@@ -35,6 +35,8 @@ import { GlobalContext, ActionType } from '../../contexts/GlobalContext';
 import useLoadRetro from '../../helpers/hooks/useLoadRetro';
 import { BoardActionType } from '../../helpers/statemachine/BoardStateMachine';
 import { ContainedButton } from '../../components';
+import { BASIC, ENTERPRISE } from '../../constants/applicationConst';
+import { UserContext } from '../../contexts/UserContext';
 
 const BootstrapTooltip = styled(({ className, ...props }: TooltipProps) => (
   <Tooltip {...props} classes={{ popper: className }}>
@@ -63,6 +65,7 @@ export default function BusinessAgility({ pulseCheck }: Props) {
     state: { fullPulseCheck, users },
     commitAction,
   } = React.useContext(BoardContext);
+  const [gUser] = React.useContext(UserContext);
 
   const [showBlankErrors, setShowBlankErrors] = React.useState(false);
   const [scrollDownButton, setScrollDownButton] = React.useState(true);
@@ -99,7 +102,20 @@ export default function BusinessAgility({ pulseCheck }: Props) {
     ) {
       const currentUser: any = users.find(user1 => user1.userId === user.id);
       if (currentUser?.pulseCheckQuestions.length > 0) {
-        navigate('/board/' + currentRetro?.id);
+
+
+        if(gUser?.azureUser?. roleName ===ENTERPRISE){
+          navigate('/enterprise/sessions/board/' + currentRetro?.id);
+        }
+       else if(gUser?.azureUser?. roleName ===BASIC){
+          navigate('/basic/sessions/board/' + currentRetro?.id);
+        }
+       
+        else navigate('/board/' + currentRetro?.id);
+       
+        setConfirmAction(undefined);
+
+
         dispatch({
           type: ActionType.SET_SNACK_MESSAGE,
           payload: {
@@ -122,7 +138,17 @@ export default function BusinessAgility({ pulseCheck }: Props) {
         parseGPulseCheckState.pulseSubmitState &&
         parseGPulseCheckState?.retroId === currentRetro?.id
       ) {
-        navigate('/board/' + currentRetro?.id);
+
+        if(gUser?.azureUser?. roleName ===ENTERPRISE){
+          navigate('/enterprise/sessions/board/' + currentRetro?.id);
+        }
+       else if(gUser?.azureUser?. roleName ===BASIC){
+          navigate('/basic/sessions/board/' + currentRetro?.id);
+        }
+       
+        else navigate('/board/' + currentRetro?.id);
+
+   
         dispatch({
           type: ActionType.SET_SNACK_MESSAGE,
           payload: {
@@ -249,7 +275,15 @@ export default function BusinessAgility({ pulseCheck }: Props) {
         'pulseCheckState',
         JSON.stringify(pulseCheckState)
       );
-      navigate('/board/' + currentRetro?.id);
+      if(gUser?.azureUser?. roleName ===ENTERPRISE){
+        navigate('/enterprise/sessions/board/' + currentRetro?.id);
+      }
+     else if(gUser?.azureUser?. roleName ===BASIC){
+        navigate('/basic/sessions/board/' + currentRetro?.id);
+      }
+     
+      else navigate('/board/' + currentRetro?.id);
+      // navigate('/board/' + currentRetro?.id);
     };
 
     if (someBlank) {
@@ -271,7 +305,16 @@ export default function BusinessAgility({ pulseCheck }: Props) {
       text: 'Are you sure? Your voice matters!',
       action: 'Skip',
       onConfirm: () => {
-        navigate('/board/' + currentRetro?.id);
+
+        if(gUser?.azureUser?. roleName ===ENTERPRISE){
+          navigate('/enterprise/sessions/board/' + currentRetro?.id);
+        }
+       else if(gUser?.azureUser?. roleName ===BASIC){
+          navigate('/basic/sessions/board/' + currentRetro?.id);
+        }
+       
+        else navigate('/board/' + currentRetro?.id);
+       
         setConfirmAction(undefined);
       },
     });

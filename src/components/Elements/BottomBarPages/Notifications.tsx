@@ -34,6 +34,7 @@ import { UserContext } from '../../../contexts/UserContext';
 export default function Notifications() {
   const navigate = useNavigate();
   const [global, dispatch] = React.useContext(GlobalContext);
+  
   const [gUser] = React.useContext(UserContext);
   const localUserData = localStorage.getItem('userData');
   const tempLocalUserData = localUserData && JSON.parse(localUserData);

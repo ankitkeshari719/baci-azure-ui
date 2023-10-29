@@ -39,6 +39,8 @@ import {
   keywordExtraction,
   // createRetroSummary,
 } from '../../helpers/msal/services';
+import { UserContext } from '../../contexts/UserContext';
+import { BASIC, ENTERPRISE } from '../../constants/applicationConst';
 const Toolbar = (props: any) => {
   const isXsUp = useMediaQuery(theme.breakpoints.only('xs'));
   const navigate = useNavigate();
@@ -75,7 +77,7 @@ const Toolbar = (props: any) => {
   const [localRetroName, setLocalRetroName] = React.useState(
     currentRetro?.name
   );
-
+  const [gUser, userDispatch] = React.useContext(UserContext);
   const [anchorEl, setAnchorEl] = React.useState<HTMLButtonElement | null>(
     null
   );
@@ -541,7 +543,17 @@ const Toolbar = (props: any) => {
               <ContainedButton
                 id="view-summary"
                 name="VIEW SUMMARY"
-                onClick={() => navigate('/report/' + currentRetro?.id)}
+                onClick={() => {
+                  if (gUser?.azureUser?.roleName == ENTERPRISE)
+                    navigate(
+                      '/enterprise/sessions/report/' + global.currentRetro?.id
+                    );
+                  else if (gUser?.azureUser?.roleName == BASIC)
+                    navigate(
+                      '/basic/sessions/report/' + global.currentRetro?.id
+                    );
+                  else navigate('/report/' + global.currentRetro?.id);
+                }}
                 style={{
                   minWidth: '150px !important',
                   height: '40px !important',
@@ -573,7 +585,17 @@ const Toolbar = (props: any) => {
               id="review-board"
               name="REVIEW BOARD"
               onClick={() => {
-                navigate('/board/' + currentRetro?.id);
+
+                if (gUser?.azureUser?.roleName == ENTERPRISE)
+                navigate(
+                  '/enterprise/sessions/board/' + global.currentRetro?.id
+                );
+              else if (gUser?.azureUser?.roleName == BASIC)
+                navigate(
+                  '/basic/sessions/board/' + global.currentRetro?.id
+                );
+              else navigate('/board/' + global.currentRetro?.id);
+            
               }}
               style={{
                 minWidth: '150px !important',

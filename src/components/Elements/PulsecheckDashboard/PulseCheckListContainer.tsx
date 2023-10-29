@@ -23,14 +23,16 @@ import {
   ENTERPRISE,
   BASIC,
 } from '../../../constants/applicationConst';
+import { UserContext } from '../../../contexts/UserContext';
 
 export default function PulseCheckListContainer() {
   const navigate = useNavigate();
   const [height, setHeight] = React.useState(0);
   const isMdUp: any = useMediaQuery(theme.breakpoints.only('md'));
   const isXsUp: any = useMediaQuery(theme.breakpoints.only('xs'));
-  const localUserData = localStorage.getItem('userData');
-  const tempLocalUserData = localUserData && JSON.parse(localUserData);
+  const [gUser,userDispatch]= React.useContext(UserContext);
+  const localUserData = gUser.azureUser
+  const tempLocalUserData = localUserData 
 
   // Function to navigate on retroListTemplate
   function goToPulseCheckLearnMore() {

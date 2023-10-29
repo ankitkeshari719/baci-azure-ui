@@ -20,6 +20,8 @@ import { MagnifyingGlassIcon } from '@heroicons/react/24/outline';
 import { useNavigate } from 'react-router-dom';
 import { ContainedButtonWithIcon } from '../../CustomizedButton/ContainedButtonWithIcon';
 import { ActionType, GlobalContext } from '../../../contexts/GlobalContext';
+import { UserContext } from '../../../contexts/UserContext';
+import { BASIC, ENTERPRISE } from '../../../constants/applicationConst';
 
 const ActionCount = [
   {
@@ -52,6 +54,7 @@ export default function ActionDashboard() {
   const [displayJiraRows, setDisplayJiraRows] = React.useState<any>([]);
   const [csvData, setCsvData] = React.useState<any>([]);
   const [global, dispatch] = React.useContext(GlobalContext);
+  const [gUser, userDispatch] = React.useContext(UserContext);
   const [codeError, setCodeError] = React.useState('');
 
   const [page, setPage] = React.useState(0);
@@ -166,7 +169,11 @@ export default function ActionDashboard() {
       payload: { retroCreateState: true },
     });
     setCodeError('');
-    navigate('/create/');
+    if (gUser?.azureUser?.roleName == ENTERPRISE)
+      navigate('/enterprise/sessions/create/');
+    else if (gUser?.azureUser?.roleName == BASIC)
+      navigate('/basic/sessions/create/');
+    else navigate('/create/');
   }
 
   return (

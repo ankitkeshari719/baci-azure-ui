@@ -7,6 +7,9 @@ import {
 import commonStyles from './../../../style.module.scss';
 import { ContainedButtonWithIcon } from '../../CustomizedButton/ContainedButtonWithIcon';
 import { useNavigate } from 'react-router-dom';
+import { UserContext } from '../../../contexts/UserContext';
+import React from 'react';
+import { BASIC, ENTERPRISE } from '../../../constants/applicationConst';
 
 const theme = createTheme({
   palette: {
@@ -24,9 +27,17 @@ const theme = createTheme({
 
 export default function EmptyEnterpriseDashboard() {
   const navigate = useNavigate();
+  const [gUser] = React.useContext(UserContext);
 
   // Function to navigate on create new retro page
   function CreateNewRetro() {
+    if(gUser.azureUser?.roleName && gUser.azureUser?.roleName === BASIC){
+      navigate('/basic/sessions/create/');
+    }
+    else if(gUser.azureUser?.roleName && gUser.azureUser?.roleName === ENTERPRISE){
+      navigate('/enterprise/sessions/create/');
+    }
+    else
     navigate('/create/');
   }
 
