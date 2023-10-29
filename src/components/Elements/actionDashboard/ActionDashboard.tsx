@@ -229,16 +229,23 @@ export default function ActionDashboard() {
           if (res.data.length > 0) {
             let actionsArray: any[] = [];
             res.data.forEach((action: any) => {
-              var day = new Date(action.createdAt).getDate();
-              var month = new Date(action.createdAt).getMonth();
-              var year = new Date(action.createdAt).getFullYear();
+           
               var actionObj = action;
               actionObj['action.value'] = action.actionName;
               actionObj['action.assigneeName'] =
                 action.assigneeFName + ' ' + action.assigneeLName;
+              if(action.createdAt)
+              {var day = new Date(action.createdAt).getDate();
+              var month = new Date(action.createdAt).getMonth();
+              var year = new Date(action.createdAt).getFullYear();
+
+       
               actionObj.startDate =
                ( day > 9 ? day : '0' + day) + '-' + (month+1) + '-' + year;
-
+            }
+            else{
+              actionObj.startDate ="-"
+            }
               actionObj['action.assigneeId'] = (action.assignedTo!=null||action.assignedTo!=undefined)?action.assignedTo:"";
 
               actionsArray.push(actionObj);
