@@ -1,13 +1,6 @@
 import * as React from 'react';
 import './styles.scss';
 import * as Icons from 'heroicons-react';
-import {
-  RocketLaunchIcon,
-  CheckCircleIcon,
-  BookmarkIcon,
-  BugAntIcon,
-  BoltIcon,
-} from '@heroicons/react/24/outline';
 import { ActionInterface } from '../../helpers/types';
 import { ListItemIcon, ListItemText } from '@material-ui/core';
 import {
@@ -32,6 +25,7 @@ import {
   listJiraProjects,
   listJiraMeta,
   createJiraIssue,
+  editJiraIssue,
   getJiraUserList,
 } from '../../helpers/msal/services';
 import { NestedDropdown } from 'mui-nested-menu';
@@ -48,7 +42,6 @@ type Props = {
   disabled: boolean;
   removeAction: (selectedActions: ActionInterface) => void;
   assignAction: (ids: string[], assigneeId: string) => void;
-
   isOtherParticipantAction?: boolean;
   jiraProjects: any[];
 };
@@ -132,13 +125,23 @@ export default function ActionItem({
                   action
                 ).then(
                   res => {
-                    console.log(res.message);
+                    console.log(res.message, res.data);
                     if (res.data) {
-                      alert(res.message);
+                      // alert(res.message);
+                      dispatch({
+                        type: ActionType.SET_SNACK_MESSAGE,
+                        payload: {
+                          snackMessage: {
+                            message: res.message,
+                            snackMessageType: 'success',
+                          },
+                        },
+                      });
+
                       updateJiraAction(action.id, {
                         jiraId: res.data.id,
                         jiraKey: res.data.key,
-                        jiraUrl: res.data.jiraUrl,
+                        jiraUrl: res.data.self,
                       });
                     }
                   },
@@ -300,28 +303,69 @@ export default function ActionItem({
 
   // function to call API on saving the existing action
   const saveEditAction = async (editActionValue: string | undefined) => {
-    dispatch({
-      type: ActionType.SET_LOADING,
-      payload: { loadingFlag: true },
-    });
-    await saveAndProcessAction(BoardActionType.UPDATE_ACTION, {
-      id: selectedAction?.id,
-      value: editActionValue,
-    }).then(
-      res => {
-        setIsEditActionClick(false);
-        dispatch({
-          type: ActionType.SET_LOADING,
-          payload: { loadingFlag: false },
-        });
-      },
-      err => {
-        dispatch({
-          type: ActionType.SET_LOADING,
-          payload: { loadingFlag: false },
-        });
-      }
-    );
+
+    if(global?.jiraCode!==undefined&&global?.jiraCode!==""){
+      dispatch({
+        type: ActionType.SET_LOADING,
+        payload: { loadingFlag: true },
+      });
+      await saveAndProcessAction(BoardActionType.UPDATE_ACTION, {
+        id: selectedAction?.id,
+        value: editActionValue,
+      }).then(
+        async res => {
+         
+          await editJiraIssue(
+            global?.jiraCode ? global?.jiraCode : '',
+            editActionValue ? editActionValue : '',
+            action
+          ).then(
+            jiraEditRes => {
+              // alert(jiraEditRes.message);
+              dispatch({
+                type: ActionType.SET_SNACK_MESSAGE,
+                payload: {
+                  snackMessage: {
+                    message:jiraEditRes.message,
+                    snackMessageType: 'success',
+                  },
+                },
+              });
+            },
+            error => {
+              // alert(error);
+              dispatch({
+                type: ActionType.SET_SNACK_MESSAGE,
+                payload: {
+                  snackMessage: {
+                    message:error,
+                    snackMessageType: 'success',
+                  },
+                },
+              });
+            }
+          );
+  
+          setIsEditActionClick(false);
+          dispatch({
+            type: ActionType.SET_LOADING,
+            payload: { loadingFlag: false },
+          });
+        },
+        err => {
+          dispatch({
+            type: ActionType.SET_LOADING,
+            payload: { loadingFlag: false },
+          });
+        }
+      );
+     
+    }
+    else
+   {
+  
+    setShowDialog(true)
+  }
   };
 
   const updateJiraAction = async (actionId: string, jiraObj: any) => {
@@ -669,9 +713,10 @@ export default function ActionItem({
             menuItemsData={
               global.user.userType == 2
                 ? menuItemsData
-                : {
-                    label: menuItemsData.label,
-                    items: [menuItemsData.items[0]],
+                
+                : menuItemsData?.label==undefined?{}: {
+                    label: menuItemsData?.label,
+                    items: [menuItemsData?.items[0]],
                   }
             }
             MenuProps={{

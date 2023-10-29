@@ -232,14 +232,14 @@ export default function ActionDashboard() {
               var day = new Date(action.createdAt).getDate();
               var month = new Date(action.createdAt).getMonth();
               var year = new Date(action.createdAt).getFullYear();
-
               var actionObj = action;
               actionObj['action.value'] = action.actionName;
               actionObj['action.assigneeName'] =
                 action.assigneeFName + ' ' + action.assigneeLName;
               actionObj.startDate =
-                day > 9 ? day : '0' + day + '-' + month + '-' + year;
-              actionObj['action.assigneeId'] = action.assignedTo;
+               ( day > 9 ? day : '0' + day) + '-' + (month+1) + '-' + year;
+
+              actionObj['action.assigneeId'] = (action.assignedTo!=null||action.assignedTo!=undefined)?action.assignedTo:"";
 
               actionsArray.push(actionObj);
             });
@@ -626,7 +626,7 @@ export default function ActionDashboard() {
                             >
                               <>
                                 {' '}
-                                {row['action.assigneeId'] && (
+                                {(
                                   <AssigneeDropdown
                                     id={row['action.assigneeId']}
                                     inputIndex={index}
@@ -692,7 +692,7 @@ export default function ActionDashboard() {
                                       obj[column.id] = valueOut;
 
                                       action = obj;
-                                      emailId = obj.assignedTo;
+                                      emailId = (obj.assignedTo!=null||obj.assignedTo!=undefined) ?obj.assignedTo:"";
                                       status = valueOut;
                                     }
                                   });

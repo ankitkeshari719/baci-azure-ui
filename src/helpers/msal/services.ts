@@ -320,6 +320,34 @@ export const createJiraIssue = async (
   return status;
 };
 
+export const editJiraIssue = async (
+
+  jiraCode: string,
+  description: string,
+  action:any
+): Promise<any> => {
+  let status: any = '';
+  const requestOptions = {
+    method: 'PUT',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({
+
+      access_token: jiraCode,
+      actionValue:description,
+      action
+    }),
+  };
+
+  await fetch(API_URL + `/editJiraIssue`, requestOptions)
+    .then(response => response.json())
+    .then(data => {
+      status = data;
+    });
+  return status;
+};
+
+
+
 //jira users list
 export const getJiraUserList = async (
   // projectId: string,
