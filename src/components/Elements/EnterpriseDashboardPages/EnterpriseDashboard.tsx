@@ -235,16 +235,35 @@ function EnterpriseDashboard() {
   };
 
   const navigateToJoinSession = () => {
-    navigate('/enterprise/sessions/joinRetro/');
+        if(gUser.azureUser?.roleName && gUser.azureUser?.roleName === BASIC){
+      navigate('/basic/sessions/');
+    }
+    else if(gUser.azureUser?.roleName && gUser.azureUser?.roleName === ENTERPRISE){
+      navigate('/enterprise/sessions/');
+    }
+   
   };
 
   const navigateToCreateSession = () => {
-    navigate('/enterprise/sessions/createRetro/');
+    if(gUser.azureUser?.roleName && gUser.azureUser?.roleName === BASIC){
+      navigate('/basic/sessions/createRetro/');
+    }
+    else if(gUser.azureUser?.roleName && gUser.azureUser?.roleName === ENTERPRISE){
+      navigate('/enterprise/sessions/createRetro/');
+    }
+
+  
   };
 
   const navigateToUploadImage = () => {
     // navigate('/enterprise/uploadImage/');
-    navigate('/enterprise/createSession/');
+    if(gUser.azureUser?.roleName && gUser.azureUser?.roleName === BASIC){
+      navigate('/basic/sessions/createSession/');
+    }
+    else if(gUser.azureUser?.roleName && gUser.azureUser?.roleName === ENTERPRISE){
+      navigate('/enterprise/sessions/createSession/');
+    }
+
   };
 
   const handleOnClick = (link: string) => {
@@ -719,9 +738,16 @@ function EnterpriseDashboard() {
                 </Box>
                 <Box
                   onClick={() => {
-                    navigate(
-                      '/enterprise/analytics/enterpriseLevelActionsCount'
-                    );
+
+                    if(gUser.azureUser?.roleName && gUser.azureUser?.roleName === BASIC){
+                      navigate('/basic/analytics/enterpriseLevelActionsCount');
+                    }
+                    else if(gUser.azureUser?.roleName && gUser.azureUser?.roleName === ENTERPRISE){
+                      navigate('/enterprise/analytics/enterpriseLevelActionsCount');
+                    }
+
+
+               
                   }}
                 >
                   <EnterpriseLevelActionsCountChart
@@ -732,29 +758,6 @@ function EnterpriseDashboard() {
                     }}
                   />
                 </Box>
-                {/* <Box
-                  display="flex"
-                  flexDirection="row"
-                  alignItems="center"
-                  justifyContent="flex-start"
-                  width="100%"
-                >
-                  <TextButton
-                    id={'Learn_More'}
-                    label={'Learn More'}
-                    size={'small'}
-                    style={{
-                      paddingLeft: '0px !important',
-                      textDecorationLine: 'underline !important',
-                      backgroundColor: 'transparent !important',
-                    }}
-                    onClick={() =>
-                      goToAnalyticsLearnMorePage(
-                        '/enterprise/analytics/enterpriseLevelActionsCountLearnMore'
-                      )
-                    }
-                  />
-                </Box> */}
               </Box>
               {/* Team Level Actions Count Chart */}
 
@@ -795,7 +798,13 @@ function EnterpriseDashboard() {
                 </Box>
                 <Box
                   onClick={() => {
-                    navigate('/enterprise/analytics/teamLevelActionsCount');
+                    if(gUser.azureUser?.roleName && gUser.azureUser?.roleName === BASIC){
+                      navigate('/basic/analytics/teamLevelActionsCount');
+                    }
+                    else if(gUser.azureUser?.roleName && gUser.azureUser?.roleName === ENTERPRISE){
+                      navigate('/enterprise/analytics/teamLevelActionsCount');
+                    }
+               
                   }}
                 >
                   <TeamLevelActionsCountChart
@@ -901,9 +910,13 @@ function EnterpriseDashboard() {
                 </Box>
                 <Box
                   onClick={() => {
-                    navigate(
-                      '/enterprise/analytics/enterpriseLevelParticipantsCount'
-                    );
+                    if(gUser.azureUser?.roleName && gUser.azureUser?.roleName === BASIC){
+                      navigate('/basic/analytics/enterpriseLevelParticipantsCount');
+                    }
+                    else if(gUser.azureUser?.roleName && gUser.azureUser?.roleName === ENTERPRISE){
+                      navigate('/enterprise/analytics/enterpriseLevelParticipantsCount');
+                    }
+             
                   }}
                 >
                   <AverageParticipantChart dashboard={true} team={selectId} totalParticipantsCount={(count)=>{
@@ -950,9 +963,13 @@ function EnterpriseDashboard() {
                 </Box>
                 <Box
                   onClick={() => {
-                    navigate(
-                      '/enterprise/analytics/enterpriseLevelRetrosCount'
-                    );
+                    if(gUser.azureUser?.roleName && gUser.azureUser?.roleName === BASIC){
+                      navigate('/basic/analytics/enterpriseLevelRetrosCount');
+                    }
+                    else if(gUser.azureUser?.roleName && gUser.azureUser?.roleName === ENTERPRISE){
+                      navigate('/enterprise/analytics/enterpriseLevelRetrosCount');
+                    }
+                  
                   }}
                 >
                   <AverageRetroChart dashboard={true} team={selectId} />
@@ -1055,9 +1072,14 @@ function EnterpriseDashboard() {
                 </Box>
                 <Box
                   onClick={() => {
-                    navigate(
-                      '/enterprise/analytics/enterpriseLevelSentimentsThemes'
-                    );
+                    if(gUser.azureUser?.roleName && gUser.azureUser?.roleName === BASIC){
+                      navigate('/basic/analytics/enterpriseLevelSentimentsThemes');
+                    }
+                    else if(gUser.azureUser?.roleName && gUser.azureUser?.roleName === ENTERPRISE){
+                      navigate('/enterprise/analytics/enterpriseLevelSentimentsThemes');
+                    }
+                    
+                
                   }}
                 >
                   <EnterpriseLevelSentimentsThemeChart
@@ -1105,9 +1127,14 @@ function EnterpriseDashboard() {
                 </Box>
                 <Box
                   onClick={() => {
-                    navigate(
-                      '/enterprise/analytics/enterpriseLevelSentimentsMoods'
-                    );
+                    if(gUser.azureUser?.roleName && gUser.azureUser?.roleName === BASIC){
+                      navigate('/basic/analytics/enterpriseLevelSentimentsMoods');
+                    }
+                    else if(gUser.azureUser?.roleName && gUser.azureUser?.roleName === ENTERPRISE){
+                      navigate('/enterprise/analytics/enterpriseLevelSentimentsMoods');
+                    }
+                    
+                 
                   }}
                 >
                   <EnterpriseLevelSentimentsMoodsChart
@@ -1213,9 +1240,14 @@ function EnterpriseDashboard() {
                 </Box>
                 <Box
                   onClick={() => {
-                    navigate(
-                      '/enterprise/analytics/enterpriseLevelSentimentsSummary'
-                    );
+                    if(gUser.azureUser?.roleName && gUser.azureUser?.roleName === BASIC){
+                      navigate('/basic/analytics/enterpriseLevelSentimentsSummary');
+                    }
+                    else if(gUser.azureUser?.roleName && gUser.azureUser?.roleName === ENTERPRISE){
+                      navigate('/enterprise/analytics/enterpriseLevelSentimentsSummary');
+                    }
+                    
+                  
                   }}
                 >
                   <EnterpriseLevelSentimentsSummaryChart

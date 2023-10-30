@@ -38,6 +38,7 @@ import {
   H5SemiBoldTypography,
 } from '../../components/CustomizedTypography';
 import { UserContext } from '../../contexts/UserContext';
+import { BASIC, ENTERPRISE } from '../../constants/applicationConst';
 
 type Props = {
   pulseCheck: any;
@@ -76,9 +77,13 @@ export default function SimplePulseCheck({ pulseCheck }: Props) {
     ) {
       const currentUser: any = users.find(user1 => user1.userId === user.id);
       if (currentUser?.pulseCheckQuestions.length > 0) {
-        if(gUser?.azureUser?.emailId!=undefined){
+        if(gUser?.azureUser?. roleName ===ENTERPRISE){
           navigate('/enterprise/sessions/board/' + currentRetro?.id);
-        }else{
+        }
+       else if(gUser?.azureUser?. roleName ===BASIC){
+          navigate('/basic/sessions/board/' + currentRetro?.id);
+        }
+        else{
           navigate('/board/' + currentRetro?.id);
         }
         
@@ -104,8 +109,13 @@ export default function SimplePulseCheck({ pulseCheck }: Props) {
         parseGPulseCheckState.pulseSubmitState &&
         parseGPulseCheckState?.retroId === currentRetro?.id
       ) {
-        if(gUser?.azureUser?.emailId!=undefined){
-        navigate('/enterprise/sessions/board/' + currentRetro?.id);}
+        if(gUser?.azureUser?. roleName ===ENTERPRISE){
+          navigate('/enterprise/sessions/board/' + currentRetro?.id);
+        }
+       else if(gUser?.azureUser?. roleName ===BASIC){
+          navigate('/basic/sessions/board/' + currentRetro?.id);
+        }
+       
         else {
 
           navigate('/board/' + currentRetro?.id);}
@@ -208,9 +218,19 @@ export default function SimplePulseCheck({ pulseCheck }: Props) {
         'pulseCheckState',
         JSON.stringify(pulseCheckState)
       );
-      if(gUser?.azureUser?.emailId!=undefined){
+
+
+      if(gUser?.azureUser?. roleName ===ENTERPRISE){
         navigate('/enterprise/sessions/board/' + currentRetro?.id);
-      }else{    navigate('/board/' + currentRetro?.id);}
+      }
+     else if(gUser?.azureUser?. roleName ===BASIC){
+        navigate('/basic/sessions/board/' + currentRetro?.id);
+      }
+     
+      else navigate('/board/' + currentRetro?.id);
+
+
+  
   
     };
 
@@ -233,9 +253,14 @@ export default function SimplePulseCheck({ pulseCheck }: Props) {
       text: 'Are you sure? Your voice matters!',
       action: 'Skip',
       onConfirm: () => {
-        if(gUser?.azureUser?.emailId!=undefined){
+        if(gUser?.azureUser?. roleName ===ENTERPRISE){
           navigate('/enterprise/sessions/board/' + currentRetro?.id);
-        }else{ navigate('/board/' + currentRetro?.id);}
+        }
+       else if(gUser?.azureUser?. roleName ===BASIC){
+          navigate('/basic/sessions/board/' + currentRetro?.id);
+        }
+       
+        else navigate('/board/' + currentRetro?.id);
        
         setConfirmAction(undefined);
       },

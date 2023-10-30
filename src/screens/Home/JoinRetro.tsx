@@ -260,7 +260,7 @@ export function JoinRetro() {
   ) => {
     await commitAction(actionName as BoardActionType, {
       parameters,
-      userId: global.user.id,
+      userId: gUser.azureUser?.emailId?gUser.azureUser?.emailId: global.user.id ,
     });
   };
 

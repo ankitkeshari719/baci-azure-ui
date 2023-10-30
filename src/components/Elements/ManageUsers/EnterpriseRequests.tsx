@@ -26,6 +26,7 @@ import {
   addEnterpriseRequestNotification,
   approvedDeclinedEnterpriseRequestByIds,
   getAllByEnterpriseId,
+  sendEmails,
   updateEnterpriseRequest,
   updateRoleOnEnterpriseRequest,
   updateUser,
@@ -43,6 +44,7 @@ import { ContainedButton } from '../../CustomizedButton/ContainedButton';
 import { OutlinedButton } from '../../CustomizedButton/OutlinedButton';
 import OutlineButtonWithIconWithNoBorder from '../../CustomizedButton/OutlineButtonWithIconWithNoBorder';
 import TeamSelector from '../TeamSelector';
+import { UserContext } from '../../../contexts/UserContext';
 
 const headCells = [
   { id: 'check', label: '', disableSorting: true },
@@ -59,6 +61,7 @@ const headCells = [
 
 export default function EnterpriseRequests() {
   const [global, dispatch] = React.useContext(GlobalContext);
+  const [gUser] = React.useContext(UserContext);
   const [height, setHeight] = React.useState(0);
   const localUserData = localStorage.getItem('userData');
   const tempLocalUserData = localUserData && JSON.parse(localUserData);
@@ -416,7 +419,17 @@ export default function EnterpriseRequests() {
     };
 
     await approvedDeclinedEnterpriseRequestByIds(requestBody).then(
-      res => {
+      async res => {
+        await sendEmails(
+          selectedEnterpriseRequestEmailIds,
+          'Request approved',
+          `Your request has been approved by ${
+            gUser.azureUser?.firstName + ' ' + gUser.azureUser?.lastName
+          }`
+        ).then(emailRes => {
+          console.log('Approval email send to user res', emailRes);
+        });
+
         dispatch({
           type: ActionType.SET_LOADING,
           payload: { loadingFlag: false },
@@ -472,7 +485,20 @@ export default function EnterpriseRequests() {
     };
 
     await approvedDeclinedEnterpriseRequestByIds(requestBody).then(
-      res => {
+     async res => {
+
+
+      await sendEmails(
+        selectedEnterpriseRequestEmailIds,
+        'Request declined',
+        `Your request has been declined by ${
+          gUser.azureUser?.firstName + ' ' + gUser.azureUser?.lastName
+        }`
+      ).then(emailRes => {
+        console.log('Decline email send to user res', emailRes);
+      });
+
+
         dispatch({
           type: ActionType.SET_LOADING,
           payload: { loadingFlag: false },

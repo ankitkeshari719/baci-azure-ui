@@ -14,6 +14,7 @@ import {
 import { Retro as RetroType } from '../../../helpers/types';
 import { OutlinedButton } from '../../CustomizedButton/OutlinedButton';
 import { BASIC, ENTERPRISE } from '../../../constants/applicationConst';
+import { UserContext } from '../../../contexts/UserContext';
 
 const styles = {
   accessCodeTextField: {
@@ -33,6 +34,7 @@ export function JoinRetroEnterprise() {
   const retro = useRetro();
   const navigate = useNavigate();
   const [global, dispatch] = React.useContext(GlobalContext);
+  const [gUser,userDispatch]= React.useContext(UserContext);
   const localUserData = localStorage.getItem('userData');
   const tempLocalUserData = localUserData && JSON.parse(localUserData);
 
@@ -56,6 +58,12 @@ export function JoinRetroEnterprise() {
       payload: { retro: foundRetro },
     });
     if (foundRetro !== undefined) {
+      if (tempLocalUserData && tempLocalUserData.roleName === BASIC) {
+        navigate('/basic/sessions/join/' + humanId);
+      } else if (tempLocalUserData && tempLocalUserData.roleName === ENTERPRISE) {
+        navigate('/enterprise/sessions/join/' + humanId);
+      }
+      else
       navigate('/join/' + humanId);
       return foundRetro;
     } else {
@@ -78,11 +86,22 @@ export function JoinRetroEnterprise() {
   }
 
   const navigateToPrivatePolicy = () => {
-    navigate('/enterprise/privatePolicy/');
+    if (tempLocalUserData && tempLocalUserData.roleName === BASIC) {
+      navigate('/basic/privatePolicy/');
+    } else if (tempLocalUserData && tempLocalUserData.roleName === ENTERPRISE) {
+      navigate('/enterprise/privatePolicy/');
+    }
+  
   };
 
   const navigateToTermAndCondition = () => {
-    navigate('/enterprise/termAndCondition/');
+
+    if (tempLocalUserData && tempLocalUserData.roleName === BASIC) {
+      navigate('/basic/termAndCondition/');
+    } else if (tempLocalUserData && tempLocalUserData.roleName === ENTERPRISE) {
+      navigate('/enterprise/termAndCondition/');
+    }
+
   };
 
   return (

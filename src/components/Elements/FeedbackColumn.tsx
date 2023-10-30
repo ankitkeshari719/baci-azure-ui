@@ -9,6 +9,8 @@ import { ActionType, GlobalContext } from '../../contexts/GlobalContext';
 import { useNavigate } from 'react-router';
 import theme from '../../helpers/theme/theme';
 import { FeedbackEntry } from '../../helpers/types';
+import { UserContext } from '../../contexts/UserContext';
+import { BASIC, ENTERPRISE } from '../../constants/applicationConst';
 
 const ColumnComponent = styled('div')({
   height: 'calc(var(--app-height) - 120px)',
@@ -43,6 +45,7 @@ export function FeedbackColumn({
   const [uncompletedError, setUnCompletedError] = React.useState(false);
 
   const scrollContainer = isXsUp || !noHeader;
+  const [gUser, userDispatch] = React.useContext(UserContext);
 
   React.useEffect(() => {
     onScroll();
@@ -91,8 +94,29 @@ export function FeedbackColumn({
         FEATURE_FLAGS.report &&
         global.currentRetro?.creatorId === global.user.id
       ) {
+        if (gUser?.azureUser?.roleName === ENTERPRISE)
+        navigate(
+          'enterprise/sessions/report/' + global.currentRetro.id
+        );
+        else if (gUser?.azureUser?.roleName === BASIC){
+          navigate(
+            'basic/sessions/report/' + global.currentRetro.id
+          );
+        }
+        else
         navigate('/report/' + global.currentRetro.id);
       } else {
+
+        if (gUser?.azureUser?.roleName === ENTERPRISE)
+        navigate(
+          'enterprise/sessions/offboarding'
+        );
+        else if (gUser?.azureUser?.roleName === BASIC){
+          navigate(
+            'basic/sessions/offboarding'
+          );
+        }
+
         navigate(`/offboarding`);
       }
     };

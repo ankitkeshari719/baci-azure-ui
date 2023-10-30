@@ -149,9 +149,9 @@ export default function EditProfile({ handleEdit }: Props) {
 
     let roleName = tempLocalUserData && tempLocalUserData.roleName;
     if (roleName === BASIC) {
-      setRole('Basic');
+      setRole(BASIC);
     } else {
-      setRole('Enterprise');
+      setRole(ENTERPRISE);
     }
   }, []);
 

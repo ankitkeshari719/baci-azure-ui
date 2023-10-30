@@ -8,6 +8,8 @@ import commonStyles from '../../style.module.scss';
 import Paper from '@mui/material/Paper';
 
 import { useNavigate } from 'react-router-dom';
+import { BASIC, ENTERPRISE } from '../../constants/applicationConst';
+import { UserContext } from '../../contexts/UserContext';
 const theme = createTheme({
   palette: {
     primary: {
@@ -30,6 +32,7 @@ const Item = styled(Paper)(({ theme }) => ({
 function BackdropButtons() {
   const navigate = useNavigate();
   const [open, setOpen] = React.useState(false);
+  const [gUser,userDispatch]= React.useContext(UserContext);
 
   const handleClose = () => {
     setOpen(false);
@@ -39,18 +42,49 @@ function BackdropButtons() {
   };
 
   const navigateToJoinSession = () => {
+    if (gUser?.azureUser?.roleName === ENTERPRISE)
+    navigate(
+      'enterprise/sessions/joinRetro/' 
+    );
+    else if (gUser?.azureUser?.roleName === BASIC){
+      navigate(
+        'basic/sessions/joinRetro/' 
+      );
+    }
     navigate('/basic/joinRetro/');
   };
 
   const navigateToCreateSession = () => {
+    if (gUser?.azureUser?.roleName === ENTERPRISE)
+    navigate(
+      'enterprise/sessions/createRetro/' 
+    );
+    else if (gUser?.azureUser?.roleName === BASIC){
+      navigate(
+        'basic/sessions/createRetro/' 
+      );
+    }
+    else
     navigate('/basic/createRetro/');
   };
 
   const navigateToUploadImage = () => {
-    // navigate('/basic/uploadImage/');
+
+
+    if (gUser?.azureUser?.roleName === ENTERPRISE)
+    navigate(
+      'enterprise/sessions/createSession/' 
+    );
+    else if (gUser?.azureUser?.roleName === BASIC){
+      navigate(
+        'basic/sessions/createSession/' 
+      );
+    }
+    else
     navigate('/basic/createSession/');
-    
   };
+    
+  
 
 
   return (

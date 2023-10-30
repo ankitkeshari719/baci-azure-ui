@@ -15,16 +15,24 @@ import {
 } from './statemachine/BoardStateMachine';
 import { pulseCheckInterface } from '../screens/CreateRetro/const';
 import { SocketContext } from '../contexts/SocketProvider';
+import { useNavigate } from 'react-router-dom';
 
 export const useRetro = () => {
   const [state, dispatch] = React.useContext(GlobalContext);
   const socket = React.useContext(SocketContext);
+  const navigate = useNavigate();
   return {
     create: async (
       retro: Partial<Omit<Retro, 'id'>>,
       retroTimeframe: string,
       retroGoal: string
     ): Promise<Retro> => {
+      var url = '';
+      if (location.pathname.includes('basic')) {
+        url = '/basic/sessions';
+      } else if (location.pathname.includes('enterprise'))
+        url = '/enterprise/sessions';
+      else url = '';
       const humanId = (
         '' +
         (Math.random() * 1000000000 + 1000000000)
@@ -36,7 +44,7 @@ export const useRetro = () => {
         humanId,
         joinUrl: `${window.location.protocol}//${window.location.hostname}${
           window.location.port ? ':' + window.location.port : ''
-        }/join/${humanId}`,
+        }${url}/join/${humanId}`,
       } as Retro;
 
       const id = await createRetro(currentRetro, state.user);
@@ -93,13 +101,18 @@ export const useRetro = () => {
         (Math.random() * 1000000000 + 1000000000)
       ).substring(0, 6);
 
+      var url = '';
+      if (location.pathname.includes('basic')) {
+        url = '/basic/sessions';
+      } else if (location.pathname.includes('enterprise'))
+        url = '/enterprise/sessions';
+      else url = '';
+
       const currentRetro = {
         name: 'Retro',
-        ...(retro ? retro : {}),
-        humanId,
+        ...(retro ? retro : {}),humanId,
         joinUrl: `${window.location.protocol}//${window.location.hostname}${
-          window.location.port ? ':' + window.location.port : ''
-        }/join/${humanId}`,
+          window.location.port ? ':' + window.location.port : ''}${url}/join/${humanId}`,
         retroGoal: retroGoal,
         retroTimeframe: retroTimeframe,
         selectedTemplate: selectedTemplate,
@@ -141,7 +154,13 @@ export const useRetro = () => {
           payload: { retro: retrievedRetro },
         });
       });
+      var url = '';
+      if (location.pathname.includes('basic')) {
+        url = '/basic/sessions';
+      } else if (location.pathname.includes('enterprise'))
+        url = '/enterprise/sessions';
 
+      else url = '';
       const action: Action = {
         id: shortid.generate(),
         actionName: BoardActionType.UPDATE_RETRO_DETAILS,
@@ -150,7 +169,7 @@ export const useRetro = () => {
           humanId: humanId,
           joinUrl: `${window.location.protocol}//${window.location.hostname}${
             window.location.port ? ':' + window.location.port : ''
-          }/join/${humanId}`,
+          }${url}/join/${humanId}`,
           retroGoal,
           retroTimeframe,
           pulseCheck: selectedPulseCheck,

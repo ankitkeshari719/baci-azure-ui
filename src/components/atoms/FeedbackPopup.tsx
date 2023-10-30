@@ -34,6 +34,8 @@ import {
 import { TextButton } from '../CustomizedButton/TextButton';
 import { ContainedButton } from '../CustomizedButton/ContainedButton';
 import * as Icons from 'heroicons-react';
+import { UserContext } from '../../contexts/UserContext';
+import { BASIC, ENTERPRISE } from '../../constants/applicationConst';
 
 const BorderLinearProgress = styled(LinearProgress)(({ theme }) => ({
   height: '6px',
@@ -65,6 +67,7 @@ export default function FeedbackPopup(props: {
   const [showThankYou, setShowThankYou] = React.useState(false);
   const isXsUp = useMediaQuery(theme.breakpoints.between('xs', 'sm'));
   const navigate = useNavigate();
+  const [gUser, userDispatch] = React.useContext(UserContext);
 
   const handleNext = () => {
     let newIndex = index + 1;
@@ -127,15 +130,54 @@ export default function FeedbackPopup(props: {
       FEATURE_FLAGS.report &&
       global.currentRetro?.creatorId === global.user.id
     ) {
+
+      if (gUser?.azureUser?.roleName === ENTERPRISE)
+      navigate(
+        'enterprise/sessions/report/' + global.currentRetro?.id
+      );
+      else if (gUser?.azureUser?.roleName === BASIC){
+        navigate(
+          'basic/sessions/report/' + global.currentRetro?.id
+        );
+      }
+      else
+
       navigate('/report/' + global.currentRetro.id);
     } else {
+      if (gUser?.azureUser?.roleName === ENTERPRISE)
+      navigate(
+        'enterprise/sessions/offboarding' 
+      );
+      else if (gUser?.azureUser?.roleName === BASIC){
+        navigate(
+          'basic/sessions/offboarding'
+        );
+      }
+      else
+
+
+
       navigate(`/offboarding`);
     }
   };
 
   const closeFeedback = () => {
+    if (gUser?.azureUser?.roleName === ENTERPRISE)
+    navigate(
+      'enterprise/sessions/offboarding' 
+    );
+    else if (gUser?.azureUser?.roleName === BASIC){
+      navigate(
+        'basic/sessions/offboarding'
+      );
+    }
+    else
+
+
+
     navigate(`/offboarding`);
-  };
+  }
+  
 
   return (
     <Dialog

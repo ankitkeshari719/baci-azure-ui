@@ -1,4 +1,4 @@
-import { Action, Retro, User } from '../types';
+import { Action, ActionInterface, Retro, User } from '../types';
 import { Dayjs } from 'dayjs';
 
 import { API_URL } from '../../constants/FeatureFlags';
@@ -296,7 +296,8 @@ export const createJiraIssue = async (
   projectId: string,
   issueType: string,
   jiraCode: string,
-  description: string
+  description: string,
+  action:any
 ): Promise<any> => {
   let status: any = '';
   const requestOptions = {
@@ -307,6 +308,7 @@ export const createJiraIssue = async (
       issueType,
       access_token: jiraCode,
       description,
+      action
     }),
   };
 
@@ -317,6 +319,54 @@ export const createJiraIssue = async (
     });
   return status;
 };
+
+export const sendEmails = async (
+  recipients:any,subject:string,text:string
+): Promise<any> => {
+  let status: any = '';
+  const requestOptions = {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({
+      recipients: recipients,subject:subject,text:text
+    }),
+  };
+
+  await fetch(API_URL + `/sendEmails`, requestOptions)
+    .then(response => response.json())
+    .then(data => {
+      status = data;
+    });
+  return status;
+};
+
+export const editJiraIssue = async (
+
+  jiraCode: string,
+  description: string,
+  action:any
+): Promise<any> => {
+  let status: any = '';
+  const requestOptions = {
+    method: 'PUT',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({
+
+      access_token: jiraCode,
+      actionValue:description,
+      action
+    }),
+  };
+
+  await fetch(API_URL + `/editJiraIssue`, requestOptions)
+    .then(response => response.json())
+    .then(data => {
+      status = data;
+    });
+  return status;
+};
+
+
 
 //jira users list
 export const getJiraUserList = async (

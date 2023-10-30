@@ -36,17 +36,29 @@ export default function useLoadRetro() {
   };
 
   React.useEffect(() => {
-    console.log("waiting",retroId)
+    console.log('waiting', retroId);
     if (!global?.user?.name && id) {
-      navigate('/join/' + id);
+      if (location.pathname.includes('basic')) {
+        navigate('/basic/join/' + id);
+      } else if (location.pathname.includes('enterprise'))
+        navigate('/enterprise/sessions/join/' + id);
+      else navigate('/join/' + id);
       return;
     }
     if ((!id || id === '') && global.currentRetro?.id) {
-      navigate('/');
+      if (location.pathname.includes('basic')) {
+        navigate('/basic/sessions/');
+      } else if (location.pathname.includes('enterprise'))
+        navigate('/enterprise/sessions/');
+      else navigate('/');
       return;
     }
     if ((!id || id === '') && !global.currentRetro?.id) {
-      navigate('/');
+      if (location.pathname.includes('basic')) {
+        navigate('/basic/sessions/');
+      } else if (location.pathname.includes('enterprise'))
+        navigate('/enterprise/sessions/');
+      else navigate('/');
       return;
     }
     if (id !== retroId) {
@@ -58,7 +70,11 @@ export default function useLoadRetro() {
               payload: { retro },
             });
           } else {
-            navigate('/');
+            if (location.pathname.includes('basic')) {
+              navigate('/basic/sessions/');
+            } else if (location.pathname.includes('enterprise'))
+              navigate('/enterprise/sessions/');
+            else navigate('/');
             return;
           }
         })
@@ -87,16 +103,30 @@ export default function useLoadRetro() {
               return;
             }
           } else {
-            console.log(gUser.azureUser?.emailId,"email")
-            if (global.currentRetro?.creatorId !== global.user.id && global.currentRetro?.creatorId!==gUser.azureUser?.emailId)
-            if(gUser.azureUser?.emailId){ navigate(`/enterprise/sessions/board/${retroId}/waiting`);}
-            else
-              navigate(`/board/${retroId}/waiting`);
+            console.log(gUser.azureUser?.emailId, 'email');
+            if (
+              global.currentRetro?.creatorId !== global.user.id &&
+              global.currentRetro?.creatorId !== gUser.azureUser?.emailId
+            ) {
+              if (location.pathname.includes('basic')) {
+                navigate('/basic/sessions' + `/board/${retroId}/waiting`);
+              } else if (location.pathname.includes('enterprise'))
+                navigate('/enterprise/sessions' + `/board/${retroId}/waiting`);
+              else navigate(`/board/${retroId}/waiting`);
+            }
+
+            // if (gUser.azureUser?.emailId) {
+
+            //   navigate(`/enterprise/sessions/board/${retroId}/waiting`);
+            // } else navigate(`/board/${retroId}/waiting`);
             else {
-              if(gUser.azureUser?.emailId){  
-                console.log("true in emailID",gUser.azureUser?.emailId)
-                navigate(`/enterprise/sessions/board/${retroId}/startRetro`);}
-              navigate(`/board/${retroId}/startRetro`);
+              if (location.pathname.includes('basic')) {
+                navigate('/basic/sessions' + `/board/${retroId}/startRetro`);
+              } else if (location.pathname.includes('enterprise'))
+                navigate(
+                  '/enterprise/sessions' + `/board/${retroId}/startRetro`
+                );
+              else navigate(`/board/${retroId}/startRetro`);
             }
             return;
           }
@@ -104,5 +134,5 @@ export default function useLoadRetro() {
         return;
       }
     }
-  }, [retroId,loading]);
+  }, [retroId, loading]);
 }

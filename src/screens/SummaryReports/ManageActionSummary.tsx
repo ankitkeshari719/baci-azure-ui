@@ -82,25 +82,25 @@ export default function ManageActionSummary({
     SetOpenHelpPopup(false);
   };
 
-  const createIssue = async () => {
-    manageActions.map((action: any, index: number) => {
-      createJiraIssue(
-        selectedJiraProject,
-        selectedJiraMeta,
-        global.jiraCode as string,
-        action.value
-      ).then(
-        (res: any) => {
-          return res.response;
-        },
-        (error: any) => {
-          console.log('error', error);
-          return [];
-        }
-      );
-    });
-    SetOpenHelpPopup(true);
-  };
+  // const createIssue = async () => {
+  //   manageActions.map((action: any, index: number) => {
+  //     createJiraIssue(
+  //       selectedJiraProject,
+  //       selectedJiraMeta,
+  //       global.jiraCode as string,
+  //       action.value
+  //     ).then(
+  //       (res: any) => {
+  //         return res.response;
+  //       },
+  //       (error: any) => {
+  //         console.log('error', error);
+  //         return [];
+  //       }
+  //     );
+  //   });
+  //   SetOpenHelpPopup(true);
+  // };
 
 
   const loadJiraProjects = async (): Promise<string[]> => {
@@ -143,7 +143,7 @@ export default function ManageActionSummary({
           <Typography className="textTypeFour">Actions Identified</Typography>
         </Col>
         {/* Jira Integration*/}
-        {global.jiraCode ? (
+        {/* {global.jiraCode ? (
           <Col
             xs="6"
             className="d-flex justify-content-start align-items-center"
@@ -196,7 +196,7 @@ export default function ManageActionSummary({
             <Button
               variant="outlined"
               className="submitfeedback"
-              onClick={createIssue}
+              // onClick={createIssue}
             >
               <Typography className="textTypeFour">Create</Typography>
             </Button>
@@ -235,7 +235,7 @@ export default function ManageActionSummary({
               <Typography className="textTypeFour">Connect to Jira</Typography>
             </Button>
           </Col>
-        )}
+        )} */}
         {manageActions.length === 0 ? null : (
           <Col
             xs={{ span: 2, offset: 8 }}
@@ -259,6 +259,9 @@ export default function ManageActionSummary({
           </Col>
         )}
       </Row>
+
+
+      
       {/* Actions to be Taken Section 2*/}
       {manageActions.length === 0 ? (
         // Manage Action when the no. is zero

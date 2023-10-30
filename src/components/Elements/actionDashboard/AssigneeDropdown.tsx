@@ -4,6 +4,7 @@ import { Box, Button, Menu, MenuItem } from '@mui/material';
 import Avatar from '../Avatar';
 import { ChevronDownIcon } from '@heroicons/react/24/outline';
 import { GlobalContext } from '../../../contexts/GlobalContext';
+import { LazyLoadImage } from 'react-lazy-load-image-component';
 
 export default function AssigneeDropdown({
   id,
@@ -23,9 +24,27 @@ export default function AssigneeDropdown({
   const open = Boolean(anchorEl);
 
   const returnUser = (id: string) => {
+
+    if(id==""||id==undefined||id==null){
+      return ( <Box display="flex" flexDirection="row" alignItems="center">
+      <LazyLoadImage
+      className="avatar"
+      style={{
+        width: '32px',
+        height: '32px',
+        borderRadius: '50%',
+        border: 'none',
+        marginRight:'10px'
+      }}
+      src={'/svgs/DefaultUser.svg'}
+    ></LazyLoadImage>
+    Un-assigned
+    </Box>)
+    }
   
     const user = users.find(user => user.emailId == id);
     return (
+      user?
       <Box display="flex" flexDirection="row" alignItems="center">
         <Avatar
           avatar={user?.selectedAvatar}
@@ -38,7 +57,20 @@ export default function AssigneeDropdown({
         />
         {user?.firstName!=undefined?user?.firstName!=undefined?user?.firstName:"" + ' ' + user?.lastName?user?.lastName:"":user.emailId}
 
-      </Box>
+      </Box>:
+         <Box display="flex" flexDirection="row" alignItems="center">
+         <LazyLoadImage
+         className="avatar"
+         style={{
+           width: '32px',
+           height: '32px',
+           borderRadius: '50%',
+           border: 'none',
+         }}
+         src={'/svgs/DefaultUser.svg'}
+       ></LazyLoadImage>
+       Un-assigned
+       </Box>
     );
   };
   React.useEffect(() => {
@@ -83,12 +115,37 @@ export default function AssigneeDropdown({
           horizontal: 'right',
         }}
       >
+
+<MenuItem
+               
+                value={""}
+                onClick={() => {
+                  handleClose();
+                  outAssigneeSelected("");
+                  setAssigneeId("");
+                }}
+              >
+                
+                <Box display="flex" flexDirection="row" alignItems="center">
+                  {/* <Avatar
+                    avatar={user?.selectedAvatar}
+                    css={{
+                      width: '32px',
+                      height: '32px',
+                      border: 'none',
+                      marginRight: '5px',
+                    }}
+                  /> */}
+           Un-assigned
+                </Box>
+              </MenuItem>
+
         {users.map(
           (user,index) =>
-            user.emailId !== assigneeId && (
+            user?.emailId !== assigneeId && (
               <MenuItem
-                key={user.emailId+index+inputIndex}
-                value={user.emailId}
+                key={user?.emailId+index+inputIndex}
+                value={user?.emailId}
                 onClick={() => {
                   handleClose();
                   outAssigneeSelected(user);

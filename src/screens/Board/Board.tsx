@@ -41,6 +41,8 @@ import useReRoute from '../../helpers/hooks/useReRoute';
 import ActionMainContainer from '../ManageActions/ActionMainContainer';
 import LeftBar from '../../components/Elements/leftBar/LeftBar';
 import { createRetroSummary } from '../../helpers/msal/services';
+import { UserContext } from '../../contexts/UserContext';
+import { BASIC, ENTERPRISE } from '../../constants/applicationConst';
 
 interface StyledTabsProps {
   children?: React.ReactNode;
@@ -150,6 +152,7 @@ export default function RetroBoard() {
   const isXsUp = useMediaQuery(theme.breakpoints.only('xs'));
   const isSmUp = useMediaQuery(theme.breakpoints.only('sm'));
   const [global, dispatch] = React.useContext(GlobalContext);
+  const [gUser, userDispatch] = React.useContext(UserContext);
   const {
     state: {
       startedDate,
@@ -372,7 +375,7 @@ export default function RetroBoard() {
 
       if (actionsData != undefined && actionsData.actions.length != 0) {
         actionsData.actions.forEach(action => {
-          columnString = columnString + ' : ' +action.value;
+          columnString = columnString + ' : ' + action.value;
           cards.push(action.value);
         });
       }
@@ -404,7 +407,14 @@ export default function RetroBoard() {
                 type: ActionType.SET_LOADING,
                 payload: { loadingFlag: false },
               });
-              navigate('/report/' + global.currentRetro?.id);
+
+              if (gUser?.azureUser?.roleName == ENTERPRISE)
+                navigate(
+                  '/enterprise/sessions/report/' + global.currentRetro?.id
+                );
+              else if (gUser?.azureUser?.roleName == BASIC)
+                navigate('/basic/sessions/report/' + global.currentRetro?.id);
+              else navigate('/report/' + global.currentRetro?.id);
             },
             () => {
               dispatch({

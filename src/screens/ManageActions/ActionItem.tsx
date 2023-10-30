@@ -1,13 +1,6 @@
 import * as React from 'react';
 import './styles.scss';
 import * as Icons from 'heroicons-react';
-import {
-  RocketLaunchIcon,
-  CheckCircleIcon,
-  BookmarkIcon,
-  BugAntIcon,
-  BoltIcon,
-} from '@heroicons/react/24/outline';
 import { ActionInterface } from '../../helpers/types';
 import { ListItemIcon, ListItemText } from '@material-ui/core';
 import {
@@ -32,11 +25,11 @@ import {
   listJiraProjects,
   listJiraMeta,
   createJiraIssue,
+  editJiraIssue,
   getJiraUserList,
 } from '../../helpers/msal/services';
 import { NestedDropdown } from 'mui-nested-menu';
 import DyanamicDialog from '../../components/atoms/DyanamicDialog';
-import { UserActionType, UserContext } from '../../contexts/UserContext';
 
 type Props = {
   action: ActionInterface;
@@ -49,9 +42,8 @@ type Props = {
   disabled: boolean;
   removeAction: (selectedActions: ActionInterface) => void;
   assignAction: (ids: string[], assigneeId: string) => void;
-
   isOtherParticipantAction?: boolean;
-  jiraProjects:any[]
+  jiraProjects: any[];
 };
 
 export default function ActionItem({
@@ -66,16 +58,14 @@ export default function ActionItem({
   removeAction,
   assignAction,
   isOtherParticipantAction,
-  jiraProjects
+  jiraProjects,
 }: Props) {
   const {
     state: { ended, users, actionsData },
     commitAction,
   } = React.useContext(BoardContext);
   const [global, dispatch] = React.useContext(GlobalContext);
-  const [gUser, userDispatch] = React.useContext(UserContext);
   const labelId = `action-label-${action.id}`;
-
   const [isMouseHover, setIsMouseHover] = React.useState<boolean>(false);
   const [isEditActionClick, setIsEditActionClick] =
     React.useState<boolean>(false);
@@ -90,34 +80,9 @@ export default function ActionItem({
     null
   );
   const openMainMenu = Boolean(mainAnchorEl);
-  // const [jiraProjects, setJiraProjects] = React.useState<any>([
-  //   { label: 'Select JIRA Project', disabled },
-  //   {
-  //     label: 'Project 1',
-  //     leftIcon: <RocketLaunchIcon height="18px" />,
-  //     rightIcon: <img src="/svgs/RightArrow.svg" />,
-  //     callback: () => setShowDialog(true),
-  //     items: [
-  //       { label: 'Export as...', disabled },
-  //       {
-  //         label: 'Task',
-  //         leftIcon: <CheckCircleIcon height="18px" />,
-  //       },
-  //       {
-  //         label: 'Story',
-  //         leftIcon: <BookmarkIcon height="18px" />,
-  //       },
-  //       { label: 'Bug', leftIcon: <BugAntIcon height="18px" /> },
-  //       { label: 'Epic', leftIcon: <BoltIcon height="18px" /> },
-  //     ],
-  //   },
-  // ]);
 
-  // For Users Menu
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
-  const [anchorEl1, setAnchorEl1] = React.useState<null | HTMLElement>(null);
   const open = Boolean(anchorEl);
-  const openProjectList = Boolean(anchorEl1);
   const [selectedActionForAssign, setSelectedActionForAssign] =
     React.useState<ActionInterface>();
   const [showDialog, setShowDialog] = React.useState<boolean>(false);
@@ -125,38 +90,174 @@ export default function ActionItem({
     r => r.by === global.user.id
   );
 
-  // For Main Menu
-  const handleMainMenuClick = (event: React.MouseEvent<HTMLElement>) => {
-    if (
-      ended ||
-      global.leaveRetro ||
-      (global.user.userType === 1 && isOtherParticipantAction)
-    ) {
-      return;
-    }
-    setMainAnchorEl(event.currentTarget);
+  //assign callback function to create jira action i.e story, task or other
+  const getJiraProjects = () => {
+    if (jiraProjects.length != 0) {
+      const projectstemsWithCallBack: any = [];
+
+      jiraProjects.forEach(project => {
+        var projectItem: any = {
+          id: project?.id,
+          label: project.label,
+          rightIcon: project.rightIcon,
+          leftIcon: project.leftIcon,
+          items: [],
+        };
+        const inputItems: any = [];
+        if (project.items?.length != 0) {
+          project.items?.forEach((item: any) => {
+            delete item.callback;
+            var itemInput = { ...item };
+
+            inputItems.push({
+              ...itemInput,
+              callback: () => {
+                var actionData: any = action;
+                actionData.retroId = global.currentRetro?.humanId;
+                (actionData.retroIdEnc = global.currentRetro?.id),
+                  (actionData.enterpriseId = global?.azureUser?.enterpriseId),
+                  (actionData.teamId = global?.currentRetro?.selectedTeam);
+                createJiraIssue(
+                  itemInput.projectData.projectId,
+                  itemInput.projectData.ticketId,
+                  global?.jiraCode ? global?.jiraCode : '',
+                  action.value,
+                  action
+                ).then(
+                  res => {
+                    console.log(res.message, res.data);
+                    if (res.data) {
+                      // alert(res.message);
+                      dispatch({
+                        type: ActionType.SET_SNACK_MESSAGE,
+                        payload: {
+                          snackMessage: {
+                            message: res.message,
+                            snackMessageType: 'success',
+                          },
+                        },
+                      });
+
+                      updateJiraAction(action.id, {
+                        jiraId: res.data.id,
+                        jiraKey: res.data.key,
+                        jiraUrl: res.data.self,
+                      });
+                    }
+                  },
+                  error => {
+                    console.log();
+                  }
+                );
+              },
+            });
+          });
+          projectItem.items = [...inputItems];
+        }
+        projectstemsWithCallBack.push(projectItem);
+      });
+      return projectstemsWithCallBack;
+    } else return jiraProjects;
   };
+
+  React.useEffect(() => {
+    setMenuItemsData({
+      label:
+        action?.assigneeAvatar === '' || action.assigneeAvatar === undefined ? (
+          <LazyLoadImage
+            className="avatar"
+            style={{
+              width: '32px',
+              height: '32px',
+              borderRadius: '50%',
+              border: 'none',
+            }}
+            src={'/svgs/DefaultUser.svg'}
+          ></LazyLoadImage>
+        ) : (
+          <LazyLoadImage
+            width="32px !important"
+            height="32px !important"
+            aria-controls={openMainMenu ? 'basic-menu' : undefined}
+            aria-haspopup="true"
+            aria-expanded={openMainMenu ? 'true' : undefined}
+            style={{
+              borderRadius: '50%',
+              border: 'none',
+            }}
+            src={'/avatars/animals/' + action?.assigneeAvatar + '.svg'}
+          ></LazyLoadImage>
+        ),
+      items: [
+        {
+          label: '   Edit   ',
+          leftIcon: (
+            <Icons.Pencil
+              size={18}
+              color="#676767"
+              style={{
+                cursor: 'unset',
+              }}
+            />
+          ),
+          callback: () => (openEditActionOption(action), handleMainMenuClose()),
+        },
+        {
+          label: '   Copy   ',
+          leftIcon: (
+            <Icons.DocumentDuplicateOutline
+              size={18}
+              color="#676767"
+              style={{
+                cursor: 'unset',
+              }}
+            />
+          ),
+          callback: () => (copyManageActions(action), handleMainMenuClose()),
+        },
+
+        !action.jiraId && {
+          label: '    Export to JIRA  ',
+          leftIcon: (
+            <img
+              src="/images/jira.png"
+              style={{ height: '18px', width: '18px' }}
+            />
+          ),
+          rightIcon: <img src="/svgs/RightArrow.svg" />,
+          items:
+            global.jiraCode == ''
+              ? [
+                  {
+                    label: 'Connect JIRA',
+                    leftIcon: <img src="/images/ArrowLeftOnRectangle.png" />,
+                    callback: () => setShowDialog(true),
+                  },
+                ]
+              : getJiraProjects(),
+        },
+
+        {
+          label: '   Remove   ',
+          leftIcon: (
+            <Icons.TrashOutline
+              size={18}
+              color="#EA4335"
+              style={{
+                cursor: 'unset',
+              }}
+            />
+          ),
+          callback: () => {
+            removeAction(action), handleMainMenuClose();
+          },
+        },
+      ],
+    });
+  }, [jiraProjects, global?.jiraCode, action]);
 
   const handleMainMenuClose = () => {
     setMainAnchorEl(null);
-  };
-
-  // For Users Menu
-  const handleUsersMenuClick = (event: React.MouseEvent<HTMLElement>) => {
-    const id: string = event.currentTarget.dataset.myValue
-      ? event.currentTarget.dataset.myValue
-      : '';
-    const selectedAction = actionsData.actions.find(action => action.id === id);
-    var tempShowUnassign = false;
-    if (
-      selectedAction?.assigneeId != '' &&
-      selectedAction?.assigneeId != undefined
-    ) {
-      tempShowUnassign = true;
-    }
-    setSelectedActionForAssign(selectedAction);
-    setShowUnassign(tempShowUnassign);
-    setAnchorEl(event.currentTarget);
   };
 
   const handleUsersMenuClose = () => {
@@ -202,13 +303,79 @@ export default function ActionItem({
 
   // function to call API on saving the existing action
   const saveEditAction = async (editActionValue: string | undefined) => {
+
+    if(global?.jiraCode!==undefined&&global?.jiraCode!==""){
+      dispatch({
+        type: ActionType.SET_LOADING,
+        payload: { loadingFlag: true },
+      });
+      await saveAndProcessAction(BoardActionType.UPDATE_ACTION, {
+        id: selectedAction?.id,
+        value: editActionValue,
+      }).then(
+        async res => {
+         
+          await editJiraIssue(
+            global?.jiraCode ? global?.jiraCode : '',
+            editActionValue ? editActionValue : '',
+            action
+          ).then(
+            jiraEditRes => {
+              // alert(jiraEditRes.message);
+              dispatch({
+                type: ActionType.SET_SNACK_MESSAGE,
+                payload: {
+                  snackMessage: {
+                    message:jiraEditRes.message,
+                    snackMessageType: 'success',
+                  },
+                },
+              });
+            },
+            error => {
+              // alert(error);
+              dispatch({
+                type: ActionType.SET_SNACK_MESSAGE,
+                payload: {
+                  snackMessage: {
+                    message:error,
+                    snackMessageType: 'success',
+                  },
+                },
+              });
+            }
+          );
+  
+          setIsEditActionClick(false);
+          dispatch({
+            type: ActionType.SET_LOADING,
+            payload: { loadingFlag: false },
+          });
+        },
+        err => {
+          dispatch({
+            type: ActionType.SET_LOADING,
+            payload: { loadingFlag: false },
+          });
+        }
+      );
+     
+    }
+    else
+   {
+  
+    setShowDialog(true)
+  }
+  };
+
+  const updateJiraAction = async (actionId: string, jiraObj: any) => {
     dispatch({
       type: ActionType.SET_LOADING,
       payload: { loadingFlag: true },
     });
-    await saveAndProcessAction(BoardActionType.UPDATE_ACTION, {
-      id: selectedAction?.id,
-      value: editActionValue,
+    await saveAndProcessAction(BoardActionType.UPDATE_JIRA_ACTION, {
+      id: actionId,
+      value: jiraObj,
     }).then(
       res => {
         setIsEditActionClick(false);
@@ -249,280 +416,7 @@ export default function ActionItem({
     );
   };
 
-  const functionToGetArray = () => {
-    const items: any = [];
-    users.map((user, index) => {
-      const userItem = {
-        label: global.user.id == user.userId ? user.userNickname : 'You',
-        leftIcon: (
-          <LazyLoadImage
-            width="32px !important"
-            height="32px !important"
-            style={{
-              borderRadius: '50%',
-            }}
-            src={'/avatars/animals/' + user.avatar + '.svg'}
-          ></LazyLoadImage>
-        ),
-        callback: () => handleAssign,
-        // items: [
-        //   {
-        //     label: '   Edit   ',
-        //     leftIcon: (
-        //       <Icons.Pencil
-        //         size={18}
-        //         color="#676767"
-        //         style={{
-        //           cursor: 'unset',
-        //         }}
-        //       />
-        //     ),
-        //     callback: () => (
-        //       openEditActionOption(action), handleMainMenuClose()
-        //     ),
-        //   },
-        // ],
-      };
-
-      items.push(userItem);
-    });
-
-    // const abc: any = {
-    //   label: "user",
-    //   leftIcon: (
-    //     <Icons.TrashOutline
-    //       size={18}
-    //       color="#EA4335"
-    //       style={{
-    //         cursor: 'unset',
-    //       }}
-    //     />
-    //   ),
-    // }
-    // items.push(abc)
-    return items;
-  };
-
-  const getJiraUsers = async () => {
-    // manageActions.map((action: any, index: number) => {
-    getJiraUserList(global.jiraCode as string).then(
-      (res: any) => {
-        return res.response;
-      },
-      (error: any) => {
-        console.log('error', error);
-        return [];
-      }
-    );
-    // });
-  };
-
-  const [menuItemsData, setMenuItemsData] = React.useState<any>({
-    label:
-      action?.assigneeAvatar === '' || action.assigneeAvatar === undefined ? (
-        <LazyLoadImage
-          className="avatar"
-          style={{
-            width: '32px',
-            height: '32px',
-            borderRadius: '50%',
-            border: 'none',
-          }}
-          src={'/svgs/DefaultUser.svg'}
-          // onClick={(event)=>{handleMainMenuClick(event)} }
-        ></LazyLoadImage>
-      ) : (
-        <LazyLoadImage
-          width="32px !important"
-          height="32px !important"
-          aria-controls={openMainMenu ? 'basic-menu' : undefined}
-          aria-haspopup="true"
-          aria-expanded={openMainMenu ? 'true' : undefined}
-          style={{
-            borderRadius: '50%',
-            border: 'none',
-          }}
-          src={'/avatars/animals/' + action?.assigneeAvatar + '.svg'}
-          // onClick={(event)=>{handleMainMenuClick(event)} }
-        ></LazyLoadImage>
-      ),
-    items: [
-      {
-        label: '   Edit   ',
-        leftIcon: (
-          <Icons.Pencil
-            size={18}
-            color="#676767"
-            style={{
-              cursor: 'unset',
-            }}
-          />
-        ),
-        callback: () => (openEditActionOption(action), handleMainMenuClose()),
-      },
-      {
-        label: '   Copy   ',
-        leftIcon: (
-          <Icons.DocumentDuplicateOutline
-            size={18}
-            color="#676767"
-            style={{
-              cursor: 'unset',
-            }}
-          />
-        ),
-        callback: () => (copyManageActions(action), handleMainMenuClose()),
-      },
-      {
-        label: '    Assign to  ',
-        leftIcon: (
-          <Icons.UserCircleOutline
-            size={18}
-            color="#676767"
-            // style={{
-            //   cursor: 'unset',
-            // }}
-          />
-        ),
-        rightIcon: <img src="/svgs/RightArrow.svg" />,
-        items: functionToGetArray(),
-        callback: handleUsersMenuClick,
-      },
-
-      // {
-      //   label:"  Get List of USERS",
-      //   leftIcon:(
-      //     <Icons.UserCircleOutline
-      //       size={18}
-      //       color="#676767"
-      //       // style={{
-      //       //   cursor: 'unset',
-      //       // }}
-      //     />
-      //   ),
-      //   rightIcon: <img src="/svgs/RightArrow.svg" />,
-      //   // items: functionToGetArray(),
-      //   callback: getJiraUsers,
-
-      // },
-
-      {
-        label: '    Export to JIRA  ',
-        leftIcon: (
-          <img
-            src="/images/jira.png"
-            style={{ height: '18px', width: '18px' }}
-          />
-        ),
-        rightIcon: <img src="/svgs/RightArrow.svg" />,
-        items:
-          global.jiraCode == ''
-            ? [
-                {
-                  label: 'Connect JIRA',
-                  leftIcon: <img src="/images/ArrowLeftOnRectangle.png" />,
-                  callback: () => setShowDialog(true),
-                },
-              ]
-            : jiraProjects,
-        callback: handleUsersMenuClick,
-        // global.jiracode
-      },
-
-      {
-        label: '   Remove   ',
-        leftIcon: (
-          <Icons.TrashOutline
-            size={18}
-            color="#EA4335"
-            style={{
-              cursor: 'unset',
-            }}
-          />
-        ),
-        callback: () => {
-          removeAction(action), handleMainMenuClose();
-        },
-      },
-    ],
-  });
-
-  // React.useEffect(() => {
-  //   if (global.jiraCode != '') loadJiraProjects();
-  // }, [global.jiraCode]);
-  // //load jira projects
-  // const loadJiraProjects = async (): Promise<string[]> => {
-  //   return await listJiraProjects(global.jiraCode as string).then(
-  //     async (res: any) => {
-  //       console.log(res, 'listJiraProjects');
-  //       var jiraProj = res.response;
-  //       if (res.status == 401) {
-  //         dispatch({
-  //           type: ActionType.SET_JIRA_CODE,
-  //           payload: { jiraCode: '' },
-  //         });
-  //         userDispatch({
-  //           type: UserActionType.SET_JIRA_CODE,
-  //           payload: { jiraCode: '' },
-  //         });
-  //       }
-  //       var projects: any = [];
-  //       projects.push({ label: 'Select JIRA Project', disabled });
-  //       for (let i = 0; i < jiraProj.length; i++) {
-  //         var project: any = {
-  //           label: jiraProj[i].name,
-  //           leftIcon: <RocketLaunchIcon height="18px" />,
-  //           rightIcon: <img src="/svgs/RightArrow.svg" />,
-  //           id: jiraProj[i].id,
-  //           // callback: () => setShowDialog(true)
-  //           items: [],
-  //         };
-  //         await listJiraMeta(global.jiraCode as string, jiraProj[i].id).then(
-  //           (res: any) => {
-  //             console.log(res.response);
-  //             res.response.forEach((item: any) => {
-  //               var exportItem: any = {
-  //                 label: item.name,
-  //                 id: item.id,
-  //                 callback: () =>
-  //                   createJiraIssue(jiraProj[i].id, item.id, '', 'asdfa'),
-  //               };
-  //               project.items.push(exportItem);
-  //             });
-  //             // return res.response;
-  //           },
-  //           (error: any) => {
-  //             console.log('error', error);
-  //             return [];
-  //           }
-  //         );
-
-  //         projects.push(project);
-  //       }
-
-  //       setJiraProjects(projects);
-  //       console.log(projects, 'projects');
-  //       return projects;
-  //     },
-  //     (error: any) => {
-  //       console.log('error', error);
-  //       return [];
-  //     }
-  //   );
-  // };
-  //load jira meta data
-  const loadJiraMeta = async (projectId: string): Promise<string[]> => {
-    return await listJiraMeta(global.jiraCode as string, projectId).then(
-      (res: any) => {
-        console.log(res.response);
-        return res.response;
-      },
-      (error: any) => {
-        console.log('error', error);
-        return [];
-      }
-    );
-  };
+  const [menuItemsData, setMenuItemsData] = React.useState<any>({});
 
   return (
     <>
@@ -574,20 +468,35 @@ export default function ActionItem({
             onMouseEnter={handleMouseEnter}
             onMouseLeave={handleMouseLeave}
           >
-            <ListItemText
-              id={labelId}
-              primary={action.value}
-              style={{
-                fontFamily: 'Poppins',
-                fontStyle: 'normal',
-                fontWeight: 400,
-                fontSize: '16px',
-                lineHeight: '22px',
-                letterSpacing: '0.2px',
-                color: '#343434',
-                wordWrap: 'break-word',
-              }}
-            />
+            <>
+              {' '}
+              {action.jiraKey && (
+                <Box
+                  component={'span'}
+                  sx={{
+                    color: 'blue',
+                    marginRight: '10px',
+                    textDecoration: 'underline',
+                  }}
+                >
+                  {action.jiraKey}
+                </Box>
+              )}
+              <ListItemText
+                id={labelId}
+                primary={action.value}
+                style={{
+                  fontFamily: 'Poppins',
+                  fontStyle: 'normal',
+                  fontWeight: 400,
+                  fontSize: '16px',
+                  lineHeight: '22px',
+                  letterSpacing: '0.2px',
+                  color: '#343434',
+                  wordWrap: 'break-word',
+                }}
+              />
+            </>
             {!ended &&
               isMouseHover &&
               (global.user.userType == 2 ||
@@ -793,213 +702,6 @@ export default function ActionItem({
             </Button>
           </Box>
         )}
-
-        {/* Avatar */}
-        {/* <ListItemAvatar>
-          {action?.assigneeAvatar === '' ||
-          action.assigneeAvatar === undefined ? (
-            <LazyLoadImage
-              className="avatar"
-              style={{
-                width: '32px',
-                height: '32px',
-                borderRadius: '50%',
-                border: 'none',
-              }}
-              src={'/svgs/DefaultUser.svg'}
-              onClick={handleMainMenuClick}
-            ></LazyLoadImage>
-          ) : (
-            <LazyLoadImage
-              width="32px !important"
-              height="32px !important"
-              aria-controls={openMainMenu ? 'basic-menu' : undefined}
-              aria-haspopup="true"
-              aria-expanded={openMainMenu ? 'true' : undefined}
-              style={{
-                borderRadius: '50%',
-                border: 'none',
-              }}
-              src={'/avatars/animals/' + action?.assigneeAvatar + '.svg'}
-              onClick={handleMainMenuClick}
-            ></LazyLoadImage>
-          )}
-          <Menu
-            id="long-menu"
-            anchorEl={mainAnchorEl}
-            open={openMainMenu}
-            onClose={handleMainMenuClose}
-            MenuListProps={{
-              'aria-labelledby': 'project-button',
-            }}
-            PaperProps={{
-              elevation: 0,
-              sx: {
-                border: '1px solid #cccccc',
-                boxShadow: '0px 1px 10px rgba(0, 0, 0, 0.15)',
-                borderRadius: '10px',
-                background: '#ffffff',
-                overflow: 'visible',
-                '&:before': {
-                  content: '""',
-                  display: 'block',
-                  position: 'absolute',
-                  top: 0,
-                  right: 14,
-                  width: 10,
-                  height: 10,
-                  bgcolor: 'background.paper',
-                  transform: 'translateY(-50%) rotate(45deg)',
-                  zIndex: 0,
-                },
-              },
-            }}
-            transformOrigin={{ horizontal: 'right', vertical: 'top' }}
-            anchorOrigin={{ horizontal: 'right', vertical: 'bottom' }}
-          >
-           
-            <MenuItem
-              onClick={() => {
-                openEditActionOption(action);
-                handleMainMenuClose();
-              }}
-            >
-              <ListItemIcon>
-                <Icons.Pencil
-                  size={18}
-                  color="#676767"
-                  style={{
-                    cursor: 'unset',
-                  }}
-                />
-              </ListItemIcon>
-              <ListItemText
-                className="actionItemMenuText"
-                style={{ color: '#343434' }}
-              >
-                Edit
-              </ListItemText>
-            </MenuItem>
-           
-            <MenuItem
-              onClick={() => {
-                copyManageActions(action);
-                handleMainMenuClose();
-              }}
-            >
-              <ListItemIcon>
-                <Icons.DocumentDuplicateOutline
-                  size={18}
-                  color="#676767"
-                  style={{
-                    cursor: 'unset',
-                  }}
-                />
-              </ListItemIcon>
-              <ListItemText
-                className="actionItemMenuText"
-                style={{ color: '#343434' }}
-              >
-                Copy
-              </ListItemText>
-            </MenuItem>
-          
-            {global.user.userType === 2 && (
-              <MenuItem
-                aria-controls={open ? 'long-menu' : undefined}
-                aria-expanded={open ? 'true' : undefined}
-                aria-haspopup="true"
-                onClick={handleUsersMenuClick}
-                data-my-value={action.id}
-              >
-                <ListItemIcon>
-                  <Icons.UserCircleOutline
-                    size={18}
-                    color="#676767"
-                    style={{
-                      cursor: 'unset',
-                    }}
-                  />
-                </ListItemIcon>
-                <ListItemText
-                  className="actionItemMenuText"
-                  style={{ color: '#343434' }}
-                >
-                  Assign
-                </ListItemText>
-              </MenuItem>
-            )}
-            {global.jiraCode ? (
-              <MenuItem
-                aria-controls={openProjectList ? 'project-list' : undefined}
-                aria-expanded={openProjectList ? 'true' : undefined}
-                aria-haspopup="true"
-                onClick={loadJiraProjects}
-              >
-                <ListItemIcon>
-                  <Icons.UserCircleOutline
-                    size={18}
-                    color="#676767"
-                    style={{
-                      cursor: 'unset',
-                    }}
-                  />
-                </ListItemIcon>
-                <ListItemText
-                  className="actionItemMenuText"
-                  style={{ color: '#343434' }}
-                >
-                  Jira projects{' '}
-                </ListItemText>
-                 ̰
-              </MenuItem>
-            ) : (
-              <MenuItem
-                aria-controls={openProjectList ? 'project-list' : undefined}
-                aria-expanded={openProjectList ? 'true' : undefined}
-                aria-haspopup="true"
-                onClick={(event) => { setAnchorEl1(event.currentTarget); connect() }}
-              >
-                <ListItemIcon>
-                  <Icons.UserCircleOutline
-                    size={18}
-                    color="#676767"
-                    style={{
-                      cursor: 'unset',
-                    }}
-                  />
-                </ListItemIcon>
-                <ListItemText
-                  className="actionItemMenuText"
-                  style={{ color: '#343434' }}
-                >
-                  Export to Jira
-                </ListItemText>
-              </MenuItem>}
-            <MenuItem
-              onClick={() => {
-                removeAction(action);
-                handleMainMenuClose();
-              }}
-            >
-              <ListItemIcon>
-                <Icons.TrashOutline
-                  size={18}
-                  color="#EA4335"
-                  style={{
-                    cursor: 'unset',
-                  }}
-                />
-              </ListItemIcon>
-              <ListItemText
-                className="actionItemMenuText"
-                style={{ color: '#EA4335' }}
-              >
-                Remove
-              </ListItemText>
-            </MenuItem>
-          </Menu>
-        </ListItemAvatar> */}
         <Box
           component="span"
           sx={{
@@ -1011,9 +713,10 @@ export default function ActionItem({
             menuItemsData={
               global.user.userType == 2
                 ? menuItemsData
-                : {
-                    label: menuItemsData.label,
-                    items: [menuItemsData.items[0]],
+                
+                : menuItemsData?.label==undefined?{}: {
+                    label: menuItemsData?.label,
+                    items: [menuItemsData?.items[0]],
                   }
             }
             MenuProps={{
@@ -1023,7 +726,6 @@ export default function ActionItem({
           />
         </Box>
       </ListItem>
-
       <Menu
         id="long-menu"
         MenuListProps={{
