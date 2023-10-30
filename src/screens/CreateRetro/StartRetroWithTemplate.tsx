@@ -6,21 +6,36 @@ import { ActionType, GlobalContext } from '../../contexts/GlobalContext';
 import { getRetro } from '../../helpers/msal/services';
 import { BoardActionType } from '../../helpers/statemachine/BoardStateMachine';
 import { TimeInputDialog } from './TimeInputDialog';
+import { UserContext } from '../../contexts/UserContext';
 
 export function StartRetroWithTemplate() {
   const navigate = useNavigate();
-  const [global, dispatch] = React.useContext(GlobalContext);
   const {
     state: { retroId, retroStarted },
     commitAction,
   } = React.useContext(BoardContext);
+  const [global, dispatch] = React.useContext(GlobalContext);
+
   const [isTimeInputDialog, setIsTimeInputDialog] =
     React.useState<boolean>(false);
   const [selectedValue, setSelectedValue] = React.useState(60);
+  const [gUser, userDispatch] = React.useContext(UserContext);
 
   React.useEffect(() => {
+    console.log('Retro is starting::::::::::::::::::::');
     if (retroStarted && retroId != undefined && retroId != '') {
-      navigate(`/board/${retroId || global.currentRetro?.id}/pulsecheck`);
+      if (
+        gUser.azureUser != undefined &&
+        gUser.azureUser.emailId != undefined &&
+        gUser.azureUser.emailId != ''
+      ) {
+        navigate(
+          `/enterprise/sessions/board/${
+            retroId || global.currentRetro?.id
+          }/pulsecheck`
+        );
+      } else if (gUser.azureUser?.emailId != undefined)
+        navigate(`/board/${retroId || global.currentRetro?.id}/pulsecheck`);
     }
   }, [retroStarted]);
 
