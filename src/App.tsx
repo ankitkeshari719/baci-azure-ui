@@ -199,8 +199,11 @@ export default function App({ instance }: AppProps) {
                                   path=""
                                   element={<BasicDashboardWithEnterprise />}
                                 />
-                               <Route path="sessions/">
-                                  <Route path='' element={<SessionsMainContainer />} />
+                                <Route path="sessions/">
+                                  <Route
+                                    path=""
+                                    element={<SessionsMainContainer />}
+                                  />
 
                                   <Route
                                     path="join/:id"
@@ -209,6 +212,12 @@ export default function App({ instance }: AppProps) {
                                   {/* retro Data */}
                                   <Route
                                     path="create"
+                                    element={
+                                      <CreateRetroMain></CreateRetroMain>
+                                    }
+                                  />
+                                  <Route
+                                    path="createRetro"
                                     element={
                                       <CreateRetroMain></CreateRetroMain>
                                     }
@@ -651,7 +660,10 @@ export default function App({ instance }: AppProps) {
                                   />
                                 </Route>
                                 <Route path="sessions/">
-                                  <Route path='' element={<SessionsMainContainer />} />
+                                  <Route
+                                    path=""
+                                    element={<SessionsMainContainer />}
+                                  />
 
                                   <Route
                                     path="join/:id"
@@ -660,6 +672,12 @@ export default function App({ instance }: AppProps) {
                                   {/* retro Data */}
                                   <Route
                                     path="create"
+                                    element={
+                                      <CreateRetroMain></CreateRetroMain>
+                                    }
+                                  />
+                                  <Route
+                                    path="createRetro"
                                     element={
                                       <CreateRetroMain></CreateRetroMain>
                                     }

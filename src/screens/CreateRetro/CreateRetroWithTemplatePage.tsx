@@ -376,6 +376,7 @@ export function CreateRetroWithTemplatePage({
     }
   };
 
+  const [isSaveSessionButtonClick, setIsSaveSessionButtonClick] = React.useState(false);
   // Function to create a New Retro
   const create = async () => {
     let mySelectedTemplate;
@@ -389,6 +390,7 @@ export function CreateRetroWithTemplatePage({
 
     sessionStorage.setItem('retroname', retroName);
     setLocalRetroName(retroName);
+    setIsSaveSessionButtonClick(true);
     const userType: number =
       global?.user?.id == global.currentRetro?.creatorId
         ? UserTypeArray[1].id
@@ -710,7 +712,7 @@ export function CreateRetroWithTemplatePage({
               handleRetroDateChange={handleRetroDateChange}
               handleScheduleDescriptionChange={handleScheduleDescriptionChange}
             />
-            {activePanel == 'finalTab' && (
+            {activePanel == 'finalTab' && !isSaveSessionButtonClick && (
               <ContainedButton
                 name="Save Session"
                 onClick={create}
