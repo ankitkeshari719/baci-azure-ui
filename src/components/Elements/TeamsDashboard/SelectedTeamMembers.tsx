@@ -309,6 +309,7 @@ export default function SelectedTeamMembers({
       .filter((record: any) => record.checked)
       .map((data: any) => data.id);
     removeMultipleUser(selectedUsersIds);
+    closeRemoveMultipleUsersPopUp();
   };
 
   const columns = [
