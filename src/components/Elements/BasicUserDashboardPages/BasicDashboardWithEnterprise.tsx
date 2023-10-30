@@ -6,11 +6,13 @@ import UploadImage from '../../../assets/img/Upload Image or Photo.png';
 import Backdrop from '@mui/material/Backdrop';
 
 import {
+  BodySemiBoldTypography,
   ButtonLabelTypography,
   CaptionRegularTypography,
   CaptionSemiBoldTypography,
   H1RegularTypography,
   H4RegularTypography,
+  H5SemiBoldTypography,
   H6RegularTypography,
   H6SemiBoldTypography,
 } from '../../CustomizedTypography';
@@ -35,8 +37,20 @@ import DialogTitle from '@mui/material/DialogTitle';
 import Slide from '@mui/material/Slide';
 import Paper from '@mui/material/Paper';
 import { TransitionProps } from '@mui/material/transitions';
-import { UserContext } from '../../../contexts/UserContext';
+import { UserActionType, UserContext } from '../../../contexts/UserContext';
 import { BASIC, ENTERPRISE } from '../../../constants/applicationConst';
+import DateSelector from '../EnterpriseDashboardPages/DateSelector';
+import TeamSelector from '../TeamSelector';
+import { ActionType, GlobalContext } from '../../../contexts/GlobalContext';
+import { ContainedButtonWithIcon } from '../../CustomizedButton/ContainedButtonWithIcon';
+import {
+  chartInputType,
+  formatDateForAPI,
+  getCountOfAllSessionsOverTime,
+  getSessionsDataForTable,
+} from '../../../helpers/msal/services';
+import { TextButtonWithIcon } from '../../CustomizedButton/TextButtonWithIcon';
+import RetroCount from '../../../assets/img/RetroCount.png';
 const theme = createTheme({
   palette: {
     primary: {
@@ -76,6 +90,31 @@ const Transition = React.forwardRef(function Transition(
 
 function BasicDashboardWithEnterprise() {
   const [gUser, userDispatch] = React.useContext(UserContext);
+  const [global, dispatch] = React.useContext(GlobalContext);
+  const [displayJiraRows, setDisplayJiraRows] = React.useState<any>([]);
+  const [actionCount, setActionCount] = React.useState<number>(0);
+  const [totalParticipants, setTotalParticipants] = React.useState<any>(0);
+  const [loading, setLoading] = React.useState<boolean>(false);
+  const [sessionCount, setSessionCount] = React.useState<number>(0);
+  const [fromDate, setFromDate] = React.useState<string>(
+    gUser.chartStartDate
+      ? gUser.chartStartDate
+      : new Date().getFullYear().toString() +
+          '-' +
+          '0' +
+          new Date().getMonth().toString().slice(-2)
+  );
+  const [toDate, setToDate] = React.useState<string>(
+    gUser.chartEndDate
+      ? gUser.chartEndDate
+      : new Date().getFullYear().toString() +
+          '-' +
+          '0' +
+          (new Date().getMonth() + 1).toString().slice(-2)
+  );
+  const [users, setUsers] = React.useState<any[]>(
+    global?.users ? global?.users : []
+  );
   const navigate = useNavigate();
   const [selectId, setSelectedId] = React.useState<string>('0');
   const [open, setOpen] = React.useState(false);
@@ -168,42 +207,124 @@ function BasicDashboardWithEnterprise() {
   ];
 
   const navigateToJoinSession = () => {
-
-
     if (gUser?.azureUser?.roleName == ENTERPRISE)
-    navigate('/enterprise/sessions/');
-  else if (gUser?.azureUser?.roleName == BASIC)
-    navigate('/basic/sessions/');
-  else 
-
-    navigate('/basic/sessions/');
+      navigate('/enterprise/sessions/');
+    else if (gUser?.azureUser?.roleName == BASIC) navigate('/basic/sessions/');
+    else navigate('/basic/sessions/');
   };
 
   const navigateToCreateSession = () => {
-
     if (gUser?.azureUser?.roleName == ENTERPRISE)
-    navigate('/enterprise/sessions/createRetro/');
-  else if (gUser?.azureUser?.roleName == BASIC)
-    navigate('/basic/sessions/createRetro/');
-  else 
-
-    navigate('/basic/createRetro/');
+      navigate('/enterprise/sessions/createRetro/');
+    else if (gUser?.azureUser?.roleName == BASIC)
+      navigate('/basic/sessions/createRetro/');
+    else navigate('/basic/createRetro/');
   };
 
   const navigateToUploadImage = () => {
     // navigate('/basic/uploadImage/');
     if (gUser?.azureUser?.roleName == ENTERPRISE)
-    navigate('/enterprise/sessions/createSession/');
-  else if (gUser?.azureUser?.roleName == BASIC)
-    navigate('/basic/sessions/createSession/');
-  else 
-
-    navigate('/basic/createSession/');
-    
-  
-    
+      navigate('/enterprise/sessions/createSession/');
+    else if (gUser?.azureUser?.roleName == BASIC)
+      navigate('/basic/sessions/createSession/');
+    else navigate('/basic/createSession/');
   };
 
+  const handleFromDate = (event: any) => {
+    setFromDate(event as string);
+    dispatch({
+      type: ActionType.CHART_START_DATE,
+      payload: { startDate: event },
+    });
+    userDispatch({
+      type: UserActionType.CHART_START_DATE,
+      payload: { startDate: event },
+    });
+  };
+
+  const handleToDate = (event: any) => {
+    setToDate(event as string);
+    dispatch({
+      type: ActionType.CHART_END_DATE,
+      payload: { endDate: event },
+    });
+    userDispatch({
+      type: UserActionType.CHART_END_DATE,
+      payload: { endDate: event },
+    });
+  };
+
+  // Call function to get Sessions
+  const handleGetRetroChartData = async () => {
+    if (gUser.azureUser != undefined) {
+      const chartInput: chartInputType = {
+        userId: gUser.azureUser?.emailId,
+        roleName: gUser.azureUser?.roleName,
+        enterpriseId: gUser.azureUser?.enterpriseId,
+        teamId: gUser.teamId ? gUser.teamId : '0',
+        fromDate: formatDateForAPI(fromDate),
+        toDate: formatDateForAPI(toDate, true),
+      };
+
+      await getCountOfAllSessionsOverTime(chartInput).then(
+        res => {
+          if (res.data != undefined && res.data?.length != undefined) {
+            var totalRetrocount = 0;
+            res.data.forEach((element: any) => {
+              totalRetrocount = element.retroCount + totalRetrocount;
+            });
+
+            setSessionCount(totalRetrocount);
+          } else {
+            setSessionCount(0);
+          }
+        },
+        err => {}
+      );
+    }
+  };
+
+  const getSessionForTable = async () => {
+    setLoading(true);
+    if (gUser.azureUser != undefined) {
+      const chartInput: chartInputType = {
+        userId: gUser.azureUser?.emailId,
+        roleName: gUser.azureUser?.roleName,
+        enterpriseId: gUser.azureUser?.enterpriseId,
+        teamId: gUser.teamId ? gUser.teamId : '0',
+        fromDate: formatDateForAPI(fromDate),
+        toDate: formatDateForAPI(toDate, true),
+      };
+
+      setLoading(true);
+      await getSessionsDataForTable(chartInput).then(
+        res => {
+          if (res.data.length > 0) {
+            let actionsArray: any[] = [];
+            res.data.forEach((action: any) => {
+              var actionObj = action;
+
+              actionObj.timestamp = new Date(action.timestamp)
+                .toLocaleString()
+                .split(',')[0];
+              actionsArray.push(actionObj);
+            });
+
+            setDisplayJiraRows([...actionsArray]);
+          } else setDisplayJiraRows([]);
+          setLoading(false);
+        },
+        error => {
+          setLoading(false);
+        }
+      );
+    }
+  };
+
+  React.useEffect(() => {
+    handleGetRetroChartData();
+    getSessionForTable();
+  }, [fromDate, toDate, selectId]);
 
   const goToAnalyticsLearnMorePage = (url: string) => {
     navigate(url);
@@ -255,6 +376,125 @@ function BasicDashboardWithEnterprise() {
             </ThemeProvider>
           </Box>
         </Box>
+        <Box
+          sx={{
+            display: 'flex',
+            flexDirection: 'row',
+            alignItems: 'center',
+            marginLeft: '16px',
+            marginTop: '16px',
+            marginBottom: '16px',
+            width: 'calc(100% - 16px)',
+            justifyContent: 'space-between',
+          }}
+        >
+          <Box
+            display="flex"
+            flexDirection="row"
+            alignItems="center"
+            justifyContent="flex-start"
+          >
+            {/* <ReactToPrint
+                  trigger={() => (
+                    <OutlinedButton
+                      id="downloadBoardPdf"
+                      label="Download Pdf"
+                      size={'small'}
+                      onClick={() => {}}
+                      style={{
+                        marginLeft: '16px',
+                      }}
+                    />
+                  )}
+                  content={() => componentRef.current}
+                /> */}
+
+            <DateSelector
+              handleFromDate={handleFromDate}
+              handleToDate={handleToDate}
+              fromDate={fromDate}
+              toDate={toDate}
+              disable={true}
+            />
+            <TeamSelector
+              enterpriseId={
+                gUser.azureUser?.enterpriseId
+                  ? gUser.azureUser?.enterpriseId
+                  : '0'
+              }
+              padding="9px"
+              selectedTeam={gUser.teamId ? gUser.teamId : selectId}
+              handleChange={(change: any) => {
+                dispatch({
+                  type: ActionType.SET_TEAM_ID,
+                  payload: { teamId: change.target.value },
+                });
+                userDispatch({
+                  type: UserActionType.SET_TEAM_ID,
+                  payload: { teamId: change.target.value },
+                });
+
+                setSelectedId(change.target.value);
+              }}
+              showAllTeamOption={true}
+            />
+
+            <TextButtonWithIcon
+              id="actions"
+              icon={
+                <Icons.ChevronRight
+                  fontSize={'16px'}
+                  style={{ marginLeft: '-16px' }}
+                />
+              }
+              style={{ marginLeft: '20px' }}
+              label={
+                actionCount > 1
+                  ? actionCount + '  Actions'
+                  : actionCount + '  Actions'
+              }
+              size={'medium'}
+              onClick={() => {
+                if (location.pathname.includes('basic')) {
+                  navigate('/basic/actions');
+                } else if (location.pathname.includes('enterprise'))
+                  navigate('/enterprise/actions');
+              }}
+            />
+          </Box>
+
+          <Box
+            padding={'12px'}
+            paddingRight={'18px'}
+            paddingLeft={'18px'}
+            display={'flex'}
+            marginRight={'20px'}
+            flexDirection={'row'}
+            justifyContent={'space-between'}
+            width={'200px'}
+            border="1px solid #CEEFFF"
+            borderRadius={'5px'}
+            sx={{ background: 'white', cursor: 'pointer' }}
+            onClick={() => {
+              if (location.pathname.includes('basic')) {
+                navigate('/basic/sessions');
+              } else if (location.pathname.includes('enterprise'))
+                navigate('/enterprise/sessions');
+            }}
+          >
+            <H5SemiBoldTypography
+              label={
+                sessionCount > 1
+                  ? sessionCount + '  Sessions'
+                  : sessionCount + '  Session'
+              }
+            />
+
+            <Box>
+              <img src={RetroCount} style={{ width: '20px', height: '18px' }} />
+            </Box>
+          </Box>
+        </Box>
 
         {/* select session flow */}
         <Backdrop
@@ -263,7 +503,7 @@ function BasicDashboardWithEnterprise() {
           onClick={handleClose}
         >
           <Box style={{ width: '1000px' }}>
-            <Grid container spacing={2} style={{gridGap:"30px"}}>
+            <Grid container spacing={2} style={{ gridGap: '30px' }}>
               <Grid
                 item
                 xs={5}
@@ -274,7 +514,7 @@ function BasicDashboardWithEnterprise() {
                   padding: '10px 10px 20px 10px',
                   alignContent: 'center',
                   maxWidth: '450px',
-                  height:"349px"
+                  height: '349px',
                 }}
               >
                 <img
@@ -284,16 +524,22 @@ function BasicDashboardWithEnterprise() {
                   height="189px"
                   width="400px"
                 />
-                <p style={{ textAlign: 'center', color: 'black',fontSize: '23px' }}>
+                <p
+                  style={{
+                    textAlign: 'center',
+                    color: 'black',
+                    fontSize: '23px',
+                  }}
+                >
                   BACI Template
                 </p>
-                <p style={{ fontSize: '16px', color: 'gray', margin:"10px" }}>
-                Need to run a collaboration session with BACI? 
+                <p style={{ fontSize: '16px', color: 'gray', margin: '10px' }}>
+                  Need to run a collaboration session with BACI?
                   <br />
                   Start instantly with preset BACI templates.
                 </p>
               </Grid>
-             
+
               <Grid
                 item
                 xs={5}
@@ -303,7 +549,7 @@ function BasicDashboardWithEnterprise() {
                   borderRadius: '10px',
                   padding: '10px 10px 20px 10px',
                   maxWidth: '450px',
-                  height:"349px"
+                  height: '349px',
                 }}
               >
                 <img
@@ -315,11 +561,15 @@ function BasicDashboardWithEnterprise() {
                 />
                 <p
                   onClick={handleClose}
-                  style={{ textAlign: 'center', color: 'black' ,fontSize: '23px'}}
+                  style={{
+                    textAlign: 'center',
+                    color: 'black',
+                    fontSize: '23px',
+                  }}
                 >
                   Upload Image or Photo
                 </p>
-                <p style={{ fontSize: '16px', color: 'gray',margin:"10px" }}>
+                <p style={{ fontSize: '16px', color: 'gray', margin: '10px' }}>
                   Run a collabration session with Post-Its on a wall?
                   <br />
                   Digitise it here for easy analysis and safe keeping.
@@ -332,7 +582,7 @@ function BasicDashboardWithEnterprise() {
         {/* Bottom container */}
         <Box display="flex" flexDirection="column" sx={{ overflow: 'auto' }}>
           {/* Teams list menu start */}
-          <Box display="flex" flexDirection="row" width="100%" mt="10px">
+          {/* <Box display="flex" flexDirection="row" width="100%" mt="10px">
             {menuList.map((menu, index) => {
               return (
                 <Box
@@ -386,7 +636,7 @@ function BasicDashboardWithEnterprise() {
                 </Box>
               );
             })}
-          </Box>
+          </Box> */}
           {/* Retro list starts here */}
           <Box
             width="100%"
@@ -397,10 +647,11 @@ function BasicDashboardWithEnterprise() {
               display: 'flex',
               flexDirection: 'row',
               alignItems: 'center',
+              overflow: 'auto',
             }}
           >
             {/* RetroCard Info */}
-            {subMenuList.map((subMenu, index) => {
+            {displayJiraRows.map((subMenu: any, index: number) => {
               return (
                 <Box
                   width="297px"
@@ -419,59 +670,101 @@ function BasicDashboardWithEnterprise() {
                     ml: '10px',
                   }}
                 >
-                  <H6SemiBoldTypography label={subMenu.retroName} />
+                  <H6SemiBoldTypography label={subMenu.name} />
                   <CaptionRegularTypography
                     label={
-                      subMenu.isRetroFinished
-                        ? subMenu.retroStartDate
-                        : 'Code : ' + subMenu.retroCode
+                      subMenu.retroStatus == 'ended'
+                        ? subMenu.timestamp
+                        : 'Code : ' + subMenu.humanId
                     }
                   />
-                  {subMenu.isRetroFinished ? (
+                  {subMenu.retroStatus == 'ended' ? (
                     <>
-                      <CaptionSemiBoldTypography
+                      {/* <CaptionSemiBoldTypography
                         label={subMenu.totalActions + ' Actions'}
                         style={{ color: commonStyles.PrimaryMain }}
-                      />
+                      /> */}
                       <Box>
                         <CaptionRegularTypography label="Participants " />
-                        {subMenu.users.map((user, index) => {
-                          {
-                            return (
-                              index < 4 && (
-                                <Avatar
-                                  key={user.name}
-                                  avatar={user.avatar}
-                                  css={{
-                                    width: '40px',
-                                    height: '40px',
-                                    marginLeft: '0',
-                                    marginRight: '-8px',
-                                    border: '0px',
-                                  }}
-                                />
-                              )
-                            );
+                        {subMenu.userEmailIds.map(
+                          (emailId: any, index: number) => {
+                            {
+                              const user = users.find(
+                                user => user.emailId == emailId
+                              );
+                              return (
+                                index < 4 && (
+                                  <Avatar
+                                    key={user.emailId}
+                                    avatar={user.selectedAvatar}
+                                    css={{
+                                      width: '40px',
+                                      height: '40px',
+                                      marginLeft: '0',
+                                      marginRight: '-8px',
+                                      border: '0px',
+                                    }}
+                                  />
+                                )
+                              );
+                            }
                           }
-                        })}
+                        )}
                         <CaptionRegularTypography
                           style={{ marginLeft: '14px' }}
-                          label={'+' + (subMenu.users.length + 1 - 4)}
+                          label={'+' + (subMenu.userEmailIds.length + 1 - 4)}
                         />
                       </Box>
-                    </>
-                  ) : (
-                    <>
-                      <CaptionRegularTypography
-                        label={'Link : ' + subMenu.retroLink}
-                      />
                       <Button
                         variant="outlined"
                         sx={{ borderRadius: '24px', fontWeight: '500px' }}
                         color="primary"
+                        disabled={
+                          gUser.azureUser?.emailId !== subMenu.creatorId &&
+                          gUser.azureUser?.emailId !==
+                            subMenu.selectedFacilitator
+                        }
+                        onClick={() =>
+                          navigate(`/basic/sessions/report/${subMenu.humanId}`)
+                        }
                       >
-                        <ButtonLabelTypography label="START SESSION" />
+                        <ButtonLabelTypography label="VIEW SUMMARY" />
                       </Button>
+                    </>
+                  ) : (
+                    <>
+                      <CaptionRegularTypography
+                        style={{ wordBreak: 'break-word' }}
+                        label={'Link : ' + subMenu.joinUrl}
+                      />
+                      {subMenu.retroStatus === 'started' ? (
+                        <Button
+                          variant="outlined"
+                          sx={{ borderRadius: '24px', fontWeight: '500px' }}
+                          color="primary"
+                          onClick={() =>
+                            navigate(`/basic/sessions/join/${subMenu.humanId}`)
+                          }
+                        >
+                          <ButtonLabelTypography label="JOIN SESSION" />
+                        </Button>
+                      ) : (
+                        <Button
+                          variant="outlined"
+                          sx={{ borderRadius: '24px', fontWeight: '500px' }}
+                          color="primary"
+                          disabled={
+                            gUser.azureUser?.emailId !== subMenu.creatorId &&
+                            gUser.azureUser?.emailId !==
+                              subMenu.selectedFacilitator
+                          }
+                          onClick={() =>
+                            navigate(`/basic/sessions/join/${subMenu.humanId}`)
+                          }
+                        >
+                          <ButtonLabelTypography label="START SESSION" />
+                        </Button>
+                      )}
                     </>
                   )}
                 </Box>
@@ -501,28 +794,18 @@ function BasicDashboardWithEnterprise() {
             {/* Analytics Chart */}
             <Box display="flex" width="100%" paddingLeft="10px">
               {/* Enterprise Level Actions Count Chart */}
-              <Box
-                display="flex"
-                flexDirection="column"
-                alignItems="center"
-                mr="20px"
-                sx={{
-                  border: '1px solid rgba(240, 240, 240, 1)',
-                  padding: '10px',
-                  cursor: 'pointer',
-                }}
-              >
+              <Box className="chartCard">
                 <Box
                   display="flex"
                   flexDirection="row"
                   alignItems="center"
                   justifyContent="flex-start"
-                  width="100%"
                 >
-                  <CaptionRegularTypography label="Count of actions (Assigned vs Completed)" />
+                  <BodySemiBoldTypography label="Count of All Actions (Assigned vs Completed)" />
                   <BootstrapTooltip
-                    title="The graph shows the break down of total actions created over time,
-                    Total actions are broken into Assigned vs Completed."
+                    title={
+                      'The graph shows the break down of total actions created over time,Total actions are broken into Assigned vs Completed.'
+                    }
                     arrow
                     placement="right"
                   >
@@ -535,64 +818,54 @@ function BasicDashboardWithEnterprise() {
                       }}
                     />
                   </BootstrapTooltip>
+                  {/* <BodySemiBoldTypography
+                    label="Learn More"
+                    style={{
+                      color: '#159ADD',
+                      cursor: 'pointer',
+                      marginTop: '8px',
+                    }}
+                    onClick={() =>
+                      handleOnClick('enterpriseLevelActionsCountLearnMore')
+                    }
+                  /> */}
                 </Box>
                 <Box
                   onClick={() => {
-                    navigate('/basic/analytics/enterpriseLevelActionsCount');
+                    if (
+                      gUser.azureUser?.roleName &&
+                      gUser.azureUser?.roleName === BASIC
+                    ) {
+                      navigate('/basic/analytics/enterpriseLevelActionsCount');
+                    } else if (
+                      gUser.azureUser?.roleName &&
+                      gUser.azureUser?.roleName === ENTERPRISE
+                    ) {
+                      navigate(
+                        '/enterprise/analytics/enterpriseLevelActionsCount'
+                      );
+                    }
                   }}
                 >
                   <EnterpriseLevelActionsCountChart
                     dashboard={true}
                     team={selectId}
                     count={e => {
-                      console.log(e);
+                      setActionCount(e);
                     }}
                   />
                 </Box>
-                {/* <Box
-                  display="flex"
-                  flexDirection="row"
-                  alignItems="center"
-                  justifyContent="flex-start"
-                  width="100%"
-                >
-                  <TextButton
-                    id={'Learn_More'}
-                    label={'Learn More'}
-                    size={'small'}
-                    style={{
-                      paddingLeft: '0px !important',
-                      textDecorationLine: 'underline !important',
-                      backgroundColor: 'transparent !important',
-                    }}
-                    onClick={() =>
-                      goToAnalyticsLearnMorePage(
-                        '/basic/analytics/enterpriseLevelActionsCountLearnMore'
-                      )
-                    }
-                  />
-                </Box> */}
               </Box>
               {/* Average Participant Chart */}
-              <Box
-                display="flex"
-                flexDirection="column"
-                alignItems="center"
-                mr="20px"
-                sx={{
-                  border: '1px solid rgba(240, 240, 240, 1)',
-                  padding: '10px',
-                  cursor: 'pointer',
-                }}
-              >
+
+              <Box className="chartCard">
                 <Box
                   display="flex"
                   flexDirection="row"
                   alignItems="center"
                   justifyContent="flex-start"
-                  width="100%"
                 >
-                  <CaptionRegularTypography label="Count of all participants over time" />
+                  <BodySemiBoldTypography label="Count of All Participants Over Time" />
                   <BootstrapTooltip
                     title="The graph shows the total number of participants (unique users) across all your teams over time."
                     arrow
@@ -610,57 +883,43 @@ function BasicDashboardWithEnterprise() {
                 </Box>
                 <Box
                   onClick={() => {
-                    navigate(
-                      '/basic/analytics/enterpriseLevelParticipantsCount'
-                    );
+                    if (
+                      gUser.azureUser?.roleName &&
+                      gUser.azureUser?.roleName === BASIC
+                    ) {
+                      navigate(
+                        '/basic/analytics/enterpriseLevelParticipantsCount'
+                      );
+                    } else if (
+                      gUser.azureUser?.roleName &&
+                      gUser.azureUser?.roleName === ENTERPRISE
+                    ) {
+                      navigate(
+                        '/enterprise/analytics/enterpriseLevelParticipantsCount'
+                      );
+                    }
                   }}
                 >
-                  <AverageParticipantChart dashboard={true} team={selectId} />
-                </Box>
-                {/* <Box
-                  display="flex"
-                  flexDirection="row"
-                  alignItems="center"
-                  justifyContent="flex-start"
-                  width="100%"
-                >
-                  <TextButton
-                    id={'Learn_More'}
-                    label={'Learn More'}
-                    size={'small'}
-                    style={{
-                      paddingLeft: '0px !important',
-                      textDecorationLine: 'underline !important',
-                      backgroundColor: 'transparent !important',
+                  <AverageParticipantChart
+                    dashboard={true}
+                    team={selectId}
+                    totalParticipantsCount={count => {
+                      setTotalParticipants(count);
                     }}
-                    onClick={() =>
-                      goToAnalyticsLearnMorePage(
-                        '/basic/analytics/enterpriseLevelParticipantsCountLearnMore'
-                      )
-                    }
                   />
-                </Box> */}
+                </Box>
               </Box>
+
               {/* Enterprise Level Sentiments Moods Chart */}
-              <Box
-                display="flex"
-                flexDirection="column"
-                alignItems="center"
-                mr="20px"
-                sx={{
-                  border: '1px solid rgba(240, 240, 240, 1)',
-                  padding: '10px',
-                  cursor: 'pointer',
-                }}
-              >
+
+              <Box className="chartCard">
                 <Box
                   display="flex"
                   flexDirection="row"
                   alignItems="center"
                   justifyContent="flex-start"
-                  width="100%"
                 >
-                  <CaptionRegularTypography label="Sentiments - Moods" />
+                  <BodySemiBoldTypography label="Sentiments - Moods" />
                   <BootstrapTooltip
                     title="The chart takes the results from the pulse check and uses AI to capture words used in BACI collaboration sessions to provide a simple chart of how your people are feeling (Happy, Sad, Neutral) from month-to-month."
                     arrow
@@ -675,12 +934,35 @@ function BasicDashboardWithEnterprise() {
                       }}
                     />
                   </BootstrapTooltip>
+                  {/* <BodySemiBoldTypography
+                    label="Learn More"
+                    style={{
+                      color: '#159ADD',
+                      cursor: 'pointer',
+                      marginTop: '8px',
+                    }}
+                    onClick={() =>
+                      handleOnClick('enterpriseLevelSentimentsMoodsLearnMore')
+                    }
+                  /> */}
                 </Box>
                 <Box
                   onClick={() => {
-                    navigate(
-                      '/basic/analytics/enterpriseLevelParticipantsCount'
-                    );
+                    if (
+                      gUser.azureUser?.roleName &&
+                      gUser.azureUser?.roleName === BASIC
+                    ) {
+                      navigate(
+                        '/basic/analytics/enterpriseLevelSentimentsMoods'
+                      );
+                    } else if (
+                      gUser.azureUser?.roleName &&
+                      gUser.azureUser?.roleName === ENTERPRISE
+                    ) {
+                      navigate(
+                        '/enterprise/analytics/enterpriseLevelSentimentsMoods'
+                      );
+                    }
                   }}
                 >
                   <EnterpriseLevelSentimentsMoodsChart
@@ -688,29 +970,6 @@ function BasicDashboardWithEnterprise() {
                     team={selectId}
                   />
                 </Box>
-                {/* <Box
-                  display="flex"
-                  flexDirection="row"
-                  alignItems="center"
-                  justifyContent="flex-start"
-                  width="100%"
-                >
-                  <TextButton
-                    id={'Learn_More'}
-                    label={'Learn More'}
-                    size={'small'}
-                    style={{
-                      paddingLeft: '0px !important',
-                      textDecorationLine: 'underline !important',
-                      backgroundColor: 'transparent !important',
-                    }}
-                    onClick={() =>
-                      goToAnalyticsLearnMorePage(
-                        '/basic/analytics/enterpriseLevelParticipantsCountLearnMore'
-                      )
-                    }
-                  />
-                </Box> */}
               </Box>
             </Box>
           </Box>

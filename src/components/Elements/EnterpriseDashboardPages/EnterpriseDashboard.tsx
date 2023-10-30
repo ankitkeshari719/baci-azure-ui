@@ -758,29 +758,6 @@ function EnterpriseDashboard() {
                     }}
                   />
                 </Box>
-                {/* <Box
-                  display="flex"
-                  flexDirection="row"
-                  alignItems="center"
-                  justifyContent="flex-start"
-                  width="100%"
-                >
-                  <TextButton
-                    id={'Learn_More'}
-                    label={'Learn More'}
-                    size={'small'}
-                    style={{
-                      paddingLeft: '0px !important',
-                      textDecorationLine: 'underline !important',
-                      backgroundColor: 'transparent !important',
-                    }}
-                    onClick={() =>
-                      goToAnalyticsLearnMorePage(
-                        '/enterprise/analytics/enterpriseLevelActionsCountLearnMore'
-                      )
-                    }
-                  />
-                </Box> */}
               </Box>
               {/* Team Level Actions Count Chart */}
 

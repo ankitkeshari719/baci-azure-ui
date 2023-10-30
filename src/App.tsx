@@ -199,15 +199,81 @@ export default function App({ instance }: AppProps) {
                                   path=""
                                   element={<BasicDashboardWithEnterprise />}
                                 />
-                                <Route
-                                  path="join/:id"
-                                  element={<JoinRetro></JoinRetro>}
-                                />
+                               <Route path="sessions/">
+                                  <Route path='' element={<SessionsMainContainer />} />
 
-                                <Route
-                                  path="create"
-                                  element={<CreateRetroMain></CreateRetroMain>}
-                                />
+                                  <Route
+                                    path="join/:id"
+                                    element={<JoinRetro></JoinRetro>}
+                                  />
+                                  {/* retro Data */}
+                                  <Route
+                                    path="create"
+                                    element={
+                                      <CreateRetroMain></CreateRetroMain>
+                                    }
+                                  />
+
+                                  <Route
+                                    path="createSession"
+                                    element={<CreateSessionMain />}
+                                  />
+
+                                  <Route
+                                    path="termAndCondition"
+                                    element={
+                                      <TermsAndConditions></TermsAndConditions>
+                                    }
+                                  />
+                                  <Route
+                                    path="privatePolicy"
+                                    element={<PrivacyPolicy></PrivacyPolicy>}
+                                  />
+                                  <Route
+                                    path="retrodetails"
+                                    element={<RetroDetails></RetroDetails>}
+                                  />
+                                  <Route
+                                    path="offboarding"
+                                    element={<Offboarding></Offboarding>}
+                                  />
+
+                                  <Route path="board" element={<MainContent />}>
+                                    <Route
+                                      path=":id/waiting"
+                                      element={
+                                        <ParticipantWaitingPage></ParticipantWaitingPage>
+                                      }
+                                    />
+                                    <Route
+                                      path=":id/pulsecheck"
+                                      element={<PulseCheckMain />}
+                                    />
+                                    <Route path=":id" element={<Board />} />
+                                    <Route
+                                      path=":id/feedback"
+                                      element={<Feedback />}
+                                    />
+                                    <Route
+                                      path=":id/startRetro"
+                                      element={<StartRetro></StartRetro>}
+                                    />
+                                  </Route>
+                                  <Route
+                                    path="report/:id"
+                                    element={<SummaryReportMain />}
+                                  />
+                                  <Route
+                                    path="retroisfinished"
+                                    element={
+                                      <RetroIsFinished></RetroIsFinished>
+                                    }
+                                  />
+                                  <Route
+                                    path="jiraCallback/"
+                                    element={<JiraCallback />}
+                                  />
+                                </Route>
 
                                 <Route
                                   path="termAndCondition"

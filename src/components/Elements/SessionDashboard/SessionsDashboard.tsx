@@ -472,7 +472,7 @@ export default function SessionDashboard() {
                                       flexDirection: 'row',
                                     }}
                                   >
-                                    <Box component={'span'} style={{wordWrap:"break-word"}}>{value}</Box>
+                                    <Box component={'span'} style={{wordBreak:"break-word",}}>{value}</Box>
                                     <DocumentDuplicateIcon
                                       cursor="pointer"
                                       onClick={() => {
@@ -522,7 +522,11 @@ export default function SessionDashboard() {
                                       START SESSION
                                     </Button>
                                   ) : value == 'ended' ? (
-                                    <Button>VIEW SUMMARY</Button>
+                                    <Button
+                                    
+                                    disabled={row['selectedFacilitator']!==gUser.azureUser?.emailId&&row['creatorId']!==gUser.azureUser?.emailId}
+                                    onClick={()=>navigate(`/basic/sessions/report/${row['humanId']}`)}
+                                    >VIEW SUMMARY</Button>
                                   ) : (
                                     <Button
                                       variant="contained"
