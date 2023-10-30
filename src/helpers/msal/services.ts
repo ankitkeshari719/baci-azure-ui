@@ -240,6 +240,21 @@ export const connectJira = async (retroId: string): Promise<string> => {
     });
   return jiraURL;
 };
+export const connectJiraForAction = async (actionId: string): Promise<string> => {
+  let jiraURL = '';
+  const requestOptions = {
+    method: 'GET',
+    headers: { 'Content-Type': 'application/json' },
+  };
+  await fetch(API_URL + `/connectJiraForAction?actionId=${actionId}`, requestOptions)
+    .then(response => response.json())
+    .then(data => {
+      jiraURL = data;
+    });
+  return jiraURL;
+};
+
+
 
 export const getJiraToken = async (jiraCode: string): Promise<string> => {
   let jiraAccessToken = '';

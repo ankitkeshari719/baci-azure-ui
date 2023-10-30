@@ -16,9 +16,11 @@ import {
 import { pulseCheckInterface } from '../screens/CreateRetro/const';
 import { SocketContext } from '../contexts/SocketProvider';
 import { useNavigate } from 'react-router-dom';
+import { UserContext } from '../contexts/UserContext';
 
 export const useRetro = () => {
   const [state, dispatch] = React.useContext(GlobalContext);
+  const [gUser]=React.useContext(UserContext);
   const socket = React.useContext(SocketContext);
   const navigate = useNavigate();
   return {
@@ -47,8 +49,22 @@ export const useRetro = () => {
         }${url}/join/${humanId}`,
       } as Retro;
 
-      const id = await createRetro(currentRetro, state.user);
-      const retrievedRetro = await getRetro(id);
+     var retrievedRetro :any;
+     var id:any;
+      if(gUser?.azureUser?.emailId){
+      const user ={id:  gUser.azureUser.emailId,
+        name: gUser.azureUser.firstName +" "+gUser.azureUser.lastName,
+        nickname :gUser.azureUser.firstName +" "+gUser.azureUser.lastName,
+        avatar :gUser.azureUser.selectedAvatar,
+        userType: 2}
+         id = await createRetro(currentRetro, user);
+         retrievedRetro = await getRetro(id);
+      }
+      else{
+         id = await createRetro(currentRetro, state.user);
+         retrievedRetro = await getRetro(id);
+      }
+     
 
       dispatch({
         type: ActionType.SET_CURRENT_RETRO,

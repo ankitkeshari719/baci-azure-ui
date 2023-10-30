@@ -138,13 +138,25 @@ const Toolbar = (props: any) => {
 
   const [personName, setPersonName] = React.useState<any[]>([]);
   React.useEffect(() => {
-    let valueToBeDisplayed: any[] = [global.currentRetro?.creatorId];
+    console.log("called")
+    let valueToBeDisplayed: any[]=[]
+    if(global.currentRetro?.creatorId!==global.currentRetro?.selectedFacilitator){
+      valueToBeDisplayed.push(global.currentRetro?.creatorId);
+      valueToBeDisplayed.push(global.currentRetro?.selectedFacilitator);
+    }
+    else {
+      valueToBeDisplayed.push(global.currentRetro?.creatorId);
+    }
+
+    // let valueToBeDisplayed: any[] = [global.currentRetro?.creatorId];
 
     users.forEach(user => {
-      if (user.isFacilitator) {
+      if (user.isFacilitator || user.userId===global.currentRetro?.selectedFacilitator) {
         valueToBeDisplayed.push(user.userId);
       }
-      if (user.isFacilitator && user.userId == global.user.id) {
+
+      console.log(user.isFacilitator)
+      if ((user.isFacilitator|| user.userId===global.currentRetro?.selectedFacilitator) && user.userId == global.user.id) {
         dispatch({
           type: ActionType.SET_USER,
           payload: {
@@ -159,7 +171,8 @@ const Toolbar = (props: any) => {
       } else if (
         !user.isFacilitator &&
         user.userId == global.user.id &&
-        user.userId != global.currentRetro?.creatorId
+        user.userId != global.currentRetro?.creatorId &&
+        user.userId != global.currentRetro?.selectedFacilitator
       ) {
         dispatch({
           type: ActionType.SET_USER,

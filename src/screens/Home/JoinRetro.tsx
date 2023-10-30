@@ -35,6 +35,7 @@ import { ContainedButton, TextButton } from '../../components';
 import { LazyLoadImage } from 'react-lazy-load-image-component';
 import { UserContext } from '../../contexts/UserContext';
 import { BoardActionType } from '../../helpers/statemachine/BoardStateMachine';
+import { ENTERPRISE } from '../../constants/applicationConst';
 
 const AVATAR_CHARACTER_LIMIT = 30;
 
@@ -196,18 +197,37 @@ export function JoinRetro() {
             payload: { loadingFlag: false },
           });
           if (retro) {
-            if (global.currentRetro?.creatorId === global.user?.id) {
+            if (global.currentRetro?.creatorId === global.user?.id ||global.currentRetro?.selectedFacilitator===global.user?.id) {
               if (gUser?.azureUser?.emailId != undefined) {
-                navigate(
-                  '/enterprise/sessions/board/' + retro.id + '/startRetro'
-                );
+                if(gUser?.azureUser?.roleName===ENTERPRISE){
+                  navigate(
+                    '/enterprise/sessions/board/' + retro.id + '/startRetro'
+                  );
+                }
+                else {
+                  navigate(
+                    '/basic/sessions/board/' + retro.id + '/startRetro'
+                  );
+                }
+                
               } else {
                 navigate('/board/' + retro.id + '/startRetro');
               }
             } else {
               console.log('waiting in Join Retro');
               if (gUser?.azureUser?.emailId != undefined) {
-                navigate('/enterprise/sessions/board/' + retro.id + '/waiting');
+
+                if(gUser?.azureUser?.roleName===ENTERPRISE){
+                  navigate(
+                    '/enterprise/sessions/board/' + retro.id + '/waiting'
+                  );
+                }
+                else {
+                  navigate(
+                    '/basic/sessions/board/' + retro.id + '/waiting'
+                  );
+                }
+            
               } else {
                 navigate('/board/' + retro.id + '/waiting');
               }

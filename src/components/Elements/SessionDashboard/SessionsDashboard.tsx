@@ -511,7 +511,7 @@ export default function SessionDashboard() {
                                         
                                         {
                                           if (location.pathname.includes('basic')) {
-                                            navigate('/basic/session/join/'+row['humanId']);
+                                            navigate('/basic/sessions/join/'+row['humanId']);
                                           } else if (location.pathname.includes('enterprise'))
                                             navigate('/enterprise/sessions/join/'+row['humanId']);
                                         }
@@ -535,7 +535,7 @@ export default function SessionDashboard() {
                                         
                                         
                                         if (location.pathname.includes('basic')) {
-                                          navigate('/basic/session/join/'+row['humanId']);
+                                          navigate('/basic/sessions/join/'+row['humanId']);
                                         } else if (location.pathname.includes('enterprise'))
                                           navigate('/enterprise/sessions/join/'+row['humanId']);
                                       }}
