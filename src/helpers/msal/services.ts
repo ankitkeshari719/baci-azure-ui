@@ -320,6 +320,26 @@ export const createJiraIssue = async (
   return status;
 };
 
+export const sendEmails = async (
+  recipients:any,subject:string,text:string
+): Promise<any> => {
+  let status: any = '';
+  const requestOptions = {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({
+      recipients: recipients,subject:subject,text:text
+    }),
+  };
+
+  await fetch(API_URL + `/sendEmails`, requestOptions)
+    .then(response => response.json())
+    .then(data => {
+      status = data;
+    });
+  return status;
+};
+
 export const editJiraIssue = async (
 
   jiraCode: string,
