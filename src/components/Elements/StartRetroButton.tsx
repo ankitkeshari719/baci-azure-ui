@@ -7,6 +7,7 @@ import { useNavigate } from 'react-router-dom';
 import { getRetro } from '../../helpers/msal/services';
 import RetroTimeInputDialog from '../atoms/RetroTimeInputDialog';
 import { UserContext } from '../../contexts/UserContext';
+import { ENTERPRISE } from '../../constants/applicationConst';
 
 const styles = {
   goToRetroBtn: {
@@ -18,7 +19,7 @@ const styles = {
 // This component is not in used
 const StartRetroButton = () => {
   const {
-    state: { retroId, retroStarted },
+    state: { retroId, retroStarted,retroStatus },
     commitAction,
   } = React.useContext(BoardContext);
   const [open, setOpen] = React.useState(false);
@@ -27,21 +28,29 @@ const StartRetroButton = () => {
   const [global, dispatch] = React.useContext(GlobalContext);
   const [gUser, userDispatch] = React.useContext(UserContext);
   React.useEffect(() => {
-    if (retroStarted && retroId != undefined && retroId != '') {
+    if ((retroStarted||retroStatus=="started") && retroId != undefined && retroId != '') {
       if (
         gUser.azureUser != undefined &&
         gUser.azureUser.emailId != undefined &&
         gUser.azureUser.emailId != ''
       ) {
+        if(gUser.azureUser?.roleName===ENTERPRISE)
         navigate(
           `/enterprise/sessions/board/${
             retroId || global.currentRetro?.id
           }/pulsecheck`
         );
+        else{
+          navigate(
+            `/basic/sessions/board/${
+              retroId || global.currentRetro?.id
+            }/pulsecheck`
+          );
+        }
       } else if (gUser.azureUser?.emailId != undefined)
         navigate(`/board/${retroId || global.currentRetro?.id}/pulsecheck`);
     }
-  }, [retroStarted]);
+  }, [retroStarted, retroStatus]);
 
   const saveAndProcessAction = async (
     actionName: BoardActionType,
@@ -77,6 +86,11 @@ const StartRetroButton = () => {
         retroDuration: duration,
       }).then(
         () => {
+          
+
+          navigate( '/enterprise/sessions/board/' +
+          global.currentRetro?.id +
+          '/pulseCheck')
           dispatch({
             type: ActionType.SET_LOADING,
             payload: { loadingFlag: false },

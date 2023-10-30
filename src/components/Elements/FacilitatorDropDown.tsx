@@ -146,16 +146,19 @@ const FacilitatorDropDown = ({ personName, onClickOfUser }: Props) => {
                     user.isMobile == true ||
                     user.userId == global.user.id ||
                     user.userId == global.currentRetro?.creatorId
+                    ||user.userId == global.currentRetro?.selectedFacilitator
                   }
                 >
                   <Checkbox
                     checked={
                       user.isFacilitator ||
                       user.userId == global.currentRetro?.creatorId
+                      ||user.userId == global.currentRetro?.selectedFacilitator
                     }
                     disabled={
                       user.userId === global.user.id ||
                       user.userId == global.currentRetro?.creatorId
+                      ||user.userId == global.currentRetro?.selectedFacilitator
                     }
                   />
                   <ListItemIcon>

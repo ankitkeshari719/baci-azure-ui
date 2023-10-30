@@ -41,7 +41,10 @@ import CsvDownloader from 'react-csv-downloader';
 import { useNavigate } from 'react-router-dom';
 import {
   chartInputType,
+  connectJira,
+  connectJiraForAction,
   createAction,
+  editJiraIssue,
   formatDateForAPI,
   getActionsDataForTable,
   getAllUsers,
@@ -50,6 +53,7 @@ import {
 } from '../../../helpers/msal/services';
 import { ActionType, GlobalContext } from '../../../contexts/GlobalContext';
 import { UserActionType, UserContext } from '../../../contexts/UserContext';
+import DyanamicDialog from '../../atoms/DyanamicDialog';
 
 interface Column {
   id:
@@ -182,6 +186,7 @@ export default function ActionDashboard() {
   const [jiraRows, setJiraRows] = React.useState<any>([]);
   const [displayJiraRows, setDisplayJiraRows] = React.useState<any>([]);
   const [csvData, setCsvData] = React.useState<any>([]);
+  const [showDialog, setShowDialog] = React.useState<boolean>(false);
   const [global, dispatch] = React.useContext(GlobalContext);
   const [gUser, userDispatch] = React.useContext(UserContext);
   const [page, setPage] = React.useState(0);
@@ -190,6 +195,7 @@ export default function ActionDashboard() {
 
   const [actionCount, setActionCount] = React.useState<any[]>(ActionCount);
   const [loading, setLoading] = React.useState<boolean>(false);
+  const [selectedActionId,setSelectedActionId]=React.useState<string>("");
   const navigate = useNavigate();
 
   React.useEffect(() => {
@@ -404,6 +410,18 @@ export default function ActionDashboard() {
     setCsvData([...initialData]);
   }, [displayJiraRows]);
 
+
+const connect =()=>{
+  connectJiraForAction(selectedActionId).then(
+    (res: any) => {
+      window.location.href = res.response;
+    },
+    error => {
+      console.log('error', error);
+    }
+
+  )
+}
   const callUpdateAction = async (
     action: any,
     assignedTo: string,
@@ -431,7 +449,110 @@ export default function ActionDashboard() {
       isActive: true,
       teamName: action.teamName,
       retroIdEnc: action.retroIdEnc,
+      value:action.actionName
     };
+
+if(gUser.jiraCode===""||gUser.jiraCode===undefined){
+  setSelectedActionId(action.actionId)
+  setShowDialog(true)
+
+
+}
+else{
+  await editJiraIssue(
+    gUser?.jiraCode ? gUser?.jiraCode : '',
+    requestBody.value ? requestBody.value : '',
+    requestBody
+  ).then(
+    jiraEditRes => {
+      // alert(jiraEditRes.message);
+      setJiraRows([...tempJiraRows]);
+      setDisplayJiraRows([...tempJiraRows]);
+      updateJiraCount(tempJiraRows);
+      setLoading(false);
+      dispatch({
+        type: ActionType.SET_SNACK_MESSAGE,
+        payload: {
+          snackMessage: {
+            message:jiraEditRes.message,
+            snackMessageType: 'success',
+          },
+        },
+      });
+    },
+    error => {
+      // alert(error);
+      setJiraRows([...jiraRows]);
+      setDisplayJiraRows([...displayJiraRows]);
+      dispatch({
+        type: ActionType.SET_SNACK_MESSAGE,
+        payload: {
+          snackMessage: {
+            message:error,
+            snackMessageType: 'success',
+          },
+        },
+      });
+    }
+  );
+
+  setLoading(false);
+  dispatch({
+    type: ActionType.SET_LOADING,
+    payload: { loadingFlag: false },
+  });
+
+}
+
+   
+
+
+
+    // await createAction(requestBody).then(
+    //   res => {
+    //     setJiraRows([...tempJiraRows]);
+    //     setDisplayJiraRows([...tempJiraRows]);
+    //     updateJiraCount(tempJiraRows);
+    //     setLoading(false);
+    //   },
+    //   err => {
+    //     setJiraRows([...jiraRows]);
+    //     setDisplayJiraRows([...displayJiraRows]);
+    //     setLoading(false);
+    //   }
+    // );
+  };
+
+  const callUpdateAction1 = async (
+    action: any,
+    assignedTo: string,
+    status: string,
+    tempJiraRows: any
+  ) => {
+    setLoading(true);
+
+    const requestBody = {
+      actionId: action.actionId,
+      actionName: action.actionName,
+      jiraId: action.jiraId,
+      retroId: action.retroId,
+      // "retroIdEnc":"64f6179cf9b80b2e2f9f31f9",
+      createdBy: action.createdBy,
+      assignedTo: assignedTo,
+      jiraUrl: action.jiraUrl,
+      teamId: action.teamId,
+      enterpriseId: action.enterpriseId,
+      status: status,
+      avatar: action.avatar,
+      createdAt: action.createdAt,
+      assigneeFName: action.assigneeFName,
+      assigneeLName: action.assigneeLName,
+      isActive: true,
+      teamName: action.teamName,
+      retroIdEnc: action.retroIdEnc,
+      jiraKey:action.jiraKey
+    };
+    
 
     await createAction(requestBody).then(
       res => {
@@ -703,7 +824,7 @@ export default function ActionDashboard() {
                                       status = valueOut;
                                     }
                                   });
-                                  callUpdateAction(
+                                  callUpdateAction1(
                                     action,
                                     emailId,
                                     status,
@@ -767,6 +888,18 @@ export default function ActionDashboard() {
         />
       </Paper>
       <>
+      <DyanamicDialog
+        show={showDialog}
+        title={'Exit Action Update'}
+        text={
+          'Current action will not be updated till we connect to jira.'
+        }
+        action={'YES, EXIT'}
+        type="Alert"
+        onCancel={() => setShowDialog(false)}
+        onConfirm={() => connect()}
+      />
+
         {loading && (
           <Box
             sx={{

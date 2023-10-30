@@ -37,9 +37,10 @@ export default function useLoadRetro() {
 
   React.useEffect(() => {
     console.log('waiting', retroId);
+    
     if (!global?.user?.name && id) {
       if (location.pathname.includes('basic')) {
-        navigate('/basic/join/' + id);
+        navigate('/basic/sessions/join/' + id);
       } else if (location.pathname.includes('enterprise'))
         navigate('/enterprise/sessions/join/' + id);
       else navigate('/join/' + id);
@@ -105,8 +106,11 @@ export default function useLoadRetro() {
           } else {
             console.log(gUser.azureUser?.emailId, 'email');
             if (
-              global.currentRetro?.creatorId !== global.user.id &&
-              global.currentRetro?.creatorId !== gUser.azureUser?.emailId
+              (global.currentRetro?.creatorId !== global.user.id &&
+              global.currentRetro?.creatorId !== gUser.azureUser?.emailId)
+              &&(global.currentRetro?.selectedFacilitator !== global.user.id &&
+                global.currentRetro?.selectedFacilitator !== gUser.azureUser?.emailId)
+
             ) {
               if (location.pathname.includes('basic')) {
                 navigate('/basic/sessions' + `/board/${retroId}/waiting`);
