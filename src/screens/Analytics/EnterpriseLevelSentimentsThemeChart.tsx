@@ -44,7 +44,7 @@ export default function EnterpriseLevelSentimentsThemeChart({
   const [neutralPercentage, setNeutralPercentage] = useState<number>();
   const [happyPercentage, setHappyPercentage] = useState<number>();
 
-  const [gUser,userDispatch]= React.useContext(UserContext);
+  const [gUser, userDispatch] = React.useContext(UserContext);
   const [fromDate, setFromDate] = useState<string>(
     gUser.chartStartDate
       ? gUser.chartStartDate
@@ -90,9 +90,9 @@ export default function EnterpriseLevelSentimentsThemeChart({
         userId: gUser.azureUser?.emailId,
         roleName: gUser.azureUser?.roleName,
         enterpriseId: gUser.azureUser?.enterpriseId,
-        teamId: gUser.teamId?gUser.teamId:"0",
+        teamId: gUser.teamId ? gUser.teamId : '0',
         fromDate: formatDateForAPI(fromDate),
-        toDate: formatDateForAPI(toDate,true),
+        toDate: formatDateForAPI(toDate, true),
       };
       setLoading(true);
 
@@ -121,11 +121,15 @@ export default function EnterpriseLevelSentimentsThemeChart({
                 item.happyCardsLength;
               totalHappyCards = totalHappyCards + item.happyCardsLength;
               totalNeutalCards = totalNeutalCards + item.neutralCardsLength;
-              totalSadCards = totalSadCards + item.totalSadCards;
+              totalSadCards = totalSadCards + item.sadCardsLength;
               data.push(obj);
             });
             setHeatMapData(data);
-
+            console.log(
+              (totalSadCards / totalCards) * 100,
+              totalSadCards,
+              totalCards
+            );
             var sadPer =
               (totalSadCards / totalCards) * 100
                 ? (totalSadCards / totalCards) * 100

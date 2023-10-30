@@ -54,6 +54,7 @@ import {
   formatDateToMonthYear,
   getCountOfAllParticipantsOverTime,
   getCountOfAllSessionsOverTime,
+  getEnterpriseById,
   getParticipantsCount,
   getRetrosCount,
   getSessionsData,
@@ -125,8 +126,10 @@ function EnterpriseDashboard() {
   );
 
   const [global, dispatch] = React.useContext(GlobalContext);
-  const [gUser,userDispatch]= React.useContext(UserContext);
-
+  const [gUser, userDispatch] = React.useContext(UserContext);
+  const [organisationPhoto, setOrganisationPhoto] = React.useState<any>('');
+  const localUserData = localStorage.getItem('userData');
+  const tempLocalUserData = localUserData && JSON.parse(localUserData);
   const [fromDate, setFromDate] = useState<string>(
     gUser.chartStartDate
       ? gUser.chartStartDate
@@ -143,7 +146,6 @@ function EnterpriseDashboard() {
           '0' +
           (new Date().getMonth() + 1).toString().slice(-2)
   );
-
 
   const [totalParticipants, setTotalParticipants] = useState<any>(0);
   const [open, setOpen] = React.useState(false);
@@ -169,8 +171,6 @@ function EnterpriseDashboard() {
   React.useEffect(() => {
     handleGetRetroChartData();
   }, [fromDate, toDate, selectId]);
-
-  
 
   // Function to get Sessions
   const handleGetRetroChartData = async () => {
@@ -200,11 +200,7 @@ function EnterpriseDashboard() {
         err => {}
       );
     }
-
-
   };
-
- 
 
   const handleFromDate = (event: any) => {
     setFromDate(event as string);
@@ -235,39 +231,61 @@ function EnterpriseDashboard() {
   };
 
   const navigateToJoinSession = () => {
-        if(gUser.azureUser?.roleName && gUser.azureUser?.roleName === BASIC){
+    if (gUser.azureUser?.roleName && gUser.azureUser?.roleName === BASIC) {
       navigate('/basic/sessions/');
-    }
-    else if(gUser.azureUser?.roleName && gUser.azureUser?.roleName === ENTERPRISE){
+    } else if (
+      gUser.azureUser?.roleName &&
+      gUser.azureUser?.roleName === ENTERPRISE
+    ) {
       navigate('/enterprise/sessions/');
     }
-   
   };
 
   const navigateToCreateSession = () => {
-    if(gUser.azureUser?.roleName && gUser.azureUser?.roleName === BASIC){
+    if (gUser.azureUser?.roleName && gUser.azureUser?.roleName === BASIC) {
       navigate('/basic/sessions/createRetro/');
-    }
-    else if(gUser.azureUser?.roleName && gUser.azureUser?.roleName === ENTERPRISE){
+    } else if (
+      gUser.azureUser?.roleName &&
+      gUser.azureUser?.roleName === ENTERPRISE
+    ) {
       navigate('/enterprise/sessions/createRetro/');
     }
-
-  
   };
 
   const navigateToUploadImage = () => {
     // navigate('/enterprise/uploadImage/');
-    if(gUser.azureUser?.roleName && gUser.azureUser?.roleName === BASIC){
+    if (gUser.azureUser?.roleName && gUser.azureUser?.roleName === BASIC) {
       navigate('/basic/sessions/createSession/');
-    }
-    else if(gUser.azureUser?.roleName && gUser.azureUser?.roleName === ENTERPRISE){
+    } else if (
+      gUser.azureUser?.roleName &&
+      gUser.azureUser?.roleName === ENTERPRISE
+    ) {
       navigate('/enterprise/sessions/createSession/');
     }
-
   };
 
   const handleOnClick = (link: string) => {
     navigate(link);
+  };
+
+
+  React.useEffect(() => {
+    callGetEnterpriseById();
+  }, []);
+
+  const callGetEnterpriseById = async () => {
+    const organisationId = tempLocalUserData && tempLocalUserData.enterpriseId;
+    await getEnterpriseById(organisationId).then(
+      res => {
+        setOrganisationPhoto(res.organisationPhoto);
+        // setOrganisationName(res.organisationName);
+        // setOrganisationCountry(res.organisationCountry);
+        // setDomains(res.organisationDomain);
+      },
+      err => {
+        console.log('err', err);
+      }
+    );
   };
 
   return (
@@ -524,11 +542,11 @@ function EnterpriseDashboard() {
                   }
                   size={'medium'}
                   onClick={() => {
-                    
-                    if(location.pathname.includes('basic')) 
-                    {navigate('/basic/actions')}
-                    else if(location.pathname.includes('enterprise'))
-                    navigate('/enterprise/actions')}}
+                    if (location.pathname.includes('basic')) {
+                      navigate('/basic/actions');
+                    } else if (location.pathname.includes('enterprise'))
+                      navigate('/enterprise/actions');
+                  }}
                 />
               </Box>
 
@@ -545,12 +563,11 @@ function EnterpriseDashboard() {
                 borderRadius={'5px'}
                 sx={{ background: 'white', cursor: 'pointer' }}
                 onClick={() => {
-                    
-                  if(location.pathname.includes('basic')) 
-                  {navigate('/basic/sessions')}
-                  else if(location.pathname.includes('enterprise'))
-                  navigate('/enterprise/sessions')}}
-              
+                  if (location.pathname.includes('basic')) {
+                    navigate('/basic/sessions');
+                  } else if (location.pathname.includes('enterprise'))
+                    navigate('/enterprise/sessions');
+                }}
               >
                 <H5SemiBoldTypography
                   label={
@@ -602,7 +619,13 @@ function EnterpriseDashboard() {
                         flexDirection: 'column',
                       }}
                     >
-                      <img src="/images/colonial_first_state.png"></img>
+                      {organisationPhoto && organisationPhoto != '' && (
+                        <img
+                          src={organisationPhoto}
+                          height="150px"
+                          width="150px"
+                        ></img>
+                      )}
                       <TinyTextSemiBoldTypography
                         label="Powered by"
                         style={{ color: '#2C69A1', marginTop: '8px' }}
@@ -738,16 +761,19 @@ function EnterpriseDashboard() {
                 </Box>
                 <Box
                   onClick={() => {
-
-                    if(gUser.azureUser?.roleName && gUser.azureUser?.roleName === BASIC){
+                    if (
+                      gUser.azureUser?.roleName &&
+                      gUser.azureUser?.roleName === BASIC
+                    ) {
                       navigate('/basic/analytics/enterpriseLevelActionsCount');
+                    } else if (
+                      gUser.azureUser?.roleName &&
+                      gUser.azureUser?.roleName === ENTERPRISE
+                    ) {
+                      navigate(
+                        '/enterprise/analytics/enterpriseLevelActionsCount'
+                      );
                     }
-                    else if(gUser.azureUser?.roleName && gUser.azureUser?.roleName === ENTERPRISE){
-                      navigate('/enterprise/analytics/enterpriseLevelActionsCount');
-                    }
-
-
-               
                   }}
                 >
                   <EnterpriseLevelActionsCountChart
@@ -798,13 +824,17 @@ function EnterpriseDashboard() {
                 </Box>
                 <Box
                   onClick={() => {
-                    if(gUser.azureUser?.roleName && gUser.azureUser?.roleName === BASIC){
+                    if (
+                      gUser.azureUser?.roleName &&
+                      gUser.azureUser?.roleName === BASIC
+                    ) {
                       navigate('/basic/analytics/teamLevelActionsCount');
-                    }
-                    else if(gUser.azureUser?.roleName && gUser.azureUser?.roleName === ENTERPRISE){
+                    } else if (
+                      gUser.azureUser?.roleName &&
+                      gUser.azureUser?.roleName === ENTERPRISE
+                    ) {
                       navigate('/enterprise/analytics/teamLevelActionsCount');
                     }
-               
                   }}
                 >
                   <TeamLevelActionsCountChart
@@ -910,18 +940,30 @@ function EnterpriseDashboard() {
                 </Box>
                 <Box
                   onClick={() => {
-                    if(gUser.azureUser?.roleName && gUser.azureUser?.roleName === BASIC){
-                      navigate('/basic/analytics/enterpriseLevelParticipantsCount');
+                    if (
+                      gUser.azureUser?.roleName &&
+                      gUser.azureUser?.roleName === BASIC
+                    ) {
+                      navigate(
+                        '/basic/analytics/enterpriseLevelParticipantsCount'
+                      );
+                    } else if (
+                      gUser.azureUser?.roleName &&
+                      gUser.azureUser?.roleName === ENTERPRISE
+                    ) {
+                      navigate(
+                        '/enterprise/analytics/enterpriseLevelParticipantsCount'
+                      );
                     }
-                    else if(gUser.azureUser?.roleName && gUser.azureUser?.roleName === ENTERPRISE){
-                      navigate('/enterprise/analytics/enterpriseLevelParticipantsCount');
-                    }
-             
                   }}
                 >
-                  <AverageParticipantChart dashboard={true} team={selectId} totalParticipantsCount={(count)=>{
-                    setTotalParticipants(count)
-                  }} />
+                  <AverageParticipantChart
+                    dashboard={true}
+                    team={selectId}
+                    totalParticipantsCount={count => {
+                      setTotalParticipants(count);
+                    }}
+                  />
                 </Box>
               </Box>
 
@@ -963,13 +1005,19 @@ function EnterpriseDashboard() {
                 </Box>
                 <Box
                   onClick={() => {
-                    if(gUser.azureUser?.roleName && gUser.azureUser?.roleName === BASIC){
+                    if (
+                      gUser.azureUser?.roleName &&
+                      gUser.azureUser?.roleName === BASIC
+                    ) {
                       navigate('/basic/analytics/enterpriseLevelRetrosCount');
+                    } else if (
+                      gUser.azureUser?.roleName &&
+                      gUser.azureUser?.roleName === ENTERPRISE
+                    ) {
+                      navigate(
+                        '/enterprise/analytics/enterpriseLevelRetrosCount'
+                      );
                     }
-                    else if(gUser.azureUser?.roleName && gUser.azureUser?.roleName === ENTERPRISE){
-                      navigate('/enterprise/analytics/enterpriseLevelRetrosCount');
-                    }
-                  
                   }}
                 >
                   <AverageRetroChart dashboard={true} team={selectId} />
@@ -1072,14 +1120,21 @@ function EnterpriseDashboard() {
                 </Box>
                 <Box
                   onClick={() => {
-                    if(gUser.azureUser?.roleName && gUser.azureUser?.roleName === BASIC){
-                      navigate('/basic/analytics/enterpriseLevelSentimentsThemes');
+                    if (
+                      gUser.azureUser?.roleName &&
+                      gUser.azureUser?.roleName === BASIC
+                    ) {
+                      navigate(
+                        '/basic/analytics/enterpriseLevelSentimentsThemes'
+                      );
+                    } else if (
+                      gUser.azureUser?.roleName &&
+                      gUser.azureUser?.roleName === ENTERPRISE
+                    ) {
+                      navigate(
+                        '/enterprise/analytics/enterpriseLevelSentimentsThemes'
+                      );
                     }
-                    else if(gUser.azureUser?.roleName && gUser.azureUser?.roleName === ENTERPRISE){
-                      navigate('/enterprise/analytics/enterpriseLevelSentimentsThemes');
-                    }
-                    
-                
                   }}
                 >
                   <EnterpriseLevelSentimentsThemeChart
@@ -1127,14 +1182,21 @@ function EnterpriseDashboard() {
                 </Box>
                 <Box
                   onClick={() => {
-                    if(gUser.azureUser?.roleName && gUser.azureUser?.roleName === BASIC){
-                      navigate('/basic/analytics/enterpriseLevelSentimentsMoods');
+                    if (
+                      gUser.azureUser?.roleName &&
+                      gUser.azureUser?.roleName === BASIC
+                    ) {
+                      navigate(
+                        '/basic/analytics/enterpriseLevelSentimentsMoods'
+                      );
+                    } else if (
+                      gUser.azureUser?.roleName &&
+                      gUser.azureUser?.roleName === ENTERPRISE
+                    ) {
+                      navigate(
+                        '/enterprise/analytics/enterpriseLevelSentimentsMoods'
+                      );
                     }
-                    else if(gUser.azureUser?.roleName && gUser.azureUser?.roleName === ENTERPRISE){
-                      navigate('/enterprise/analytics/enterpriseLevelSentimentsMoods');
-                    }
-                    
-                 
                   }}
                 >
                   <EnterpriseLevelSentimentsMoodsChart
@@ -1240,14 +1302,21 @@ function EnterpriseDashboard() {
                 </Box>
                 <Box
                   onClick={() => {
-                    if(gUser.azureUser?.roleName && gUser.azureUser?.roleName === BASIC){
-                      navigate('/basic/analytics/enterpriseLevelSentimentsSummary');
+                    if (
+                      gUser.azureUser?.roleName &&
+                      gUser.azureUser?.roleName === BASIC
+                    ) {
+                      navigate(
+                        '/basic/analytics/enterpriseLevelSentimentsSummary'
+                      );
+                    } else if (
+                      gUser.azureUser?.roleName &&
+                      gUser.azureUser?.roleName === ENTERPRISE
+                    ) {
+                      navigate(
+                        '/enterprise/analytics/enterpriseLevelSentimentsSummary'
+                      );
                     }
-                    else if(gUser.azureUser?.roleName && gUser.azureUser?.roleName === ENTERPRISE){
-                      navigate('/enterprise/analytics/enterpriseLevelSentimentsSummary');
-                    }
-                    
-                  
                   }}
                 >
                   <EnterpriseLevelSentimentsSummaryChart

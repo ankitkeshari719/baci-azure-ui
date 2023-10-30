@@ -4,6 +4,8 @@ import MenuItem from '@mui/material/MenuItem';
 import FormControl from '@mui/material/FormControl';
 import Select from '@mui/material/Select';
 import { getAllTeamsByEnterpriseId } from '../../helpers/msal/services';
+import { UserContext } from '../../contexts/UserContext';
+import { ENTERPRISE } from '../../constants/applicationConst';
 
 type Props = {
   enterpriseId: string;
@@ -21,9 +23,14 @@ export default function TeamSelector({
   showAllTeamOption,
 }: Props) {
   const [teams, setTeams] = React.useState<any>([]);
+  const [gUser]=React.useContext(UserContext)
 
   React.useEffect(() => {
-    callGetAllTeamsByEnterpriseId();
+    if(gUser.azureUser?.roleName==ENTERPRISE){
+      callGetAllTeamsByEnterpriseId();
+    }
+    else
+    setTeams(gUser?.azureUser?.teams?gUser?.azureUser?.teams:[])
   }, []);
 
   const callGetAllTeamsByEnterpriseId = async () => {

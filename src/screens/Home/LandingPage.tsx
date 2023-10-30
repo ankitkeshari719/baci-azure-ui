@@ -213,7 +213,11 @@ export function LandingPage({ isDemo }: { isDemo?: boolean }) {
       payload: { retroCreateState: true },
     });
     setCodeError('');
-    navigate('/create/');
+    if (location.pathname.includes('basic')) {
+      navigate('/basic/sessions/create');
+    } else if (location.pathname.includes('enterprise'))
+      navigate('/enterprise/sessions/create');
+;
   }
 
   // Navigate To Private Policy
