@@ -34,7 +34,8 @@ import { UserContext } from '../../../contexts/UserContext';
 export default function Notifications() {
   const navigate = useNavigate();
   const [global, dispatch] = React.useContext(GlobalContext);
-  
+  const [time, setTime] = React.useState(new Date());
+
   const [gUser] = React.useContext(UserContext);
   const localUserData = localStorage.getItem('userData');
   const tempLocalUserData = localUserData && JSON.parse(localUserData);
@@ -43,6 +44,15 @@ export default function Notifications() {
     React.useState<any>([]);
   const [allPreviousValidNotifications, setAllPreviousValidNotifications] =
     React.useState<any>([]);
+
+
+    React.useEffect(() => {
+    const interval = setInterval(() => {
+      setTime(new Date());
+    }, 2000);
+
+    return () => clearInterval(interval);
+  }, []);
 
   React.useEffect(() => {
     callGetAllValidNotification();
