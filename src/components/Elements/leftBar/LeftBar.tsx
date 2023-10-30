@@ -144,6 +144,10 @@ const LeftBar = () => {
       setSelectedMenu(menuArray[5].label);
     } else if (location.pathname.includes('settings')) {
       setSelectedMenu(menuArray[6].label);
+    }else if (location.pathname.includes('help')) {
+      setSelectedMenu(menuArray[7].label);
+    }else if (location.pathname.includes('notifications')) {
+      setSelectedMenu(menuArray[8].label);
     }
     else{
       setSelectedMenu(menuArray[0].label);
@@ -159,6 +163,8 @@ const LeftBar = () => {
     location.pathname.includes('templates'),
     location.pathname.includes('teams'),
     location.pathname.includes('settings'),
+    location.pathname.includes('help'),
+    location.pathname.includes('notifications'),
   ]);
 
   // Function to navigate on retroListTemplate
