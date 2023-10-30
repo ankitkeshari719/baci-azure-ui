@@ -54,6 +54,7 @@ import {
 import { ActionType, GlobalContext } from '../../../contexts/GlobalContext';
 import { UserActionType, UserContext } from '../../../contexts/UserContext';
 import DyanamicDialog from '../../atoms/DyanamicDialog';
+import { ContainedButtonWithIcon } from '../../CustomizedButton/ContainedButtonWithIcon';
 
 interface Column {
   id:
@@ -195,7 +196,7 @@ export default function ActionDashboard() {
 
   const [actionCount, setActionCount] = React.useState<any[]>(ActionCount);
   const [loading, setLoading] = React.useState<boolean>(false);
-  const [selectedActionId,setSelectedActionId]=React.useState<string>("");
+  const [selectedActionId, setSelectedActionId] = React.useState<string>('');
   const navigate = useNavigate();
 
   React.useEffect(() => {
@@ -235,24 +236,24 @@ export default function ActionDashboard() {
           if (res.data.length > 0) {
             let actionsArray: any[] = [];
             res.data.forEach((action: any) => {
-           
               var actionObj = action;
               actionObj['action.value'] = action.actionName;
               actionObj['action.assigneeName'] =
                 action.assigneeFName + ' ' + action.assigneeLName;
-              if(action.createdAt)
-              {var day = new Date(action.createdAt).getDate();
-              var month = new Date(action.createdAt).getMonth();
-              var year = new Date(action.createdAt).getFullYear();
+              if (action.createdAt) {
+                var day = new Date(action.createdAt).getDate();
+                var month = new Date(action.createdAt).getMonth();
+                var year = new Date(action.createdAt).getFullYear();
 
-       
-              actionObj.startDate =
-               ( day > 9 ? day : '0' + day) + '-' + (month+1) + '-' + year;
-            }
-            else{
-              actionObj.startDate ="-"
-            }
-              actionObj['action.assigneeId'] = (action.assignedTo!=null||action.assignedTo!=undefined)?action.assignedTo:"";
+                actionObj.startDate =
+                  (day > 9 ? day : '0' + day) + '-' + (month + 1) + '-' + year;
+              } else {
+                actionObj.startDate = '-';
+              }
+              actionObj['action.assigneeId'] =
+                action.assignedTo != null || action.assignedTo != undefined
+                  ? action.assignedTo
+                  : '';
 
               actionsArray.push(actionObj);
             });
@@ -410,18 +411,16 @@ export default function ActionDashboard() {
     setCsvData([...initialData]);
   }, [displayJiraRows]);
 
-
-const connect =()=>{
-  connectJiraForAction(selectedActionId).then(
-    (res: any) => {
-      window.location.href = res.response;
-    },
-    error => {
-      console.log('error', error);
-    }
-
-  )
-}
+  const connect = () => {
+    connectJiraForAction(selectedActionId).then(
+      (res: any) => {
+        window.location.href = res.response;
+      },
+      error => {
+        console.log('error', error);
+      }
+    );
+  };
   const callUpdateAction = async (
     action: any,
     assignedTo: string,
@@ -449,64 +448,56 @@ const connect =()=>{
       isActive: true,
       teamName: action.teamName,
       retroIdEnc: action.retroIdEnc,
-      value:action.actionName
+      value: action.actionName,
     };
 
-if(gUser.jiraCode===""||gUser.jiraCode===undefined){
-  setSelectedActionId(action.actionId)
-  setShowDialog(true)
+    if (gUser.jiraCode === '' || gUser.jiraCode === undefined) {
+      setSelectedActionId(action.actionId);
+      setShowDialog(true);
+    } else {
+      await editJiraIssue(
+        gUser?.jiraCode ? gUser?.jiraCode : '',
+        requestBody.value ? requestBody.value : '',
+        requestBody
+      ).then(
+        jiraEditRes => {
+          // alert(jiraEditRes.message);
+          setJiraRows([...tempJiraRows]);
+          setDisplayJiraRows([...tempJiraRows]);
+          updateJiraCount(tempJiraRows);
+          setLoading(false);
+          dispatch({
+            type: ActionType.SET_SNACK_MESSAGE,
+            payload: {
+              snackMessage: {
+                message: jiraEditRes.message,
+                snackMessageType: 'success',
+              },
+            },
+          });
+        },
+        error => {
+          // alert(error);
+          setJiraRows([...jiraRows]);
+          setDisplayJiraRows([...displayJiraRows]);
+          dispatch({
+            type: ActionType.SET_SNACK_MESSAGE,
+            payload: {
+              snackMessage: {
+                message: error,
+                snackMessageType: 'success',
+              },
+            },
+          });
+        }
+      );
 
-
-}
-else{
-  await editJiraIssue(
-    gUser?.jiraCode ? gUser?.jiraCode : '',
-    requestBody.value ? requestBody.value : '',
-    requestBody
-  ).then(
-    jiraEditRes => {
-      // alert(jiraEditRes.message);
-      setJiraRows([...tempJiraRows]);
-      setDisplayJiraRows([...tempJiraRows]);
-      updateJiraCount(tempJiraRows);
       setLoading(false);
       dispatch({
-        type: ActionType.SET_SNACK_MESSAGE,
-        payload: {
-          snackMessage: {
-            message:jiraEditRes.message,
-            snackMessageType: 'success',
-          },
-        },
-      });
-    },
-    error => {
-      // alert(error);
-      setJiraRows([...jiraRows]);
-      setDisplayJiraRows([...displayJiraRows]);
-      dispatch({
-        type: ActionType.SET_SNACK_MESSAGE,
-        payload: {
-          snackMessage: {
-            message:error,
-            snackMessageType: 'success',
-          },
-        },
+        type: ActionType.SET_LOADING,
+        payload: { loadingFlag: false },
       });
     }
-  );
-
-  setLoading(false);
-  dispatch({
-    type: ActionType.SET_LOADING,
-    payload: { loadingFlag: false },
-  });
-
-}
-
-   
-
-
 
     // await createAction(requestBody).then(
     //   res => {
@@ -550,9 +541,8 @@ else{
       isActive: true,
       teamName: action.teamName,
       retroIdEnc: action.retroIdEnc,
-      jiraKey:action.jiraKey
+      jiraKey: action.jiraKey,
     };
-    
 
     await createAction(requestBody).then(
       res => {
@@ -568,6 +558,18 @@ else{
       }
     );
   };
+  function CreateNewRetro() {
+    dispatch({
+      type: ActionType.SET_RETRO_CREATE,
+      payload: { retroCreateState: true },
+    });
+    // setCodeError('');
+    if (location.pathname.includes('basic')) {
+      navigate('/basic/sessions/create');
+    } else if (location.pathname.includes('enterprise'))
+      navigate('/enterprise/sessions/create');
+;
+  }
 
   return (
     <>
@@ -677,228 +679,265 @@ else{
               fontSize: '16px',
               borderRadius: '10px',
             }}
+            disabled={displayJiraRows.length == 0 }
           />
           {/* <FunnelIcon width="32px" style={{ cursor: 'pointer' }} /> */}
         </Box>
-        <TableContainer sx={{ height: 'calc(100% - 280px)' }}>
-          <Table stickyHeader aria-label="sticky table">
-            <TableHead>
-              <TableRow>
-                {columns.map(column => (
-                  <TableCell
-                    key={column.id}
-                    align={column.align}
-                    sx={{ borderBottom: '2px solid gray' }}
-                    onClick={() =>
-                      column.id != 'teamId' &&
-                      handleSortRequest(column.id, displayJiraRows)
-                    }
-                  >
-                    {column.id == 'teamId' ? (
-                      <>
-                        <BodySemiBoldTypography label={column.label} />
-                      </>
-                    ) : (
-                      <TableSortLabel
-                        active={true}
-                        direction={orderDirection === 'asc' ? 'asc' : 'desc'}
+        {displayJiraRows.length != 0 ? (
+          <>
+            <TableContainer sx={{ height: 'calc(100% - 280px)' }}>
+              <Table stickyHeader aria-label="sticky table">
+                <TableHead>
+                  <TableRow>
+                    {columns.map(column => (
+                      <TableCell
+                        key={column.id}
+                        align={column.align}
+                        sx={{ borderBottom: '2px solid gray' }}
+                        onClick={() =>
+                          column.id != 'teamId' &&
+                          handleSortRequest(column.id, displayJiraRows)
+                        }
                       >
-                        <BodySemiBoldTypography label={column.label} />
-                      </TableSortLabel>
-                    )}
-                  </TableCell>
-                ))}
-              </TableRow>
-            </TableHead>
-            <TableBody>
-              {displayJiraRows
-                .filter((row1: any) =>
-                  // note that I've incorporated the searchedVal length check here
-                  searchFunction(row1)
-                )
-                .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-                .map((row: any, index: number) => {
-                  return (
-                    <StyledTableRow
-                      hover
-                      role="checkbox"
-                      tabIndex={-1}
-                      key={index}
-                    >
-                      {columns.map(column => {
-                        const value = row[column.id];
-                        if (column.id == 'jiraId') {
-                          return (
-                            <TableCell
-                              key={column.id + '12'}
-                              align={column.align}
-                              sx={{
-                                color: 'rgba(0, 0, 238, 1)',
-                                minWidth: '100px',
-                                cursor: 'pointer',
-                              }}
-                            >
-                              <a href={row['url']} target="_blank">
-                                {row['jiraKey'] ? row['jiraKey'] : value}
-                              </a>
-                            </TableCell>
-                          );
-                        } else if (column.id == 'action.assigneeId') {
-                          return (
-                            <TableCell
-                              key={column.id + '12'}
-                              align={column.align}
-                              sx={{
-                                minWidth: '150px',
-                              }}
-                            >
-                              <>
-                                {' '}
-                                {(
-                                  <AssigneeDropdown
-                                    id={row['action.assigneeId']}
-                                    inputIndex={index}
-                                    outAssigneeSelected={async valueOut => {
-                                      setSearchedVal('');
+                        {column.id == 'teamId' ? (
+                          <>
+                            <BodySemiBoldTypography label={column.label} />
+                          </>
+                        ) : (
+                          <TableSortLabel
+                            active={true}
+                            direction={
+                              orderDirection === 'asc' ? 'asc' : 'desc'
+                            }
+                          >
+                            <BodySemiBoldTypography label={column.label} />
+                          </TableSortLabel>
+                        )}
+                      </TableCell>
+                    ))}
+                  </TableRow>
+                </TableHead>
+                <TableBody>
+                  {displayJiraRows
+                    .filter((row1: any) =>
+                      // note that I've incorporated the searchedVal length check here
+                      searchFunction(row1)
+                    )
+                    .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+                    .map((row: any, index: number) => {
+                      return (
+                        <StyledTableRow
+                          hover
+                          role="checkbox"
+                          tabIndex={-1}
+                          key={index}
+                        >
+                          {columns.map(column => {
+                            const value = row[column.id];
+                            if (column.id == 'jiraId') {
+                              return (
+                                <TableCell
+                                  key={column.id + '12'}
+                                  align={column.align}
+                                  sx={{
+                                    color: 'rgba(0, 0, 238, 1)',
+                                    minWidth: '100px',
+                                    cursor: 'pointer',
+                                  }}
+                                >
+                                  <a href={row['url']} target="_blank">
+                                    {row['jiraKey'] ? row['jiraKey'] : value}
+                                  </a>
+                                </TableCell>
+                              );
+                            } else if (column.id == 'action.assigneeId') {
+                              return (
+                                <TableCell
+                                  key={column.id + '12'}
+                                  align={column.align}
+                                  sx={{
+                                    minWidth: '150px',
+                                  }}
+                                >
+                                  <>
+                                    {' '}
+                                    {
+                                      <AssigneeDropdown
+                                        id={row['action.assigneeId']}
+                                        inputIndex={index}
+                                        outAssigneeSelected={async valueOut => {
+                                          setSearchedVal('');
+                                          var tempJiraRows = jiraRows;
+                                          var action = '';
+                                          var emailId = '';
+                                          var status = '';
+                                          tempJiraRows.map(
+                                            (obj: any, i: number) => {
+                                              if (index == i) {
+                                                obj[column.id] =
+                                                  valueOut?.emailId;
+                                                obj['assigneeName'] =
+                                                  valueOut?.name;
+                                                obj['assigneeAvatar'] =
+                                                  valueOut?.avatar;
+                                                action = obj;
+                                                emailId = valueOut?.emailId;
+                                                status = obj?.status;
+                                              }
+                                            }
+                                          );
+                                          callUpdateAction(
+                                            action,
+                                            emailId,
+                                            status,
+                                            tempJiraRows
+                                          );
+                                          // setJiraRows(tempJiraRows);
+                                          // setDisplayJiraRows(tempJiraRows);
+
+                                          // localStorage.setItem(
+                                          //   'actionList',
+                                          //   JSON.stringify(tempJiraRows)
+                                          // );
+                                          //
+                                        }}
+                                      />
+                                    }
+                                  </>
+                                </TableCell>
+                              );
+                            } else if (column.id == 'status') {
+                              return (
+                                <TableCell
+                                  key={column.id + '12'}
+                                  align={column.align}
+                                  sx={{
+                                    minWidth: '80px',
+                                  }}
+                                >
+                                  <StatusDropDown
+                                    status={value}
+                                    outStatusSelected={valueOut => {
                                       var tempJiraRows = jiraRows;
                                       var action = '';
                                       var emailId = '';
                                       var status = '';
+
                                       tempJiraRows.map(
                                         (obj: any, i: number) => {
                                           if (index == i) {
-                                            obj[column.id] = valueOut?.emailId;
-                                            obj['assigneeName'] =
-                                              valueOut?.name;
-                                            obj['assigneeAvatar'] =
-                                              valueOut?.avatar;
+                                            obj[column.id] = valueOut;
+
                                             action = obj;
-                                            emailId = valueOut?.emailId;
-                                            status = obj?.status;
+                                            emailId =
+                                              obj.assignedTo != null ||
+                                              obj.assignedTo != undefined
+                                                ? obj.assignedTo
+                                                : '';
+                                            status = valueOut;
                                           }
                                         }
                                       );
-                                      callUpdateAction(
+                                      callUpdateAction1(
                                         action,
                                         emailId,
                                         status,
                                         tempJiraRows
                                       );
+                                      // console.log("run")
                                       // setJiraRows(tempJiraRows);
-                                      // setDisplayJiraRows(tempJiraRows);
+                                      // updateJiraCount(tempJiraRows);
 
                                       // localStorage.setItem(
                                       //   'actionList',
                                       //   JSON.stringify(tempJiraRows)
                                       // );
-                                      //
+                                      // updateJiraCount(tempJiraRows);
                                     }}
                                   />
-                                )}
-                              </>
-                            </TableCell>
-                          );
-                        } else if (column.id == 'status') {
-                          return (
-                            <TableCell
-                              key={column.id + '12'}
-                              align={column.align}
-                              sx={{
-                                minWidth: '80px',
-                              }}
-                            >
-                              <StatusDropDown
-                                status={value}
-                                outStatusSelected={valueOut => {
-                                  var tempJiraRows = jiraRows;
-                                  var action = '';
-                                  var emailId = '';
-                                  var status = '';
-
-                                  tempJiraRows.map((obj: any, i: number) => {
-                                    if (index == i) {
-                                      obj[column.id] = valueOut;
-
-                                      action = obj;
-                                      emailId = (obj.assignedTo!=null||obj.assignedTo!=undefined) ?obj.assignedTo:"";
-                                      status = valueOut;
-                                    }
-                                  });
-                                  callUpdateAction1(
-                                    action,
-                                    emailId,
-                                    status,
-                                    tempJiraRows
-                                  );
-                                  // console.log("run")
-                                  // setJiraRows(tempJiraRows);
-                                  // updateJiraCount(tempJiraRows);
-
-                                  // localStorage.setItem(
-                                  //   'actionList',
-                                  //   JSON.stringify(tempJiraRows)
-                                  // );
-                                  // updateJiraCount(tempJiraRows);
-                                }}
-                              />
-                              {/* {value} */}
-                            </TableCell>
-                          );
-                        } else if (column.id == 'teamId') {
-                          return (
-                            <TableCell
-                              key={column.id + '12'}
-                              align={column.align}
-                              sx={{
-                                minWidth: '20px',
-                                alignItems: 'center',
-                              }}
-                            >
-                              <EllipsisVerticalIcon width="24px" />
-                            </TableCell>
-                          );
-                        } else {
-                          return (
-                            <TableCell
-                              key={column.id}
-                              align={column.align}
-                              sx={{ maxWidth: '250px' }}
-                            >
-                              {value}
-                            </TableCell>
-                          );
-                        }
-                      })}
-                    </StyledTableRow>
-                  );
-                })}
-            </TableBody>
-          </Table>
-        </TableContainer>
-        <TablePagination
-          rowsPerPageOptions={[10, 25, 100]}
-          component="div"
-          count={
-            displayJiraRows.filter((row1: any) => searchFunction(row1)).length
-          }
-          rowsPerPage={rowsPerPage}
-          page={page}
-          onPageChange={handleChangePage}
-          onRowsPerPageChange={handleChangeRowsPerPage}
-        />
+                                  {/* {value} */}
+                                </TableCell>
+                              );
+                            } else if (column.id == 'teamId') {
+                              return (
+                                <TableCell
+                                  key={column.id + '12'}
+                                  align={column.align}
+                                  sx={{
+                                    minWidth: '20px',
+                                    alignItems: 'center',
+                                  }}
+                                >
+                                  <EllipsisVerticalIcon width="24px" />
+                                </TableCell>
+                              );
+                            } else {
+                              return (
+                                <TableCell
+                                  key={column.id}
+                                  align={column.align}
+                                  sx={{ maxWidth: '250px' }}
+                                >
+                                  {value}
+                                </TableCell>
+                              );
+                            }
+                          })}
+                        </StyledTableRow>
+                      );
+                    })}
+                </TableBody>
+              </Table>
+            </TableContainer>
+            <TablePagination
+              rowsPerPageOptions={[10, 25, 100]}
+              component="div"
+              count={
+                displayJiraRows.filter((row1: any) => searchFunction(row1))
+                  .length
+              }
+              rowsPerPage={rowsPerPage}
+              page={page}
+              onPageChange={handleChangePage}
+              onRowsPerPageChange={handleChangeRowsPerPage}
+            />
+          </>
+        ) : (
+          <Box
+            sx={{
+              height: 'calc(100% - 280px)',
+              display: 'flex',
+              justifyContent: 'center',
+              alignItems: 'center',
+              flexDirection: 'column',
+            }}
+          >
+            <img src="/svgs/emptyActions.svg" width={300} height={350} />
+            <H2SemiBoldTypography
+              label="No Action to display"
+              style={{ color: '#2C69A1' }}
+            />
+            <ContainedButtonWithIcon
+              id={'create_new__retro_button_desktop'}
+              label={'New Session'}
+              size={'medium'}
+              iconPath="/svgs/plusSmall.svg"
+              style={{ width: '260px', marginTop: '40px', textAlign: 'center' }}
+              onClick={() => CreateNewRetro()}
+            />
+          </Box>
+        )}
       </Paper>
       <>
-      <DyanamicDialog
-        show={showDialog}
-        title={'Exit Action Update'}
-        text={
-          'Current action will not be updated till we connect to jira.'
-        }
-        action={'YES, EXIT'}
-        type="Alert"
-        onCancel={() => setShowDialog(false)}
-        onConfirm={() => connect()}
-      />
+        <DyanamicDialog
+          show={showDialog}
+          title={'Exit Action Update'}
+          text={'Current action will not be updated till we connect to jira.'}
+          action={'YES, EXIT'}
+          type="Alert"
+          onCancel={() => setShowDialog(false)}
+          onConfirm={() => connect()}
+        />
 
         {loading && (
           <Box

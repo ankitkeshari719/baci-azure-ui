@@ -8,6 +8,6 @@ export const ActionsMainContainer = () => {
   localStorage.setItem('actionList', JSON.stringify(ActionList));
 
   return (
-    <>{ActionList.length === 0 ? <ActionEmptyPage /> : <ActionDashboard />}</>
+    <>{false ? <ActionEmptyPage /> : <ActionDashboard />}</>
   );
 };
