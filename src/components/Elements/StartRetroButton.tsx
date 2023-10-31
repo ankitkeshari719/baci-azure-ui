@@ -119,7 +119,7 @@ const StartRetroButton = () => {
   return (
     <>
       {(global?.currentRetro?.creatorId === global?.user?.id ||
-        global?.currentRetro?.selectedFacilitator === global?.user?.id) && (
+        global?.currentRetro?.selectedFacilitator === gUser.azureUser?.emailId) && (
         <>
           <Button
             variant="outlined"
