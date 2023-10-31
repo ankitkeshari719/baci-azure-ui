@@ -78,7 +78,7 @@ export default function EditTeam() {
   const navigate = useNavigate();
   const { id } = useParams();
   const [global, dispatch] = React.useContext(GlobalContext);
-  const [gUser,userDispatch]= React.useContext(UserContext);
+  const [gUser, userDispatch] = React.useContext(UserContext);
   const localUserData = localStorage.getItem('userData');
   const tempLocalUserData = localUserData && JSON.parse(localUserData);
   const [enterpriseId, setEnterpriseId] = React.useState('');
@@ -1640,56 +1640,63 @@ export default function EditTeam() {
             value={searchedVal}
           />
           {/* Users List */}
-          <TblContainer>
-            {/* <TblHead /> */}
-            <TableBody>
-              {recordAfterPagingAndSorting().map((item: any) => {
-                return (
-                  <TableRow key={item.id}>
-                    <TableCell>
-                      <>
-                        {item.selectedAvatar != '' ? (
-                          <LazyLoadImage
-                            className="avatar"
-                            style={{
-                              height: '48px',
-                              width: '48px',
-                              borderRadius: '50%',
-                              border: '5px solid #f9fbf8',
-                              cursor: 'pointer',
-                            }}
-                            src={
-                              '/avatars/animals/' + item.selectedAvatar + '.svg'
-                            }
-                          ></LazyLoadImage>
-                        ) : (
-                          <LazyLoadImage
-                            width="48px !important"
-                            height="48px !important"
-                            style={{
-                              borderRadius: '50%',
-                              cursor: 'pointer',
-                              border: 'none',
-                            }}
-                            src={'/svgs/DefaultUser.svg'}
-                          ></LazyLoadImage>
-                        )}
-                        {item.fullName}
-                      </>
-                    </TableCell>
-                    <TableCell>{item.emailId}</TableCell>
-                    <TableCell>
-                      <Checkbox
-                        checked={item.checked}
-                        onChange={(e: any) => handleChangeCheckbox(e, item.id)}
-                        inputProps={{ 'aria-label': 'controlled' }}
-                      />
-                    </TableCell>
-                  </TableRow>
-                );
-              })}
-            </TableBody>
-          </TblContainer>
+          <Box sx={{overflow: 'scroll'}}>
+            <TblContainer>
+              {/* <TblHead /> */}
+              <TableBody>
+                {recordAfterPagingAndSorting().map((item: any) => {
+                  return (
+                    <TableRow key={item.id}>
+                      <TableCell>
+                        <>
+                          {item.selectedAvatar != '' ? (
+                            <LazyLoadImage
+                              className="avatar"
+                              style={{
+                                height: '48px',
+                                width: '48px',
+                                borderRadius: '50%',
+                                border: '5px solid #f9fbf8',
+                                cursor: 'pointer',
+                              }}
+                              src={
+                                '/avatars/animals/' +
+                                item.selectedAvatar +
+                                '.svg'
+                              }
+                            ></LazyLoadImage>
+                          ) : (
+                            <LazyLoadImage
+                              width="48px !important"
+                              height="48px !important"
+                              style={{
+                                borderRadius: '50%',
+                                cursor: 'pointer',
+                                border: 'none',
+                              }}
+                              src={'/svgs/DefaultUser.svg'}
+                            ></LazyLoadImage>
+                          )}
+                          {item.fullName}
+                        </>
+                      </TableCell>
+                      <TableCell>{item.emailId}</TableCell>
+                      <TableCell>
+                        <Checkbox
+                          checked={item.checked}
+                          onChange={(e: any) =>
+                            handleChangeCheckbox(e, item.id)
+                          }
+                          inputProps={{ 'aria-label': 'controlled' }}
+                        />
+                      </TableCell>
+                    </TableRow>
+                  );
+                })}
+              </TableBody>
+            </TblContainer>
+          </Box>
+
           {/* Buttons */}
           <Box>
             <Box
