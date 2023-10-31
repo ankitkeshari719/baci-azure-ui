@@ -126,6 +126,33 @@ function BasicDashboardWithEnterprise() {
     setOpen(true);
   };
 
+  React.useEffect(() => {
+    localStorage.setItem(
+      'uuid',
+      gUser?.azureUser ? gUser?.azureUser.emailId : ''
+    );
+    dispatch({
+      type: ActionType.SET_USER,
+      payload: {
+        user: {
+          id:
+            gUser.azureUser?.emailId != undefined
+              ? gUser.azureUser?.emailId
+              : '',
+          name:
+            gUser.azureUser?.emailId != undefined
+              ? gUser.azureUser?.firstName + ' ' + gUser.azureUser?.lastName
+              : '',
+          avatar:
+            gUser.azureUser?.emailId != undefined
+              ? gUser.azureUser?.selectedAvatar
+              : '',
+          userType: 1,
+        },
+      },
+    });
+  },[]);
+
   const menuList = [
     {
       id: '0',

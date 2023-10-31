@@ -15,6 +15,10 @@ import useLoadRetro from '../../helpers/hooks/useLoadRetro';
 import Toolbar from '../../components/Elements/Toolbar';
 import StartRetroButton from '../../components/Elements/StartRetroButton';
 import { DeploymentPopUp } from '../Utils/Alerts/DeploymentPopUp';
+import { useNavigate } from 'react-router-dom';
+import { ENTERPRISE } from '../../constants/applicationConst';
+import { BoardContext } from '../../contexts/BoardContext';
+import { UserContext } from '../../contexts/UserContext';
 
 const styles = {
   frame101: {
@@ -132,8 +136,14 @@ const styles = {
 
 // This component is not in used
 export function StartRetro() {
-  const [global, dispatch] = React.useContext(GlobalContext);
   const [iscopied, setIsCopied] = React.useState(false);
+  const navigate = useNavigate();
+  const {
+    state: { retroId, retroStarted, retroStatus },
+    commitAction,
+  } = React.useContext(BoardContext);
+  const [global, dispatch] = React.useContext(GlobalContext);
+  const [gUser, userDispatch] = React.useContext(UserContext);
 
   useLoadRetro();
 
@@ -155,6 +165,38 @@ export function StartRetro() {
   const handleTooltipClose = () => {
     setIsCopied(false);
   };
+
+  React.useEffect(() => {
+    console.log('retroStarted', retroStarted);
+    console.log('retroStatus', retroStatus);
+
+    if (
+      (retroStarted || retroStatus == 'started') &&
+      retroId != undefined &&
+      retroId != ''
+    ) {
+      if (
+        gUser.azureUser != undefined &&
+        gUser.azureUser.emailId != undefined &&
+        gUser.azureUser.emailId != ''
+      ) {
+        if (gUser.azureUser?.roleName === ENTERPRISE)
+          navigate(
+            `/enterprise/sessions/board/${
+              retroId || global.currentRetro?.id
+            }/pulsecheck`
+          );
+        else {
+          navigate(
+            `/basic/sessions/board/${
+              retroId || global.currentRetro?.id
+            }/pulsecheck`
+          );
+        }
+      } else if (gUser.azureUser?.emailId != undefined)
+        navigate(`/board/${retroId || global.currentRetro?.id}/pulsecheck`);
+    }
+  }, [retroStarted, retroStatus]);
 
   return (
     <Grid container spacing={0}>
