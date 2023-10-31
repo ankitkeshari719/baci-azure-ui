@@ -866,7 +866,13 @@ function EnterpriseDashboard() {
                   }}
                 >
                   <Grid item xs={6}>
-                    <img src="/images/colonial_first_state.png"></img>
+                  {organisationPhoto && organisationPhoto != '' && (
+                        <img
+                          src={organisationPhoto}
+                          height="150px"
+                          width="150px"
+                        ></img>
+                      )}
                   </Grid>
                   <Grid item xs={6}>
                     <Box
@@ -1046,7 +1052,13 @@ function EnterpriseDashboard() {
                   }}
                 >
                   <Grid item xs={6}>
-                    <img src="/images/colonial_first_state.png"></img>
+                  {organisationPhoto && organisationPhoto != '' && (
+                        <img
+                          src={organisationPhoto}
+                          height="150px"
+                          width="150px"
+                        ></img>
+                      )}
                   </Grid>
                   <Grid item xs={6}>
                     <Box
@@ -1228,7 +1240,13 @@ function EnterpriseDashboard() {
                   }}
                 >
                   <Grid item xs={6}>
-                    <img src="/images/colonial_first_state.png"></img>
+                  {organisationPhoto && organisationPhoto != '' && (
+                        <img
+                          src={organisationPhoto}
+                          height="150px"
+                          width="150px"
+                        ></img>
+                      )}
                   </Grid>
                   <Grid item xs={6}>
                     <Box

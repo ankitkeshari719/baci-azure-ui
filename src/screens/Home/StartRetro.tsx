@@ -11,7 +11,6 @@ import './../../global.scss';
 import email from '../../assets/img/emailbox.png';
 
 import { GlobalContext } from '../../contexts/GlobalContext';
-import useLoadRetro from '../../helpers/hooks/useLoadRetro';
 import Toolbar from '../../components/Elements/Toolbar';
 import StartRetroButton from '../../components/Elements/StartRetroButton';
 import { DeploymentPopUp } from '../Utils/Alerts/DeploymentPopUp';
@@ -145,7 +144,7 @@ export function StartRetro() {
   const [global, dispatch] = React.useContext(GlobalContext);
   const [gUser, userDispatch] = React.useContext(UserContext);
 
-  useLoadRetro();
+  
 
   const downloadQRCode = () => {
     const canvas = document.querySelector('canvas');
