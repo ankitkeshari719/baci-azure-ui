@@ -873,15 +873,6 @@ console.log(action)
                                         status,
                                         tempJiraRows
                                       );
-                                      // console.log("run")
-                                      // setJiraRows(tempJiraRows);
-                                      // updateJiraCount(tempJiraRows);
-
-                                      // localStorage.setItem(
-                                      //   'actionList',
-                                      //   JSON.stringify(tempJiraRows)
-                                      // );
-                                      // updateJiraCount(tempJiraRows);
                                     }}
                                   />
                                   {/* {value} */}

@@ -36,8 +36,6 @@ export default function useLoadRetro() {
   };
 
   React.useEffect(() => {
-    console.log('waiting', retroId);
-    
     if (!global?.user?.name && id) {
       if (location.pathname.includes('basic')) {
         navigate('/basic/sessions/join/' + id);
@@ -98,19 +96,15 @@ export default function useLoadRetro() {
         }).then(() => {
           if (global.currentRetro && retroStarted) {
             if (FEATURE_FLAGS.pulseCheck) {
-              // navigate(
-              //   `/board/${retroId || global.currentRetro?.id}/pulsecheck`
-              // );
               return;
             }
           } else {
-            console.log(gUser.azureUser?.emailId, 'email');
             if (
-              (global.currentRetro?.creatorId !== global.user.id &&
-              global.currentRetro?.creatorId !== gUser.azureUser?.emailId)
-              &&(global.currentRetro?.selectedFacilitator !== global.user.id &&
-                global.currentRetro?.selectedFacilitator !== gUser.azureUser?.emailId)
-
+              global.currentRetro?.creatorId !== global.user.id &&
+              global.currentRetro?.creatorId !== gUser.azureUser?.emailId &&
+              global.currentRetro?.selectedFacilitator !== global.user.id &&
+              global.currentRetro?.selectedFacilitator !==
+                gUser.azureUser?.emailId
             ) {
               if (location.pathname.includes('basic')) {
                 navigate('/basic/sessions' + `/board/${retroId}/waiting`);
@@ -118,11 +112,6 @@ export default function useLoadRetro() {
                 navigate('/enterprise/sessions' + `/board/${retroId}/waiting`);
               else navigate(`/board/${retroId}/waiting`);
             }
-
-            // if (gUser.azureUser?.emailId) {
-
-            //   navigate(`/enterprise/sessions/board/${retroId}/waiting`);
-            // } else navigate(`/board/${retroId}/waiting`);
             else {
               if (location.pathname.includes('basic')) {
                 navigate('/basic/sessions' + `/board/${retroId}/startRetro`);

@@ -50,10 +50,6 @@ const styles = {
 };
 
 export default function ErrorDialog(props?: any) {
-  React.useEffect(() => {
-    console.log('error', props.error);
-  }, []);
-
   return (
     <>
       {props.error == 'error : Socket disconnected' ? (
@@ -111,17 +107,22 @@ export default function ErrorDialog(props?: any) {
                     justifyContent: 'end',
                   }}
                 >
-                  <Divider orientation="vertical" variant="middle" flexItem sx={{
-                    width: '48px !important',
-                    height: ' 0px !important',
-                    border: '0.5px solid #CCCCCC !important',
-                    transform: 'rotate(90deg) !important',
-                    flex: 'none !important',
-                    order: '2 !important',
-                    alignSelf: 'stretch !important',
-                    flexGrow: '0 !important',
-                    zIndex: '2 !important',
-                  }} />
+                  <Divider
+                    orientation="vertical"
+                    variant="middle"
+                    flexItem
+                    sx={{
+                      width: '48px !important',
+                      height: ' 0px !important',
+                      border: '0.5px solid #CCCCCC !important',
+                      transform: 'rotate(90deg) !important',
+                      flex: 'none !important',
+                      order: '2 !important',
+                      alignSelf: 'stretch !important',
+                      flexGrow: '0 !important',
+                      zIndex: '2 !important',
+                    }}
+                  />
                 </Col>
                 <Col
                   xs="7"
@@ -129,7 +130,7 @@ export default function ErrorDialog(props?: any) {
                     display: 'flex',
                     justifyContent: 'start',
                     padding: '0px',
-                    margin: '0px'
+                    margin: '0px',
                   }}
                 >
                   <Box>

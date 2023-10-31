@@ -144,12 +144,11 @@ const LeftBar = () => {
       setSelectedMenu(menuArray[5].label);
     } else if (location.pathname.includes('settings')) {
       setSelectedMenu(menuArray[6].label);
-    }else if (location.pathname.includes('help')) {
-      setSelectedMenu(menuArray[7].label);
-    }else if (location.pathname.includes('notifications')) {
-      setSelectedMenu(menuArray[8].label);
-    }
-    else{
+    } else if (location.pathname.includes('help')) {
+      setSelectedMenu(bottomMenuArray[0].label);
+    } else if (location.pathname.includes('notifications')) {
+      setSelectedMenu(bottomMenuArray[1].label);
+    } else {
       setSelectedMenu(menuArray[0].label);
     }
   }, [
@@ -222,11 +221,12 @@ const LeftBar = () => {
           >
             <img src="/../images/r_MenuHeader.png" style={{ width: '56px' }} />
           </Box>
-       
+
           {menuArray.map((menu, index) => {
             {
               // let a = menu.isVisibleToBasic ? (
-             return   <Tooltip title={menu.label} key={menu.label} placement="right">
+              return (
+                <Tooltip title={menu.label} key={menu.label} placement="right">
                   <menu.icon
                     className={
                       menu.label == selectedMenu
@@ -255,6 +255,7 @@ const LeftBar = () => {
                     onMouseLeave={() => {}}
                   />
                 </Tooltip>
+              );
               // ) : (
               //   <></>
               // );
