@@ -435,10 +435,9 @@ export default function ActionDashboard() {
     setLoading(true);
 
 
-console.log(action)
     const requestBody = {
       id: action.actionId,
-      actionValue: action.actionName,
+      actionValue:action['actionName'],
       jiraId: action.jiraId,
       retroId: action.retroId,
       // "retroIdEnc":"64f6179cf9b80b2e2f9f31f9",
@@ -460,45 +459,46 @@ console.log(action)
     };
 console.log(requestBody)
     if (gUser.jiraCode === '' || gUser.jiraCode === undefined) {
-      // setSelectedActionId(action.actionId);
-      // setShowDialog(true);
+      setSelectedActionId(action.actionId);
+      setShowDialog(true);
     } else {
-      // await editJiraIssue(
-      //   gUser?.jiraCode ? gUser?.jiraCode : '',
-      //   requestBody.value ? requestBody.value : '',
-      //   requestBody
-      // ).then(
-      //   jiraEditRes => {
-      //     // alert(jiraEditRes.message);
-      //     setJiraRows([...tempJiraRows]);
-      //     setDisplayJiraRows([...tempJiraRows]);
-      //     updateJiraCount(tempJiraRows);
-      //     setLoading(false);
-      //     dispatch({
-      //       type: ActionType.SET_SNACK_MESSAGE,
-      //       payload: {
-      //         snackMessage: {
-      //           message: jiraEditRes.message,
-      //           snackMessageType: 'success',
-      //         },
-      //       },
-      //     });
-      //   },
-      //   error => {
-      //     // alert(error);
-      //     setJiraRows([...jiraRows]);
-      //     setDisplayJiraRows([...displayJiraRows]);
-      //     dispatch({
-      //       type: ActionType.SET_SNACK_MESSAGE,
-      //       payload: {
-      //         snackMessage: {
-      //           message: error,
-      //           snackMessageType: 'success',
-      //         },
-      //       },
-      //     });
-      //   }
-      // );
+      await editJiraIssue(
+        gUser?.jiraCode ? gUser?.jiraCode : '',
+        requestBody.value ? requestBody.value : '',
+        requestBody
+      ).then(
+        jiraEditRes => {
+          // alert(jiraEditRes.message);
+          setJiraRows([...tempJiraRows]);
+          setDisplayJiraRows([...tempJiraRows]);
+          updateJiraCount(tempJiraRows);
+          setLoading(false);
+          getActionsForTable();
+          dispatch({
+            type: ActionType.SET_SNACK_MESSAGE,
+            payload: {
+              snackMessage: {
+                message: jiraEditRes.message,
+                snackMessageType: 'success',
+              },
+            },
+          });
+        },
+        error => {
+          // alert(error);
+          setJiraRows([...jiraRows]);
+          setDisplayJiraRows([...displayJiraRows]);
+          dispatch({
+            type: ActionType.SET_SNACK_MESSAGE,
+            payload: {
+              snackMessage: {
+                message: error,
+                snackMessageType: 'success',
+              },
+            },
+          });
+        }
+      );
 
       setLoading(false);
       dispatch({
@@ -529,10 +529,11 @@ console.log(requestBody)
     tempJiraRows: any
   ) => {
     setLoading(true);
-console.log(action)
+
+
     const requestBody = {
       actionId: action.actionId,
-      actionName: action.actionName,
+      actionName: action['action.actionName'],
       jiraId: action.jiraId,
       retroId: action.retroId,
       // "retroIdEnc":"64f6179cf9b80b2e2f9f31f9",
@@ -817,6 +818,7 @@ console.log(action)
                                           );
                                           callUpdateAction(
                                             row,
+                                        
                                             emailId,
                                             status,
                                             tempJiraRows
