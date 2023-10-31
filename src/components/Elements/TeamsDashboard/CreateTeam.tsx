@@ -1005,26 +1005,28 @@ export default function CreateTeam() {
           value={searchedVal}
         />
         {/* Users List */}
-        <TblContainer>
-          {/* <TblHead /> */}
-          <TableBody>
-            {recordAfterPagingAndSorting().map((item: any) => {
-              return (
-                <TableRow key={item.id}>
-                  <TableCell>{item.fullName}</TableCell>
-                  <TableCell>{item.emailId}</TableCell>
-                  <TableCell>
-                    <Checkbox
-                      checked={item.checked}
-                      onChange={(e: any) => handleChangeCheckbox(e, item.id)}
-                      inputProps={{ 'aria-label': 'controlled' }}
-                    />
-                  </TableCell>
-                </TableRow>
-              );
-            })}
-          </TableBody>
-        </TblContainer>
+        <Box sx={{ overflow: 'scroll' }}>
+          <TblContainer>
+            {/* <TblHead /> */}
+            <TableBody>
+              {recordAfterPagingAndSorting().map((item: any) => {
+                return (
+                  <TableRow key={item.id}>
+                    <TableCell>{item.fullName}</TableCell>
+                    <TableCell>{item.emailId}</TableCell>
+                    <TableCell>
+                      <Checkbox
+                        checked={item.checked}
+                        onChange={(e: any) => handleChangeCheckbox(e, item.id)}
+                        inputProps={{ 'aria-label': 'controlled' }}
+                      />
+                    </TableCell>
+                  </TableRow>
+                );
+              })}
+            </TableBody>
+          </TblContainer>
+        </Box>
         {/* Buttons */}
         <Box>
           <Box
