@@ -342,7 +342,7 @@ export default function SessionDashboard() {
             }}
             onClick={() => {
               if (location.pathname.includes('basic')) {
-                navigate('/basic/create');
+                navigate('/basic/sessions/create');
               } else if (location.pathname.includes('enterprise'))
                 navigate('/enterprise/sessions/create');
             }}

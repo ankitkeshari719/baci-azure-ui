@@ -77,6 +77,7 @@ interface Column {
 
 const columns: Column[] = [
   { id: 'teamName', label: 'Team', minWidth: 200, displayName: 'Team' },
+  { id: 'jiraKey', label: 'JIRA Key', minWidth: 200, displayName: "JIRA Key'" },
   { id: 'jiraId', label: 'JIRA ID', minWidth: 200, displayName: "JIRA ID'" },
   { id: 'action.value', label: 'Action', minWidth: 300, displayName: 'Action' },
   {
@@ -237,6 +238,9 @@ export default function ActionDashboard() {
             let actionsArray: any[] = [];
             res.data.forEach((action: any) => {
               var actionObj = action;
+              if(action.jiraKey==null){
+                actionObj.jiraKey="-"
+              }
               actionObj['action.value'] = action.actionName;
               actionObj['action.assigneeName'] =
                 action.assigneeFName + ' ' + action.assigneeLName;
@@ -260,6 +264,7 @@ export default function ActionDashboard() {
             setJiraRows([...actionsArray]);
             updateJiraCount([...actionsArray]);
             setDisplayJiraRows([...actionsArray]);
+            console.log([...actionsArray])
           }
           setLoading(false);
         },
@@ -429,9 +434,11 @@ export default function ActionDashboard() {
   ) => {
     setLoading(true);
 
+
+console.log(action)
     const requestBody = {
-      actionId: action.actionId,
-      actionName: action.actionName,
+      id: action.actionId,
+      actionValue: action.actionName,
       jiraId: action.jiraId,
       retroId: action.retroId,
       // "retroIdEnc":"64f6179cf9b80b2e2f9f31f9",
@@ -449,48 +456,49 @@ export default function ActionDashboard() {
       teamName: action.teamName,
       retroIdEnc: action.retroIdEnc,
       value: action.actionName,
+      jiraKey: action.jiraKey,
     };
-
+console.log(requestBody)
     if (gUser.jiraCode === '' || gUser.jiraCode === undefined) {
-      setSelectedActionId(action.actionId);
-      setShowDialog(true);
+      // setSelectedActionId(action.actionId);
+      // setShowDialog(true);
     } else {
-      await editJiraIssue(
-        gUser?.jiraCode ? gUser?.jiraCode : '',
-        requestBody.value ? requestBody.value : '',
-        requestBody
-      ).then(
-        jiraEditRes => {
-          // alert(jiraEditRes.message);
-          setJiraRows([...tempJiraRows]);
-          setDisplayJiraRows([...tempJiraRows]);
-          updateJiraCount(tempJiraRows);
-          setLoading(false);
-          dispatch({
-            type: ActionType.SET_SNACK_MESSAGE,
-            payload: {
-              snackMessage: {
-                message: jiraEditRes.message,
-                snackMessageType: 'success',
-              },
-            },
-          });
-        },
-        error => {
-          // alert(error);
-          setJiraRows([...jiraRows]);
-          setDisplayJiraRows([...displayJiraRows]);
-          dispatch({
-            type: ActionType.SET_SNACK_MESSAGE,
-            payload: {
-              snackMessage: {
-                message: error,
-                snackMessageType: 'success',
-              },
-            },
-          });
-        }
-      );
+      // await editJiraIssue(
+      //   gUser?.jiraCode ? gUser?.jiraCode : '',
+      //   requestBody.value ? requestBody.value : '',
+      //   requestBody
+      // ).then(
+      //   jiraEditRes => {
+      //     // alert(jiraEditRes.message);
+      //     setJiraRows([...tempJiraRows]);
+      //     setDisplayJiraRows([...tempJiraRows]);
+      //     updateJiraCount(tempJiraRows);
+      //     setLoading(false);
+      //     dispatch({
+      //       type: ActionType.SET_SNACK_MESSAGE,
+      //       payload: {
+      //         snackMessage: {
+      //           message: jiraEditRes.message,
+      //           snackMessageType: 'success',
+      //         },
+      //       },
+      //     });
+      //   },
+      //   error => {
+      //     // alert(error);
+      //     setJiraRows([...jiraRows]);
+      //     setDisplayJiraRows([...displayJiraRows]);
+      //     dispatch({
+      //       type: ActionType.SET_SNACK_MESSAGE,
+      //       payload: {
+      //         snackMessage: {
+      //           message: error,
+      //           snackMessageType: 'success',
+      //         },
+      //       },
+      //     });
+      //   }
+      // );
 
       setLoading(false);
       dispatch({
@@ -521,7 +529,7 @@ export default function ActionDashboard() {
     tempJiraRows: any
   ) => {
     setLoading(true);
-
+console.log(action)
     const requestBody = {
       actionId: action.actionId,
       actionName: action.actionName,
@@ -746,11 +754,32 @@ export default function ActionDashboard() {
                                   }}
                                 >
                                   <a href={row['url']} target="_blank">
-                                    {row['jiraKey'] ? row['jiraKey'] : value}
+                                    {row['jiraId']}
+                                    {/* {row['jiraKey'] ? row['jiraKey'] : value} */}
                                   </a>
                                 </TableCell>
                               );
-                            } else if (column.id == 'action.assigneeId') {
+                            }
+                            
+                            else   if (column.id == 'jiraKey') {
+                              return (
+                                <TableCell
+                                  key={column.id + '12'}
+                                  align={column.align}
+                                  sx={{
+                                    color: 'rgba(0, 0, 238, 1)',
+                                    minWidth: '100px',
+                                    cursor: 'pointer',
+                                  }}
+                                >
+                                  <a href={row['url']} target="_blank">
+                                    {row['jiraKey']?row['jiraKey']:""}
+                                    {/* {row['jiraKey'] ? row['jiraKey'] : value} */}
+                                  </a>
+                                </TableCell>
+                              );
+                            } 
+                            else if (column.id == 'action.assigneeId') {
                               return (
                                 <TableCell
                                   key={column.id + '12'}
@@ -787,7 +816,7 @@ export default function ActionDashboard() {
                                             }
                                           );
                                           callUpdateAction(
-                                            action,
+                                            row,
                                             emailId,
                                             status,
                                             tempJiraRows
