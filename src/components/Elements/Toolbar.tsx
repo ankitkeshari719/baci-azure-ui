@@ -138,25 +138,32 @@ const Toolbar = (props: any) => {
 
   const [personName, setPersonName] = React.useState<any[]>([]);
   React.useEffect(() => {
-    console.log("called")
-    let valueToBeDisplayed: any[]=[]
-    if(global.currentRetro?.creatorId!==global.currentRetro?.selectedFacilitator){
+    let valueToBeDisplayed: any[] = [];
+    if (
+      global.currentRetro?.creatorId !==
+      global.currentRetro?.selectedFacilitator
+    ) {
       valueToBeDisplayed.push(global.currentRetro?.creatorId);
       valueToBeDisplayed.push(global.currentRetro?.selectedFacilitator);
-    }
-    else {
+    } else {
       valueToBeDisplayed.push(global.currentRetro?.creatorId);
     }
 
     // let valueToBeDisplayed: any[] = [global.currentRetro?.creatorId];
 
     users.forEach(user => {
-      if (user.isFacilitator || user.userId===global.currentRetro?.selectedFacilitator) {
+      if (
+        user.isFacilitator ||
+        user.userId === global.currentRetro?.selectedFacilitator
+      ) {
         valueToBeDisplayed.push(user.userId);
       }
 
-      console.log(user.isFacilitator)
-      if ((user.isFacilitator|| user.userId===global.currentRetro?.selectedFacilitator) && user.userId == global.user.id) {
+      if (
+        (user.isFacilitator ||
+          user.userId === global.currentRetro?.selectedFacilitator) &&
+        user.userId == global.user.id
+      ) {
         dispatch({
           type: ActionType.SET_USER,
           payload: {
@@ -455,37 +462,6 @@ const Toolbar = (props: any) => {
                   name="FINISH RETRO"
                   onClick={async () => {
                     setOpenDialog(true);
-
-                    // let columnString: string = '';
-                    // columns.forEach(column => {
-                    //   const columnName = column.name;
-                    //   columnString = columnString + columnName;
-
-                    //   column.groups.forEach(group => {
-                    //     const groupName = group.name;
-                    //     columnString = columnString + ' : ' + groupName;
-
-                    //     group.cards.forEach(card => {
-                    //       const cardValue = card.value;
-
-                    //       columnString = columnString + ' : ' + cardValue;
-                    //     });
-                    //   });
-                    // });
-
-                    // await createRetroSummary(columnString, retroId).then(
-                    //   (res: any) => {
-                    //     const data = res.response;
-                    //     if (data) {
-                    //       console.log(data);
-                    //     } else {
-                    //       alert('Please try again');
-                    //     }
-                    //   },
-                    //   error => {
-                    //     console.log(error);
-                    //   }
-                    // );
                   }}
                   style={{
                     minWidth: '150px !important',
@@ -598,17 +574,13 @@ const Toolbar = (props: any) => {
               id="review-board"
               name="REVIEW BOARD"
               onClick={() => {
-
                 if (gUser?.azureUser?.roleName == ENTERPRISE)
-                navigate(
-                  '/enterprise/sessions/board/' + global.currentRetro?.id
-                );
-              else if (gUser?.azureUser?.roleName == BASIC)
-                navigate(
-                  '/basic/sessions/board/' + global.currentRetro?.id
-                );
-              else navigate('/board/' + global.currentRetro?.id);
-            
+                  navigate(
+                    '/enterprise/sessions/board/' + global.currentRetro?.id
+                  );
+                else if (gUser?.azureUser?.roleName == BASIC)
+                  navigate('/basic/sessions/board/' + global.currentRetro?.id);
+                else navigate('/board/' + global.currentRetro?.id);
               }}
               style={{
                 minWidth: '150px !important',

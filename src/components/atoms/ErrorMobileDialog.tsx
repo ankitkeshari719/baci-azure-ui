@@ -49,9 +49,6 @@ const styles = {
 };
 
 export default function ErrorMobileDialog(props?: any) {
-  React.useEffect(() => {
-    console.log('error', props.error);
-  }, []);
 
   return (
     <>
