@@ -844,15 +844,6 @@ export default function ActionDashboard() {
                                         status,
                                         tempJiraRows
                                       );
-                                      // console.log("run")
-                                      // setJiraRows(tempJiraRows);
-                                      // updateJiraCount(tempJiraRows);
-
-                                      // localStorage.setItem(
-                                      //   'actionList',
-                                      //   JSON.stringify(tempJiraRows)
-                                      // );
-                                      // updateJiraCount(tempJiraRows);
                                     }}
                                   />
                                   {/* {value} */}
