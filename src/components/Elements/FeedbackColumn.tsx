@@ -96,11 +96,11 @@ export function FeedbackColumn({
       ) {
         if (gUser?.azureUser?.roleName === ENTERPRISE)
         navigate(
-          'enterprise/sessions/report/' + global.currentRetro.id
+          '/enterprise/sessions/report/' + global.currentRetro.id
         );
         else if (gUser?.azureUser?.roleName === BASIC){
           navigate(
-            'basic/sessions/report/' + global.currentRetro.id
+            '/basic/sessions/report/' + global.currentRetro.id
           );
         }
         else
@@ -109,11 +109,11 @@ export function FeedbackColumn({
 
         if (gUser?.azureUser?.roleName === ENTERPRISE)
         navigate(
-          'enterprise/sessions/offboarding'
+          '/enterprise/sessions/offboarding'
         );
         else if (gUser?.azureUser?.roleName === BASIC){
           navigate(
-            'basic/sessions/offboarding'
+            '/basic/sessions/offboarding'
           );
         }
 
@@ -147,8 +147,28 @@ export function FeedbackColumn({
           FEATURE_FLAGS.report &&
           global.currentRetro?.creatorId === global.user.id
         ) {
+          if (gUser?.azureUser?.roleName === ENTERPRISE)
+          navigate(
+            '/enterprise/sessions/report/' + global.currentRetro.id
+          );
+          else if (gUser?.azureUser?.roleName === BASIC){
+            navigate(
+              '/basic/sessions/report/' + global.currentRetro.id
+            );
+          }
+          else
           navigate('/report/' + global.currentRetro.id);
         } else {
+          if (gUser?.azureUser?.roleName === ENTERPRISE)
+          navigate(
+            '/enterprise/sessions/offboarding'
+          );
+          else if (gUser?.azureUser?.roleName === BASIC){
+            navigate(
+              '/basic/sessions/offboarding'
+            );
+          }
+  
           navigate(`/offboarding`);
         }
       },

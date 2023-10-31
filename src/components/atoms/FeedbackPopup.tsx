@@ -133,11 +133,11 @@ export default function FeedbackPopup(props: {
 
       if (gUser?.azureUser?.roleName === ENTERPRISE)
       navigate(
-        'enterprise/sessions/report/' + global.currentRetro?.id
+        '/enterprise/sessions/report/' + global.currentRetro?.id
       );
       else if (gUser?.azureUser?.roleName === BASIC){
         navigate(
-          'basic/sessions/report/' + global.currentRetro?.id
+          '/basic/sessions/report/' + global.currentRetro?.id
         );
       }
       else
@@ -146,11 +146,11 @@ export default function FeedbackPopup(props: {
     } else {
       if (gUser?.azureUser?.roleName === ENTERPRISE)
       navigate(
-        'enterprise/sessions/offboarding' 
+        '/enterprise/sessions/offboarding' 
       );
       else if (gUser?.azureUser?.roleName === BASIC){
         navigate(
-          'basic/sessions/offboarding'
+          '/basic/sessions/offboarding'
         );
       }
       else
@@ -164,11 +164,11 @@ export default function FeedbackPopup(props: {
   const closeFeedback = () => {
     if (gUser?.azureUser?.roleName === ENTERPRISE)
     navigate(
-      'enterprise/sessions/offboarding' 
+      '/enterprise/sessions/offboarding' 
     );
     else if (gUser?.azureUser?.roleName === BASIC){
       navigate(
-        'basic/sessions/offboarding'
+        '/basic/sessions/offboarding'
       );
     }
     else
