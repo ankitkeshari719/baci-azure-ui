@@ -333,7 +333,7 @@ export default function RetroBoard() {
   // Finish Retrox
   const finishRetro = async () => {
     if (global.user.userType == 2) {
-      sessionStorage.removeItem('retoname');
+      sessionStorage.removeItem('retroname');
 
       dispatch({
         type: ActionType.SET_LOADING,

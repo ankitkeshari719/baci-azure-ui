@@ -20,6 +20,8 @@ import { BoardActionType } from '../../helpers/statemachine/BoardStateMachine';
 import theme from '../../helpers/theme/theme';
 import FeedbackPopup from '../../components/atoms/FeedbackPopup';
 import { ContainedButton } from '../../components';
+import { BASIC, ENTERPRISE } from '../../constants/applicationConst';
+import { UserContext } from '../../contexts/UserContext';
 
 export default function Feedback() {
   const navigate = useNavigate();
@@ -27,6 +29,8 @@ export default function Feedback() {
   const isXsUp = useMediaQuery(theme.breakpoints.only('xs'));
 
   const [{ user, currentRetro }] = React.useContext(GlobalContext);
+  const [gUser] = React.useContext(UserContext);
+  
   const {
     state: { creatorId, retroName, users, ended },
     commitAction,
@@ -57,19 +61,45 @@ export default function Feedback() {
           saveAndProcessAction(BoardActionType.END_RETRO, { undo: true }).then(
             () => {
               setConfirmAction(undefined);
-              navigate('/board/' + currentRetro?.id);
+              if (gUser?.azureUser?.roleName == ENTERPRISE)
+              navigate(
+                '/enterprise/sessions/board/' + currentRetro?.id
+              );
+            else if (gUser?.azureUser?.roleName == BASIC)
+              navigate(
+                '/basic/sessions/board/' + currentRetro?.id
+              );
+            else navigate('/board/' + currentRetro?.id);
+
+           
             }
           );
         },
       });
     } else {
-      navigate('/board/' + currentRetro?.id);
+      if (gUser?.azureUser?.roleName == ENTERPRISE)
+      navigate(
+        '/enterprise/sessions/board/' + currentRetro?.id
+      );
+    else if (gUser?.azureUser?.roleName == BASIC)
+      navigate(
+        '/basic/sessions/board/' + currentRetro?.id
+      );
+    else navigate('/board/' + currentRetro?.id);
     }
   };
 
   React.useEffect(() => {
     if (!ended && ended !== endedOnEntry) {
-      navigate(`/board/${currentRetro?.id}`);
+      if (gUser?.azureUser?.roleName == ENTERPRISE)
+      navigate(
+        '/enterprise/sessions/board/' + currentRetro?.id
+      );
+    else if (gUser?.azureUser?.roleName == BASIC)
+      navigate(
+        '/basic/sessions/board/' + currentRetro?.id
+      );
+    else navigate('/board/' + currentRetro?.id);
     }
   }, [ended]);
 

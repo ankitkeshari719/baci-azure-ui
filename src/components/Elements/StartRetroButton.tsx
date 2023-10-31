@@ -8,6 +8,7 @@ import { getRetro } from '../../helpers/msal/services';
 import RetroTimeInputDialog from '../atoms/RetroTimeInputDialog';
 import { UserContext } from '../../contexts/UserContext';
 import { ENTERPRISE } from '../../constants/applicationConst';
+import useLoadRetro from '../../helpers/hooks/useLoadRetro';
 
 const styles = {
   goToRetroBtn: {
@@ -27,7 +28,9 @@ const StartRetroButton = () => {
   const navigate = useNavigate();
   const [global, dispatch] = React.useContext(GlobalContext);
   const [gUser, userDispatch] = React.useContext(UserContext);
+  useLoadRetro()
   React.useEffect(() => {
+    
     if ((retroStarted||retroStatus=="started") && retroId != undefined && retroId != '') {
       if (
         gUser.azureUser != undefined &&
@@ -119,7 +122,7 @@ const StartRetroButton = () => {
   return (
     <>
       {(global?.currentRetro?.creatorId === global?.user?.id ||
-        global?.currentRetro?.selectedFacilitator === global?.user?.id) && (
+        global?.currentRetro?.selectedFacilitator === gUser.azureUser?.emailId) && (
         <>
           <Button
             variant="outlined"

@@ -126,85 +126,32 @@ function BasicDashboardWithEnterprise() {
     setOpen(true);
   };
 
-  const menuList = [
-    {
-      id: '0',
-      label: 'Mobile Experience Team',
-      actions: 'VIEW 15 ACTIONS',
-      isSelected: true,
-    },
-    {
-      id: '1',
-      label: 'Superannuation Product Team',
-      actions: 'VIEW 5 ACTIONS',
-      isSelected: false,
-    },
-    {
-      id: '2',
-      label: 'Insurance Team',
-      actions: 'VIEW 15 ACTIONS',
-      isSelected: false,
-    },
-  ];
-
-  const subMenuList = [
-    {
-      retroName: 'Mobile App Design BACI Session 3',
-      retroCode: '54727',
-      retroLink: 'http://app.baci.com/54727',
-      retroStartDate: '',
-      totalActions: '4',
-      isRetroFinished: false,
-      users: [
-        { name: 'Sean Woon', avatar: 'Animals-avatar_2avatar' },
-        { name: 'Manisha', avatar: 'Animals-avatar_7avatar' },
-        { name: 'Ankit', avatar: 'Animals-avatar_11avatar' },
-        { name: 'Rajesh', avatar: 'Animals-avatar_19avatar' },
-        { name: 'Vishal', avatar: 'Animals-avatar_21avatar' },
-        { name: 'Tatayana', avatar: 'Animals-avatar_30avatar' },
-        { name: 'Benny', avatar: 'Animals-avatar_28avatar' },
-        { name: 'Amol', avatar: 'Animals-avatar_31avatar' },
-        { name: 'Mayuri', avatar: 'Animals-avatar_12avatar' },
-      ],
-    },
-
-    {
-      retroName: 'Mobile App Design BACI Session 2',
-      retroCode: '54149',
-      retroLink: 'http://app.baci.com/54149',
-      retroStartDate: 'April 19, 2023',
-      totalActions: '4',
-      isRetroFinished: true,
-      users: [
-        { name: 'Sean Woon', avatar: 'Animals-avatar_2avatar' },
-        { name: 'Manisha', avatar: 'Animals-avatar_7avatar' },
-        { name: 'Rajesh', avatar: 'Animals-avatar_19avatar' },
-        { name: 'Vishal', avatar: 'Animals-avatar_21avatar' },
-        { name: 'Tatayana', avatar: 'Animals-avatar_30avatar' },
-        { name: 'Amol', avatar: 'Animals-avatar_31avatar' },
-        { name: 'Mayuri', avatar: 'Animals-avatar_12avatar' },
-      ],
-    },
-    {
-      retroName: 'Mobile App Design BACI Session 1',
-      retroCode: '53122',
-      retroLink: 'http://app.baci.com/53122',
-      retroStartDate: 'April 19, 2023',
-      totalActions: '5',
-      isRetroFinished: true,
-      users: [
-        { name: 'Sean Woon', avatar: 'Animals-avatar_2avatar' },
-        { name: 'Manisha', avatar: 'Animals-avatar_7avatar' },
-        { name: 'Ankit', avatar: 'Animals-avatar_11avatar' },
-        { name: 'Rajesh', avatar: 'Animals-avatar_19avatar' },
-        { name: 'Vishal', avatar: 'Animals-avatar_21avatar' },
-        { name: 'Tatayana', avatar: 'Animals-avatar_30avatar' },
-        { name: 'Benny', avatar: 'Animals-avatar_28avatar' },
-        { name: 'Amol', avatar: 'Animals-avatar_31avatar' },
-        { name: 'Mayuri', avatar: 'Animals-avatar_12avatar' },
-      ],
-    },
-  ];
+  React.useEffect(() => {
+    localStorage.setItem(
+      'uuid',
+      gUser?.azureUser ? gUser?.azureUser.emailId : ''
+    );
+    dispatch({
+      type: ActionType.SET_USER,
+      payload: {
+        user: {
+          id:
+            gUser.azureUser?.emailId != undefined
+              ? gUser.azureUser?.emailId
+              : '',
+          name:
+            gUser.azureUser?.emailId != undefined
+              ? gUser.azureUser?.firstName + ' ' + gUser.azureUser?.lastName
+              : '',
+          avatar:
+            gUser.azureUser?.emailId != undefined
+              ? gUser.azureUser?.selectedAvatar
+              : '',
+          userType: 1,
+        },
+      },
+    });
+  },[]);
 
   const navigateToJoinSession = () => {
     if (gUser?.azureUser?.roleName == ENTERPRISE)
@@ -693,7 +640,7 @@ function BasicDashboardWithEnterprise() {
                                 user => user.emailId == emailId
                               );
                               return (
-                                index < 4 && (
+                                index < 4 &&user?.selectedAvatar && (
                                   <Avatar
                                     key={user.emailId}
                                     avatar={user.selectedAvatar}

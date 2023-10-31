@@ -19,7 +19,7 @@ export default function useLoadRetro() {
   const [gUser] = React.useContext(UserContext);
   const isXsUp = useMediaQuery(theme.breakpoints.only('xs'));
   const {
-    state: { retroId, users, ended, loading, retroStarted },
+    state: { retroId, users, ended, loading, retroStarted, retroStatus },
     commitAction,
   } = React.useContext(BoardContext);
 
@@ -94,11 +94,16 @@ export default function useLoadRetro() {
           avatar: global.avatar,
           isMobile: window.innerWidth < 700,
         }).then(() => {
-          if (global.currentRetro && retroStarted) {
+      
+          if (global.currentRetro && (retroStarted||retroStatus=="started")) {
             if (FEATURE_FLAGS.pulseCheck) {
               return;
             }
           } else {
+
+        
+
+
             if (
               global.currentRetro?.creatorId !== global.user.id &&
               global.currentRetro?.creatorId !== gUser.azureUser?.emailId &&
